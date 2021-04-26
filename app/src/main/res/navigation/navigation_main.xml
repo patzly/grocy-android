@@ -132,9 +132,6 @@
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_navigation_master_objects"
             app:destination="@id/navigation_master_objects" />
         <action
-            android:id="@+id/action_drawerBottomSheetDialogFragment_to_stockFragment"
-            app:destination="@id/stockFragment" />
-        <action
             android:id="@+id/action_drawerBottomSheetDialogFragment_to_consumeFragment"
             app:destination="@id/consumeFragment" />
         <action

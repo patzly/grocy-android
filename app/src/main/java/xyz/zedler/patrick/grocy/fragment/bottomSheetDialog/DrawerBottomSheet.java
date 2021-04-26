@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.SettingsFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.StockFragment;
+import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
@@ -104,7 +104,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         });
 
         BaseFragment currentFragment = activity.getCurrentFragment();
-        if (currentFragment instanceof StockFragment) {
+        if (currentFragment instanceof StockOverviewFragment) {
             select(binding.linearDrawerStock, binding.textDrawerStock);
         } else if (currentFragment instanceof ShoppingListFragment) {
             select(binding.linearDrawerShoppingList, binding.textDrawerShoppingList);
@@ -134,7 +134,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
 
         if (v.getId() == R.id.linear_drawer_stock) {
             navigateCustom(DrawerBottomSheetDirections
-                    .actionDrawerBottomSheetDialogFragmentToStockFragment());
+                    .actionDrawerBottomSheetDialogFragmentToStockOverviewFragment());
         } else if (v.getId() == R.id.linear_drawer_shopping_list) {
             navigateCustom(DrawerBottomSheetDirections
                     .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
