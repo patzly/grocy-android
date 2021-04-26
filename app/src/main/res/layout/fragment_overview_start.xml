@@ -87,16 +87,13 @@
 
             </LinearLayout>
 
-            <xyz.zedler.patrick.grocy.view.ActionButton
-                android:id="@+id/button_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="8dp"
-                android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_aboutFragment)}"
-                app:icon="@drawable/ic_round_info_outline_anim"
-                app:tint="@color/icon"
-                app:dense="true" />
+            <androidx.appcompat.widget.Toolbar
+              android:id="@+id/toolbar"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:layout_gravity="end"
+              app:contentInsetStart="0dp"
+              app:menu="@menu/menu_overview" />
 
         </FrameLayout>
 
