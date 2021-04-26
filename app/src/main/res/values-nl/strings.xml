@@ -98,8 +98,6 @@
     <string name="action_own_server">Eigen server</string>
     <string name="action_enter_data_manually">Gegevens handmatig invoeren</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d verloopt binnenkort</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d verlopen</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
@@ -331,7 +329,6 @@
     <string name="subtitle_supported">Ondersteund</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Niet ondersteund</string>
-
     <string name="description_input_product_part1">Product veld bevat:</string>
     <string name="description_input_product_part2">Kies hoe je door wil gaan:</string>
     <string name="description_input_product_option1">Maak een nieuw product aan en gebruik de invoer als naam</string>

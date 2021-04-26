@@ -160,6 +160,8 @@
     <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
     <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
     <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_hide_on_stock">Die Bestand-Seite listet alle Produkte auf, die derzeit im Bestand oder unter ihrem Mindestbestand sind. Aktiviere dies, um dieses Produkt nie dort anzuzeigen.</string>
     <string name="msg_help_due_date_type">Je nach ausgewähltem Typ wird die Hervorhebung auf der Bestandsübersicht unterschiedlich sein. \"MHD\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum möglicherweise immer noch verzehrt werden kann. \"Verbrauchsdatum\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum nicht mehr verzehrt werden kann.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days">Bei Einkäufen wird hierauf basierend das Fälligkeitsdatum vorausgefüllt (-1 bedeutet, dass dieses Produkt niemals überfällig ist).</string>
@@ -209,7 +211,9 @@
     <string name="error_empty_stock_sub">Kaufen Sie einige Produkte</string>
     <string name="error_empty_shopping_list">Leerer Einkaufszettel</string>
     <string name="error_empty_shopping_list_sub">Fügen Sie Produkte hinzu, die Sie benötigen</string>
+    <string name="error_empty_barcodes_sub">Fügen Sie welche mit dem Button unten hinzu</string>
     <string name="error_empty_master_data_sub">Erstellen Sie welche mit dem Button unten</string>
+    <string name="error_empty_product_barcodes">Keine Produkt-Barcodes</string>
     <string name="error_empty_locations">Keine Standorte</string>
     <string name="error_empty_product_groups">Keine Produktgruppen</string>
     <string name="error_empty_products">Keine Produkte</string>
@@ -352,6 +356,10 @@
     <string name="subtitle_supported">Unterstützt</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Nicht unterstützt</string>
+    <!-- %1$s is a number -->
+    <string name="subtitle_barcode_amount">Menge: %1$s</string>
+    <!-- %1$s is a unit -->
+    <string name="subtitle_barcode_unit">Mengeneinheit: %1$d</string>
 
     <string name="description_input_product_part1">Produkt-Feld enthält:</string>
     <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>

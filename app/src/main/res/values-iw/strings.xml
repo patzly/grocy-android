@@ -98,12 +98,12 @@
     <string name="action_own_server">שרת עצמאי</string>
     <string name="action_enter_data_manually">מילוי המידע ידנית</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">התוקף של %1$d עומד לפוג בקרוב</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">התוקף של %1$d פג</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
     <string name="msg_missing_products">%1$d מתחת לכמות מינימום</string>
+    <!-- %1$s is the number of products which are in stock -->
+    <string name="msg_in_stock_products">%1$d במלאי</string>
     <string name="msg_consumed">נצרכו %1$s %2$s מתוך %3$s</string>
     <string name="msg_consumed_spoiled">נצרכו %1$s %2$s מתוך %3$s כמקולקלים</string>
     <string name="msg_opened">סמן %1$s %2$s מתוך %3$s כפתוחים</string>
@@ -230,7 +230,6 @@
     <string name="error_failed_to_connect_to">ההתחברות לשרת נכשלה</string>
     <string name="error_missing_information">לא מולאו כל השדות הנחוצים</string>
     <string name="error_handshake">אישור שגוי</string>
-    <!-- %1$s is an URL -->
     <string name="error_handshake_description">שרת זה דורש אישור שאינו מוכר או מהימן מצד Android.\nאישור השרת חייב להיות חתום על ידי רשות אישורים מהימנה (למשל: letsencrypt.org) או מאוחסן באחסון אישורי המשתמש במכשיר הזה.</string>
     <string name="error_unexpected_response_code">קוד תגובה בלתי צפוי</string>
     <string name="error_unexpected_response">תגובה בלתי צפויה מהשרת</string>
@@ -334,7 +333,6 @@
     <string name="subtitle_supported">נתמך</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">לא נתמך</string>
-
     <string name="description_input_product_part1">שדה המוצר מכיל:</string>
     <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
     <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>

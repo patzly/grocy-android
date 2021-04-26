@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 
@@ -140,6 +141,8 @@ public class BaseFragment extends Fragment {
     public void saveText(Spanned spanned) {}
 
     public void saveNumber(String text, Bundle argsBundle) {}
+
+    public void performAction(String action, StockItem stockItem) {}
 
     public void updateShortcuts() {}
 

@@ -98,8 +98,6 @@
     <string name="action_own_server">Server personale</string>
     <string name="action_enter_data_manually">Inserisci dati manualmente</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d presto in scadenza</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d scaduto</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
@@ -240,7 +238,6 @@
     <string name="error_failed_to_connect_to">Connessione al server non riuscita</string>
     <string name="error_missing_information">Non sono stati compilati tutti i campi richiesti</string>
     <string name="error_handshake">Certificato Invalido</string>
-    <!-- %1$s is an URL -->
     <string name="error_handshake_description">Questo server richiede un certificato che non è riconosciuto o affidabile.\nIl certificato deve essere firmato da una autorità valida (esempio letsencrypt.org) oppure salvato nello store dei certificati di questo dispositivo Android.</string>
     <string name="error_unexpected_response_code">Codice di risposta inaspettato</string>
     <string name="error_unexpected_response">Risposta del server inaspettata</string>
@@ -344,7 +341,6 @@
     <string name="subtitle_supported">Supportato</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Non supportato</string>
-
     <string name="description_input_product_part1">Il campo prodotto contiene:</string>
     <string name="description_input_product_part2">Per favore scegli come procedere:</string>
     <string name="description_input_product_option1">Crea nuovo prodotto e usa il dato inserito come nome</string>

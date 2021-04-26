@@ -98,8 +98,6 @@
     <string name="action_own_server">Vlastní server</string>
     <string name="action_enter_data_manually">Zadejte údaje ručně</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d expiruje brzy</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d po expiraci</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
@@ -240,7 +238,6 @@
     <string name="error_failed_to_connect_to">Připojení k serveru selhalo</string>
     <string name="error_missing_information">Nejsou vyplněna všechna vyžadovaná pole</string>
     <string name="error_handshake">Neplatný certifikát</string>
-    <!-- %1$s is an URL -->
     <string name="error_handshake_description">Tento server vyžaduje certifikát který není známý nebo důvěryhodný Androidem.\nCertifikát serveru musí být buďto podepsán důvěryhodnou certifikační autoritou (např. letsencrypt.org) nebo uložen v uživatelském úložišti certifikátů v Androidu na tomto zařízení.</string>
     <string name="error_unexpected_response_code">Neočekávaný kód odpovědi</string>
     <string name="error_unexpected_response">Neočekávaná odpověď serveru</string>
@@ -344,7 +341,6 @@
     <string name="subtitle_supported">Podporováno</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Není podporováno</string>
-
     <string name="description_input_product_part1">Pole produktu obsahuje:</string>
     <string name="description_input_product_part2">Prosím zvolte jak pokračovat:</string>
     <string name="description_input_product_option1">Vytvořit produkt a použít zadanou hodnotu jako jméno</string>

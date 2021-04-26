@@ -51,7 +51,6 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.StockFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -175,19 +174,17 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_consume_all) {
-				activity.showMessage(R.string.msg_not_implemented_yet);
-				/*((StockFragment) activity.getCurrentFragment()).performAction(
+				activity.getCurrentFragment().performAction(
 						Constants.ACTION.CONSUME_ALL,
-						product.getId()
-				);*/
+						stockItem
+				);
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_consume_spoiled) {
-				activity.showMessage(R.string.msg_not_implemented_yet);
-				/*((StockFragment) activity.getCurrentFragment()).performAction(
+				activity.getCurrentFragment().performAction(
 						Constants.ACTION.CONSUME_SPOILED,
-						product.getId()
-				);*/
+						stockItem
+				);
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_purchase) {
@@ -250,27 +247,13 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
 		refreshButtonStates(false);
 		actionButtonConsume.setOnClickListener(v -> {
-			if(true) {
-				activity.showMessage(R.string.msg_not_implemented_yet);
-				return;
-			}
 			disableActions();
-			((StockFragment) activity.getCurrentFragment()).performAction(
-					Constants.ACTION.CONSUME,
-					product.getId()
-			);
+			activity.getCurrentFragment().performAction(Constants.ACTION.CONSUME, stockItem);
 			dismiss();
 		});
 		actionButtonOpen.setOnClickListener(v -> {
-			if(true) {
-				activity.showMessage(R.string.msg_not_implemented_yet);
-				return;
-			}
 			disableActions();
-			((StockFragment) activity.getCurrentFragment()).performAction(
-					Constants.ACTION.OPEN,
-					product.getId()
-			);
+			activity.getCurrentFragment().performAction(Constants.ACTION.OPEN, stockItem);
 			dismiss();
 		});
 		// tooltips

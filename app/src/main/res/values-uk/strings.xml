@@ -160,6 +160,8 @@
     <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
     <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
     <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_hide_on_stock">На сторінці огляду запасів перераховані всі товари, які зараз є на складі або їх менше мін. кількості. Увімкніть це, щоб завжди приховувати цей продукт там.</string>
     <string name="msg_help_due_date_type">Залежно від вибраного типу терміну, підсвічування на сторінці огляду запасів буде різним. \"Краще вжити до\" означає, що продукт, можливо, все ще безпечний для споживання після закінчення його терміну. «Термін придатності» означає, що продукт не є безпечним для споживання після закінчення його терміну.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days">Для покупок ця кількість днів буде додана до сьогоднішнього дня для пропозиції терміну (-1 означає, що цей продукт ніколи не буде прострочений).</string>
@@ -209,7 +211,9 @@
     <string name="error_empty_stock_sub">Купіть що-небудь</string>
     <string name="error_empty_shopping_list">Порожній список покупок</string>
     <string name="error_empty_shopping_list_sub">Додайте продукти, які вам потрібні</string>
+    <string name="error_empty_barcodes_sub">Додайте штрих-код за допомогою кнопки нижче</string>
     <string name="error_empty_master_data_sub">Створіть за допомогою кнопки нижче</string>
+    <string name="error_empty_product_barcodes">Відсутні штрих-коди товару</string>
     <string name="error_empty_locations">Відсутні місця зберігання</string>
     <string name="error_empty_product_groups">Відсутні групи продуктів</string>
     <string name="error_empty_products">Відсутні продукти</string>
@@ -352,6 +356,10 @@
     <string name="subtitle_supported">Підтримується</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">Не підтримується</string>
+    <!-- %1$s is a number -->
+    <string name="subtitle_barcode_amount">Кількість: %1$s</string>
+    <!-- %1$s is a unit -->
+    <string name="subtitle_barcode_unit">Одиниця виміру: %1$d</string>
 
     <string name="description_input_product_part1">Поле продукту містить:</string>
     <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
@@ -369,6 +377,48 @@
         <item quantity="few">У вас є %1$d продуктів на складі.</item>
         <item quantity="many">У вас є %1$d продуктів на складі.</item>
         <item quantity="other">У вас є %1$d продуктів на складі.</item>
+    </plurals>
+    <!-- %1$s and %2$s are numbers -->
+    <plurals name="description_overview_stock_due_soon">
+        <item quantity="one">Минає термін придатності %1$d продукту протягом наступних %2$d днів.</item>
+        <item quantity="few">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
+        <item quantity="many">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
+        <item quantity="other">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_overdue">
+        <item quantity="one">%1$d продукт прострочений</item>
+        <item quantity="few">%1$d продукти прострочені</item>
+        <item quantity="many">%1$d продуктів прострочені</item>
+        <item quantity="other">%1$d продукти прострочені</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_expired">
+        <item quantity="one">%1$d термін придатності продукту минув</item>
+        <item quantity="few">%1$d термін придатності продуктів минув</item>
+        <item quantity="many">%1$d термін придатності продуктів минув</item>
+        <item quantity="other">%1$d термін придатності продуктів минув</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing">
+        <item quantity="one">%1$d продукт нижче визначеної мінімальної кількості запасів.</item>
+        <item quantity="few">%1$d продукти нижче визначеної мінімальної кількості запасів.</item>
+        <item quantity="many">%1$d продуктів нижче визначеної мінімальної кількості запасів.</item>
+        <item quantity="other">%1$d продуктів нижче визначеної мінімальної кількості запасів.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing_shopping_list_single">
+        <item quantity="one">%1$d з них у вашому списку покупок.</item>
+        <item quantity="few">%1$d з них у вашому списку покупок.</item>
+        <item quantity="many">%1$d з них у вашому списку покупок.</item>
+        <item quantity="other">%1$d з них у вашому списку покупок.</item>
+    </plurals>
+    <!-- %1$s is a number -->
+    <plurals name="description_overview_stock_missing_shopping_list_multi">
+        <item quantity="one">%1$d з них у ваших списках покупок.</item>
+        <item quantity="few">%1$d з них у ваших списках покупок.</item>
+        <item quantity="many">%1$d з них у ваших списках покупок.</item>
+        <item quantity="other">%1$d з них у ваших списках покупок.</item>
     </plurals>
     <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
     <plurals name="description_overview_stock_value">
