@@ -98,8 +98,6 @@
     <string name="action_own_server">自己的服务器</string>
     <string name="action_enter_data_manually">手动输入数据</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d即将到期</string>
     <!-- %1$s is the number of products which are expired -->
     <string name="msg_expired_products">%1$d已过期</string>
     <!-- %1$s is the number of products which are below min. stock amount -->
@@ -240,7 +238,6 @@
     <string name="error_failed_to_connect_to">无法连接服务器</string>
     <string name="error_missing_information">并非所有必填字段都填写</string>
     <string name="error_handshake">证书无效</string>
-    <!-- %1$s is an URL -->
     <string name="error_handshake_description">此服务器需要Android不知道或信任的证书。\n 服务器证书必须由可信证书颁发机构（例如letsencrypt.org）签名或存储在此设备的Android用户证书存储中。</string>
     <string name="error_unexpected_response_code">意外的响应代码</string>
     <string name="error_unexpected_response">意外的服务器响应</string>
@@ -344,7 +341,6 @@
     <string name="subtitle_supported">支持</string>
     <!-- Like the words 'not supported' from 'This version is not supported.'-->
     <string name="subtitle_not_supported">未支持</string>
-
     <string name="description_input_product_part1">产品字段包含：</string>
     <string name="description_input_product_part2">请选择如何继续：</string>
     <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
