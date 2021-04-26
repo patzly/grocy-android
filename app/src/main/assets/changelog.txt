@@ -15,6 +15,7 @@
 - Fixed: Location filter in new stock overview now behaves like on server (#248)
 - Fixed: Products are hidden in new stock overview if "hide on stock" is active
 - Fixed: Quick consume & open work again in stock overview (#386)
+- Fixed: Amount which is set in product as quick consume amount is used (#359)
 
 2.0.0-alpha05
 - Improved: Language selection and behavior
