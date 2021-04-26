@@ -25,14 +25,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -107,6 +106,19 @@ public class OverviewStartFragment extends BaseFragment {
         );
 
         viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
+
+        binding.toolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.action_about) {
+                navigateDeepLink(R.string.deep_link_aboutFragment);
+            } else if (id == R.id.action_changelog) {
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.info_changelog));
+                bundle.putString(Constants.ARGUMENT.FILE, "changelog");
+                activity.showBottomSheet(new TextBottomSheet(), bundle);
+            }
+            return false;
+        });
 
         // for offline info in app bar
         binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
