@@ -96,7 +96,7 @@
                 android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_aboutFragment)}"
                 app:icon="@drawable/ic_round_info_outline_anim"
                 app:tint="@color/icon"
-                app:dense="true"/>
+                app:dense="true" />
 
         </FrameLayout>
 
@@ -390,46 +390,13 @@
 
                             </LinearLayout>
 
-                            <LinearLayout
-                              android:orientation="horizontal"
+                            <TextView
+                              style="@style/Widget.Grocy.TextView.Paragraph"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:gravity="top"
-                              android:visibility="@{viewModel.stockDescriptionMissingTextLive != null &amp;&amp; viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}">
-
-                                <FrameLayout
-                                  android:layout_width="wrap_content"
-                                  android:layout_height="wrap_content"
-                                  tools:ignore="TooDeepLayout"
-                                  android:visibility="invisible">
-
-                                    <View
-                                      android:layout_width="4dp"
-                                      android:layout_height="4dp"
-                                      android:layout_marginStart="6dp"
-                                      android:layout_marginEnd="6dp"
-                                      android:layout_gravity="center_vertical"
-                                      android:background="@drawable/shape_circle"
-                                      android:backgroundTint="@color/on_background"/>
-
-                                    <TextView
-                                      style="@style/Widget.Grocy.TextView"
-                                      android:layout_width="wrap_content"
-                                      android:layout_height="wrap_content"
-                                      android:text="E"
-                                      android:visibility="invisible"
-                                      tools:ignore="HardcodedText" />
-
-                                </FrameLayout>
-
-                                <TextView
-                                  style="@style/Widget.Grocy.TextView.Paragraph"
-                                  android:layout_width="0dp"
-                                  android:layout_height="wrap_content"
-                                  android:layout_weight="1"
-                                  android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"/>
-
-                            </LinearLayout>
+                              android:layout_marginStart="16dp"
+                              android:visibility="@{viewModel.stockDescriptionMissingTextLive != null &amp;&amp; viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}"
+                              android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}"/>
 
                         </LinearLayout>
 
