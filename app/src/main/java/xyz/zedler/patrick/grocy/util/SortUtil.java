@@ -19,15 +19,18 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -41,15 +44,27 @@ import xyz.zedler.patrick.grocy.model.Store;
 
 public class SortUtil {
 
-    public static void sortStockItemsByName(List<StockItem> stockItems, boolean ascending) {
+    // Source: https://medium.com/fme-developer-stories/how-to-sort-umlaute-in-java-correctly-13f3262f15a1
+    private static final String EXT_GERMAN_RULES = "&< ' ' < '.'"+
+            "<0<1<2<3<4<5<6<7<8<9<a,A<b,B<c,C<d,D<ð,Ð<e,E<f,F<g,G<h,H<i,I<j"+
+            ",J<k,K<l,L<m,M<n,N<o,O<p,P<q,Q<r,R<s, S & SS,ß<t,T& TH, Þ &TH,"+
+            "þ <u,U<v,V<w,W<x,X<y,Y<z,Z&AE,Æ&AE,æ&OE,Œ&OE,œ";
+
+    private static void compareStockItemsWithExtGerman(List<StockItem> items, boolean asc) {
+        Collections.sort(items, (item1, item2) -> Collator.getInstance(Locale.GERMAN).compare(
+                (asc ? item1 : item2).getProduct().getName().toLowerCase(),
+                (asc ? item2 : item1).getProduct().getName().toLowerCase()
+        ));
+    }
+
+    public static void sortStockItemsByName(
+            Context context, List<StockItem> stockItems, boolean ascending
+    ) {
         if(stockItems == null) return;
-        Collections.sort(
-                stockItems,
-                (item1, item2) -> (ascending ? item1 : item2).getProduct()
-                        .getName()
-                        .toLowerCase().compareTo(
-                                (ascending ? item2 : item1).getProduct().getName().toLowerCase()
-                )
+        Locale locale = LocaleUtil.getUserLocale(context);
+        Collections.sort(stockItems, (item1, item2) -> Collator.getInstance(locale).compare(
+                (ascending ? item1 : item2).getProduct().getName().toLowerCase(),
+                (ascending ? item2 : item1).getProduct().getName().toLowerCase())
         );
     }
 
@@ -92,70 +107,72 @@ public class SortUtil {
         );
     }
 
-    public static void sortLocationsByName(ArrayList<Location> locations, boolean ascending) {
+    public static void sortLocationsByName(
+            Context context, ArrayList<Location> locations, boolean ascending
+    ) {
         if(locations == null) return;
-        Collections.sort(
-                locations,
-                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
-                        (ascending ? item2 : item1).getName().toLowerCase()
-                )
-        );
+        Locale locale = LocaleUtil.getUserLocale(context);
+        Collections.sort(locations, (item1, item2) -> Collator.getInstance(locale).compare(
+                (ascending ? item1 : item2).getName().toLowerCase(),
+                (ascending ? item2 : item1).getName().toLowerCase()
+        ));
     }
 
-    public static void sortStoresByName(List<Store> stores, boolean ascending) {
+    public static void sortStoresByName(Context context, List<Store> stores, boolean ascending) {
         if(stores == null) return;
-        Collections.sort(
-                stores,
-                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
-                        (ascending ? item2 : item1).getName().toLowerCase()
-                )
-        );
+        Locale locale = LocaleUtil.getUserLocale(context);
+        Collections.sort(stores, (item1, item2) -> Collator.getInstance(locale).compare(
+                (ascending ? item1 : item2).getName().toLowerCase(),
+                (ascending ? item2 : item1).getName().toLowerCase()
+        ));
     }
 
     public static void sortProductGroupsByName(
+            Context context,
             ArrayList<ProductGroup> productGroups,
             boolean ascending
     ) {
         if(productGroups == null || productGroups.isEmpty()) return;
-        Collections.sort(
-                productGroups,
-                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
-                        (ascending ? item2 : item1).getName().toLowerCase()
-                )
-        );
+        Locale locale = LocaleUtil.getUserLocale(context);
+        Collections.sort(productGroups, (item1, item2) -> Collator.getInstance(locale).compare(
+                (ascending ? item1 : item2).getName().toLowerCase(),
+                (ascending ? item2 : item1).getName().toLowerCase()
+        ));
     }
 
     public static void sortQuantityUnitsByName(
+            Context context,
             ArrayList<QuantityUnit> quantityUnits,
             boolean ascending
     ) {
         if(quantityUnits == null) return;
-        Collections.sort(
-                quantityUnits,
-                (item1, item2) -> (ascending ? item1 : item2).getName().toLowerCase().compareTo(
-                        (ascending ? item2 : item1).getName().toLowerCase()
-                )
-        );
+        Locale locale = LocaleUtil.getUserLocale(context);
+        Collections.sort(quantityUnits, (item1, item2) -> Collator.getInstance(locale).compare(
+                (ascending ? item1 : item2).getName().toLowerCase(),
+                (ascending ? item2 : item1).getName().toLowerCase()
+        ));
     }
 
     public static void sortShoppingListItemsByName(
+            Context context,
             List<ShoppingListItem> shoppingListItems,
             HashMap<Integer, String> productNamesHashMap,
             boolean ascending
     ) {
         if(shoppingListItems == null) return;
+        Locale locale = LocaleUtil.getUserLocale(context);
         ArrayList<ShoppingListItem> itemsWithoutProduct = new ArrayList<>();
         for(ShoppingListItem shoppingListItem : shoppingListItems) {
-            if(!shoppingListItem.hasProduct()) {
-                itemsWithoutProduct.add(shoppingListItem);
-            }
+            if(!shoppingListItem.hasProduct()) itemsWithoutProduct.add(shoppingListItem);
         }
         Collections.sort(
                 itemsWithoutProduct,
                 (item1, item2) -> {
                     String noteA = (ascending ? item1 : item2).getNote();
                     String noteB = (ascending ? item2 : item1).getNote();
-                    if(noteA != null && noteB != null) return noteA.compareToIgnoreCase(noteB);
+                    if(noteA != null && noteB != null) {
+                        return Collator.getInstance(locale).compare(noteA, noteB);
+                    }
                     else if(noteA == null && noteB != null) return -1;
                     else if(noteA != null) return 1;
                     else return 0;
@@ -169,7 +186,9 @@ public class SortUtil {
                             .getProductIdInt());
                     String nameB = productNamesHashMap.get((ascending ? item2 : item1)
                             .getProductIdInt());
-                    if(nameA != null && nameB != null) return nameA.compareToIgnoreCase(nameB);
+                    if(nameA != null && nameB != null) {
+                        return Collator.getInstance(locale).compare(nameA, nameB);
+                    }
                     else if(nameA == null && nameB != null) return -1;
                     else if(nameA != null) return 1;
                     else return 0;
@@ -180,12 +199,8 @@ public class SortUtil {
 
     public static void sortLanguagesByName(List<Language> languages) {
         if(languages == null) return;
-        Collections.sort(
-                languages,
-                (item1, item2) -> item1.getName().toLowerCase().compareTo(
-                        item2.getName().toLowerCase()
-                )
-        );
+        Collections.sort(languages, (item1, item2) -> item1.getName().toLowerCase()
+                .compareTo(item2.getName().toLowerCase()));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)

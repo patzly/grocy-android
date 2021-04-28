@@ -114,7 +114,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
         isRefresh = false;
 
-        PluralRules pluralRules = PluralRules.forLocale(LocaleUtil.getUserLocale(activity));
+        //PluralRules pluralRules = PluralRules.forLocale(LocaleUtil.getUserLocale(activity));
 
         // VIEWS
 
@@ -260,7 +260,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
                             response,
                             new TypeToken<ArrayList<QuantityUnit>>(){}.getType()
                     );
-                    SortUtil.sortQuantityUnitsByName(quantityUnits, true);
+                    SortUtil.sortQuantityUnitsByName(requireContext(), quantityUnits, true);
                     quantityUnitNames = getQuantityUnitNames();
 
                     binding.swipeMasterQuantityUnit.setRefreshing(false);

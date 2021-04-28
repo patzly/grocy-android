@@ -433,7 +433,7 @@ public class StockOverviewFragment extends BaseFragment implements
             if(menuItem == null) return;
             SubMenu menuProductGroups = menuItem.getSubMenu();
             menuProductGroups.clear();
-            SortUtil.sortProductGroupsByName(productGroups, true);
+            SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
             for(ProductGroup pg : productGroups) {
                 menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
                     if(binding.recycler.getAdapter() == null) return false;
@@ -453,7 +453,7 @@ public class StockOverviewFragment extends BaseFragment implements
             if(menuItem == null) return;
             SubMenu menuLocations = menuItem.getSubMenu();
             menuLocations.clear();
-            SortUtil.sortLocationsByName(locations, true);
+            SortUtil.sortLocationsByName(requireContext(), locations, true);
             for(Location loc : locations) {
                 menuLocations.add(loc.getName()).setOnMenuItemClickListener(item -> {
                     if(binding.recycler.getAdapter() == null) return false;

@@ -79,7 +79,7 @@ public class ShoppingListHelper {
         }
         // sort product groups
         ArrayList<ProductGroup> sortedProductGroups = new ArrayList<>(sortedShoppingListItems.keySet());
-        SortUtil.sortProductGroupsByName(sortedProductGroups, true);
+        SortUtil.sortProductGroupsByName(context, sortedProductGroups, true);
         if(sortedProductGroups.contains(ungrouped)) {
             sortedProductGroups.remove(ungrouped);
             sortedProductGroups.add(ungrouped);
@@ -93,7 +93,7 @@ public class ShoppingListHelper {
             Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
             assert items != null;
             ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
-            SortUtil.sortShoppingListItemsByName(itemsOneGroup, productNamesHashMap, true);
+            SortUtil.sortShoppingListItemsByName(context, itemsOneGroup, productNamesHashMap, true);
             groupedListItems.addAll(itemsOneGroup);
         }
         if(!showNotes) return groupedListItems;
@@ -158,7 +158,7 @@ public class ShoppingListHelper {
         }
         // sort product groups
         ArrayList<ProductGroup> sortedProductGroups = new ArrayList<>(sortedShoppingListItems.keySet());
-        SortUtil.sortProductGroupsByName(sortedProductGroups, true);
+        SortUtil.sortProductGroupsByName(context, sortedProductGroups, true);
         if(sortedProductGroups.contains(ungrouped)) {
             sortedProductGroups.remove(ungrouped);
             sortedProductGroups.add(ungrouped);
@@ -172,7 +172,7 @@ public class ShoppingListHelper {
             Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
             assert items != null;
             ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
-            SortUtil.sortShoppingListItemsByName(itemsOneGroup, productNamesHashMap, true);
+            SortUtil.sortShoppingListItemsByName(context, itemsOneGroup, productNamesHashMap, true);
             groupedListItems.addAll(itemsOneGroup);
         }
         // add bottom notes if they are not empty

@@ -398,7 +398,7 @@ public class ShoppingListFragment extends BaseFragment implements
                     showMessage(activity.getString(R.string.error_undefined));
                     return true;
                 }
-                SortUtil.sortShoppingListItemsByName(listItems, productNamesHashMap, true);
+                SortUtil.sortShoppingListItemsByName(requireContext(), listItems, productNamesHashMap, true);
                 ShoppingListItem[] array = new ShoppingListItem[listItems.size()];
                 for(int i=0; i<array.length; i++) array[i] = listItems.get(i);
                 navigate(R.id.purchaseFragment,

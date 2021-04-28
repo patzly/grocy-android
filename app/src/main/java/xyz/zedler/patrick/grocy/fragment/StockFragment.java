@@ -849,7 +849,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
                 .apply();
         switch (sortMode) {
             case Constants.STOCK.SORT.NAME:
-                SortUtil.sortStockItemsByName(displayedItems, ascending);
+                SortUtil.sortStockItemsByName(requireContext(), displayedItems, ascending);
                 break;
             case Constants.STOCK.SORT.BBD:
                 SortUtil.sortStockItemsByBBD(displayedItems, ascending);
@@ -1267,7 +1267,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
     private void setMenuLocationFilters() {
         if(activity == null || locations == null) return;
 
-        SortUtil.sortLocationsByName(locations, true);
+        SortUtil.sortLocationsByName(requireContext(), locations, true);
 
         MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
         if(menuItem == null) return;
@@ -1291,7 +1291,7 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
         if(menuItem == null) return;
         SubMenu menuProductGroups = menuItem.getSubMenu();
         menuProductGroups.clear();
-        SortUtil.sortProductGroupsByName(productGroups, true);
+        SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
         for(ProductGroup productGroup : productGroups) {
             menuProductGroups.add(productGroup.getName()).setOnMenuItemClickListener(item -> {
                 //if(!uiMode.equals(Constants.UI.STOCK_DEFAULT)) return false;

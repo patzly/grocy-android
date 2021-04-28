@@ -456,7 +456,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
         switch (sortMode) {
             case Constants.STOCK.SORT.NAME:
-                SortUtil.sortStockItemsByName(filteredStockItems, sortAscending);
+                SortUtil.sortStockItemsByName(getApplication(), filteredStockItems, sortAscending);
                 break;
             case Constants.STOCK.SORT.BBD:
                 SortUtil.sortStockItemsByBBD(filteredStockItems, sortAscending);

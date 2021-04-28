@@ -266,7 +266,7 @@ public class MasterLocationFragment extends BaseFragment {
                             response,
                             new TypeToken<ArrayList<Location>>(){}.getType()
                     );
-                    SortUtil.sortLocationsByName(locations, true);
+                    SortUtil.sortLocationsByName(requireContext(), locations, true);
                     locationNames = getLocationNames();
 
                     binding.swipeMasterLocation.setRefreshing(false);

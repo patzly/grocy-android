@@ -252,7 +252,7 @@ public class MasterStoreFragment extends BaseFragment {
                             response,
                             new TypeToken<List<Store>>(){}.getType()
                     );
-                    SortUtil.sortStoresByName(stores, true);
+                    SortUtil.sortStoresByName(requireContext(), stores, true);
                     storeNames = getStoreNames();
 
                     binding.swipeMasterStore.setRefreshing(false);
