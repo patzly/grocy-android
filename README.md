@@ -22,6 +22,11 @@ You can try it using the demo option available on the login screen.
 
 ## Downloads
 
+**Attention: The three sources below contain the outdated version 1.10.1 which doesn't work with the current grocy server version 3.0.x!**
+**Alpha builds of our new version 2.0.0 which is compatible with grocy server version 3.0.x are [here](https://github.com/patzly/grocy-android/issues/266).**
+
+**For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our alpha versions. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo) to your client. Thank you silkevicious!**
+
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://f-droid.org/de/packages/xyz.zedler.patrick.grocy/'><img alt='Get it on F-Droid' height="80" src='assets/badge_fdroid.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a>
 
 ## Screenshots
