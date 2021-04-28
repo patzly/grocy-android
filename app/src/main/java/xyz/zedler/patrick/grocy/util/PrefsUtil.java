@@ -17,26 +17,16 @@
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package xyz.zedler.patrick.grocy.util;
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+import android.content.SharedPreferences;
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5'
-    }
-}
+public class PrefsUtil {
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    public static boolean isDebuggingEnabled(SharedPreferences sharedPrefs) {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+        );
+    }
 }

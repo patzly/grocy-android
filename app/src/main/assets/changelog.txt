@@ -1,3 +1,6 @@
+2.0.0-alpha07
+- New: We use Conscrypt now to support TLS1.3 on older Android versions (#163)
+
 2.0.0-alpha06
 - New: Stock overview page now has list animations and offline loading
 - New: 'Scan mode' is now 'Quick mode' and has a better help text (#332)

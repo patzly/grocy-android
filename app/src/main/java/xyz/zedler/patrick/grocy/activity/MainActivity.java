@@ -65,11 +65,17 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.conscrypt.Conscrypt;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -87,6 +93,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -107,12 +114,24 @@ public class MainActivity extends AppCompatActivity {
     private boolean debug;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        Locale userLocale = LocaleUtil.getUserLocale(base);
+        Locale.setDefault(userLocale);
+        Resources resources = base.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.setLocale(userLocale);
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+
+        super.attachBaseContext(base.createConfigurationContext(configuration));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // PREFERENCES
-
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+        debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+
+        insertConscrypt();
 
         // DARK MODE
 
@@ -526,6 +545,7 @@ public class MainActivity extends AppCompatActivity {
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS);
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES);
+        editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE);
         editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
 
         editPrefs.remove(Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);
@@ -623,22 +643,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
-        Locale userLocale = LocaleUtil.getUserLocale(base);
-        Locale.setDefault(userLocale);
-        Resources resources = base.getResources();
-        Configuration configuration = resources.getConfiguration();
-        configuration.setLocale(userLocale);
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-
-        super.attachBaseContext(base.createConfigurationContext(configuration));
-    }
-
-    @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
             overrideConfiguration.setLocale(LocaleUtil.getUserLocale(this));
         }
         super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
+    private void insertConscrypt() {
+        try {
+            Conscrypt.Version version = Conscrypt.version();
+            if(debug) Log.i(TAG, "insertConscrypt: Using Conscrypt/" + version.major() + "."
+                    + version.minor() + "." + version.patch() + " for TLS");
+            SSLEngine engine = SSLContext.getDefault().createSSLEngine();
+            if(debug) Log.i(TAG, "Enabled protocols: "
+                    + Arrays.toString(engine.getEnabledProtocols()) + " }");
+            if(debug) Log.i(TAG, "Enabled ciphers: "
+                    + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, "insertConscrypt: NoSuchAlgorithmException");
+            Log.e(TAG, e.getMessage() != null ? e.getMessage(): e.toString());
+        }
     }
 }
