@@ -19,9 +19,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.FocusFinder;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +37,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -49,11 +54,12 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
 
-public class ShoppingListItemEditFragment extends BaseFragment {
+public class ShoppingListItemEditFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener {
 
     private final static String TAG = ShoppingListItemEditFragment.class.getSimpleName();
 
@@ -61,6 +67,7 @@ public class ShoppingListItemEditFragment extends BaseFragment {
     private FragmentShoppingListItemEditBinding binding;
     private ShoppingListItemEditViewModel viewModel;
     private InfoFullscreenHelper infoFullscreenHelper;
+    private ScanInputCaptureManager capture;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -122,6 +129,16 @@ public class ShoppingListItemEditFragment extends BaseFragment {
             viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
         });
 
+        viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
+            if(visible) {
+                capture.onResume();
+                capture.decode();
+            } else {
+                capture.onPause();
+            }
+            lockOrUnlockRotation(visible);
+        });
+
         /*viewModel.getQuickModeEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
             if(isEnabled) {
                 binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT
@@ -139,13 +156,21 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         // necessary because else getValue() doesn't give current value (?)
         viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {});
 
-        String barcode = (String) getFromThisDestinationNow(Constants.ARGUMENT.BARCODE);
-        if(barcode != null) {
-            removeForThisDestination(Constants.ARGUMENT.BARCODE);
-            viewModel.onBarcodeRecognized(barcode); // TODO: Request focus in product field if barcode was written in chip
-        }
-
         if(savedInstanceState == null) viewModel.loadFromDatabase(true);
+
+        binding.barcodeScan.setTorchOff();
+        binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
+            @Override public void onTorchOn() {
+                viewModel.getFormData().setTorchOn(true);
+            }
+            @Override public void onTorchOff() {
+                viewModel.getFormData().setTorchOn(false);
+            }
+        });
+        CameraSettings cameraSettings = new CameraSettings();
+        cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
+        binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
+        capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
 
         updateUI(args.getAnimateStart() && savedInstanceState == null);
     }
@@ -166,6 +191,54 @@ public class ShoppingListItemEditFragment extends BaseFragment {
                 animated,
                 () -> viewModel.saveItem()
         );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(viewModel.getFormData().isScannerVisible()) capture.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if(viewModel.getFormData().isScannerVisible()) capture.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(viewModel.getFormData().isScannerVisible()) {
+            return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        } return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy() {
+        if(capture != null) capture.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBarcodeResult(BarcodeResult result) {
+        if(result.getText().isEmpty()) {
+            resumeScan();
+            return;
+        }
+        viewModel.getFormData().toggleScannerVisibility();
+        viewModel.onBarcodeRecognized(result.getText());
+    }
+
+    public void toggleTorch() {
+        if(viewModel.getFormData().isTorchOn()) {
+            binding.barcodeScan.setTorchOff();
+        } else {
+            binding.barcodeScan.setTorchOn();
+        }
+    }
+
+    public void toggleScannerVisibility() {
+        viewModel.getFormData().toggleScannerVisibility();
+        if(viewModel.getFormData().isScannerVisible()) clearInputFocus();
     }
 
     public void clearInputFocus() {
@@ -204,6 +277,14 @@ public class ShoppingListItemEditFragment extends BaseFragment {
         nextView.requestFocus();
         if(nextView instanceof EditText) {
             activity.showKeyboard((EditText) nextView);
+        }
+    }
+
+    private void lockOrUnlockRotation(boolean scannerIsVisible) {
+        if(scannerIsVisible) {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        } else {
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
         }
     }
 

@@ -149,6 +149,36 @@
 
                         </LinearLayout>
 
+                        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                            android:id="@+id/barcode_scan"
+                            android:layout_width="350dp"
+                            android:layout_height="160dp"
+                            android:layout_gravity="center_horizontal"
+                            android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
+                            android:onClick="@{() -> fragment.toggleTorch()}"
+                            app:zxing_scanner_layout="@layout/partial_scanner_embedded"/>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="8dp"
+                            android:visibility="@{viewModel.externalScannerEnabled ? View.VISIBLE : View.GONE}"
+                            app:contentPadding="16dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardBackgroundColor="@color/on_background_variant">
+
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/msg_help_external_scanner_ready" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
                         <LinearLayout
                             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
                             android:paddingTop="8dp"
@@ -172,10 +202,10 @@
                                 app:helperTextEnabled="true"
                                 app:helperText=" "
                                 app:errorIconDrawable="@{null}"
-                                app:endIconOnClickListener="@{v -> fragment.navigate(R.id.scanInputFragment)}"
+                                app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
                                 app:errorText="@{formData.productNameErrorLive}">
 
-                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                <xyz.zedler.patrick.grocy.view.CustomAutoCompleteTextView
                                     android:id="@+id/auto_complete_shopping_list_item_edit_product"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

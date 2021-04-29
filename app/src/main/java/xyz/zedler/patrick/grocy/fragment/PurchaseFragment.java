@@ -252,7 +252,10 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
 
     @Override
     public void onBarcodeResult(BarcodeResult result) {
-        if(result.getText().isEmpty()) resumeScan();
+        if(result.getText().isEmpty()) {
+            resumeScan();
+            return;
+        }
         if(!viewModel.isQuickModeEnabled()) viewModel.getFormData().toggleScannerVisibility();
         viewModel.onBarcodeRecognized(result.getText());
     }

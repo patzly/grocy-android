@@ -444,6 +444,20 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         currentQueueLoading = queueLoading;
     }
 
+    public boolean getUseFrontCam() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.FRONT_CAM,
+                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+        );
+    }
+
+    public boolean getExternalScannerEnabled() {
+        return sharedPrefs.getBoolean(
+                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
+        );
+    }
+
     private void showErrorMessage() {
         showMessage(getString(R.string.error_undefined));
     }

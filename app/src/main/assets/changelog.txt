@@ -4,6 +4,7 @@
 - Improved: List sorting uses rules of currently selected language (#371)
 - Improved: You can open purchase or consume page from stock for one product now
 - Improved: Long-tap on shopping list card on start page to open shopping mode
+- Improved: Shopping list item edit page has the camera scanner frame now
 - Fixed: Swipe buttons in stock overview didn't work for last two items
 - Fixed: Menu items on bottom were not clickable sometimes (#383)
 - Fixed: Parent product field is locked if product is already parent product (#349)

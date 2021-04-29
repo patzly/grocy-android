@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataShoppingListItemEdit {
     private final Application application;
+    private final MutableLiveData<Boolean> scannerVisibilityLive;
     private final MutableLiveData<ShoppingList> shoppingListLive;
     private final LiveData<String> shoppingListNameLive;
     private final MutableLiveData<Integer> shoppingListIdLive;
@@ -61,9 +62,11 @@ public class FormDataShoppingListItemEdit {
     private final MutableLiveData<String> noteLive;
     private final MutableLiveData<Integer> noteErrorLive;
     private boolean filledWithShoppingListItem;
+    private boolean torchOn = false;
 
     public FormDataShoppingListItemEdit(Application application) {
         this.application = application;
+        scannerVisibilityLive = new MutableLiveData<>(false);
         shoppingListLive = new MutableLiveData<>();
         shoppingListNameLive = Transformations.map(
                 shoppingListLive,
@@ -111,6 +114,27 @@ public class FormDataShoppingListItemEdit {
         noteLive = new MutableLiveData<>();
         noteErrorLive = new MutableLiveData<>();
         filledWithShoppingListItem = false;
+    }
+
+    public MutableLiveData<Boolean> getScannerVisibilityLive() {
+        return scannerVisibilityLive;
+    }
+
+    public boolean isScannerVisible() {
+        assert scannerVisibilityLive.getValue() != null;
+        return scannerVisibilityLive.getValue();
+    }
+
+    public void toggleScannerVisibility() {
+        scannerVisibilityLive.setValue(!isScannerVisible());
+    }
+
+    public boolean isTorchOn() {
+        return torchOn;
+    }
+
+    public void setTorchOn(boolean torchOn) {
+        this.torchOn = torchOn;
     }
 
     public MutableLiveData<ShoppingList> getShoppingListLive() {
