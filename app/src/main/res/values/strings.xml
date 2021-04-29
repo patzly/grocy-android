@@ -165,6 +165,8 @@
     <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
+    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+    <string name="msg_help_parent_product_deactivated">This product cannot have a parent product because it is already used as a parent product in another product.</string>
     <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
     <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
     <string name="msg_help_default_due_days">For purchases this amount of days will be added to today for the due date suggestion (-1 means that this product will be never overdue).</string>

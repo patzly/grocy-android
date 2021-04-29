@@ -174,10 +174,32 @@
 
                         </LinearLayout>
 
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            app:contentPadding="16dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardBackgroundColor="@color/on_background_variant"
+                            android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
+
+                            <TextView
+                                style="@style/Widget.Grocy.TextView.Paragraph"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/msg_help_parent_product_deactivated"/>
+
+                        </com.google.android.material.card.MaterialCardView>
+
                         <LinearLayout
                             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
                             android:paddingTop="8dp"
-                            android:paddingBottom="0dp">
+                            android:paddingBottom="0dp"
+                            android:alpha="@{formData.parentProductEnabled ? 1.0f : 0.5f}">
 
                             <ImageView
                                 android:id="@+id/image_product"
@@ -198,7 +220,8 @@
                                 app:helperText=" "
                                 app:errorIconDrawable="@{null}"
                                 app:endIconOnClickListener="@{v -> fragment.navigate(R.id.scanInputFragment)}"
-                                app:errorText="@{formData.parentProductNameErrorLive}">
+                                app:errorText="@{formData.parentProductNameErrorLive}"
+                                android:enabled="@{formData.parentProductEnabled}">
 
                                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                                     android:id="@+id/auto_complete_parent_product"

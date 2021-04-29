@@ -33,6 +33,7 @@ import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataMasterProductCatOptional {
     private final Application application;
@@ -41,6 +42,7 @@ public class FormDataMasterProductCatOptional {
     private final MutableLiveData<ArrayList<Product>> productsLive;
     private final MutableLiveData<Product> parentProductLive;
     private final MutableLiveData<String> parentProductNameLive;
+    private final MutableLiveData<Boolean> parentProductEnabled;
     private final MutableLiveData<Integer> parentProductNameErrorLive;
     private final MutableLiveData<Spanned> descriptionLive;
     private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
@@ -63,6 +65,7 @@ public class FormDataMasterProductCatOptional {
                 parentProductLive,
                 product -> product != null ? product.getName() : null
         );
+        parentProductEnabled = new MutableLiveData<>(true);
         parentProductNameErrorLive = new MutableLiveData<>();
         descriptionLive = new MutableLiveData<>();
         productGroupsLive = new MutableLiveData<>();
@@ -109,6 +112,10 @@ public class FormDataMasterProductCatOptional {
 
     public MutableLiveData<Integer> getParentProductNameErrorLive() {
         return parentProductNameErrorLive;
+    }
+
+    public MutableLiveData<Boolean> getParentProductEnabled() {
+        return parentProductEnabled;
     }
 
     public MutableLiveData<Spanned> getDescriptionLive() {
@@ -220,6 +227,16 @@ public class FormDataMasterProductCatOptional {
 
         isActiveLive.setValue(product.isActive());
         parentProductLive.setValue(getProductFromId(product.getParentProductId()));
+
+        ArrayList<Product> products = productsLive.getValue();
+        if(products != null) {
+            for(Product productTemp : products) {
+                if(NumUtil.isStringInt(productTemp.getParentProductId()) && Integer.parseInt(productTemp.getParentProductId()) == product.getId()) {
+                    parentProductEnabled.setValue(false);
+                    break;
+                }
+            }
+        }
         descriptionLive.setValue(product.getDescription() != null
                 ? Html.fromHtml(product.getDescription()) : null);
         productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
