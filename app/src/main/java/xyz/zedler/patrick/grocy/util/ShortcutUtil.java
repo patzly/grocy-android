@@ -26,140 +26,140 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class ShortcutUtil {
 
-    public final static String STOCK_OVERVIEW = "shortcut_stock_overview";
-    public final static String SHOPPING_LIST = "shortcut_shopping_list";
-    public final static String ADD_TO_SHOPPING_LIST = "shortcut_add_to_shopping_list";
-    public final static String SHOPPING_MODE = "shortcut_shopping_mode";
-    public final static String PURCHASE = "shortcut_purchase";
-    public final static String CONSUME = "shortcut_consume";
+  public final static String STOCK_OVERVIEW = "shortcut_stock_overview";
+  public final static String SHOPPING_LIST = "shortcut_shopping_list";
+  public final static String ADD_TO_SHOPPING_LIST = "shortcut_add_to_shopping_list";
+  public final static String SHOPPING_MODE = "shortcut_shopping_mode";
+  public final static String PURCHASE = "shortcut_purchase";
+  public final static String CONSUME = "shortcut_consume";
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static List<ShortcutInfo> getDynamicShortcuts(Context context) {
-        ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
-        return shortcutManager.getDynamicShortcuts();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static List<ShortcutInfo> getDynamicShortcuts(Context context) {
+    ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+    return shortcutManager.getDynamicShortcuts();
+  }
 
-    public static void refreshShortcuts(Context context, Uri uriAddToShoppingListDeepLink) {
-        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) return;
-        ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
-        List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
-        List<ShortcutInfo> newShortcutInfos = new ArrayList<>();
-        for(ShortcutInfo shortcutInfo : shortcutInfos) {
-            if(shortcutInfo.getId().equals(STOCK_OVERVIEW)) {
-                newShortcutInfos.add(createShortcutStockOverview(
-                        context, context.getString(R.string.title_stock_overview)
-                ));
-            } else if(shortcutInfo.getId().equals(SHOPPING_LIST)) {
-                newShortcutInfos.add(createShortcutShoppingList(
-                        context, context.getString(R.string.title_shopping_list)
-                ));
-            } else if(shortcutInfo.getId().equals(ADD_TO_SHOPPING_LIST)) {
-                newShortcutInfos.add(createShortcutAddToShoppingList(
-                        context, uriAddToShoppingListDeepLink,
-                        context.getString(R.string.action_shopping_list_add)
-                ));
-            } else if(shortcutInfo.getId().equals(SHOPPING_MODE)) {
-                newShortcutInfos.add(createShortcutShoppingMode(
-                        context, context.getString(R.string.title_shopping_mode)
-                ));
-            } else if(shortcutInfo.getId().equals(PURCHASE)) {
-                newShortcutInfos.add(createShortcutPurchase(
-                        context, context.getString(R.string.title_purchase)
-                ));
-            } else if(shortcutInfo.getId().equals(CONSUME)) {
-                newShortcutInfos.add(createShortcutConsume(
-                        context, context.getString(R.string.title_consume)
-                ));
-            }
-        }
-        List<String> shortcutIdsSorted = Arrays.asList(
-                STOCK_OVERVIEW, SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
-                SHOPPING_MODE, PURCHASE, CONSUME
-        );
-        shortcutManager.removeAllDynamicShortcuts();
-        newShortcutInfos = SortUtil.sortShortcutsById(newShortcutInfos, shortcutIdsSorted);
-        shortcutManager.setDynamicShortcuts(newShortcutInfos);
+  public static void refreshShortcuts(Context context, Uri uriAddToShoppingListDeepLink) {
+    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) {
+      return;
     }
+    ShortcutManager shortcutManager = context.getSystemService(ShortcutManager.class);
+    List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
+    List<ShortcutInfo> newShortcutInfos = new ArrayList<>();
+    for (ShortcutInfo shortcutInfo : shortcutInfos) {
+      if (shortcutInfo.getId().equals(STOCK_OVERVIEW)) {
+        newShortcutInfos.add(createShortcutStockOverview(
+            context, context.getString(R.string.title_stock_overview)
+        ));
+      } else if (shortcutInfo.getId().equals(SHOPPING_LIST)) {
+        newShortcutInfos.add(createShortcutShoppingList(
+            context, context.getString(R.string.title_shopping_list)
+        ));
+      } else if (shortcutInfo.getId().equals(ADD_TO_SHOPPING_LIST)) {
+        newShortcutInfos.add(createShortcutAddToShoppingList(
+            context, uriAddToShoppingListDeepLink,
+            context.getString(R.string.action_shopping_list_add)
+        ));
+      } else if (shortcutInfo.getId().equals(SHOPPING_MODE)) {
+        newShortcutInfos.add(createShortcutShoppingMode(
+            context, context.getString(R.string.title_shopping_mode)
+        ));
+      } else if (shortcutInfo.getId().equals(PURCHASE)) {
+        newShortcutInfos.add(createShortcutPurchase(
+            context, context.getString(R.string.title_purchase)
+        ));
+      } else if (shortcutInfo.getId().equals(CONSUME)) {
+        newShortcutInfos.add(createShortcutConsume(
+            context, context.getString(R.string.title_consume)
+        ));
+      }
+    }
+    List<String> shortcutIdsSorted = Arrays.asList(
+        STOCK_OVERVIEW, SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
+        SHOPPING_MODE, PURCHASE, CONSUME
+    );
+    shortcutManager.removeAllDynamicShortcuts();
+    newShortcutInfos = SortUtil.sortShortcutsById(newShortcutInfos, shortcutIdsSorted);
+    shortcutManager.setDynamicShortcuts(newShortcutInfos);
+  }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static ShortcutInfo createShortcutStockOverview(Context context, CharSequence label) {
-        Uri uri = Uri.parse(context.getString(R.string.deep_link_stockOverviewFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(context, MainActivity.class);
-        return new ShortcutInfo.Builder(context, STOCK_OVERVIEW)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_stock))
-                .setIntent(intent).build();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutStockOverview(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_stockOverviewFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, STOCK_OVERVIEW)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_stock))
+        .setIntent(intent).build();
+  }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static ShortcutInfo createShortcutShoppingList(Context context, CharSequence label) {
-        Uri uri = Uri.parse(context.getString(R.string.deep_link_shoppingListFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(context, MainActivity.class);
-        return new ShortcutInfo.Builder(context, SHOPPING_LIST)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_shopping_list))
-                .setIntent(intent).build();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutShoppingList(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_shoppingListFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, SHOPPING_LIST)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_shopping_list))
+        .setIntent(intent).build();
+  }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static ShortcutInfo createShortcutAddToShoppingList(Context context, Uri uri, CharSequence label) {
-        Intent intent = getIntent(context, uri);
-        return new ShortcutInfo.Builder(context, ADD_TO_SHOPPING_LIST)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_add))
-                .setIntent(intent).build();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutAddToShoppingList(Context context, Uri uri,
+      CharSequence label) {
+    Intent intent = getIntent(context, uri);
+    return new ShortcutInfo.Builder(context, ADD_TO_SHOPPING_LIST)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_add))
+        .setIntent(intent).build();
+  }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static ShortcutInfo createShortcutShoppingMode(Context context, CharSequence label) {
-        Uri uri = Uri.parse(context.getString(R.string.deep_link_shoppingModeFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(context, MainActivity.class);
-        return new ShortcutInfo.Builder(context, SHOPPING_MODE)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_shopping_mode))
-                .setIntent(intent).build();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutShoppingMode(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_shoppingModeFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, SHOPPING_MODE)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_shopping_mode))
+        .setIntent(intent).build();
+  }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static ShortcutInfo createShortcutPurchase(Context context, CharSequence label) {
-        Uri uri = Uri.parse(context.getString(R.string.deep_link_purchaseFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(context, MainActivity.class);
-        return new ShortcutInfo.Builder(context, PURCHASE)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_purchase))
-                .setIntent(intent).build();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutPurchase(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_purchaseFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, PURCHASE)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_purchase))
+        .setIntent(intent).build();
+  }
 
-    @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-    public static ShortcutInfo createShortcutConsume(Context context, CharSequence label) {
-        Uri uri = Uri.parse(context.getString(R.string.deep_link_consumeFragment));
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(context, MainActivity.class);
-        return new ShortcutInfo.Builder(context, CONSUME)
-                .setShortLabel(label)
-                .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
-                .setIntent(intent).build();
-    }
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutConsume(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_consumeFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, CONSUME)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
+        .setIntent(intent).build();
+  }
 
-    private static Intent getIntent(Context context, Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setClass(context, MainActivity.class);
-        return intent;
-    }
+  private static Intent getIntent(Context context, Uri uri) {
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return intent;
+  }
 }

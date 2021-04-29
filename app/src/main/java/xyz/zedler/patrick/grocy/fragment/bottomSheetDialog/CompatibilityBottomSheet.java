@@ -27,79 +27,75 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class CompatibilityBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = CompatibilityBottomSheet.class.getSimpleName();
+  private final static String TAG = CompatibilityBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
+  private MainActivity activity;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-    }
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
 
-    @SuppressLint("ApplySharedPref")
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_compatibility, container, false
-        );
+  @SuppressLint("ApplySharedPref")
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_compatibility, container, false
+    );
 
-        activity = (MainActivity) requireActivity();
+    activity = (MainActivity) requireActivity();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        ArrayList<String> supportedVersions = requireArguments().getStringArrayList(
-                Constants.ARGUMENT.SUPPORTED_VERSIONS
-        );
-        assert supportedVersions != null;
-        String currentVersion = requireArguments().getString(Constants.ARGUMENT.VERSION);
+    ArrayList<String> supportedVersions = requireArguments().getStringArrayList(
+        Constants.ARGUMENT.SUPPORTED_VERSIONS
+    );
+    assert supportedVersions != null;
+    String currentVersion = requireArguments().getString(Constants.ARGUMENT.VERSION);
 
-        TextView textViewMsg = view.findViewById(R.id.text_compatibility_msg);
-        textViewMsg.setText(activity.getString(
-                R.string.msg_compatibility,
-                currentVersion,
-                supportedVersions.get(0),
-                supportedVersions.get(supportedVersions.size()-1)
-        ));
+    TextView textViewMsg = view.findViewById(R.id.text_compatibility_msg);
+    textViewMsg.setText(activity.getString(
+        R.string.msg_compatibility,
+        currentVersion,
+        supportedVersions.get(0),
+        supportedVersions.get(supportedVersions.size() - 1)
+    ));
 
-        view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {
-            dismiss();
-            activity.getCurrentFragment().enableLoginButtons();
-        });
+    view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {
+      dismiss();
+      activity.getCurrentFragment().enableLoginButtons();
+    });
 
-        view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
-            prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
-                    .apply();
-            activity.getCurrentFragment().login(false);
-            dismiss();
-        });
+    view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
+      prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
+          .apply();
+      activity.getCurrentFragment().login(false);
+      dismiss();
+    });
 
-        setCancelable(false);
+    setCancelable(false);
 
-        return view;
-    }
+    return view;
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

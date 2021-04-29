@@ -24,12 +24,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatScannerBinding;
@@ -42,67 +40,68 @@ import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatScannerFragment extends BaseFragment {
 
-    private final static String TAG = SettingsCatScannerFragment.class.getSimpleName();
+  private final static String TAG = SettingsCatScannerFragment.class.getSimpleName();
 
-    private FragmentSettingsCatScannerBinding binding;
-    private MainActivity activity;
+  private FragmentSettingsCatScannerBinding binding;
+  private MainActivity activity;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentSettingsCatScannerBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentSettingsCatScannerBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    binding.setActivity(activity);
+    binding.setFragment(this);
+    binding.setViewModel(viewModel);
+    binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
+    binding.setClickUtil(new ClickUtil());
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+            activity,
+            activity.binding.frameMainContainer
+        ));
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
+
+    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+      activity.getScrollBehavior().setUpScroll(binding.scroll);
+      activity.getScrollBehavior().setHideOnScroll(true);
+      activity.updateBottomAppBar(
+          Constants.FAB.POSITION.GONE,
+          R.menu.menu_empty,
+          false,
+          () -> {
+          }
+      );
+      activity.binding.fabMain.hide();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+    setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
-        binding.setActivity(activity);
-        binding.setFragment(this);
-        binding.setViewModel(viewModel);
-        binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
-        binding.setClickUtil(new ClickUtil());
-        binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity,
-                        activity.binding.frameMainContainer
-                ));
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
-
-        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.getScrollBehavior().setUpScroll(binding.scroll);
-            activity.getScrollBehavior().setHideOnScroll(true);
-            activity.updateBottomAppBar(
-                    Constants.FAB.POSITION.GONE,
-                    R.menu.menu_empty,
-                    false,
-                    () -> {}
-            );
-            activity.binding.fabMain.hide();
-        }
-
-        setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
-    }
-
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
-    }
+  @Override
+  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
+  }
 }

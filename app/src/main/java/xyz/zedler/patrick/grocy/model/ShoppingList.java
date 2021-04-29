@@ -21,86 +21,84 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "shopping_list_table")
 public class ShoppingList implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private final int id;
 
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
-    private String name;
+  @ColumnInfo(name = "name")
+  @SerializedName("name")
+  private final String name;
 
-    @ColumnInfo(name = "notes")
-    @SerializedName("description")
-    private String notes;
+  @ColumnInfo(name = "notes")
+  @SerializedName("description")
+  private String notes;
 
-    public ShoppingList(int id, String name, String notes) {
-        this.id = id;
-        this.name = name;
-        this.notes = notes;
-    }
+  public ShoppingList(int id, String name, String notes) {
+    this.id = id;
+    this.name = name;
+    this.notes = notes;
+  }
 
-    private ShoppingList(Parcel parcel) {
-        id = parcel.readInt();
-        name = parcel.readString();
-        notes = parcel.readString();
+  private ShoppingList(Parcel parcel) {
+    id = parcel.readInt();
+    name = parcel.readString();
+    notes = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(name);
+    dest.writeString(notes);
+  }
+
+  public static final Creator<ShoppingList> CREATOR = new Creator<ShoppingList>() {
+
+    @Override
+    public ShoppingList createFromParcel(Parcel in) {
+      return new ShoppingList(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(notes);
+    public ShoppingList[] newArray(int size) {
+      return new ShoppingList[size];
     }
+  };
 
-    public static final Creator<ShoppingList> CREATOR = new Creator<ShoppingList>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public ShoppingList createFromParcel(Parcel in) {
-            return new ShoppingList(in);
-        }
+  public String getName() {
+    return name;
+  }
 
-        @Override
-        public ShoppingList[] newArray(int size) {
-            return new ShoppingList[size];
-        }
-    };
+  public String getNotes() {
+    return notes;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
 
-    public String getName() {
-        return name;
-    }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "ShoppingListEntity{id=" + id + ", name='" + name + "', notes='" + notes + "'}";
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "ShoppingListEntity{id=" + id + ", name='" + name + "', notes='" + notes + "'}";
+  }
 }

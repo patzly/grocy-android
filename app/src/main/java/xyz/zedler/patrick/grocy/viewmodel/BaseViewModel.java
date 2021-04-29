@@ -22,12 +22,10 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.res.Resources;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -36,75 +34,83 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 
 public class BaseViewModel extends AndroidViewModel {
 
-    private final EventHandler eventHandler;
-    private boolean isSearchVisible;
+  private final EventHandler eventHandler;
+  private boolean isSearchVisible;
 
-    public BaseViewModel(@NonNull Application application) {
-        super(application);
-        eventHandler = new EventHandler();
-        isSearchVisible = false;
+  public BaseViewModel(@NonNull Application application) {
+    super(application);
+    eventHandler = new EventHandler();
+    isSearchVisible = false;
+  }
+
+  void showErrorMessage() {
+    showMessage(getString(R.string.error_undefined));
+  }
+
+  public void showMessage(@Nullable String message) {
+    if (message == null) {
+      return;
     }
+    showSnackbar(new SnackbarMessage(message));
+  }
 
-    void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
+  public void showMessage(@StringRes int message) {
+    showSnackbar(new SnackbarMessage(getString(message)));
+  }
 
-    public void showMessage(@Nullable String message) {
-        if(message == null) return;
-        showSnackbar(new SnackbarMessage(message));
-    }
+  void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
+    eventHandler.setValue(snackbarMessage);
+  }
 
-    public void showMessage(@StringRes int message) {
-        showSnackbar(new SnackbarMessage(getString(message)));
-    }
+  void showBottomSheet(@NonNull BaseBottomSheet bottomSheet, Bundle bundle) {
+    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
+  }
 
-    void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
+  void showBottomSheet(@NonNull BaseBottomSheet bottomSheet) {
+    eventHandler.setValue(new BottomSheetEvent(bottomSheet));
+  }
 
-    void showBottomSheet(@NonNull BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
+  void sendEvent(int type) {
+    eventHandler.setValue(new Event() {
+      @Override
+      public int getType() {
+        return type;
+      }
+    });
+  }
 
-    void showBottomSheet(@NonNull BaseBottomSheet bottomSheet) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet));
-    }
+  void sendEvent(int type, Bundle bundle) {
+    eventHandler.setValue(new Event() {
+      @Override
+      public int getType() {
+        return type;
+      }
 
-    void sendEvent(int type) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
-        });
-    }
+      @Override
+      public Bundle getBundle() {
+        return bundle;
+      }
+    });
+  }
 
-    void sendEvent(int type, Bundle bundle) {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return type;}
+  @NonNull
+  public EventHandler getEventHandler() {
+    return eventHandler;
+  }
 
-            @Override
-            public Bundle getBundle() {return bundle;}
-        });
-    }
+  String getString(@StringRes int resId) {
+    return getApplication().getString(resId);
+  }
 
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
+  Resources getResources() {
+    return getApplication().getResources();
+  }
 
-    String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
-    }
+  public boolean isSearchVisible() {
+    return isSearchVisible;
+  }
 
-    Resources getResources() {
-        return getApplication().getResources();
-    }
-
-    public boolean isSearchVisible() {
-        return isSearchVisible;
-    }
-
-    public void setIsSearchVisible(boolean visible) {
-        isSearchVisible = visible;
-    }
+  public void setIsSearchVisible(boolean visible) {
+    isSearchVisible = visible;
+  }
 }

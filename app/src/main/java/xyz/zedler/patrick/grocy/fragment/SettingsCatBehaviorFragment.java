@@ -26,14 +26,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatBehaviorBinding;
@@ -46,92 +43,93 @@ import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatBehaviorFragment extends BaseFragment {
 
-    private final static String TAG = SettingsCatBehaviorFragment.class.getSimpleName();
+  private final static String TAG = SettingsCatBehaviorFragment.class.getSimpleName();
 
-    private FragmentSettingsCatBehaviorBinding binding;
-    private MainActivity activity;
+  private FragmentSettingsCatBehaviorBinding binding;
+  private MainActivity activity;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentSettingsCatBehaviorBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentSettingsCatBehaviorBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    binding.setActivity(activity);
+    binding.setFragment(this);
+    binding.setViewModel(viewModel);
+    binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
+    binding.setClickUtil(new ClickUtil());
+
+    viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+            activity,
+            activity.binding.frameMainContainer
+        ));
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
+
+    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+      activity.getScrollBehavior().setUpScroll(binding.scroll);
+      activity.getScrollBehavior().setHideOnScroll(true);
+      activity.updateBottomAppBar(
+          Constants.FAB.POSITION.GONE,
+          R.menu.menu_empty,
+          false,
+          () -> {
+          }
+      );
+      activity.binding.fabMain.hide();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+    updateShortcuts();
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
-        binding.setActivity(activity);
-        binding.setFragment(this);
-        binding.setViewModel(viewModel);
-        binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
-        binding.setClickUtil(new ClickUtil());
+    setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
 
-        viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity,
-                        activity.binding.frameMainContainer
-                ));
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
-
-        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.getScrollBehavior().setUpScroll(binding.scroll);
-            activity.getScrollBehavior().setHideOnScroll(true);
-            activity.updateBottomAppBar(
-                    Constants.FAB.POSITION.GONE,
-                    R.menu.menu_empty,
-                    false,
-                    () -> {}
-            );
-            activity.binding.fabMain.hide();
+  @Override
+  public void updateShortcuts() {
+    String subtitleShortcuts;
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+      ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
+      List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
+      StringBuilder shortcutLabels = new StringBuilder();
+      for (ShortcutInfo shortcutInfo : shortcutInfos) {
+        shortcutLabels.append(shortcutInfo.getShortLabel());
+        if (shortcutInfo != shortcutInfos.get(shortcutInfos.size() - 1)) {
+          shortcutLabels.append(", ");
         }
-
-        updateShortcuts();
-
-        setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+      }
+      if (shortcutLabels.length() != 0) {
+        subtitleShortcuts = shortcutLabels.toString();
+      } else {
+        subtitleShortcuts = getString(R.string.subtitle_none_selected);
+      }
+    } else {
+      subtitleShortcuts = getString(R.string.subtitle_not_supported);
     }
+    binding.subtitleShortcuts.setText(subtitleShortcuts);
+  }
 
-    @Override
-    public void updateShortcuts() {
-        String subtitleShortcuts;
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
-            ShortcutManager shortcutManager = activity.getSystemService(ShortcutManager.class);
-            List<ShortcutInfo> shortcutInfos = shortcutManager.getDynamicShortcuts();
-            StringBuilder shortcutLabels = new StringBuilder();
-            for(ShortcutInfo shortcutInfo : shortcutInfos) {
-                shortcutLabels.append(shortcutInfo.getShortLabel());
-                if(shortcutInfo != shortcutInfos.get(shortcutInfos.size()-1)) {
-                    shortcutLabels.append(", ");
-                }
-            }
-            if(shortcutLabels.length() != 0) {
-                subtitleShortcuts = shortcutLabels.toString();
-            } else {
-                subtitleShortcuts = getString(R.string.subtitle_none_selected);
-            }
-        } else {
-            subtitleShortcuts = getString(R.string.subtitle_not_supported);
-        }
-        binding.subtitleShortcuts.setText(subtitleShortcuts);
-    }
-
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
-    }
+  @Override
+  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
+  }
 }

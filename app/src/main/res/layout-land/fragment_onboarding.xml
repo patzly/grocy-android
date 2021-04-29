@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -18,151 +17,152 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:gravity="center_horizontal">
+
+  <androidx.viewpager2.widget.ViewPager2
+    android:id="@+id/pager_onboarding"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal">
+    android:layout_weight="1"
+    android:scrollbars="none"
+    android:overScrollMode="never" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager_onboarding"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scrollbars="none"
-        android:overScrollMode="never"/>
+  <View
+    style="@style/Theme.Grocy.Divider"
+    android:layout_width="1.5dp"
+    android:layout_height="match_parent"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp" />
 
-    <View
-        style="@style/Theme.Grocy.Divider"
-        android:layout_width="1.5dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
+  <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <LinearLayout
+      android:id="@+id/linear_onboarding_text_land"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:orientation="vertical"
+      android:layout_marginTop="16dp"
+      android:layout_weight="1"
+      android:gravity="center"
+      tools:ignore="NestedWeights">
+
+      <TextView
+        android:id="@+id/text_onboarding_title_land"
+        style="@style/Widget.Grocy.TextView.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:maxLines="2" />
+
+      <TextView
+        android:id="@+id/text_onboarding_description_land"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="@string/feature_1_description"
+        android:lineSpacingExtra="8sp"
+        android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/button_onboarding_start"
+      style="@style/Widget.Grocy.Button.UnelevatedButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/action_get_started" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      android:baselineAligned="false">
+
+      <FrameLayout
+        android:id="@+id/frame_onboarding_previous"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/actionBarItemBackground"
+        android:clickable="true"
+        android:gravity="start|center_vertical"
+        android:contentDescription="@string/action_prev"
+        android:tooltipText="@string/action_prev"
+        android:focusable="true"
+        tools:targetApi="o">
+
+        <ImageView
+          android:id="@+id/image_onboarding_previous"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_chevron_left_anim" />
+
+      </FrameLayout>
+
+      <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:gravity="center">
 
-        <LinearLayout
-            android:id="@+id/linear_onboarding_text_land"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            tools:ignore="NestedWeights">
+        <com.google.android.material.tabs.TabLayout
+          android:id="@+id/tabs_onboarding"
+          style="@style/Widget.Grocy.TabLayout.PageIndicator"
+          android:layout_width="wrap_content"
+          android:layout_height="8dp"
+          android:background="@null"
+          app:tabMaxWidth="16dp"
+          app:tabIndicatorFullWidth="true"
+          app:tabIndicator="@drawable/tab_indicator_onboarding"
+          app:tabIndicatorColor="@color/secondary"
+          app:tabBackground="@drawable/tab_background_onboarding" />
 
-            <TextView
-                android:id="@+id/text_onboarding_title_land"
-                style="@style/Widget.Grocy.TextView.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="22sp"
-                android:maxLines="2"/>
+      </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_onboarding_description_land"
-                style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:text="@string/feature_1_description"
-                android:lineSpacingExtra="8sp"
-                android:textSize="15sp"/>
+      <FrameLayout
+        android:id="@+id/frame_onboarding_next"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/actionBarItemBackground"
+        android:clickable="true"
+        android:gravity="end"
+        android:contentDescription="@string/action_next"
+        android:tooltipText="@string/action_next"
+        android:focusable="true"
+        tools:targetApi="o">
 
-        </LinearLayout>
+        <ImageView
+          android:id="@+id/image_onboarding_next"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_chevron_right_anim" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_onboarding_start"
-            style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/action_get_started"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:baselineAligned="false">
-
-            <FrameLayout
-                android:id="@+id/frame_onboarding_previous"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="start|center_vertical"
-                android:contentDescription="@string/action_prev"
-                android:tooltipText="@string/action_prev"
-                android:focusable="true"
-                tools:targetApi="o">
-
-                <ImageView
-                    android:id="@+id/image_onboarding_previous"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_chevron_left_anim" />
-
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabs_onboarding"
-                    style="@style/Widget.Grocy.TabLayout.PageIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="8dp"
-                    android:background="@null"
-                    app:tabMaxWidth="16dp"
-                    app:tabIndicatorFullWidth="true"
-                    app:tabIndicator="@drawable/tab_indicator_onboarding"
-                    app:tabIndicatorColor="@color/secondary"
-                    app:tabBackground="@drawable/tab_background_onboarding" />
-
-            </LinearLayout>
-
-            <FrameLayout
-                android:id="@+id/frame_onboarding_next"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="end"
-                android:contentDescription="@string/action_next"
-                android:tooltipText="@string/action_next"
-                android:focusable="true"
-                tools:targetApi="o">
-
-                <ImageView
-                    android:id="@+id/image_onboarding_next"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_chevron_right_anim" />
-
-            </FrameLayout>
-
-        </LinearLayout>
+      </FrameLayout>
 
     </LinearLayout>
+
+  </LinearLayout>
 
 </LinearLayout>

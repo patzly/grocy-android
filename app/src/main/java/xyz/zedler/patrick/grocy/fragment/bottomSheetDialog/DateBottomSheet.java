@@ -28,17 +28,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
@@ -46,159 +42,161 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class DateBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = DateBottomSheet.class.getSimpleName();
+  private final static String TAG = DateBottomSheet.class.getSimpleName();
 
-    public final static String DATE_TYPE = "date_type";
-    public final static int PURCHASED_DATE = 1;
-    public final static int DUE_DATE = 2;
+  public final static String DATE_TYPE = "date_type";
+  public final static int PURCHASED_DATE = 1;
+  public final static int DUE_DATE = 2;
 
-    private MainActivity activity;
-    private Bundle args;
-    private Calendar calendar;
-    private SimpleDateFormat dateFormat;
-    private String defaultDueDays;
-    private DatePicker datePicker;
-    private MaterialCheckBox neverExpires;
+  private MainActivity activity;
+  private Bundle args;
+  private Calendar calendar;
+  private SimpleDateFormat dateFormat;
+  private String defaultDueDays;
+  private DatePicker datePicker;
+  private MaterialCheckBox neverExpires;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @SuppressLint("SimpleDateFormat")
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_due_date, container, false
+    );
+
+    activity = (MainActivity) requireActivity();
+    args = requireArguments();
+
+    calendar = Calendar.getInstance();
+    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    datePicker = view.findViewById(R.id.date_picker_bbd);
+    neverExpires = view.findViewById(R.id.checkbox_bbd_never_expires);
+
+    neverExpires.setOnCheckedChangeListener(
+        (v, isChecked) -> datePicker.animate()
+            .alpha(isChecked ? 0.5f : 1)
+            .withEndAction(() -> datePicker.setEnabled(!isChecked))
+            .setDuration(200)
+            .start()
+    );
+
+    if (args.getInt(DATE_TYPE) == DUE_DATE) {
+      view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
+          v -> neverExpires.setChecked(!neverExpires.isChecked())
+      );
+    } else {
+      view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
+      ((TextView) view.findViewById(R.id.text_bbd_title))
+          .setText(R.string.property_purchased_date);
     }
-
-    @SuppressLint("SimpleDateFormat")
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_due_date, container, false
-        );
-
-        activity = (MainActivity) requireActivity();
-        args = requireArguments();
-
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        datePicker = view.findViewById(R.id.date_picker_bbd);
-        neverExpires = view.findViewById(R.id.checkbox_bbd_never_expires);
-
-        neverExpires.setOnCheckedChangeListener(
-                (v, isChecked) -> datePicker.animate()
-                        .alpha(isChecked ? 0.5f : 1)
-                        .withEndAction(() -> datePicker.setEnabled(!isChecked))
-                        .setDuration(200)
-                        .start()
-        );
-
-        if(args.getInt(DATE_TYPE) == DUE_DATE) {
-            view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
-                    v -> neverExpires.setChecked(!neverExpires.isChecked())
-            );
-        } else {
-            view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
-            ((TextView) view.findViewById(R.id.text_bbd_title))
-                    .setText(R.string.property_purchased_date);
+    view.findViewById(R.id.button_bbd_reset).setOnClickListener(
+        v -> {
+          calendar = Calendar.getInstance();
+          fillForm(null);
         }
-        view.findViewById(R.id.button_bbd_reset).setOnClickListener(
-                v -> {
-                    calendar = Calendar.getInstance();
-                    fillForm(null);
-                }
-        );
-        view.findViewById(R.id.button_bbd_save).setOnClickListener(
-                v -> dismiss()
-        );
+    );
+    view.findViewById(R.id.button_bbd_save).setOnClickListener(
+        v -> dismiss()
+    );
 
-        String selectedDate = args.getString(Constants.ARGUMENT.SELECTED_DATE);
-        defaultDueDays = args.getString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW);
+    String selectedDate = args.getString(Constants.ARGUMENT.SELECTED_DATE);
+    defaultDueDays = args.getString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW);
 
-        fillForm(selectedDate);
+    fillForm(selectedDate);
 
-        return view;
-    }
+    return view;
+  }
 
-    private void fillForm(String selectedBestBeforeDate) {
-        if(selectedBestBeforeDate != null
-                && selectedBestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)) {
+  private void fillForm(String selectedBestBeforeDate) {
+    if (selectedBestBeforeDate != null
+        && selectedBestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)) {
 
-            datePicker.setEnabled(false);
-            datePicker.setAlpha(0.5f);
-            neverExpires.setChecked(true);
+      datePicker.setEnabled(false);
+      datePicker.setAlpha(0.5f);
+      neverExpires.setChecked(true);
 
-        } else if(selectedBestBeforeDate != null) {
+    } else if (selectedBestBeforeDate != null) {
 
-            try {
-                Date date = dateFormat.parse(selectedBestBeforeDate);
-                if(date != null) calendar.setTime(date);
-            } catch (ParseException e) {
-                fillForm(null);
-                activity.showMessage(activity.getString(R.string.error_undefined));
-                return;
-            }
-            datePicker.setEnabled(true);
-            datePicker.setAlpha(1.0f);
-            neverExpires.setChecked(false);
-
-        } else if(defaultDueDays != null) {
-
-            if(Integer.parseInt(defaultDueDays) < 0) {
-                datePicker.setEnabled(false);
-                datePicker.setAlpha(0.5f);
-                neverExpires.setChecked(true);
-            } else {
-                datePicker.setEnabled(true);
-                datePicker.setAlpha(1.0f);
-                neverExpires.setChecked(false);
-                calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultDueDays));
-            }
-
-        } else {
-
-            datePicker.setEnabled(false);
-            datePicker.setAlpha(0.5f);
-            neverExpires.setChecked(true);
-
+      try {
+        Date date = dateFormat.parse(selectedBestBeforeDate);
+        if (date != null) {
+          calendar.setTime(date);
         }
+      } catch (ParseException e) {
+        fillForm(null);
+        activity.showMessage(activity.getString(R.string.error_undefined));
+        return;
+      }
+      datePicker.setEnabled(true);
+      datePicker.setAlpha(1.0f);
+      neverExpires.setChecked(false);
 
-        datePicker.updateDate(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
+    } else if (defaultDueDays != null) {
+
+      if (Integer.parseInt(defaultDueDays) < 0) {
+        datePicker.setEnabled(false);
+        datePicker.setAlpha(0.5f);
+        neverExpires.setChecked(true);
+      } else {
+        datePicker.setEnabled(true);
+        datePicker.setAlpha(1.0f);
+        neverExpires.setChecked(false);
+        calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultDueDays));
+      }
+
+    } else {
+
+      datePicker.setEnabled(false);
+      datePicker.setAlpha(0.5f);
+      neverExpires.setChecked(true);
+
     }
 
-    @Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        super.onDismiss(dialog);
+    datePicker.updateDate(
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    );
+  }
 
-        String date;
-        if(!neverExpires.isChecked()) {
-            calendar.set(
-                    datePicker.getYear(),
-                    datePicker.getMonth(),
-                    datePicker.getDayOfMonth()
-            );
-            date = dateFormat.format(calendar.getTime());
-        } else {
-            date = Constants.DATE.NEVER_OVERDUE;
-        }
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    super.onDismiss(dialog);
 
-        BaseFragment currentFragment = activity.getCurrentFragment();
-        if(args.getInt(DATE_TYPE) == DUE_DATE) {
-            currentFragment.selectDueDate(date);
-        } else {
-            currentFragment.selectPurchasedDate(date);
-        }
-        currentFragment.onBottomSheetDismissed();
+    String date;
+    if (!neverExpires.isChecked()) {
+      calendar.set(
+          datePicker.getYear(),
+          datePicker.getMonth(),
+          datePicker.getDayOfMonth()
+      );
+      date = dateFormat.format(calendar.getTime());
+    } else {
+      date = Constants.DATE.NEVER_OVERDUE;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
+    BaseFragment currentFragment = activity.getCurrentFragment();
+    if (args.getInt(DATE_TYPE) == DUE_DATE) {
+      currentFragment.selectDueDate(date);
+    } else {
+      currentFragment.selectPurchasedDate(date);
     }
+    currentFragment.onBottomSheetDismissed();
+  }
+
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

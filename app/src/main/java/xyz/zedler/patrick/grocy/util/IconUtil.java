@@ -28,61 +28,76 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.annotation.IdRes;
 
 public class IconUtil {
 
-    private final static String TAG = IconUtil.class.getSimpleName();
+  private final static String TAG = IconUtil.class.getSimpleName();
 
-    public static void start(Activity activity, @IdRes int viewId) {
-        if(activity == null) return;
-        start((View) activity.findViewById(viewId));
+  public static void start(Activity activity, @IdRes int viewId) {
+    if (activity == null) {
+      return;
     }
+    start((View) activity.findViewById(viewId));
+  }
 
-    public static void start(View view, @IdRes int viewId) {
-        if(view == null) return;
-        start((View) view.findViewById(viewId));
+  public static void start(View view, @IdRes int viewId) {
+    if (view == null) {
+      return;
     }
+    start((View) view.findViewById(viewId));
+  }
 
-    public static void start(View view) {
-        if(view == null) return;
-        try {
-            ImageView imageView = (ImageView) view;
-            start(imageView);
-        } catch (ClassCastException e) {
-            Log.e(TAG, "start() requires ImageView");
-        }
+  public static void start(View view) {
+    if (view == null) {
+      return;
     }
+    try {
+      ImageView imageView = (ImageView) view;
+      start(imageView);
+    } catch (ClassCastException e) {
+      Log.e(TAG, "start() requires ImageView");
+    }
+  }
 
-    public static void start(ImageView imageView) {
-        if(imageView == null || imageView.getDrawable() == null) return;
-        if(!(imageView.getDrawable() instanceof AnimatedVectorDrawable)) return;
-        start(imageView.getDrawable());
+  public static void start(ImageView imageView) {
+    if (imageView == null || imageView.getDrawable() == null) {
+      return;
     }
+    if (!(imageView.getDrawable() instanceof AnimatedVectorDrawable)) {
+      return;
+    }
+    start(imageView.getDrawable());
+  }
 
-    public static void start(MenuItem item) {
-        if(item == null) return;
-        start(item.getIcon());
+  public static void start(MenuItem item) {
+    if (item == null) {
+      return;
     }
+    start(item.getIcon());
+  }
 
-    public static void start(Drawable drawable) {
-        if(drawable == null) return;
-        try {
-            ((Animatable) drawable).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "start() requires AnimVectorDrawable");
-        }
+  public static void start(Drawable drawable) {
+    if (drawable == null) {
+      return;
     }
+    try {
+      ((Animatable) drawable).start();
+    } catch (ClassCastException cla) {
+      Log.e(TAG, "start() requires AnimVectorDrawable");
+    }
+  }
 
-    public static void reset(Drawable drawable) {
-        if(drawable == null) return;
-        try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ((AnimatedVectorDrawable) drawable).reset();
-            }
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "start() requires AnimVectorDrawable");
-        }
+  public static void reset(Drawable drawable) {
+    if (drawable == null) {
+      return;
     }
+    try {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        ((AnimatedVectorDrawable) drawable).reset();
+      }
+    } catch (ClassCastException cla) {
+      Log.e(TAG, "start() requires AnimVectorDrawable");
+    }
+  }
 }

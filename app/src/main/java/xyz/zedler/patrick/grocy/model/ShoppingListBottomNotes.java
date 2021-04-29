@@ -20,44 +20,46 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.text.Spanned;
-
 import androidx.annotation.NonNull;
-
 import java.util.Objects;
 
 public class ShoppingListBottomNotes extends GroupedListItem {
 
-    private Spanned notes;
+  private final Spanned notes;
 
-    public ShoppingListBottomNotes(Spanned notes) {
-        this.notes = notes;
-    }
+  public ShoppingListBottomNotes(Spanned notes) {
+    this.notes = notes;
+  }
 
-    public Spanned getNotes() {
-        return notes;
-    }
+  public Spanned getNotes() {
+    return notes;
+  }
 
-    @Override
-    public int getType() {
-        return TYPE_BOTTOM_NOTES;
-    }
+  @Override
+  public int getType() {
+    return TYPE_BOTTOM_NOTES;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ShoppingListBottomNotes that = (ShoppingListBottomNotes) o;
-        return Objects.equals(notes, that.notes);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ShoppingListBottomNotes that = (ShoppingListBottomNotes) o;
+    return Objects.equals(notes, that.notes);
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(notes);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(notes);
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "ShoppingListBottomNotes(" + notes.toString() + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "ShoppingListBottomNotes(" + notes.toString() + ')';
+  }
 }

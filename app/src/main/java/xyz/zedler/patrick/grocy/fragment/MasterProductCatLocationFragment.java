@@ -23,15 +23,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatLocationBinding;
@@ -48,174 +44,184 @@ import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatLocationViewModel;
 
 public class MasterProductCatLocationFragment extends BaseFragment {
 
-    private final static String TAG = MasterProductCatLocationFragment.class.getSimpleName();
+  private final static String TAG = MasterProductCatLocationFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private FragmentMasterProductCatLocationBinding binding;
-    private MasterProductCatLocationViewModel viewModel;
-    private InfoFullscreenHelper infoFullscreenHelper;
+  private MainActivity activity;
+  private FragmentMasterProductCatLocationBinding binding;
+  private MasterProductCatLocationViewModel viewModel;
+  private InfoFullscreenHelper infoFullscreenHelper;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentMasterProductCatLocationBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentMasterProductCatLocationBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @Override
+  public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    MasterProductFragmentArgs args = MasterProductFragmentArgs
+        .fromBundle(requireArguments());
+    viewModel = new ViewModelProvider(this, new MasterProductCatLocationViewModel
+        .MasterProductCatLocationViewModelFactory(activity.getApplication(), args)
+    ).get(MasterProductCatLocationViewModel.class);
+    binding.setActivity(activity);
+    binding.setFormData(viewModel.getFormData());
+    binding.setViewModel(viewModel);
+    binding.setFragment(this);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        SnackbarMessage message = (SnackbarMessage) event;
+        Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+        activity.showSnackbar(snack);
+      } else if (event.getType() == Event.NAVIGATE_UP) {
+        activity.navigateUp();
+      } else if (event.getType() == Event.SET_SHOPPING_LIST_ID) {
+        int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
+        setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
+
+    infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
+    viewModel.getInfoFullscreenLive().observe(
+        getViewLifecycleOwner(),
+        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+    );
+
+    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
+      if (!isLoading) {
+        viewModel.setCurrentQueueLoading(null);
+      }
+    });
+
+    if (savedInstanceState == null) {
+      viewModel.loadFromDatabase(true);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+    updateUI(savedInstanceState == null);
+  }
 
-    @Override
-    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        MasterProductFragmentArgs args = MasterProductFragmentArgs
-                .fromBundle(requireArguments());
-        viewModel = new ViewModelProvider(this, new MasterProductCatLocationViewModel
-                .MasterProductCatLocationViewModelFactory(activity.getApplication(), args)
-        ).get(MasterProductCatLocationViewModel.class);
-        binding.setActivity(activity);
-        binding.setFormData(viewModel.getFormData());
-        binding.setViewModel(viewModel);
-        binding.setFragment(this);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                SnackbarMessage message = (SnackbarMessage) event;
-                Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
-                activity.showSnackbar(snack);
-            } else if(event.getType() == Event.NAVIGATE_UP) {
-                activity.navigateUp();
-            } else if(event.getType() == Event.SET_SHOPPING_LIST_ID) {
-                int id = event.getBundle().getInt(Constants.ARGUMENT.SELECTED_ID);
-                setForDestination(R.id.shoppingListFragment, Constants.ARGUMENT.SELECTED_ID, id);
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
-
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
-        viewModel.getInfoFullscreenLive().observe(
-                getViewLifecycleOwner(),
-                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-        );
-
-        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-            if(!isLoading) viewModel.setCurrentQueueLoading(null);
-        });
-
-        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
-
-        updateUI(savedInstanceState == null);
-    }
-
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(R.id.scroll);
-        activity.getScrollBehavior().setHideOnScroll(true);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.END,
-                viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
-                menuItem -> {
-                    if(menuItem.getItemId() != R.id.action_delete) return false;
-                    setForDestination(
-                            R.id.masterProductFragment,
-                            Constants.ARGUMENT.ACTION,
-                            Constants.ACTION.DELETE
-                    );
-                    activity.onBackPressed();
-                    return true;
-                }
-        );
-        activity.updateFab(
-                R.drawable.ic_round_backup,
-                R.string.action_save,
-                Constants.FAB.TAG.SAVE,
-                animated,
-                () -> {
-                    setForDestination(
-                            R.id.masterProductFragment,
-                            Constants.ARGUMENT.ACTION,
-                            Constants.ACTION.SAVE
-                    );
-                    activity.onBackPressed();
-                }
-        );
-    }
-
-    public void clearInputFocus() {
-        activity.hideKeyboard();
-    }
-
-    public void showLocationsBottomSheet() {
-        ArrayList<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
-        if(locations == null) {
-            viewModel.showErrorMessage();
-            return;
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(R.id.scroll);
+    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.END,
+        viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
+        menuItem -> {
+          if (menuItem.getItemId() != R.id.action_delete) {
+            return false;
+          }
+          setForDestination(
+              R.id.masterProductFragment,
+              Constants.ARGUMENT.ACTION,
+              Constants.ACTION.DELETE
+          );
+          activity.onBackPressed();
+          return true;
         }
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
-        Location location = viewModel.getFormData().getLocationLive().getValue();
-        int locationId = location != null ? location.getId() : -1;
-        bundle.putInt(Constants.ARGUMENT.SELECTED_ID, locationId);
-        activity.showBottomSheet(new LocationsBottomSheet(), bundle);
-    }
-
-    public void showStoresBottomSheet() {
-        ArrayList<Store> stores = viewModel.getFormData().getStoresLive().getValue();
-        if(stores == null) {
-            viewModel.showErrorMessage();
-            return;
+    );
+    activity.updateFab(
+        R.drawable.ic_round_backup,
+        R.string.action_save,
+        Constants.FAB.TAG.SAVE,
+        animated,
+        () -> {
+          setForDestination(
+              R.id.masterProductFragment,
+              Constants.ARGUMENT.ACTION,
+              Constants.ACTION.SAVE
+          );
+          activity.onBackPressed();
         }
-        if(stores != null && !stores.isEmpty() && stores.get(0).getId() != -1) {
-            stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-        }
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
-        Store store = viewModel.getFormData().getStoreLive().getValue();
-        int storeId = store != null ? store.getId() : -1;
-        bundle.putInt(Constants.ARGUMENT.SELECTED_ID, storeId);
-        activity.showBottomSheet(new StoresBottomSheet(), bundle);
-    }
+    );
+  }
 
-    @Override
-    public void selectLocation(Location location) {
-        viewModel.getFormData().getLocationLive().setValue(location);
-    }
+  public void clearInputFocus() {
+    activity.hideKeyboard();
+  }
 
-    @Override
-    public void selectStore(Store store) {
-        viewModel.getFormData().getStoreLive().setValue(store);
+  public void showLocationsBottomSheet() {
+    ArrayList<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
+    if (locations == null) {
+      viewModel.showErrorMessage();
+      return;
     }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    Location location = viewModel.getFormData().getLocationLive().getValue();
+    int locationId = location != null ? location.getId() : -1;
+    bundle.putInt(Constants.ARGUMENT.SELECTED_ID, locationId);
+    activity.showBottomSheet(new LocationsBottomSheet(), bundle);
+  }
 
-    @Override
-    public boolean onBackPressed() {
-        setForDestination(
-                R.id.masterProductFragment,
-                Constants.ARGUMENT.PRODUCT,
-                viewModel.getFilledProduct()
-        );
-        return false;
+  public void showStoresBottomSheet() {
+    ArrayList<Store> stores = viewModel.getFormData().getStoresLive().getValue();
+    if (stores == null) {
+      viewModel.showErrorMessage();
+      return;
     }
+    if (stores != null && !stores.isEmpty() && stores.get(0).getId() != -1) {
+      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    Store store = viewModel.getFormData().getStoreLive().getValue();
+    int storeId = store != null ? store.getId() : -1;
+    bundle.putInt(Constants.ARGUMENT.SELECTED_ID, storeId);
+    activity.showBottomSheet(new StoresBottomSheet(), bundle);
+  }
 
-    @Override
-    public void updateConnectivity(boolean isOnline) {
-        if(!isOnline == viewModel.isOffline()) return;
-        viewModel.setOfflineLive(!isOnline);
-        if(isOnline) viewModel.downloadData();
-    }
+  @Override
+  public void selectLocation(Location location) {
+    viewModel.getFormData().getLocationLive().setValue(location);
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
+  @Override
+  public void selectStore(Store store) {
+    viewModel.getFormData().getStoreLive().setValue(store);
+  }
+
+  @Override
+  public boolean onBackPressed() {
+    setForDestination(
+        R.id.masterProductFragment,
+        Constants.ARGUMENT.PRODUCT,
+        viewModel.getFilledProduct()
+    );
+    return false;
+  }
+
+  @Override
+  public void updateConnectivity(boolean isOnline) {
+    if (!isOnline == viewModel.isOffline()) {
+      return;
     }
+    viewModel.setOfflineLive(!isOnline);
+    if (isOnline) {
+      viewModel.downloadData();
+    }
+  }
+
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

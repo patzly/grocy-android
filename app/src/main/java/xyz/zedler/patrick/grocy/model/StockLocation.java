@@ -21,142 +21,140 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_current_location_table")
 public class StockLocation implements Parcelable {
 
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
 
-    @PrimaryKey
-    @ColumnInfo(name = "product_id")
-    @SerializedName("product_id")
-    private int productId;
+  @PrimaryKey
+  @ColumnInfo(name = "product_id")
+  @SerializedName("product_id")
+  private int productId;
 
-    @ColumnInfo(name = "amount")
-    @SerializedName("amount")
-    private String amount;
+  @ColumnInfo(name = "amount")
+  @SerializedName("amount")
+  private String amount;
 
-    @ColumnInfo(name = "location_id")
-    @SerializedName("location_id")
-    private int locationId;
+  @ColumnInfo(name = "location_id")
+  @SerializedName("location_id")
+  private int locationId;
 
-    @ColumnInfo(name = "location_name")
-    @SerializedName("location_name")
-    private String locationName;
+  @ColumnInfo(name = "location_name")
+  @SerializedName("location_name")
+  private String locationName;
 
-    @ColumnInfo(name = "location_is_freezer")
-    @SerializedName("location_is_freezer")
-    private String isFreezer;
+  @ColumnInfo(name = "location_is_freezer")
+  @SerializedName("location_is_freezer")
+  private String isFreezer;
 
-    public StockLocation() {}  // for room
+  public StockLocation() {
+  }  // for room
 
-    private StockLocation(Parcel parcel) {
-        id = parcel.readInt();
-        productId = parcel.readInt();
-        amount = parcel.readString();
-        locationId = parcel.readInt();
-        locationName = parcel.readString();
-        isFreezer = parcel.readString();
+  private StockLocation(Parcel parcel) {
+    id = parcel.readInt();
+    productId = parcel.readInt();
+    amount = parcel.readString();
+    locationId = parcel.readInt();
+    locationName = parcel.readString();
+    isFreezer = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeInt(productId);
+    dest.writeString(amount);
+    dest.writeInt(locationId);
+    dest.writeString(locationName);
+    dest.writeString(isFreezer);
+  }
+
+  public static final Creator<StockLocation> CREATOR = new Creator<StockLocation>() {
+
+    @Override
+    public StockLocation createFromParcel(Parcel in) {
+      return new StockLocation(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(productId);
-        dest.writeString(amount);
-        dest.writeInt(locationId);
-        dest.writeString(locationName);
-        dest.writeString(isFreezer);
+    public StockLocation[] newArray(int size) {
+      return new StockLocation[size];
     }
+  };
 
-    public static final Creator<StockLocation> CREATOR = new Creator<StockLocation>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public StockLocation createFromParcel(Parcel in) {
-            return new StockLocation(in);
-        }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-        @Override
-        public StockLocation[] newArray(int size) {
-            return new StockLocation[size];
-        }
-    };
+  public int getProductId() {
+    return productId;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public void setProductId(int productId) {
+    this.productId = productId;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public String getAmount() {
+    return amount;
+  }
 
-    public int getProductId() {
-        return productId;
-    }
+  public double getAmountDouble() {
+    return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
+  }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
+  public void setAmount(String amount) {
+    this.amount = amount;
+  }
 
-    public String getAmount() {
-        return amount;
-    }
+  public int getLocationId() {
+    return locationId;
+  }
 
-    public double getAmountDouble() {
-        return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
-    }
+  public void setLocationId(int locationId) {
+    this.locationId = locationId;
+  }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
+  public String getLocationName() {
+    return locationName;
+  }
 
-    public int getLocationId() {
-        return locationId;
-    }
+  public void setLocationName(String locationName) {
+    this.locationName = locationName;
+  }
 
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
-    }
+  public String getIsFreezer() {
+    return isFreezer;
+  }
 
-    public String getLocationName() {
-        return locationName;
-    }
+  public boolean getIsFreezerBoolean() {
+    return NumUtil.isStringInt(isFreezer) && Integer.parseInt(isFreezer) == 1;
+  }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
+  public void setIsFreezer(String isFreezer) {
+    this.isFreezer = isFreezer;
+  }
 
-    public String getIsFreezer() {
-        return isFreezer;
-    }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    public boolean getIsFreezerBoolean() {
-        return NumUtil.isStringInt(isFreezer) && Integer.parseInt(isFreezer) == 1;
-    }
-
-    public void setIsFreezer(String isFreezer) {
-        this.isFreezer = isFreezer;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "StockLocation(" + locationName + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "StockLocation(" + locationName + ')';
+  }
 }

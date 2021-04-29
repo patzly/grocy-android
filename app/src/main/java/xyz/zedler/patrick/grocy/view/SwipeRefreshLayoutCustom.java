@@ -21,24 +21,23 @@ package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class SwipeRefreshLayoutCustom extends SwipeRefreshLayout {
 
-    public SwipeRefreshLayoutCustom(@NonNull Context context) {
-        super(context);
-    }
+  public SwipeRefreshLayoutCustom(@NonNull Context context) {
+    super(context);
+  }
 
-    public SwipeRefreshLayoutCustom(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public SwipeRefreshLayoutCustom(@NonNull Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    @Override
-    public boolean canChildScrollUp() {
-        return super.canChildScrollUp();
-    }
+  @Override
+  public boolean canChildScrollUp() {
+    return super.canChildScrollUp();
+  }
 
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,65 +18,65 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:paddingStart="0dp"
+    android:paddingEnd="4dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingStart="0dp"
-        android:paddingEnd="4dp">
+    <TextView
+      android:id="@+id/text_text_title"
+      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:padding="16dp"
+      android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/text_text_title"
-            style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_weight="1"/>
+    <FrameLayout
+      android:id="@+id/frame_text_open_link"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:background="?attr/actionBarItemBackground"
+      android:clickable="true"
+      android:layout_gravity="end|center_vertical"
+      android:focusable="true">
 
-        <FrameLayout
-            android:id="@+id/frame_text_open_link"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/actionBarItemBackground"
-            android:clickable="true"
-            android:layout_gravity="end|center_vertical"
-            android:focusable="true">
+      <ImageView
+        android:id="@+id/image_text_open_link"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_round_open_in_browser_anim" />
 
-            <ImageView
-                android:id="@+id/image_text_open_link"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_round_open_in_browser_anim" />
+    </FrameLayout>
 
-        </FrameLayout>
+  </LinearLayout>
 
-    </LinearLayout>
+  <View
+    style="@style/Theme.Grocy.Divider"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp" />
 
-    <View
-        style="@style/Theme.Grocy.Divider"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+    <TextView
+      android:id="@+id/text_text"
+      style="@style/Widget.Grocy.TextView.Paragraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp"
+      android:textSize="14.5sp" />
 
-        <TextView
-            android:id="@+id/text_text"
-            style="@style/Widget.Grocy.TextView.Paragraph"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textSize="14.5sp" />
-
-    </androidx.core.widget.NestedScrollView>
+  </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

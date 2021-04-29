@@ -48,100 +48,104 @@ import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
 
-	private final static String TAG = TextBottomSheet.class.getSimpleName();
-	private boolean debug;
+  private final static String TAG = TextBottomSheet.class.getSimpleName();
+  private boolean debug;
 
-	private FragmentBottomsheetTextBinding binding;
+  private FragmentBottomsheetTextBinding binding;
 
-	@NonNull
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-	}
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
 
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater,
-							 ViewGroup container,
-							 Bundle savedInstanceState) {
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState) {
 
-		binding = FragmentBottomsheetTextBinding.inflate(
-				inflater, container, false
-		);
+    binding = FragmentBottomsheetTextBinding.inflate(
+        inflater, container, false
+    );
 
-		Context context = requireContext();
-		Bundle bundle = requireArguments();
+    Context context = requireContext();
+    Bundle bundle = requireArguments();
 
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-		binding.textTextTitle.setText(
-				bundle.getString(Constants.ARGUMENT.TITLE)
-		);
+    binding.textTextTitle.setText(
+        bundle.getString(Constants.ARGUMENT.TITLE)
+    );
 
-		String link = bundle.getString(Constants.ARGUMENT.LINK);
-		if (link != null) {
-			binding.frameTextOpenLink.setOnClickListener(v -> {
-				IconUtil.start(binding.imageTextOpenLink);
-				new Handler().postDelayed(
-						() -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
-						500
-				);
-			});
-		} else {
-			binding.frameTextOpenLink.setVisibility(View.GONE);
-		}
+    String link = bundle.getString(Constants.ARGUMENT.LINK);
+    if (link != null) {
+      binding.frameTextOpenLink.setOnClickListener(v -> {
+        IconUtil.start(binding.imageTextOpenLink);
+        new Handler().postDelayed(
+            () -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
+            500
+        );
+      });
+    } else {
+      binding.frameTextOpenLink.setVisibility(View.GONE);
+    }
 
-		String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
-		String content = TextUtil.readFromFile(context, file);
-		if(file.equals("changelog.txt")) {
-			binding.textText.setText(
-					BulletUtil.makeBulletList(
-							context,
-							6,
-							2,
-							"- ",
-							content,
-							Arrays.asList("New:", "Improved:", "Fixed:")
-					),
-					TextView.BufferType.SPANNABLE
-			);
-			binding.textText.setTextSize(15.5f);
-		} else {
-			binding.textText.setText(content);
-		}
+    String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
+    String content = TextUtil.readFromFile(context, file);
+    if (file.equals("changelog.txt")) {
+      binding.textText.setText(
+          BulletUtil.makeBulletList(
+              context,
+              6,
+              2,
+              "- ",
+              content,
+              Arrays.asList("New:", "Improved:", "Fixed:")
+          ),
+          TextView.BufferType.SPANNABLE
+      );
+      binding.textText.setTextSize(15.5f);
+    } else {
+      binding.textText.setText(content);
+    }
 
-		return binding.getRoot();
-	}
+    return binding.getRoot();
+  }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		binding = null;
-	}
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
+  }
 
-	private String readFromFile(Context context, String file) {
-		StringBuilder text = new StringBuilder();
-		try {
-			InputStream inputStream = context.getAssets().open(file);
-			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			for(String line; (line = bufferedReader.readLine()) != null;) {
-				text.append(line).append('\n');
-			}
-			text.deleteCharAt(text.length() - 1);
-			inputStream.close();
-		} catch (FileNotFoundException e) {
-			if(debug) Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
-			return null;
-		} catch (Exception e) {
-			if(debug) Log.e(TAG, "readFromFile: " + e.toString());
-		}
-		return text.toString();
-	}
+  private String readFromFile(Context context, String file) {
+    StringBuilder text = new StringBuilder();
+    try {
+      InputStream inputStream = context.getAssets().open(file);
+      InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+      BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+      for (String line; (line = bufferedReader.readLine()) != null; ) {
+        text.append(line).append('\n');
+      }
+      text.deleteCharAt(text.length() - 1);
+      inputStream.close();
+    } catch (FileNotFoundException e) {
+      if (debug) {
+        Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
+      }
+      return null;
+    } catch (Exception e) {
+      if (debug) {
+        Log.e(TAG, "readFromFile: " + e.toString());
+      }
+    }
+    return text.toString();
+  }
 
-	@NonNull
-	@Override
-	public String toString() {
-		return TAG;
-	}
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

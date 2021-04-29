@@ -21,9 +21,9 @@ package xyz.zedler.patrick.grocy.model;
 
 public abstract class GroupedListItem {
 
-    public static final int TYPE_HEADER = 0;
-    public static final int TYPE_ENTRY = 1;
-    public static final int TYPE_BOTTOM_NOTES = 2;
+  public static final int TYPE_HEADER = 0;
+  public static final int TYPE_ENTRY = 1;
+  public static final int TYPE_BOTTOM_NOTES = 2;
 
-    abstract public int getType();
+  abstract public int getType();
 }

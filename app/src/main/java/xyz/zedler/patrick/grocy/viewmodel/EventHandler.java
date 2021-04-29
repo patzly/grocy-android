@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import androidx.lifecycle.LifecycleOwner;
-
 import xyz.zedler.patrick.grocy.model.Event;
 
 /**
@@ -31,21 +30,23 @@ import xyz.zedler.patrick.grocy.model.Event;
  */
 public class EventHandler extends SingleLiveEvent<Event> {
 
-    public void observeEvent(LifecycleOwner owner, final EventObserver observer) {
-        super.observe(owner, t -> {
-            if (t == null) {
-                return;
-            }
-            observer.onNewMessage(t);
-        });
-    }
+  public void observeEvent(LifecycleOwner owner, final EventObserver observer) {
+    super.observe(owner, t -> {
+      if (t == null) {
+        return;
+      }
+      observer.onNewMessage(t);
+    });
+  }
 
-    public interface EventObserver {
-        /**
-         * Called when there is a new message to be shown.
-         * @param event The new event, non-null.
-         */
-        void onNewMessage(Event event);
-    }
+  public interface EventObserver {
+
+    /**
+     * Called when there is a new message to be shown.
+     *
+     * @param event The new event, non-null.
+     */
+    void onNewMessage(Event event);
+  }
 
 }

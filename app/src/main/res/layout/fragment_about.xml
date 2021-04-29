@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -20,393 +19,394 @@
 
 <layout>
 
-    <data>
-        <import type="android.view.View"/>
-        <variable name="fragment"
-            type="xyz.zedler.patrick.grocy.fragment.AboutFragment"/>
-        <variable name="activity"
-            type="xyz.zedler.patrick.grocy.activity.MainActivity"/>
-    </data>
+  <data>
+    <import type="android.view.View" />
+    <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.AboutFragment" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+  </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar_about"
+      android:layout_width="match_parent"
+      android:layout_height="?android:actionBarSize">
+
+      <LinearLayout
+        android:id="@+id/linear_about_app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@color/primary">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar_about"
+        <FrameLayout
+          android:id="@+id/frame_about_back"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="20dp"
+          android:background="?attr/actionBarItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:contentDescription="@string/action_back"
+          android:tooltipText="@string/action_back"
+          android:focusable="true"
+          tools:targetApi="o"
+          android:onClick="@{() -> activity.navigateUp()}">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_arrow_back" />
+
+        </FrameLayout>
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.Toolbar"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="16dp"
+          android:text="@string/title_about" />
+
+      </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll_about"
+      android:background="@color/background"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?android:actionBarSize">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="8dp"
+          app:contentPadding="16dp"
+          app:cardElevation="0dp"
+          app:cardCornerRadius="12dp"
+          app:cardBackgroundColor="@color/on_background_variant">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize">
-
-            <LinearLayout
-                android:id="@+id/linear_about_app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:background="@color/primary">
-
-                <FrameLayout
-                    android:id="@+id/frame_about_back"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/actionBarItemBackground"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:contentDescription="@string/action_back"
-                    android:tooltipText="@string/action_back"
-                    android:focusable="true"
-                    tools:targetApi="o"
-                    android:onClick="@{() -> activity.navigateUp()}">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_round_arrow_back" />
-
-                </FrameLayout>
-
-                <TextView
-                    style="@style/Widget.Grocy.TextView.Toolbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/title_about" />
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_about"
-            android:background="@color/background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?android:actionBarSize">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:paddingBottom="8dp"
-                android:orientation="vertical">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:contentPadding="16dp"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="@color/on_background_variant">
-
-                    <TextView
-                        style="@style/Widget.Grocy.TextView.Paragraph"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/info_acknowledgement" />
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <LinearLayout
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine">
-
-                    <ImageView
-                        android:id="@+id/image_version"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_info_outline_anim"
-                        tools:ignore="ContentDescription" />
-
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                            android:text="@string/info_version" />
-
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/versionName" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linear_changelog"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+            android:layout_height="wrap_content"
+            android:text="@string/info_acknowledgement" />
 
-                    <ImageView
-                        android:id="@+id/image_changelog"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_history_anim"
-                        tools:ignore="ContentDescription" />
+        </com.google.android.material.card.MaterialCardView>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/info_changelog" />
+          <ImageView
+            android:id="@+id/image_version"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_info_outline_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/info_changelog_description" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/info_version" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/versionName" />
 
-                <LinearLayout
-                    android:id="@+id/linear_developers"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/image_developers"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_person_anim"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_changelog"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                            android:text="@string/info_developers" />
+          <ImageView
+            android:id="@+id/image_changelog"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_history_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/app_developer" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/info_changelog" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/info_changelog_description" />
 
-                <LinearLayout
-                    android:id="@+id/linear_github"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_github"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_developers"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/info_github" />
+          <ImageView
+            android:id="@+id/image_developers"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_person_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/info_github_description" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/info_developers" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/app_developer" />
 
-                <LinearLayout
-                    android:id="@+id/linear_intro"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/image_intro"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_view_carousel_anim"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_github"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/info_intro" />
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_github"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/info_intro_description" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/info_github" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/info_github_description" />
 
-                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine">
+          </LinearLayout>
 
-                    <ImageView
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_date_range"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_intro"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                            android:text="@string/info_dev_beginning" />
+          <ImageView
+            android:id="@+id/image_intro"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_view_carousel_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/info_dev_beginning_date" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/info_intro" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/info_intro_description" />
 
-                <TextView
-                    style="@style/Widget.Grocy.TextView.Category"
-                    android:text="@string/category_licenses" />
+          </LinearLayout>
 
-                <LinearLayout
-                  android:id="@+id/linear_license_gson"
-                  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+        </LinearLayout>
 
-                    <ImageView
-                      android:id="@+id/image_license_gson"
-                      style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                      android:src="@drawable/ic_round_copyright_anim"
-                      tools:ignore="ContentDescription" />
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine">
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_date_range"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                          style="@style/Widget.Grocy.TextView.ListItem.Title"
-                          android:text="@string/license_gson" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                        <TextView
-                          style="@style/Widget.Grocy.TextView.ListItem.Description"
-                          android:text="@string/license_author_google" />
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/info_dev_beginning" />
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/info_dev_beginning_date" />
 
-                </LinearLayout>
+          </LinearLayout>
 
-                <LinearLayout
-                  android:id="@+id/linear_license_jost"
-                  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+        </LinearLayout>
 
-                    <ImageView
-                      android:id="@+id/image_license_jost"
-                      style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                      android:src="@drawable/ic_round_copyright_anim"
-                      tools:ignore="ContentDescription" />
+        <TextView
+          style="@style/Widget.Grocy.TextView.Category"
+          android:text="@string/category_licenses" />
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_license_gson"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                          style="@style/Widget.Grocy.TextView.ListItem.Title"
-                          android:text="@string/license_jost" />
+          <ImageView
+            android:id="@+id/image_license_gson"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                          style="@style/Widget.Grocy.TextView.ListItem.Description"
-                          android:text="@string/license_jost_author" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_gson" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_author_google" />
 
-                <LinearLayout
-                    android:id="@+id/linear_license_material_components"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/image_license_material_components"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_copyright_anim"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_license_jost"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/license_material_components" />
+          <ImageView
+            android:id="@+id/image_license_jost"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/license_author_google" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_jost" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_jost_author" />
 
-                <LinearLayout
-                    android:id="@+id/linear_license_material_icons"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/image_license_material_icons"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_copyright_anim"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_license_material_components"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/license_material_icons" />
+          <ImageView
+            android:id="@+id/image_license_material_components"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/license_author_google" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_material_components" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_author_google" />
 
-                <LinearLayout
-                    android:id="@+id/linear_license_volley"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/image_license_volley"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_copyright_anim"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_license_material_icons"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/license_volley" />
+          <ImageView
+            android:id="@+id/image_license_material_icons"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/license_author_google" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_material_icons" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_author_google" />
 
-                <LinearLayout
-                    android:id="@+id/linear_license_xzing_android"
-                    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+          </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/image_license_xzing_android"
-                        style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                        android:src="@drawable/ic_round_copyright_anim"
-                        tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-                    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+        <LinearLayout
+          android:id="@+id/linear_license_volley"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Title"
-                            android:text="@string/license_xzing_android" />
+          <ImageView
+            android:id="@+id/image_license_volley"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
 
-                        <TextView
-                            style="@style/Widget.Grocy.TextView.ListItem.Description"
-                            android:text="@string/license_xzing_android_author" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-                    </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_volley" />
 
-                </LinearLayout>
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_author_google" />
 
-            </LinearLayout>
+          </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+          android:id="@+id/linear_license_xzing_android"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+
+          <ImageView
+            android:id="@+id/image_license_xzing_android"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_xzing_android" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_xzing_android_author" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

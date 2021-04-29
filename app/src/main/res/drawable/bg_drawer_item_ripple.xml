@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,26 +18,29 @@
   -->
 
 <layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:autoMirrored="true">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:autoMirrored="true">
 
-    <item>
+  <item>
 
-        <ripple android:color="@color/highlight">
+    <ripple android:color="@color/highlight">
 
-            <item android:left="4dp" android:bottom="1dp" android:top="1dp">
-                <shape android:shape="rectangle">
+      <item
+        android:left="4dp"
+        android:bottom="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
 
-                    <corners
-                        android:topLeftRadius="32dp"
-                        android:bottomLeftRadius="32dp"/>
+          <corners
+            android:topLeftRadius="32dp"
+            android:bottomLeftRadius="32dp" />
 
-                    <solid android:color="@color/surface"/>
-                </shape>
-            </item>
+          <solid android:color="@color/surface" />
+        </shape>
+      </item>
 
-        </ripple>
+    </ripple>
 
-    </item>
+  </item>
 
 </layer-list>

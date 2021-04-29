@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -40,11 +39,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.transition.TransitionInflater;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterObjectListAdapter;
@@ -70,401 +66,428 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
 
 public class MasterObjectListFragment extends BaseFragment
-        implements MasterObjectListAdapter.MasterObjectListAdapterListener {
+    implements MasterObjectListAdapter.MasterObjectListAdapterListener {
 
-    private final static String TAG = MasterObjectListFragment.class.getSimpleName();
+  private final static String TAG = MasterObjectListFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private AppBarBehavior appBarBehavior;
-    private ClickUtil clickUtil;
-    private InfoFullscreenHelper infoFullscreenHelper;
-    private FragmentMasterObjectListBinding binding;
-    private MasterObjectListViewModel viewModel;
+  private MainActivity activity;
+  private AppBarBehavior appBarBehavior;
+  private ClickUtil clickUtil;
+  private InfoFullscreenHelper infoFullscreenHelper;
+  private FragmentMasterObjectListBinding binding;
+  private MasterObjectListViewModel viewModel;
 
-    private String entity;
+  private String entity;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        entity = MasterObjectListFragmentArgs.fromBundle(requireArguments()).getEntity();
-        binding = FragmentMasterObjectListBinding.inflate(
-                inflater, container, false
-        );
-        int title;
-        switch (entity) {
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    entity = MasterObjectListFragmentArgs.fromBundle(requireArguments()).getEntity();
+    binding = FragmentMasterObjectListBinding.inflate(
+        inflater, container, false
+    );
+    int title;
+    switch (entity) {
+      case GrocyApi.ENTITY.PRODUCTS:
+        title = R.string.property_products;
+        break;
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
+        title = R.string.property_quantity_units;
+        break;
+      case GrocyApi.ENTITY.LOCATIONS:
+        title = R.string.property_locations;
+        break;
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        title = R.string.property_product_groups;
+        break;
+      default: // STORES
+        title = R.string.property_stores;
+    }
+    binding.title.setText(title);
+
+    String transitionName = MasterObjectListFragmentArgs
+        .fromBundle(requireArguments()).getTransitionName();
+    if (!TextUtils.isEmpty(transitionName)) {
+      binding.title.setTransitionName(transitionName);
+      setSharedElementEnterTransition(
+          TransitionInflater.from(requireContext())
+              .inflateTransition(android.R.transition.move)
+      );
+    }
+
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+
+    if (infoFullscreenHelper != null) {
+      infoFullscreenHelper.destroyInstance();
+      infoFullscreenHelper = null;
+    }
+    if (binding != null) {
+      binding.recycler.animate().cancel();
+      binding = null;
+    }
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    clickUtil = new ClickUtil();
+
+    viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
+        .MasterObjectListViewModelFactory(activity.getApplication(), entity)
+    ).get(MasterObjectListViewModel.class);
+    viewModel.setOfflineLive(!activity.isOnline());
+
+    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
+      binding.swipe.setRefreshing(state);
+      if (!state) {
+        viewModel.setCurrentQueueLoading(null);
+      }
+    });
+    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
+    // for offline info in app bar
+    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+    binding.swipe.setProgressBackgroundColorSchemeColor(
+        ContextCompat.getColor(activity, R.color.surface)
+    );
+    binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
+
+    viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
+      if (objects == null) {
+        return;
+      }
+      if (objects.isEmpty()) {
+        InfoFullscreen info;
+        if (viewModel.isSearchActive()) {
+          info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
+        } else {
+          int fullscreenType;
+          switch (entity) {
             case GrocyApi.ENTITY.PRODUCTS:
-                title = R.string.property_products;
-                break;
+              fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCTS;
+              break;
             case GrocyApi.ENTITY.QUANTITY_UNITS:
-                title = R.string.property_quantity_units;
-                break;
+              fullscreenType = InfoFullscreen.INFO_EMPTY_QUS;
+              break;
             case GrocyApi.ENTITY.LOCATIONS:
-                title = R.string.property_locations;
-                break;
+              fullscreenType = InfoFullscreen.INFO_EMPTY_LOCATIONS;
+              break;
             case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                title = R.string.property_product_groups;
-                break;
+              fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCT_GROUPS;
+              break;
             default: // STORES
-                title = R.string.property_stores;
+              fullscreenType = InfoFullscreen.INFO_EMPTY_STORES;
+          }
+          info = new InfoFullscreen(fullscreenType);
         }
-        binding.title.setText(title);
+        viewModel.getInfoFullscreenLive().setValue(info);
+      } else {
+        viewModel.getInfoFullscreenLive().setValue(null);
+      }
+      if (binding.recycler.getAdapter() instanceof MasterObjectListAdapter) {
+        ((MasterObjectListAdapter) binding.recycler.getAdapter()).updateData(objects);
+      } else {
+        binding.recycler.setAdapter(new MasterObjectListAdapter(
+            getContext(),
+            entity,
+            objects,
+            this,
+            viewModel.getHorizontalFilterBarMulti()
+        ));
+      }
+    });
 
-        String transitionName = MasterObjectListFragmentArgs
-                .fromBundle(requireArguments()).getTransitionName();
-        if(!TextUtils.isEmpty(transitionName)) {
-            binding.title.setTransitionName(transitionName);
-            setSharedElementEnterTransition(
-                    TransitionInflater.from(requireContext())
-                            .inflateTransition(android.R.transition.move)
-            );
-        }
+    viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        SnackbarMessage msg = (SnackbarMessage) event;
+        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);
+        activity.showSnackbar(snackbar);
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
 
-        return binding.getRoot();
+    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
+
+    if (savedInstanceState == null) {
+      viewModel.deleteSearch(); // delete search if navigating back from other fragment
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    // INITIALIZE VIEWS
 
-        if(infoFullscreenHelper != null) {
-            infoFullscreenHelper.destroyInstance();
-            infoFullscreenHelper = null;
+    binding.back.setOnClickListener(v -> activity.onBackPressed());
+    binding.searchClose.setOnClickListener(v -> dismissSearch());
+    binding.editTextSearch.addTextChangedListener(new TextWatcher() {
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      }
+
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+      }
+
+      public void afterTextChanged(Editable s) {
+        if (appBarBehavior.isPrimaryLayout()) {
+          return;
         }
-        if(binding != null) {
-            binding.recycler.animate().cancel();
-            binding = null;
-        }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        clickUtil = new ClickUtil();
-
-        viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
-                .MasterObjectListViewModelFactory(activity.getApplication(), entity)
-        ).get(MasterObjectListViewModel.class);
-        viewModel.setOfflineLive(!activity.isOnline());
-
-        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-            binding.swipe.setRefreshing(state);
-            if(!state) viewModel.setCurrentQueueLoading(null);
-        });
-        binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-        // for offline info in app bar
-        binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-        binding.swipe.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
-
-        viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
-            if(objects == null) return;
-            if(objects.isEmpty()) {
-                InfoFullscreen info;
-                if(viewModel.isSearchActive()) {
-                    info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-                } else {
-                    int fullscreenType;
-                    switch (entity) {
-                        case GrocyApi.ENTITY.PRODUCTS:
-                            fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCTS;
-                            break;
-                        case GrocyApi.ENTITY.QUANTITY_UNITS:
-                            fullscreenType = InfoFullscreen.INFO_EMPTY_QUS;
-                            break;
-                        case GrocyApi.ENTITY.LOCATIONS:
-                            fullscreenType = InfoFullscreen.INFO_EMPTY_LOCATIONS;
-                            break;
-                        case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                            fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCT_GROUPS;
-                            break;
-                        default: // STORES
-                            fullscreenType = InfoFullscreen.INFO_EMPTY_STORES;
-                    }
-                    info = new InfoFullscreen(fullscreenType);
-                }
-                viewModel.getInfoFullscreenLive().setValue(info);
-            } else {
-                viewModel.getInfoFullscreenLive().setValue(null);
-            }
-            if(binding.recycler.getAdapter() instanceof MasterObjectListAdapter) {
-                ((MasterObjectListAdapter) binding.recycler.getAdapter()).updateData(objects);
-            } else {
-                binding.recycler.setAdapter(new MasterObjectListAdapter(
-                        getContext(),
-                        entity,
-                        objects,
-                        this,
-                        viewModel.getHorizontalFilterBarMulti()
-                ));
-            }
-        });
-
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                SnackbarMessage msg = (SnackbarMessage) event;
-                Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);
-                activity.showSnackbar(snackbar);
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
-
-        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
-
-        if(savedInstanceState == null) viewModel.deleteSearch(); // delete search if navigating back from other fragment
-
-        // INITIALIZE VIEWS
-
-        binding.back.setOnClickListener(v -> activity.onBackPressed());
-        binding.searchClose.setOnClickListener(v -> dismissSearch());
-        binding.editTextSearch.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            public void afterTextChanged(Editable s) {
-                if(appBarBehavior.isPrimaryLayout()) return;
-                viewModel.setSearch(s != null ? s.toString() : "");
-            }
-        });
-        binding.editTextSearch.setOnEditorActionListener(
-                (TextView v, int actionId, KeyEvent event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        activity.hideKeyboard();
-                        return true;
-                    } return false;
-                });
-
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-        viewModel.getInfoFullscreenLive().observe(
-                getViewLifecycleOwner(),
-                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-        );
-
-        // APP BAR BEHAVIOR
-
-        appBarBehavior = new AppBarBehavior(
-                activity,
-                R.id.app_bar_default,
-                R.id.app_bar_search
-        );
-        if(viewModel.isSearchActive()) appBarBehavior.switchToSecondary();
-
-        binding.recycler.setLayoutManager(
-                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        );
-        binding.recycler.setItemAnimator(new DefaultItemAnimator());
-        binding.recycler.setAdapter(new MasterPlaceholderAdapter());
-
-        if(savedInstanceState == null) {
-            viewModel.loadFromDatabase(true);
-        }
-
-        // UPDATE UI
-        updateUI(true);
-    }
-
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(binding.recycler);
-        activity.getScrollBehavior().setHideOnScroll(true);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.CENTER,
-                !entity.equals(GrocyApi.ENTITY.PRODUCTS)
-                        ? R.menu.menu_master_items
-                        : R.menu.menu_master_products,
-                animated,
-                this::setUpBottomMenu
-        );
-        activity.updateFab(
-                R.drawable.ic_round_add_anim,
-                R.string.action_add,
-                Constants.FAB.TAG.ADD,
-                animated,
-                () -> {
-                    switch (entity) {
-                        case GrocyApi.ENTITY.QUANTITY_UNITS:
-                            navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterQuantityUnitFragment());
-                            break;
-                        case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                            navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterProductGroupFragment());
-                            break;
-                        case GrocyApi.ENTITY.LOCATIONS:
-                            navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterLocationFragment());
-                            break;
-                        case GrocyApi.ENTITY.STORES:
-                            navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterStoreFragment());
-                            break;
-                        case GrocyApi.ENTITY.PRODUCTS:
-                            navigate(MasterObjectListFragmentDirections
-                                    .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
-                    }
-                }
-        );
-    }
-
-    public void setUpBottomMenu() {
-        // sorting
-        MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
-        itemSort.setIcon(
-                viewModel.isSortAscending()
-                        ? R.drawable.ic_round_sort_desc_to_asc_anim
-                        : R.drawable.ic_round_sort_asc_to_desc
-        );
-        itemSort.getIcon().setAlpha(255);
-        itemSort.setOnMenuItemClickListener(item -> {
-            viewModel.setSortAscending(!viewModel.isSortAscending());
-            item.setIcon(
-                    viewModel.isSortAscending()
-                            ? R.drawable.ic_round_sort_asc_to_desc
-                            : R.drawable.ic_round_sort_desc_to_asc_anim
-            );
-            item.getIcon().setAlpha(255);
-            IconUtil.start(item);
+        viewModel.setSearch(s != null ? s.toString() : "");
+      }
+    });
+    binding.editTextSearch.setOnEditorActionListener(
+        (TextView v, int actionId, KeyEvent event) -> {
+          if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            activity.hideKeyboard();
             return true;
+          }
+          return false;
         });
 
-        // search
-        MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
-        if(search == null) return;
-        search.setOnMenuItemClickListener(item -> {
-            IconUtil.start(item);
-            setUpSearch();
-            return true;
-        });
+    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
+    viewModel.getInfoFullscreenLive().observe(
+        getViewLifecycleOwner(),
+        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+    );
 
-        // product group filter
-        if(entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-            MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
-            if(menuItem == null) return;
-            SubMenu menuProductGroups = menuItem.getSubMenu();
-            menuProductGroups.clear();
-            ArrayList<ProductGroup> productGroups = viewModel.getProductGroups();
-            if(productGroups != null && !productGroups.isEmpty()) {
-                ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
-                SortUtil.sortProductGroupsByName(requireContext(), sorted, true);
-                for(ProductGroup pg : sorted) {
-                    menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
-                        if(binding.recycler.getAdapter() == null) return false;
-                        viewModel.getHorizontalFilterBarMulti().addFilter(
-                                HorizontalFilterBarMulti.PRODUCT_GROUP,
-                                new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
-                        );
-                        binding.recycler.getAdapter().notifyItemChanged(0);
-                        return true;
-                    });
-                }
-                menuItem.setVisible(true);
-            } else {
-                menuItem.setVisible(false);
-            }
-        }
+    // APP BAR BEHAVIOR
+
+    appBarBehavior = new AppBarBehavior(
+        activity,
+        R.id.app_bar_default,
+        R.id.app_bar_search
+    );
+    if (viewModel.isSearchActive()) {
+      appBarBehavior.switchToSecondary();
     }
 
-    @Override
-    public void onItemRowClicked(Object object) {
-        if(clickUtil.isDisabled()) return;
-        viewModel.showObjectBottomSheetOfDisplayedItem(object);
+    binding.recycler.setLayoutManager(
+        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+    );
+    binding.recycler.setItemAnimator(new DefaultItemAnimator());
+    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+
+    if (savedInstanceState == null) {
+      viewModel.loadFromDatabase(true);
     }
 
-    @Override
-    public void editObject(Object object) {
-        switch (entity) {
+    // UPDATE UI
+    updateUI(true);
+  }
+
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(binding.recycler);
+    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.CENTER,
+        !entity.equals(GrocyApi.ENTITY.PRODUCTS)
+            ? R.menu.menu_master_items
+            : R.menu.menu_master_products,
+        animated,
+        this::setUpBottomMenu
+    );
+    activity.updateFab(
+        R.drawable.ic_round_add_anim,
+        R.string.action_add,
+        Constants.FAB.TAG.ADD,
+        animated,
+        () -> {
+          switch (entity) {
             case GrocyApi.ENTITY.QUANTITY_UNITS:
-                navigate(MasterObjectListFragmentDirections
-                        .actionMasterObjectListFragmentToMasterQuantityUnitFragment()
-                        .setQuantityUnit((QuantityUnit) object));
-                break;
+              navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterQuantityUnitFragment());
+              break;
             case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                navigate(MasterObjectListFragmentDirections
-                        .actionMasterObjectListFragmentToMasterProductGroupFragment()
-                        .setProductGroup((ProductGroup) object));
-                break;
+              navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterProductGroupFragment());
+              break;
             case GrocyApi.ENTITY.LOCATIONS:
-                navigate(MasterObjectListFragmentDirections
-                        .actionMasterObjectListFragmentToMasterLocationFragment()
-                        .setLocation((Location) object));
-                break;
+              navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterLocationFragment());
+              break;
             case GrocyApi.ENTITY.STORES:
-                navigate(MasterObjectListFragmentDirections
-                        .actionMasterObjectListFragmentToMasterStoreFragment()
-                        .setStore((Store) object));
-                break;
+              navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterStoreFragment());
+              break;
             case GrocyApi.ENTITY.PRODUCTS:
-                navigate(MasterObjectListFragmentDirections
-                        .actionMasterObjectListFragmentToMasterProductFragment(
-                                Constants.ACTION.EDIT
-                        ).setProduct((Product) object));
-                break;
+              navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
+          }
         }
-    }
+    );
+  }
 
-    private void setUpSearch() {
-        if(!viewModel.isSearchActive()) { // only if no search is active
-            appBarBehavior.switchToSecondary();
-            binding.editTextSearch.setText("");
+  public void setUpBottomMenu() {
+    // sorting
+    MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
+    itemSort.setIcon(
+        viewModel.isSortAscending()
+            ? R.drawable.ic_round_sort_desc_to_asc_anim
+            : R.drawable.ic_round_sort_asc_to_desc
+    );
+    itemSort.getIcon().setAlpha(255);
+    itemSort.setOnMenuItemClickListener(item -> {
+      viewModel.setSortAscending(!viewModel.isSortAscending());
+      item.setIcon(
+          viewModel.isSortAscending()
+              ? R.drawable.ic_round_sort_asc_to_desc
+              : R.drawable.ic_round_sort_desc_to_asc_anim
+      );
+      item.getIcon().setAlpha(255);
+      IconUtil.start(item);
+      return true;
+    });
+
+    // search
+    MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
+    if (search == null) {
+      return;
+    }
+    search.setOnMenuItemClickListener(item -> {
+      IconUtil.start(item);
+      setUpSearch();
+      return true;
+    });
+
+    // product group filter
+    if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
+      MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
+      if (menuItem == null) {
+        return;
+      }
+      SubMenu menuProductGroups = menuItem.getSubMenu();
+      menuProductGroups.clear();
+      ArrayList<ProductGroup> productGroups = viewModel.getProductGroups();
+      if (productGroups != null && !productGroups.isEmpty()) {
+        ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
+        SortUtil.sortProductGroupsByName(requireContext(), sorted, true);
+        for (ProductGroup pg : sorted) {
+          menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
+            if (binding.recycler.getAdapter() == null) {
+              return false;
+            }
+            viewModel.getHorizontalFilterBarMulti().addFilter(
+                HorizontalFilterBarMulti.PRODUCT_GROUP,
+                new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
+            );
+            binding.recycler.getAdapter().notifyItemChanged(0);
+            return true;
+          });
         }
-        binding.editTextSearch.requestFocus();
-        activity.showKeyboard(binding.editTextSearch);
-
-        viewModel.setIsSearchVisible(true);
+        menuItem.setVisible(true);
+      } else {
+        menuItem.setVisible(false);
+      }
     }
+  }
 
-    @Override
-    public boolean isSearchVisible() {
-        return viewModel.isSearchVisible();
+  @Override
+  public void onItemRowClicked(Object object) {
+    if (clickUtil.isDisabled()) {
+      return;
     }
+    viewModel.showObjectBottomSheetOfDisplayedItem(object);
+  }
 
-    @Override
-    public void dismissSearch() {
-        appBarBehavior.switchToPrimary();
-        activity.hideKeyboard();
-        binding.editTextSearch.setText("");
-        viewModel.setSearch(null);
-
-        viewModel.setIsSearchVisible(false);
-    }
-
-    @Override
-    public void copyProduct(Product product) {
+  @Override
+  public void editObject(Object object) {
+    switch (entity) {
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
         navigate(MasterObjectListFragmentDirections
-                .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE)
-                .setProduct(product));
+            .actionMasterObjectListFragmentToMasterQuantityUnitFragment()
+            .setQuantityUnit((QuantityUnit) object));
+        break;
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        navigate(MasterObjectListFragmentDirections
+            .actionMasterObjectListFragmentToMasterProductGroupFragment()
+            .setProductGroup((ProductGroup) object));
+        break;
+      case GrocyApi.ENTITY.LOCATIONS:
+        navigate(MasterObjectListFragmentDirections
+            .actionMasterObjectListFragmentToMasterLocationFragment()
+            .setLocation((Location) object));
+        break;
+      case GrocyApi.ENTITY.STORES:
+        navigate(MasterObjectListFragmentDirections
+            .actionMasterObjectListFragmentToMasterStoreFragment()
+            .setStore((Store) object));
+        break;
+      case GrocyApi.ENTITY.PRODUCTS:
+        navigate(MasterObjectListFragmentDirections
+            .actionMasterObjectListFragmentToMasterProductFragment(
+                Constants.ACTION.EDIT
+            ).setProduct((Product) object));
+        break;
     }
+  }
 
-    @Override
-    public void deleteObjectSafely(Object object) {
-        viewModel.deleteObjectSafely(object);
+  private void setUpSearch() {
+    if (!viewModel.isSearchActive()) { // only if no search is active
+      appBarBehavior.switchToSecondary();
+      binding.editTextSearch.setText("");
     }
+    binding.editTextSearch.requestFocus();
+    activity.showKeyboard(binding.editTextSearch);
 
-    @Override
-    public void deleteObject(int objectId) {
-        viewModel.deleteObject(objectId);
-    }
+    viewModel.setIsSearchVisible(true);
+  }
 
-    private void appBarOfflineInfo(boolean visible) {
-        boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-        if(visible == currentState) return;
-        binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
+  @Override
+  public boolean isSearchVisible() {
+    return viewModel.isSearchVisible();
+  }
 
-    @Override
-    public void updateConnectivity(boolean online) {
-        if(!online == viewModel.isOffline()) return;
-        viewModel.setOfflineLive(!online);
-        viewModel.downloadData();
-    }
+  @Override
+  public void dismissSearch() {
+    appBarBehavior.switchToPrimary();
+    activity.hideKeyboard();
+    binding.editTextSearch.setText("");
+    viewModel.setSearch(null);
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
+    viewModel.setIsSearchVisible(false);
+  }
+
+  @Override
+  public void copyProduct(Product product) {
+    navigate(MasterObjectListFragmentDirections
+        .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE)
+        .setProduct(product));
+  }
+
+  @Override
+  public void deleteObjectSafely(Object object) {
+    viewModel.deleteObjectSafely(object);
+  }
+
+  @Override
+  public void deleteObject(int objectId) {
+    viewModel.deleteObject(objectId);
+  }
+
+  private void appBarOfflineInfo(boolean visible) {
+    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
+    if (visible == currentState) {
+      return;
     }
+    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
+  }
+
+  @Override
+  public void updateConnectivity(boolean online) {
+    if (!online == viewModel.isOffline()) {
+      return;
+    }
+    viewModel.setOfflineLive(!online);
+    viewModel.downloadData();
+  }
+
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

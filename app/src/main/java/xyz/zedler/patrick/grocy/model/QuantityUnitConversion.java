@@ -21,154 +21,156 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Objects;
 
 @Entity(tableName = "quantity_unit_conversion_table")
 public class QuantityUnitConversion implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
 
-    @ColumnInfo(name = "from_qu_id")
-    @SerializedName("from_qu_id")
-    private int fromQuId;
+  @ColumnInfo(name = "from_qu_id")
+  @SerializedName("from_qu_id")
+  private int fromQuId;
 
-    @ColumnInfo(name = "to_qu_id")
-    @SerializedName("to_qu_id")
-    private int toQuId;
+  @ColumnInfo(name = "to_qu_id")
+  @SerializedName("to_qu_id")
+  private int toQuId;
 
-    @ColumnInfo(name = "factor")
-    @SerializedName("factor")
-    private double factor;
+  @ColumnInfo(name = "factor")
+  @SerializedName("factor")
+  private double factor;
 
-    @ColumnInfo(name = "product_id")
-    @SerializedName("product_id")
-    private int productId;
+  @ColumnInfo(name = "product_id")
+  @SerializedName("product_id")
+  private int productId;
 
-    @ColumnInfo(name = "row_created_timestamp")
-    @SerializedName("row_created_timestamp")
-    private String rowCreatedTimestamp;
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
 
-    public QuantityUnitConversion() {}
+  public QuantityUnitConversion() {
+  }
 
-    @Ignore
-    public QuantityUnitConversion(Parcel parcel) {
-        id = parcel.readInt();
-        fromQuId = parcel.readInt();
-        toQuId = parcel.readInt();
-        factor = parcel.readDouble();
-        productId = parcel.readInt();
-        rowCreatedTimestamp = parcel.readString();
+  @Ignore
+  public QuantityUnitConversion(Parcel parcel) {
+    id = parcel.readInt();
+    fromQuId = parcel.readInt();
+    toQuId = parcel.readInt();
+    factor = parcel.readDouble();
+    productId = parcel.readInt();
+    rowCreatedTimestamp = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeInt(fromQuId);
+    dest.writeInt(toQuId);
+    dest.writeDouble(factor);
+    dest.writeInt(productId);
+    dest.writeString(rowCreatedTimestamp);
+  }
+
+  public static final Creator<QuantityUnitConversion> CREATOR = new Creator<QuantityUnitConversion>() {
+
+    @Override
+    public QuantityUnitConversion createFromParcel(Parcel in) {
+      return new QuantityUnitConversion(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(fromQuId);
-        dest.writeInt(toQuId);
-        dest.writeDouble(factor);
-        dest.writeInt(productId);
-        dest.writeString(rowCreatedTimestamp);
+    public QuantityUnitConversion[] newArray(int size) {
+      return new QuantityUnitConversion[size];
     }
+  };
 
-    public static final Creator<QuantityUnitConversion> CREATOR = new Creator<QuantityUnitConversion>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public QuantityUnitConversion createFromParcel(Parcel in) {
-            return new QuantityUnitConversion(in);
-        }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-        @Override
-        public QuantityUnitConversion[] newArray(int size) {
-            return new QuantityUnitConversion[size];
-        }
-    };
+  public int getFromQuId() {
+    return fromQuId;
+  }
 
-    public int getId() {
-        return id;
+  public void setFromQuId(int fromQuId) {
+    this.fromQuId = fromQuId;
+  }
+
+  public int getToQuId() {
+    return toQuId;
+  }
+
+  public void setToQuId(int toQuId) {
+    this.toQuId = toQuId;
+  }
+
+  public double getFactor() {
+    return factor;
+  }
+
+  public void setFactor(double factor) {
+    this.factor = factor;
+  }
+
+  public int getProductId() {
+    return productId;
+  }
+
+  public void setProductId(int productId) {
+    this.productId = productId;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    QuantityUnitConversion that = (QuantityUnitConversion) o;
+    return id == that.id &&
+        fromQuId == that.fromQuId &&
+        toQuId == that.toQuId &&
+        Double.compare(that.factor, factor) == 0 &&
+        productId == that.productId &&
+        Objects.equals(rowCreatedTimestamp, that.rowCreatedTimestamp);
+  }
 
-    public int getFromQuId() {
-        return fromQuId;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, fromQuId, toQuId, factor, productId, rowCreatedTimestamp);
+  }
 
-    public void setFromQuId(int fromQuId) {
-        this.fromQuId = fromQuId;
-    }
-
-    public int getToQuId() {
-        return toQuId;
-    }
-
-    public void setToQuId(int toQuId) {
-        this.toQuId = toQuId;
-    }
-
-    public double getFactor() {
-        return factor;
-    }
-
-    public void setFactor(double factor) {
-        this.factor = factor;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public String getRowCreatedTimestamp() {
-        return rowCreatedTimestamp;
-    }
-
-    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
-        this.rowCreatedTimestamp = rowCreatedTimestamp;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        QuantityUnitConversion that = (QuantityUnitConversion) o;
-        return id == that.id &&
-                fromQuId == that.fromQuId &&
-                toQuId == that.toQuId &&
-                Double.compare(that.factor, factor) == 0 &&
-                productId == that.productId &&
-                Objects.equals(rowCreatedTimestamp, that.rowCreatedTimestamp);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, fromQuId, toQuId, factor, productId, rowCreatedTimestamp);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "QuantityUnitConversion(" + id + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "QuantityUnitConversion(" + id + ')';
+  }
 }

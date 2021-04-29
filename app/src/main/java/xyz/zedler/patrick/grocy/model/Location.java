@@ -21,144 +21,145 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Objects;
 
 @Entity(tableName = "location_table")
 public class Location implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
 
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
-    private String name;
+  @ColumnInfo(name = "name")
+  @SerializedName("name")
+  private String name;
 
-    @ColumnInfo(name = "description")
-    @SerializedName("description")
-    private String description;
+  @ColumnInfo(name = "description")
+  @SerializedName("description")
+  private String description;
 
-    @ColumnInfo(name = "row_created_timestamp")
-    @SerializedName("row_created_timestamp")
-    private String rowCreatedTimestamp;
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
 
-    @ColumnInfo(name = "is_freezer")
-    @SerializedName("is_freezer")
-    private String isFreezer;
+  @ColumnInfo(name = "is_freezer")
+  @SerializedName("is_freezer")
+  private String isFreezer;
 
-    public Location(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  public Location(int id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    public Location(Parcel parcel) {
-        id = parcel.readInt();
-        name = parcel.readString();
-        description = parcel.readString();
-        rowCreatedTimestamp = parcel.readString();
-        isFreezer = parcel.readString();
+  public Location(Parcel parcel) {
+    id = parcel.readInt();
+    name = parcel.readString();
+    description = parcel.readString();
+    rowCreatedTimestamp = parcel.readString();
+    isFreezer = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(name);
+    dest.writeString(description);
+    dest.writeString(rowCreatedTimestamp);
+    dest.writeString(isFreezer);
+  }
+
+  public static final Creator<Location> CREATOR = new Creator<Location>() {
+
+    @Override
+    public Location createFromParcel(Parcel in) {
+      return new Location(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(rowCreatedTimestamp);
-        dest.writeString(isFreezer);
+    public Location[] newArray(int size) {
+      return new Location[size];
     }
+  };
 
-    public static final Creator<Location> CREATOR = new Creator<Location>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public Location createFromParcel(Parcel in) {
-            return new Location(in);
-        }
+  public String getName() {
+    return name;
+  }
 
-        @Override
-        public Location[] newArray(int size) {
-            return new Location[size];
-        }
-    };
+  public String getDescription() {
+    return description;
+  }
 
-    public int getId() {
-        return id;
+  public String getIsFreezer() {
+    return isFreezer;
+  }
+
+  public int getIsFreezerInt() {
+    return isFreezer == null || isFreezer.isEmpty() ? 0 : Integer.parseInt(isFreezer);
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
+  }
+
+  public void setIsFreezer(String isFreezer) {
+    this.isFreezer = isFreezer;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public String getName() {
-        return name;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    Location location = (Location) o;
+    return id == location.id &&
+        isFreezer == location.isFreezer &&
+        Objects.equals(name, location.name) &&
+        Objects.equals(description, location.description) &&
+        Objects.equals(rowCreatedTimestamp, location.rowCreatedTimestamp);
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, description, rowCreatedTimestamp, isFreezer);
+  }
 
-    public String getIsFreezer() {
-        return isFreezer;
-    }
-
-    public int getIsFreezerInt() {
-        return isFreezer == null || isFreezer.isEmpty() ? 0 : Integer.parseInt(isFreezer);
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getRowCreatedTimestamp() {
-        return rowCreatedTimestamp;
-    }
-
-    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
-        this.rowCreatedTimestamp = rowCreatedTimestamp;
-    }
-
-    public void setIsFreezer(String isFreezer) {
-        this.isFreezer = isFreezer;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Location location = (Location) o;
-        return id == location.id &&
-                isFreezer == location.isFreezer &&
-                Objects.equals(name, location.name) &&
-                Objects.equals(description, location.description) &&
-                Objects.equals(rowCreatedTimestamp, location.rowCreatedTimestamp);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, rowCreatedTimestamp, isFreezer);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Location(" + name + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "Location(" + name + ')';
+  }
 }

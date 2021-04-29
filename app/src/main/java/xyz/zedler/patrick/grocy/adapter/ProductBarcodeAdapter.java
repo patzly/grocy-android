@@ -23,13 +23,10 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowProductBarcodeBinding;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -37,130 +34,136 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAdapter.ViewHolder> {
 
-    private final static String TAG = ProductBarcodeAdapter.class.getSimpleName();
+  private final static String TAG = ProductBarcodeAdapter.class.getSimpleName();
 
-    private ArrayList<ProductBarcode> productBarcodes;
-    private ProductBarcodeAdapterListener listener;
+  private final ArrayList<ProductBarcode> productBarcodes;
+  private final ProductBarcodeAdapterListener listener;
 
-    public ProductBarcodeAdapter(
-            ArrayList<ProductBarcode> productBarcodes,
-            ProductBarcodeAdapterListener listener
+  public ProductBarcodeAdapter(
+      ArrayList<ProductBarcode> productBarcodes,
+      ProductBarcodeAdapterListener listener
+  ) {
+    this.productBarcodes = new ArrayList<>(productBarcodes);
+    this.listener = listener;
+  }
+
+  public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    private final RowProductBarcodeBinding binding;
+
+    public ViewHolder(RowProductBarcodeBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
+    }
+  }
+
+  @NonNull
+  @Override
+  public ProductBarcodeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+      int viewType) {
+    RowProductBarcodeBinding binding = RowProductBarcodeBinding.inflate(
+        LayoutInflater.from(parent.getContext()),
+        parent,
+        false
+    );
+    return new ViewHolder(binding);
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  @Override
+  public void onBindViewHolder(
+      @NonNull final ProductBarcodeAdapter.ViewHolder holder,
+      int position
+  ) {
+    ProductBarcode productBarcode = productBarcodes.get(holder.getAdapterPosition());
+
+    holder.binding.barcode.setText(productBarcode.getBarcode());
+
+    if (NumUtil.isStringDouble(productBarcode.getAmount())) {
+      String amountStr = holder.binding.amount.getContext().getString(
+          R.string.subtitle_barcode_amount,
+          NumUtil.trim(NumUtil.toDouble(productBarcode.getAmount()))
+      );
+      holder.binding.amount.setText(amountStr);
+      holder.binding.amount.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.amount.setVisibility(View.GONE);
+    }
+
+    if (productBarcode.getNote() != null && !productBarcode.getNote().trim().isEmpty()) {
+      holder.binding.note.setText(productBarcode.getNote());
+      holder.binding.note.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.note.setVisibility(View.GONE);
+    }
+
+    holder.binding.container.setOnClickListener(
+        view -> listener.onItemRowClicked(productBarcode)
+    );
+  }
+
+  @Override
+  public int getItemCount() {
+    return productBarcodes.size();
+  }
+
+  public void updateData(ArrayList<ProductBarcode> productBarcodesNew) {
+    DiffCallback diffCallback = new DiffCallback(
+        this.productBarcodes,
+        productBarcodesNew
+    );
+    DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+    this.productBarcodes.clear();
+    this.productBarcodes.addAll(productBarcodesNew);
+    diffResult.dispatchUpdatesTo(this);
+  }
+
+  static class DiffCallback extends DiffUtil.Callback {
+
+    ArrayList<ProductBarcode> oldItems;
+    ArrayList<ProductBarcode> newItems;
+
+    public DiffCallback(
+        ArrayList<ProductBarcode> oldItems,
+        ArrayList<ProductBarcode> newItems
     ) {
-        this.productBarcodes = new ArrayList<>(productBarcodes);
-        this.listener = listener;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final RowProductBarcodeBinding binding;
-
-        public ViewHolder(RowProductBarcodeBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-    }
-
-    @NonNull
-    @Override
-    public ProductBarcodeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RowProductBarcodeBinding binding = RowProductBarcodeBinding.inflate(
-                LayoutInflater.from(parent.getContext()),
-                parent,
-                false
-        );
-        return new ViewHolder(binding);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public void onBindViewHolder(
-            @NonNull final ProductBarcodeAdapter.ViewHolder holder,
-            int position
-    ) {
-        ProductBarcode productBarcode = productBarcodes.get(holder.getAdapterPosition());
-
-        holder.binding.barcode.setText(productBarcode.getBarcode());
-
-        if(NumUtil.isStringDouble(productBarcode.getAmount())) {
-            String amountStr = holder.binding.amount.getContext().getString(
-                    R.string.subtitle_barcode_amount,
-                    NumUtil.trim(NumUtil.toDouble(productBarcode.getAmount()))
-            );
-            holder.binding.amount.setText(amountStr);
-            holder.binding.amount.setVisibility(View.VISIBLE);
-        } else {
-            holder.binding.amount.setVisibility(View.GONE);
-        }
-
-        if(productBarcode.getNote() != null && !productBarcode.getNote().trim().isEmpty()) {
-            holder.binding.note.setText(productBarcode.getNote());
-            holder.binding.note.setVisibility(View.VISIBLE);
-        } else {
-            holder.binding.note.setVisibility(View.GONE);
-        }
-
-        holder.binding.container.setOnClickListener(
-                view -> listener.onItemRowClicked(productBarcode)
-        );
+      this.newItems = newItems;
+      this.oldItems = oldItems;
     }
 
     @Override
-    public int getItemCount() {
-        return productBarcodes.size();
+    public int getOldListSize() {
+      return oldItems.size();
     }
 
-    public void updateData(ArrayList<ProductBarcode> productBarcodesNew) {
-        DiffCallback diffCallback = new DiffCallback(
-                this.productBarcodes,
-                productBarcodesNew
-        );
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-        this.productBarcodes.clear();
-        this.productBarcodes.addAll(productBarcodesNew);
-        diffResult.dispatchUpdatesTo(this);
+    @Override
+    public int getNewListSize() {
+      return newItems.size();
     }
 
-    static class DiffCallback extends DiffUtil.Callback {
-        ArrayList<ProductBarcode> oldItems;
-        ArrayList<ProductBarcode> newItems;
-
-        public DiffCallback(
-                ArrayList<ProductBarcode> oldItems,
-                ArrayList<ProductBarcode> newItems
-        ) {
-            this.newItems = newItems;
-            this.oldItems = oldItems;
-        }
-
-        @Override
-        public int getOldListSize() {
-            return oldItems.size();
-        }
-
-        @Override
-        public int getNewListSize() {
-            return newItems.size();
-        }
-
-        @Override
-        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return compare(oldItemPosition, newItemPosition, false);
-        }
-
-        @Override
-        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return compare(oldItemPosition, newItemPosition, true);
-        }
-
-        private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-            ProductBarcode newItem = newItems.get(newItemPos);
-            ProductBarcode oldItem = oldItems.get(oldItemPos);
-            if(!compareContent) return newItem.getId() == oldItem.getId();
-
-            return newItem.equals(oldItem);
-        }
+    @Override
+    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+      return compare(oldItemPosition, newItemPosition, false);
     }
 
-    public interface ProductBarcodeAdapterListener {
-        void onItemRowClicked(ProductBarcode productBarcode);
+    @Override
+    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+      return compare(oldItemPosition, newItemPosition, true);
     }
+
+    private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
+      ProductBarcode newItem = newItems.get(newItemPos);
+      ProductBarcode oldItem = oldItems.get(oldItemPos);
+      if (!compareContent) {
+        return newItem.getId() == oldItem.getId();
+      }
+
+      return newItem.equals(oldItem);
+    }
+  }
+
+  public interface ProductBarcodeAdapterListener {
+
+    void onItemRowClicked(ProductBarcode productBarcode);
+  }
 }

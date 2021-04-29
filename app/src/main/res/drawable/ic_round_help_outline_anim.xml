@@ -17,22 +17,60 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<animated-vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
-    <aapt:attr name="android:drawable">
-        <vector android:name="vector" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
-            <group android:name="group" android:pivotX="12" android:pivotY="17">
-                <path android:name="question" android:pathData="M 11 16 L 13 16 L 13 18 L 11 18 Z M 12.61 6.04 C 10.55 5.74 8.73 7.01 8.18 8.83 C 8 9.41 8.44 10 9.05 10 L 9.25 10 C 9.66 10 9.99 9.71 10.13 9.33 C 10.45 8.44 11.4 7.83 12.43 8.05 C 13.38 8.25 14.08 9.18 14 10.15 C 13.9 11.49 12.38 11.78 11.55 13.03 C 11.55 13.04 11.54 13.04 11.54 13.05 C 11.53 13.07 11.52 13.08 11.51 13.1 C 11.42 13.25 11.33 13.42 11.26 13.6 C 11.25 13.63 11.23 13.65 11.22 13.68 C 11.21 13.7 11.21 13.72 11.2 13.75 C 11.08 14.09 11 14.5 11 15 L 13 15 C 13 14.58 13.11 14.23 13.28 13.93 C 13.3 13.9 13.31 13.87 13.33 13.84 C 13.41 13.7 13.51 13.57 13.61 13.45 C 13.62 13.44 13.63 13.42 13.64 13.41 C 13.74 13.29 13.85 13.18 13.97 13.07 C 14.93 12.16 16.23 11.42 15.96 9.51 C 15.72 7.77 14.35 6.3 12.61 6.04 Z" android:fillColor="@color/icon" android:strokeWidth="1"/>
-            </group>
-            <path android:name="circle" android:pathData="M 12 2 C 6.48 2 2 6.48 2 12 C 2 17.52 6.48 22 12 22 C 17.52 22 22 17.52 22 12 C 22 6.48 17.52 2 12 2 Z M 12 20 C 7.59 20 4 16.41 4 12 C 4 7.59 7.59 4 12 4 C 16.41 4 20 7.59 20 12 C 20 16.41 16.41 20 12 20 Z" android:fillColor="@color/icon" android:strokeWidth="1"/>
-        </vector>
+<animated-vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:aapt="http://schemas.android.com/aapt">
+  <aapt:attr name="android:drawable">
+    <vector
+      android:name="vector"
+      android:width="24dp"
+      android:height="24dp"
+      android:viewportWidth="24"
+      android:viewportHeight="24">
+      <group
+        android:name="group"
+        android:pivotX="12"
+        android:pivotY="17">
+        <path
+          android:name="question"
+          android:pathData="M 11 16 L 13 16 L 13 18 L 11 18 Z M 12.61 6.04 C 10.55 5.74 8.73 7.01 8.18 8.83 C 8 9.41 8.44 10 9.05 10 L 9.25 10 C 9.66 10 9.99 9.71 10.13 9.33 C 10.45 8.44 11.4 7.83 12.43 8.05 C 13.38 8.25 14.08 9.18 14 10.15 C 13.9 11.49 12.38 11.78 11.55 13.03 C 11.55 13.04 11.54 13.04 11.54 13.05 C 11.53 13.07 11.52 13.08 11.51 13.1 C 11.42 13.25 11.33 13.42 11.26 13.6 C 11.25 13.63 11.23 13.65 11.22 13.68 C 11.21 13.7 11.21 13.72 11.2 13.75 C 11.08 14.09 11 14.5 11 15 L 13 15 C 13 14.58 13.11 14.23 13.28 13.93 C 13.3 13.9 13.31 13.87 13.33 13.84 C 13.41 13.7 13.51 13.57 13.61 13.45 C 13.62 13.44 13.63 13.42 13.64 13.41 C 13.74 13.29 13.85 13.18 13.97 13.07 C 14.93 12.16 16.23 11.42 15.96 9.51 C 15.72 7.77 14.35 6.3 12.61 6.04 Z"
+          android:fillColor="@color/icon"
+          android:strokeWidth="1" />
+      </group>
+      <path
+        android:name="circle"
+        android:pathData="M 12 2 C 6.48 2 2 6.48 2 12 C 2 17.52 6.48 22 12 22 C 17.52 22 22 17.52 22 12 C 22 6.48 17.52 2 12 2 Z M 12 20 C 7.59 20 4 16.41 4 12 C 4 7.59 7.59 4 12 4 C 16.41 4 20 7.59 20 12 C 20 16.41 16.41 20 12 20 Z"
+        android:fillColor="@color/icon"
+        android:strokeWidth="1" />
+    </vector>
+  </aapt:attr>
+  <target android:name="group">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:duration="100"
+          android:valueFrom="0"
+          android:valueTo="20"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="100"
+          android:duration="100"
+          android:valueFrom="20"
+          android:valueTo="-10"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="200"
+          android:duration="100"
+          android:valueFrom="-10"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
     </aapt:attr>
-    <target android:name="group">
-        <aapt:attr name="android:animation">
-            <set>
-                <objectAnimator android:propertyName="rotation" android:duration="100" android:valueFrom="0" android:valueTo="20" android:valueType="floatType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
-                <objectAnimator android:propertyName="rotation" android:startOffset="100" android:duration="100" android:valueFrom="20" android:valueTo="-10" android:valueType="floatType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
-                <objectAnimator android:propertyName="rotation" android:startOffset="200" android:duration="100" android:valueFrom="-10" android:valueTo="0" android:valueType="floatType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
-            </set>
-        </aapt:attr>
-    </target>
+  </target>
 </animated-vector>

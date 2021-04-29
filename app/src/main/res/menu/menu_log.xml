@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,19 +18,19 @@
   -->
 
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_refresh"
-        android:title="@string/action_reload"
-        android:icon="@drawable/ic_round_refresh_anim"
-        app:showAsAction="ifRoom"/>
+  <item
+    android:id="@+id/action_refresh"
+    android:title="@string/action_reload"
+    android:icon="@drawable/ic_round_refresh_anim"
+    app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_feedback"
-        android:title="@string/action_feedback"
-        android:icon="@drawable/ic_round_feedback_anim"
-        app:showAsAction="ifRoom"/>
+  <item
+    android:id="@+id/action_feedback"
+    android:title="@string/action_feedback"
+    android:icon="@drawable/ic_round_feedback_anim"
+    app:showAsAction="ifRoom" />
 
 </menu>

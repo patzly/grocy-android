@@ -17,26 +17,27 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+<vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="24dp"
+  android:height="24dp"
+  android:viewportWidth="24"
+  android:viewportHeight="24">
   <path
-      android:pathData="M8,9h8a1,1 0,0 1,1 1v8a1,1 0,0 1,-1 1H8a1,1 0,0 1,-1 -1v-8a1,1 0,0 1,1 -1z"
-      android:fillColor="@color/white"
-      android:fillAlpha="0.4"/>
+    android:pathData="M8,9h8a1,1 0,0 1,1 1v8a1,1 0,0 1,-1 1H8a1,1 0,0 1,-1 -1v-8a1,1 0,0 1,1 -1z"
+    android:fillColor="@color/white"
+    android:fillAlpha="0.4" />
   <path
-      android:pathData="M8,7a1,1 0,0 0,-1 1v2h10V8a1,1 0,0 0,-1 -1z"
-      android:fillColor="@color/retro_green"/>
+    android:pathData="M8,7a1,1 0,0 0,-1 1v2h10V8a1,1 0,0 0,-1 -1z"
+    android:fillColor="@color/retro_green" />
   <path
-      android:pathData="M7,12v6a1,1 0,0 0,1 1h8a1,1 0,0 0,1 -1v-6z"
-      android:fillColor="@color/retro_yellow"/>
+    android:pathData="M7,12v6a1,1 0,0 0,1 1h8a1,1 0,0 0,1 -1v-6z"
+    android:fillColor="@color/retro_yellow" />
   <path
-      android:pathData="M9,13h8v5H9z"
-      android:fillColor="@color/white"/>
+    android:pathData="M9,13h8v5H9z"
+    android:fillColor="@color/white" />
   <path
-      android:fillColor="@color/black"
-      android:fillAlpha="0.8"
-      android:pathData="M9.35,13.5v4h0.19v-4zM9.71,13.5v4h0.58v-4zM10.67,13.5v4h0.2v-4zM11.14,13.5v4h0.19v-4zM11.67,13.5v4h0.28v-4zM12.25,13.5v4h0.56v-4zM12.95,13.5v4h0.2v-4zM13.36,13.5v4h0.76v-4zM14.47,13.5v4h0.57v-4zM15.44,13.5v4h0.94v-4zM16.62,13.5v4h0.2v-4z"/>
+    android:fillColor="@color/black"
+    android:fillAlpha="0.8"
+    android:pathData="M9.35,13.5v4h0.19v-4zM9.71,13.5v4h0.58v-4zM10.67,13.5v4h0.2v-4zM11.14,13.5v4h0.19v-4zM11.67,13.5v4h0.28v-4zM12.25,13.5v4h0.56v-4zM12.95,13.5v4h0.2v-4zM13.36,13.5v4h0.76v-4zM14.47,13.5v4h0.57v-4zM15.44,13.5v4h0.94v-4zM16.62,13.5v4h0.2v-4z" />
 </vector>

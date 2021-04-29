@@ -21,32 +21,37 @@ package xyz.zedler.patrick.grocy.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class ArrayUtil {
 
-    public static HashMap<Integer, Location> getLocationsHashMap(ArrayList<Location> locations) {
-        HashMap <Integer, Location> hashMap = new HashMap<>();
-        for(Location l : locations) hashMap.put(l.getId(), l);
-        return hashMap;
+  public static HashMap<Integer, Location> getLocationsHashMap(ArrayList<Location> locations) {
+    HashMap<Integer, Location> hashMap = new HashMap<>();
+    for (Location l : locations) {
+      hashMap.put(l.getId(), l);
     }
+    return hashMap;
+  }
 
-    public static HashMap<Integer, ProductGroup> getProductGroupsHashMap(
-            ArrayList<ProductGroup> productGroups
-    ) {
-        HashMap <Integer, ProductGroup> hashMap = new HashMap<>();
-        for(ProductGroup p : productGroups) hashMap.put(p.getId(), p);
-        return hashMap;
+  public static HashMap<Integer, ProductGroup> getProductGroupsHashMap(
+      ArrayList<ProductGroup> productGroups
+  ) {
+    HashMap<Integer, ProductGroup> hashMap = new HashMap<>();
+    for (ProductGroup p : productGroups) {
+      hashMap.put(p.getId(), p);
     }
+    return hashMap;
+  }
 
-    public static HashMap<Integer, QuantityUnit> getQuantityUnitsHashMap(
-            ArrayList<QuantityUnit> quantityUnits
-    ) {
-        HashMap <Integer, QuantityUnit> hashMap = new HashMap<>();
-        for(QuantityUnit q : quantityUnits) hashMap.put(q.getId(), q);
-        return hashMap;
+  public static HashMap<Integer, QuantityUnit> getQuantityUnitsHashMap(
+      ArrayList<QuantityUnit> quantityUnits
+  ) {
+    HashMap<Integer, QuantityUnit> hashMap = new HashMap<>();
+    for (QuantityUnit q : quantityUnits) {
+      hashMap.put(q.getId(), q);
     }
+    return hashMap;
+  }
 }

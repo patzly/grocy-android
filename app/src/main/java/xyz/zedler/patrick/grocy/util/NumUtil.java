@@ -23,71 +23,81 @@ import java.text.DecimalFormat;
 
 public class NumUtil {
 
-    public static String trim(double value) {
-        DecimalFormat decimalFormat = new DecimalFormat("###.##");
-        return decimalFormat.format(value).replace(",", ".");
-    }
+  public static String trim(double value) {
+    DecimalFormat decimalFormat = new DecimalFormat("###.##");
+    return decimalFormat.format(value).replace(",", ".");
+  }
 
-    public static String trimPrice(double value) {
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        return decimalFormat.format(value).replace(",", ".");
-    }
+  public static String trimPrice(double value) {
+    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+    return decimalFormat.format(value).replace(",", ".");
+  }
 
-    public static String formatPrice(String value) {
-        return trimPrice(toDouble(value));
-    }
+  public static String formatPrice(String value) {
+    return trimPrice(toDouble(value));
+  }
 
-    public static boolean isDouble(String input) {
-        if(input == null || input.isEmpty()) return false;
-        try {
-            Double.parseDouble(input.replace(",", "."));
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
+  public static boolean isDouble(String input) {
+    if (input == null || input.isEmpty()) {
+      return false;
     }
+    try {
+      Double.parseDouble(input.replace(",", "."));
+      return true;
+    } catch (NumberFormatException ex) {
+      return false;
+    }
+  }
 
-    public static double toDouble(String input) {
-        if(input == null || input.isEmpty()) return -1;
-        try {
-            return Double.parseDouble(input.replace(",", "."));
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
+  public static double toDouble(String input) {
+    if (input == null || input.isEmpty()) {
+      return -1;
     }
+    try {
+      return Double.parseDouble(input.replace(",", "."));
+    } catch (NumberFormatException ex) {
+      return -1;
+    }
+  }
 
-    public static boolean isStringInt(String s) {
-        if(s == null || s.isEmpty()) return false;
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
+  public static boolean isStringInt(String s) {
+    if (s == null || s.isEmpty()) {
+      return false;
     }
+    try {
+      Integer.parseInt(s);
+      return true;
+    } catch (NumberFormatException ex) {
+      return false;
+    }
+  }
 
-    public static boolean isStringDouble(String s) {
-        if(s == null || s.isEmpty()) return false;
-        try {
-            Double.parseDouble(s);
-            return !Double.isNaN(Double.parseDouble(s));
-        } catch (NumberFormatException ex) {
-            return false;
-        }
+  public static boolean isStringDouble(String s) {
+    if (s == null || s.isEmpty()) {
+      return false;
     }
+    try {
+      Double.parseDouble(s);
+      return !Double.isNaN(Double.parseDouble(s));
+    } catch (NumberFormatException ex) {
+      return false;
+    }
+  }
 
-    public static boolean isStringNum(String s) {
-        if(s == null || s.isEmpty()) return false;
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException ex) {
-            try {
-                Double.parseDouble(s);
-                return true;
-            } catch (NumberFormatException ex1) {
-                return false;
-            }
-        }
+  public static boolean isStringNum(String s) {
+    if (s == null || s.isEmpty()) {
+      return false;
     }
+    try {
+      Integer.parseInt(s);
+      return true;
+    } catch (NumberFormatException ex) {
+      try {
+        Double.parseDouble(s);
+        return true;
+      } catch (NumberFormatException ex1) {
+        return false;
+      }
+    }
+  }
 }

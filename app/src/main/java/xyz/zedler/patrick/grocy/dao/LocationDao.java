@@ -25,32 +25,31 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.Location;
 
 @Dao
 public interface LocationDao {
-    @Query("SELECT * FROM location_table")
-    LiveData<List<Location>> getAllLive();
 
-    @Query("SELECT * FROM location_table")
-    List<Location> getAll();
+  @Query("SELECT * FROM location_table")
+  LiveData<List<Location>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM location_table")
-    int count();
+  @Query("SELECT * FROM location_table")
+  List<Location> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<Location> locations);
+  @Query("SELECT COUNT(*) FROM location_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Location location);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<Location> locations);
 
-    @Delete
-    void delete(Location location);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(Location location);
 
-    @Query("DELETE FROM location_table")
-    void deleteAll();
+  @Delete
+  void delete(Location location);
+
+  @Query("DELETE FROM location_table")
+  void deleteAll();
 
 }

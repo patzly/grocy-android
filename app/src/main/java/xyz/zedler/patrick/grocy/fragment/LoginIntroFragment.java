@@ -26,10 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginIntroBinding;
@@ -40,64 +38,66 @@ import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class LoginIntroFragment extends BaseFragment {
 
-    private FragmentLoginIntroBinding binding;
-    private MainActivity activity;
+  private FragmentLoginIntroBinding binding;
+  private MainActivity activity;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentLoginIntroBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentLoginIntroBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
 
-    @Override
-    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        binding.setFragment(this);
-        binding.setClickUtil(new ClickUtil());
-    }
+  @Override
+  public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    binding.setFragment(this);
+    binding.setClickUtil(new ClickUtil());
+  }
 
-    public void loginDemoInstance() {
-        navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
-                getString(R.string.url_grocy_demo),
-                ""
-        ));
-    }
+  public void loginDemoInstance() {
+    navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginRequestFragment(
+        getString(R.string.url_grocy_demo),
+        ""
+    ));
+  }
 
-    public void loginOwnInstance() {
-        navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment());
-    }
+  public void loginOwnInstance() {
+    navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment());
+  }
 
-    public void openHelpWebsite() {
-        boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
-        if(!success) activity.showMessage(R.string.error_no_browser);
+  public void openHelpWebsite() {
+    boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
+    if (!success) {
+      activity.showMessage(R.string.error_no_browser);
     }
+  }
 
-    public void openGrocyWebsite() {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
-    }
+  public void openGrocyWebsite() {
+    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
+  }
 
-    public void showFeedbackBottomSheet() {
-        activity.showBottomSheet(new FeedbackBottomSheet());
-    }
+  public void showFeedbackBottomSheet() {
+    activity.showBottomSheet(new FeedbackBottomSheet());
+  }
 
-    @Override
-    public boolean onBackPressed() {
-        activity.finish();
-        return true;
-    }
+  @Override
+  public boolean onBackPressed() {
+    activity.finish();
+    return true;
+  }
 
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
-    }
+  @Override
+  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
+  }
 }

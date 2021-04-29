@@ -30,11 +30,12 @@ import com.google.android.material.shape.ShapePath;
 
 /**
  * Modification of the official Material Components' BottomAppBarTopEdgeTreatment.
- *
+ * <p>
  * Top edge treatment for the bottom app bar which "cradles" a circular {@link
  * FloatingActionButton}.
  *
- * <p>This edge features a downward semi-circular cutout from the edge line. The two corners created
+ * <p>This edge features a downward semi-circular cutout from the edge line. The two corners
+ * created
  * by the cutout can optionally be rounded. The circular cutout can also support a vertically offset
  * FloatingActionButton; i.e., the cut-out need not be a perfect semi-circle, but could be an arc of
  * less than 180 degrees that does not start or finish with a vertical path. This vertical offset
@@ -55,12 +56,12 @@ public class BottomAppBarTopEdgeTreatment extends EdgeTreatment implements Clone
   private float horizontalOffset;
 
   /**
-   * @param fabMargin the margin in pixels between the cutout and the fab.
-   * @param roundedCornerRadius the radius, in pixels, of the rounded corners created by the cutout.
-   *     A value of 0 will produce a sharp cutout.
+   * @param fabMargin            the margin in pixels between the cutout and the fab.
+   * @param roundedCornerRadius  the radius, in pixels, of the rounded corners created by the
+   *                             cutout. A value of 0 will produce a sharp cutout.
    * @param cradleVerticalOffset vertical offset, in pixels, of the {@link FloatingActionButton}
-   *     being cradled. An offset of 0 indicates the vertical center of the {@link
-   *     FloatingActionButton} is positioned on the top edge.
+   *                             being cradled. An offset of 0 indicates the vertical center of the
+   *                             {@link FloatingActionButton} is positioned on the top edge.
    */
   public BottomAppBarTopEdgeTreatment(
       float fabMargin, float roundedCornerRadius, float cradleVerticalOffset) {
@@ -171,7 +172,9 @@ public class BottomAppBarTopEdgeTreatment extends EdgeTreatment implements Clone
     this.fabDiameter = fabDiameter;
   }
 
-  /** Sets the horizontal offset, in pixels, of the cradle from center. */
+  /**
+   * Sets the horizontal offset, in pixels, of the cradle from center.
+   */
   void setHorizontalOffset(float horizontalOffset) {
     this.horizontalOffset = horizontalOffset;
   }

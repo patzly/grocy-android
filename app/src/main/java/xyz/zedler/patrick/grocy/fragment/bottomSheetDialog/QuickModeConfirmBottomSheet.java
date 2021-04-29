@@ -29,108 +29,109 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.transition.TransitionManager;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class QuickModeConfirmBottomSheet extends BaseBottomSheet {
 
-    private final static int CONFIRMATION_DURATION = 3000;
-    private final static String TAG = QuickModeConfirmBottomSheet.class.getSimpleName();
+  private final static int CONFIRMATION_DURATION = 3000;
+  private final static String TAG = QuickModeConfirmBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
+  private MainActivity activity;
 
-    private ProgressBar progressTimeout;
-    private ValueAnimator confirmProgressAnimator;
+  private ProgressBar progressTimeout;
+  private ValueAnimator confirmProgressAnimator;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_scan_mode_confirm, container, false
+    );
+
+    activity = (MainActivity) requireActivity();
+    Bundle args = requireArguments();
+
+    view.findViewById(R.id.header).setOnClickListener(v -> hideAndStopProgress());
+    view.findViewById(R.id.container).setOnClickListener(v -> hideAndStopProgress());
+    view.findViewById(R.id.button_cancel).setOnClickListener(v -> dismiss());
+    view.findViewById(R.id.button_proceed).setOnClickListener(v -> {
+      activity.getCurrentFragment().startTransaction();
+      dismiss();
+    });
+
+    String msg = args.getString(Constants.ARGUMENT.TEXT);
+    ((TextView) view.findViewById(R.id.text)).setText(msg);
+
+    progressTimeout = view.findViewById(R.id.progress_timeout);
+    startProgress();
+
+    setCancelable(false);
+
+    return view;
+  }
+
+  @Override
+  public void onDestroyView() {
+    if (confirmProgressAnimator != null) {
+      confirmProgressAnimator.cancel();
+      confirmProgressAnimator = null;
     }
+    super.onDestroyView();
+  }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_scan_mode_confirm, container, false
-        );
-
-        activity = (MainActivity) requireActivity();
-        Bundle args = requireArguments();
-
-        view.findViewById(R.id.header).setOnClickListener(v -> hideAndStopProgress());
-        view.findViewById(R.id.container).setOnClickListener(v -> hideAndStopProgress());
-        view.findViewById(R.id.button_cancel).setOnClickListener(v -> dismiss());
-        view.findViewById(R.id.button_proceed).setOnClickListener(v -> {
-            activity.getCurrentFragment().startTransaction();
-            dismiss();
-        });
-
-        String msg = args.getString(Constants.ARGUMENT.TEXT);
-        ((TextView) view.findViewById(R.id.text)).setText(msg);
-
-        progressTimeout = view.findViewById(R.id.progress_timeout);
-        startProgress();
-
-        setCancelable(false);
-
-        return view;
+  private void startProgress() {
+    int startValue = 0;
+    if (confirmProgressAnimator != null) {
+      startValue = progressTimeout.getProgress();
+      if (startValue == 100) {
+        startValue = 0;
+      }
+      confirmProgressAnimator.removeAllListeners();
+      confirmProgressAnimator.cancel();
+      confirmProgressAnimator = null;
     }
-
-    @Override
-    public void onDestroyView() {
-        if(confirmProgressAnimator != null) {
-            confirmProgressAnimator.cancel();
-            confirmProgressAnimator = null;
+    confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressTimeout.getMax());
+    confirmProgressAnimator.setDuration(CONFIRMATION_DURATION
+        * (progressTimeout.getMax() - startValue) / progressTimeout.getMax());
+    confirmProgressAnimator.addUpdateListener(
+        animation -> progressTimeout.setProgress((Integer) animation.getAnimatedValue())
+    );
+    confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        if (progressTimeout.getProgress() != progressTimeout.getMax()) {
+          return;
         }
-        super.onDestroyView();
-    }
+        activity.getCurrentFragment().startTransaction();
+        dismiss();
+      }
+    });
+    confirmProgressAnimator.start();
+  }
 
-    private void startProgress() {
-        int startValue = 0;
-        if(confirmProgressAnimator != null) {
-            startValue = progressTimeout.getProgress();
-            if(startValue == 100) startValue = 0;
-            confirmProgressAnimator.removeAllListeners();
-            confirmProgressAnimator.cancel();
-            confirmProgressAnimator = null;
-        }
-        confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressTimeout.getMax());
-        confirmProgressAnimator.setDuration(CONFIRMATION_DURATION
-                * (progressTimeout.getMax() - startValue) / progressTimeout.getMax());
-        confirmProgressAnimator.addUpdateListener(
-                animation -> progressTimeout.setProgress((Integer) animation.getAnimatedValue())
-        );
-        confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if(progressTimeout.getProgress() != progressTimeout.getMax()) return;
-                activity.getCurrentFragment().startTransaction();
-                dismiss();
-            }
-        });
-        confirmProgressAnimator.start();
-    }
+  private void hideAndStopProgress() {
+    confirmProgressAnimator.cancel();
+    TransitionManager.beginDelayedTransition((ViewGroup) requireView());
+    progressTimeout.setVisibility(View.GONE);
+  }
 
-    private void hideAndStopProgress() {
-        confirmProgressAnimator.cancel();
-        TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-        progressTimeout.setVisibility(View.GONE);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

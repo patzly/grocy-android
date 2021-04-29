@@ -27,22 +27,17 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -56,385 +51,411 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterStoreFragment extends BaseFragment {
 
-    private final static String TAG = MasterStoreFragment.class.getSimpleName();
+  private final static String TAG = MasterStoreFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private Gson gson;
-    private GrocyApi grocyApi;
-    private DownloadHelper dlHelper;
-    private FragmentMasterStoreBinding binding;
+  private MainActivity activity;
+  private Gson gson;
+  private GrocyApi grocyApi;
+  private DownloadHelper dlHelper;
+  private FragmentMasterStoreBinding binding;
 
-    private ArrayList<Store> stores;
-    private ArrayList<String> storeNames;
-    private Store editStore;
+  private ArrayList<Store> stores;
+  private ArrayList<String> storeNames;
+  private Store editStore;
 
-    private boolean isRefresh;
-    private boolean debug;
+  private boolean isRefresh;
+  private boolean debug;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentMasterStoreBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentMasterStoreBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-        dlHelper.destroy();
-    }
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+    dlHelper.destroy();
+  }
 
-    @Override
-    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
+  @Override
+  public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
 
-        // PREFERENCES
+    // PREFERENCES
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-        // WEB
+    // WEB
 
-        dlHelper = new DownloadHelper(activity, TAG);
-        grocyApi = activity.getGrocyApi();
-        gson = new Gson();
+    dlHelper = new DownloadHelper(activity, TAG);
+    grocyApi = activity.getGrocyApi();
+    gson = new Gson();
 
-        // VARIABLES
+    // VARIABLES
 
-        stores = new ArrayList<>();
-        storeNames = new ArrayList<>();
+    stores = new ArrayList<>();
+    storeNames = new ArrayList<>();
 
-        editStore = null;
-        isRefresh = false;
+    editStore = null;
+    isRefresh = false;
 
-        // VIEWS
+    // VIEWS
 
-        binding.frameMasterStoreCancel.setOnClickListener(v -> activity.onBackPressed());
+    binding.frameMasterStoreCancel.setOnClickListener(v -> activity.onBackPressed());
 
-        // swipe refresh
-        binding.swipeMasterStore.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipeMasterStore.setColorSchemeColors(
-                ContextCompat.getColor(activity, R.color.secondary)
-        );
-        binding.swipeMasterStore.setOnRefreshListener(this::refresh);
+    // swipe refresh
+    binding.swipeMasterStore.setProgressBackgroundColorSchemeColor(
+        ContextCompat.getColor(activity, R.color.surface)
+    );
+    binding.swipeMasterStore.setColorSchemeColors(
+        ContextCompat.getColor(activity, R.color.secondary)
+    );
+    binding.swipeMasterStore.setOnRefreshListener(this::refresh);
 
-        // name
-        binding.editTextMasterStoreName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if(hasFocus) IconUtil.start(binding.imageMasterStoreName);
+    // name
+    binding.editTextMasterStoreName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+      if (hasFocus) {
+        IconUtil.start(binding.imageMasterStoreName);
+      }
+    });
+
+    // description
+    binding.editTextMasterStoreDescription.setOnFocusChangeListener(
+        (View v, boolean hasFocus) -> {
+          if (hasFocus) {
+            IconUtil.start(binding.imageMasterStoreDescription);
+          }
         });
 
-        // description
-        binding.editTextMasterStoreDescription.setOnFocusChangeListener(
-                (View v, boolean hasFocus) -> {
-                    if(hasFocus) IconUtil.start(binding.imageMasterStoreDescription);
-                });
+    MasterStoreFragmentArgs args = MasterStoreFragmentArgs.fromBundle(requireArguments());
+    editStore = args.getStore();
+    if (editStore != null) {
+      fillWithEditReferences();
+    } else {
+      resetAll();
+    }
 
-        MasterStoreFragmentArgs args = MasterStoreFragmentArgs.fromBundle(requireArguments());
-        editStore = args.getStore();
-        if(editStore != null) {
+    // START
+
+    if (savedInstanceState == null) {
+      load();
+    } else {
+      restoreSavedInstanceState(savedInstanceState);
+    }
+
+    // UPDATE UI
+    updateUI((getArguments() == null
+        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        && savedInstanceState == null);
+  }
+
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(R.id.scroll_master_store);
+    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.END,
+        R.menu.menu_master_item_edit,
+        animated,
+        this::setUpBottomMenu
+    );
+    activity.updateFab(
+        R.drawable.ic_round_backup,
+        R.string.action_save,
+        Constants.FAB.TAG.SAVE,
+        animated,
+        this::saveStore
+    );
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    if (isHidden()) {
+      return;
+    }
+
+    outState.putParcelableArrayList("stores", stores);
+    outState.putStringArrayList("storeNames", storeNames);
+
+    outState.putParcelable("editStore", editStore);
+  }
+
+  private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+    if (isHidden()) {
+      return;
+    }
+
+    stores = savedInstanceState.getParcelableArrayList("stores");
+    storeNames = savedInstanceState.getStringArrayList("storeNames");
+
+    editStore = savedInstanceState.getParcelable("editStore");
+
+    isRefresh = false;
+    binding.swipeMasterStore.setRefreshing(false);
+
+    updateEditReferences();
+
+    if (isRefresh && editStore != null) {
+      fillWithEditReferences();
+    } else {
+      resetAll();
+    }
+  }
+
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden && getView() != null) {
+      onViewCreated(getView(), null);
+    }
+  }
+
+  private void load() {
+    if (activity.isOnline()) {
+      download();
+    }
+  }
+
+  private void refresh() {
+    // for only fill with up-to-date data on refresh,
+    // not on startup as the bundle should contain everything needed
+    isRefresh = true;
+    if (activity.isOnline()) {
+      download();
+    } else {
+      binding.swipeMasterStore.setRefreshing(false);
+      activity.showSnackbar(
+          Snackbar.make(
+              activity.findViewById(R.id.frame_main_container),
+              activity.getString(R.string.msg_no_connection),
+              Snackbar.LENGTH_SHORT
+          ).setActionTextColor(
+              ContextCompat.getColor(activity, R.color.secondary)
+          ).setAction(
+              activity.getString(R.string.action_retry),
+              v1 -> refresh()
+          )
+      );
+    }
+  }
+
+  private void download() {
+    binding.swipeMasterStore.setRefreshing(true);
+    downloadStores();
+  }
+
+  private void downloadStores() {
+    dlHelper.get(
+        grocyApi.getObjects(GrocyApi.ENTITY.STORES),
+        response -> {
+          stores = gson.fromJson(
+              response,
+              new TypeToken<List<Store>>() {
+              }.getType()
+          );
+          SortUtil.sortStoresByName(requireContext(), stores, true);
+          storeNames = getStoreNames();
+
+          binding.swipeMasterStore.setRefreshing(false);
+
+          updateEditReferences();
+
+          if (isRefresh && editStore != null) {
             fillWithEditReferences();
-        } else {
+          } else {
             resetAll();
+          }
+        },
+        error -> {
+          binding.swipeMasterStore.setRefreshing(false);
+          activity.showSnackbar(
+              Snackbar.make(
+                  activity.findViewById(R.id.frame_main_container),
+                  activity.getString(R.string.error_undefined),
+                  Snackbar.LENGTH_SHORT
+              ).setActionTextColor(
+                  ContextCompat.getColor(activity, R.color.secondary)
+              ).setAction(
+                  activity.getString(R.string.action_retry),
+                  v1 -> download()
+              )
+          );
         }
+    );
+  }
 
-        // START
+  private void updateEditReferences() {
+    if (editStore != null) {
+      Store editStore = getStore(this.editStore.getId());
+      if (editStore != null) {
+        this.editStore = editStore;
+      }
+    }
+  }
 
-        if(savedInstanceState == null) {
-            load();
+  private ArrayList<String> getStoreNames() {
+    ArrayList<String> names = new ArrayList<>();
+    if (stores != null) {
+      for (Store store : stores) {
+        if (editStore != null) {
+          if (store.getId() != editStore.getId()) {
+            names.add(store.getName().trim());
+          }
         } else {
-            restoreSavedInstanceState(savedInstanceState);
+          names.add(store.getName().trim());
         }
+      }
+    }
+    return names;
+  }
 
-        // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-                && savedInstanceState == null);
+  private Store getStore(int storeId) {
+    for (Store store : stores) {
+      if (store.getId() == storeId) {
+        return store;
+      }
+    }
+    return null;
+  }
+
+  private void fillWithEditReferences() {
+    clearInputFocusAndErrors();
+    if (editStore != null) {
+      // name
+      binding.editTextMasterStoreName.setText(editStore.getName());
+      // description
+      binding.editTextMasterStoreDescription.setText(editStore.getDescription());
+    }
+  }
+
+  private void clearInputFocusAndErrors() {
+    activity.hideKeyboard();
+    binding.textInputMasterStoreName.clearFocus();
+    binding.textInputMasterStoreName.setErrorEnabled(false);
+    binding.textInputMasterStoreDescription.clearFocus();
+    binding.textInputMasterStoreDescription.setErrorEnabled(false);
+  }
+
+  public void saveStore() {
+    if (isFormInvalid()) {
+      return;
     }
 
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_store);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.END,
-                R.menu.menu_master_item_edit,
-                animated,
-                this::setUpBottomMenu
-        );
-        activity.updateFab(
-                R.drawable.ic_round_backup,
-                R.string.action_save,
-                Constants.FAB.TAG.SAVE,
-                animated,
-                this::saveStore
-        );
+    JSONObject jsonObject = new JSONObject();
+    try {
+      Editable name = binding.editTextMasterStoreName.getText();
+      Editable description = binding.editTextMasterStoreDescription.getText();
+      jsonObject.put("name", (name != null ? name : "").toString().trim());
+      jsonObject.put(
+          "description", (description != null ? description : "").toString().trim()
+      );
+    } catch (JSONException e) {
+      if (debug) {
+        Log.e(TAG, "saveStore: " + e);
+      }
     }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(isHidden()) return;
-
-        outState.putParcelableArrayList("stores", stores);
-        outState.putStringArrayList("storeNames", storeNames);
-
-        outState.putParcelable("editStore", editStore);
-    }
-
-    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
-        if(isHidden()) return;
-
-        stores = savedInstanceState.getParcelableArrayList("stores");
-        storeNames = savedInstanceState.getStringArrayList("storeNames");
-
-        editStore = savedInstanceState.getParcelable("editStore");
-
-        isRefresh = false;
-        binding.swipeMasterStore.setRefreshing(false);
-
-        updateEditReferences();
-
-        if(isRefresh && editStore != null) {
-            fillWithEditReferences();
-        } else {
-            resetAll();
-        }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if(!hidden && getView() != null) onViewCreated(getView(), null);
-    }
-
-    private void load() {
-        if(activity.isOnline()) {
-            download();
-        }
-    }
-
-    private void refresh() {
-        // for only fill with up-to-date data on refresh,
-        // not on startup as the bundle should contain everything needed
-        isRefresh = true;
-        if(activity.isOnline()) {
-            download();
-        } else {
-            binding.swipeMasterStore.setRefreshing(false);
-            activity.showSnackbar(
-                    Snackbar.make(
-                            activity.findViewById(R.id.frame_main_container),
-                            activity.getString(R.string.msg_no_connection),
-                            Snackbar.LENGTH_SHORT
-                    ).setActionTextColor(
-                            ContextCompat.getColor(activity, R.color.secondary)
-                    ).setAction(
-                            activity.getString(R.string.action_retry),
-                            v1 -> refresh()
-                    )
-            );
-        }
-    }
-
-    private void download() {
-        binding.swipeMasterStore.setRefreshing(true);
-        downloadStores();
-    }
-
-    private void downloadStores() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.STORES),
-                response -> {
-                    stores = gson.fromJson(
-                            response,
-                            new TypeToken<List<Store>>(){}.getType()
-                    );
-                    SortUtil.sortStoresByName(requireContext(), stores, true);
-                    storeNames = getStoreNames();
-
-                    binding.swipeMasterStore.setRefreshing(false);
-
-                    updateEditReferences();
-
-                    if(isRefresh && editStore != null) {
-                        fillWithEditReferences();
-                    } else {
-                        resetAll();
-                    }
-                },
-                error -> {
-                    binding.swipeMasterStore.setRefreshing(false);
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.findViewById(R.id.frame_main_container),
-                                    activity.getString(R.string.error_undefined),
-                                    Snackbar.LENGTH_SHORT
-                            ).setActionTextColor(
-                                    ContextCompat.getColor(activity, R.color.secondary)
-                            ).setAction(
-                                    activity.getString(R.string.action_retry),
-                                    v1 -> download()
-                            )
-                    );
-                }
-        );
-    }
-
-    private void updateEditReferences() {
-        if(editStore != null) {
-            Store editStore = getStore(this.editStore.getId());
-            if(editStore != null) this.editStore = editStore;
-        }
-    }
-
-    private ArrayList<String> getStoreNames() {
-        ArrayList<String> names = new ArrayList<>();
-        if(stores != null) {
-            for(Store store : stores) {
-                if(editStore != null) {
-                    if(store.getId() != editStore.getId()) {
-                        names.add(store.getName().trim());
-                    }
-                } else {
-                    names.add(store.getName().trim());
-                }
+    if (editStore != null) {
+      dlHelper.put(
+          grocyApi.getObject(GrocyApi.ENTITY.STORES, editStore.getId()),
+          jsonObject,
+          response -> activity.navigateUp(),
+          error -> {
+            showErrorMessage();
+            if (debug) {
+              Log.e(TAG, "saveStore: " + error);
             }
-        }
-        return names;
-    }
-
-    private Store getStore(int storeId) {
-        for(Store store : stores) {
-            if(store.getId() == storeId) {
-                return store;
+          }
+      );
+    } else {
+      dlHelper.post(
+          grocyApi.getObjects(GrocyApi.ENTITY.STORES),
+          jsonObject,
+          response -> activity.navigateUp(),
+          error -> {
+            showErrorMessage();
+            if (debug) {
+              Log.e(TAG, "saveStore: " + error);
             }
-        } return null;
+          }
+      );
+    }
+  }
+
+  private boolean isFormInvalid() {
+    clearInputFocusAndErrors();
+    boolean isInvalid = false;
+
+    String name = String.valueOf(binding.editTextMasterStoreName.getText()).trim();
+    if (name.isEmpty()) {
+      binding.textInputMasterStoreName.setError(activity.getString(R.string.error_empty));
+      isInvalid = true;
+    } else if (!storeNames.isEmpty() && storeNames.contains(name)) {
+      binding.textInputMasterStoreName.setError(activity.getString(R.string.error_duplicate));
+      isInvalid = true;
     }
 
-    private void fillWithEditReferences() {
-        clearInputFocusAndErrors();
-        if(editStore != null) {
-            // name
-            binding.editTextMasterStoreName.setText(editStore.getName());
-            // description
-            binding.editTextMasterStoreDescription.setText(editStore.getDescription());
-        }
+    return isInvalid;
+  }
+
+  private void resetAll() {
+    if (editStore != null) {
+      return;
     }
+    clearInputFocusAndErrors();
+    binding.editTextMasterStoreName.setText(null);
+    binding.editTextMasterStoreDescription.setText(null);
+  }
 
-    private void clearInputFocusAndErrors() {
-        activity.hideKeyboard();
-        binding.textInputMasterStoreName.clearFocus();
-        binding.textInputMasterStoreName.setErrorEnabled(false);
-        binding.textInputMasterStoreDescription.clearFocus();
-        binding.textInputMasterStoreDescription.setErrorEnabled(false);
+  public void deleteStoreSafely() {
+    if (editStore == null) {
+      return;
     }
+    Bundle bundle = new Bundle();
+    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.STORES);
+    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editStore.getId());
+    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editStore.getName());
+    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
+  }
 
-    public void saveStore() {
-        if(isFormInvalid()) return;
+  @Override
+  public void deleteObject(int storeId) {
+    dlHelper.delete(
+        grocyApi.getObject(GrocyApi.ENTITY.STORES, storeId),
+        response -> activity.navigateUp(),
+        error -> showErrorMessage()
+    );
+  }
 
-        JSONObject jsonObject = new JSONObject();
-        try {
-            Editable name = binding.editTextMasterStoreName.getText();
-            Editable description = binding.editTextMasterStoreDescription.getText();
-            jsonObject.put("name", (name != null ? name : "").toString().trim());
-            jsonObject.put(
-                    "description", (description != null ? description : "").toString().trim()
-            );
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "saveStore: " + e);
-        }
-        if(editStore != null) {
-            dlHelper.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.STORES, editStore.getId()),
-                    jsonObject,
-                    response -> activity.navigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveStore: " + error);
-                    }
-            );
-        } else {
-            dlHelper.post(
-                    grocyApi.getObjects(GrocyApi.ENTITY.STORES),
-                    jsonObject,
-                    response -> activity.navigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveStore: " + error);
-                    }
-            );
-        }
+  private void showErrorMessage() {
+    activity.showSnackbar(
+        Snackbar.make(
+            activity.findViewById(R.id.frame_main_container),
+            activity.getString(R.string.error_undefined),
+            Snackbar.LENGTH_SHORT
+        )
+    );
+  }
+
+  public void setUpBottomMenu() {
+    MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
+    if (delete != null) {
+      delete.setOnMenuItemClickListener(item -> {
+        IconUtil.start(item);
+        deleteStoreSafely();
+        return true;
+      });
+      delete.setVisible(editStore != null);
     }
+  }
 
-    private boolean isFormInvalid() {
-        clearInputFocusAndErrors();
-        boolean isInvalid = false;
-
-        String name = String.valueOf(binding.editTextMasterStoreName.getText()).trim();
-        if(name.isEmpty()) {
-            binding.textInputMasterStoreName.setError(activity.getString(R.string.error_empty));
-            isInvalid = true;
-        } else if(!storeNames.isEmpty() && storeNames.contains(name)) {
-            binding.textInputMasterStoreName.setError(activity.getString(R.string.error_duplicate));
-            isInvalid = true;
-        }
-
-        return isInvalid;
-    }
-
-    private void resetAll() {
-        if(editStore != null) return;
-        clearInputFocusAndErrors();
-        binding.editTextMasterStoreName.setText(null);
-        binding.editTextMasterStoreDescription.setText(null);
-    }
-
-    public void deleteStoreSafely() {
-        if(editStore == null) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.STORES);
-        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editStore.getId());
-        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editStore.getName());
-        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-    }
-
-    @Override
-    public void deleteObject(int storeId) {
-        dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.STORES, storeId),
-                response -> activity.navigateUp(),
-                error -> showErrorMessage()
-        );
-    }
-
-    private void showErrorMessage() {
-        activity.showSnackbar(
-                Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
-                        activity.getString(R.string.error_undefined),
-                        Snackbar.LENGTH_SHORT
-                )
-        );
-    }
-
-    public void setUpBottomMenu() {
-        MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
-        if(delete != null) {
-            delete.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                deleteStoreSafely();
-                return true;
-            });
-            delete.setVisible(editStore != null);
-        }
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

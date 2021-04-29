@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,166 +18,166 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/background">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="?android:actionBarSize"
+    android:background="@color/primary">
+
+    <LinearLayout
+      android:id="@+id/linear_master_locations_app_bar_default"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center_vertical"
+      android:orientation="horizontal">
+
+      <FrameLayout
+        android:id="@+id/frame_master_locations_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/actionBarItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:contentDescription="@string/action_back"
+        android:tooltipText="@string/action_back"
+        android:focusable="true"
+        tools:targetApi="o">
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_arrow_back" />
+
+      </FrameLayout>
+
+      <TextView
+        style="@style/Widget.Grocy.TextView.Toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/property_locations"
+        android:layout_marginEnd="16dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/linear_master_locations_app_bar_search"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      android:baselineAligned="false">
+
+      <FrameLayout
+        android:id="@+id/frame_master_locations_search_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/actionBarItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:contentDescription="@string/action_close"
+        android:tooltipText="@string/action_close"
+        android:focusable="true"
+        tools:targetApi="o">
+
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_close" />
+
+      </FrameLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_master_locations_search"
+        style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="72dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/edit_text_master_locations_search"
+          style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:imeOptions="actionSearch"
+          android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+          android:singleLine="true"
+          android:textColor="@color/on_background" />
+
+      </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_master_locations"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_marginTop="?android:actionBarSize"
+    android:overScrollMode="never">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:background="@color/primary">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linear_master_locations_app_bar_default"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:id="@+id/frame_master_locations_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_back"
-                android:tooltipText="@string/action_back"
-                android:focusable="true"
-                tools:targetApi="o">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_arrow_back" />
-
-            </FrameLayout>
-
-            <TextView
-                style="@style/Widget.Grocy.TextView.Toolbar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/property_locations"
-                android:layout_marginEnd="16dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_master_locations_app_bar_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:baselineAligned="false">
-
-            <FrameLayout
-                android:id="@+id/frame_master_locations_search_close"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_close"
-                android:tooltipText="@string/action_close"
-                android:focusable="true"
-                tools:targetApi="o">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_close" />
-
-            </FrameLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_master_locations_search"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="72dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_master_locations_search"
-                    style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-                    android:singleLine="true"
-                    android:textColor="@color/on_background" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_master_locations"
+      <include
+        android:id="@+id/linear_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
+        android:layout_marginBottom="?actionBarSize"
+        layout="@layout/partial_empty" />
+
+      <include
+        android:id="@+id/relative_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?actionBarSize"
+        layout="@layout/info_fullscreen" />
+
+      <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_master_locations"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:overScrollMode="never">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingTop="8dp"
+          android:paddingBottom="100dp">
+
+          <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_master_locations"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:nestedScrollingEnabled="false"
+            android:clipToPadding="false" />
 
-            <include
-                android:id="@+id/linear_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/partial_empty"/>
+        </LinearLayout>
 
-            <include
-                android:id="@+id/relative_error"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?actionBarSize"
-                layout="@layout/info_fullscreen"/>
+      </androidx.core.widget.NestedScrollView>
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll_master_locations"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never">
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="100dp">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_master_locations"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:overScrollMode="never"
-                        android:nestedScrollingEnabled="false"
-                        android:clipToPadding="false"/>
-
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

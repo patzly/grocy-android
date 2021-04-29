@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -18,30 +17,31 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:state_enabled="true"
-        android:state_pressed="true">
+  <item
+    android:state_enabled="true"
+    android:state_pressed="true">
 
-        <objectAnimator
-            android:duration="250"
-            android:propertyName="translationZ"
-            android:valueTo="2.5dp"
-            android:valueType="floatType"/>
+    <objectAnimator
+      android:duration="250"
+      android:propertyName="translationZ"
+      android:valueTo="2.5dp"
+      android:valueType="floatType" />
 
-    </item>
+  </item>
 
-    <item
-        android:state_enabled="true"
-        android:state_pressed="false">
+  <item
+    android:state_enabled="true"
+    android:state_pressed="false">
 
-        <objectAnimator
-            android:duration="250"
-            android:propertyName="translationZ"
-            android:valueTo="0dp"
-            android:valueType="floatType"/>
+    <objectAnimator
+      android:duration="250"
+      android:propertyName="translationZ"
+      android:valueTo="0dp"
+      android:valueType="floatType" />
 
-    </item>
+  </item>
 
 </selector>

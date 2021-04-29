@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,68 +18,68 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  android:gravity="center">
+
+  <com.google.android.material.card.MaterialCardView
+    android:id="@+id/card_filter_chip"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:gravity="center">
+    android:layout_height="32dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardCornerRadius="16dp"
+    app:strokeWidth="0dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/on_background_secondary">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_filter_chip"
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:orientation="horizontal"
+      android:paddingStart="4dp"
+      android:paddingEnd="0dp"
+      android:gravity="center_vertical">
+
+      <FrameLayout
+        android:id="@+id/frame_filter_chip_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp">
+
+        <ImageView
+          android:id="@+id/image_filter_chip_icon_bg"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:src="@drawable/bg_chip_icon"
+          tools:ignore="ContentDescription" />
+
+        <ImageView
+          android:id="@+id/image_filter_chip_icon"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_gravity="bottom|center_horizontal"
+          android:src="@drawable/ic_round_filter_list_in_anim"
+          tools:ignore="ContentDescription" />
+
+      </FrameLayout>
+
+      <TextView
+        android:id="@+id/text_filter_chip"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        app:cardCornerRadius="16dp"
-        app:strokeWidth="0dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/on_background_secondary">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="12dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:fontFamily="@font/jost_medium" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingStart="4dp"
-            android:paddingEnd="0dp"
-            android:gravity="center_vertical">
+    </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/frame_filter_chip_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
-
-                <ImageView
-                    android:id="@+id/image_filter_chip_icon_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/bg_chip_icon"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:id="@+id/image_filter_chip_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:src="@drawable/ic_round_filter_list_in_anim"
-                    tools:ignore="ContentDescription" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/text_filter_chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="12dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:fontFamily="@font/jost_medium"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+  </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

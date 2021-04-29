@@ -24,77 +24,83 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class AppBarBehaviorNew {
 
-	private final static String TAG = AppBarBehaviorNew.class.getSimpleName();
+  private final static String TAG = AppBarBehaviorNew.class.getSimpleName();
 
-	private static final int ANIM_DURATION = 300;
-	private static final String SAVED_STATE_KEY = "app_bar_layout_is_primary";
+  private static final int ANIM_DURATION = 300;
+  private static final String SAVED_STATE_KEY = "app_bar_layout_is_primary";
 
-	private final View viewPrimary;
-	private final View viewSecondary;
-	private boolean isPrimary = true;
-	private final boolean debug;
+  private final View viewPrimary;
+  private final View viewSecondary;
+  private boolean isPrimary = true;
+  private final boolean debug;
 
-	public AppBarBehaviorNew(Activity activity, View primary, View secondary, Bundle savedState) {
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+  public AppBarBehaviorNew(Activity activity, View primary, View secondary, Bundle savedState) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-		if(savedState == null) {
-			isPrimary = true;
-		} else if(savedState.containsKey(SAVED_STATE_KEY)) {
-			isPrimary = savedState.getBoolean(SAVED_STATE_KEY);
-		}
+    if (savedState == null) {
+      isPrimary = true;
+    } else if (savedState.containsKey(SAVED_STATE_KEY)) {
+      isPrimary = savedState.getBoolean(SAVED_STATE_KEY);
+    }
 
-		viewPrimary = primary;
-		viewPrimary.setAlpha(1);
-		viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
-		viewSecondary = secondary;
-		viewSecondary.setAlpha(1);
-		viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
-	}
+    viewPrimary = primary;
+    viewPrimary.setAlpha(1);
+    viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
+    viewSecondary = secondary;
+    viewSecondary.setAlpha(1);
+    viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
+  }
 
-	public void saveInstanceState(@NonNull Bundle outState) {
-		outState.putBoolean(SAVED_STATE_KEY, isPrimary);
-	}
+  public void saveInstanceState(@NonNull Bundle outState) {
+    outState.putBoolean(SAVED_STATE_KEY, isPrimary);
+  }
 
-	public void switchToPrimary() {
-		if(isPrimary) return;
-		isPrimary = true;
-		viewSecondary.animate()
-				.alpha(0)
-				.setDuration(ANIM_DURATION / 2)
-				.withEndAction(() -> {
-					viewSecondary.setVisibility(View.GONE);
-					viewPrimary.setVisibility(View.VISIBLE);
-					viewPrimary.setAlpha(0);
-					viewPrimary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
-				}).start();
-		if(debug) Log.i(TAG, "switch to primary layout");
-	}
+  public void switchToPrimary() {
+    if (isPrimary) {
+      return;
+    }
+    isPrimary = true;
+    viewSecondary.animate()
+        .alpha(0)
+        .setDuration(ANIM_DURATION / 2)
+        .withEndAction(() -> {
+          viewSecondary.setVisibility(View.GONE);
+          viewPrimary.setVisibility(View.VISIBLE);
+          viewPrimary.setAlpha(0);
+          viewPrimary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
+        }).start();
+    if (debug) {
+      Log.i(TAG, "switch to primary layout");
+    }
+  }
 
-	public void switchToSecondary() {
-		if(!isPrimary) return;
-		isPrimary = false;
-		viewPrimary.animate()
-				.alpha(0)
-				.setDuration(ANIM_DURATION / 2)
-				.withEndAction(() -> {
-					viewPrimary.setVisibility(View.GONE);
-					viewSecondary.setVisibility(View.VISIBLE);
-					viewSecondary.setAlpha(0);
-					viewSecondary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
-				}).start();
-		if(debug) Log.i(TAG, "switch to secondary layout");
-	}
+  public void switchToSecondary() {
+    if (!isPrimary) {
+      return;
+    }
+    isPrimary = false;
+    viewPrimary.animate()
+        .alpha(0)
+        .setDuration(ANIM_DURATION / 2)
+        .withEndAction(() -> {
+          viewPrimary.setVisibility(View.GONE);
+          viewSecondary.setVisibility(View.VISIBLE);
+          viewSecondary.setAlpha(0);
+          viewSecondary.animate().alpha(1).setDuration(ANIM_DURATION / 2).start();
+        }).start();
+    if (debug) {
+      Log.i(TAG, "switch to secondary layout");
+    }
+  }
 
-	public boolean isPrimaryLayout() {
-		return isPrimary;
-	}
+  public boolean isPrimaryLayout() {
+    return isPrimary;
+  }
 }

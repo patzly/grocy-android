@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,6 +18,6 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/secondary" android:state_enabled="true"/>
-    <item android:color="@color/on_background_secondary"/>
+  <item android:color="@color/secondary" android:state_enabled="true" />
+  <item android:color="@color/on_background_secondary" />
 </selector>

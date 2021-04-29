@@ -29,117 +29,115 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import xyz.zedler.patrick.grocy.R;
 
 public class ActionButton extends LinearLayout {
 
-    private final static String TAG = ActionButton.class.getSimpleName();
+  private final static String TAG = ActionButton.class.getSimpleName();
 
-    private final static float ICON_ALPHA_DISABLED = 0.5f;
+  private final static float ICON_ALPHA_DISABLED = 0.5f;
 
-    final Context context;
-    ImageView imageViewIcon;
-    FrameLayout frameLayoutButton;
+  final Context context;
+  ImageView imageViewIcon;
+  FrameLayout frameLayoutButton;
 
-    public ActionButton(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+  public ActionButton(@NonNull Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
 
-        this.context = context;
+    this.context = context;
 
-        int iconResId = -1;
-        int colorIconTint = -1;
-        boolean isDense = false;
+    int iconResId = -1;
+    int colorIconTint = -1;
+    boolean isDense = false;
 
-        if(attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ActionButton);
-            try {
-                iconResId = typedArray.getResourceId(R.styleable.ActionButton_icon, -1);
-                colorIconTint = typedArray.getColor(R.styleable.ActionButton_tint, -1);
-                isDense = typedArray.getBoolean(R.styleable.ActionButton_dense, false);
-            } finally {
-                typedArray.recycle();
-            }
-        }
-
-        inflate(
-                context,
-                isDense
-                        ? R.layout.view_action_button_dense
-                        : R.layout.view_action_button,
-                this
-        );
-
-        imageViewIcon = findViewById(R.id.image_action_button);
-        frameLayoutButton = findViewById(R.id.frame_action_button);
-
-        imageViewIcon.setImageResource(iconResId);
-        setIconTint(colorIconTint);
+    if (attrs != null) {
+      TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ActionButton);
+      try {
+        iconResId = typedArray.getResourceId(R.styleable.ActionButton_icon, -1);
+        colorIconTint = typedArray.getColor(R.styleable.ActionButton_tint, -1);
+        isDense = typedArray.getBoolean(R.styleable.ActionButton_dense, false);
+      } finally {
+        typedArray.recycle();
+      }
     }
 
-    public void setIcon(@DrawableRes int iconRes) {
-        imageViewIcon.setImageResource(iconRes);
-    }
+    inflate(
+        context,
+        isDense
+            ? R.layout.view_action_button_dense
+            : R.layout.view_action_button,
+        this
+    );
 
-    public void setIconTint(int color) {
-        imageViewIcon.setImageTintList(new ColorStateList(new int[][]{
-                new int[] { android.R.attr.state_enabled},
-                new int[] {-android.R.attr.state_enabled}
-        }, new int[]{
-                color, color
-        }));
-    }
+    imageViewIcon = findViewById(R.id.image_action_button);
+    frameLayoutButton = findViewById(R.id.frame_action_button);
 
-    public void setState(boolean enabled) {
-        frameLayoutButton.setEnabled(enabled);
-        frameLayoutButton.setAlpha(enabled ? 1 : ICON_ALPHA_DISABLED);
-    }
+    imageViewIcon.setImageResource(iconResId);
+    setIconTint(colorIconTint);
+  }
 
-    public void refreshState(boolean enabled) {
-        if(enabled) {
-            if(!frameLayoutButton.isEnabled()) {
-                frameLayoutButton.animate().alpha(1).setDuration(300).start();
-            }
-        } else {
-            if(frameLayoutButton.isEnabled()) {
-                frameLayoutButton.animate().alpha(ICON_ALPHA_DISABLED).setDuration(300).start();
-            }
-        }
-        frameLayoutButton.setEnabled(enabled);
-    }
+  public void setIcon(@DrawableRes int iconRes) {
+    imageViewIcon.setImageResource(iconRes);
+  }
 
-    @Override
-    public void setOnClickListener(@Nullable OnClickListener l) {
-        frameLayoutButton.setOnClickListener(l);
-    }
+  public void setIconTint(int color) {
+    imageViewIcon.setImageTintList(new ColorStateList(new int[][]{
+        new int[]{android.R.attr.state_enabled},
+        new int[]{-android.R.attr.state_enabled}
+    }, new int[]{
+        color, color
+    }));
+  }
 
-    @Override
-    public void setOnTouchListener(OnTouchListener l) {
-        frameLayoutButton.setOnTouchListener(l);
-    }
+  public void setState(boolean enabled) {
+    frameLayoutButton.setEnabled(enabled);
+    frameLayoutButton.setAlpha(enabled ? 1 : ICON_ALPHA_DISABLED);
+  }
 
-    @Override
-    public void setTooltipText(@Nullable CharSequence tooltipText) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            frameLayoutButton.setTooltipText(tooltipText);
-        }
+  public void refreshState(boolean enabled) {
+    if (enabled) {
+      if (!frameLayoutButton.isEnabled()) {
+        frameLayoutButton.animate().alpha(1).setDuration(300).start();
+      }
+    } else {
+      if (frameLayoutButton.isEnabled()) {
+        frameLayoutButton.animate().alpha(ICON_ALPHA_DISABLED).setDuration(300).start();
+      }
     }
+    frameLayoutButton.setEnabled(enabled);
+  }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        frameLayoutButton.setEnabled(enabled);
-        frameLayoutButton.setClickable(enabled);
-    }
+  @Override
+  public void setOnClickListener(@Nullable OnClickListener l) {
+    frameLayoutButton.setOnClickListener(l);
+  }
 
-    public void startIconAnimation() {
-        try {
-            ((Animatable) imageViewIcon.getDrawable()).start();
-        } catch (ClassCastException cla) {
-            Log.e(TAG, "startIconAnimation() requires AVD!");
-        }
+  @Override
+  public void setOnTouchListener(OnTouchListener l) {
+    frameLayoutButton.setOnTouchListener(l);
+  }
+
+  @Override
+  public void setTooltipText(@Nullable CharSequence tooltipText) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      frameLayoutButton.setTooltipText(tooltipText);
     }
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    frameLayoutButton.setEnabled(enabled);
+    frameLayoutButton.setClickable(enabled);
+  }
+
+  public void startIconAnimation() {
+    try {
+      ((Animatable) imageViewIcon.getDrawable()).start();
+    } catch (ClassCastException cla) {
+      Log.e(TAG, "startIconAnimation() requires AVD!");
+    }
+  }
 }

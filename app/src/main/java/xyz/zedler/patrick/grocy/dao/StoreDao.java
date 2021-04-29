@@ -25,32 +25,31 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.Store;
 
 @Dao
 public interface StoreDao {
-    @Query("SELECT * FROM store_table")
-    LiveData<List<Store>> getAllLive();
 
-    @Query("SELECT * FROM store_table")
-    List<Store> getAll();
+  @Query("SELECT * FROM store_table")
+  LiveData<List<Store>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM store_table")
-    int count();
+  @Query("SELECT * FROM store_table")
+  List<Store> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<Store> stores);
+  @Query("SELECT COUNT(*) FROM store_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Store store);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<Store> stores);
 
-    @Delete
-    void delete(Store store);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(Store store);
 
-    @Query("DELETE FROM store_table")
-    void deleteAll();
+  @Delete
+  void delete(Store store);
+
+  @Query("DELETE FROM store_table")
+  void deleteAll();
 
 }

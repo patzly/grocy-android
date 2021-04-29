@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,48 +18,48 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.journeyapps.barcodescanner.BarcodeView
+    android:id="@+id/zxing_barcode_surface"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" />
 
-    <com.journeyapps.barcodescanner.BarcodeView
-        android:id="@+id/zxing_barcode_surface"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+  <com.journeyapps.barcodescanner.ViewfinderView
+    android:id="@+id/zxing_viewfinder_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:zxing_possible_result_points="@color/transparent"
+    app:zxing_result_view="@color/transparent"
+    app:zxing_viewfinder_mask="@color/primary"
+    app:zxing_viewfinder_laser_visibility="false" />
 
-    <com.journeyapps.barcodescanner.ViewfinderView
-        android:id="@+id/zxing_viewfinder_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:zxing_possible_result_points="@color/transparent"
-        app:zxing_result_view="@color/transparent"
-        app:zxing_viewfinder_mask="@color/primary"
-        app:zxing_viewfinder_laser_visibility="false"/>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="3dp"
+    android:background="@color/retro_red_bg_white"
+    android:alpha="0.7"
+    android:layout_gravity="center"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/retro_red_bg_white"
-        android:alpha="0.7"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+  <com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/transparent"
+    app:strokeWidth="4dp"
+    app:strokeColor="@color/grey800" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/transparent"
-        app:strokeWidth="4dp"
-        app:strokeColor="@color/grey800"/>
-
-    <xyz.zedler.patrick.grocy.view.BarcodeRipple
-        android:id="@+id/ripple_scan"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+  <xyz.zedler.patrick.grocy.view.BarcodeRipple
+    android:id="@+id/ripple_scan"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

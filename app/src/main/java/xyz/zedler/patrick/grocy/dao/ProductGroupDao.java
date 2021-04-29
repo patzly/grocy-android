@@ -25,32 +25,31 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 
 @Dao
 public interface ProductGroupDao {
-    @Query("SELECT * FROM product_group_table")
-    LiveData<List<ProductGroup>> getAllLive();
 
-    @Query("SELECT * FROM product_group_table")
-    List<ProductGroup> getAll();
+  @Query("SELECT * FROM product_group_table")
+  LiveData<List<ProductGroup>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM product_group_table")
-    int count();
+  @Query("SELECT * FROM product_group_table")
+  List<ProductGroup> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<ProductGroup> productGroups);
+  @Query("SELECT COUNT(*) FROM product_group_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ProductGroup productGroup);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<ProductGroup> productGroups);
 
-    @Delete
-    void delete(ProductGroup productGroup);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(ProductGroup productGroup);
 
-    @Query("DELETE FROM product_group_table")
-    void deleteAll();
+  @Delete
+  void delete(ProductGroup productGroup);
+
+  @Query("DELETE FROM product_group_table")
+  void deleteAll();
 
 }

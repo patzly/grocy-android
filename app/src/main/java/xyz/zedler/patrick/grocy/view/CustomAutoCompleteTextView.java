@@ -22,46 +22,44 @@ package xyz.zedler.patrick.grocy.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 public class CustomAutoCompleteTextView extends MaterialAutoCompleteTextView {
 
-    private Runnable onEnterPressListener;
-    private Runnable onTabPressListener;
+  private Runnable onEnterPressListener;
+  private Runnable onTabPressListener;
 
-    public CustomAutoCompleteTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public CustomAutoCompleteTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_TAB && onTabPressListener != null) {
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_TAB && onTabPressListener != null) {
+      return true;
     }
+    return super.onKeyDown(keyCode, event);
+  }
 
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_TAB && onTabPressListener != null) {
-            onTabPressListener.run();
-            return true;
-        } else if(keyCode == KeyEvent.KEYCODE_ENTER && onEnterPressListener != null) {
-            onEnterPressListener.run();
-            return true;
-        }
-        return super.onKeyUp(keyCode, event);
+  @Override
+  public boolean onKeyUp(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_TAB && onTabPressListener != null) {
+      onTabPressListener.run();
+      return true;
+    } else if (keyCode == KeyEvent.KEYCODE_ENTER && onEnterPressListener != null) {
+      onEnterPressListener.run();
+      return true;
     }
+    return super.onKeyUp(keyCode, event);
+  }
 
-    public void setOnTabPressListener(Runnable onTabPressListener) {
-        this.onTabPressListener = onTabPressListener;
-    }
+  public void setOnTabPressListener(Runnable onTabPressListener) {
+    this.onTabPressListener = onTabPressListener;
+  }
 
-    public void setOnEnterPressListener(Runnable onEnterPressListener) {
-        this.onEnterPressListener = onEnterPressListener;
-    }
+  public void setOnEnterPressListener(Runnable onEnterPressListener) {
+    this.onEnterPressListener = onEnterPressListener;
+  }
 }

@@ -22,282 +22,289 @@ package xyz.zedler.patrick.grocy.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
+import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
-
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "shopping_list_item_table")
 public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
 
-    @ColumnInfo(name = "note")
-    @SerializedName("note")
-    private String note;
+  @ColumnInfo(name = "note")
+  @SerializedName("note")
+  private String note;
 
-    @ColumnInfo(name = "amount")
-    @SerializedName("amount")
-    private String amount;
+  @ColumnInfo(name = "amount")
+  @SerializedName("amount")
+  private String amount;
 
-    @ColumnInfo(name = "shopping_list_id")
-    @SerializedName("shopping_list_id")
-    private int shoppingListId;
+  @ColumnInfo(name = "shopping_list_id")
+  @SerializedName("shopping_list_id")
+  private int shoppingListId;
 
-    @ColumnInfo(name = "qu_id")
-    @SerializedName("qu_id")
-    private String quId;
+  @ColumnInfo(name = "qu_id")
+  @SerializedName("qu_id")
+  private String quId;
 
-    @ColumnInfo(name = "done")
-    @SerializedName("done")
-    private int done;
+  @ColumnInfo(name = "done")
+  @SerializedName("done")
+  private int done;
 
-    @ColumnInfo(name = "done_synced")
-    @SerializedName("done_synced")
-    private int doneSynced = -1;  // state of param "done" on server during time of last sync
-                                  // -1 means that the "done" was not edited since sync
+  @ColumnInfo(name = "done_synced")
+  @SerializedName("done_synced")
+  private int doneSynced = -1;  // state of param "done" on server during time of last sync
+  // -1 means that the "done" was not edited since sync
 
-    @ColumnInfo(name = "product_id")
-    @SerializedName("product_id")
-    private String productId;
+  @ColumnInfo(name = "product_id")
+  @SerializedName("product_id")
+  private String productId;
 
-    @ColumnInfo(name = "row_created_timestamp")
-    @SerializedName("row_created_timestamp")
-    private String rowCreatedTimestamp;
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
 
-    public ShoppingListItem() {}
+  public ShoppingListItem() {
+  }
 
-    private ShoppingListItem( // for clone
-              int id,
-              String productId,
-              String note,
-                              String amount,
-              int shoppingListId,
-              String quId,
-              int done,
-              int doneSynced
-    ) {
-        this.id = id;
-        this.productId = productId;
-        this.note = note;
-        this.amount = amount;
-        this.shoppingListId = shoppingListId;
-        this.quId = quId;
-        this.done = done;
-        this.doneSynced = doneSynced;
-    }
+  private ShoppingListItem( // for clone
+      int id,
+      String productId,
+      String note,
+      String amount,
+      int shoppingListId,
+      String quId,
+      int done,
+      int doneSynced
+  ) {
+    this.id = id;
+    this.productId = productId;
+    this.note = note;
+    this.amount = amount;
+    this.shoppingListId = shoppingListId;
+    this.quId = quId;
+    this.done = done;
+    this.doneSynced = doneSynced;
+  }
 
-    private ShoppingListItem(Parcel parcel) {
-        id = parcel.readInt();
-        productId = parcel.readString();
-        note = parcel.readString();
-        amount = parcel.readString();
-        shoppingListId = parcel.readInt();
-        quId = parcel.readString();
-        done = parcel.readInt();
-        doneSynced = parcel.readInt();
+  private ShoppingListItem(Parcel parcel) {
+    id = parcel.readInt();
+    productId = parcel.readString();
+    note = parcel.readString();
+    amount = parcel.readString();
+    shoppingListId = parcel.readInt();
+    quId = parcel.readString();
+    done = parcel.readInt();
+    doneSynced = parcel.readInt();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(productId);
+    dest.writeString(note);
+    dest.writeString(amount);
+    dest.writeInt(shoppingListId);
+    dest.writeString(quId);
+    dest.writeInt(done);
+    dest.writeInt(doneSynced);
+  }
+
+  public static final Creator<ShoppingListItem> CREATOR = new Creator<ShoppingListItem>() {
+
+    @Override
+    public ShoppingListItem createFromParcel(Parcel in) {
+      return new ShoppingListItem(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(productId);
-        dest.writeString(note);
-        dest.writeString(amount);
-        dest.writeInt(shoppingListId);
-        dest.writeString(quId);
-        dest.writeInt(done);
-        dest.writeInt(doneSynced);
+    public ShoppingListItem[] newArray(int size) {
+      return new ShoppingListItem[size];
     }
+  };
 
-    public static final Creator<ShoppingListItem> CREATOR = new Creator<ShoppingListItem>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public ShoppingListItem createFromParcel(Parcel in) {
-            return new ShoppingListItem(in);
-        }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-        @Override
-        public ShoppingListItem[] newArray(int size) {
-            return new ShoppingListItem[size];
-        }
-    };
-
-    public int getId() {
-        return id;
+  public String getProductId() {
+    if (productId != null && productId.isEmpty()) {
+      return null;
     }
+    return productId;
+  }
 
-    public void setId(int id) {
-        this.id = id;
+  public int getProductIdInt() {
+    if (!hasProduct()) {
+      return -1;
     }
+    return Integer.parseInt(productId);
+  }
 
-    public String getProductId() {
-        if(productId != null && productId.isEmpty()) return null;
-        return productId;
-    }
+  public void setProductId(String productId) {
+    this.productId = productId;
+  }
 
-    public int getProductIdInt() {
-        if(!hasProduct()) return -1;
-        return Integer.parseInt(productId);
-    }
+  public String getNote() {
+    return note;
+  }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
+  public void setNote(String note) {  // getter & setter seem useless,
+    this.note = note;               // but are required by Room
+  }
 
-    public String getNote() {
-        return note;
-    }
+  public String getAmount() {
+    return amount;
+  }
 
-    public void setNote(String note) {  // getter & setter seem useless,
-        this.note = note;               // but are required by Room
-    }
+  public double getAmountDouble() {
+    return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
+  }
 
-    public String getAmount() {
-        return amount;
-    }
+  public void setAmount(String amount) {
+    this.amount = amount;
+  }
 
-    public double getAmountDouble() {
-        return NumUtil.isStringDouble(amount) ? Double.parseDouble(amount) : 0;
-    }
+  public void setAmountDouble(double amount) {
+    this.amount = NumUtil.trim(amount);
+  }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
+  public int getShoppingListId() {
+    return shoppingListId;
+  }
 
-    public void setAmountDouble(double amount) {
-        this.amount = NumUtil.trim(amount);
-    }
+  public void setShoppingListId(int shoppingListId) {
+    this.shoppingListId = shoppingListId;
+  }
 
-    public int getShoppingListId() {
-        return shoppingListId;
-    }
+  public int getDone() {
+    return done;
+  }
 
-    public void setShoppingListId(int shoppingListId) {
-        this.shoppingListId = shoppingListId;
-    }
+  public boolean isUndone() {
+    return getDone() != 1;
+  }
 
-    public int getDone() {
-        return done;
-    }
+  public void setDone(int done) {
+    this.done = done;
+  }
 
-    public boolean isUndone() {
-        return getDone() != 1;
-    }
+  public int getDoneSynced() {
+    return doneSynced;
+  }
 
-    public void setDone(int done) {
-        this.done = done;
-    }
+  public void setDoneSynced(int doneSynced) {
+    this.doneSynced = doneSynced;
+  }
 
-    public int getDoneSynced() {
-        return doneSynced;
-    }
+  public boolean hasProduct() {
+    return productId != null && !productId.isEmpty();
+  }
 
-    public void setDoneSynced(int doneSynced) {
-        this.doneSynced = doneSynced;
-    }
+  public String getQuId() {
+    return quId;
+  }
 
-    public boolean hasProduct() {
-        return productId != null && !productId.isEmpty();
-    }
+  public int getQuIdInt() {
+    return NumUtil.isStringInt(quId) ? Integer.parseInt(quId) : -1;
+  }
 
-    public String getQuId() {
-        return quId;
-    }
+  public void setQuId(String quId) {
+    this.quId = quId;
+  }
 
-    public int getQuIdInt() {
-        return NumUtil.isStringInt(quId) ? Integer.parseInt(quId) : -1;
-    }
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
 
-    public void setQuId(String quId) {
-        this.quId = quId;
-    }
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
+  }
 
-    public String getRowCreatedTimestamp() {
-        return rowCreatedTimestamp;
-    }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
-        this.rowCreatedTimestamp = rowCreatedTimestamp;
-    }
+  @Override
+  public int getType() {
+    return TYPE_ENTRY;
+  }
 
-    @Override
-    public int describeContents() {
-        return 0;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ShoppingListItem that = (ShoppingListItem) o;
+    return id == that.id &&
+        Objects.equals(amount, that.amount) &&
+        shoppingListId == that.shoppingListId &&
+        done == that.done &&
+        Objects.equals(note, that.note) &&
+        Objects.equals(productId, that.productId) &&
+        Objects.equals(quId, that.quId);
+  }
 
-    @Override
-    public int getType() {
-        return TYPE_ENTRY;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, note, amount, shoppingListId, quId, done, productId);
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ShoppingListItem that = (ShoppingListItem) o;
-        return id == that.id &&
-                Objects.equals(amount, that.amount) &&
-                shoppingListId == that.shoppingListId &&
-                done == that.done &&
-                Objects.equals(note, that.note) &&
-                Objects.equals(productId, that.productId) &&
-                Objects.equals(quId, that.quId);
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "ShoppingListItem(" + id + ")";
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, note, amount, shoppingListId, quId, done, productId);
-    }
+  @NonNull
+  public ShoppingListItem getClone() {
+    return new ShoppingListItem(
+        this.id,
+        this.productId,
+        this.note,
+        this.amount,
+        this.shoppingListId,
+        this.quId,
+        this.done,
+        this.doneSynced
+    );
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "ShoppingListItem(" + id + ")";
+  public static JSONObject getJsonFromShoppingListItem(ShoppingListItem item, boolean debug,
+      String TAG) {
+    JSONObject json = new JSONObject();
+    try {
+      Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
+      Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
+      Object note = item.getNote() == null || item.getNote().isEmpty()
+          ? JSONObject.NULL : item.getNote();
+      json.put("shopping_list_id", item.getShoppingListId());
+      json.put("amount", item.getAmountDouble());
+      json.put("qu_id", quId);
+      json.put("product_id", productId);
+      json.put("note", note);
+    } catch (JSONException e) {
+      if (debug) {
+        Log.e(TAG, "getJsonFromShoppingListItem: " + e);
+      }
     }
-
-    @NonNull
-    public ShoppingListItem getClone() {
-        return new ShoppingListItem(
-                this.id,
-                this.productId,
-                this.note,
-                this.amount,
-                this.shoppingListId,
-                this.quId,
-                this.done,
-                this.doneSynced
-        );
-    }
-
-    public static JSONObject getJsonFromShoppingListItem(ShoppingListItem item, boolean debug, String TAG) {
-        JSONObject json = new JSONObject();
-        try {
-            Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
-            Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
-            Object note = item.getNote() == null || item.getNote().isEmpty()
-                    ? JSONObject.NULL : item.getNote();
-            json.put("shopping_list_id", item.getShoppingListId());
-            json.put("amount", item.getAmountDouble());
-            json.put("qu_id", quId);
-            json.put("product_id", productId);
-            json.put("note", note);
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "getJsonFromShoppingListItem: " + e);
-        }
-        return json;
-    }
+    return json;
+  }
 }

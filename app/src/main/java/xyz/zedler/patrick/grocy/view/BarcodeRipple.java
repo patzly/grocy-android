@@ -30,99 +30,101 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-
 import androidx.annotation.Nullable;
-
 import com.google.android.material.card.MaterialCardView;
-
 import xyz.zedler.patrick.grocy.R;
 
 public class BarcodeRipple extends LinearLayout {
 
-    private MaterialCardView cardView;
-    private ValueAnimator animator;
-    private int width, height, strokeWidth;
-    private boolean continueAnim = false;
-    private int rippleDuration, rippleOffset;
+  private final MaterialCardView cardView;
+  private ValueAnimator animator;
+  private int width, height, strokeWidth;
+  private boolean continueAnim = false;
+  private final int rippleDuration;
+  private final int rippleOffset;
 
-    public BarcodeRipple(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+  public BarcodeRipple(Context context, @Nullable AttributeSet attrs) {
+    super(context, attrs);
 
-        inflate(context, R.layout.view_barcode_ripple, this);
+    inflate(context, R.layout.view_barcode_ripple, this);
 
-        rippleDuration = 1500;
-        rippleOffset = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                40,
-                getResources().getDisplayMetrics()
-        );
+    rippleDuration = 1500;
+    rippleOffset = (int) TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        40,
+        getResources().getDisplayMetrics()
+    );
 
-        cardView = findViewById(R.id.card_barcode_ripple);
-        cardView.setAlpha(0);
-        cardView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        width = cardView.getWidth();
-                        height = cardView.getHeight();
-                        strokeWidth = cardView.getStrokeWidth();
+    cardView = findViewById(R.id.card_barcode_ripple);
+    cardView.setAlpha(0);
+    cardView.getViewTreeObserver().addOnGlobalLayoutListener(
+        new ViewTreeObserver.OnGlobalLayoutListener() {
+          @Override
+          public void onGlobalLayout() {
+            width = cardView.getWidth();
+            height = cardView.getHeight();
+            strokeWidth = cardView.getStrokeWidth();
 
-                        //resumeAnimation();
+            //resumeAnimation();
 
-                        if (getViewTreeObserver().isAlive()) {
-                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                    }
-                });
+            if (getViewTreeObserver().isAlive()) {
+              getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+          }
+        });
+  }
+
+  private void animation() {
+    cardView.getLayoutParams().width = width;
+    cardView.getLayoutParams().height = height;
+    cardView.setStrokeWidth(strokeWidth);
+    cardView.requestLayout();
+    cardView.setAlpha(0);
+
+    if (animator != null) {
+      if (animator.isRunning()) {
+        animator.pause();
+      }
     }
-
-    private void animation() {
-        cardView.getLayoutParams().width = width;
-        cardView.getLayoutParams().height = height;
-        cardView.setStrokeWidth(strokeWidth);
-        cardView.requestLayout();
-        cardView.setAlpha(0);
-
-        if(animator != null) {
-            if(animator.isRunning()) animator.pause();
+    cardView.animate().alpha(1).setDuration(500).setInterpolator(
+        new AccelerateInterpolator()
+    ).withEndAction(() -> {
+      animator = ValueAnimator.ofFloat(0, 1);
+      animator.addListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          if (continueAnim) {
+            startAnimation();
+          }
         }
-        cardView.animate().alpha(1).setDuration(500).setInterpolator(
-                new AccelerateInterpolator()
-        ).withEndAction(() -> {
-            animator = ValueAnimator.ofFloat(0, 1);
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if(continueAnim) startAnimation();
-                }
-            });
-            animator.addUpdateListener(animation -> {
-                cardView.getLayoutParams().height =
-                        (int) (height + ((float) animation.getAnimatedValue()) * rippleOffset);
-                cardView.getLayoutParams().width =
-                        (int) (width + ((float) animation.getAnimatedValue()) * rippleOffset);
-                cardView.setStrokeWidth(
-                        (int) ((((float) animation.getAnimatedValue()) * -1 + 1) * strokeWidth)
-                );
-                cardView.setAlpha((float) animation.getAnimatedValue() * -1 + 1);
-                cardView.requestLayout();
-            });
-            animator.setDuration(rippleDuration).setInterpolator(new DecelerateInterpolator());
-            animator.start();
-        }).start();
-    }
+      });
+      animator.addUpdateListener(animation -> {
+        cardView.getLayoutParams().height =
+            (int) (height + ((float) animation.getAnimatedValue()) * rippleOffset);
+        cardView.getLayoutParams().width =
+            (int) (width + ((float) animation.getAnimatedValue()) * rippleOffset);
+        cardView.setStrokeWidth(
+            (int) ((((float) animation.getAnimatedValue()) * -1 + 1) * strokeWidth)
+        );
+        cardView.setAlpha((float) animation.getAnimatedValue() * -1 + 1);
+        cardView.requestLayout();
+      });
+      animator.setDuration(rippleDuration).setInterpolator(new DecelerateInterpolator());
+      animator.start();
+    }).start();
+  }
 
-    private void startAnimation() {
-        continueAnim = true;
-        //animation();
-    }
+  private void startAnimation() {
+    continueAnim = true;
+    //animation();
+  }
 
-    public void resumeAnimation() {
-        continueAnim = true;
-        new Handler().postDelayed(this::animation, 1500);
-    }
+  public void resumeAnimation() {
+    continueAnim = true;
+    new Handler().postDelayed(this::animation, 1500);
+  }
 
-    public void pauseAnimation() {
-        continueAnim = false;
-    }
+  public void pauseAnimation() {
+    continueAnim = false;
+  }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,85 +18,85 @@
   -->
 
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frame_input_chip_container"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/frame_input_chip_container"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  android:gravity="center">
+
+  <com.google.android.material.card.MaterialCardView
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:gravity="center">
+    android:layout_height="32dp"
+    android:layout_gravity="center"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardCornerRadius="16dp"
+    app:strokeWidth="0dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/on_background_tertiary">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:paddingStart="4dp"
+      android:paddingEnd="0dp"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      android:animateLayoutChanges="true">
+
+      <FrameLayout
+        android:id="@+id/frame_input_chip_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp">
+
+        <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:src="@drawable/bg_chip_icon"
+          tools:ignore="ContentDescription" />
+
+        <ImageView
+          android:id="@+id/image_input_chip_icon"
+          android:layout_width="16dp"
+          android:layout_height="16dp"
+          android:layout_gravity="center"
+          tools:ignore="ContentDescription,UseAppTint"
+          android:tint="@color/icon" />
+
+      </FrameLayout>
+
+      <TextView
+        android:id="@+id/text_input_chip"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        app:cardCornerRadius="16dp"
-        app:strokeWidth="0dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/on_background_tertiary">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/jost_medium"
+        android:textColor="@color/on_background"
+        android:textSize="14sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="4dp"
-            android:paddingEnd="0dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:animateLayoutChanges="true">
+      <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_round_cancel"
+        tools:ignore="ContentDescription,UseAppTint"
+        android:tint="@color/on_background_secondary" />
 
-            <FrameLayout
-                android:id="@+id/frame_input_chip_icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp">
+    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/bg_chip_icon"
-                    tools:ignore="ContentDescription" />
+  </com.google.android.material.card.MaterialCardView>
 
-                <ImageView
-                    android:id="@+id/image_input_chip_icon"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    tools:ignore="ContentDescription,UseAppTint"
-                    android:tint="@color/icon" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/text_input_chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/jost_medium"
-                android:textColor="@color/on_background"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_round_cancel"
-                tools:ignore="ContentDescription,UseAppTint"
-                android:tint="@color/on_background_secondary" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <View
-        android:id="@+id/view_input_chip_close"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="end|center_vertical"
-        android:clickable="true"
-        android:focusable="true" />
+  <View
+    android:id="@+id/view_input_chip_close"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_gravity="end|center_vertical"
+    android:clickable="true"
+    android:focusable="true" />
 
 </FrameLayout>

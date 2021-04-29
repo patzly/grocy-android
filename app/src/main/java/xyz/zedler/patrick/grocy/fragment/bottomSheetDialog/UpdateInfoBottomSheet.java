@@ -25,54 +25,51 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class UpdateInfoBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = "UpdateInfoBottomSheet";
+  private final static String TAG = "UpdateInfoBottomSheet";
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-    }
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_update_info, container, false
-        );
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_update_info, container, false
+    );
 
-        MainActivity activity = (MainActivity) getActivity();
-        assert activity != null;
+    MainActivity activity = (MainActivity) getActivity();
+    assert activity != null;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        view.findViewById(R.id.button_ok).setOnClickListener(v -> {
-            prefs.edit().putBoolean(Constants.PREF.UPDATE_INFO_READ, true).apply();
-            dismiss();
-        });
+    view.findViewById(R.id.button_ok).setOnClickListener(v -> {
+      prefs.edit().putBoolean(Constants.PREF.UPDATE_INFO_READ, true).apply();
+      dismiss();
+    });
 
-        setCancelable(false);
+    setCancelable(false);
 
-        return view;
-    }
+    return view;
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

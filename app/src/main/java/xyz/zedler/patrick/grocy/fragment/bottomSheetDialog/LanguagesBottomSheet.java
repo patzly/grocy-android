@@ -28,16 +28,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.Locale;
 import java.util.Objects;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LanguageAdapter;
@@ -51,115 +47,115 @@ import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 
 public class LanguagesBottomSheet extends BaseBottomSheet
-        implements LanguageAdapter.LanguageAdapterListener {
+    implements LanguageAdapter.LanguageAdapterListener {
 
-    private final static String TAG = LanguagesBottomSheet.class.getSimpleName();
+  private final static String TAG = LanguagesBottomSheet.class.getSimpleName();
 
-    private FragmentBottomsheetListSelectionBinding binding;
-    private MainActivity activity;
-    private SharedPreferences sharedPrefs;
+  private FragmentBottomsheetListSelectionBinding binding;
+  private MainActivity activity;
+  private SharedPreferences sharedPrefs;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState) {
+    binding = FragmentBottomsheetListSelectionBinding.inflate(
+        inflater, container, false
+    );
+
+    activity = (MainActivity) requireActivity();
+
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    String selectedCode = sharedPrefs.getString(
+        Constants.SETTINGS.APPEARANCE.LANGUAGE,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
+    );
+
+    binding.textListSelectionTitle.setText(getString(R.string.setting_language_description));
+    binding.textListSelectionDescription.setText(getString(R.string.setting_language_info));
+    binding.textListSelectionDescription.setVisibility(View.VISIBLE);
+
+    binding.recyclerListSelection.setLayoutManager(
+        new LinearLayoutManager(
+            activity,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+    );
+    binding.recyclerListSelection.setAdapter(
+        new LanguageAdapter(LocaleUtil.getLanguages(activity), selectedCode, this)
+    );
+
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
+  }
+
+  @Override
+  public void onItemRowClicked(Language language) {
+    String previousCode = sharedPrefs.getString(
+        Constants.SETTINGS.APPEARANCE.LANGUAGE, null
+    );
+    String selectedCode = language != null ? language.getCode() : null;
+
+    if (Objects.equals(previousCode, selectedCode)) {
+      return;
+    } else if (previousCode == null || selectedCode == null) {
+      Locale localeDevice = LocaleUtil.getNearestSupportedLocale(
+          activity, LocaleUtil.getDeviceLocale()
+      );
+      String codeToCompare = previousCode == null ? selectedCode : previousCode;
+      if (Objects.equals(localeDevice.toString(), codeToCompare)) {
+        BaseFragment current = activity.getCurrentFragment();
+        current.setLanguage(language);
+        dismiss();
+      } else {
+        new Handler().postDelayed(() -> {
+          updateShortcuts(
+              selectedCode != null
+                  ? LocaleUtil.getLocaleFromCode(selectedCode)
+                  : localeDevice
+          );
+          RestartUtil.restartApp(activity);
+        }, 100);
+      }
+    } else {
+      new Handler().postDelayed(() -> {
+        updateShortcuts(LocaleUtil.getLocaleFromCode(selectedCode));
+        RestartUtil.restartApp(activity);
+      }, 100);
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentBottomsheetListSelectionBinding.inflate(
-                inflater, container, false
-        );
+    sharedPrefs.edit().putString(Constants.SETTINGS.APPEARANCE.LANGUAGE, selectedCode).apply();
+  }
 
-        activity = (MainActivity) requireActivity();
+  private void updateShortcuts(@NonNull Locale locale) {
+    Configuration configuration = getResources().getConfiguration();
+    configuration.setLocale(locale);
+    getResources().updateConfiguration(
+        configuration, getResources().getDisplayMetrics()
+    );
+    Uri uriAddToShoppingListDeepLink = getUriWithArgs(
+        R.string.deep_link_shoppingListItemEditFragment,
+        new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+            .build().toBundle()
+    );
+    ShortcutUtil.refreshShortcuts(requireContext(), uriAddToShoppingListDeepLink);
+  }
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        String selectedCode = sharedPrefs.getString(
-                Constants.SETTINGS.APPEARANCE.LANGUAGE,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
-        );
-
-        binding.textListSelectionTitle.setText(getString(R.string.setting_language_description));
-        binding.textListSelectionDescription.setText(getString(R.string.setting_language_info));
-        binding.textListSelectionDescription.setVisibility(View.VISIBLE);
-
-        binding.recyclerListSelection.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
-        );
-        binding.recyclerListSelection.setAdapter(
-                new LanguageAdapter(LocaleUtil.getLanguages(activity), selectedCode, this)
-        );
-
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
-
-    @Override
-    public void onItemRowClicked(Language language) {
-        String previousCode = sharedPrefs.getString(
-                Constants.SETTINGS.APPEARANCE.LANGUAGE, null
-        );
-        String selectedCode = language != null ? language.getCode() : null;
-
-        if (Objects.equals(previousCode, selectedCode)) {
-            return;
-        } else if (previousCode == null || selectedCode == null) {
-            Locale localeDevice = LocaleUtil.getNearestSupportedLocale(
-                    activity, LocaleUtil.getDeviceLocale()
-            );
-            String codeToCompare = previousCode == null ? selectedCode : previousCode;
-            if (Objects.equals(localeDevice.toString(), codeToCompare)) {
-                BaseFragment current = activity.getCurrentFragment();
-                current.setLanguage(language);
-                dismiss();
-            } else {
-                new Handler().postDelayed(() -> {
-                    updateShortcuts(
-                            selectedCode != null
-                                    ? LocaleUtil.getLocaleFromCode(selectedCode)
-                                    : localeDevice
-                    );
-                    RestartUtil.restartApp(activity);
-                }, 100);
-            }
-        } else {
-            new Handler().postDelayed(() -> {
-                updateShortcuts(LocaleUtil.getLocaleFromCode(selectedCode));
-                RestartUtil.restartApp(activity);
-            }, 100);
-        }
-
-        sharedPrefs.edit().putString(Constants.SETTINGS.APPEARANCE.LANGUAGE, selectedCode).apply();
-    }
-
-    private void updateShortcuts(@NonNull Locale locale) {
-        Configuration configuration = getResources().getConfiguration();
-        configuration.setLocale(locale);
-        getResources().updateConfiguration(
-                configuration, getResources().getDisplayMetrics()
-        );
-        Uri uriAddToShoppingListDeepLink = getUriWithArgs(
-                R.string.deep_link_shoppingListItemEditFragment,
-                new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-                        .build().toBundle()
-        );
-        ShortcutUtil.refreshShortcuts(requireContext(), uriAddToShoppingListDeepLink);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

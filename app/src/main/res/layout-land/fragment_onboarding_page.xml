@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,75 +18,75 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:gravity="center"
+  android:paddingTop="16dp"
+  android:paddingBottom="16dp">
+
+  <FrameLayout
+    android:id="@+id/frame_onboarding_container"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
+    tools:ignore="Suspicious0dp">
+
+    <ImageView
+      android:id="@+id/image_onboarding_back"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:scaleType="centerCrop"
+      android:adjustViewBounds="true"
+      tools:ignore="ContentDescription" />
+
+    <ImageView
+      android:id="@+id/image_onboarding_focused"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:scaleType="centerCrop"
+      android:adjustViewBounds="true"
+      tools:ignore="ContentDescription" />
+
+    <ImageView
+      android:id="@+id/image_onboarding_rotate"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:scaleType="centerCrop"
+      android:adjustViewBounds="true"
+      tools:ignore="ContentDescription" />
+
+    <ImageView
+      android:id="@+id/image_onboarding_front"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:scaleType="centerCrop"
+      android:adjustViewBounds="true"
+      tools:ignore="ContentDescription" />
+
+  </FrameLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
     android:orientation="vertical"
-    android:gravity="center"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp">
+    android:visibility="gone">
 
-    <FrameLayout
-        android:id="@+id/frame_onboarding_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        tools:ignore="Suspicious0dp">
+    <TextView
+      android:id="@+id/text_onboarding_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/image_onboarding_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
+    <TextView
+      android:id="@+id/text_onboarding_description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/image_onboarding_focused"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/image_onboarding_rotate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/image_onboarding_front"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            tools:ignore="ContentDescription" />
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/text_onboarding_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/text_onboarding_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
+  </LinearLayout>
 
 </LinearLayout>

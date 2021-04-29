@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,17 +18,17 @@
   -->
 
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_about"
-        android:title="@string/title_about"
-        app:showAsAction="never"/>
+  <item
+    android:id="@+id/action_about"
+    android:title="@string/title_about"
+    app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_changelog"
-        android:title="@string/info_changelog"
-        app:showAsAction="never"/>
+  <item
+    android:id="@+id/action_changelog"
+    android:title="@string/info_changelog"
+    app:showAsAction="never" />
 
 </menu>

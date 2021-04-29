@@ -22,60 +22,67 @@ package xyz.zedler.patrick.grocy.model;
 import java.util.HashMap;
 
 public class HorizontalFilterBarMulti {
-    public final static String PRODUCT_GROUP = "product_group";
-    public final static String LOCATION = "location";
 
-    private final HashMap<String, Filter> filtersActive;
-    private final FilterChangedListener filterChangedListener;
+  public final static String PRODUCT_GROUP = "product_group";
+  public final static String LOCATION = "location";
 
-    public HorizontalFilterBarMulti(FilterChangedListener filterChangedListener) {
-        filtersActive = new HashMap<>();
-        this.filterChangedListener = filterChangedListener;
+  private final HashMap<String, Filter> filtersActive;
+  private final FilterChangedListener filterChangedListener;
+
+  public HorizontalFilterBarMulti(FilterChangedListener filterChangedListener) {
+    filtersActive = new HashMap<>();
+    this.filterChangedListener = filterChangedListener;
+  }
+
+  public void addFilter(String filterType, Filter filter) {
+    filtersActive.put(filterType, filter);
+    onFilterChanged();
+  }
+
+  public void removeFilter(String filter) {
+    filtersActive.remove(filter);
+    onFilterChanged();
+  }
+
+  public Filter getFilter(String filter) {
+    if (!filtersActive.containsKey(filter)) {
+      return null;
+    }
+    return filtersActive.get(filter);
+  }
+
+  public boolean areFiltersActive() {
+    return !filtersActive.isEmpty();
+  }
+
+  public void onFilterChanged() {
+    if (filterChangedListener == null) {
+      return;
+    }
+    filterChangedListener.onChanged();
+  }
+
+  public interface FilterChangedListener {
+
+    void onChanged();
+  }
+
+  public static class Filter {
+
+    private final String objectName;
+    private final int objectId;
+
+    public Filter(String objectName, int objectId) {
+      this.objectName = objectName;
+      this.objectId = objectId;
     }
 
-    public void addFilter(String filterType, Filter filter) {
-        filtersActive.put(filterType, filter);
-        onFilterChanged();
+    public String getObjectName() {
+      return objectName;
     }
 
-    public void removeFilter(String filter) {
-        filtersActive.remove(filter);
-        onFilterChanged();
+    public int getObjectId() {
+      return objectId;
     }
-
-    public Filter getFilter(String filter) {
-        if(!filtersActive.containsKey(filter)) return null;
-        return filtersActive.get(filter);
-    }
-
-    public boolean areFiltersActive() {
-        return !filtersActive.isEmpty();
-    }
-
-    public void onFilterChanged() {
-        if(filterChangedListener == null) return;
-        filterChangedListener.onChanged();
-    }
-
-    public interface FilterChangedListener {
-        void onChanged();
-    }
-
-    public static class Filter {
-        private final String objectName;
-        private final int objectId;
-
-        public Filter(String objectName, int objectId) {
-            this.objectName = objectName;
-            this.objectId = objectId;
-        }
-
-        public String getObjectName() {
-            return objectName;
-        }
-
-        public int getObjectId() {
-            return objectId;
-        }
-    }
+  }
 }

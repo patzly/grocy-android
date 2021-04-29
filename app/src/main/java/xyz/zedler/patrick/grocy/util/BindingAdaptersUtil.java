@@ -25,136 +25,147 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.adapter.MatchProductsArrayAdapter;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class BindingAdaptersUtil {
 
-    @BindingAdapter({"errorText"})
-    public static void setErrorMessage(TextInputLayout view, MutableLiveData<Integer> errorMsg) {
-        if(errorMsg.getValue() != null) {
-            view.setError(view.getContext().getString(errorMsg.getValue()));
-        } else if(view.isErrorEnabled()) {
-            view.setErrorEnabled(false);
-        }
+  @BindingAdapter({"errorText"})
+  public static void setErrorMessage(TextInputLayout view, MutableLiveData<Integer> errorMsg) {
+    if (errorMsg.getValue() != null) {
+      view.setError(view.getContext().getString(errorMsg.getValue()));
+    } else if (view.isErrorEnabled()) {
+      view.setErrorEnabled(false);
     }
+  }
 
-    @BindingAdapter({"errorText"})
-    public static void setErrorMessageStr(TextInputLayout view, MutableLiveData<String> errorMsg) {
-        if(errorMsg.getValue() != null) {
-            view.setError(errorMsg.getValue());
-        } else if(view.isErrorEnabled()) {
-            view.setErrorEnabled(false);
-        }
+  @BindingAdapter({"errorText"})
+  public static void setErrorMessageStr(TextInputLayout view, MutableLiveData<String> errorMsg) {
+    if (errorMsg.getValue() != null) {
+      view.setError(errorMsg.getValue());
+    } else if (view.isErrorEnabled()) {
+      view.setErrorEnabled(false);
     }
+  }
 
-    @BindingAdapter({"progressBackgroundColor"})
-    public static void setProgressBackgroundColor(SwipeRefreshLayout view, @ColorInt int color) {
-        view.setProgressBackgroundColorSchemeColor(color);
-    }
+  @BindingAdapter({"progressBackgroundColor"})
+  public static void setProgressBackgroundColor(SwipeRefreshLayout view, @ColorInt int color) {
+    view.setProgressBackgroundColorSchemeColor(color);
+  }
 
-    @BindingAdapter({"progressForegroundColor"})
-    public static void setColorSchemeColors(SwipeRefreshLayout view, @ColorInt int color) {
-        view.setColorSchemeColors(color);
-    }
+  @BindingAdapter({"progressForegroundColor"})
+  public static void setColorSchemeColors(SwipeRefreshLayout view, @ColorInt int color) {
+    view.setColorSchemeColors(color);
+  }
 
-    @BindingAdapter({"transitionTypeChanging"})
-    public static void setTransitionTypeChanging(ViewGroup view, boolean enabled) {
-        if(!enabled) return;
-        view.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+  @BindingAdapter({"transitionTypeChanging"})
+  public static void setTransitionTypeChanging(ViewGroup view, boolean enabled) {
+    if (!enabled) {
+      return;
     }
+    view.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+  }
 
-    @BindingAdapter({"productList"})
-    public static void setProductList(MaterialAutoCompleteTextView view, List<Product> items) {
-        if(items == null) return;
-        view.setAdapter(new MatchProductsArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, items));
+  @BindingAdapter({"productList"})
+  public static void setProductList(MaterialAutoCompleteTextView view, List<Product> items) {
+    if (items == null) {
+      return;
     }
+    view.setAdapter(
+        new MatchProductsArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1,
+            items));
+  }
 
-    @BindingAdapter("onSearchClickInSoftKeyboard")
-    public static void setOnSearchClickInSoftKeyboardListener(
-            EditText view,
-            Runnable listener
-    ) {
-        view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                listener.run();
-                return true;
-            } return false;
-        });
-    }
+  @BindingAdapter("onSearchClickInSoftKeyboard")
+  public static void setOnSearchClickInSoftKeyboardListener(
+      EditText view,
+      Runnable listener
+  ) {
+    view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+        listener.run();
+        return true;
+      }
+      return false;
+    });
+  }
 
-    @BindingAdapter("onDoneClickInSoftKeyboard")
-    public static void setOnDoneClickInSoftKeyboardListener(
-            EditText view,
-            Runnable listener
-    ) {
-        view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                listener.run();
-                return true;
-            } return false;
-        });
-    }
+  @BindingAdapter("onDoneClickInSoftKeyboard")
+  public static void setOnDoneClickInSoftKeyboardListener(
+      EditText view,
+      Runnable listener
+  ) {
+    view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_DONE) {
+        listener.run();
+        return true;
+      }
+      return false;
+    });
+  }
 
-    @BindingAdapter("onNextClickInSoftKeyboard")
-    public static void setOnNextClickInSoftKeyboardListener(
-            EditText view,
-            Runnable listener
-    ) {
-        view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                listener.run();
-                return true;
-            } return false;
-        });
-    }
+  @BindingAdapter("onNextClickInSoftKeyboard")
+  public static void setOnNextClickInSoftKeyboardListener(
+      EditText view,
+      Runnable listener
+  ) {
+    view.setOnEditorActionListener(listener == null ? null : (v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_NEXT) {
+        listener.run();
+        return true;
+      }
+      return false;
+    });
+  }
 
-    @BindingAdapter("endIconOnLongClickListenerCustom")
-    public static void setEndIconOnLongClickListenerCustom(TextInputLayout view, Runnable listener) {
-        view.setEndIconOnLongClickListener(v -> {
-            listener.run();
-            return true;
-        });
-    }
+  @BindingAdapter("endIconOnLongClickListenerCustom")
+  public static void setEndIconOnLongClickListenerCustom(TextInputLayout view, Runnable listener) {
+    view.setEndIconOnLongClickListener(v -> {
+      listener.run();
+      return true;
+    });
+  }
 
-    @BindingAdapter(value={"android:onClick", "clickUtil", "iconToAnimate"}, requireAll=false)
-    public static void setOnClickListener(
-            View view,
-            View.OnClickListener listener,
-            ClickUtil clickUtil,
-            View iconToAnimate
-    ) {
-        if(view == null) return;
-        view.setOnClickListener(v -> {
-            if(clickUtil != null && clickUtil.isDisabled()) return;
-            if(iconToAnimate instanceof ActionButton) {
-                ((ActionButton) iconToAnimate).startIconAnimation();
-            } else if(view instanceof ActionButton) {
-                ((ActionButton) view).startIconAnimation();
-            } else if(iconToAnimate instanceof ImageView) {
-                IconUtil.start(iconToAnimate);
-            }
-            if(listener != null) listener.onClick(view);
-        });
+  @BindingAdapter(value = {"android:onClick", "clickUtil", "iconToAnimate"}, requireAll = false)
+  public static void setOnClickListener(
+      View view,
+      View.OnClickListener listener,
+      ClickUtil clickUtil,
+      View iconToAnimate
+  ) {
+    if (view == null) {
+      return;
     }
+    view.setOnClickListener(v -> {
+      if (clickUtil != null && clickUtil.isDisabled()) {
+        return;
+      }
+      if (iconToAnimate instanceof ActionButton) {
+        ((ActionButton) iconToAnimate).startIconAnimation();
+      } else if (view instanceof ActionButton) {
+        ((ActionButton) view).startIconAnimation();
+      } else if (iconToAnimate instanceof ImageView) {
+        IconUtil.start(iconToAnimate);
+      }
+      if (listener != null) {
+        listener.onClick(view);
+      }
+    });
+  }
 
-    @BindingAdapter("android:onLongClickVoid")
-    public static void setOnLongClickListener(View view, Runnable listener) {
-        view.setOnLongClickListener(v -> {
-            listener.run();
-            return true;
-        });
-    }
+  @BindingAdapter("android:onLongClickVoid")
+  public static void setOnLongClickListener(View view, Runnable listener) {
+    view.setOnLongClickListener(v -> {
+      listener.run();
+      return true;
+    });
+  }
 }

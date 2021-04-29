@@ -24,13 +24,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputProductBinding;
@@ -39,85 +36,85 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class InputProductBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = InputProductBottomSheet.class.getSimpleName();
+  private final static String TAG = InputProductBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
-    private FragmentBottomsheetInputProductBinding binding;
+  private MainActivity activity;
+  private FragmentBottomsheetInputProductBinding binding;
 
-    private MutableLiveData<Integer> selectionLive;
+  private MutableLiveData<Integer> selectionLive;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentBottomsheetInputProductBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    setSkipCollapsedInPortrait();
+    setCancelable(false);
+    super.onViewCreated(view, savedInstanceState);
+    activity = (MainActivity) requireActivity();
+    binding.setBottomsheet(this);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    String input = requireArguments().getString(Constants.ARGUMENT.PRODUCT_INPUT);
+    assert input != null;
+    binding.input.setText(input);
+
+    boolean stringOnlyContainsNumbers = true;
+    for (char c : input.trim().toCharArray()) {
+      try {
+        Integer.parseInt(String.valueOf(c));
+      } catch (NumberFormatException e) {
+        stringOnlyContainsNumbers = false;
+        break;
+      }
     }
+    selectionLive = new MutableLiveData<>(stringOnlyContainsNumbers ? 3 : 1);
+  }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentBottomsheetInputProductBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
+  public void proceed() {
+    assert selectionLive.getValue() != null;
+    String input = binding.input.getText().toString();
+    if (selectionLive.getValue() == 1) {
+      navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
+          new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+              .setProductName(input).build().toBundle());
+    } else if (selectionLive.getValue() == 2) {
+      activity.getCurrentFragment().addBarcodeToNewProduct(input.trim());
+      navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
+          new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+              .build().toBundle());
+    } else {
+      activity.getCurrentFragment().addBarcodeToExistingProduct(input.trim());
     }
+    dismiss();
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        setSkipCollapsedInPortrait();
-        setCancelable(false);
-        super.onViewCreated(view, savedInstanceState);
-        activity = (MainActivity) requireActivity();
-        binding.setBottomsheet(this);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
+  public MutableLiveData<Integer> getSelectionLive() {
+    return selectionLive;
+  }
 
-        String input = requireArguments().getString(Constants.ARGUMENT.PRODUCT_INPUT);
-        assert input != null;
-        binding.input.setText(input);
+  public void setSelectionLive(int selection) {
+    selectionLive.setValue(selection);
+  }
 
-        boolean stringOnlyContainsNumbers = true;
-        for(char c : input.trim().toCharArray()) {
-            try {
-                Integer.parseInt(String.valueOf(c));
-            } catch(NumberFormatException e) {
-                stringOnlyContainsNumbers = false;
-                break;
-            }
-        }
-        selectionLive = new MutableLiveData<>(stringOnlyContainsNumbers ? 3 : 1);
-    }
-
-    public void proceed() {
-        assert selectionLive.getValue() != null;
-        String input = binding.input.getText().toString();
-        if(selectionLive.getValue() == 1) {
-            navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
-                    new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
-                            .setProductName(input).build().toBundle());
-        } else if(selectionLive.getValue() == 2) {
-            activity.getCurrentFragment().addBarcodeToNewProduct(input.trim());
-            navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
-                    new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
-                            .build().toBundle());
-        } else {
-            activity.getCurrentFragment().addBarcodeToExistingProduct(input.trim());
-        }
-        dismiss();
-    }
-
-    public MutableLiveData<Integer> getSelectionLive() {
-        return selectionLive;
-    }
-
-    public void setSelectionLive(int selection) {
-        selectionLive.setValue(selection);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

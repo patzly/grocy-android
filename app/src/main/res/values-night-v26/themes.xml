@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -20,15 +19,15 @@
 
 <resources>
 
-    <style name="Theme.Grocy" parent="Base.Grocy">
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:statusBarColor">@color/background</item>
-        <item name="android:navigationBarColor">@color/background</item>
-    </style>
+  <style name="Theme.Grocy" parent="Base.Grocy">
+    <item name="android:windowLightStatusBar">false</item>
+    <item name="android:statusBarColor">@color/background</item>
+    <item name="android:navigationBarColor">@color/background</item>
+  </style>
 
-    <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
-        <item name="android:navigationBarColor">@color/primary</item>
-        <item name="android:statusBarColor">@color/primary</item>
-    </style>
+  <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
+    <item name="android:navigationBarColor">@color/primary</item>
+    <item name="android:statusBarColor">@color/primary</item>
+  </style>
 
 </resources>

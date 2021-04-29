@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,96 +18,96 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <TextView
+    style="@style/Widget.Grocy.TextView.Title.BottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:padding="16dp"
+    android:text="@string/title_feedback" />
 
-    <TextView
-        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+  <View
+    style="@style/Theme.Grocy.Divider"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp" />
+
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:paddingBottom="8dp"
+      android:gravity="center_horizontal">
+
+      <TextView
+        style="@style/Widget.Grocy.TextView.Paragraph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="@string/title_feedback"/>
+        android:textAlignment="viewStart"
+        android:text="@string/msg_feedback"
+        android:padding="16dp" />
 
-    <View
-        style="@style/Theme.Grocy.Divider"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
+      <LinearLayout
+        android:id="@+id/linear_feedback_issue"
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+        android:background="@drawable/bg_list_item_surface">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        <ImageView
+          android:id="@+id/image_feedback_issue"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+          android:src="@drawable/ic_round_github"
+          tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="8dp"
-            android:gravity="center_horizontal">
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-            <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewStart"
-                android:text="@string/msg_feedback"
-                android:padding="16dp"/>
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
+            android:text="@string/action_new_issue" />
 
-            <LinearLayout
-                android:id="@+id/linear_feedback_issue"
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-                android:background="@drawable/bg_list_item_surface">
-
-                <ImageView
-                    android:id="@+id/image_feedback_issue"
-                    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                    android:src="@drawable/ic_round_github"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                    <TextView
-                        style="@style/Widget.Grocy.TextView.ListItem.Title"
-                        android:text="@string/action_new_issue" />
-
-                    <TextView
-                        style="@style/Widget.Grocy.TextView.ListItem.Description"
-                        android:text="@string/action_new_issue_description" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_feedback_rate"
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-                android:background="@drawable/bg_list_item_surface">
-
-                <ImageView
-                    android:id="@+id/image_feedback_rate"
-                    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                    android:src="@drawable/ic_round_star_anim"
-                    tools:ignore="ContentDescription" />
-
-                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                    <TextView
-                        style="@style/Widget.Grocy.TextView.ListItem.Title"
-                        android:text="@string/action_rate" />
-
-                    <TextView
-                        style="@style/Widget.Grocy.TextView.ListItem.Description"
-                        android:text="@string/action_rate_description" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
+            android:text="@string/action_new_issue_description" />
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/linear_feedback_rate"
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+        android:background="@drawable/bg_list_item_surface">
+
+        <ImageView
+          android:id="@+id/image_feedback_rate"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+          android:src="@drawable/ic_round_star_anim"
+          tools:ignore="ContentDescription" />
+
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
+            android:text="@string/action_rate" />
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
+            android:text="@string/action_rate_description" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

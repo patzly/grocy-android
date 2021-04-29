@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.util;
 
 import androidx.annotation.Nullable;
-
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -29,56 +28,57 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class ObjectUtil {
-    public static int getObjectId(Object object, String entity) {
-        switch (entity) {
-            case GrocyApi.ENTITY.QUANTITY_UNITS:
-                return ((QuantityUnit) object).getId();
-            case GrocyApi.ENTITY.LOCATIONS:
-                return ((Location) object).getId();
-            case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                return ((ProductGroup) object).getId();
-            case GrocyApi.ENTITY.STORES:
-                return ((Store) object).getId();
-            case GrocyApi.ENTITY.PRODUCTS:
-                return ((Product) object).getId();
-            default:
-                return -1;
-        }
-    }
 
-    @Nullable
-    public static String getObjectName(Object object, String entity) {
-        switch (entity) {
-            case GrocyApi.ENTITY.QUANTITY_UNITS:
-                return ((QuantityUnit) object).getName();
-            case GrocyApi.ENTITY.LOCATIONS:
-                return ((Location) object).getName();
-            case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                return ((ProductGroup) object).getName();
-            case GrocyApi.ENTITY.STORES:
-                return ((Store) object).getName();
-            case GrocyApi.ENTITY.PRODUCTS:
-                return ((Product) object).getName();
-            default:
-                return null;
-        }
+  public static int getObjectId(Object object, String entity) {
+    switch (entity) {
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
+        return ((QuantityUnit) object).getId();
+      case GrocyApi.ENTITY.LOCATIONS:
+        return ((Location) object).getId();
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        return ((ProductGroup) object).getId();
+      case GrocyApi.ENTITY.STORES:
+        return ((Store) object).getId();
+      case GrocyApi.ENTITY.PRODUCTS:
+        return ((Product) object).getId();
+      default:
+        return -1;
     }
+  }
 
-    @Nullable
-    public static String getObjectDescription(Object object, String entity) {
-        switch (entity) {
-            case GrocyApi.ENTITY.QUANTITY_UNITS:
-                return ((QuantityUnit) object).getDescription();
-            case GrocyApi.ENTITY.LOCATIONS:
-                return ((Location) object).getDescription();
-            case GrocyApi.ENTITY.PRODUCT_GROUPS:
-                return ((ProductGroup) object).getDescription();
-            case GrocyApi.ENTITY.STORES:
-                return ((Store) object).getDescription();
-            case GrocyApi.ENTITY.PRODUCTS:
-                return ((Product) object).getDescription();
-            default:
-                return null;
-        }
+  @Nullable
+  public static String getObjectName(Object object, String entity) {
+    switch (entity) {
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
+        return ((QuantityUnit) object).getName();
+      case GrocyApi.ENTITY.LOCATIONS:
+        return ((Location) object).getName();
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        return ((ProductGroup) object).getName();
+      case GrocyApi.ENTITY.STORES:
+        return ((Store) object).getName();
+      case GrocyApi.ENTITY.PRODUCTS:
+        return ((Product) object).getName();
+      default:
+        return null;
     }
+  }
+
+  @Nullable
+  public static String getObjectDescription(Object object, String entity) {
+    switch (entity) {
+      case GrocyApi.ENTITY.QUANTITY_UNITS:
+        return ((QuantityUnit) object).getDescription();
+      case GrocyApi.ENTITY.LOCATIONS:
+        return ((Location) object).getDescription();
+      case GrocyApi.ENTITY.PRODUCT_GROUPS:
+        return ((ProductGroup) object).getDescription();
+      case GrocyApi.ENTITY.STORES:
+        return ((Store) object).getDescription();
+      case GrocyApi.ENTITY.PRODUCTS:
+        return ((Product) object).getDescription();
+      default:
+        return null;
+    }
+  }
 }

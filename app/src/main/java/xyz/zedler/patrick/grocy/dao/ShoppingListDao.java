@@ -25,38 +25,37 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 
 @Dao
 public interface ShoppingListDao {
-    @Query("SELECT * FROM shopping_list_table")
-    LiveData<List<ShoppingList>> getAllLive();
 
-    @Query("SELECT * FROM shopping_list_table")
-    List<ShoppingList> getAll();
+  @Query("SELECT * FROM shopping_list_table")
+  LiveData<List<ShoppingList>> getAllLive();
 
-    @Query("SELECT * FROM shopping_list_table WHERE id IN (:shoppingListIds)")
-    List<ShoppingList> loadAllByIds(int[] shoppingListIds);
+  @Query("SELECT * FROM shopping_list_table")
+  List<ShoppingList> getAll();
 
-    @Query("SELECT * FROM shopping_list_table WHERE name LIKE :name LIMIT 1")
-    ShoppingList findByName(String name);
+  @Query("SELECT * FROM shopping_list_table WHERE id IN (:shoppingListIds)")
+  List<ShoppingList> loadAllByIds(int[] shoppingListIds);
 
-    @Query("SELECT COUNT(*) FROM shopping_list_table")
-    int count();
+  @Query("SELECT * FROM shopping_list_table WHERE name LIKE :name LIMIT 1")
+  ShoppingList findByName(String name);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<ShoppingList> shoppingLists);
+  @Query("SELECT COUNT(*) FROM shopping_list_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ShoppingList shoppingList);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<ShoppingList> shoppingLists);
 
-    @Delete
-    void delete(ShoppingList shoppingList);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(ShoppingList shoppingList);
 
-    @Query("DELETE FROM shopping_list_table")
-    void deleteAll();
+  @Delete
+  void delete(ShoppingList shoppingList);
+
+  @Query("DELETE FROM shopping_list_table")
+  void deleteAll();
 
 }

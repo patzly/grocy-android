@@ -24,12 +24,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
@@ -39,85 +36,87 @@ import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class MasterQuantityUnitBottomSheet extends BaseBottomSheet {
 
-	private final static String TAG = MasterQuantityUnitBottomSheet.class.getSimpleName();
+  private final static String TAG = MasterQuantityUnitBottomSheet.class.getSimpleName();
 
-	private MainActivity activity;
-	private QuantityUnit quantityUnit;
-	private ListItem itemName, itemNamePlural, itemDescription;
+  private MainActivity activity;
+  private QuantityUnit quantityUnit;
+  private ListItem itemName, itemNamePlural, itemDescription;
 
-	@NonNull
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-	}
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
 
-	@Override
-	public View onCreateView(
-			LayoutInflater inflater,
-			ViewGroup container,
-			Bundle savedInstanceState
-	) {
-		View view = inflater.inflate(
-				R.layout.fragment_bottomsheet_master_quantity_unit,
-				container,
-				false
-		);
+  @Override
+  public View onCreateView(
+      LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_master_quantity_unit,
+        container,
+        false
+    );
 
-		activity = (MainActivity) getActivity();
-		assert activity != null;
+    activity = (MainActivity) getActivity();
+    assert activity != null;
 
-		Bundle bundle = getArguments();
-		if(bundle != null) quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
+    Bundle bundle = getArguments();
+    if (bundle != null) {
+      quantityUnit = bundle.getParcelable(Constants.ARGUMENT.QUANTITY_UNIT);
+    }
 
-		// VIEWS
+    // VIEWS
 
-		itemName = view.findViewById(R.id.item_master_quantity_unit_name);
-		itemNamePlural = view.findViewById(R.id.item_master_quantity_unit_name_plural);
-		itemDescription = view.findViewById(R.id.item_master_quantity_unit_description);
+    itemName = view.findViewById(R.id.item_master_quantity_unit_name);
+    itemNamePlural = view.findViewById(R.id.item_master_quantity_unit_name_plural);
+    itemDescription = view.findViewById(R.id.item_master_quantity_unit_description);
 
-		// TOOLBAR
+    // TOOLBAR
 
-		MaterialToolbar toolbar = view.findViewById(R.id.toolbar_master_quantity_unit);
-		toolbar.setOnMenuItemClickListener(item -> {
-			BaseFragment fragmentCurrent = activity.getCurrentFragment();
-			if(item.getItemId() == R.id.action_edit) {
-				fragmentCurrent.editObject(quantityUnit);
-			} else if(item.getItemId() == R.id.action_delete) {
-				fragmentCurrent.deleteObjectSafely(quantityUnit);
-			}
-			dismiss();
-			return true;
-		});
+    MaterialToolbar toolbar = view.findViewById(R.id.toolbar_master_quantity_unit);
+    toolbar.setOnMenuItemClickListener(item -> {
+      BaseFragment fragmentCurrent = activity.getCurrentFragment();
+      if (item.getItemId() == R.id.action_edit) {
+        fragmentCurrent.editObject(quantityUnit);
+      } else if (item.getItemId() == R.id.action_delete) {
+        fragmentCurrent.deleteObjectSafely(quantityUnit);
+      }
+      dismiss();
+      return true;
+    });
 
-		setData();
+    setData();
 
-		return view;
-	}
+    return view;
+  }
 
-	private void setData() {
-		// NAME (singular & plural form)
-		itemName.setText(
-				activity.getString(R.string.property_name_singular),
-				quantityUnit.getName()
-		);
-		itemNamePlural.setText(
-				activity.getString(R.string.property_name_plural),
-				quantityUnit.getNamePlural()
-		);
+  private void setData() {
+    // NAME (singular & plural form)
+    itemName.setText(
+        activity.getString(R.string.property_name_singular),
+        quantityUnit.getName()
+    );
+    itemNamePlural.setText(
+        activity.getString(R.string.property_name_plural),
+        quantityUnit.getNamePlural()
+    );
 
-		// DESCRIPTION
-		String description = quantityUnit.getDescription();
-		if(description != null && !description.isEmpty()) {
-			itemDescription.setSingleLine(false);
-			itemDescription.setText(activity.getString(R.string.property_description), description);
-		} else {
-			itemDescription.setVisibility(View.GONE);
-		}
-	}
+    // DESCRIPTION
+    String description = quantityUnit.getDescription();
+    if (description != null && !description.isEmpty()) {
+      itemDescription.setSingleLine(false);
+      itemDescription.setText(activity.getString(R.string.property_description), description);
+    } else {
+      itemDescription.setVisibility(View.GONE);
+    }
+  }
 
-	@NonNull
-	@Override
-	public String toString() {
-		return TAG;
-	}
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

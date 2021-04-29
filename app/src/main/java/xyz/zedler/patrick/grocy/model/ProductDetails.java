@@ -21,253 +21,250 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 
 public class ProductDetails implements Parcelable {
 
-    @SerializedName("product")
-    private final Product product;
+  @SerializedName("product")
+  private final Product product;
 
-    @SerializedName("product_barcodes")
-    private final ArrayList<ProductBarcode> productBarcodes;
+  @SerializedName("product_barcodes")
+  private final ArrayList<ProductBarcode> productBarcodes;
 
-    @SerializedName("last_purchased")
-    private final String lastPurchased;
+  @SerializedName("last_purchased")
+  private final String lastPurchased;
 
-    @SerializedName("last_used")
-    private final String lastUsed;
+  @SerializedName("last_used")
+  private final String lastUsed;
 
-    @SerializedName("stock_amount")
-    private final String stockAmount;
+  @SerializedName("stock_amount")
+  private final String stockAmount;
 
-    @SerializedName("stock_value")
-    private final String stockValue;
+  @SerializedName("stock_value")
+  private final String stockValue;
 
-    @SerializedName("stock_amount_opened")
-    private final String stockAmountOpened;
+  @SerializedName("stock_amount_opened")
+  private final String stockAmountOpened;
 
-    @SerializedName("stock_amount_aggregated")
-    private final String stockAmountAggregated;
+  @SerializedName("stock_amount_aggregated")
+  private final String stockAmountAggregated;
 
-    @SerializedName("stock_amount_opened_aggregated")
-    private final String stockAmountOpenedAggregated;
+  @SerializedName("stock_amount_opened_aggregated")
+  private final String stockAmountOpenedAggregated;
 
-    @SerializedName("quantity_unit_purchase")
-    private final QuantityUnit quantityUnitPurchase;
+  @SerializedName("quantity_unit_purchase")
+  private final QuantityUnit quantityUnitPurchase;
 
-    @SerializedName("quantity_unit_stock")
-    private final QuantityUnit quantityUnitStock;
+  @SerializedName("quantity_unit_stock")
+  private final QuantityUnit quantityUnitStock;
 
-    @SerializedName("last_price")
-    private final String lastPrice;
+  @SerializedName("last_price")
+  private final String lastPrice;
 
-    @SerializedName("avg_price")
-    private final String avgPrice;
+  @SerializedName("avg_price")
+  private final String avgPrice;
 
-    @SerializedName("oldest_price")
-    private final String oldestPrice;
+  @SerializedName("oldest_price")
+  private final String oldestPrice;
 
-    @SerializedName("last_shopping_location_id")
-    private final String lastShoppingLocationId;
+  @SerializedName("last_shopping_location_id")
+  private final String lastShoppingLocationId;
 
-    @SerializedName("default_shopping_location_id")
-    private final String defaultShoppingLocationId;
+  @SerializedName("default_shopping_location_id")
+  private final String defaultShoppingLocationId;
 
-    @SerializedName("next_due_date")
-    private final String nextDueDate;
+  @SerializedName("next_due_date")
+  private final String nextDueDate;
 
-    @SerializedName("location")
-    private final Location location;
+  @SerializedName("location")
+  private final Location location;
 
-    @SerializedName("average_shelf_life_days")
-    private final int averageShelfLifeDays;
+  @SerializedName("average_shelf_life_days")
+  private final int averageShelfLifeDays;
 
-    @SerializedName("spoil_rate_percent")
-    private final String spoilRatePercent;
+  @SerializedName("spoil_rate_percent")
+  private final String spoilRatePercent;
 
-    @SerializedName("is_aggregated_amount")
-    private final int isAggregatedAmount;
+  @SerializedName("is_aggregated_amount")
+  private final int isAggregatedAmount;
 
-    public ProductDetails(Parcel parcel) {
-        product = parcel.readParcelable(Product.class.getClassLoader());
-        // productBarcodes = parcel.readParcelableList(); // TODO ?
-        productBarcodes = null;
-        lastPurchased = parcel.readString();
-        lastUsed = parcel.readString();
-        stockAmount = parcel.readString();
-        stockValue = parcel.readString();
-        stockAmountOpened = parcel.readString();
-        stockAmountAggregated = parcel.readString();
-        stockAmountOpenedAggregated = parcel.readString();
-        quantityUnitPurchase = parcel.readParcelable(QuantityUnit.class.getClassLoader());
-        quantityUnitStock = parcel.readParcelable(QuantityUnit.class.getClassLoader());
-        lastPrice = parcel.readString();
-        avgPrice = parcel.readString();
-        oldestPrice = parcel.readString();
-        lastShoppingLocationId = parcel.readString();
-        defaultShoppingLocationId = parcel.readString();
-        nextDueDate = parcel.readString();
-        location = parcel.readParcelable(Location.class.getClassLoader());
-        averageShelfLifeDays = parcel.readInt();
-        spoilRatePercent = parcel.readString();
-        isAggregatedAmount = parcel.readInt();
+  public ProductDetails(Parcel parcel) {
+    product = parcel.readParcelable(Product.class.getClassLoader());
+    // productBarcodes = parcel.readParcelableList(); // TODO ?
+    productBarcodes = null;
+    lastPurchased = parcel.readString();
+    lastUsed = parcel.readString();
+    stockAmount = parcel.readString();
+    stockValue = parcel.readString();
+    stockAmountOpened = parcel.readString();
+    stockAmountAggregated = parcel.readString();
+    stockAmountOpenedAggregated = parcel.readString();
+    quantityUnitPurchase = parcel.readParcelable(QuantityUnit.class.getClassLoader());
+    quantityUnitStock = parcel.readParcelable(QuantityUnit.class.getClassLoader());
+    lastPrice = parcel.readString();
+    avgPrice = parcel.readString();
+    oldestPrice = parcel.readString();
+    lastShoppingLocationId = parcel.readString();
+    defaultShoppingLocationId = parcel.readString();
+    nextDueDate = parcel.readString();
+    location = parcel.readParcelable(Location.class.getClassLoader());
+    averageShelfLifeDays = parcel.readInt();
+    spoilRatePercent = parcel.readString();
+    isAggregatedAmount = parcel.readInt();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeParcelable(product, 0);
+    // dest.writeParcelableList(productBarcodes); // TODO ?
+    dest.writeString(lastPurchased);
+    dest.writeString(lastUsed);
+    dest.writeString(stockAmount);
+    dest.writeString(stockValue);
+    dest.writeString(stockAmountOpened);
+    dest.writeString(stockAmountAggregated);
+    dest.writeString(stockAmountOpenedAggregated);
+    dest.writeParcelable(quantityUnitPurchase, 0);
+    dest.writeParcelable(quantityUnitStock, 0);
+    dest.writeString(lastPrice);
+    dest.writeString(avgPrice);
+    dest.writeString(oldestPrice);
+    dest.writeString(lastShoppingLocationId);
+    dest.writeString(defaultShoppingLocationId);
+    dest.writeString(nextDueDate);
+    dest.writeParcelable(location, 0);
+    dest.writeInt(averageShelfLifeDays);
+    dest.writeString(spoilRatePercent);
+    dest.writeInt(isAggregatedAmount);
+  }
+
+  public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
+
+    @Override
+    public ProductDetails createFromParcel(Parcel in) {
+      return new ProductDetails(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(product, 0);
-        // dest.writeParcelableList(productBarcodes); // TODO ?
-        dest.writeString(lastPurchased);
-        dest.writeString(lastUsed);
-        dest.writeString(stockAmount);
-        dest.writeString(stockValue);
-        dest.writeString(stockAmountOpened);
-        dest.writeString(stockAmountAggregated);
-        dest.writeString(stockAmountOpenedAggregated);
-        dest.writeParcelable(quantityUnitPurchase, 0);
-        dest.writeParcelable(quantityUnitStock, 0);
-        dest.writeString(lastPrice);
-        dest.writeString(avgPrice);
-        dest.writeString(oldestPrice);
-        dest.writeString(lastShoppingLocationId);
-        dest.writeString(defaultShoppingLocationId);
-        dest.writeString(nextDueDate);
-        dest.writeParcelable(location, 0);
-        dest.writeInt(averageShelfLifeDays);
-        dest.writeString(spoilRatePercent);
-        dest.writeInt(isAggregatedAmount);
+    public ProductDetails[] newArray(int size) {
+      return new ProductDetails[size];
     }
+  };
 
-    public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
+  public Product getProduct() {
+    return product;
+  }
 
-        @Override
-        public ProductDetails createFromParcel(Parcel in) {
-            return new ProductDetails(in);
-        }
+  public String getLastPurchased() {
+    return lastPurchased;
+  }
 
-        @Override
-        public ProductDetails[] newArray(int size) {
-            return new ProductDetails[size];
-        }
-    };
+  public String getLastUsed() {
+    return lastUsed;
+  }
 
-    public Product getProduct() {
-        return product;
+  public double getStockAmount() {
+    if (stockAmount == null || stockAmount.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(stockAmount);
     }
+  }
 
-    public String getLastPurchased() {
-        return lastPurchased;
+  public double getStockAmountOpened() {
+    if (stockAmountOpened == null || stockAmountOpened.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(stockAmountOpened);
     }
+  }
 
-    public String getLastUsed() {
-        return lastUsed;
+  public double getStockAmountAggregated() {
+    if (stockAmountAggregated == null || stockAmountAggregated.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(stockAmountAggregated);
     }
+  }
 
-    public double getStockAmount() {
-        if(stockAmount == null || stockAmount.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(stockAmount);
-        }
+  public double getStockAmountOpenedAggregated() {
+    if (stockAmountOpenedAggregated == null || stockAmountOpenedAggregated.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(stockAmountOpenedAggregated);
     }
+  }
 
-    public double getStockAmountOpened() {
-        if(stockAmountOpened == null || stockAmountOpened.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(stockAmountOpened);
-        }
-    }
+  public QuantityUnit getQuantityUnitPurchase() {
+    return quantityUnitPurchase;
+  }
 
-    public double getStockAmountAggregated() {
-        if(stockAmountAggregated == null || stockAmountAggregated.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(stockAmountAggregated);
-        }
-    }
+  public QuantityUnit getQuantityUnitStock() {
+    return quantityUnitStock;
+  }
 
-    public double getStockAmountOpenedAggregated() {
-        if(stockAmountOpenedAggregated == null || stockAmountOpenedAggregated.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(stockAmountOpenedAggregated);
-        }
-    }
+  public String getLastPrice() {
+    return lastPrice;
+  }
 
-    public QuantityUnit getQuantityUnitPurchase() {
-        return quantityUnitPurchase;
-    }
+  public String getNextDueDate() {
+    return nextDueDate;
+  }
 
-    public QuantityUnit getQuantityUnitStock() {
-        return quantityUnitStock;
-    }
+  public Location getLocation() {
+    return location;
+  }
 
-    public String getLastPrice() {
-        return lastPrice;
-    }
+  public int getAverageShelfLifeDays() {
+    return averageShelfLifeDays;
+  }
 
-    public String getNextDueDate() {
-        return nextDueDate;
+  public double getSpoilRatePercent() {
+    if (spoilRatePercent == null || spoilRatePercent.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(spoilRatePercent);
     }
+  }
 
-    public Location getLocation() {
-        return location;
-    }
+  public int getIsAggregatedAmount() {
+    return isAggregatedAmount;
+  }
 
-    public int getAverageShelfLifeDays() {
-        return averageShelfLifeDays;
-    }
+  public String getLastShoppingLocationId() {
+    return lastShoppingLocationId;
+  }
 
-    public double getSpoilRatePercent() {
-        if(spoilRatePercent == null || spoilRatePercent.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(spoilRatePercent);
-        }
-    }
+  public String getDefaultShoppingLocationId() {
+    return defaultShoppingLocationId;
+  }
 
-    public int getIsAggregatedAmount() {
-        return isAggregatedAmount;
-    }
+  public ArrayList<ProductBarcode> getProductBarcodes() {
+    return productBarcodes;
+  }
 
-    public String getLastShoppingLocationId() {
-        return lastShoppingLocationId;
-    }
+  public String getStockValue() {
+    return stockValue;
+  }
 
-    public String getDefaultShoppingLocationId() {
-        return defaultShoppingLocationId;
-    }
+  public String getAvgPrice() {
+    return avgPrice;
+  }
 
-    public ArrayList<ProductBarcode> getProductBarcodes() {
-        return productBarcodes;
-    }
+  public String getOldestPrice() {
+    return oldestPrice;
+  }
 
-    public String getStockValue() {
-        return stockValue;
-    }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    public String getAvgPrice() {
-        return avgPrice;
-    }
-
-    public String getOldestPrice() {
-        return oldestPrice;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "ProductDetails(" + product + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "ProductDetails(" + product + ')';
+  }
 }

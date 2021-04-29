@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -18,20 +17,23 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:left="4dp" android:right="4dp">
+  <item
+    android:left="4dp"
+    android:right="4dp">
 
-        <shape android:shape="oval">
+    <shape android:shape="oval">
 
-            <solid android:color="@color/secondary"/>
+      <solid android:color="@color/secondary" />
 
-            <size
-                android:width="8dp"
-                android:height="8dp"/>
+      <size
+        android:width="8dp"
+        android:height="8dp" />
 
-        </shape>
+    </shape>
 
-    </item>
+  </item>
 
 </layer-list>

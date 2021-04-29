@@ -25,15 +25,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.util.Locale;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatAppearanceBinding;
@@ -47,106 +44,107 @@ import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatAppearanceFragment extends BaseFragment {
 
-    private final static String TAG = SettingsCatAppearanceFragment.class.getSimpleName();
+  private final static String TAG = SettingsCatAppearanceFragment.class.getSimpleName();
 
-    private FragmentSettingsCatAppearanceBinding binding;
-    private MainActivity activity;
-    private SettingsViewModel viewModel;
-    private MutableLiveData<Boolean> darkModeLive;
+  private FragmentSettingsCatAppearanceBinding binding;
+  private MainActivity activity;
+  private SettingsViewModel viewModel;
+  private MutableLiveData<Boolean> darkModeLive;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentSettingsCatAppearanceBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentSettingsCatAppearanceBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    binding.setActivity(activity);
+    binding.setFragment(this);
+    binding.setViewModel(viewModel);
+    binding.setClickUtil(new ClickUtil());
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    darkModeLive = new MutableLiveData<>(viewModel.getDarkMode());
+
+    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+      activity.getScrollBehavior().setUpScroll(binding.scroll);
+      activity.getScrollBehavior().setHideOnScroll(true);
+      activity.updateBottomAppBar(
+          Constants.FAB.POSITION.GONE,
+          R.menu.menu_empty,
+          false,
+          () -> {
+          }
+      );
+      activity.binding.fabMain.hide();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+    setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
-        binding.setActivity(activity);
-        binding.setFragment(this);
-        binding.setViewModel(viewModel);
-        binding.setClickUtil(new ClickUtil());
-        binding.setLifecycleOwner(getViewLifecycleOwner());
+  public MutableLiveData<Boolean> getDarkModeLive() {
+    return darkModeLive;
+  }
 
-        darkModeLive = new MutableLiveData<>(viewModel.getDarkMode());
+  public void setDarkMode(boolean dark) {
+    IconUtil.start(binding.imageDark);
+    new Handler().postDelayed(() -> {
+      darkModeLive.setValue(dark);
+      updateTheme(dark);
+    }, 300);
+    viewModel.setDarkMode(dark);
+  }
 
-        if(activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-            activity.getScrollBehavior().setUpScroll(binding.scroll);
-            activity.getScrollBehavior().setHideOnScroll(true);
-            activity.updateBottomAppBar(
-                    Constants.FAB.POSITION.GONE,
-                    R.menu.menu_empty,
-                    false,
-                    () -> {}
-            );
-            activity.binding.fabMain.hide();
-        }
+  @Override
+  public void setLanguage(Language language) {
+    Locale locale = language != null
+        ? LocaleUtil.getLocaleFromCode(language.getCode())
+        : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
+    binding.textLanguage.setText(
+        language != null
+            ? locale.getDisplayName()
+            : getString(R.string.setting_language_system, locale.getDisplayName())
+    );
+  }
 
-        setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
-    }
+  public String getLanguage() {
+    String code = viewModel.getLanguage();
+    Locale locale = code != null
+        ? LocaleUtil.getLocaleFromCode(code)
+        : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
+    return code != null
+        ? locale.getDisplayName()
+        : getString(R.string.setting_language_system, locale.getDisplayName());
+  }
 
-    public MutableLiveData<Boolean> getDarkModeLive() {
-        return darkModeLive;
-    }
+  public void showLanguageSelection() {
+    IconUtil.start(binding.imageLanguage);
+    activity.showBottomSheet(new LanguagesBottomSheet());
+  }
 
-    public void setDarkMode(boolean dark) {
-        IconUtil.start(binding.imageDark);
-        new Handler().postDelayed(() -> {
-            darkModeLive.setValue(dark);
-            updateTheme(dark);
-        }, 300);
-        viewModel.setDarkMode(dark);
-    }
+  private void updateTheme(boolean forceDarkMode) {
+    AppCompatDelegate.setDefaultNightMode(forceDarkMode
+        ? AppCompatDelegate.MODE_NIGHT_YES
+        : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    );
+    activity.executeOnStart();
+  }
 
-    @Override
-    public void setLanguage(Language language) {
-        Locale locale = language != null
-                ? LocaleUtil.getLocaleFromCode(language.getCode())
-                : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
-        binding.textLanguage.setText(
-                language != null
-                        ? locale.getDisplayName()
-                        : getString(R.string.setting_language_system, locale.getDisplayName())
-        );
-    }
-
-    public String getLanguage() {
-        String code = viewModel.getLanguage();
-        Locale locale = code != null
-                ? LocaleUtil.getLocaleFromCode(code)
-                : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
-        return code != null
-                ? locale.getDisplayName()
-                : getString(R.string.setting_language_system, locale.getDisplayName());
-    }
-
-    public void showLanguageSelection() {
-        IconUtil.start(binding.imageLanguage);
-        activity.showBottomSheet(new LanguagesBottomSheet());
-    }
-
-    private void updateTheme(boolean forceDarkMode) {
-        AppCompatDelegate.setDefaultNightMode(forceDarkMode
-                ? AppCompatDelegate.MODE_NIGHT_YES
-                : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        );
-        activity.executeOnStart();
-    }
-
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
-    }
+  @Override
+  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
+  }
 }

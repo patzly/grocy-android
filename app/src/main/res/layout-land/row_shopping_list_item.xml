@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,59 +18,59 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/container"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:background="@drawable/bg_list_item"
+  android:padding="16dp"
+  android:gravity="center_vertical">
+
+  <TextView
+    android:id="@+id/name"
+    style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/bg_list_item"
-    android:padding="16dp"
-    android:gravity="center_vertical">
+    android:layout_weight="1"
+    android:singleLine="true" />
+
+  <TextView
+    android:id="@+id/note_as_name"
+    style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:textStyle="italic"
+    android:visibility="gone" />
+
+  <LinearLayout
+    android:id="@+id/note_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginEnd="10dp"
+    android:visibility="gone">
 
     <TextView
-        android:id="@+id/name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:singleLine="true" />
+      android:id="@+id/note"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:maxWidth="150dp"
+      android:singleLine="true"
+      android:textStyle="italic" />
 
-    <TextView
-        android:id="@+id/note_as_name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textStyle="italic"
-        android:visibility="gone" />
+  </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/note_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginEnd="10dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/note"
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="150dp"
-            android:singleLine="true"
-            android:textStyle="italic" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/amount"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true" />
+  <TextView
+    android:id="@+id/amount"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:singleLine="true" />
 
 </LinearLayout>

@@ -22,57 +22,56 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.model.FormDataLoginApiForm;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class LoginApiFormViewModel extends BaseViewModel {
 
-    private static final String TAG = LoginApiFormViewModel.class.getSimpleName();
+  private static final String TAG = LoginApiFormViewModel.class.getSimpleName();
 
-    private final SharedPreferences sharedPrefs;
-    private final SharedPreferences sharedPrefsPrivate;
-    private final FormDataLoginApiForm formData;
+  private final SharedPreferences sharedPrefs;
+  private final SharedPreferences sharedPrefsPrivate;
+  private final FormDataLoginApiForm formData;
 
-    private final boolean debug;
+  private final boolean debug;
 
-    public LoginApiFormViewModel(@NonNull Application application, LoginApiFormFragmentArgs args) {
-        super(application);
+  public LoginApiFormViewModel(@NonNull Application application, LoginApiFormFragmentArgs args) {
+    super(application);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        sharedPrefsPrivate = getApplication().getSharedPreferences(
-                Constants.PREF.CREDENTIALS,
-                Context.MODE_PRIVATE
-        );
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    sharedPrefsPrivate = getApplication().getSharedPreferences(
+        Constants.PREF.CREDENTIALS,
+        Context.MODE_PRIVATE
+    );
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-        formData = new FormDataLoginApiForm(sharedPrefsPrivate, args);
+    formData = new FormDataLoginApiForm(sharedPrefsPrivate, args);
+  }
+
+  public FormDataLoginApiForm getFormData() {
+    return formData;
+  }
+
+  public static class LoginApiFormViewModelFactory implements ViewModelProvider.Factory {
+
+    private final Application application;
+    private final LoginApiFormFragmentArgs args;
+
+    public LoginApiFormViewModelFactory(Application application, LoginApiFormFragmentArgs args) {
+      this.application = application;
+      this.args = args;
     }
 
-    public FormDataLoginApiForm getFormData() {
-        return formData;
+    @NonNull
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new LoginApiFormViewModel(application, args);
     }
-
-    public static class LoginApiFormViewModelFactory implements ViewModelProvider.Factory {
-        private final Application application;
-        private final LoginApiFormFragmentArgs args;
-
-        public LoginApiFormViewModelFactory(Application application, LoginApiFormFragmentArgs args) {
-            this.application = application;
-            this.args = args;
-        }
-
-        @NonNull
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new LoginApiFormViewModel(application, args);
-        }
-    }
+  }
 }

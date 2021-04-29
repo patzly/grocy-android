@@ -22,16 +22,12 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
@@ -49,319 +45,326 @@ import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
-    private static final String TAG = SettingsViewModel.class.getSimpleName();
-    private final SharedPreferences sharedPrefs;
-    private boolean debug;
+  private static final String TAG = SettingsViewModel.class.getSimpleName();
+  private final SharedPreferences sharedPrefs;
+  private final boolean debug;
 
-    private final DownloadHelper dlHelper;
-    private NetUtil netUtil;
-    private Gson gson;
-    private final GrocyApi grocyApi;
+  private final DownloadHelper dlHelper;
+  private final NetUtil netUtil;
+  private final Gson gson;
+  private final GrocyApi grocyApi;
 
-    private MutableLiveData<Boolean> isLoadingLive;
-    private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
+  private MutableLiveData<Boolean> isLoadingLive;
+  private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
 
-    public SettingsViewModel(@NonNull Application application) {
-        super(application);
+  public SettingsViewModel(@NonNull Application application) {
+    super(application);
 
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
 
-        dlHelper = new DownloadHelper(
-                getApplication(),
-                TAG,
-                isLoading -> isLoadingLive.setValue(isLoading)
-        );
-        netUtil = new NetUtil(getApplication());
-        gson = new Gson();
-        grocyApi = new GrocyApi(getApplication());
+    dlHelper = new DownloadHelper(
+        getApplication(),
+        TAG,
+        isLoading -> isLoadingLive.setValue(isLoading)
+    );
+    netUtil = new NetUtil(getApplication());
+    gson = new Gson();
+    grocyApi = new GrocyApi(getApplication());
 
-        isLoadingLive = new MutableLiveData<>(false);
-        getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
+    isLoadingLive = new MutableLiveData<>(false);
+    getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
+  }
+
+  public boolean isDemo() {
+    String server = getServerUrl();
+    return server != null && server.contains("grocy.info");
+  }
+
+  public boolean isVersionCompatible() {
+    return getSupportedVersions().contains(
+        sharedPrefs.getString(
+            Constants.PREF.GROCY_VERSION,
+            getString(R.string.date_unknown)
+        )
+    );
+  }
+
+  public void showCompatibilityBottomSheet() {
+    if (isVersionCompatible()) {
+      return;
     }
+    Bundle bundle = new Bundle();
+    bundle.putString(Constants.ARGUMENT.SERVER, sharedPrefs.getString(
+        Constants.PREF.SERVER_URL,
+        getString(R.string.date_unknown)
+    ));
+    bundle.putString(Constants.ARGUMENT.KEY, sharedPrefs.getString(
+        Constants.PREF.API_KEY,
+        getString(R.string.date_unknown)
+    ));
+    bundle.putString(Constants.ARGUMENT.VERSION, sharedPrefs.getString(
+        Constants.PREF.GROCY_VERSION,
+        getString(R.string.date_unknown)
+    ));
+    bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemo());
+    bundle.putStringArrayList(
+        Constants.ARGUMENT.SUPPORTED_VERSIONS,
+        getSupportedVersions()
+    );
+    CompatibilityBottomSheet bottomSheet = new CompatibilityBottomSheet();
+    showBottomSheet(bottomSheet, bundle);
+  }
 
-    public boolean isDemo() {
-        String server = getServerUrl();
-        return server != null && server.contains("grocy.info");
-    }
+  public void reloadConfiguration() {
+    ConfigUtil.loadInfo(
+        dlHelper,
+        grocyApi,
+        sharedPrefs,
+        () -> showBottomSheet(new RestartBottomSheet(), null),
+        error -> showErrorMessage()
+    );
+  }
 
-    public boolean isVersionCompatible() {
-        return getSupportedVersions().contains(
-                sharedPrefs.getString(
-                        Constants.PREF.GROCY_VERSION,
-                        getString(R.string.date_unknown)
-                )
-        );
-    }
+  public void showLogoutBottomSheet() {
+    showBottomSheet(new LogoutBottomSheet());
+  }
 
-    public void showCompatibilityBottomSheet() {
-        if(isVersionCompatible()) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.SERVER, sharedPrefs.getString(
-                Constants.PREF.SERVER_URL,
-                getString(R.string.date_unknown)
-        ));
-        bundle.putString(Constants.ARGUMENT.KEY, sharedPrefs.getString(
-                Constants.PREF.API_KEY,
-                getString(R.string.date_unknown)
-        ));
-        bundle.putString(Constants.ARGUMENT.VERSION, sharedPrefs.getString(
-                Constants.PREF.GROCY_VERSION,
-                getString(R.string.date_unknown)
-        ));
-        bundle.putBoolean(Constants.ARGUMENT.DEMO_CHOSEN, isDemo());
-        bundle.putStringArrayList(
-                Constants.ARGUMENT.SUPPORTED_VERSIONS,
-                getSupportedVersions()
-        );
-        CompatibilityBottomSheet bottomSheet = new CompatibilityBottomSheet();
-        showBottomSheet(bottomSheet, bundle);
-    }
+  public void showShortcutsBottomSheet() {
+    showBottomSheet(new ShortcutsBottomSheet(), null);
+  }
 
-    public void reloadConfiguration() {
-        ConfigUtil.loadInfo(
-                dlHelper,
-                grocyApi,
-                sharedPrefs,
-                () -> showBottomSheet(new RestartBottomSheet(), null),
-                error -> showErrorMessage()
-        );
-    }
+  public String getServerUrl() {
+    return sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+  }
 
-    public void showLogoutBottomSheet() {
-        showBottomSheet(new LogoutBottomSheet());
-    }
+  public boolean getDarkMode() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.APPEARANCE.DARK_MODE,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+    );
+  }
 
-    public void showShortcutsBottomSheet() {
-        showBottomSheet(new ShortcutsBottomSheet(), null);
-    }
+  public void setDarkMode(boolean dark) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.APPEARANCE.DARK_MODE, dark).apply();
+  }
 
-    public String getServerUrl() {
-        return sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    }
+  public String getLanguage() {
+    return sharedPrefs.getString(
+        Constants.SETTINGS.APPEARANCE.LANGUAGE,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
+    );
+  }
 
-    public boolean getDarkMode() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.APPEARANCE.DARK_MODE,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
-        );
-    }
+  public void showLoadingTimeoutBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());
+    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
+    showBottomSheet(new InputNumberBottomSheet(), bundle);
+  }
 
-    public void setDarkMode(boolean dark) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.APPEARANCE.DARK_MODE, dark).apply();
-    }
+  public int getLoadingTimeout() {
+    return sharedPrefs.getInt(
+        Constants.SETTINGS.NETWORK.LOADING_TIMEOUT,
+        Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT
+    );
+  }
 
-    public String getLanguage() {
-        return sharedPrefs.getString(
-                Constants.SETTINGS.APPEARANCE.LANGUAGE,
-                Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
-        );
-    }
+  public void setLoadingTimeout(int seconds) {
+    sharedPrefs.edit().putInt(Constants.SETTINGS.NETWORK.LOADING_TIMEOUT, seconds).apply();
+  }
 
-    public void showLoadingTimeoutBottomSheet() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());
-        bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
-        showBottomSheet(new InputNumberBottomSheet(), bundle);
-    }
+  public boolean getLoggingEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+        Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+    );
+  }
 
-    public int getLoadingTimeout() {
-        return sharedPrefs.getInt(
-                Constants.SETTINGS.NETWORK.LOADING_TIMEOUT,
-                Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT
-        );
-    }
+  public void setLoggingEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING, enabled).apply();
+  }
 
-    public void setLoadingTimeout(int seconds) {
-        sharedPrefs.edit().putInt(Constants.SETTINGS.NETWORK.LOADING_TIMEOUT, seconds).apply();
-    }
+  public boolean getInfoLogsEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS,
+        Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_INFO_LOGS
+    );
+  }
 
-    public boolean getLoggingEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
-                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
-        );
-    }
+  public void setInfoLogsEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS, enabled).apply();
+  }
 
-    public void setLoggingEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING, enabled).apply();
-    }
+  public boolean getBeginnerModeEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+    );
+  }
 
-    public boolean getInfoLogsEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS,
-                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_INFO_LOGS
-        );
-    }
+  public void setBeginnerModeEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE, enabled).apply();
+  }
 
-    public void setInfoLogsEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS, enabled).apply();
-    }
+  public boolean getExpandBottomSheetsEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
+    );
+  }
 
-    public boolean getBeginnerModeEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
-        );
-    }
+  public void setExpandBottomSheetsEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
+  }
 
-    public void setBeginnerModeEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE, enabled).apply();
-    }
+  public boolean getFrontCamEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SCANNER.FRONT_CAM,
+        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+    );
+  }
 
-    public boolean getExpandBottomSheetsEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
-        );
-    }
+  public void setFrontCamEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.FRONT_CAM, enabled).apply();
+  }
 
-    public void setExpandBottomSheetsEnabled(boolean enabled) {
-        sharedPrefs.edit()
-                .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
-    }
+  public boolean getExternalScannerEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+        Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
+    );
+  }
 
-    public boolean getFrontCamEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SCANNER.FRONT_CAM,
-                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-        );
-    }
+  public MutableLiveData<Boolean> getGetExternalScannerEnabledLive() {
+    return getExternalScannerEnabledLive;
+  }
 
-    public void setFrontCamEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.FRONT_CAM, enabled).apply();
-    }
+  public void setExternalScannerEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER, enabled).apply();
+    getExternalScannerEnabledLive.setValue(enabled);
+  }
 
-    public boolean getExternalScannerEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
-                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
-        );
-    }
+  public boolean getKeepScreenOnEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON,
+        Constants.SETTINGS_DEFAULT.SHOPPING_MODE.KEEP_SCREEN_ON
+    );
+  }
 
-    public MutableLiveData<Boolean> getGetExternalScannerEnabledLive() {
-        return getExternalScannerEnabledLive;
-    }
+  public void setKeepScreenOnEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON, enabled)
+        .apply();
+  }
 
-    public void setExternalScannerEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER, enabled).apply();
-        getExternalScannerEnabledLive.setValue(enabled);
-    }
+  public boolean getShowDoneItemsEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
+        Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
+    );
+  }
 
-    public boolean getKeepScreenOnEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON,
-                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.KEEP_SCREEN_ON
-        );
-    }
+  public void setShowDoneItemsEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
+        .apply();
+  }
 
-    public void setKeepScreenOnEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.KEEP_SCREEN_ON, enabled)
-                .apply();
-    }
+  public boolean getListIndicatorEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK,
+        Constants.SETTINGS_DEFAULT.STOCK.DISPLAY_DOTS_IN_STOCK
+    );
+  }
 
-    public boolean getShowDoneItemsEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
-                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
-        );
-    }
+  public void setListIndicatorEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK, enabled)
+        .apply();
+  }
 
-    public void setShowDoneItemsEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
-                .apply();
-    }
+  public boolean getPurchasedDateEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
+        Constants.SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE
+    );
+  }
 
-    public boolean getListIndicatorEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK,
-                Constants.SETTINGS_DEFAULT.STOCK.DISPLAY_DOTS_IN_STOCK
-        );
-    }
+  public void setPurchasedDateEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE, enabled)
+        .apply();
+  }
 
-    public void setListIndicatorEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK, enabled)
-                .apply();
-    }
+  public boolean getLoadingCircleEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.NETWORK.LOADING_CIRCLE,
+        Constants.SETTINGS_DEFAULT.NETWORK.LOADING_CIRCLE
+    );
+  }
 
-    public boolean getPurchasedDateEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
-                Constants.SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE
-        );
-    }
+  public void setLoadingCircleEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NETWORK.LOADING_CIRCLE, enabled)
+        .apply();
+  }
 
-    public void setPurchasedDateEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE, enabled)
-                .apply();
-    }
+  public ArrayList<String> getSupportedVersions() {
+    return new ArrayList<>(Arrays.asList(
+        getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
+    ));
+  }
 
-    public boolean getLoadingCircleEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.NETWORK.LOADING_CIRCLE,
-                Constants.SETTINGS_DEFAULT.NETWORK.LOADING_CIRCLE
-        );
-    }
+  public boolean getIsDemoInstance() {
+    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    return server != null && server.contains("grocy.info");
+  }
 
-    public void setLoadingCircleEnabled(boolean enabled) {
-        sharedPrefs.edit().putBoolean(Constants.SETTINGS.NETWORK.LOADING_CIRCLE, enabled)
-                .apply();
+  public Location getLocation(ArrayList<Location> locations, int id) {
+    for (Location location : locations) {
+      if (location.getId() == id) {
+        return location;
+      }
     }
+    return null;
+  }
 
-    public ArrayList<String> getSupportedVersions() {
-        return new ArrayList<>(Arrays.asList(
-                getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
-        ));
+  public ProductGroup getProductGroup(ArrayList<ProductGroup> productGroups, int id) {
+    for (ProductGroup productGroup : productGroups) {
+      if (productGroup.getId() == id) {
+        return productGroup;
+      }
     }
+    return null;
+  }
 
-    public boolean getIsDemoInstance() {
-        String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-        return server != null && server.contains("grocy.info");
+  public QuantityUnit getQuantityUnit(ArrayList<QuantityUnit> quantityUnits, int id) {
+    for (QuantityUnit quantityUnit : quantityUnits) {
+      if (quantityUnit.getId() == id) {
+        return quantityUnit;
+      }
     }
+    return null;
+  }
 
-    public Location getLocation(ArrayList<Location> locations, int id) {
-        for(Location location : locations) {
-            if(location.getId() == id) {
-                return location;
-            }
-        } return null;
-    }
+  public DownloadHelper getDownloadHelper() {
+    return dlHelper;
+  }
 
-    public ProductGroup getProductGroup(ArrayList<ProductGroup> productGroups, int id) {
-        for(ProductGroup productGroup : productGroups) {
-            if(productGroup.getId() == id) {
-                return productGroup;
-            }
-        } return null;
-    }
+  public GrocyApi getGrocyApi() {
+    return grocyApi;
+  }
 
-    public QuantityUnit getQuantityUnit(ArrayList<QuantityUnit> quantityUnits, int id) {
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) {
-                return quantityUnit;
-            }
-        } return null;
+  public boolean isFeatureEnabled(String pref) {
+    if (pref == null) {
+      return true;
     }
+    return sharedPrefs.getBoolean(pref, true);
+  }
 
-    public DownloadHelper getDownloadHelper() {
-        return dlHelper;
-    }
-
-    public GrocyApi getGrocyApi() {
-        return grocyApi;
-    }
-
-    public boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
-    }
-
-    @Override
-    protected void onCleared() {
-        dlHelper.destroy();
-        super.onCleared();
-    }
+  @Override
+  protected void onCleared() {
+    dlHelper.destroy();
+    super.onCleared();
+  }
 }

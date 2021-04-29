@@ -25,32 +25,31 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 
 @Dao
 public interface QuantityUnitConversionDao {
-    @Query("SELECT * FROM quantity_unit_conversion_table")
-    LiveData<List<QuantityUnitConversion>> getAllLive();
 
-    @Query("SELECT * FROM quantity_unit_conversion_table")
-    List<QuantityUnitConversion> getAll();
+  @Query("SELECT * FROM quantity_unit_conversion_table")
+  LiveData<List<QuantityUnitConversion>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM quantity_unit_conversion_table")
-    int count();
+  @Query("SELECT * FROM quantity_unit_conversion_table")
+  List<QuantityUnitConversion> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<QuantityUnitConversion> quantityUnitConversions);
+  @Query("SELECT COUNT(*) FROM quantity_unit_conversion_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(QuantityUnitConversion quantityUnitConversion);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<QuantityUnitConversion> quantityUnitConversions);
 
-    @Delete
-    void delete(QuantityUnitConversion quantityUnitConversion);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(QuantityUnitConversion quantityUnitConversion);
 
-    @Query("DELETE FROM quantity_unit_conversion_table")
-    void deleteAll();
+  @Delete
+  void delete(QuantityUnitConversion quantityUnitConversion);
+
+  @Query("DELETE FROM quantity_unit_conversion_table")
+  void deleteAll();
 
 }

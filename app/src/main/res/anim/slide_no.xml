@@ -17,9 +17,9 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
-<translate
-    android:duration="@integer/default_anim_duration"/>
+  <translate android:duration="@integer/default_anim_duration" />
 
 </set>

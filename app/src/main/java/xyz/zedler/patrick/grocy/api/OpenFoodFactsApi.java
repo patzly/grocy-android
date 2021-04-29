@@ -24,24 +24,24 @@ import xyz.zedler.patrick.grocy.R;
 
 public class OpenFoodFactsApi {
 
-    private final static String TAG = OpenFoodFactsApi.class.getSimpleName();
+  private final static String TAG = OpenFoodFactsApi.class.getSimpleName();
 
-    public static String getUserAgent(Context context) {
-        return "Grocy Android - v"
-                + context.getString(R.string.versionName) + " - "
-                + context.getString(R.string.url_github);
-    }
+  public static String getUserAgent(Context context) {
+    return "Grocy Android - v"
+        + context.getString(R.string.versionName) + " - "
+        + context.getString(R.string.url_github);
+  }
 
-    private static String getUrl(String command) {
-        return "https://world.openfoodfacts.org/api/v0/" + command;
-    }
+  private static String getUrl(String command) {
+    return "https://world.openfoodfacts.org/api/v0/" + command;
+  }
 
-    // PRODUCT
+  // PRODUCT
 
-    /**
-     * Returns a product json
-     */
-    public static String getProduct(String barcode) {
-        return getUrl("product/" + barcode + ".json");
-    }
+  /**
+   * Returns a product json
+   */
+  public static String getProduct(String barcode) {
+    return getUrl("product/" + barcode + ".json");
+  }
 }

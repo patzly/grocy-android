@@ -20,9 +20,7 @@
 package xyz.zedler.patrick.grocy.web;
 
 import android.util.Base64;
-
 import androidx.annotation.Nullable;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -30,96 +28,106 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
 
-    private final Runnable onRequestFinished;
-    private final String url;
-    private final String apiKey;
-    private final String homeAssistantIngressSessionKey;
+  private final Runnable onRequestFinished;
+  private final String url;
+  private final String apiKey;
+  private final String homeAssistantIngressSessionKey;
 
-    public CustomJsonArrayRequest(
-            int method,
-            String url,
-            String apiKey,
-            String homeAssistantIngressSessionKey,
-            @Nullable JSONObject jsonRequest,
-            Response.Listener<JSONArray> listener,
-            @Nullable Response.ErrorListener errorListener,
-            @Nullable Runnable onRequestFinished,
-            int timeoutSeconds,
-            String tag
-    ) {
-        super(method, url, jsonRequest.toString(), response -> {
-            if(onRequestFinished != null) onRequestFinished.run();
-            listener.onResponse(response);
-        }, error -> {
-            if(onRequestFinished != null) onRequestFinished.run();
-            if(errorListener != null) errorListener.onErrorResponse(error);
-        });
-        this.onRequestFinished = onRequestFinished;
-        this.url = url;
-        this.apiKey = apiKey;
-        this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
-        if(tag != null) setTag(tag);
-        setShouldCache(false);
-        RetryPolicy policy = new DefaultRetryPolicy(
-                timeoutSeconds * 1000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        );
-        setRetryPolicy(policy);
+  public CustomJsonArrayRequest(
+      int method,
+      String url,
+      String apiKey,
+      String homeAssistantIngressSessionKey,
+      @Nullable JSONObject jsonRequest,
+      Response.Listener<JSONArray> listener,
+      @Nullable Response.ErrorListener errorListener,
+      @Nullable Runnable onRequestFinished,
+      int timeoutSeconds,
+      String tag
+  ) {
+    super(method, url, jsonRequest.toString(), response -> {
+      if (onRequestFinished != null) {
+        onRequestFinished.run();
+      }
+      listener.onResponse(response);
+    }, error -> {
+      if (onRequestFinished != null) {
+        onRequestFinished.run();
+      }
+      if (errorListener != null) {
+        errorListener.onErrorResponse(error);
+      }
+    });
+    this.onRequestFinished = onRequestFinished;
+    this.url = url;
+    this.apiKey = apiKey;
+    this.homeAssistantIngressSessionKey = homeAssistantIngressSessionKey;
+    if (tag != null) {
+      setTag(tag);
     }
+    setShouldCache(false);
+    RetryPolicy policy = new DefaultRetryPolicy(
+        timeoutSeconds * 1000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    );
+    setRetryPolicy(policy);
+  }
 
-    @Override
-    protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
-        try {
-            String jsonString = new String(
-                    response.data,
-                    HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET)
-            );
-            JSONArray result = null;
-            if(jsonString.length() > 0) {
-                result = new JSONArray(jsonString);
-            }
-            return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
-        } catch (UnsupportedEncodingException | JSONException e) {
-            return Response.error(new ParseError(e));
-        }
+  @Override
+  protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+    try {
+      String jsonString = new String(
+          response.data,
+          HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET)
+      );
+      JSONArray result = null;
+      if (jsonString.length() > 0) {
+        result = new JSONArray(jsonString);
+      }
+      return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
+    } catch (UnsupportedEncodingException | JSONException e) {
+      return Response.error(new ParseError(e));
     }
+  }
 
-    @Override
-    public void cancel() {
-        super.cancel();
-        if(onRequestFinished != null) onRequestFinished.run();
+  @Override
+  public void cancel() {
+    super.cancel();
+    if (onRequestFinished != null) {
+      onRequestFinished.run();
     }
+  }
 
-    @Override
-    public Map<String, String> getHeaders() {
-        Map<String, String> params = new HashMap<>();
-        Matcher matcher = Pattern.compile("(http|https)://(\\S+):(\\S+)@(\\S+)").matcher(url);
-        if(matcher.matches()) {
-            String user = matcher.group(2);
-            String password = matcher.group(3);
-            byte[] combination = (user + ":" + password).getBytes();
-            String encoded = Base64.encodeToString(combination, Base64.DEFAULT);
-            params.put( "Authorization", "Basic " + encoded);
-        }
-        if(apiKey != null && !apiKey.isEmpty()) params.put("GROCY-API-KEY", apiKey);
-        if(homeAssistantIngressSessionKey != null) {
-            params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
-        }
-        return params.isEmpty() ? Collections.emptyMap() : params;
+  @Override
+  public Map<String, String> getHeaders() {
+    Map<String, String> params = new HashMap<>();
+    Matcher matcher = Pattern.compile("(http|https)://(\\S+):(\\S+)@(\\S+)").matcher(url);
+    if (matcher.matches()) {
+      String user = matcher.group(2);
+      String password = matcher.group(3);
+      byte[] combination = (user + ":" + password).getBytes();
+      String encoded = Base64.encodeToString(combination, Base64.DEFAULT);
+      params.put("Authorization", "Basic " + encoded);
     }
+    if (apiKey != null && !apiKey.isEmpty()) {
+      params.put("GROCY-API-KEY", apiKey);
+    }
+    if (homeAssistantIngressSessionKey != null) {
+      params.put("Cookie", "ingress_session=" + homeAssistantIngressSessionKey);
+    }
+    return params.isEmpty() ? Collections.emptyMap() : params;
+  }
 }

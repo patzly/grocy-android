@@ -28,16 +28,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentConsumeBinding;
@@ -58,375 +55,405 @@ import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
 
-public class ConsumeFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener {
+public class ConsumeFragment extends BaseFragment implements
+    ScanInputCaptureManager.BarcodeListener {
 
-    private final static String TAG = ConsumeFragment.class.getSimpleName();
+  private final static String TAG = ConsumeFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private ConsumeFragmentArgs args;
-    private FragmentConsumeBinding binding;
-    private ConsumeViewModel viewModel;
-    private InfoFullscreenHelper infoFullscreenHelper;
-    private ScanInputCaptureManager capture;
+  private MainActivity activity;
+  private ConsumeFragmentArgs args;
+  private FragmentConsumeBinding binding;
+  private ConsumeViewModel viewModel;
+  private InfoFullscreenHelper infoFullscreenHelper;
+  private ScanInputCaptureManager capture;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentConsumeBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentConsumeBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if (infoFullscreenHelper != null) {
+      infoFullscreenHelper.destroyInstance();
+      infoFullscreenHelper = null;
     }
+    binding.barcodeScan.setTorchOff();
+    lockOrUnlockRotation(false);
+    binding = null;
+  }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(infoFullscreenHelper != null) {
-            infoFullscreenHelper.destroyInstance();
-            infoFullscreenHelper = null;
+  @Override
+  public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+
+    args = ConsumeFragmentArgs.fromBundle(requireArguments());
+
+    viewModel = new ViewModelProvider(this, new ConsumeViewModel
+        .ConsumeViewModelFactory(activity.getApplication(), args)
+    ).get(ConsumeViewModel.class);
+    binding.setActivity(activity);
+    binding.setViewModel(viewModel);
+    binding.setFragment(this);
+    binding.setFormData(viewModel.getFormData());
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
+
+    viewModel.getInfoFullscreenLive().observe(
+        getViewLifecycleOwner(),
+        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+    );
+    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
+        binding.swipe.setRefreshing(isDownloading)
+    );
+    viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+            activity,
+            activity.binding.frameMainContainer
+        ));
+      } else if (event.getType() == Event.CONSUME_SUCCESS) {
+        assert getArguments() != null;
+        if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+          activity.navigateUp();
+        } else {
+          viewModel.getFormData().clearForm();
+          focusProductInputIfNecessary();
+          if (viewModel.getFormData().isScannerVisible()) {
+            capture.onResume();
+            capture.decode();
+          }
         }
-        binding.barcodeScan.setTorchOff();
-        lockOrUnlockRotation(false);
-        binding = null;
-    }
-
-    @Override
-    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-
-        args = ConsumeFragmentArgs.fromBundle(requireArguments());
-
-        viewModel = new ViewModelProvider(this, new ConsumeViewModel
-                .ConsumeViewModelFactory(activity.getApplication(), args)
-        ).get(ConsumeViewModel.class);
-        binding.setActivity(activity);
-        binding.setViewModel(viewModel);
-        binding.setFragment(this);
-        binding.setFormData(viewModel.getFormData());
-        binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
-
-        viewModel.getInfoFullscreenLive().observe(
-                getViewLifecycleOwner(),
-                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-        );
-        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-                binding.swipe.setRefreshing(isDownloading)
-        );
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity,
-                        activity.binding.frameMainContainer
-                ));
-            } else if(event.getType() == Event.CONSUME_SUCCESS) {
-                assert getArguments() != null;
-                if(PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
-                    activity.navigateUp();
-                } else {
-                    viewModel.getFormData().clearForm();
-                    focusProductInputIfNecessary();
-                    if(viewModel.getFormData().isScannerVisible()) {
-                        capture.onResume();
-                        capture.decode();
-                    }
-                }
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            } else if(event.getType() == Event.FOCUS_INVALID_VIEWS) {
-                focusNextInvalidView();
-            } else if(event.getType() == Event.QUICK_MODE_ENABLED) {
-                focusProductInputIfNecessary();
-            } else if(event.getType() == Event.QUICK_MODE_DISABLED) {
-                clearInputFocus();
-            }
-        });
-
-        if(getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID) != null) {
-            int productId = (int) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
-            removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-            viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
-        } else if(NumUtil.isStringInt(args.getProductId())) {
-            int productId = Integer.parseInt(args.getProductId());
-            setArguments(new ConsumeFragmentArgs.Builder(args)
-                    .setProductId(null).build().toBundle());
-            viewModel.setProduct(productId, null);
-        }
-
-        viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
-            if(visible) {
-                capture.onResume();
-                capture.decode();
-            } else {
-                capture.onPause();
-            }
-            lockOrUnlockRotation(visible);
-        });
-        // following line is necessary because no observers are set in Views
-        viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {});
-
-        viewModel.getFormData().getProductDetailsLive().observe(
-                getViewLifecycleOwner(),
-                productDetails -> {
-                    MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_open);
-                    if(productDetails != null && productDetails.getProduct()
-                            .getEnableTareWeightHandlingBoolean() || menuItem == null) return;
-                    menuItem.setVisible(productDetails != null);
-                }
-        );
-
-        //hideDisabledFeatures();
-
-        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
-
-        binding.barcodeScan.setTorchOff();
-        binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
-            @Override public void onTorchOn() {
-                viewModel.getFormData().setTorchOn(true);
-            }
-            @Override public void onTorchOff() {
-                viewModel.getFormData().setTorchOn(false);
-            }
-        });
-        CameraSettings cameraSettings = new CameraSettings();
-        cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
-        binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
-        capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
-
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      } else if (event.getType() == Event.FOCUS_INVALID_VIEWS) {
+        focusNextInvalidView();
+      } else if (event.getType() == Event.QUICK_MODE_ENABLED) {
         focusProductInputIfNecessary();
-
-        updateUI(args.getAnimateStart() && savedInstanceState == null);
-    }
-
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.END,
-                R.menu.menu_consume,
-                this::onMenuItemClick
-        );
-        activity.updateFab(
-                R.drawable.ic_round_consume_product,
-                R.string.action_consume,
-                Constants.FAB.TAG.CONSUME,
-                animated,
-                () -> {
-                    if(viewModel.isQuickModeEnabled()) {
-                        focusNextInvalidView();
-                    } else if(!viewModel.getFormData().isProductNameValid()) {
-                        clearFocusAndCheckProductInput();
-                    } else {
-                        viewModel.consumeProduct(false);
-                    }
-                }
-        );
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(viewModel.getFormData().isScannerVisible()) capture.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        if(viewModel.getFormData().isScannerVisible()) capture.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(viewModel.getFormData().isScannerVisible()) {
-            return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-        } return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onDestroy() {
-        if(capture != null) capture.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBarcodeResult(BarcodeResult result) {
-        if(result.getText().isEmpty()) {
-            resumeScan();
-            return;
-        }
-        if(!viewModel.isQuickModeEnabled()) viewModel.getFormData().toggleScannerVisibility();
-        viewModel.onBarcodeRecognized(result.getText());
-    }
-
-    public void toggleTorch() {
-        if(viewModel.getFormData().isTorchOn()) {
-            binding.barcodeScan.setTorchOff();
-        } else {
-            binding.barcodeScan.setTorchOn();
-        }
-    }
-
-    @Override
-    public int getSelectedQuantityUnitId() {
-        QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
-        if(selectedId == null) return -1;
-        return selectedId.getId();
-    }
-
-    @Override
-    public void selectQuantityUnit(QuantityUnit quantityUnit) {
-        viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
-    }
-
-    @Override
-    public void selectStockLocation(StockLocation stockLocation) {
-        MutableLiveData<StockLocation> stockLocationLive = viewModel.getFormData()
-                .getStockLocationLive();
-        boolean locationHasChanged = stockLocation != stockLocationLive.getValue();
-        stockLocationLive.setValue(stockLocation);
-        if(!locationHasChanged) return;
-        viewModel.getFormData().getUseSpecificLive().setValue(false);
-        viewModel.getFormData().getSpecificStockEntryLive().setValue(null);
-        viewModel.getFormData().isAmountValid();
-    }
-
-    @Override
-    public void selectStockEntry(StockEntry stockEntry) {
-        viewModel.getFormData().getSpecificStockEntryLive().setValue(stockEntry);
-        viewModel.getFormData().isAmountValid();
-    }
-
-    @Override
-    public void addBarcodeToExistingProduct(String barcode) {
-        viewModel.addBarcodeToExistingProduct(barcode);
-        binding.autoCompleteConsumeProduct.requestFocus();
-        activity.showKeyboard(binding.autoCompleteConsumeProduct);
-    }
-
-    @Override
-    public void addBarcodeToNewProduct(String barcode) {
-        viewModel.addBarcodeToExistingProduct(barcode);
-    }
-
-    public void toggleScannerVisibility() {
-        viewModel.getFormData().toggleScannerVisibility();
-        if(viewModel.getFormData().isScannerVisible()) clearInputFocus();
-    }
-
-    public void clearInputFocus() {
-        activity.hideKeyboard();
-        binding.autoCompleteConsumeProduct.clearFocus();
-        binding.quantityUnitContainer.clearFocus();
-        binding.textInputShoppingListItemEditAmount.clearFocus();
-    }
-
-    public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
-        Product product = (Product) adapterView.getItemAtPosition(pos);
+      } else if (event.getType() == Event.QUICK_MODE_DISABLED) {
         clearInputFocus();
-        if(product == null) return;
-        viewModel.setProduct(product.getId(), null);
+      }
+    });
+
+    if (getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID) != null) {
+      int productId = (int) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
+      removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
+    } else if (NumUtil.isStringInt(args.getProductId())) {
+      int productId = Integer.parseInt(args.getProductId());
+      setArguments(new ConsumeFragmentArgs.Builder(args)
+          .setProductId(null).build().toBundle());
+      viewModel.setProduct(productId, null);
     }
 
-    public void clearFocusAndCheckProductInput() {
-        clearInputFocus();
-        viewModel.checkProductInput();
-    }
+    viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
+      if (visible) {
+        capture.onResume();
+        capture.decode();
+      } else {
+        capture.onPause();
+      }
+      lockOrUnlockRotation(visible);
+    });
+    // following line is necessary because no observers are set in Views
+    viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
+    });
 
-    public void focusProductInputIfNecessary() {
-        if(!viewModel.isQuickModeEnabled() || viewModel.getFormData().isScannerVisible()) return;
-        ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
-        String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
-        if(productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
-            binding.autoCompleteConsumeProduct.requestFocus();
-            if(viewModel.getFormData().getExternalScannerEnabled()) {
-                activity.hideKeyboard();
-            } else {
-                activity.showKeyboard(binding.autoCompleteConsumeProduct);
+    viewModel.getFormData().getProductDetailsLive().observe(
+        getViewLifecycleOwner(),
+        productDetails -> {
+          MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_open);
+            if (productDetails != null && productDetails.getProduct()
+                .getEnableTareWeightHandlingBoolean() || menuItem == null) {
+                return;
             }
+          menuItem.setVisible(productDetails != null);
         }
-    }
+    );
 
-    public void focusNextInvalidView() {
-        EditText nextView = null;
-        if(!viewModel.getFormData().isProductNameValid()) {
-            nextView = binding.autoCompleteConsumeProduct;
-        } else if(!viewModel.getFormData().isAmountValid()) {
-            nextView = binding.editTextShoppingListItemEditAmount;
-        }
-        if(nextView == null) {
-            clearInputFocus();
-            viewModel.showConfirmationBottomSheet();
-            return;
-        }
-        nextView.requestFocus();
-        activity.showKeyboard(nextView);
-    }
+    //hideDisabledFeatures();
 
-    private void lockOrUnlockRotation(boolean scannerIsVisible) {
-        if(scannerIsVisible) {
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-        } else {
-            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-        }
-    }
+      if (savedInstanceState == null) {
+          viewModel.loadFromDatabase(true);
+      }
 
-    @Override
-    public void startTransaction() {
-        viewModel.consumeProduct(false);
-    }
+    binding.barcodeScan.setTorchOff();
+    binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
+      @Override
+      public void onTorchOn() {
+        viewModel.getFormData().setTorchOn(true);
+      }
 
-    @Override
-    public void onBottomSheetDismissed() {
-        if(!viewModel.isQuickModeEnabled()) {
-            clearInputFocus();
-        } else {
+      @Override
+      public void onTorchOff() {
+        viewModel.getFormData().setTorchOn(false);
+      }
+    });
+    CameraSettings cameraSettings = new CameraSettings();
+    cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
+    binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
+    capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
+
+    focusProductInputIfNecessary();
+
+    updateUI(args.getAnimateStart() && savedInstanceState == null);
+  }
+
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
+    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.END,
+        R.menu.menu_consume,
+        this::onMenuItemClick
+    );
+    activity.updateFab(
+        R.drawable.ic_round_consume_product,
+        R.string.action_consume,
+        Constants.FAB.TAG.CONSUME,
+        animated,
+        () -> {
+          if (viewModel.isQuickModeEnabled()) {
             focusNextInvalidView();
+          } else if (!viewModel.getFormData().isProductNameValid()) {
+            clearFocusAndCheckProductInput();
+          } else {
+            viewModel.consumeProduct(false);
+          }
         }
-    }
+    );
+  }
 
-    private void hideDisabledFeatures() {
+  @Override
+  public void onResume() {
+    super.onResume();
+      if (viewModel.getFormData().isScannerVisible()) {
+          capture.onResume();
+      }
+  }
+
+  @Override
+  public void onPause() {
+      if (viewModel.getFormData().isScannerVisible()) {
+          capture.onPause();
+      }
+    super.onPause();
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (viewModel.getFormData().isScannerVisible()) {
+      return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    }
+    return super.onKeyDown(keyCode, event);
+  }
+
+  @Override
+  public void onDestroy() {
+      if (capture != null) {
+          capture.onDestroy();
+      }
+    super.onDestroy();
+  }
+
+  @Override
+  public void onBarcodeResult(BarcodeResult result) {
+    if (result.getText().isEmpty()) {
+      resumeScan();
+      return;
+    }
+      if (!viewModel.isQuickModeEnabled()) {
+          viewModel.getFormData().toggleScannerVisibility();
+      }
+    viewModel.onBarcodeRecognized(result.getText());
+  }
+
+  public void toggleTorch() {
+    if (viewModel.getFormData().isTorchOn()) {
+      binding.barcodeScan.setTorchOff();
+    } else {
+      binding.barcodeScan.setTorchOn();
+    }
+  }
+
+  @Override
+  public int getSelectedQuantityUnitId() {
+    QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
+      if (selectedId == null) {
+          return -1;
+      }
+    return selectedId.getId();
+  }
+
+  @Override
+  public void selectQuantityUnit(QuantityUnit quantityUnit) {
+    viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
+  }
+
+  @Override
+  public void selectStockLocation(StockLocation stockLocation) {
+    MutableLiveData<StockLocation> stockLocationLive = viewModel.getFormData()
+        .getStockLocationLive();
+    boolean locationHasChanged = stockLocation != stockLocationLive.getValue();
+    stockLocationLive.setValue(stockLocation);
+      if (!locationHasChanged) {
+          return;
+      }
+    viewModel.getFormData().getUseSpecificLive().setValue(false);
+    viewModel.getFormData().getSpecificStockEntryLive().setValue(null);
+    viewModel.getFormData().isAmountValid();
+  }
+
+  @Override
+  public void selectStockEntry(StockEntry stockEntry) {
+    viewModel.getFormData().getSpecificStockEntryLive().setValue(stockEntry);
+    viewModel.getFormData().isAmountValid();
+  }
+
+  @Override
+  public void addBarcodeToExistingProduct(String barcode) {
+    viewModel.addBarcodeToExistingProduct(barcode);
+    binding.autoCompleteConsumeProduct.requestFocus();
+    activity.showKeyboard(binding.autoCompleteConsumeProduct);
+  }
+
+  @Override
+  public void addBarcodeToNewProduct(String barcode) {
+    viewModel.addBarcodeToExistingProduct(barcode);
+  }
+
+  public void toggleScannerVisibility() {
+    viewModel.getFormData().toggleScannerVisibility();
+      if (viewModel.getFormData().isScannerVisible()) {
+          clearInputFocus();
+      }
+  }
+
+  public void clearInputFocus() {
+    activity.hideKeyboard();
+    binding.autoCompleteConsumeProduct.clearFocus();
+    binding.quantityUnitContainer.clearFocus();
+    binding.textInputShoppingListItemEditAmount.clearFocus();
+  }
+
+  public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
+    Product product = (Product) adapterView.getItemAtPosition(pos);
+    clearInputFocus();
+      if (product == null) {
+          return;
+      }
+    viewModel.setProduct(product.getId(), null);
+  }
+
+  public void clearFocusAndCheckProductInput() {
+    clearInputFocus();
+    viewModel.checkProductInput();
+  }
+
+  public void focusProductInputIfNecessary() {
+      if (!viewModel.isQuickModeEnabled() || viewModel.getFormData().isScannerVisible()) {
+          return;
+      }
+    ProductDetails productDetails = viewModel.getFormData().getProductDetailsLive().getValue();
+    String productNameInput = viewModel.getFormData().getProductNameLive().getValue();
+    if (productDetails == null && (productNameInput == null || productNameInput.isEmpty())) {
+      binding.autoCompleteConsumeProduct.requestFocus();
+      if (viewModel.getFormData().getExternalScannerEnabled()) {
+        activity.hideKeyboard();
+      } else {
+        activity.showKeyboard(binding.autoCompleteConsumeProduct);
+      }
+    }
+  }
+
+  public void focusNextInvalidView() {
+    EditText nextView = null;
+    if (!viewModel.getFormData().isProductNameValid()) {
+      nextView = binding.autoCompleteConsumeProduct;
+    } else if (!viewModel.getFormData().isAmountValid()) {
+      nextView = binding.editTextShoppingListItemEditAmount;
+    }
+    if (nextView == null) {
+      clearInputFocus();
+      viewModel.showConfirmationBottomSheet();
+      return;
+    }
+    nextView.requestFocus();
+    activity.showKeyboard(nextView);
+  }
+
+  private void lockOrUnlockRotation(boolean scannerIsVisible) {
+    if (scannerIsVisible) {
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+    } else {
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
+    }
+  }
+
+  @Override
+  public void startTransaction() {
+    viewModel.consumeProduct(false);
+  }
+
+  @Override
+  public void onBottomSheetDismissed() {
+    if (!viewModel.isQuickModeEnabled()) {
+      clearInputFocus();
+    } else {
+      focusNextInvalidView();
+    }
+  }
+
+  private void hideDisabledFeatures() {
         /*if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
             binding.linearPurchaseLocation.setVisibility(View.GONE);
         }*/
-    }
+  }
 
-    private boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.action_product_overview) {
-            IconUtil.start(item);
-            if(!viewModel.getFormData().isProductNameValid()) return false;
-            activity.showBottomSheet(
-                    new ProductOverviewBottomSheet(),
-                    new ProductOverviewBottomSheetArgs.Builder().setProductDetails(
-                            viewModel.getFormData().getProductDetailsLive().getValue()
-                    ).build().toBundle()
-            );
-            return true;
-        } else if(item.getItemId() == R.id.action_clear_form) {
-            IconUtil.start(item);
-            clearInputFocus();
-            viewModel.getFormData().clearForm();
-            if(viewModel.getFormData().isScannerVisible()) {
-                capture.onResume();
-                capture.decode();
-            }
-            return true;
-        } else if(item.getItemId() == R.id.action_open) {
-            if(viewModel.isQuickModeEnabled()) {
-                focusNextInvalidView();
-            } else {
-                viewModel.consumeProduct(true);
-            }
-            return true;
+  private boolean onMenuItemClick(MenuItem item) {
+    if (item.getItemId() == R.id.action_product_overview) {
+      IconUtil.start(item);
+        if (!viewModel.getFormData().isProductNameValid()) {
+            return false;
         }
-        return false;
+      activity.showBottomSheet(
+          new ProductOverviewBottomSheet(),
+          new ProductOverviewBottomSheetArgs.Builder().setProductDetails(
+              viewModel.getFormData().getProductDetailsLive().getValue()
+          ).build().toBundle()
+      );
+      return true;
+    } else if (item.getItemId() == R.id.action_clear_form) {
+      IconUtil.start(item);
+      clearInputFocus();
+      viewModel.getFormData().clearForm();
+      if (viewModel.getFormData().isScannerVisible()) {
+        capture.onResume();
+        capture.decode();
+      }
+      return true;
+    } else if (item.getItemId() == R.id.action_open) {
+      if (viewModel.isQuickModeEnabled()) {
+        focusNextInvalidView();
+      } else {
+        viewModel.consumeProduct(true);
+      }
+      return true;
     }
+    return false;
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

@@ -19,380 +19,380 @@
 
 <resources>
 
-    <!-- This is an action – in English, it contains a verb.
-     The string is visible after clicking long on the action button in purchase screen for example. -->
-    <string name="action_purchase">Köp</string>
-    <!-- This is an action – in English, it contains a verb.
-     The string is visible after clicking long on the action button in consume screen for example. -->
-    <string name="action_consume">Konsumera</string>
-    <!-- This is an action – in English, it contains a verb. -->
-    <string name="action_consume_all">Konsumera alla</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in purchase screen for example. -->
+  <string name="action_purchase">Köp</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in consume screen for example. -->
+  <string name="action_consume">Konsumera</string>
+  <!-- This is an action – in English, it contains a verb. -->
+  <string name="action_consume_all">Konsumera alla</string>
 
-    <string name="action_consume_one_spoiled">Konsumera 1 som skämd</string>
-    <!-- %1$s is a quantity unit and %2$s is a product name -->
-    <string name="action_consume_one">Konsumera 1 %1$s av %2$s</string>
-    <string name="action_open">Markera som öppnad</string>
-    <!-- %1$s is a quantity unit and %2$s is a product name -->
-    <string name="action_open_one">Öppna 1 %1$s av %2$s</string>
-    <string name="action_edit_product">Redigera produkt</string>
-    <string name="action_shopping_list_add">Lägg till i inköpslista</string>
+  <string name="action_consume_one_spoiled">Konsumera 1 som skämd</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_consume_one">Konsumera 1 %1$s av %2$s</string>
+  <string name="action_open">Markera som öppnad</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_open_one">Öppna 1 %1$s av %2$s</string>
+  <string name="action_edit_product">Redigera produkt</string>
+  <string name="action_shopping_list_add">Lägg till i inköpslista</string>
 
-    <string name="action_back">Tillbaka</string>
-    <string name="action_search">Sök</string>
-    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
-    <string name="action_next">Nästa</string>
-    <string name="action_new">Ny</string>
-    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
-    <string name="action_prev">Föregående</string>
-    <string name="action_feedback">Skicka feedback</string>
-    <string name="action_reset">Återställ</string>
-    <string name="action_reload">Uppdatera</string>
-    <string name="action_top_scroll">Scrolla till toppen</string>
-    <string name="action_send">Skicka</string>
-    <string name="action_close">Stäng</string>
-    <string name="action_scan">Skanna</string>
-    <string name="action_cancel">Avbryt</string>
-    <string name="action_add">Lägg till</string>
-    <string name="action_clear">Töm</string>
-    <string name="action_clear_shopping_list">Töm inköpslista</string>
-    <string name="action_rate">Betygsätt på Google Play</string>
-    <string name="action_rate_description">Stöd fortsatt utveckling</string>
-    <string name="action_email">Skicka e-post</string>
-    <string name="action_email_description">Kontakta utvecklarna</string>
-    <string name="action_new_issue">Öppna nytt ärende på GitHub</string>
-    <string name="action_new_issue_description">Rapportera buggar eller föreslå en förbättring</string>
-    <string name="action_get_started">Kom igång</string>
-    <string name="action_ascending">Stigande</string>
-    <string name="action_filter">Filtrera</string>
-    <string name="action_sort">Sortera</string>
-    <string name="action_undo">Ångra</string>
-    <string name="action_retry">Försök igen</string>
-    <string name="action_edit">Redigera</string>
-    <string name="action_delete">Radera</string>
-    <string name="action_save">Spara</string>
-    <string name="action_logout">Logga ut</string>
-    <string name="action_restart">Starta om</string>
-    <string name="action_create">Skapa</string>
-    <string name="action_link">Länk</string>
-    <string name="action_open_scanner">Öppna skanner</string>
-    <string name="action_discard">Förkasta</string>
-    <string name="action_toggle_done">Växla klar</string>
-    <string name="action_edit_notes">Redigera anteckningar</string>
-    <string name="action_add_missing">Lägg till saknade produkter</string>
-    <string name="action_purchase_all_items">Köp alla varor</string>
-    <string name="action_skip_entry">Hoppa över objekt</string>
-    <string name="action_delete_shopping_list">Radera shoppinglista</string>
-    <string name="action_create_key">Skapa nyckel</string>
-    <string name="action_login">Logga in</string>
-    <string name="action_ignore">Ignorera</string>
-    <!-- This string should follow the equality between "all" and "Clear all items" -->
-    <string name="action_clear_all">Alla</string>
-    <!-- This string should follow the equality between "done" and "Clear done items" -->
-    <string name="action_clear_done">Klar</string>
+  <string name="action_back">Tillbaka</string>
+  <string name="action_search">Sök</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_next">Nästa</string>
+  <string name="action_new">Ny</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_prev">Föregående</string>
+  <string name="action_feedback">Skicka feedback</string>
+  <string name="action_reset">Återställ</string>
+  <string name="action_reload">Uppdatera</string>
+  <string name="action_top_scroll">Scrolla till toppen</string>
+  <string name="action_send">Skicka</string>
+  <string name="action_close">Stäng</string>
+  <string name="action_scan">Skanna</string>
+  <string name="action_cancel">Avbryt</string>
+  <string name="action_add">Lägg till</string>
+  <string name="action_clear">Töm</string>
+  <string name="action_clear_shopping_list">Töm inköpslista</string>
+  <string name="action_rate">Betygsätt på Google Play</string>
+  <string name="action_rate_description">Stöd fortsatt utveckling</string>
+  <string name="action_email">Skicka e-post</string>
+  <string name="action_email_description">Kontakta utvecklarna</string>
+  <string name="action_new_issue">Öppna nytt ärende på GitHub</string>
+  <string name="action_new_issue_description">Rapportera buggar eller föreslå en förbättring</string>
+  <string name="action_get_started">Kom igång</string>
+  <string name="action_ascending">Stigande</string>
+  <string name="action_filter">Filtrera</string>
+  <string name="action_sort">Sortera</string>
+  <string name="action_undo">Ångra</string>
+  <string name="action_retry">Försök igen</string>
+  <string name="action_edit">Redigera</string>
+  <string name="action_delete">Radera</string>
+  <string name="action_save">Spara</string>
+  <string name="action_logout">Logga ut</string>
+  <string name="action_restart">Starta om</string>
+  <string name="action_create">Skapa</string>
+  <string name="action_link">Länk</string>
+  <string name="action_open_scanner">Öppna skanner</string>
+  <string name="action_discard">Förkasta</string>
+  <string name="action_toggle_done">Växla klar</string>
+  <string name="action_edit_notes">Redigera anteckningar</string>
+  <string name="action_add_missing">Lägg till saknade produkter</string>
+  <string name="action_purchase_all_items">Köp alla varor</string>
+  <string name="action_skip_entry">Hoppa över objekt</string>
+  <string name="action_delete_shopping_list">Radera shoppinglista</string>
+  <string name="action_create_key">Skapa nyckel</string>
+  <string name="action_login">Logga in</string>
+  <string name="action_ignore">Ignorera</string>
+  <!-- This string should follow the equality between "all" and "Clear all items" -->
+  <string name="action_clear_all">Alla</string>
+  <!-- This string should follow the equality between "done" and "Clear done items" -->
+  <string name="action_clear_done">Klar</string>
 
-    <!-- %1$s is the number of products which expire soon -->
-    <string name="msg_due_products">%1$d går snart ut</string>
-    <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$d utgångna</string>
-    <!-- %1$s is the number of products which are below min. stock amount -->
-    <string name="msg_missing_products">%1$d under förinställt lagerbelopp</string>
-    <string name="msg_consumed">Konsumerade %1$s %2$s av %3$s</string>
-    <string name="msg_consumed_spoiled">Konsumerade %1$s %2$s av %3$s som skämd</string>
-    <string name="msg_opened">Markerade %1$s %2$s av %3$s som öppnad</string>
-    <!-- %1$s is the number of undone items in shopping list -->
-    <string name="msg_undone_items">%1$d ångrade</string>
-    <!-- %1$s is a product name -->
-    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-    <string name="msg_purchased">Köpte %1$s %2$s av %3$s</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_not_in_stock">%1$s finns inte i lager</string>
-    <string name="msg_no_connection">Ingen anslutning</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_no_stock_locations">Inga lagerplatser för %1$s</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_no_stock_entries">Inga lagerobjekt för %1$s</string>
-    <string name="msg_not_found">Produkten hittades inte</string>
-    <string name="msg_undone_transaction">Ångrade transaktion</string>
-    <string name="msg_failed_to_sync">Misslyckades att synkronisera objekt</string>
-    <string name="msg_synced">Synkronisering av objekt lyckades</string>
-    <!-- %1$s is a shopping list name -->
-    <string name="msg_added_missing_products">Lade till saknade produkter till %1$s</string>
-    <!-- %1$s is a shopping list name -->
-    <string name="msg_shopping_list_cleared">%1$s rensades</string>
-    <!-- %1$s is a shopping list name -->
-    <string name="msg_shopping_list_deleted">%1$s raderades</string>
-    <string name="msg_barcode_duplicate">Streckkod finns redan</string>
-    <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
-    <string name="msg_master_delete">Radera %1$s \"%2$s\"?</string>
-    <!-- %1$s is a master data type like "location" or "product" -->
-    <string name="msg_master_delete_usage">Den här %1$s används fortfarande</string>
-    <string name="msg_item_marked_as_done">Markerade objekt som slutfört</string>
-    <string name="msg_item_marked_as_undone">Markerade objekt som ej slutfört</string>
-    <string name="msg_compatibility">Den här appversionen är inte kompatibel med den version av grocy som körs på servern.\n\nNuvarande serverversion: %1$s\n\nKrav:\nLägsta serverversion: %2$s\nHögsta serverversion: %3$s\n\nOm du ignorerar denna varning kan dataförlust (mindre troligt) och krascher (mer troligt) uppstå.\nDu har blivit varnad!</string>
-    <string name="msg_logout">Ingenting på din server kommer att ändras. Du kommer att omdirigeras till inloggningssidan.</string>
-    <string name="msg_logout_demo">Du använder demo-instansen av grocy från <u>https://grocy.info</u>.\n\n<b>Inga ändringar kommer att sparas!\nDe kommer att vara publika tills servern automatiskt skriver över dem.</b>\n\nDu kan ange en egen serveradress på inloggningssidan.</string>
-    <string name="msg_restart">Appen behöver startas om för att applicera den nuvarande konfigurationen från Grocy.</string>
-    <string name="msg_features">Starta om introduktionen i \"Om\"</string>
-    <string name="msg_feedback">Har du några önskemål, frågor eller problem? Kontakta oss och låt oss hjälpa till!\nAnnars skulle vi vara väldigt glada för en positiv recension i Play Store.</string>
-    <string name="msg_point_at_barcode">Rikta kameran mot steckkoden</string>
+  <!-- %1$s is the number of products which expire soon -->
+  <string name="msg_due_products">%1$d går snart ut</string>
+  <!-- %1$s is the number of products which are expired -->
+  <string name="msg_expired_products">%1$d utgångna</string>
+  <!-- %1$s is the number of products which are below min. stock amount -->
+  <string name="msg_missing_products">%1$d under förinställt lagerbelopp</string>
+  <string name="msg_consumed">Konsumerade %1$s %2$s av %3$s</string>
+  <string name="msg_consumed_spoiled">Konsumerade %1$s %2$s av %3$s som skämd</string>
+  <string name="msg_opened">Markerade %1$s %2$s av %3$s som öppnad</string>
+  <!-- %1$s is the number of undone items in shopping list -->
+  <string name="msg_undone_items">%1$d ångrade</string>
+  <!-- %1$s is a product name -->
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_purchased">Köpte %1$s %2$s av %3$s</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_not_in_stock">%1$s finns inte i lager</string>
+  <string name="msg_no_connection">Ingen anslutning</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_locations">Inga lagerplatser för %1$s</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_entries">Inga lagerobjekt för %1$s</string>
+  <string name="msg_not_found">Produkten hittades inte</string>
+  <string name="msg_undone_transaction">Ångrade transaktion</string>
+  <string name="msg_failed_to_sync">Misslyckades att synkronisera objekt</string>
+  <string name="msg_synced">Synkronisering av objekt lyckades</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_added_missing_products">Lade till saknade produkter till %1$s</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_cleared">%1$s rensades</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_deleted">%1$s raderades</string>
+  <string name="msg_barcode_duplicate">Streckkod finns redan</string>
+  <!-- %1$s is a master data type like "Product" or "Location"; %2$s is the name of it. -->
+  <string name="msg_master_delete">Radera %1$s \"%2$s\"?</string>
+  <!-- %1$s is a master data type like "location" or "product" -->
+  <string name="msg_master_delete_usage">Den här %1$s används fortfarande</string>
+  <string name="msg_item_marked_as_done">Markerade objekt som slutfört</string>
+  <string name="msg_item_marked_as_undone">Markerade objekt som ej slutfört</string>
+  <string name="msg_compatibility">Den här appversionen är inte kompatibel med den version av grocy som körs på servern.\n\nNuvarande serverversion: %1$s\n\nKrav:\nLägsta serverversion: %2$s\nHögsta serverversion: %3$s\n\nOm du ignorerar denna varning kan dataförlust (mindre troligt) och krascher (mer troligt) uppstå.\nDu har blivit varnad!</string>
+  <string name="msg_logout">Ingenting på din server kommer att ändras. Du kommer att omdirigeras till inloggningssidan.</string>
+  <string name="msg_logout_demo">Du använder demo-instansen av grocy från <u>https://grocy.info</u>.\n\n<b>Inga ändringar kommer att sparas!\nDe kommer att vara publika tills servern automatiskt skriver över dem.</b>\n\nDu kan ange en egen serveradress på inloggningssidan.</string>
+  <string name="msg_restart">Appen behöver startas om för att applicera den nuvarande konfigurationen från Grocy.</string>
+  <string name="msg_features">Starta om introduktionen i \"Om\"</string>
+  <string name="msg_feedback">Har du några önskemål, frågor eller problem? Kontakta oss och låt oss hjälpa till!\nAnnars skulle vi vara väldigt glada för en positiv recension i Play Store.</string>
+  <string name="msg_point_at_barcode">Rikta kameran mot steckkoden</string>
 
-    <string name="error_api_not_working">API-nyckel fungerar inte</string>
-    <string name="error_orbot_not_installed">Orbot är inte installerad</string>
-    <string name="error_select_product">Välj en produkt</string>
-    <string name="error_empty">Krävs</string>
-    <string name="error_empty_stock">Ingenting i lager</string>
-    <string name="error_empty_stock_sub">Gå och köp några produkter</string>
-    <string name="error_empty_shopping_list">Tom shoppinglista</string>
-    <string name="error_empty_shopping_list_sub">Lägg till några produkter du behöver</string>
-    <string name="error_empty_master_data_sub">Skapa några med knappen nedan</string>
-    <string name="error_empty_locations">Inga platser</string>
-    <string name="error_empty_product_groups">Inga produktgrupper</string>
-    <string name="error_empty_products">Inga produkter</string>
-    <string name="error_empty_qu">Inga mängdenheter</string>
-    <string name="error_empty_stores">Inga butiker</string>
-    <string name="error_search">Inga sökresultat</string>
-    <string name="error_search_sub">Försök med andra termer</string>
-    <string name="error_filter">Inget att visa</string>
-    <string name="error_filter_sub">Prova andra filter</string>
-    <string name="error_duplicate">Existerar redan</string>
-    <string name="error_parent">Kan inte vara förälder till sig själv</string>
-    <string name="error_invalid_product">Ogiltig produkt</string>
-    <string name="error_invalid_url">Ogiltig URL</string>
-    <string name="error_invalid_amount">Ogiltig mängd</string>
-    <string name="error_invalid_best_before_days">Använd -1 för varor som inte går ut</string>
-    <string name="error_invalid_factor">Ogiltig faktor</string>
-    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-    <string name="error_bounds_min_max">Mellan %1$s och %2$s</string>
-    <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_min">Större än eller lika med %1$s</string>
-    <string name="error_offline">Offline</string>
-    <string name="error_name_exists">Namn finns redan</string>
-    <string name="error_offline_subtitle">Kontrollera din anslutning och försök igen</string>
-    <string name="error_unknown">Uups!</string>
-    <string name="error_not_grocy_instance">Inte en giltig grocy-instans</string>
-    <string name="error_timeout">Timeout-fel</string>
-    <!-- %1$s is a server URL -->
-    <string name="error_failed_to_connect_to">Kunde inte ansluta till %1$s</string>
-    <string name="error_handshake">Certifikat saknas</string>
-    <!-- %1$s is an URL -->
-    <string name="error_handshake_description">%1$s kräver ett certifikat som inte är känt eller betrott av Android.\nServerns certifikat måste vara signerat av en betrodd certifikatutfärdare (CA)\nFör att uppfylla dessa krav kan du använda ett gratis certifikat från letsencrypt.org för att säkra anslutningen.</string>
-    <string name="error_unexpected_response_code">Oväntad svarskod: %1$d</string>
-    <string name="error_unexpected_response">Oväntat svar från servern</string>
-    <string name="error_no_browser">Installera en webbläsare för att visa hjälphemsidan</string>
-    <string name="error_undefined">Ett fel uppstod</string>
+  <string name="error_api_not_working">API-nyckel fungerar inte</string>
+  <string name="error_orbot_not_installed">Orbot är inte installerad</string>
+  <string name="error_select_product">Välj en produkt</string>
+  <string name="error_empty">Krävs</string>
+  <string name="error_empty_stock">Ingenting i lager</string>
+  <string name="error_empty_stock_sub">Gå och köp några produkter</string>
+  <string name="error_empty_shopping_list">Tom shoppinglista</string>
+  <string name="error_empty_shopping_list_sub">Lägg till några produkter du behöver</string>
+  <string name="error_empty_master_data_sub">Skapa några med knappen nedan</string>
+  <string name="error_empty_locations">Inga platser</string>
+  <string name="error_empty_product_groups">Inga produktgrupper</string>
+  <string name="error_empty_products">Inga produkter</string>
+  <string name="error_empty_qu">Inga mängdenheter</string>
+  <string name="error_empty_stores">Inga butiker</string>
+  <string name="error_search">Inga sökresultat</string>
+  <string name="error_search_sub">Försök med andra termer</string>
+  <string name="error_filter">Inget att visa</string>
+  <string name="error_filter_sub">Prova andra filter</string>
+  <string name="error_duplicate">Existerar redan</string>
+  <string name="error_parent">Kan inte vara förälder till sig själv</string>
+  <string name="error_invalid_product">Ogiltig produkt</string>
+  <string name="error_invalid_url">Ogiltig URL</string>
+  <string name="error_invalid_amount">Ogiltig mängd</string>
+  <string name="error_invalid_best_before_days">Använd -1 för varor som inte går ut</string>
+  <string name="error_invalid_factor">Ogiltig faktor</string>
+  <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+  <string name="error_bounds_min_max">Mellan %1$s och %2$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_min">Större än eller lika med %1$s</string>
+  <string name="error_offline">Offline</string>
+  <string name="error_name_exists">Namn finns redan</string>
+  <string name="error_offline_subtitle">Kontrollera din anslutning och försök igen</string>
+  <string name="error_unknown">Uups!</string>
+  <string name="error_not_grocy_instance">Inte en giltig grocy-instans</string>
+  <string name="error_timeout">Timeout-fel</string>
+  <!-- %1$s is a server URL -->
+  <string name="error_failed_to_connect_to">Kunde inte ansluta till %1$s</string>
+  <string name="error_handshake">Certifikat saknas</string>
+  <!-- %1$s is an URL -->
+  <string name="error_handshake_description">%1$s kräver ett certifikat som inte är känt eller betrott av Android.\nServerns certifikat måste vara signerat av en betrodd certifikatutfärdare (CA)\nFör att uppfylla dessa krav kan du använda ett gratis certifikat från letsencrypt.org för att säkra anslutningen.</string>
+  <string name="error_unexpected_response_code">Oväntad svarskod: %1$d</string>
+  <string name="error_unexpected_response">Oväntat svar från servern</string>
+  <string name="error_no_browser">Installera en webbläsare för att visa hjälphemsidan</string>
+  <string name="error_undefined">Ett fel uppstod</string>
 
-    <string name="title_stock_overview">Lageröversikt</string>
-    <string name="title_purchase">Köp</string>
-    <string name="title_consume">Konsumera</string>
-    <string name="title_product_overview">Produktöversikt</string>
-    <string name="title_product">Produkt</string>
-    <string name="title_master_data">Huvuddata</string>
-    <string name="title_stock_entries">Lagerobjekt</string>
-    <string name="title_shopping_list">Shoppinglista</string>
-    <string name="title_feedback">Feedback</string>
-    <string name="title_settings">Inställningar</string>
-    <string name="title_info">Information</string>
-    <string name="title_help">Hjälp</string>
-    <string name="title_logs">Loggar</string>
-    <string name="title_compatibility">Kompabilitetsproblem</string>
-    <string name="title_logout">Logga ut från Grocy?</string>
-    <string name="title_restart">Starta om Grocy?</string>
-    <string name="title_logout_demo">Logga ut från demo-läge?</string>
-    <string name="title_manage_master_data">Hantera huvuddata</string>
+  <string name="title_stock_overview">Lageröversikt</string>
+  <string name="title_purchase">Köp</string>
+  <string name="title_consume">Konsumera</string>
+  <string name="title_product_overview">Produktöversikt</string>
+  <string name="title_product">Produkt</string>
+  <string name="title_master_data">Huvuddata</string>
+  <string name="title_stock_entries">Lagerobjekt</string>
+  <string name="title_shopping_list">Shoppinglista</string>
+  <string name="title_feedback">Feedback</string>
+  <string name="title_settings">Inställningar</string>
+  <string name="title_info">Information</string>
+  <string name="title_help">Hjälp</string>
+  <string name="title_logs">Loggar</string>
+  <string name="title_compatibility">Kompabilitetsproblem</string>
+  <string name="title_logout">Logga ut från Grocy?</string>
+  <string name="title_restart">Starta om Grocy?</string>
+  <string name="title_logout_demo">Logga ut från demo-läge?</string>
+  <string name="title_manage_master_data">Hantera huvuddata</string>
 
-    <string name="title_spoiled">Skämd</string>
-    <string name="title_use_specific">Använd specifikt lagerobjekt</string>
-    <string name="title_stock_entry_no_specific">Inget specifikt objekt</string>
-    <string name="title_shopping_list_ungrouped">Ogrupperat</string>
-    <string name="title_list_entry">Listobjekt</string>
-    <string name="title_edit_list_entry">Redigera listobjekt</string>
-    <string name="title_create_list_entry">Skapa listobjekt</string>
-    <string name="title_shopping_list_edit">Redigera shoppinglista</string>
-    <string name="title_shopping_list_new">Ny shoppinglista</string>
-    <string name="title_shopping_mode">Shoppingläge</string>
-    <string name="title_batch_mode_shopping_list">Batch-läge för shoppinglista</string>
+  <string name="title_spoiled">Skämd</string>
+  <string name="title_use_specific">Använd specifikt lagerobjekt</string>
+  <string name="title_stock_entry_no_specific">Inget specifikt objekt</string>
+  <string name="title_shopping_list_ungrouped">Ogrupperat</string>
+  <string name="title_list_entry">Listobjekt</string>
+  <string name="title_edit_list_entry">Redigera listobjekt</string>
+  <string name="title_create_list_entry">Skapa listobjekt</string>
+  <string name="title_shopping_list_edit">Redigera shoppinglista</string>
+  <string name="title_shopping_list_new">Ny shoppinglista</string>
+  <string name="title_shopping_mode">Shoppingläge</string>
+  <string name="title_batch_mode_shopping_list">Batch-läge för shoppinglista</string>
 
-    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
-    <string name="subtitle_amount">%1$s %2$s</string>
-    <!-- %1$s is a number like 1, 2, 3 -->
-    <string name="subtitle_amount_opened">(%1$s öppnade)</string>
-    <!-- %1$s is a product name -->
-    <string name="subtitle_stock_locations">Där %1$s finns i lager</string>
-    <string name="subtitle_default_location">Standard</string>
-    <string name="subtitle_none_selected">Inget markerat</string>
-    <string name="subtitle_empty">Tom</string>
-    <string name="subtitle_done">Klar</string>
-    <string name="subtitle_undone">Ångrat</string>
-    <string name="subtitle_never_overdue">Går aldrig ut</string>
-    <string name="subtitle_selected">Valt</string>
-    <string name="subtitle_stock_entry_no_specific">Kortast datum först, sedan först in – först ut</string>
-    <!-- %1$s is a purchase date -->
-    <string name="subtitle_stock_entry_name">Köptes: %1$s</string>
-    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
-    <string name="subtitle_stock_entry">Bäst före: %1$s; antal: %2$s; %3$s</string>
-    <!-- %1$s and %2$s are numbers -->
-    <string name="subtitle_entry_num_of_num">Objekt %1$d av %2$d</string>
+  <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+  <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- %1$s is a number like 1, 2, 3 -->
+  <string name="subtitle_amount_opened">(%1$s öppnade)</string>
+  <!-- %1$s is a product name -->
+  <string name="subtitle_stock_locations">Där %1$s finns i lager</string>
+  <string name="subtitle_default_location">Standard</string>
+  <string name="subtitle_none_selected">Inget markerat</string>
+  <string name="subtitle_empty">Tom</string>
+  <string name="subtitle_done">Klar</string>
+  <string name="subtitle_undone">Ångrat</string>
+  <string name="subtitle_never_overdue">Går aldrig ut</string>
+  <string name="subtitle_selected">Valt</string>
+  <string name="subtitle_stock_entry_no_specific">Kortast datum först, sedan först in – först ut</string>
+  <!-- %1$s is a purchase date -->
+  <string name="subtitle_stock_entry_name">Köptes: %1$s</string>
+  <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened) -->
+  <string name="subtitle_stock_entry">Bäst före: %1$s; antal: %2$s; %3$s</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_entry_num_of_num">Objekt %1$d av %2$d</string>
 
-    <!-- %1$s is a product name -->
+  <!-- %1$s is a product name -->
 
-    <string name="property_name">Namn</string>
-    <string name="property_name_singular">Namn (singularform)</string>
-    <string name="property_name_plural">Namn (pluralform)</string>
-    <string name="property_product">Produkt</string>
-    <string name="property_products">Produkter</string>
-    <string name="property_product_name">Produktnamn</string>
-    <string name="property_parent_product">Förälderprodukt</string>
-    <string name="property_description">Beskrivning</string>
-    <string name="property_note">Anteckning</string>
-    <string name="property_status">Status</string>
-    <string name="property_amount">Antal</string>
-    <string name="property_seconds">Sekunder</string>
-    <!-- %1$d is a number (amount of seconds) -->
-    <string name="property_seconds_num">%1$d sekunder</string>
-    <string name="property_amount_min_stock">Minsta lagerbelopp</string>
-    <!-- &1$s is a quantity unit like "bottles" -->
-    <string name="property_amount_in">Mängd i %1$s</string>
-    <string name="property_price">Pris</string>
-    <!-- &1$s is a currency like "USD", or "EUR" -->
-    <string name="property_price_in">Pris i %1$s</string>
-    <string name="property_quantity_unit">Mängdenhet</string>
-    <string name="property_quantity_units">Mängdenheter</string>
-    <string name="property_default_qu_purchase">Mängdenhetsköp</string>
-    <string name="property_qu_stock">Mängdenhet lager</string>
-    <string name="property_qu_factor">Faktor mellan köp och lager</string>
-    <string name="property_barcode">Streckkod</string>
-    <string name="property_barcodes">Streckkoder</string>
-    <string name="property_due_date">Bäst före-datum</string>
-    <string name="property_due_date_next">Nästa bäst före-datum</string>
-    <string name="property_due_days_default">Standard-hållbarhet (dagar)</string>
-    <string name="property_due_days_default_opened">Standard-hållbarhet (dagar) efter öppning</string>
-    <string name="property_location">Plats</string>
-    <string name="property_location_default">Standardplats</string>
-    <string name="property_notes">Anteckningar</string>
-    <string name="property_locations">Platser</string>
-    <string name="property_store">Butik</string>
-    <string name="property_store_unknown">Okänd butik</string>
-    <string name="property_store_default">Standardbutik</string>
-    <string name="property_stores">Butiker</string>
-    <string name="property_shopping_list">Shoppinglista</string>
-    <string name="property_shopping_lists">Shoppinglistor</string>
-    <string name="property_last_purchased">Senast inköpt</string>
-    <string name="property_last_used">Senast använd</string>
-    <string name="property_last_price">Senaste pris</string>
-    <string name="property_average_shelf_life">Genomsnittlig hållbarhet</string>
-    <string name="property_spoil_rate">Andel skämd</string>
-    <string name="property_price_history">Prishistorik</string>
-    <string name="property_product_group">Produktgrupp</string>
-    <string name="property_product_groups">Produktgrupper</string>
-    <string name="property_opened">öppnad</string>
-    <string name="property_not_opened">inte öppnad</string>
-    <string name="property_is_freezer">Är frys</string>
+  <string name="property_name">Namn</string>
+  <string name="property_name_singular">Namn (singularform)</string>
+  <string name="property_name_plural">Namn (pluralform)</string>
+  <string name="property_product">Produkt</string>
+  <string name="property_products">Produkter</string>
+  <string name="property_product_name">Produktnamn</string>
+  <string name="property_parent_product">Förälderprodukt</string>
+  <string name="property_description">Beskrivning</string>
+  <string name="property_note">Anteckning</string>
+  <string name="property_status">Status</string>
+  <string name="property_amount">Antal</string>
+  <string name="property_seconds">Sekunder</string>
+  <!-- %1$d is a number (amount of seconds) -->
+  <string name="property_seconds_num">%1$d sekunder</string>
+  <string name="property_amount_min_stock">Minsta lagerbelopp</string>
+  <!-- &1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_in">Mängd i %1$s</string>
+  <string name="property_price">Pris</string>
+  <!-- &1$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_in">Pris i %1$s</string>
+  <string name="property_quantity_unit">Mängdenhet</string>
+  <string name="property_quantity_units">Mängdenheter</string>
+  <string name="property_default_qu_purchase">Mängdenhetsköp</string>
+  <string name="property_qu_stock">Mängdenhet lager</string>
+  <string name="property_qu_factor">Faktor mellan köp och lager</string>
+  <string name="property_barcode">Streckkod</string>
+  <string name="property_barcodes">Streckkoder</string>
+  <string name="property_due_date">Bäst före-datum</string>
+  <string name="property_due_date_next">Nästa bäst före-datum</string>
+  <string name="property_due_days_default">Standard-hållbarhet (dagar)</string>
+  <string name="property_due_days_default_opened">Standard-hållbarhet (dagar) efter öppning</string>
+  <string name="property_location">Plats</string>
+  <string name="property_location_default">Standardplats</string>
+  <string name="property_notes">Anteckningar</string>
+  <string name="property_locations">Platser</string>
+  <string name="property_store">Butik</string>
+  <string name="property_store_unknown">Okänd butik</string>
+  <string name="property_store_default">Standardbutik</string>
+  <string name="property_stores">Butiker</string>
+  <string name="property_shopping_list">Shoppinglista</string>
+  <string name="property_shopping_lists">Shoppinglistor</string>
+  <string name="property_last_purchased">Senast inköpt</string>
+  <string name="property_last_used">Senast använd</string>
+  <string name="property_last_price">Senaste pris</string>
+  <string name="property_average_shelf_life">Genomsnittlig hållbarhet</string>
+  <string name="property_spoil_rate">Andel skämd</string>
+  <string name="property_price_history">Prishistorik</string>
+  <string name="property_product_group">Produktgrupp</string>
+  <string name="property_product_groups">Produktgrupper</string>
+  <string name="property_opened">öppnad</string>
+  <string name="property_not_opened">inte öppnad</string>
+  <string name="property_is_freezer">Är frys</string>
 
-    <string name="date_today">Idag</string>
-    <string name="date_unknown">Okänt</string>
-    <string name="date_unlimited">Obegränsat</string>
-    <string name="date_never">Aldrig</string>
+  <string name="date_today">Idag</string>
+  <string name="date_unknown">Okänt</string>
+  <string name="date_unlimited">Obegränsat</string>
+  <string name="date_never">Aldrig</string>
 
-    <plurals name="date_days">
-        <item quantity="one">%d dag</item>
-        <item quantity="other">%d dagar</item>
-    </plurals>
-    <plurals name="date_months">
-        <item quantity="one">%d månad</item>
-        <item quantity="other">%d månader</item>
-    </plurals>
-    <plurals name="date_years">
-        <item quantity="one">%d år</item>
-        <item quantity="other">%d år</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_days_ago">
-        <item quantity="one">%d dag sedan</item>
-        <item quantity="other">%d dagar sedan</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_months_ago">
-        <item quantity="one">%d månad sedan</item>
-        <item quantity="other">%d månader sedan</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_years_ago">
-        <item quantity="one">%d år sedan</item>
-        <item quantity="other">%d år sedan</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_days_from_now">
-        <item quantity="one">%d dag från och med nu</item>
-        <item quantity="other">%d dagar från och med nu</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_months_from_now">
-        <item quantity="one">%d månad från och med nu</item>
-        <item quantity="other">%d månader från och med nu</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_years_from_now">
-        <item quantity="one">%d år från och med nu</item>
-        <item quantity="other">%d år från och med nu</item>
-    </plurals>
+  <plurals name="date_days">
+    <item quantity="one">%d dag</item>
+    <item quantity="other">%d dagar</item>
+  </plurals>
+  <plurals name="date_months">
+    <item quantity="one">%d månad</item>
+    <item quantity="other">%d månader</item>
+  </plurals>
+  <plurals name="date_years">
+    <item quantity="one">%d år</item>
+    <item quantity="other">%d år</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_ago">
+    <item quantity="one">%d dag sedan</item>
+    <item quantity="other">%d dagar sedan</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_ago">
+    <item quantity="one">%d månad sedan</item>
+    <item quantity="other">%d månader sedan</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_ago">
+    <item quantity="one">%d år sedan</item>
+    <item quantity="other">%d år sedan</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_from_now">
+    <item quantity="one">%d dag från och med nu</item>
+    <item quantity="other">%d dagar från och med nu</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one">%d månad från och med nu</item>
+    <item quantity="other">%d månader från och med nu</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">%d år från och med nu</item>
+    <item quantity="other">%d år från och med nu</item>
+  </plurals>
 
-    <string name="info_acknowledgement">Vi vill tacka Bernd Bestel, utan vars fantastiska arbete denna app inte skulle kunna existera.</string>
-    <string name="info_intro">Visa introduktion igen</string>
-    <string name="info_intro_description">Demonstrera funktioner</string>
-    <string name="info_material_components_built_with">Byggd med</string>
-    <string name="info_version">Version</string>
-    <string name="info_grocy_version">Version av Grocy</string>
-    <string name="subtitle_not_supported">Stöds inte</string>
-    <string name="info_changelog">Ändringslogg</string>
-    <string name="info_changelog_description">Vad är nytt?</string>
-    <string name="info_developers">Utvecklare</string>
-    <string name="info_github">Grocy Android på GitHub</string>
-    <string name="info_github_description">Källkod</string>
-    <string name="info_website">Öppna Grocy-hemsidan</string>
+  <string name="info_acknowledgement">Vi vill tacka Bernd Bestel, utan vars fantastiska arbete denna app inte skulle kunna existera.</string>
+  <string name="info_intro">Visa introduktion igen</string>
+  <string name="info_intro_description">Demonstrera funktioner</string>
+  <string name="info_material_components_built_with">Byggd med</string>
+  <string name="info_version">Version</string>
+  <string name="info_grocy_version">Version av Grocy</string>
+  <string name="subtitle_not_supported">Stöds inte</string>
+  <string name="info_changelog">Ändringslogg</string>
+  <string name="info_changelog_description">Vad är nytt?</string>
+  <string name="info_developers">Utvecklare</string>
+  <string name="info_github">Grocy Android på GitHub</string>
+  <string name="info_github_description">Källkod</string>
+  <string name="info_website">Öppna Grocy-hemsidan</string>
 
-    <string name="feature_1_title">Grocy för Android</string>
-    <string name="feature_1_description">Lokalt hostad livsmedelshantering för ditt hem</string>
-    <string name="feature_2_title">Intuitiv design</string>
-    <string name="feature_2_description">Öppna och konsumera med ett svep</string>
-    <string name="feature_3_title">Kraftfull batch-bearbetning</string>
-    <string name="feature_3_description">Skanna hela ditt inköp på några sekunder</string>
+  <string name="feature_1_title">Grocy för Android</string>
+  <string name="feature_1_description">Lokalt hostad livsmedelshantering för ditt hem</string>
+  <string name="feature_2_title">Intuitiv design</string>
+  <string name="feature_2_description">Öppna och konsumera med ett svep</string>
+  <string name="feature_3_title">Kraftfull batch-bearbetning</string>
+  <string name="feature_3_description">Skanna hela ditt inköp på några sekunder</string>
 
-    <string name="category_licenses">Licenser för öppen källkod</string>
-    <string name="category_general">Generellt</string>
-    <string name="category_server">Server</string>
-    <string name="category_debugging">Felsökning</string>
-    <string name="title_presets_new_products">Förinställningar för nya produkter</string>
+  <string name="category_licenses">Licenser för öppen källkod</string>
+  <string name="category_general">Generellt</string>
+  <string name="category_server">Server</string>
+  <string name="category_debugging">Felsökning</string>
+  <string name="title_presets_new_products">Förinställningar för nya produkter</string>
 
-    <string name="hint_server">Server URL</string>
-    <string name="hint_key">Giltig API-nyckel</string>
+  <string name="hint_server">Server URL</string>
+  <string name="hint_key">Giltig API-nyckel</string>
 
-    <string name="setting_dark_mode">Tvinga mörkt läge</string>
-    <string name="setting_dark_mode_description">Av för att använda systemets inställning</string>
-    <string name="setting_open_food_facts">Använd Open Food Facts</string>
-    <string name="setting_open_food_facts_description">Hämta information från streckkoder</string>
-    <string name="setting_use_front_cam">Använd främre kamera</string>
-    <string name="setting_use_front_cam_description">För streckkodsskanning</string>
-    <string name="setting_reload_config">Ladda om konfiguration</string>
-    <string name="setting_reload_config_description">Appomstart krävs</string>
-    <string name="setting_logout">Logga ut</string>
-    <string name="setting_logout_description">Återgå till inloggningssida</string>
-    <string name="setting_list_indicator">Indikera listobjekt</string>
-    <string name="setting_list_indicator_description">Visa blå prick vid produkter som finns i en shoppinglista</string>
-    <string name="setting_shopping_mode_update_interval">Uppdateringsintervall för shoppingläge</string>
-    <string name="setting_keep_screen_on">Behåll skärmen på</string>
-    <string name="setting_keep_screen_on_description">När shoppingläget används</string>
-    <string name="setting_expiring_soon_days">Antal dagar för \"går snart ut\"</string>
-    <string name="setting_default_amount_purchase">Standardantal vid köp</string>
-    <string name="setting_default_amount_consume">Standardantal vid konsumtion</string>
-    <string name="setting_empty_value">Tom</string>
-    <string name="setting_sync_off">Synkronisering av</string>
-    <string name="setting_not_loaded">Kunde inte läsas in</string>
-    <string name="setting_debug">Aktivera loggning</string>
-    <string name="setting_debug_description">Visa fel i loggarna</string>
-    <string name="setting_info_logs">Visa informationsloggar</string>
-    <string name="setting_logs_description">Visa logcat-loggar för denna process</string>
+  <string name="setting_dark_mode">Tvinga mörkt läge</string>
+  <string name="setting_dark_mode_description">Av för att använda systemets inställning</string>
+  <string name="setting_open_food_facts">Använd Open Food Facts</string>
+  <string name="setting_open_food_facts_description">Hämta information från streckkoder</string>
+  <string name="setting_use_front_cam">Använd främre kamera</string>
+  <string name="setting_use_front_cam_description">För streckkodsskanning</string>
+  <string name="setting_reload_config">Ladda om konfiguration</string>
+  <string name="setting_reload_config_description">Appomstart krävs</string>
+  <string name="setting_logout">Logga ut</string>
+  <string name="setting_logout_description">Återgå till inloggningssida</string>
+  <string name="setting_list_indicator">Indikera listobjekt</string>
+  <string name="setting_list_indicator_description">Visa blå prick vid produkter som finns i en shoppinglista</string>
+  <string name="setting_shopping_mode_update_interval">Uppdateringsintervall för shoppingläge</string>
+  <string name="setting_keep_screen_on">Behåll skärmen på</string>
+  <string name="setting_keep_screen_on_description">När shoppingläget används</string>
+  <string name="setting_expiring_soon_days">Antal dagar för \"går snart ut\"</string>
+  <string name="setting_default_amount_purchase">Standardantal vid köp</string>
+  <string name="setting_default_amount_consume">Standardantal vid konsumtion</string>
+  <string name="setting_empty_value">Tom</string>
+  <string name="setting_sync_off">Synkronisering av</string>
+  <string name="setting_not_loaded">Kunde inte läsas in</string>
+  <string name="setting_debug">Aktivera loggning</string>
+  <string name="setting_debug_description">Visa fel i loggarna</string>
+  <string name="setting_info_logs">Visa informationsloggar</string>
+  <string name="setting_logs_description">Visa logcat-loggar för denna process</string>
 
-    <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
-    Examples: 'de' for German; 'fr' for French -->
-    <string name="url_grocy_demo">https://sv.demo.grocy.info</string>
-    </resources>
+  <!-- This is the URL of the demo instance. Replace 'en' with the abbreviation of the translation language.
+  Examples: 'de' for German; 'fr' for French -->
+  <string name="url_grocy_demo">https://sv.demo.grocy.info</string>
+</resources>

@@ -21,113 +21,112 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "missing_item_table")
 public class MissingItem implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
 
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
-    private String name;
+  @ColumnInfo(name = "name")
+  @SerializedName("name")
+  private String name;
 
-    @ColumnInfo(name = "amount_missing")
-    @SerializedName("amount_missing")
-    private String amountMissing;
+  @ColumnInfo(name = "amount_missing")
+  @SerializedName("amount_missing")
+  private String amountMissing;
 
-    @ColumnInfo(name = "is_partly_in_stock")
-    @SerializedName("is_partly_in_stock")
-    private int isPartlyInStock;
+  @ColumnInfo(name = "is_partly_in_stock")
+  @SerializedName("is_partly_in_stock")
+  private int isPartlyInStock;
 
-    // for Room
-    public MissingItem() {}
+  // for Room
+  public MissingItem() {
+  }
 
-    private MissingItem(Parcel parcel) {
-        id = parcel.readInt();
-        name = parcel.readString();
-        amountMissing = parcel.readString();
-        isPartlyInStock = parcel.readInt();
+  private MissingItem(Parcel parcel) {
+    id = parcel.readInt();
+    name = parcel.readString();
+    amountMissing = parcel.readString();
+    isPartlyInStock = parcel.readInt();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(name);
+    dest.writeString(amountMissing);
+    dest.writeInt(isPartlyInStock);
+  }
+
+  public static final Creator<MissingItem> CREATOR = new Creator<MissingItem>() {
+
+    @Override
+    public MissingItem createFromParcel(Parcel in) {
+      return new MissingItem(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(amountMissing);
-        dest.writeInt(isPartlyInStock);
+    public MissingItem[] newArray(int size) {
+      return new MissingItem[size];
     }
+  };
 
-    public static final Creator<MissingItem> CREATOR = new Creator<MissingItem>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public MissingItem createFromParcel(Parcel in) {
-            return new MissingItem(in);
-        }
+  public String getName() {
+    return name;
+  }
 
-        @Override
-        public MissingItem[] newArray(int size) {
-            return new MissingItem[size];
-        }
-    };
-
-    public int getId() {
-        return id;
+  public double getAmountMissingDouble() {
+    if (amountMissing == null || amountMissing.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(amountMissing);
     }
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getAmountMissing() {
+    return amountMissing;
+  }
 
-    public double getAmountMissingDouble() {
-        if(amountMissing == null || amountMissing.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(amountMissing);
-        }
-    }
+  public int getIsPartlyInStock() {
+    return isPartlyInStock;
+  }
 
-    public String getAmountMissing() {
-        return amountMissing;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public int getIsPartlyInStock() {
-        return isPartlyInStock;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public void setAmountMissing(String amountMissing) {
+    this.amountMissing = amountMissing;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setIsPartlyInStock(int isPartlyInStock) {
+    this.isPartlyInStock = isPartlyInStock;
+  }
 
-    public void setAmountMissing(String amountMissing) {
-        this.amountMissing = amountMissing;
-    }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    public void setIsPartlyInStock(int isPartlyInStock) {
-        this.isPartlyInStock = isPartlyInStock;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "MissingItem(" + name + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "MissingItem(" + name + ')';
+  }
 }

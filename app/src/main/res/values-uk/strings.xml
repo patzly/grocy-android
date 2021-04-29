@@ -19,688 +19,688 @@
 
 <resources>
 
-    <!-- This is an action – in English, it contains a verb.
-     The string is visible after clicking long on the action button in purchase screen for example. -->
-    <string name="action_purchase">Придбати</string>
-    <!-- This is an action – in English, it contains a verb.
-     The string is visible after clicking long on the action button in consume screen for example. -->
-    <string name="action_consume">Використати</string>
-    <!-- This is an action – in English, it contains a verb. -->
-    <string name="action_consume_all">Використати все</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in purchase screen for example. -->
+  <string name="action_purchase">Придбати</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in consume screen for example. -->
+  <string name="action_consume">Використати</string>
+  <!-- This is an action – in English, it contains a verb. -->
+  <string name="action_consume_all">Використати все</string>
 
-    <string name="action_consume_one_spoiled">Списати 1 як зіпсований</string>
-    <!-- %1$s is a quantity unit and %2$s is a product name -->
-    <string name="action_consume_one">Використати %1$s %2$s</string>
-    <string name="action_open">Позначити як відкрите</string>
-    <!-- %1$s is a quantity unit and %2$s is a product name -->
-    <string name="action_open_one">Відкрити %1$s %2$s</string>
-    <string name="action_edit_product">Редагувати продукт</string>
-    <string name="action_shopping_list_add">Додати до списку покупок</string>
+  <string name="action_consume_one_spoiled">Списати 1 як зіпсований</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_consume_one">Використати %1$s %2$s</string>
+  <string name="action_open">Позначити як відкрите</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_open_one">Відкрити %1$s %2$s</string>
+  <string name="action_edit_product">Редагувати продукт</string>
+  <string name="action_shopping_list_add">Додати до списку покупок</string>
 
-    <string name="action_back">Назад</string>
-    <string name="action_search">Пошук</string>
-    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
-    <string name="action_next">Далі</string>
-    <string name="action_new">Новий</string>
-    <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
-    <string name="action_prev">Назад</string>
-    <string name="action_feedback">Надіслати відгук</string>
-    <string name="action_reset">Скинути</string>
-    <string name="action_reload">Оновити</string>
-    <string name="action_top_scroll">На початок</string>
-    <string name="action_send">Надіслати</string>
-    <string name="action_close">Закрити</string>
-    <string name="action_scan">Сканувати</string>
-    <string name="action_cancel">Скасувати</string>
-    <string name="action_add">Додати</string>
-    <string name="action_clear">Очистити</string>
-    <string name="action_clear_shopping_list">Очистити список покупок</string>
-    <string name="action_rate">Оцінити на Google Play</string>
-    <string name="action_rate_description">Заохотити розробників</string>
-    <string name="action_email">Відправити email</string>
-    <string name="action_email_description">Зв’язатися з розробниками</string>
-    <string name="action_new_issue">Відкрити нове обговорення на GitHub</string>
-    <string name="action_new_issue_description">Повідомити про помилку або побажання</string>
-    <string name="action_get_started">Розпочати</string>
-    <string name="action_ascending">За зростанням</string>
-    <string name="action_filter">Фільтр</string>
-    <string name="action_sort">Сортування</string>
-    <string name="action_undo">Скасувати</string>
-    <string name="action_retry">Повторити</string>
-    <string name="action_edit">Редагувати</string>
-    <string name="action_proceed">Приступити</string>
-    <string name="action_delete">Видалити</string>
-    <string name="action_save">Зберегти</string>
-    <string name="action_logout">Вийти</string>
-    <string name="action_restart">Перезапустити</string>
-    <string name="action_create">Створити</string>
-    <string name="action_link">Посилання</string>
-    <string name="action_try_again">Спробуйте ще раз</string>
-    <string name="action_open_scanner">Відкрити сканер</string>
-    <string name="action_discard">Відхилити</string>
-    <string name="action_clear_form">Очистити форму</string>
-    <string name="action_toggle_done">Помітити виконаним</string>
-    <string name="action_edit_notes">Редагувати нотатки</string>
-    <string name="action_add_missing">Додайте відсутні продукти</string>
-    <string name="action_purchase_all_items">Придбати все</string>
-    <string name="action_skip_entry">Пропустити запис</string>
-    <string name="action_toggle_flash">Перемкнути спалах</string>
-    <string name="action_delete_shopping_list">Видалити список покупок</string>
-    <string name="action_create_key">Створити ключ</string>
-    <string name="action_login">Увійти</string>
-    <string name="action_ignore">Ігнорувати</string>
-    <!-- This string should follow the equality between "all" and "Clear all items" -->
-    <string name="action_clear_all">Все</string>
-    <!-- This string should follow the equality between "done" and "Clear done items" -->
-    <string name="action_clear_done">Виконано</string>
-    <string name="action_display_help">Показувати тексти довідки</string>
-    <string name="action_demo_server">Демонстраційний сервер</string>
-    <string name="action_own_server">Власний сервер</string>
-    <string name="action_enter_data_manually">Введіть дані вручну</string>
+  <string name="action_back">Назад</string>
+  <string name="action_search">Пошук</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_next">Далі</string>
+  <string name="action_new">Новий</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_prev">Назад</string>
+  <string name="action_feedback">Надіслати відгук</string>
+  <string name="action_reset">Скинути</string>
+  <string name="action_reload">Оновити</string>
+  <string name="action_top_scroll">На початок</string>
+  <string name="action_send">Надіслати</string>
+  <string name="action_close">Закрити</string>
+  <string name="action_scan">Сканувати</string>
+  <string name="action_cancel">Скасувати</string>
+  <string name="action_add">Додати</string>
+  <string name="action_clear">Очистити</string>
+  <string name="action_clear_shopping_list">Очистити список покупок</string>
+  <string name="action_rate">Оцінити на Google Play</string>
+  <string name="action_rate_description">Заохотити розробників</string>
+  <string name="action_email">Відправити email</string>
+  <string name="action_email_description">Зв’язатися з розробниками</string>
+  <string name="action_new_issue">Відкрити нове обговорення на GitHub</string>
+  <string name="action_new_issue_description">Повідомити про помилку або побажання</string>
+  <string name="action_get_started">Розпочати</string>
+  <string name="action_ascending">За зростанням</string>
+  <string name="action_filter">Фільтр</string>
+  <string name="action_sort">Сортування</string>
+  <string name="action_undo">Скасувати</string>
+  <string name="action_retry">Повторити</string>
+  <string name="action_edit">Редагувати</string>
+  <string name="action_proceed">Приступити</string>
+  <string name="action_delete">Видалити</string>
+  <string name="action_save">Зберегти</string>
+  <string name="action_logout">Вийти</string>
+  <string name="action_restart">Перезапустити</string>
+  <string name="action_create">Створити</string>
+  <string name="action_link">Посилання</string>
+  <string name="action_try_again">Спробуйте ще раз</string>
+  <string name="action_open_scanner">Відкрити сканер</string>
+  <string name="action_discard">Відхилити</string>
+  <string name="action_clear_form">Очистити форму</string>
+  <string name="action_toggle_done">Помітити виконаним</string>
+  <string name="action_edit_notes">Редагувати нотатки</string>
+  <string name="action_add_missing">Додайте відсутні продукти</string>
+  <string name="action_purchase_all_items">Придбати все</string>
+  <string name="action_skip_entry">Пропустити запис</string>
+  <string name="action_toggle_flash">Перемкнути спалах</string>
+  <string name="action_delete_shopping_list">Видалити список покупок</string>
+  <string name="action_create_key">Створити ключ</string>
+  <string name="action_login">Увійти</string>
+  <string name="action_ignore">Ігнорувати</string>
+  <!-- This string should follow the equality between "all" and "Clear all items" -->
+  <string name="action_clear_all">Все</string>
+  <!-- This string should follow the equality between "done" and "Clear done items" -->
+  <string name="action_clear_done">Виконано</string>
+  <string name="action_display_help">Показувати тексти довідки</string>
+  <string name="action_demo_server">Демонстраційний сервер</string>
+  <string name="action_own_server">Власний сервер</string>
+  <string name="action_enter_data_manually">Введіть дані вручну</string>
 
-    <!-- %1$s is the number of products which are due soon -->
-    <string name="msg_due_products">%1$d скоро спливає термін</string>
-    <!-- %1$s is the number of products which are overdue -->
-    <string name="msg_overdue_products">%1$d прострочений</string>
-    <!-- %1$s is the number of products which are expired -->
-    <string name="msg_expired_products">%1$d зіпсувалось</string>
-    <!-- %1$s is the number of products which are below min. stock amount -->
-    <string name="msg_missing_products">на %1$d нижче мінімального запасу</string>
-    <!-- %1$s is the number of products which are in stock -->
-    <string name="msg_in_stock_products">%1$d в запасах</string>
-    <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
-    <string name="msg_consumed_spoiled">Зіпсовано %1$s %2$s %3$s</string>
-    <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
-    <!-- %1$s is the number of undone items in shopping list -->
-    <string name="msg_undone_items">%1$d скасовано</string>
-    <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-    <string name="msg_purchased">Придбано %1$s %2$s %3$s</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_not_in_stock">Немає в запасах %1$s</string>
-    <string name="msg_no_connection">Немає з\'єднання</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_no_stock_locations">Відсутні місця зберігання для %1$s</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_no_stock_entries">Відсутні запаси для %1$s</string>
-    <string name="msg_not_found">Продукт не знайдено</string>
-    <string name="msg_undone_transaction">Дію скасовано</string>
-    <string name="msg_failed_to_sync">Не вдалося синхронізувати записи</string>
-    <string name="msg_synced">Записи успішно синхронізовано</string>
-    <!-- %1$s is a shopping list name -->
-    <string name="msg_added_missing_products">Відсутні продукти додано до %1$s</string>
-    <!-- %1$s is a shopping list name -->
-    <string name="msg_shopping_list_cleared">Список %1$s очищено</string>
-    <!-- %1$s is a shopping list name -->
-    <string name="msg_shopping_list_deleted">Список %1$s видалено</string>
-    <string name="msg_barcode_duplicate">Штрих-код вже існує</string>
-    <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
-    <string name="msg_master_delete">Дійсно бажаєте видалити %1$s \"%2$s\"?</string>
-    <!-- %1$s is a product name -->
-    <string name="msg_master_delete_product">Ви впевнені у видаленні продукту \"%1$s\"?\n\nЦе також видаляє будь-яку суму запасів, журнал та всі інші посилання на цей продукт - замість цього вимкніть його, якщо ви хочете зберегти все та просто приховати продукт.</string>
-    <!-- %1$s is a master data type like "location" or "product" -->
-    <string name="msg_master_delete_usage">%1$s ще використовується</string>
-    <string name="msg_item_marked_as_done">Пункт виконано</string>
-    <string name="msg_item_marked_as_undone">Пункт скасовано</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-    <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
-    <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-    <string name="msg_quick_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
-    <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
-    <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
-    <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
-    <string name="msg_logout_demo_short">Публічний демонстраційний сервер. Торкніться для деталей.</string>
-    <string name="msg_restart">Щоб правильно застосувати поточну конфігурацію Grocy, потрібно перезапустити програму.</string>
-    <string name="msg_shortcuts">Можна ввімкнути до 4-х ярликів:</string>
-    <string name="msg_shortcuts_not_supported">Ярлики не підтримуються в цій версії Android.</string>
-    <string name="msg_features">Запустити вступ знову можливо в розділі \"Про додаток\"</string>
-    <string name="msg_feedback">Чи є у вас побажання, запитання чи помилки? Зв’яжіться з нами та ми допоможемо!\nЯкщо ні, ми будемо дуже раді приємному відгуку в Play Store.</string>
-    <string name="msg_point_at_barcode">Наведіть камеру на штрих-код</string>
-    <string name="msg_press_hold_confirm">Натисніть і утримуйте для підтвердження</string>
-    <string name="msg_welcome_to_grocy">Ласкаво просимо на Grocy Android!\n\nЩоб продуктивно використовувати Grocy, вам потрібен власний сервер або add-on Grocy для Home Assistant.\nЯкщо ви просто хочете випробувати цю програму, ви можете скористатися демо-сервером від Бернда Берселя, творця grocy.</string>
-    <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
-    <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
-    <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_hide_on_stock">На сторінці огляду запасів перераховані всі товари, які зараз є на складі або їх менше мін. кількості. Увімкніть це, щоб завжди приховувати цей продукт там.</string>
-    <string name="msg_help_due_date_type">Залежно від вибраного типу терміну, підсвічування на сторінці огляду запасів буде різним. \"Краще вжити до\" означає, що продукт, можливо, все ще безпечний для споживання після закінчення його терміну. «Термін придатності» означає, що продукт не є безпечним для споживання після закінчення його терміну.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_default_due_days">Для покупок ця кількість днів буде додана до сьогоднішнього дня для пропозиції терміну (-1 означає, що цей продукт ніколи не буде прострочений).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_default_due_days_opened">Коли цей продукт був позначений як відкритий, термін буде замінено на сьогодні + така кількість днів (значення 0 вимикає це).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_default_due_days_freezing">При переміщенні цього продукту в морозильну камеру (при його заморожуванні) термін буде замінений на сьогодні + вказана кількість днів (-1 означає, що цей продукт ніколи не буде прострочений).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_default_due_days_thawing">При переміщенні цього продукту з морозильної камери (при його розморожуванні) термін буде замінений на сьогодні + вказана кількість днів.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_qu_stock">Кількісний запас не можна змінювати після першої покупки.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_qu_purchase">Це одиниця кількості за замовчуванням, яка використовується при додаванні цього товару до списку покупок.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_accumulate_min_amount">Якщо увімкнено, мінімальна кількість під продуктів буде накопичиться в цьому продукті, тобто під продукт ніколи не буде \"відсутнім\", лише цей продукт.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_quick_consume_amount">Ця кількість використовується для \"кнопок швидкого споживання / відкриття\" на сторінці огляду запасу (стосується одиниці запасу кількості).</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_tare_weight">Обробка ваги тари корисна, наприклад для борошна в банках - при покупці/споживанні/інвентаризації ви завжди зважуєте цілу банку, кількість, яку потрібно оприбуткувати, автоматично розраховується на основі того, що є в наявності, і ваги тара, визначеної нижче.</string>
-    <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_tare_weight_purchase">Увімкнено обробку ваги тари - зважте весь контейнер, кількість, яку потрібно оприбуткувати, буде автоматично розрахована.</string>
-    <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_disable_stock_check">Цей продукт буде використано як типовий під час додавання цього продукту як складової рецепта.</string>
-    <string name="msg_help_external_scanner_ready">Ви можете використовувати зовнішній сканер для поля нижче, коли на нього встановлено фокус та воно порожнє.</string>
-    <string name="msg_help_external_scanner_settings">Ця програма підтримує зовнішні сканери, які виконують роль клавіатури та можуть бути підключені через USB або Bluetooth. У зовнішньому сканері мають бути налаштовані такі параметри:\n\nПрефікс: Немає\nСуфікс: TAB або ENTER</string>
-    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_specific_item_consume">Перший елемент у цьому списку буде обрано за правилом за замовчуванням, яке має значення \'Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло.</string>
-    <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="msg_help_recipe_consume">Це лише для статистичних цілей.</string>
-    <string name="msg_help_quick_mode">Ви можете довго натискати на рядок заголовка вище, щоб активувати швидкий режим. У цьому режимі транзакція буде виконана негайно, якщо товар було введено або відскановано, а всі поля можуть бути автоматично заповнені (за продуктами та/або штрих-кодами за замовчуванням).</string>
-    <string name="msg_help_loading_circle_settings">На кожній сторінці, де щось потрібно завантажити з сервера, програма спочатку перевіряє крихітним запитом, чи є зміни в базі даних сервера з минулого разу, і оновлює лише застарілі дані. Увімкніть опцію нижче, щоб показати коло завантаження навіть для цього крихітного запиту.</string>
-    <string name="msg_help_start">Активний режим для початківців: Тексти довідки відображаються за замовчуванням на всіх сторінках, якщо такі є. Торкніться, щоб змінити.</string>
-    <string name="msg_help_purchased_date_settings">Якщо опція нижче ввімкнена, на сторінці купівлі та інвентаризації відображатиметься поле для дати придбання. В іншому випадку придбана дата за замовчуванням сьогодні.</string>
-    <string name="msg_help_normal_login">Натисніть на цю картку, якщо ви використовуєте Home Assistant з add-on Grocy.</string>
-    <string name="msg_help_home_assistant_login">Ви використовуєте add-on Grocy для Home Assistant. Тому потрібно ще кілька деталей. Натисніть на цю картку, щоб перейти до звичайного входу.</string>
-    <string name="msg_help_home_assistant_login_help_show">Торкніться тут, щоб показати довідкові тексти.</string>
-    <string name="msg_help_home_assistant_login_help_hide">Торкніться тут, щоб приховати довідкові тексти.</string>
-    <string name="msg_help_home_assistant_login_server">У поле нижче ви також можете ввести URL-адресу хмари Nabu Casa, якщо ви використовуєте цю послугу. Торкніться цієї картки, щоб відвідати вебсайт Nabu Casa.</string>
-    <string name="msg_help_home_assistant_login_token">Ви можете створити довготривалий маркер доступу в налаштуваннях профілю Home Assistant (останній розділ). Натисніть тут, щоб відкрити URL-адресу зверху.</string>
-    <string name="msg_help_home_assistant_login_proxy_id">Перейдіть назад або торкніться цієї картки, щоб відсканувати QR-код, який заповнює поля нижче.</string>
+  <!-- %1$s is the number of products which are due soon -->
+  <string name="msg_due_products">%1$d скоро спливає термін</string>
+  <!-- %1$s is the number of products which are overdue -->
+  <string name="msg_overdue_products">%1$d прострочений</string>
+  <!-- %1$s is the number of products which are expired -->
+  <string name="msg_expired_products">%1$d зіпсувалось</string>
+  <!-- %1$s is the number of products which are below min. stock amount -->
+  <string name="msg_missing_products">на %1$d нижче мінімального запасу</string>
+  <!-- %1$s is the number of products which are in stock -->
+  <string name="msg_in_stock_products">%1$d в запасах</string>
+  <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
+  <string name="msg_consumed_spoiled">Зіпсовано %1$s %2$s %3$s</string>
+  <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
+  <!-- %1$s is the number of undone items in shopping list -->
+  <string name="msg_undone_items">%1$d скасовано</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_purchased">Придбано %1$s %2$s %3$s</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_not_in_stock">Немає в запасах %1$s</string>
+  <string name="msg_no_connection">Немає з\'єднання</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_locations">Відсутні місця зберігання для %1$s</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_entries">Відсутні запаси для %1$s</string>
+  <string name="msg_not_found">Продукт не знайдено</string>
+  <string name="msg_undone_transaction">Дію скасовано</string>
+  <string name="msg_failed_to_sync">Не вдалося синхронізувати записи</string>
+  <string name="msg_synced">Записи успішно синхронізовано</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_added_missing_products">Відсутні продукти додано до %1$s</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_cleared">Список %1$s очищено</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_deleted">Список %1$s видалено</string>
+  <string name="msg_barcode_duplicate">Штрих-код вже існує</string>
+  <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+  <string name="msg_master_delete">Дійсно бажаєте видалити %1$s \"%2$s\"?</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_master_delete_product">Ви впевнені у видаленні продукту \"%1$s\"?\n\nЦе також видаляє будь-яку суму запасів, журнал та всі інші посилання на цей продукт - замість цього вимкніть його, якщо ви хочете зберегти все та просто приховати продукт.</string>
+  <!-- %1$s is a master data type like "location" or "product" -->
+  <string name="msg_master_delete_usage">%1$s ще використовується</string>
+  <string name="msg_item_marked_as_done">Пункт виконано</string>
+  <string name="msg_item_marked_as_undone">Пункт скасовано</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
+  <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
+  <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
+  <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
+  <string name="msg_logout_demo_short">Публічний демонстраційний сервер. Торкніться для деталей.</string>
+  <string name="msg_restart">Щоб правильно застосувати поточну конфігурацію Grocy, потрібно перезапустити програму.</string>
+  <string name="msg_shortcuts">Можна ввімкнути до 4-х ярликів:</string>
+  <string name="msg_shortcuts_not_supported">Ярлики не підтримуються в цій версії Android.</string>
+  <string name="msg_features">Запустити вступ знову можливо в розділі \"Про додаток\"</string>
+  <string name="msg_feedback">Чи є у вас побажання, запитання чи помилки? Зв’яжіться з нами та ми допоможемо!\nЯкщо ні, ми будемо дуже раді приємному відгуку в Play Store.</string>
+  <string name="msg_point_at_barcode">Наведіть камеру на штрих-код</string>
+  <string name="msg_press_hold_confirm">Натисніть і утримуйте для підтвердження</string>
+  <string name="msg_welcome_to_grocy">Ласкаво просимо на Grocy Android!\n\nЩоб продуктивно використовувати Grocy, вам потрібен власний сервер або add-on Grocy для Home Assistant.\nЯкщо ви просто хочете випробувати цю програму, ви можете скористатися демо-сервером від Бернда Берселя, творця grocy.</string>
+  <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
+  <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
+  <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">На сторінці огляду запасів перераховані всі товари, які зараз є на складі або їх менше мін. кількості. Увімкніть це, щоб завжди приховувати цей продукт там.</string>
+  <string name="msg_help_due_date_type">Залежно від вибраного типу терміну, підсвічування на сторінці огляду запасів буде різним. \"Краще вжити до\" означає, що продукт, можливо, все ще безпечний для споживання після закінчення його терміну. «Термін придатності» означає, що продукт не є безпечним для споживання після закінчення його терміну.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days">Для покупок ця кількість днів буде додана до сьогоднішнього дня для пропозиції терміну (-1 означає, що цей продукт ніколи не буде прострочений).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">Коли цей продукт був позначений як відкритий, термін буде замінено на сьогодні + така кількість днів (значення 0 вимикає це).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_freezing">При переміщенні цього продукту в морозильну камеру (при його заморожуванні) термін буде замінений на сьогодні + вказана кількість днів (-1 означає, що цей продукт ніколи не буде прострочений).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">При переміщенні цього продукту з морозильної камери (при його розморожуванні) термін буде замінений на сьогодні + вказана кількість днів.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_stock">Кількісний запас не можна змінювати після першої покупки.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Це одиниця кількості за замовчуванням, яка використовується при додаванні цього товару до списку покупок.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">Якщо увімкнено, мінімальна кількість під продуктів буде накопичиться в цьому продукті, тобто під продукт ніколи не буде \"відсутнім\", лише цей продукт.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount">Ця кількість використовується для \"кнопок швидкого споживання / відкриття\" на сторінці огляду запасу (стосується одиниці запасу кількості).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight">Обробка ваги тари корисна, наприклад для борошна в банках - при покупці/споживанні/інвентаризації ви завжди зважуєте цілу банку, кількість, яку потрібно оприбуткувати, автоматично розраховується на основі того, що є в наявності, і ваги тара, визначеної нижче.</string>
+  <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight_purchase">Увімкнено обробку ваги тари - зважте весь контейнер, кількість, яку потрібно оприбуткувати, буде автоматично розрахована.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_stock_check">Цей продукт буде використано як типовий під час додавання цього продукту як складової рецепта.</string>
+  <string name="msg_help_external_scanner_ready">Ви можете використовувати зовнішній сканер для поля нижче, коли на нього встановлено фокус та воно порожнє.</string>
+  <string name="msg_help_external_scanner_settings">Ця програма підтримує зовнішні сканери, які виконують роль клавіатури та можуть бути підключені через USB або Bluetooth. У зовнішньому сканері мають бути налаштовані такі параметри:\n\nПрефікс: Немає\nСуфікс: TAB або ENTER</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_specific_item_consume">Перший елемент у цьому списку буде обрано за правилом за замовчуванням, яке має значення \'Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло.</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_consume">Це лише для статистичних цілей.</string>
+  <string name="msg_help_quick_mode">Ви можете довго натискати на рядок заголовка вище, щоб активувати швидкий режим. У цьому режимі транзакція буде виконана негайно, якщо товар було введено або відскановано, а всі поля можуть бути автоматично заповнені (за продуктами та/або штрих-кодами за замовчуванням).</string>
+  <string name="msg_help_loading_circle_settings">На кожній сторінці, де щось потрібно завантажити з сервера, програма спочатку перевіряє крихітним запитом, чи є зміни в базі даних сервера з минулого разу, і оновлює лише застарілі дані. Увімкніть опцію нижче, щоб показати коло завантаження навіть для цього крихітного запиту.</string>
+  <string name="msg_help_start">Активний режим для початківців: Тексти довідки відображаються за замовчуванням на всіх сторінках, якщо такі є. Торкніться, щоб змінити.</string>
+  <string name="msg_help_purchased_date_settings">Якщо опція нижче ввімкнена, на сторінці купівлі та інвентаризації відображатиметься поле для дати придбання. В іншому випадку придбана дата за замовчуванням сьогодні.</string>
+  <string name="msg_help_normal_login">Натисніть на цю картку, якщо ви використовуєте Home Assistant з add-on Grocy.</string>
+  <string name="msg_help_home_assistant_login">Ви використовуєте add-on Grocy для Home Assistant. Тому потрібно ще кілька деталей. Натисніть на цю картку, щоб перейти до звичайного входу.</string>
+  <string name="msg_help_home_assistant_login_help_show">Торкніться тут, щоб показати довідкові тексти.</string>
+  <string name="msg_help_home_assistant_login_help_hide">Торкніться тут, щоб приховати довідкові тексти.</string>
+  <string name="msg_help_home_assistant_login_server">У поле нижче ви також можете ввести URL-адресу хмари Nabu Casa, якщо ви використовуєте цю послугу. Торкніться цієї картки, щоб відвідати вебсайт Nabu Casa.</string>
+  <string name="msg_help_home_assistant_login_token">Ви можете створити довготривалий маркер доступу в налаштуваннях профілю Home Assistant (останній розділ). Натисніть тут, щоб відкрити URL-адресу зверху.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Перейдіть назад або торкніться цієї картки, щоб відсканувати QR-код, який заповнює поля нижче.</string>
 
-    <string name="error_api_not_working">Ключ API не працює</string>
-    <string name="error_orbot_not_installed">Orbot не встановлено</string>
-    <string name="error_select_product">Оберіть продукт</string>
-    <string name="error_empty">Обов\'язково</string>
-    <string name="error_empty_stock">Нічого в запасах</string>
-    <string name="error_empty_stock_sub">Купіть що-небудь</string>
-    <string name="error_empty_shopping_list">Порожній список покупок</string>
-    <string name="error_empty_shopping_list_sub">Додайте продукти, які вам потрібні</string>
-    <string name="error_empty_barcodes_sub">Додайте штрих-код за допомогою кнопки нижче</string>
-    <string name="error_empty_master_data_sub">Створіть за допомогою кнопки нижче</string>
-    <string name="error_empty_product_barcodes">Відсутні штрих-коди товару</string>
-    <string name="error_empty_locations">Відсутні місця зберігання</string>
-    <string name="error_empty_product_groups">Відсутні групи продуктів</string>
-    <string name="error_empty_products">Відсутні продукти</string>
-    <string name="error_empty_qu">Відсутні одиниці виміру</string>
-    <string name="error_empty_stores">Магазини відсутні</string>
-    <string name="error_search">Результати пошуку відсутні</string>
-    <string name="error_search_sub">Спробуйте інші умови</string>
-    <string name="error_filter">Нічого показати</string>
-    <string name="error_filter_sub">Спробуйте інші фільтри</string>
-    <string name="error_duplicate">Вже існує</string>
-    <string name="error_parent">Не може бути батьком для себе</string>
-    <string name="error_invalid_product">Некоректний товар</string>
-    <string name="error_invalid_url">Некоректний URL</string>
-    <string name="error_invalid_amount">Некоректна кількість</string>
-    <string name="error_invalid_price">Некоректна ціна</string>
-    <string name="error_invalid_best_before_days">Використовуйте -1 якщо термін придатності необмежений</string>
-    <string name="error_invalid_factor">Некоректний коефіцієнт</string>
-    <string name="error_api_qr_code">Це не QR-код з обліковими даними API grocy</string>
-    <string name="error_loading_qus">Не вдалося завантажити одиниці виміру з продукту</string>
-    <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
-    <string name="error_bounds_min_max">Має бути в межах від %1$s до %2$s</string>
-    <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_min">Має дорівнювати або бути більшим за %1$s</string>
-    <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_max">Має бути меншим або рівним %1$s</string>
-    <!-- %1$s is a number like 0, 1, 2 -->
-    <string name="error_bounds_higher">Має бути більшим за %1$s</string>
-    <string name="error_offline">Офлайн</string>
-    <string name="error_offline_subtitle">Ця сторінка працює тільки з доступом до Інтернету. Перевірте підключення.</string>
-    <string name="error_name_exists">Назва вже існує</string>
-    <string name="error_network">Помилка мережі</string>
-    <string name="error_network_subtitle">Не вдалося повністю завантажити потрібні дані</string>
-    <string name="error_unknown">Ой, щось пішло не так!</string>
-    <string name="error_not_grocy_instance">Не дійсний сервер Grocy</string>
-    <string name="error_timeout">Перевищено час очікування</string>
-    <string name="error_no_product_selected">Продукт не вибрано</string>
-    <string name="error_failed_to_connect_to">Не вдалося під\'єднатися до сервера</string>
-    <string name="error_missing_information">Заповнено не всі обов\'язкові поля</string>
-    <string name="error_handshake">Недійсний сертифікат</string>
-    <string name="error_handshake_description">Для цього сервера потрібен сертифікат, який невідомий або довірений для Android.\nСертифікат сервера повинен бути підписаний довіреним центром сертифікації (наприклад, letsencrypt.org) або зберігатися в сховищі сертифікатів користувачів Android цього пристрою.</string>
-    <string name="error_unexpected_response_code">Несподіваний код відповіді</string>
-    <string name="error_unexpected_response">Несподівана відповідь сервера</string>
-    <string name="error_no_browser">Встановіть веб-браузер для відображення веб-сайту довідки</string>
-    <string name="error_barcode_not_linked">Штрих-код не зв\'язано з продуктом</string>
-    <string name="error_no_product_details">Не вдалося отримати відомості про продукт</string>
-    <string name="error_failed_barcode_upload">Не вдалося передати штрих-код</string>
-    <string name="error_undefined">Виникла помилка</string>
+  <string name="error_api_not_working">Ключ API не працює</string>
+  <string name="error_orbot_not_installed">Orbot не встановлено</string>
+  <string name="error_select_product">Оберіть продукт</string>
+  <string name="error_empty">Обов\'язково</string>
+  <string name="error_empty_stock">Нічого в запасах</string>
+  <string name="error_empty_stock_sub">Купіть що-небудь</string>
+  <string name="error_empty_shopping_list">Порожній список покупок</string>
+  <string name="error_empty_shopping_list_sub">Додайте продукти, які вам потрібні</string>
+  <string name="error_empty_barcodes_sub">Додайте штрих-код за допомогою кнопки нижче</string>
+  <string name="error_empty_master_data_sub">Створіть за допомогою кнопки нижче</string>
+  <string name="error_empty_product_barcodes">Відсутні штрих-коди товару</string>
+  <string name="error_empty_locations">Відсутні місця зберігання</string>
+  <string name="error_empty_product_groups">Відсутні групи продуктів</string>
+  <string name="error_empty_products">Відсутні продукти</string>
+  <string name="error_empty_qu">Відсутні одиниці виміру</string>
+  <string name="error_empty_stores">Магазини відсутні</string>
+  <string name="error_search">Результати пошуку відсутні</string>
+  <string name="error_search_sub">Спробуйте інші умови</string>
+  <string name="error_filter">Нічого показати</string>
+  <string name="error_filter_sub">Спробуйте інші фільтри</string>
+  <string name="error_duplicate">Вже існує</string>
+  <string name="error_parent">Не може бути батьком для себе</string>
+  <string name="error_invalid_product">Некоректний товар</string>
+  <string name="error_invalid_url">Некоректний URL</string>
+  <string name="error_invalid_amount">Некоректна кількість</string>
+  <string name="error_invalid_price">Некоректна ціна</string>
+  <string name="error_invalid_best_before_days">Використовуйте -1 якщо термін придатності необмежений</string>
+  <string name="error_invalid_factor">Некоректний коефіцієнт</string>
+  <string name="error_api_qr_code">Це не QR-код з обліковими даними API grocy</string>
+  <string name="error_loading_qus">Не вдалося завантажити одиниці виміру з продукту</string>
+  <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+  <string name="error_bounds_min_max">Має бути в межах від %1$s до %2$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_min">Має дорівнювати або бути більшим за %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_max">Має бути меншим або рівним %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_higher">Має бути більшим за %1$s</string>
+  <string name="error_offline">Офлайн</string>
+  <string name="error_offline_subtitle">Ця сторінка працює тільки з доступом до Інтернету. Перевірте підключення.</string>
+  <string name="error_name_exists">Назва вже існує</string>
+  <string name="error_network">Помилка мережі</string>
+  <string name="error_network_subtitle">Не вдалося повністю завантажити потрібні дані</string>
+  <string name="error_unknown">Ой, щось пішло не так!</string>
+  <string name="error_not_grocy_instance">Не дійсний сервер Grocy</string>
+  <string name="error_timeout">Перевищено час очікування</string>
+  <string name="error_no_product_selected">Продукт не вибрано</string>
+  <string name="error_failed_to_connect_to">Не вдалося під\'єднатися до сервера</string>
+  <string name="error_missing_information">Заповнено не всі обов\'язкові поля</string>
+  <string name="error_handshake">Недійсний сертифікат</string>
+  <string name="error_handshake_description">Для цього сервера потрібен сертифікат, який невідомий або довірений для Android.\nСертифікат сервера повинен бути підписаний довіреним центром сертифікації (наприклад, letsencrypt.org) або зберігатися в сховищі сертифікатів користувачів Android цього пристрою.</string>
+  <string name="error_unexpected_response_code">Несподіваний код відповіді</string>
+  <string name="error_unexpected_response">Несподівана відповідь сервера</string>
+  <string name="error_no_browser">Встановіть веб-браузер для відображення веб-сайту довідки</string>
+  <string name="error_barcode_not_linked">Штрих-код не зв\'язано з продуктом</string>
+  <string name="error_no_product_details">Не вдалося отримати відомості про продукт</string>
+  <string name="error_failed_barcode_upload">Не вдалося передати штрих-код</string>
+  <string name="error_undefined">Виникла помилка</string>
 
-    <string name="title_overview">Огляд</string>
-    <string name="title_stock_overview">Огляд запасів</string>
-    <string name="title_purchase">Купувати</string>
-    <string name="title_consume">Спожити</string>
-    <string name="title_barcode_input">Введення штрих-коду</string>
-    <string name="title_product_overview">Огляд продукту</string>
-    <string name="title_product">Продукт</string>
-    <string name="title_product_create">Створити продукт</string>
-    <string name="title_product_edit">Редагувати продукт</string>
-    <string name="title_master_data">Основні дані</string>
-    <string name="title_stock_entries">Список запасів</string>
-    <string name="title_shopping_list">Список покупок</string>
-    <string name="title_feedback">Зворотній зв\'язок</string>
-    <string name="title_settings">Налаштування</string>
-    <!-- Context: About this app -->
-    <string name="title_about">Про додаток</string>
-    <string name="title_info">Інформація</string>
-    <string name="title_help">Допомога</string>
-    <string name="title_logs">Журнал</string>
-    <string name="title_compatibility">Проблеми сумісності</string>
-    <string name="title_logout">Вийти з Grocy?</string>
-    <string name="title_restart">Перезапустити Grocy?</string>
-    <string name="title_logout_demo">Вийти з демо-режиму?</string>
-    <string name="title_manage_master_data">Керування основними даними</string>
-    <string name="title_edit_description">Редагувати опис</string>
-    <string name="title_input_number">Введення числа</string>
-    <string name="title_external_barcode_input">Зовнішній сканер</string>
-    <string name="title_confirmation">Підтвердження</string>
+  <string name="title_overview">Огляд</string>
+  <string name="title_stock_overview">Огляд запасів</string>
+  <string name="title_purchase">Купувати</string>
+  <string name="title_consume">Спожити</string>
+  <string name="title_barcode_input">Введення штрих-коду</string>
+  <string name="title_product_overview">Огляд продукту</string>
+  <string name="title_product">Продукт</string>
+  <string name="title_product_create">Створити продукт</string>
+  <string name="title_product_edit">Редагувати продукт</string>
+  <string name="title_master_data">Основні дані</string>
+  <string name="title_stock_entries">Список запасів</string>
+  <string name="title_shopping_list">Список покупок</string>
+  <string name="title_feedback">Зворотній зв\'язок</string>
+  <string name="title_settings">Налаштування</string>
+  <!-- Context: About this app -->
+  <string name="title_about">Про додаток</string>
+  <string name="title_info">Інформація</string>
+  <string name="title_help">Допомога</string>
+  <string name="title_logs">Журнал</string>
+  <string name="title_compatibility">Проблеми сумісності</string>
+  <string name="title_logout">Вийти з Grocy?</string>
+  <string name="title_restart">Перезапустити Grocy?</string>
+  <string name="title_logout_demo">Вийти з демо-режиму?</string>
+  <string name="title_manage_master_data">Керування основними даними</string>
+  <string name="title_edit_description">Редагувати опис</string>
+  <string name="title_input_number">Введення числа</string>
+  <string name="title_external_barcode_input">Зовнішній сканер</string>
+  <string name="title_confirmation">Підтвердження</string>
 
-    <string name="title_spoiled">Зіпсовано</string>
-    <string name="title_use_specific">Використовувати конкретний запас</string>
-    <string name="title_specific">Конкретный запас</string>
-    <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="title_exact_amount">Споживати точну кількість</string>
-    <string name="title_recipe">Рецепт</string>
-    <string name="title_total_price">Загальна ціна</string>
-    <string name="title_unit_price">Ціна одиниці</string>
-    <!-- %1$s is a quantity unit -->
-    <string name="title_unit_price_specific">%1$s ціна</string>
-    <string name="title_stock_entry_no_specific">Невизначений запас</string>
-    <string name="title_shopping_list_ungrouped">Не в групі</string>
-    <string name="title_list_entry">Елемент списку</string>
-    <string name="title_edit_list_entry">Редагувати елемент списку</string>
-    <string name="title_create_list_entry">Створити елемент списку</string>
-    <string name="title_shopping_list_edit">Редагувати список покупок</string>
-    <string name="title_shopping_list_new">Новий список покупок</string>
-    <string name="title_shopping_mode">Режим покупок</string>
-    <string name="title_batch_mode_shopping_list">Пакетний режим списку покупок</string>
-    <string name="title_product_cat_optional">Необов\'язкові властивості</string>
-    <string name="title_product_cat_location">Місце за замовчуванням</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="title_product_cat_due_date">Термін</string>
-    <string name="title_product_cat_amount">Кількість</string>
-    <string name="title_product_cat_quantity_unit">Одиниця виміру</string>
-    <string name="title_product_cat_barcodes">Штрих-коди</string>
-    <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-    <string name="title_product_cat_qu_conversions">Перетворення ОВ</string>
-    <string name="title_unknown_input">Невідоме введення</string>
-    <string name="title_presets_new_products">Шаблон для нових продуктів</string>
+  <string name="title_spoiled">Зіпсовано</string>
+  <string name="title_use_specific">Використовувати конкретний запас</string>
+  <string name="title_specific">Конкретный запас</string>
+  <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_exact_amount">Споживати точну кількість</string>
+  <string name="title_recipe">Рецепт</string>
+  <string name="title_total_price">Загальна ціна</string>
+  <string name="title_unit_price">Ціна одиниці</string>
+  <!-- %1$s is a quantity unit -->
+  <string name="title_unit_price_specific">%1$s ціна</string>
+  <string name="title_stock_entry_no_specific">Невизначений запас</string>
+  <string name="title_shopping_list_ungrouped">Не в групі</string>
+  <string name="title_list_entry">Елемент списку</string>
+  <string name="title_edit_list_entry">Редагувати елемент списку</string>
+  <string name="title_create_list_entry">Створити елемент списку</string>
+  <string name="title_shopping_list_edit">Редагувати список покупок</string>
+  <string name="title_shopping_list_new">Новий список покупок</string>
+  <string name="title_shopping_mode">Режим покупок</string>
+  <string name="title_batch_mode_shopping_list">Пакетний режим списку покупок</string>
+  <string name="title_product_cat_optional">Необов\'язкові властивості</string>
+  <string name="title_product_cat_location">Місце за замовчуванням</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_product_cat_due_date">Термін</string>
+  <string name="title_product_cat_amount">Кількість</string>
+  <string name="title_product_cat_quantity_unit">Одиниця виміру</string>
+  <string name="title_product_cat_barcodes">Штрих-коди</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_product_cat_qu_conversions">Перетворення ОВ</string>
+  <string name="title_unknown_input">Невідоме введення</string>
+  <string name="title_presets_new_products">Шаблон для нових продуктів</string>
 
-    <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
-    <string name="subtitle_amount">%1$s %2$s</string>
-    <!-- %1$s is a number like 1, 2, 3 -->
-    <string name="subtitle_amount_opened">(відкрито %1$s) </string>
-    <!-- %1$s is a product name -->
-    <string name="subtitle_stock_locations">Де є запас %1$s</string>
-    <string name="subtitle_default_location">Місце за замовчуванням</string>
-    <string name="subtitle_none_selected">Нічого не вибрано</string>
-    <string name="subtitle_empty">Порожньо</string>
-    <string name="subtitle_done">Виконано</string>
-    <string name="subtitle_undone">Скасовано</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="subtitle_never_overdue">Ніколи не спливає</string>
-    <string name="subtitle_selected">Вибрано</string>
-    <string name="subtitle_stock_entry_no_specific">Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло</string>
-    <!-- %1$s is a purchase date -->
-    <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="subtitle_stock_entry_name">Куплено на %1$s</string>
-    <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
-    <string name="subtitle_stock_entry">Термін минає %1$s; Кількість:%2$s; %3$s</string>
-    <!-- %1$s and %2$s are numbers -->
-    <string name="subtitle_entry_num_of_num">Запис %1$d з %2$d</string>
-    <!-- %1$s is an amount, %2$s is a quantity unit -->
-    <string name="subtitle_amount_compare">Це дорівнює %1$s %2$s</string>
-    <!-- %1$s is a price, %2$s is a quantity unit -->
-    <string name="subtitle_price_means">Це означає %1$s за %2$s</string>
-    <string name="subtitle_product_hidden">Продукт приховано</string>
-    <string name="subtitle_product_not_hidden">Продукт не приховано</string>
-    <string name="subtitle_product_not_on_server">Продукт відсутній на сервері</string>
-    <string name="subtitle_unknown">Невідомо</string>
-    <!-- Like the word 'supported' from 'This version is supported.'-->
-    <string name="subtitle_supported">Підтримується</string>
-    <!-- Like the words 'not supported' from 'This version is not supported.'-->
-    <string name="subtitle_not_supported">Не підтримується</string>
-    <!-- %1$s is a number -->
-    <string name="subtitle_barcode_amount">Кількість: %1$s</string>
-    <!-- %1$s is a unit -->
-    <string name="subtitle_barcode_unit">Одиниця виміру: %1$d</string>
+  <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+  <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- %1$s is a number like 1, 2, 3 -->
+  <string name="subtitle_amount_opened">(відкрито %1$s) </string>
+  <!-- %1$s is a product name -->
+  <string name="subtitle_stock_locations">Де є запас %1$s</string>
+  <string name="subtitle_default_location">Місце за замовчуванням</string>
+  <string name="subtitle_none_selected">Нічого не вибрано</string>
+  <string name="subtitle_empty">Порожньо</string>
+  <string name="subtitle_done">Виконано</string>
+  <string name="subtitle_undone">Скасовано</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_never_overdue">Ніколи не спливає</string>
+  <string name="subtitle_selected">Вибрано</string>
+  <string name="subtitle_stock_entry_no_specific">Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло</string>
+  <!-- %1$s is a purchase date -->
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_stock_entry_name">Куплено на %1$s</string>
+  <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
+  <string name="subtitle_stock_entry">Термін минає %1$s; Кількість:%2$s; %3$s</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_entry_num_of_num">Запис %1$d з %2$d</string>
+  <!-- %1$s is an amount, %2$s is a quantity unit -->
+  <string name="subtitle_amount_compare">Це дорівнює %1$s %2$s</string>
+  <!-- %1$s is a price, %2$s is a quantity unit -->
+  <string name="subtitle_price_means">Це означає %1$s за %2$s</string>
+  <string name="subtitle_product_hidden">Продукт приховано</string>
+  <string name="subtitle_product_not_hidden">Продукт не приховано</string>
+  <string name="subtitle_product_not_on_server">Продукт відсутній на сервері</string>
+  <string name="subtitle_unknown">Невідомо</string>
+  <!-- Like the word 'supported' from 'This version is supported.'-->
+  <string name="subtitle_supported">Підтримується</string>
+  <!-- Like the words 'not supported' from 'This version is not supported.'-->
+  <string name="subtitle_not_supported">Не підтримується</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Кількість: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Одиниця виміру: %1$d</string>
 
-    <string name="description_input_product_part1">Поле продукту містить:</string>
-    <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
-    <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>
-    <string name="description_input_product_option2">Створіть новий продукт і використовуйте введення як штрих-код</string>
-    <string name="description_input_product_option3">Пов’язати штрих-код із продуктом</string>
-    <!-- Context: Clear shopping list -->
-    <string name="description_clear_shopping_list_option1">Видалення лише виконані елементи</string>
-    <!-- Context: Clear shopping list -->
-    <string name="description_clear_shopping_list_option2">Видалити все</string>
+  <string name="description_input_product_part1">Поле продукту містить:</string>
+  <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
+  <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>
+  <string name="description_input_product_option2">Створіть новий продукт і використовуйте введення як штрих-код</string>
+  <string name="description_input_product_option3">Пов’язати штрих-код із продуктом</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option1">Видалення лише виконані елементи</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option2">Видалити все</string>
 
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock">
-        <item quantity="one">У вас є %1$d продуктів на складі.</item>
-        <item quantity="few">У вас є %1$d продуктів на складі.</item>
-        <item quantity="many">У вас є %1$d продуктів на складі.</item>
-        <item quantity="other">У вас є %1$d продуктів на складі.</item>
-    </plurals>
-    <!-- %1$s and %2$s are numbers -->
-    <plurals name="description_overview_stock_due_soon">
-        <item quantity="one">Минає термін придатності %1$d продукту протягом наступних %2$d днів.</item>
-        <item quantity="few">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
-        <item quantity="many">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
-        <item quantity="other">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock_overdue">
-        <item quantity="one">%1$d продукт прострочений</item>
-        <item quantity="few">%1$d продукти прострочені</item>
-        <item quantity="many">%1$d продуктів прострочені</item>
-        <item quantity="other">%1$d продукти прострочені</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock_expired">
-        <item quantity="one">%1$d термін придатності продукту минув</item>
-        <item quantity="few">%1$d термін придатності продуктів минув</item>
-        <item quantity="many">%1$d термін придатності продуктів минув</item>
-        <item quantity="other">%1$d термін придатності продуктів минув</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock_missing">
-        <item quantity="one">%1$d продукт нижче визначеної мінімальної кількості запасів.</item>
-        <item quantity="few">%1$d продукти нижче визначеної мінімальної кількості запасів.</item>
-        <item quantity="many">%1$d продуктів нижче визначеної мінімальної кількості запасів.</item>
-        <item quantity="other">%1$d продуктів нижче визначеної мінімальної кількості запасів.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock_missing_shopping_list_single">
-        <item quantity="one">%1$d з них у вашому списку покупок.</item>
-        <item quantity="few">%1$d з них у вашому списку покупок.</item>
-        <item quantity="many">%1$d з них у вашому списку покупок.</item>
-        <item quantity="other">%1$d з них у вашому списку покупок.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_stock_missing_shopping_list_multi">
-        <item quantity="one">%1$d з них у ваших списках покупок.</item>
-        <item quantity="few">%1$d з них у ваших списках покупок.</item>
-        <item quantity="many">%1$d з них у ваших списках покупок.</item>
-        <item quantity="other">%1$d з них у ваших списках покупок.</item>
-    </plurals>
-    <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
-    <plurals name="description_overview_stock_value">
-        <item quantity="one">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
-        <item quantity="few">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
-        <item quantity="many">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
-        <item quantity="other">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_shopping_list_multi">
-        <item quantity="one">%1$d пунктів у списках покупок.</item>
-        <item quantity="few">%1$d пунктів у списках покупок.</item>
-        <item quantity="many">%1$d пунктів у списках покупок.</item>
-        <item quantity="other">%1$d пунктів у списках покупок.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_shopping_list">
-        <item quantity="one">%1$d пунктів у списку покупок.</item>
-        <item quantity="few">%1$d пунктів у списку покупок.</item>
-        <item quantity="many">%1$d пунктів у списку покупок.</item>
-        <item quantity="other">%1$d пунктів у списку покупок.</item>
-    </plurals>
-    <!-- %1$s is a number -->
-    <plurals name="description_overview_master_data">
-        <item quantity="one">Ваша база даних містить %1$d продуктів.</item>
-        <item quantity="few">Ваша база даних містить %1$d продуктів.</item>
-        <item quantity="many">Ваша база даних містить %1$d продуктів.</item>
-        <item quantity="other">Ваша база даних містить %1$d продуктів.</item>
-    </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock">
+    <item quantity="one">У вас є %1$d продуктів на складі.</item>
+    <item quantity="few">У вас є %1$d продуктів на складі.</item>
+    <item quantity="many">У вас є %1$d продуктів на складі.</item>
+    <item quantity="other">У вас є %1$d продуктів на складі.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">Минає термін придатності %1$d продукту протягом наступних %2$d днів.</item>
+    <item quantity="few">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
+    <item quantity="many">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
+    <item quantity="other">Минає термін придатності %1$d продуктів протягом наступних %2$d днів.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d продукт прострочений</item>
+    <item quantity="few">%1$d продукти прострочені</item>
+    <item quantity="many">%1$d продуктів прострочені</item>
+    <item quantity="other">%1$d продукти прострочені</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d термін придатності продукту минув</item>
+    <item quantity="few">%1$d термін придатності продуктів минув</item>
+    <item quantity="many">%1$d термін придатності продуктів минув</item>
+    <item quantity="other">%1$d термін придатності продуктів минув</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d продукт нижче визначеної мінімальної кількості запасів.</item>
+    <item quantity="few">%1$d продукти нижче визначеної мінімальної кількості запасів.</item>
+    <item quantity="many">%1$d продуктів нижче визначеної мінімальної кількості запасів.</item>
+    <item quantity="other">%1$d продуктів нижче визначеної мінімальної кількості запасів.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d з них у вашому списку покупок.</item>
+    <item quantity="few">%1$d з них у вашому списку покупок.</item>
+    <item quantity="many">%1$d з них у вашому списку покупок.</item>
+    <item quantity="other">%1$d з них у вашому списку покупок.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d з них у ваших списках покупок.</item>
+    <item quantity="few">%1$d з них у ваших списках покупок.</item>
+    <item quantity="many">%1$d з них у ваших списках покупок.</item>
+    <item quantity="other">%1$d з них у ваших списках покупок.</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+  <plurals name="description_overview_stock_value">
+    <item quantity="one">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
+    <item quantity="few">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
+    <item quantity="many">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
+    <item quantity="other">У вас є %1$d товарів на складі вартістю %2$s %3$s.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list_multi">
+    <item quantity="one">%1$d пунктів у списках покупок.</item>
+    <item quantity="few">%1$d пунктів у списках покупок.</item>
+    <item quantity="many">%1$d пунктів у списках покупок.</item>
+    <item quantity="other">%1$d пунктів у списках покупок.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d пунктів у списку покупок.</item>
+    <item quantity="few">%1$d пунктів у списку покупок.</item>
+    <item quantity="many">%1$d пунктів у списку покупок.</item>
+    <item quantity="other">%1$d пунктів у списку покупок.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_master_data">
+    <item quantity="one">Ваша база даних містить %1$d продуктів.</item>
+    <item quantity="few">Ваша база даних містить %1$d продуктів.</item>
+    <item quantity="many">Ваша база даних містить %1$d продуктів.</item>
+    <item quantity="other">Ваша база даних містить %1$d продуктів.</item>
+  </plurals>
 
-    <string name="property_name">Назва</string>
-    <string name="property_name_singular">Назва (однина)</string>
-    <string name="property_name_plural">Назва (множина)</string>
-    <string name="property_product">Продукт</string>
-    <string name="property_products">Продукти</string>
-    <string name="property_product_name">Назва продукту</string>
-    <string name="property_parent_product">Батьківський продукт</string>
-    <string name="property_description">Опис</string>
-    <string name="property_note">Нотатка</string>
-    <string name="property_status">Статус</string>
-    <string name="property_amount">Кількість</string>
-    <string name="property_seconds">Секунди</string>
-    <!-- %1$d is a number (amount of seconds) -->
-    <string name="property_seconds_num">%1$d сек.</string>
-    <string name="property_amount_min_stock">Мін. кількість в запасі</string>
-    <!-- %1$s is a quantity unit like "bottles" -->
-    <string name="property_amount_in">Одна %1$s містить</string>
-    <string name="property_price">Ціна</string>
-    <!-- %1$s is a currency like "USD", or "EUR" -->
-    <string name="property_price_in">Ціна в %1$s</string>
-    <string name="property_quantity_unit">Одиниця виміру</string>
-    <string name="property_quantity_units">Одиниці виміру</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_default_qu_purchase">Одиниці виміру покупки</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_qu_stock">Одиниця виміру запасу</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_qu_factor">Коефіцієнт закупівлі до одиниці кількості запасу</string>
-    <string name="property_barcode">Штрих-код</string>
-    <string name="property_barcodes">Штрих-коди</string>
-    <string name="property_days">Днів</string>
-    <string name="property_purchased_date">Дата купівлі</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_date_type">Вид терміну</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_type_best_before">Краще вжити до</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_type_expiration">Термін придатності</string>
-    <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_date">Термін</string>
-    <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_date_next">Наступний термін</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_days_default">Термін за замовчуванням</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_days_default_opened">Термін за замовчанням після відкриття</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_days_default_freezing">Термін за замовчуванням після заморожування</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_due_days_default_thawing">Термін за замовчуванням після розморожування</string>
-    <string name="property_location">Місце</string>
-    <string name="property_location_default">Місце за замовчуванням</string>
-    <string name="property_notes">Нотатки</string>
-    <string name="property_locations">Місця</string>
-    <string name="property_store">Магазин</string>
-    <string name="property_store_unknown">Невідомий магазин</string>
-    <string name="property_store_default">Магазин за замовчуванням</string>
-    <string name="property_stores">Магазини</string>
-    <string name="property_shopping_list">Список покупок</string>
-    <string name="property_shopping_lists">Списки покупок</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_last_purchased">Востаннє придбано</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_last_used">В останнє використано</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_last_price">Остання ціна</string>
-    <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_average_shelf_life">Зазвичай зберігається</string>
-    <string name="property_spoil_rate">Відсоток зіпсованого</string>
-    <string name="property_price_history">Історія цін</string>
-    <string name="property_product_group">Група продуктів</string>
-    <string name="property_product_groups">Групи продуктів</string>
-    <string name="property_opened">відкрито</string>
-    <string name="property_not_opened">не відкрито</string>
-    <string name="property_is_freezer">Морозилка</string>
-    <!-- kcal (kilo calories) is a unit for energy -->
-    <string name="property_energy">Енергетична цінність (ккал)</string>
-    <string name="property_active">Активний</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_never_show">Ніколи не показувати в запасах огляд</string>
-    <string name="property_number">Номер</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_enable_tare_weight">Увімкнути обробку ваги тари</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_tare_weight">Вага тара</string>
-    <!-- %1$s is a quantity unit like "bottles" -->
-    <string name="property_tare_weight_in">Вага тари в %1$s</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_disable_stock_check">Вимкніть перевірку наявності запасів для цього інгредієнта</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_amount_quick_consume">Кількість швидкого споживання</string>
-    <!-- %1$s is a quantity unit like "bottles" -->
-    <string name="property_amount_quick_consume_in">Кількість для швидкого споживання в %1$s</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="property_accumulate_amount">Накопичування під продуктів мін. запасу</string>
-    <string name="property_picture">Зображення</string>
+  <string name="property_name">Назва</string>
+  <string name="property_name_singular">Назва (однина)</string>
+  <string name="property_name_plural">Назва (множина)</string>
+  <string name="property_product">Продукт</string>
+  <string name="property_products">Продукти</string>
+  <string name="property_product_name">Назва продукту</string>
+  <string name="property_parent_product">Батьківський продукт</string>
+  <string name="property_description">Опис</string>
+  <string name="property_note">Нотатка</string>
+  <string name="property_status">Статус</string>
+  <string name="property_amount">Кількість</string>
+  <string name="property_seconds">Секунди</string>
+  <!-- %1$d is a number (amount of seconds) -->
+  <string name="property_seconds_num">%1$d сек.</string>
+  <string name="property_amount_min_stock">Мін. кількість в запасі</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_in">Одна %1$s містить</string>
+  <string name="property_price">Ціна</string>
+  <!-- %1$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_in">Ціна в %1$s</string>
+  <string name="property_quantity_unit">Одиниця виміру</string>
+  <string name="property_quantity_units">Одиниці виміру</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_purchase">Одиниці виміру покупки</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_stock">Одиниця виміру запасу</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_factor">Коефіцієнт закупівлі до одиниці кількості запасу</string>
+  <string name="property_barcode">Штрих-код</string>
+  <string name="property_barcodes">Штрих-коди</string>
+  <string name="property_days">Днів</string>
+  <string name="property_purchased_date">Дата купівлі</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_type">Вид терміну</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_best_before">Краще вжити до</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_expiration">Термін придатності</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date">Термін</string>
+  <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_next">Наступний термін</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default">Термін за замовчуванням</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_opened">Термін за замовчанням після відкриття</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_freezing">Термін за замовчуванням після заморожування</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_thawing">Термін за замовчуванням після розморожування</string>
+  <string name="property_location">Місце</string>
+  <string name="property_location_default">Місце за замовчуванням</string>
+  <string name="property_notes">Нотатки</string>
+  <string name="property_locations">Місця</string>
+  <string name="property_store">Магазин</string>
+  <string name="property_store_unknown">Невідомий магазин</string>
+  <string name="property_store_default">Магазин за замовчуванням</string>
+  <string name="property_stores">Магазини</string>
+  <string name="property_shopping_list">Список покупок</string>
+  <string name="property_shopping_lists">Списки покупок</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_purchased">Востаннє придбано</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_used">В останнє використано</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_price">Остання ціна</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_average_shelf_life">Зазвичай зберігається</string>
+  <string name="property_spoil_rate">Відсоток зіпсованого</string>
+  <string name="property_price_history">Історія цін</string>
+  <string name="property_product_group">Група продуктів</string>
+  <string name="property_product_groups">Групи продуктів</string>
+  <string name="property_opened">відкрито</string>
+  <string name="property_not_opened">не відкрито</string>
+  <string name="property_is_freezer">Морозилка</string>
+  <!-- kcal (kilo calories) is a unit for energy -->
+  <string name="property_energy">Енергетична цінність (ккал)</string>
+  <string name="property_active">Активний</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_never_show">Ніколи не показувати в запасах огляд</string>
+  <string name="property_number">Номер</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_enable_tare_weight">Увімкнути обробку ваги тари</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_tare_weight">Вага тара</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_tare_weight_in">Вага тари в %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_stock_check">Вимкніть перевірку наявності запасів для цього інгредієнта</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_consume">Кількість швидкого споживання</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_consume_in">Кількість для швидкого споживання в %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_accumulate_amount">Накопичування під продуктів мін. запасу</string>
+  <string name="property_picture">Зображення</string>
 
-    <string name="date_today">Сьогодні</string>
-    <string name="date_unknown">Невідомо</string>
-    <!-- This means the 'time' context -->
-    <string name="date_unlimited">Необмежено</string>
-    <!-- This means the 'time' context, like 'Last used date: Never' -->
-    <string name="date_never">Ніколи</string>
+  <string name="date_today">Сьогодні</string>
+  <string name="date_unknown">Невідомо</string>
+  <!-- This means the 'time' context -->
+  <string name="date_unlimited">Необмежено</string>
+  <!-- This means the 'time' context, like 'Last used date: Never' -->
+  <string name="date_never">Ніколи</string>
 
-    <plurals name="date_days">
-        <item quantity="one">%d день</item>
-        <item quantity="few">%d дня</item>
-        <item quantity="many">%d днів</item>
-        <item quantity="other">%d днів</item>
-    </plurals>
-    <plurals name="date_months">
-        <item quantity="one">%d місяць</item>
-        <item quantity="few">%d місяці</item>
-        <item quantity="many">%d місяців</item>
-        <item quantity="other">%d місяців</item>
-    </plurals>
-    <plurals name="date_years">
-        <item quantity="one">%d рік</item>
-        <item quantity="few">%d роки</item>
-        <item quantity="many">%d років</item>
-        <item quantity="other">%d років</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_days_ago">
-        <item quantity="one">%d день тому</item>
-        <item quantity="few">%d дні тому</item>
-        <item quantity="many">%d днів тому</item>
-        <item quantity="other">%d днів тому</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_months_ago">
-        <item quantity="one">%d місяць тому</item>
-        <item quantity="few">%d місяці тому</item>
-        <item quantity="many">%d місяців тому</item>
-        <item quantity="other">%d місяців тому</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_years_ago">
-        <item quantity="one">%d рік тому</item>
-        <item quantity="few">%d роки тому</item>
-        <item quantity="many">%d років тому</item>
-        <item quantity="other">%d років тому</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_days_from_now">
-        <item quantity="one">Через %d день</item>
-        <item quantity="few">Через %d дні</item>
-        <item quantity="many">Через %d днів</item>
-        <item quantity="other">Через %d днів</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_months_from_now">
-        <item quantity="one">Через %d місяць</item>
-        <item quantity="few">Через %d місяці</item>
-        <item quantity="many">Через %d місяців</item>
-        <item quantity="other">Через %d місяців</item>
-    </plurals>
-    <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
-    <plurals name="date_years_from_now">
-        <item quantity="one">Через %d рік</item>
-        <item quantity="few">Через %d роки</item>
-        <item quantity="many">Через %d років</item>
-        <item quantity="other">Через %d років</item>
-    </plurals>
+  <plurals name="date_days">
+    <item quantity="one">%d день</item>
+    <item quantity="few">%d дня</item>
+    <item quantity="many">%d днів</item>
+    <item quantity="other">%d днів</item>
+  </plurals>
+  <plurals name="date_months">
+    <item quantity="one">%d місяць</item>
+    <item quantity="few">%d місяці</item>
+    <item quantity="many">%d місяців</item>
+    <item quantity="other">%d місяців</item>
+  </plurals>
+  <plurals name="date_years">
+    <item quantity="one">%d рік</item>
+    <item quantity="few">%d роки</item>
+    <item quantity="many">%d років</item>
+    <item quantity="other">%d років</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_ago">
+    <item quantity="one">%d день тому</item>
+    <item quantity="few">%d дні тому</item>
+    <item quantity="many">%d днів тому</item>
+    <item quantity="other">%d днів тому</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_ago">
+    <item quantity="one">%d місяць тому</item>
+    <item quantity="few">%d місяці тому</item>
+    <item quantity="many">%d місяців тому</item>
+    <item quantity="other">%d місяців тому</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_ago">
+    <item quantity="one">%d рік тому</item>
+    <item quantity="few">%d роки тому</item>
+    <item quantity="many">%d років тому</item>
+    <item quantity="other">%d років тому</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_from_now">
+    <item quantity="one">Через %d день</item>
+    <item quantity="few">Через %d дні</item>
+    <item quantity="many">Через %d днів</item>
+    <item quantity="other">Через %d днів</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one">Через %d місяць</item>
+    <item quantity="few">Через %d місяці</item>
+    <item quantity="many">Через %d місяців</item>
+    <item quantity="other">Через %d місяців</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">Через %d рік</item>
+    <item quantity="few">Через %d роки</item>
+    <item quantity="many">Через %d років</item>
+    <item quantity="other">Через %d років</item>
+  </plurals>
 
-    <string name="info_acknowledgement">Ми хотіли б подякувати розробнику grocy, Бернду Беттелю, без чиєї великої роботи цей додаток ніколи б не був можливим.</string>
-    <string name="info_intro">Повторити вступ</string>
-    <string name="info_intro_description">Демонстрація можливостей</string>
-    <string name="info_dev_beginning">Початок розробки</string>
-    <string name="info_dev_beginning_date">Квітень 2020</string>
-    <string name="info_version">Версія</string>
-    <string name="info_grocy_version">Версія Grocy</string>
-    <string name="info_changelog">Журнал змін</string>
-    <string name="info_changelog_description">Що нового?</string>
-    <string name="info_developers">Розробники</string>
-    <string name="info_github">Grocy Android на GitHub</string>
-    <string name="info_github_description">Вихідний код</string>
-    <string name="info_website">Відкрити сайт Grocy</string>
+  <string name="info_acknowledgement">Ми хотіли б подякувати розробнику grocy, Бернду Беттелю, без чиєї великої роботи цей додаток ніколи б не був можливим.</string>
+  <string name="info_intro">Повторити вступ</string>
+  <string name="info_intro_description">Демонстрація можливостей</string>
+  <string name="info_dev_beginning">Початок розробки</string>
+  <string name="info_dev_beginning_date">Квітень 2020</string>
+  <string name="info_version">Версія</string>
+  <string name="info_grocy_version">Версія Grocy</string>
+  <string name="info_changelog">Журнал змін</string>
+  <string name="info_changelog_description">Що нового?</string>
+  <string name="info_developers">Розробники</string>
+  <string name="info_github">Grocy Android на GitHub</string>
+  <string name="info_github_description">Вихідний код</string>
+  <string name="info_website">Відкрити сайт Grocy</string>
 
-    <string name="feature_1_title">Grocy для Android</string>
-    <string name="feature_1_description">Самостійне управління продуктами для вашого будинку</string>
-    <string name="feature_2_title">Інтуїтивний дизайн</string>
-    <string name="feature_2_description">Відкриття та використання одним жестом</string>
-    <string name="feature_3_title">Потужна пакетна обробка</string>
-    <string name="feature_3_description">Скануйте всю свою покупку за лічені секунди</string>
+  <string name="feature_1_title">Grocy для Android</string>
+  <string name="feature_1_description">Самостійне управління продуктами для вашого будинку</string>
+  <string name="feature_2_title">Інтуїтивний дизайн</string>
+  <string name="feature_2_description">Відкриття та використання одним жестом</string>
+  <string name="feature_3_title">Потужна пакетна обробка</string>
+  <string name="feature_3_description">Скануйте всю свою покупку за лічені секунди</string>
 
-    <string name="category_licenses">Ліцензії open source</string>
-    <string name="category_general">Загальне</string>
-    <string name="category_stock">Запас</string>
-    <string name="category_server">Сервер</string>
-    <string name="category_scanner">Сканер</string>
-    <string name="category_appearance">Зовнішній вигляд</string>
-    <string name="category_network">Мережа</string>
-    <string name="category_behavior">Поведінка</string>
-    <string name="category_debugging">Налагодження</string>
+  <string name="category_licenses">Ліцензії open source</string>
+  <string name="category_general">Загальне</string>
+  <string name="category_stock">Запас</string>
+  <string name="category_server">Сервер</string>
+  <string name="category_scanner">Сканер</string>
+  <string name="category_appearance">Зовнішній вигляд</string>
+  <string name="category_network">Мережа</string>
+  <string name="category_behavior">Поведінка</string>
+  <string name="category_debugging">Налагодження</string>
 
-    <string name="hint_server">Адреса сервера</string>
-    <string name="hint_key">Дійсний ключ API</string>
+  <string name="hint_server">Адреса сервера</string>
+  <string name="hint_key">Дійсний ключ API</string>
 
-    <string name="setting_dark_mode">Примусовий темний режим</string>
-    <string name="setting_dark_mode_description">Вимкнути для використання системних налаштувань</string>
-    <string name="setting_language">Мова</string>
-    <string name="setting_language_description">Оберіть мову</string>
-    <string name="setting_language_info">Дуже дякую всім перекладачам-добровольцям у Transifex!\nБудь ласка, відвідайте нас на GitHub, щоб дізнатись, як ви можете допомогти зробити Grocy Android доступною для вашої мови.</string>
-    <string name="setting_language_system">Визначено системою %1$s</string>
-    <string name="setting_language_not_available">Недоступно</string>
-    <string name="setting_open_food_facts">Використовувати Open Food Facts</string>
-    <string name="setting_open_food_facts_description">Отримувати інформацію зі штрих-кодів</string>
-    <string name="setting_use_front_cam">Використовувати фронтальну камеру</string>
-    <string name="setting_use_front_cam_description">Для сканування штрих-коду</string>
-    <string name="setting_external_support">Підтримка зовнішнього сканера</string>
-    <string name="setting_external_support_description">Через USB або Bluetooth</string>
-    <string name="setting_reload_config">Перезавантажити конфігурацію</string>
-    <string name="setting_reload_config_description">Потрібне перезавантаження застосунку</string>
-    <string name="setting_logout">Вийти</string>
-    <string name="setting_logout_description">Повернутися на сторінку входу</string>
-    <string name="setting_manage_shortcuts">Керування ярликами</string>
-    <string name="setting_list_indicator">Підсвітити елемент списку</string>
-    <string name="setting_list_indicator_description">Показувати синю крапку, якщо товар є у списку покупок</string>
-    <string name="setting_shopping_mode_update_interval">Інтервал оновлення режиму покупок</string>
-    <string name="setting_keep_screen_on">Не вимикати екран</string>
-    <string name="setting_keep_screen_on_description">В режимі покупок</string>
-    <string name="setting_show_done_items">Показати виконані елементи</string>
-    <string name="setting_show_done_items_description">Знизу</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="setting_expiring_soon_days">За скільки днів попереджати, що спливає термін придатності</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="setting_default_amount_purchase">Кількість для покупки за замовчуванням</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="setting_default_amount_consume">Кількість для споживання за замовчуванням</string>
-    <string name="setting_purchased_date">Запитувати дату купівлі</string>
-    <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-    <string name="setting_purchased_date_description">На сторінці купівлі та інвентаризації</string>
-    <string name="setting_empty_value">Порожньо</string>
-    <string name="setting_sync_off">Синхронізацію вимкнено</string>
-    <string name="setting_not_loaded">Не вдалося завантажити</string>
-    <string name="setting_debug">Увімкнути ведення журналу</string>
-    <string name="setting_debug_description">Відображати помилки в журналах</string>
-    <string name="setting_info_logs">Показати інформаційні записи журналів</string>
-    <string name="setting_logs_description">Показати журнал цього процесу</string>
-    <string name="setting_timeout">Час очікування завантаження</string>
-    <string name="setting_timeout_descriptions">Після чого завантаження скасовується</string>
-    <string name="setting_beginner_mode">Спрощений режим</string>
-    <string name="setting_beginner_mode_description">Показувати тексти довідки за замовчуванням</string>
-    <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
-    <string name="setting_expand_bottom_sheets">Розгорнути нижні аркуші</string>
-    <string name="setting_expand_bottom_sheets_description">У альбомному режимі</string>
-    <string name="setting_loading_circle">Показувати коло завантаження для всіх запитів</string>
-    <string name="setting_loading_circle_description">Корисно для повільних мереж</string>
-    <string name="setting_synchronized">Ці параметри синхронізуються із сервером.</string>
+  <string name="setting_dark_mode">Примусовий темний режим</string>
+  <string name="setting_dark_mode_description">Вимкнути для використання системних налаштувань</string>
+  <string name="setting_language">Мова</string>
+  <string name="setting_language_description">Оберіть мову</string>
+  <string name="setting_language_info">Дуже дякую всім перекладачам-добровольцям у Transifex!\nБудь ласка, відвідайте нас на GitHub, щоб дізнатись, як ви можете допомогти зробити Grocy Android доступною для вашої мови.</string>
+  <string name="setting_language_system">Визначено системою %1$s</string>
+  <string name="setting_language_not_available">Недоступно</string>
+  <string name="setting_open_food_facts">Використовувати Open Food Facts</string>
+  <string name="setting_open_food_facts_description">Отримувати інформацію зі штрих-кодів</string>
+  <string name="setting_use_front_cam">Використовувати фронтальну камеру</string>
+  <string name="setting_use_front_cam_description">Для сканування штрих-коду</string>
+  <string name="setting_external_support">Підтримка зовнішнього сканера</string>
+  <string name="setting_external_support_description">Через USB або Bluetooth</string>
+  <string name="setting_reload_config">Перезавантажити конфігурацію</string>
+  <string name="setting_reload_config_description">Потрібне перезавантаження застосунку</string>
+  <string name="setting_logout">Вийти</string>
+  <string name="setting_logout_description">Повернутися на сторінку входу</string>
+  <string name="setting_manage_shortcuts">Керування ярликами</string>
+  <string name="setting_list_indicator">Підсвітити елемент списку</string>
+  <string name="setting_list_indicator_description">Показувати синю крапку, якщо товар є у списку покупок</string>
+  <string name="setting_shopping_mode_update_interval">Інтервал оновлення режиму покупок</string>
+  <string name="setting_keep_screen_on">Не вимикати екран</string>
+  <string name="setting_keep_screen_on_description">В режимі покупок</string>
+  <string name="setting_show_done_items">Показати виконані елементи</string>
+  <string name="setting_show_done_items_description">Знизу</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_expiring_soon_days">За скільки днів попереджати, що спливає термін придатності</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_purchase">Кількість для покупки за замовчуванням</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_consume">Кількість для споживання за замовчуванням</string>
+  <string name="setting_purchased_date">Запитувати дату купівлі</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_purchased_date_description">На сторінці купівлі та інвентаризації</string>
+  <string name="setting_empty_value">Порожньо</string>
+  <string name="setting_sync_off">Синхронізацію вимкнено</string>
+  <string name="setting_not_loaded">Не вдалося завантажити</string>
+  <string name="setting_debug">Увімкнути ведення журналу</string>
+  <string name="setting_debug_description">Відображати помилки в журналах</string>
+  <string name="setting_info_logs">Показати інформаційні записи журналів</string>
+  <string name="setting_logs_description">Показати журнал цього процесу</string>
+  <string name="setting_timeout">Час очікування завантаження</string>
+  <string name="setting_timeout_descriptions">Після чого завантаження скасовується</string>
+  <string name="setting_beginner_mode">Спрощений режим</string>
+  <string name="setting_beginner_mode_description">Показувати тексти довідки за замовчуванням</string>
+  <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
+  <string name="setting_expand_bottom_sheets">Розгорнути нижні аркуші</string>
+  <string name="setting_expand_bottom_sheets_description">У альбомному режимі</string>
+  <string name="setting_loading_circle">Показувати коло завантаження для всіх запитів</string>
+  <string name="setting_loading_circle_description">Корисно для повільних мереж</string>
+  <string name="setting_synchronized">Ці параметри синхронізуються із сервером.</string>
 
-    <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
-    Examples: 'de' for German; 'fr' for French -->
-    <string name="url_grocy_demo">https://en.demo.grocy.info</string>
-    </resources>
+  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
+  Examples: 'de' for German; 'fr' for French -->
+  <string name="url_grocy_demo">https://en.demo.grocy.info</string>
+</resources>

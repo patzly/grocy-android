@@ -25,16 +25,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitAdapter;
@@ -42,57 +38,57 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class QuantityUnitsBottomSheet extends BaseBottomSheet
-        implements QuantityUnitAdapter.QuantityUnitAdapterListener {
+    implements QuantityUnitAdapter.QuantityUnitAdapterListener {
 
-    private final static String TAG = QuantityUnitsBottomSheet.class.getSimpleName();
+  private final static String TAG = QuantityUnitsBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
-    private ArrayList<QuantityUnit> quantityUnits;
+  private MainActivity activity;
+  private ArrayList<QuantityUnit> quantityUnits;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-    }
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_list_selection, container, false
-        );
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_list_selection, container, false
+    );
 
-        activity = (MainActivity) requireActivity();
+    activity = (MainActivity) requireActivity();
 
-        quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
-        int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
+    int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
-        TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
-        textViewTitle.setText(activity.getString(R.string.property_quantity_units));
+    TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
+    textViewTitle.setText(activity.getString(R.string.property_quantity_units));
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
-        );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(
-                new QuantityUnitAdapter(
-                        quantityUnits, selected, this
-                )
-        );
+    RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
+    recyclerView.setLayoutManager(
+        new LinearLayoutManager(
+            activity,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+    );
+    recyclerView.setItemAnimator(new DefaultItemAnimator());
+    recyclerView.setAdapter(
+        new QuantityUnitAdapter(
+            quantityUnits, selected, this
+        )
+    );
 
-        return view;
-    }
+    return view;
+  }
 
-    @Override
-    public void onItemRowClicked(int position) {
+  @Override
+  public void onItemRowClicked(int position) {
         /*if(activity.getClass() == MainActivity.class) {
             Fragment currentFragment = ((MainActivity) activity).getCurrentFragment();
             if(currentFragment.getClass() == MasterProductSimpleFragment.class) {
@@ -117,16 +113,16 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheet
                 quantityUnits.get(position),
                 requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
         );*/
-        activity.getCurrentFragment().selectQuantityUnit(quantityUnits.get(position));
-        activity.getCurrentFragment().selectQuantityUnit(
-                quantityUnits.get(position), requireArguments()
-        );
-        dismiss();
-    }
+    activity.getCurrentFragment().selectQuantityUnit(quantityUnits.get(position));
+    activity.getCurrentFragment().selectQuantityUnit(
+        quantityUnits.get(position), requireArguments()
+    );
+    dismiss();
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

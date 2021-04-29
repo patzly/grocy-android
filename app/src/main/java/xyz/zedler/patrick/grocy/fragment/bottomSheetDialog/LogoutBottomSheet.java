@@ -26,60 +26,57 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class LogoutBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = LogoutBottomSheet.class.getSimpleName();
+  private final static String TAG = LogoutBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
+  private MainActivity activity;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @SuppressLint("ApplySharedPref")
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_logout, container, false
+    );
+
+    activity = (MainActivity) requireActivity();
+
+    if (getArguments() != null) {
+      // bundle was set to new Bundle() to indicate the demo type
+      TextView textViewTitle = view.findViewById(R.id.text_logout_title);
+      textViewTitle.setText(activity.getString(R.string.title_logout_demo));
+      TextView textViewMsg = view.findViewById(R.id.text_logout_msg);
+      textViewMsg.setText(activity.getText(R.string.msg_logout_demo));
     }
 
-    @SuppressLint("ApplySharedPref")
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_logout, container, false
-        );
+    view.findViewById(R.id.button_logout_cancel).setOnClickListener(v -> dismiss());
 
-        activity = (MainActivity) requireActivity();
+    view.findViewById(R.id.button_logout_logout).setOnClickListener(v -> {
+      activity.clearOfflineDataAndRestart();
+      dismiss();
+    });
 
-        if(getArguments() != null) {
-            // bundle was set to new Bundle() to indicate the demo type
-            TextView textViewTitle = view.findViewById(R.id.text_logout_title);
-            textViewTitle.setText(activity.getString(R.string.title_logout_demo));
-            TextView textViewMsg = view.findViewById(R.id.text_logout_msg);
-            textViewMsg.setText(activity.getText(R.string.msg_logout_demo));
-        }
+    return view;
+  }
 
-        view.findViewById(R.id.button_logout_cancel).setOnClickListener(v -> dismiss());
-
-        view.findViewById(R.id.button_logout_logout).setOnClickListener(v -> {
-            activity.clearOfflineDataAndRestart();
-            dismiss();
-        });
-
-        return view;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

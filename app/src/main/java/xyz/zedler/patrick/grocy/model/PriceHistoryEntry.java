@@ -20,44 +20,45 @@
 package xyz.zedler.patrick.grocy.model;
 
 import androidx.annotation.NonNull;
-
 import com.google.gson.annotations.SerializedName;
 
 public class PriceHistoryEntry {
 
-    @SerializedName("date")
-    private String date;
+  @SerializedName("date")
+  private String date;
 
-    @SerializedName("price")
-    private String price;
+  @SerializedName("price")
+  private String price;
 
-    @SerializedName("shopping_location")
-    private Store store;
+  @SerializedName("shopping_location")
+  private Store store;
 
-    public String getDate() {
-        return date;
+  public String getDate() {
+    return date;
+  }
+
+  public double getPrice() {
+    if (price == null || price.isEmpty()) {
+      return 0;
+    } else {
+      return Double.parseDouble(price);
     }
+  }
 
-    public double getPrice() {
-        if(price == null || price.isEmpty()) {
-            return 0;
-        } else {
-            return Double.parseDouble(price);
-        }
-    }
+  public Store getStore() {
+    return store;
+  }
 
-    public Store getStore() {
-        return store;
+  public String getStoreName() {
+    if (store == null) {
+      return null;
     }
+    return store.getName();
+  }
 
-    public String getStoreName() {
-        if(store == null) return null;
-        return store.getName();
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "PriceHistoryEntry(" + date + ": " + price + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "PriceHistoryEntry(" + date + ": " + price + ')';
+  }
 }

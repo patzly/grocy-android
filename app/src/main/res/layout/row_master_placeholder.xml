@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,22 +18,22 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:background="@color/background"
-    android:padding="16dp">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  android:background="@color/background"
+  android:padding="16dp">
 
-    <TextView
-        style="@style/Widget.Grocy.TextView.ListItem.Title"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:singleLine="true"
-        android:textColor="@color/transparent"
-        android:background="@drawable/bg_placeholder_text"
-        android:backgroundTint="@color/on_background_tertiary" />
+  <TextView
+    style="@style/Widget.Grocy.TextView.ListItem.Title"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start|center_vertical"
+    android:singleLine="true"
+    android:textColor="@color/transparent"
+    android:background="@drawable/bg_placeholder_text"
+    android:backgroundTint="@color/on_background_tertiary" />
 
 </LinearLayout>

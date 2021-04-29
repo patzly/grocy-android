@@ -17,15 +17,16 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+<vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="24dp"
+  android:height="24dp"
+  android:viewportWidth="24"
+  android:viewportHeight="24">
   <path
-      android:pathData="M5,16.94l15.58,0.4 0.5,-0.66z"
-      android:fillColor="@color/retro_red"/>
+    android:pathData="M5,16.94l15.58,0.4 0.5,-0.66z"
+    android:fillColor="@color/retro_red" />
   <path
-      android:pathData="M8.73,14c-0.4,0 -0.73,0.33 -0.73,0.73v4.54c0,0.4 0.33,0.73 0.73,0.73h9.54c0.4,0 0.73,-0.33 0.73,-0.73v-4.54c0,-0.4 -0.33,-0.73 -0.73,-0.73zM8.8,14.25h9.4c0.31,0 0.56,0.26 0.56,0.57v4.36c0,0.31 -0.25,0.57 -0.57,0.57L8.8,19.75a0.57,0.57 0,0 1,-0.57 -0.57v-4.36c0,-0.31 0.26,-0.57 0.57,-0.57z"
-      android:fillColor="@color/on_background"/>
+    android:pathData="M8.73,14c-0.4,0 -0.73,0.33 -0.73,0.73v4.54c0,0.4 0.33,0.73 0.73,0.73h9.54c0.4,0 0.73,-0.33 0.73,-0.73v-4.54c0,-0.4 -0.33,-0.73 -0.73,-0.73zM8.8,14.25h9.4c0.31,0 0.56,0.26 0.56,0.57v4.36c0,0.31 -0.25,0.57 -0.57,0.57L8.8,19.75a0.57,0.57 0,0 1,-0.57 -0.57v-4.36c0,-0.31 0.26,-0.57 0.57,-0.57z"
+    android:fillColor="@color/on_background" />
 </vector>

@@ -20,38 +20,36 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 
 public class BottomSheetEvent extends Event {
 
-    private final BaseBottomSheet bottomSheet;
-    private final Bundle bundle;
+  private final BaseBottomSheet bottomSheet;
+  private final Bundle bundle;
 
-    public BottomSheetEvent(@NonNull BaseBottomSheet bottomSheet, @Nullable Bundle bundle) {
-        this.bottomSheet = bottomSheet;
-        this.bundle = bundle;
-    }
+  public BottomSheetEvent(@NonNull BaseBottomSheet bottomSheet, @Nullable Bundle bundle) {
+    this.bottomSheet = bottomSheet;
+    this.bundle = bundle;
+  }
 
-    public BottomSheetEvent(@NonNull BaseBottomSheet bottomSheet) {
-        this(bottomSheet, null);
-    }
+  public BottomSheetEvent(@NonNull BaseBottomSheet bottomSheet) {
+    this(bottomSheet, null);
+  }
 
-    public BaseBottomSheet getBottomSheet() {
-        return bottomSheet;
-    }
+  public BaseBottomSheet getBottomSheet() {
+    return bottomSheet;
+  }
 
-    @Override
-    public Bundle getBundle() {
-        return bundle;
-    }
+  @Override
+  public Bundle getBundle() {
+    return bundle;
+  }
 
-    @Override
-    public int getType() {
-        return Event.BOTTOM_SHEET;
-    }
+  @Override
+  public int getType() {
+    return Event.BOTTOM_SHEET;
+  }
 
 }

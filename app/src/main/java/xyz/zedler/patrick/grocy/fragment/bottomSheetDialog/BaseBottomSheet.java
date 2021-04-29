@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,68 +37,68 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
 import java.net.URLEncoder;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 /**
- * This is an extended BottomSheetDialogFragment class. The one overridden method fixes the
- * weird behavior of bottom sheets in landscape mode. All bottom sheets in this app should use this
+ * This is an extended BottomSheetDialogFragment class. The one overridden method fixes the weird
+ * behavior of bottom sheets in landscape mode. All bottom sheets in this app should use this
  * extended class to apply the fix.
  */
 public class BaseBottomSheet extends BottomSheetDialogFragment {
-    private boolean skipCollapsedStateInPortrait = false;
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+  private boolean skipCollapsedStateInPortrait = false;
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
-                requireContext()
-        );
-        boolean expandBottomSheets = sharedPrefs.getBoolean(
-                Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
-                Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
-        );
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-        view.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if(view.getViewTreeObserver().isAlive()) {
-                            view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(
+        requireContext()
+    );
+    boolean expandBottomSheets = sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.EXPAND_BOTTOM_SHEETS
+    );
 
-                        BottomSheetBehavior<View> behavior = getBehavior();
-                        if(behavior == null) return;
+    view.getViewTreeObserver().addOnGlobalLayoutListener(
+        new ViewTreeObserver.OnGlobalLayoutListener() {
+          @Override
+          public void onGlobalLayout() {
+            if (view.getViewTreeObserver().isAlive()) {
+              view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
 
-                        int orientation = getResources().getConfiguration().orientation;
-                        if(orientation == Configuration.ORIENTATION_PORTRAIT
-                                && skipCollapsedStateInPortrait
-                        ) {
-                            behavior.setPeekHeight(getDisplayHeight(requireActivity()));
-                            behavior.setSkipCollapsed(true);
-                        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            behavior.setPeekHeight(getDisplayHeight(requireActivity()) / 2);
-                        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            behavior.setPeekHeight(
-                                    expandBottomSheets
-                                            ? getDisplayHeight(requireActivity())
-                                            : getDisplayHeight(requireActivity()) / 2
-                            );
-                        }
-                    }
-                });
-    }
+            BottomSheetBehavior<View> behavior = getBehavior();
+            if (behavior == null) {
+              return;
+            }
 
-    private static int getDisplayHeight(Activity activity) {
-        // important for targeting SDK 11
+            int orientation = getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT
+                && skipCollapsedStateInPortrait
+            ) {
+              behavior.setPeekHeight(getDisplayHeight(requireActivity()));
+              behavior.setSkipCollapsed(true);
+            } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+              behavior.setPeekHeight(getDisplayHeight(requireActivity()) / 2);
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+              behavior.setPeekHeight(
+                  expandBottomSheets
+                      ? getDisplayHeight(requireActivity())
+                      : getDisplayHeight(requireActivity()) / 2
+              );
+            }
+          }
+        });
+  }
+
+  private static int getDisplayHeight(Activity activity) {
+    // important for targeting SDK 11
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowMetrics windowMetrics = activity.getWindowManager().getCurrentWindowMetrics();
             Insets insets = windowMetrics.getWindowInsets().getInsetsIgnoringVisibility(
@@ -107,95 +106,106 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
             );
             return (windowMetrics.getBounds().height() - insets.top - insets.bottom) / 2;
         } else {*/
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            return displayMetrics.heightPixels;
-        //}
-    }
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    return displayMetrics.heightPixels;
+    //}
+  }
 
-    @Nullable
-    BottomSheetBehavior<View> getBehavior() {
-        BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-        if(dialog == null) return null;
-        View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-        if(sheet == null) return null;
-        return BottomSheetBehavior.from(sheet);
+  @Nullable
+  BottomSheetBehavior<View> getBehavior() {
+    BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
+    if (dialog == null) {
+      return null;
     }
+    View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+    if (sheet == null) {
+      return null;
+    }
+    return BottomSheetBehavior.from(sheet);
+  }
 
-    void setSkipCollapsedInPortrait() {
-        skipCollapsedStateInPortrait = true;
-    }
+  void setSkipCollapsedInPortrait() {
+    skipCollapsedStateInPortrait = true;
+  }
 
-    @NonNull
-    NavController findNavController() {
-        return NavHostFragment.findNavController(this);
-    }
+  @NonNull
+  NavController findNavController() {
+    return NavHostFragment.findNavController(this);
+  }
 
-    void navigate(NavDirections directions) {
-        findNavController().navigate(directions);
-    }
+  void navigate(NavDirections directions) {
+    findNavController().navigate(directions);
+  }
 
-    void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
-        findNavController().navigate(directions, navigatorExtras);
-    }
+  void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
+    findNavController().navigate(directions, navigatorExtras);
+  }
 
-    void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
-        findNavController().navigate(directions, navOptions);
-    }
+  void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
+    findNavController().navigate(directions, navOptions);
+  }
 
-    void navigate(@IdRes int destination) {
-        navigate(destination, (Bundle) null);
-    }
+  void navigate(@IdRes int destination) {
+    navigate(destination, (Bundle) null);
+  }
 
-    void navigate(@IdRes int destination, Bundle arguments) {
-        NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_in_up)
-                .setPopExitAnim(R.anim.slide_out_down)
-                .setExitAnim(R.anim.slide_no);
-        findNavController().navigate(destination, arguments, builder.build());
-    }
+  void navigate(@IdRes int destination, Bundle arguments) {
+    NavOptions.Builder builder = new NavOptions.Builder();
+    builder.setEnterAnim(R.anim.slide_in_up)
+        .setPopExitAnim(R.anim.slide_out_down)
+        .setExitAnim(R.anim.slide_no);
+    findNavController().navigate(destination, arguments, builder.build());
+  }
 
-    void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
-        findNavController().navigate(destination, null, navOptions);
-    }
+  void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
+    findNavController().navigate(destination, null, navOptions);
+  }
 
-    void navigateDeepLink(@NonNull Uri uri) {
-        NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_in_up)
-                .setPopExitAnim(R.anim.slide_out_down)
-                .setExitAnim(R.anim.slide_no);
-        findNavController().navigate(uri, builder.build());
-    }
+  void navigateDeepLink(@NonNull Uri uri) {
+    NavOptions.Builder builder = new NavOptions.Builder();
+    builder.setEnterAnim(R.anim.slide_in_up)
+        .setPopExitAnim(R.anim.slide_out_down)
+        .setExitAnim(R.anim.slide_no);
+    findNavController().navigate(uri, builder.build());
+  }
 
-    void navigateDeepLink(@NonNull String uri) {
-        navigateDeepLink(Uri.parse(uri));
-    }
+  void navigateDeepLink(@NonNull String uri) {
+    navigateDeepLink(Uri.parse(uri));
+  }
 
-    void navigateDeepLink(@NonNull String uri, @NonNull Bundle args) {
-        navigateDeepLink(getUriWithArgs(uri, args));
-    }
+  void navigateDeepLink(@NonNull String uri, @NonNull Bundle args) {
+    navigateDeepLink(getUriWithArgs(uri, args));
+  }
 
-    Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
-        String[] parts = uri.split("\\?");
-        if(parts.length == 1) return Uri.parse(uri);
-        String linkPart = parts[0];
-        String argsPart = parts[parts.length-1];
-        String[] pairs = argsPart.split("&");
-        String finalDeepLink = linkPart + "?";
-        for(int i=0; i<=pairs.length-1; i++) {
-            String pair = pairs[i];
-            String key = pair.split("=")[0];
-            Object valueBundle = argsBundle.get(key);
-            if(valueBundle == null) continue;
-            try {
-                finalDeepLink += key + "=" + URLEncoder.encode(valueBundle.toString(), "UTF-8");
-            } catch (Throwable ignore) {}
-            if(i != pairs.length-1) finalDeepLink += "&";
-        }
-        return Uri.parse(finalDeepLink);
+  Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+    String[] parts = uri.split("\\?");
+    if (parts.length == 1) {
+      return Uri.parse(uri);
     }
+    String linkPart = parts[0];
+    String argsPart = parts[parts.length - 1];
+    String[] pairs = argsPart.split("&");
+    String finalDeepLink = linkPart + "?";
+    for (int i = 0; i <= pairs.length - 1; i++) {
+      String pair = pairs[i];
+      String key = pair.split("=")[0];
+      Object valueBundle = argsBundle.get(key);
+      if (valueBundle == null) {
+        continue;
+      }
+      try {
+        finalDeepLink += key + "=" + URLEncoder.encode(valueBundle.toString(), "UTF-8");
+      } catch (Throwable ignore) {
+      }
+      if (i != pairs.length - 1) {
+        finalDeepLink += "&";
+      }
+    }
+    return Uri.parse(finalDeepLink);
+  }
 
-    Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {
-        return getUriWithArgs(getString(uri), args);
-    }
+  Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {
+    return getUriWithArgs(getString(uri), args);
+  }
 }

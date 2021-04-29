@@ -21,120 +21,121 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Objects;
 
 @Entity(tableName = "store_table")
 public class Store implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private final int id;
 
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
-    private String name;
+  @ColumnInfo(name = "name")
+  @SerializedName("name")
+  private final String name;
 
-    @ColumnInfo(name = "description")
-    @SerializedName("description")
-    private String description;
+  @ColumnInfo(name = "description")
+  @SerializedName("description")
+  private String description;
 
-    @ColumnInfo(name = "row_created_timestamp")
-    @SerializedName("row_created_timestamp")
-    private String rowCreatedTimestamp;
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedTimestamp;
 
-    /**
-     * First element in bottomSheet selection: NONE (id = -1)
-     */
-    public Store(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  /**
+   * First element in bottomSheet selection: NONE (id = -1)
+   */
+  public Store(int id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    public Store(Parcel parcel) {
-        id = parcel.readInt();
-        name = parcel.readString();
-        description = parcel.readString();
-        rowCreatedTimestamp = parcel.readString();
+  public Store(Parcel parcel) {
+    id = parcel.readInt();
+    name = parcel.readString();
+    description = parcel.readString();
+    rowCreatedTimestamp = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(name);
+    dest.writeString(description);
+    dest.writeString(rowCreatedTimestamp);
+  }
+
+  public static final Creator<Store> CREATOR = new Creator<Store>() {
+
+    @Override
+    public Store createFromParcel(Parcel in) {
+      return new Store(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(rowCreatedTimestamp);
+    public Store[] newArray(int size) {
+      return new Store[size];
     }
+  };
 
-    public static final Creator<Store> CREATOR = new Creator<Store>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public Store createFromParcel(Parcel in) {
-            return new Store(in);
-        }
+  public String getName() {
+    return name;
+  }
 
-        @Override
-        public Store[] newArray(int size) {
-            return new Store[size];
-        }
-    };
+  public String getDescription() {
+    return description;
+  }
 
-    public int getId() {
-        return id;
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getRowCreatedTimestamp() {
+    return rowCreatedTimestamp;
+  }
+
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public String getName() {
-        return name;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    Store store = (Store) o;
+    return id == store.id &&
+        Objects.equals(name, store.name) &&
+        Objects.equals(description, store.description) &&
+        Objects.equals(rowCreatedTimestamp, store.rowCreatedTimestamp);
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, description, rowCreatedTimestamp);
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getRowCreatedTimestamp() {
-        return rowCreatedTimestamp;
-    }
-
-    public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
-        this.rowCreatedTimestamp = rowCreatedTimestamp;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Store store = (Store) o;
-        return id == store.id &&
-                Objects.equals(name, store.name) &&
-                Objects.equals(description, store.description) &&
-                Objects.equals(rowCreatedTimestamp, store.rowCreatedTimestamp);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, rowCreatedTimestamp);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Store(" + name + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "Store(" + name + ')';
+  }
 }

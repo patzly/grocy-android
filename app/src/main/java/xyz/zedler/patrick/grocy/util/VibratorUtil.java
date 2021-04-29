@@ -27,48 +27,48 @@ import android.os.Vibrator;
 
 public class VibratorUtil {
 
-    private final static long CLICK = 60;
-    private final static long HEAVY_CLICK = 120;
-    private final static long TICK = 30;
+  private final static long CLICK = 60;
+  private final static long HEAVY_CLICK = 120;
+  private final static long TICK = 30;
 
-    private Vibrator vibrator;
+  private Vibrator vibrator;
 
-    public VibratorUtil(Context context) {
-        if(context != null) {
-            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        }
+  public VibratorUtil(Context context) {
+    if (context != null) {
+      vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
+  }
 
-    public VibratorUtil(Activity activity) {
-        if(activity != null) {
-            vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-        }
+  public VibratorUtil(Activity activity) {
+    if (activity != null) {
+      vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
     }
+  }
 
-    public void click() {
-        vibrate(CLICK);
-    }
+  public void click() {
+    vibrate(CLICK);
+  }
 
-    public void heavyClick() {
-        vibrate(HEAVY_CLICK);
-    }
+  public void heavyClick() {
+    vibrate(HEAVY_CLICK);
+  }
 
-    public void tick() {
-        vibrate(TICK);
-    }
+  public void tick() {
+    vibrate(TICK);
+  }
 
-    public void vibrate(long duration) {
-        if(vibrator != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(
-                        VibrationEffect.createOneShot(
-                                duration,
-                                VibrationEffect.DEFAULT_AMPLITUDE
-                        )
-                );
-            } else {
-                vibrator.vibrate(duration);
-            }
-        }
+  public void vibrate(long duration) {
+    if (vibrator != null) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(
+            VibrationEffect.createOneShot(
+                duration,
+                VibrationEffect.DEFAULT_AMPLITUDE
+            )
+        );
+      } else {
+        vibrator.vibrate(duration);
+      }
     }
+  }
 }

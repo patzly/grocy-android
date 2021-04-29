@@ -24,12 +24,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginRequestBinding;
@@ -41,78 +39,78 @@ import xyz.zedler.patrick.grocy.viewmodel.LoginRequestViewModel;
 
 public class LoginRequestFragment extends BaseFragment {
 
-    private FragmentLoginRequestBinding binding;
-    private MainActivity activity;
-    private LoginRequestViewModel viewModel;
+  private FragmentLoginRequestBinding binding;
+  private MainActivity activity;
+  private LoginRequestViewModel viewModel;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentLoginRequestBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentLoginRequestBinding.inflate(inflater, container, false);
+    return binding.getRoot();
+  }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+  }
 
-    @Override
-    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        LoginRequestFragmentArgs args = LoginRequestFragmentArgs.fromBundle(requireArguments());
-        viewModel = new ViewModelProvider(this, new LoginRequestViewModel
-                .LoginViewModelFactory(activity.getApplication(), args)
-        ).get(LoginRequestViewModel.class);
-        binding.setViewModel(viewModel);
-        binding.setActivity(activity);
-        binding.setFragment(this);
-        binding.setClickUtil(new ClickUtil());
-        binding.setLifecycleOwner(getViewLifecycleOwner());
+  @Override
+  public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    LoginRequestFragmentArgs args = LoginRequestFragmentArgs.fromBundle(requireArguments());
+    viewModel = new ViewModelProvider(this, new LoginRequestViewModel
+        .LoginViewModelFactory(activity.getApplication(), args)
+    ).get(LoginRequestViewModel.class);
+    binding.setViewModel(viewModel);
+    binding.setActivity(activity);
+    binding.setFragment(this);
+    binding.setClickUtil(new ClickUtil());
+    binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity,
-                        activity.binding.frameMainContainer
-                ));
-            } else if(event.getType() == Event.LOGIN_SUCCESS) {
-                activity.updateGrocyApi();
-                navigateToStartDestination();
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
-    }
+    viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+            activity,
+            activity.binding.frameMainContainer
+        ));
+      } else if (event.getType() == Event.LOGIN_SUCCESS) {
+        activity.updateGrocyApi();
+        navigateToStartDestination();
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
+  }
 
-    private void navigateToStartDestination() {
-        activity.updateStartDestination();
-        NavOptions.Builder builder = new NavOptions.Builder();
-        builder.setEnterAnim(R.anim.slide_from_end);
-        builder.setExitAnim(R.anim.slide_to_start);
-        builder.setPopEnterAnim(R.anim.slide_from_start);
-        builder.setPopExitAnim(R.anim.slide_to_end);
-        builder.setPopUpTo(R.id.navigation_main, true);
-        navigate(findNavController().getGraph().getStartDestination(), builder.build());
-    }
+  private void navigateToStartDestination() {
+    activity.updateStartDestination();
+    NavOptions.Builder builder = new NavOptions.Builder();
+    builder.setEnterAnim(R.anim.slide_from_end);
+    builder.setExitAnim(R.anim.slide_to_start);
+    builder.setPopEnterAnim(R.anim.slide_from_start);
+    builder.setPopExitAnim(R.anim.slide_to_end);
+    builder.setPopUpTo(R.id.navigation_main, true);
+    navigate(findNavController().getGraph().getStartDestination(), builder.build());
+  }
 
-    @Override
-    public void login(boolean checkVersion) {
-        viewModel.login(checkVersion);
-    }
+  @Override
+  public void login(boolean checkVersion) {
+    viewModel.login(checkVersion);
+  }
 
-    @Override
-    void onEnterAnimationEnd() {
-        login(true);
-    }
+  @Override
+  void onEnterAnimationEnd() {
+    login(true);
+  }
 
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
-    }
+  @Override
+  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
+  }
 }

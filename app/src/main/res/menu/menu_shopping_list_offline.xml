@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,22 +18,22 @@
   -->
 
 <menu
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_search"
-        android:title="@string/action_search"
-        android:icon="@drawable/ic_round_search_anim"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction" />
+  <item
+    android:id="@+id/action_search"
+    android:title="@string/action_search"
+    android:icon="@drawable/ic_round_search_anim"
+    app:showAsAction="always"
+    tools:ignore="AlwaysShowAction" />
 
-    <item
-        android:id="@+id/action_shopping_mode"
-        android:title="@string/title_shopping_mode"
-        android:icon="@drawable/ic_round_storefront_menu"
-        app:showAsAction="ifRoom"
-        tools:ignore="AlwaysShowAction" />
+  <item
+    android:id="@+id/action_shopping_mode"
+    android:title="@string/title_shopping_mode"
+    android:icon="@drawable/ic_round_storefront_menu"
+    app:showAsAction="ifRoom"
+    tools:ignore="AlwaysShowAction" />
 
 </menu>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,50 +18,49 @@
   -->
 
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:id="@+id/group_1">
+  <group android:id="@+id/group_1">
 
-        <item
-            android:id="@+id/action_add_to_shopping_list"
-            android:title="@string/action_shopping_list_add"
-            app:showAsAction="never"/>
+    <item
+      android:id="@+id/action_add_to_shopping_list"
+      android:title="@string/action_shopping_list_add"
+      app:showAsAction="never" />
 
-        <item
-            android:id="@+id/action_consume_all"
-            android:title="@string/action_consume_all"
-            app:showAsAction="never"/>
+    <item
+      android:id="@+id/action_consume_all"
+      android:title="@string/action_consume_all"
+      app:showAsAction="never" />
 
-        <item
-            android:id="@+id/action_consume_spoiled"
-            android:title="@string/action_consume_one_spoiled"
-            app:showAsAction="never"/>
+    <item
+      android:id="@+id/action_consume_spoiled"
+      android:title="@string/action_consume_one_spoiled"
+      app:showAsAction="never" />
 
-    </group>
+  </group>
 
-    <group
-        android:id="@+id/group_2">
+  <group android:id="@+id/group_2">
 
-        <item
-            android:id="@+id/action_purchase"
-            android:title="@string/title_purchase"
-            app:showAsAction="never"/>
+    <item
+      android:id="@+id/action_purchase"
+      android:title="@string/title_purchase"
+      app:showAsAction="never" />
 
-        <item
-            android:id="@+id/action_consume"
-            android:title="@string/title_consume"
-            app:showAsAction="never"/>
+    <item
+      android:id="@+id/action_consume"
+      android:title="@string/title_consume"
+      app:showAsAction="never" />
 
-    </group>
+  </group>
 
-    <group android:id="@+id/group_3">
+  <group android:id="@+id/group_3">
 
-        <item
-            android:id="@+id/action_edit_product"
-            android:title="@string/action_edit_product"
-            app:showAsAction="never"/>
+    <item
+      android:id="@+id/action_edit_product"
+      android:title="@string/action_edit_product"
+      app:showAsAction="never" />
 
-    </group>
+  </group>
 
 </menu>

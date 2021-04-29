@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,101 +18,101 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:gravity="center_horizontal">
+
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:layout_height="0dp"
+    android:layout_weight="1">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+      android:id="@+id/frame_onboarding_container"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_gravity="center_vertical"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      tools:ignore="UselessParent">
 
-        <FrameLayout
-            android:id="@+id/frame_onboarding_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            tools:ignore="UselessParent">
+      <ImageView
+        android:id="@+id/image_onboarding_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/onboarding_1_b"
+        tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/image_onboarding_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:src="@drawable/onboarding_1_b"
-                tools:ignore="ContentDescription" />
+      <ImageView
+        android:id="@+id/image_onboarding_focused"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/onboarding_1_m"
+        tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/image_onboarding_focused"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:src="@drawable/onboarding_1_m"
-                tools:ignore="ContentDescription" />
+      <ImageView
+        android:id="@+id/image_onboarding_rotate"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/onboarding_1_r"
+        tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/image_onboarding_rotate"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:src="@drawable/onboarding_1_r"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/image_onboarding_front"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:src="@drawable/onboarding_1_f"
-                tools:ignore="ContentDescription" />
-
-        </FrameLayout>
+      <ImageView
+        android:id="@+id/image_onboarding_front"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/onboarding_1_f"
+        tools:ignore="ContentDescription" />
 
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:clipToPadding="false">
+  </FrameLayout>
 
-        <TextView
-            android:id="@+id/text_onboarding_title"
-            style="@style/Widget.Grocy.TextView.Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:maxLines="2"/>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:clipToPadding="false">
 
-        <TextView
-            android:id="@+id/text_onboarding_description"
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"
-            android:lineSpacingExtra="8sp"
-            android:textSize="15sp"
-            android:maxLines="4"
-            android:minLines="2"/>
+    <TextView
+      android:id="@+id/text_onboarding_title"
+      style="@style/Widget.Grocy.TextView.Title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textAlignment="center"
+      android:textSize="24sp"
+      android:maxLines="2" />
 
-    </LinearLayout>
+    <TextView
+      android:id="@+id/text_onboarding_description"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:textAlignment="center"
+      android:lineSpacingExtra="8sp"
+      android:textSize="15sp"
+      android:maxLines="4"
+      android:minLines="2" />
+
+  </LinearLayout>
 
 </LinearLayout>

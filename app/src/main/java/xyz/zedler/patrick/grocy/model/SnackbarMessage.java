@@ -22,62 +22,59 @@ package xyz.zedler.patrick.grocy.model;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SnackbarMessage extends Event {
 
-    private final String message;
-    private String actionText;
-    private View.OnClickListener action;
-    private String duration;
+  private final String message;
+  private String actionText;
+  private View.OnClickListener action;
+  private String duration;
 
-    public SnackbarMessage(@NonNull String message) {
-        this.message = message;
-    }
+  public SnackbarMessage(@NonNull String message) {
+    this.message = message;
+  }
 
-    public SnackbarMessage(@NonNull String message, int durationSecs) {
-        this.message = message;
-        this.duration = String.valueOf(durationSecs * 1000);
-    }
+  public SnackbarMessage(@NonNull String message, int durationSecs) {
+    this.message = message;
+    this.duration = String.valueOf(durationSecs * 1000);
+  }
 
-    public SnackbarMessage setAction(
-            @NonNull String actionText,
-            @NonNull View.OnClickListener action
-    ) {
-        this.actionText = actionText;
-        this.action = action;
-        return this;
-    }
+  public SnackbarMessage setAction(
+      @NonNull String actionText,
+      @NonNull View.OnClickListener action
+  ) {
+    this.actionText = actionText;
+    this.action = action;
+    return this;
+  }
 
-    public void setDurationSecs(int duration) {
-        this.duration = String.valueOf(duration * 1000);
-    }
+  public void setDurationSecs(int duration) {
+    this.duration = String.valueOf(duration * 1000);
+  }
 
-    public Snackbar getSnackbar(Context context, View view) {
-        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
-        if(actionText != null) {
-            snackbar.setAction(actionText, action);
-            snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.secondary));
-        }
-        if(NumUtil.isStringInt(duration)) {
-            snackbar.setDuration(Integer.parseInt(duration));
-        }
-        View v = snackbar.getView();
-        TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
-        text.setMaxLines(3);
-        return snackbar;
+  public Snackbar getSnackbar(Context context, View view) {
+    Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+    if (actionText != null) {
+      snackbar.setAction(actionText, action);
+      snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.secondary));
     }
+    if (NumUtil.isStringInt(duration)) {
+      snackbar.setDuration(Integer.parseInt(duration));
+    }
+    View v = snackbar.getView();
+    TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
+    text.setMaxLines(3);
+    return snackbar;
+  }
 
-    @Override
-    public int getType() {
-        return Event.SNACKBAR_MESSAGE;
-    }
+  @Override
+  public int getType() {
+    return Event.SNACKBAR_MESSAGE;
+  }
 
 }

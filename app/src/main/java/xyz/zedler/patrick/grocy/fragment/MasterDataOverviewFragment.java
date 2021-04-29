@@ -24,13 +24,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.FragmentNavigator;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -43,200 +41,209 @@ import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
 
-    private final static String TAG = MasterDataOverviewFragment.class.getSimpleName();
+  private final static String TAG = MasterDataOverviewFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private FragmentMasterDataOverviewBinding binding;
-    private MasterDataOverviewViewModel viewModel;
-    private InfoFullscreenHelper infoFullscreenHelper;
+  private MainActivity activity;
+  private FragmentMasterDataOverviewBinding binding;
+  private MasterDataOverviewViewModel viewModel;
+  private InfoFullscreenHelper infoFullscreenHelper;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentMasterDataOverviewBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentMasterDataOverviewBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if (infoFullscreenHelper != null) {
+      infoFullscreenHelper.destroyInstance();
+      infoFullscreenHelper = null;
+    }
+    if (binding != null) {
+      binding = null;
+    }
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+
+    viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
+    viewModel.setOfflineLive(!activity.isOnline());
+
+    binding.back.setOnClickListener(v -> activity.navigateUp());
+
+    binding.linearProducts.setOnClickListener(v -> navigate(
+        MasterDataOverviewFragmentDirections
+            .actionMasterDataOverviewFragmentToMasterObjectListFragment(
+                GrocyApi.ENTITY.PRODUCTS
+            ).setTransitionName(getString(R.string.transition_overview_products)),
+        (new FragmentNavigator.Extras.Builder()).addSharedElement(
+            binding.titleProducts,
+            getString(R.string.transition_overview_products)
+        ).build())
+    );
+    binding.linearQuantityUnits.setOnClickListener(v -> navigate(
+        MasterDataOverviewFragmentDirections
+            .actionMasterDataOverviewFragmentToMasterObjectListFragment(
+                GrocyApi.ENTITY.QUANTITY_UNITS
+            ).setTransitionName(getString(R.string.transition_overview_qus)),
+        (new FragmentNavigator.Extras.Builder()).addSharedElement(
+            binding.titleQuantityUnits,
+            getString(R.string.transition_overview_qus)
+        ).build())
+    );
+    binding.linearLocations.setOnClickListener(v -> navigate(
+        MasterDataOverviewFragmentDirections
+            .actionMasterDataOverviewFragmentToMasterObjectListFragment(
+                GrocyApi.ENTITY.LOCATIONS
+            ).setTransitionName(getString(R.string.transition_overview_locations)),
+        (new FragmentNavigator.Extras.Builder()).addSharedElement(
+            binding.titleLocations,
+            getString(R.string.transition_overview_locations)
+        ).build())
+    );
+    binding.linearProductGroups.setOnClickListener(v -> navigate(
+        MasterDataOverviewFragmentDirections
+            .actionMasterDataOverviewFragmentToMasterObjectListFragment(
+                GrocyApi.ENTITY.PRODUCT_GROUPS
+            ).setTransitionName(getString(R.string.transition_overview_product_groups)),
+        (new FragmentNavigator.Extras.Builder()).addSharedElement(
+            binding.titleProductGroups,
+            getString(R.string.transition_overview_product_groups)
+        ).build())
+    );
+    binding.linearStores.setOnClickListener(v -> navigate(
+        MasterDataOverviewFragmentDirections
+            .actionMasterDataOverviewFragmentToMasterObjectListFragment(
+                GrocyApi.ENTITY.STORES
+            ).setTransitionName(getString(R.string.transition_overview_stores)),
+        (new FragmentNavigator.Extras.Builder()).addSharedElement(
+            binding.titleStores,
+            getString(R.string.transition_overview_stores)
+        ).build())
+    );
+
+    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
+      binding.swipe.setRefreshing(state);
+      if (!state) {
+        viewModel.setCurrentQueueLoading(null);
+      }
+    });
+    binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
+    binding.swipe.setProgressBackgroundColorSchemeColor(
+        ContextCompat.getColor(activity, R.color.surface)
+    );
+    binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
+
+    viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
+            activity,
+            activity.binding.frameMainContainer
+        ));
+      }
+    });
+
+    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
+    viewModel.getInfoFullscreenLive().observe(
+        getViewLifecycleOwner(),
+        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+    );
+
+    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
+
+    viewModel.getProductsLive().observe(
+        getViewLifecycleOwner(),
+        products -> binding.countProducts.setText(
+            products != null ? String.valueOf(products.size())
+                : getString(R.string.subtitle_unknown)
+        )
+    );
+    viewModel.getLocationsLive().observe(
+        getViewLifecycleOwner(),
+        locations -> binding.countLocations.setText(
+            locations != null ? String.valueOf(locations.size())
+                : getString(R.string.subtitle_unknown)
+        )
+    );
+    viewModel.getStoresLive().observe(
+        getViewLifecycleOwner(),
+        stores -> binding.countStores.setText(
+            stores != null ? String.valueOf(stores.size())
+                : getString(R.string.subtitle_unknown)
+        )
+    );
+    viewModel.getQuantityUnitsLive().observe(
+        getViewLifecycleOwner(),
+        quantityUnits -> binding.countQuantityUnits.setText(
+            quantityUnits != null
+                ? String.valueOf(quantityUnits.size())
+                : getString(R.string.subtitle_unknown)
+        )
+    );
+    viewModel.getProductGroupsLive().observe(
+        getViewLifecycleOwner(),
+        productGroups -> binding.countProductGroups.setText(
+            productGroups != null
+                ? String.valueOf(productGroups.size())
+                : getString(R.string.subtitle_unknown)
+        )
+    );
+
+    // for offline info in app bar
+    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+
+    if (savedInstanceState == null) {
+      viewModel.loadFromDatabase(true);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(infoFullscreenHelper != null) {
-            infoFullscreenHelper.destroyInstance();
-            infoFullscreenHelper = null;
+    // UPDATE UI
+    updateUI((getArguments() == null
+        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        && savedInstanceState == null);
+  }
+
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(binding.scroll);
+    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.GONE,
+        R.menu.menu_empty,
+        animated,
+        () -> {
         }
-        if(binding != null) {
-            binding = null;
-        }
+    );
+  }
+
+  @Override
+  public void updateConnectivity(boolean online) {
+    if (!online == viewModel.isOffline()) {
+      return;
     }
+    viewModel.setOfflineLive(!online);
+    viewModel.downloadData();
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-
-        viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
-        viewModel.setOfflineLive(!activity.isOnline());
-
-        binding.back.setOnClickListener(v -> activity.navigateUp());
-
-        binding.linearProducts.setOnClickListener(v -> navigate(
-                MasterDataOverviewFragmentDirections
-                        .actionMasterDataOverviewFragmentToMasterObjectListFragment(
-                                GrocyApi.ENTITY.PRODUCTS
-                        ).setTransitionName(getString(R.string.transition_overview_products)),
-                (new FragmentNavigator.Extras.Builder()).addSharedElement(
-                        binding.titleProducts,
-                        getString(R.string.transition_overview_products)
-                ).build())
-        );
-        binding.linearQuantityUnits.setOnClickListener(v -> navigate(
-                MasterDataOverviewFragmentDirections
-                        .actionMasterDataOverviewFragmentToMasterObjectListFragment(
-                                GrocyApi.ENTITY.QUANTITY_UNITS
-                        ).setTransitionName(getString(R.string.transition_overview_qus)),
-                (new FragmentNavigator.Extras.Builder()).addSharedElement(
-                        binding.titleQuantityUnits,
-                        getString(R.string.transition_overview_qus)
-                ).build())
-        );
-        binding.linearLocations.setOnClickListener(v -> navigate(
-                MasterDataOverviewFragmentDirections
-                        .actionMasterDataOverviewFragmentToMasterObjectListFragment(
-                                GrocyApi.ENTITY.LOCATIONS
-                        ).setTransitionName(getString(R.string.transition_overview_locations)),
-                (new FragmentNavigator.Extras.Builder()).addSharedElement(
-                        binding.titleLocations,
-                        getString(R.string.transition_overview_locations)
-                ).build())
-        );
-        binding.linearProductGroups.setOnClickListener(v -> navigate(
-                MasterDataOverviewFragmentDirections
-                        .actionMasterDataOverviewFragmentToMasterObjectListFragment(
-                                GrocyApi.ENTITY.PRODUCT_GROUPS
-                        ).setTransitionName(getString(R.string.transition_overview_product_groups)),
-                (new FragmentNavigator.Extras.Builder()).addSharedElement(
-                        binding.titleProductGroups,
-                        getString(R.string.transition_overview_product_groups)
-                ).build())
-        );
-        binding.linearStores.setOnClickListener(v -> navigate(
-                MasterDataOverviewFragmentDirections
-                        .actionMasterDataOverviewFragmentToMasterObjectListFragment(
-                                GrocyApi.ENTITY.STORES
-                        ).setTransitionName(getString(R.string.transition_overview_stores)),
-                (new FragmentNavigator.Extras.Builder()).addSharedElement(
-                        binding.titleStores,
-                        getString(R.string.transition_overview_stores)
-                ).build())
-        );
-
-        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-            binding.swipe.setRefreshing(state);
-            if(!state) viewModel.setCurrentQueueLoading(null);
-        });
-        binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-        binding.swipe.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
-
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-                        activity,
-                        activity.binding.frameMainContainer
-                ));
-            }
-        });
-
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-        viewModel.getInfoFullscreenLive().observe(
-                getViewLifecycleOwner(),
-                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-        );
-
-        viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
-
-        viewModel.getProductsLive().observe(
-                getViewLifecycleOwner(),
-                products -> binding.countProducts.setText(
-                        products != null ? String.valueOf(products.size())
-                                : getString(R.string.subtitle_unknown)
-                )
-        );
-        viewModel.getLocationsLive().observe(
-                getViewLifecycleOwner(),
-                locations -> binding.countLocations.setText(
-                        locations != null ? String.valueOf(locations.size())
-                                : getString(R.string.subtitle_unknown)
-                )
-        );
-        viewModel.getStoresLive().observe(
-                getViewLifecycleOwner(),
-                stores -> binding.countStores.setText(
-                        stores != null ? String.valueOf(stores.size())
-                                : getString(R.string.subtitle_unknown)
-                )
-        );
-        viewModel.getQuantityUnitsLive().observe(
-                getViewLifecycleOwner(),
-                quantityUnits -> binding.countQuantityUnits.setText(
-                        quantityUnits != null
-                                ? String.valueOf(quantityUnits.size())
-                                : getString(R.string.subtitle_unknown)
-                )
-        );
-        viewModel.getProductGroupsLive().observe(
-                getViewLifecycleOwner(),
-                productGroups -> binding.countProductGroups.setText(
-                        productGroups != null
-                                ? String.valueOf(productGroups.size())
-                                : getString(R.string.subtitle_unknown)
-                )
-        );
-
-        // for offline info in app bar
-        binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-
-        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
-
-        // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-                && savedInstanceState == null);
+  private void appBarOfflineInfo(boolean visible) {
+    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
+    if (visible == currentState) {
+      return;
     }
+    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
+  }
 
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(binding.scroll);
-        activity.getScrollBehavior().setHideOnScroll(true);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.GONE,
-                R.menu.menu_empty,
-                animated,
-                () -> {}
-        );
-    }
-
-    @Override
-    public void updateConnectivity(boolean online) {
-        if(!online == viewModel.isOffline()) return;
-        viewModel.setOfflineLive(!online);
-        viewModel.downloadData();
-    }
-
-    private void appBarOfflineInfo(boolean visible) {
-        boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-        if(visible == currentState) return;
-        binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

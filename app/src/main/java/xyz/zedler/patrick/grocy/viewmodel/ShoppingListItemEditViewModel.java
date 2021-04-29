@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -32,14 +31,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-
 import com.android.volley.VolleyError;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
@@ -65,459 +60,512 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ShoppingListItemEditViewModel extends AndroidViewModel {
 
-    private static final String TAG = ShoppingListItemEditViewModel.class.getSimpleName();
+  private static final String TAG = ShoppingListItemEditViewModel.class.getSimpleName();
 
-    private final SharedPreferences sharedPrefs;
-    private final DownloadHelper dlHelper;
-    private final GrocyApi grocyApi;
-    private final EventHandler eventHandler;
-    private final ShoppingListItemEditRepository repository;
-    private final FormDataShoppingListItemEdit formData;
+  private final SharedPreferences sharedPrefs;
+  private final DownloadHelper dlHelper;
+  private final GrocyApi grocyApi;
+  private final EventHandler eventHandler;
+  private final ShoppingListItemEditRepository repository;
+  private final FormDataShoppingListItemEdit formData;
+  private final ShoppingListItemEditFragmentArgs args;
+
+  private final MutableLiveData<Boolean> isLoadingLive;
+  private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
+  private final MutableLiveData<Boolean> offlineLive;
+
+  private ArrayList<ShoppingList> shoppingLists;
+  private ArrayList<Product> products;
+  private ArrayList<ProductBarcode> barcodes;
+  private ArrayList<QuantityUnit> quantityUnits;
+  private ArrayList<QuantityUnitConversion> unitConversions;
+
+  private DownloadHelper.Queue currentQueueLoading;
+  private final boolean debug;
+  private final boolean isActionEdit;
+
+  public ShoppingListItemEditViewModel(
+      @NonNull Application application,
+      @NonNull ShoppingListItemEditFragmentArgs startupArgs
+  ) {
+    super(application);
+
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+
+    isLoadingLive = new MutableLiveData<>(false);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    grocyApi = new GrocyApi(getApplication());
+    eventHandler = new EventHandler();
+    repository = new ShoppingListItemEditRepository(application);
+    formData = new FormDataShoppingListItemEdit(application);
+    args = startupArgs;
+    isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
+
+    infoFullscreenLive = new MutableLiveData<>();
+    offlineLive = new MutableLiveData<>(false);
+  }
+
+  public FormDataShoppingListItemEdit getFormData() {
+    return formData;
+  }
+
+  public void loadFromDatabase(boolean downloadAfterLoading) {
+    repository.loadFromDatabase((shoppingLists, products, barcodes, qUs, conversions) -> {
+      this.shoppingLists = shoppingLists;
+      this.products = products;
+      this.barcodes = barcodes;
+      this.quantityUnits = qUs;
+      this.unitConversions = conversions;
+      formData.getProductsLive().setValue(products);
+      if (!isActionEdit) {
+        formData.getShoppingListLive().setValue(getLastShoppingList());
+      }
+      fillWithSoppingListItemIfNecessary();
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
+  }
+
+  public void downloadData(@Nullable String dbChangedTime) {
+    if (currentQueueLoading != null) {
+      currentQueueLoading.reset(true);
+      currentQueueLoading = null;
+    }
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
+      return;
+    }
+    if (dbChangedTime == null) {
+      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      return;
+    }
+
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    queue.append(
+        dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
+          this.shoppingLists = shoppingLists;
+          if (!isActionEdit) {
+            formData.getShoppingListLive().setValue(getLastShoppingList());
+          }
+        }), dlHelper.updateProducts(dbChangedTime, products -> {
+          this.products = products;
+          formData.getProductsLive().setValue(products);
+        }), dlHelper.updateQuantityUnitConversions(
+            dbChangedTime, conversions -> this.unitConversions = conversions
+        ), dlHelper.updateProductBarcodes(
+            dbChangedTime, barcodes -> this.barcodes = barcodes
+        ), dlHelper.updateQuantityUnits(
+            dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+        )
+    );
+    if (queue.isEmpty()) {
+      return;
+    }
+
+    currentQueueLoading = queue;
+    queue.start();
+  }
+
+  public void downloadData() {
+    downloadData(null);
+  }
+
+  public void downloadDataForceUpdate() {
+    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.apply();
+    downloadData();
+  }
+
+  private void onQueueEmpty() {
+    if (isOffline()) {
+      setOfflineLive(false);
+    }
+    fillWithSoppingListItemIfNecessary();
+    repository.updateDatabase(shoppingLists, products, barcodes,
+        quantityUnits, unitConversions, () -> {
+        });
+  }
+
+  private void onDownloadError(@Nullable VolleyError error) {
+    if (debug) {
+      Log.e(TAG, "onError: VolleyError: " + error);
+    }
+    showMessage(getString(R.string.msg_no_connection));
+    if (!isOffline()) {
+      setOfflineLive(true);
+    }
+  }
+
+  public void saveItem() {
+    if (!formData.isFormValid()) {
+      return;
+    }
+
+    ShoppingListItem item = null;
+    if (isActionEdit) {
+      item = args.getShoppingListItem();
+    }
+    item = formData.fillShoppingListItem(item);
+    JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, debug, TAG);
+
+    if (isActionEdit) {
+      dlHelper.put(
+          grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, item.getId()),
+          jsonObject,
+          response -> saveProductBarcodeAndNavigateUp(),
+          error -> {
+            showErrorMessage();
+            if (debug) {
+              Log.e(TAG, "saveItem: " + error);
+            }
+          }
+      );
+    } else {
+      dlHelper.post(
+          grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+          jsonObject,
+          response -> saveProductBarcodeAndNavigateUp(),
+          error -> {
+            showErrorMessage();
+            if (debug) {
+              Log.e(TAG, "saveItem: " + error);
+            }
+          }
+      );
+    }
+  }
+
+  private void saveProductBarcodeAndNavigateUp() {
+    ProductBarcode productBarcode = formData.fillProductBarcode(null);
+    if (productBarcode.getBarcode() == null) {
+      navigateUp();
+      return;
+    }
+    dlHelper.addProductBarcode(
+        ProductBarcode.getJsonFromProductBarcode(productBarcode, debug, TAG),
+        this::navigateUp,
+        error -> navigateUp()
+    ).perform(dlHelper.getUuid());
+  }
+
+  private void fillWithSoppingListItemIfNecessary() {
+    if (!isActionEdit || formData.isFilledWithShoppingListItem()) {
+      return;
+    }
+
+    ShoppingListItem item = args.getShoppingListItem();
+    assert item != null;
+
+    ShoppingList shoppingList = getShoppingList(item.getShoppingListId());
+    formData.getShoppingListLive().setValue(shoppingList);
+
+    double amount = item.getAmountDouble();
+    QuantityUnit quantityUnit = null;
+
+    Product product = item.getProductId() != null ? getProduct(item.getProductIdInt()) : null;
+    if (product != null) {
+      formData.getProductLive().setValue(product);
+      formData.getProductNameLive().setValue(product.getName());
+      HashMap<QuantityUnit, Double> unitFactors = setProductQuantityUnitsAndFactors(product);
+
+      quantityUnit = getQuantityUnit(item.getQuIdInt());
+      if (unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
+        Double factor = unitFactors.get(quantityUnit);
+        assert factor != null;
+        if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchase()) {
+          amount = amount / factor;
+        } else if (factor != -1) {
+          amount = amount * factor;
+        }
+      }
+    }
+    formData.getAmountLive().setValue(NumUtil.trim(amount));
+    formData.getQuantityUnitLive().setValue(quantityUnit);
+
+    formData.getNoteLive().setValue(item.getNote());
+    formData.setFilledWithShoppingListItem(true);
+  }
+
+  private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
+    QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
+    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
+
+    if (stock == null || purchase == null) {
+      showMessage(getString(R.string.error_loading_qus));
+      return null;
+    }
+
+    HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
+    ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
+    unitFactors.put(stock, (double) -1);
+    quIdsInHashMap.add(stock.getId());
+    if (!quIdsInHashMap.contains(purchase.getId())) {
+      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
+    }
+    for (QuantityUnitConversion conversion : unitConversions) {
+      if (product.getId() != conversion.getProductId()) {
+        continue;
+      }
+      QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
+      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
+        continue;
+      }
+      unitFactors.put(unit, conversion.getFactor());
+    }
+    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+
+    if (!isActionEdit) {
+      formData.getQuantityUnitLive().setValue(purchase);
+    }
+    return unitFactors;
+  }
+
+  public void setProduct(Product product) {
+    if (product == null) {
+      return;
+    }
+    formData.getProductLive().setValue(product);
+    formData.getProductNameLive().setValue(product.getName());
+    setProductQuantityUnitsAndFactors(product);
+    formData.isFormValid();
+  }
+
+  public void onBarcodeRecognized(String barcode) {
+    Product product = getProductFromBarcode(barcode);
+    if (product != null) {
+      setProduct(product);
+    } else {
+      formData.getBarcodeLive().setValue(barcode);
+      formData.isFormValid();
+    }
+  }
+
+  public void showProductDetailsBottomSheet() {
+    Product product = checkProductInput();
+    if (product == null) {
+      showMessage(getString(R.string.error_no_product_selected));
+      return;
+    }
+    dlHelper.getProductDetails(product.getId(), details -> showBottomSheet(
+        new ProductOverviewBottomSheet(),
+        new ProductOverviewBottomSheetArgs.Builder()
+            .setProductDetails(details).build().toBundle()
+    )).perform(dlHelper.getUuid());
+  }
+
+  public void deleteItem() {
+    if (!isActionEdit()) {
+      return;
+    }
+    ShoppingListItem shoppingListItem = args.getShoppingListItem();
+    assert shoppingListItem != null;
+    dlHelper.delete(
+        grocyApi.getObject(
+            GrocyApi.ENTITY.SHOPPING_LIST,
+            shoppingListItem.getId()
+        ),
+        response -> navigateUp(),
+        error -> showErrorMessage()
+    );
+  }
+
+  public Product checkProductInput() {
+    formData.isProductNameValid();
+    String input = formData.getProductNameLive().getValue();
+    if (input == null || input.isEmpty()) {
+      return null;
+    }
+    Product product = getProductFromName(input);
+
+    Product currentProduct = formData.getProductLive().getValue();
+    if (currentProduct != null && currentProduct.getId() == product.getId()) {
+      return product;
+    }
+
+    if (product != null) {
+      setProduct(product);
+    } else {
+      Bundle bundle = new Bundle();
+      bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
+      showBottomSheet(new InputProductBottomSheet(), bundle);
+    }
+    return product;
+  }
+
+  private QuantityUnit getQuantityUnit(int id) {
+    for (QuantityUnit quantityUnit : quantityUnits) {
+      if (quantityUnit.getId() == id) {
+        return quantityUnit;
+      }
+    }
+    return null;
+  }
+
+  private ShoppingList getLastShoppingList() {
+    int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
+    return getShoppingList(lastId);
+  }
+
+  private ShoppingList getShoppingList(int id) {
+    for (ShoppingList shoppingList : shoppingLists) {
+      if (shoppingList.getId() == id) {
+        return shoppingList;
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public Product getProduct(int id) {
+    for (Product product : products) {
+      if (product.getId() == id) {
+        return product;
+      }
+    }
+    return null;
+  }
+
+  private Product getProductFromName(String name) {
+    for (Product product : products) {
+      if (product.getName().equals(name)) {
+        return product;
+      }
+    }
+    return null;
+  }
+
+  private Product getProductFromBarcode(String barcode) {
+    for (ProductBarcode code : barcodes) {
+      if (code.getBarcode().equals(barcode)) {
+        return getProduct(code.getProductId());
+      }
+    }
+    return null;
+  }
+
+  public boolean isActionEdit() {
+    return isActionEdit;
+  }
+
+  public boolean isFeatureMultiShoppingListsEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
+    );
+  }
+
+  @NonNull
+  public MutableLiveData<Boolean> getOfflineLive() {
+    return offlineLive;
+  }
+
+  public Boolean isOffline() {
+    return offlineLive.getValue();
+  }
+
+  public void setOfflineLive(boolean isOffline) {
+    offlineLive.setValue(isOffline);
+  }
+
+  @NonNull
+  public MutableLiveData<Boolean> getIsLoadingLive() {
+    return isLoadingLive;
+  }
+
+  @NonNull
+  public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
+    return infoFullscreenLive;
+  }
+
+  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+    currentQueueLoading = queueLoading;
+  }
+
+  public boolean getUseFrontCam() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SCANNER.FRONT_CAM,
+        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+    );
+  }
+
+  public boolean getExternalScannerEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
+        Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
+    );
+  }
+
+  private void showErrorMessage() {
+    showMessage(getString(R.string.error_undefined));
+  }
+
+  private void showMessage(@NonNull String message) {
+    showSnackbar(new SnackbarMessage(message));
+  }
+
+  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
+    eventHandler.setValue(snackbarMessage);
+  }
+
+  private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
+    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
+  }
+
+  private void navigateUp() {
+    eventHandler.setValue(new Event() {
+      @Override
+      public int getType() {
+        return Event.NAVIGATE_UP;
+      }
+    });
+  }
+
+  @NonNull
+  public EventHandler getEventHandler() {
+    return eventHandler;
+  }
+
+  public boolean isFeatureEnabled(String pref) {
+    if (pref == null) {
+      return true;
+    }
+    return sharedPrefs.getBoolean(pref, true);
+  }
+
+  private String getString(@StringRes int resId) {
+    return getApplication().getString(resId);
+  }
+
+  @Override
+  protected void onCleared() {
+    dlHelper.destroy();
+    super.onCleared();
+  }
+
+  public static class ShoppingListItemEditViewModelFactory implements ViewModelProvider.Factory {
+
+    private final Application application;
     private final ShoppingListItemEditFragmentArgs args;
 
-    private final MutableLiveData<Boolean> isLoadingLive;
-    private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private final MutableLiveData<Boolean> offlineLive;
-
-    private ArrayList<ShoppingList> shoppingLists;
-    private ArrayList<Product> products;
-    private ArrayList<ProductBarcode> barcodes;
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<QuantityUnitConversion> unitConversions;
-
-    private DownloadHelper.Queue currentQueueLoading;
-    private final boolean debug;
-    private final boolean isActionEdit;
-
-    public ShoppingListItemEditViewModel(
-            @NonNull Application application,
-            @NonNull ShoppingListItemEditFragmentArgs startupArgs
+    public ShoppingListItemEditViewModelFactory(
+        Application application,
+        ShoppingListItemEditFragmentArgs args
     ) {
-        super(application);
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
-
-        isLoadingLive = new MutableLiveData<>(false);
-        dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-        grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
-        repository = new ShoppingListItemEditRepository(application);
-        formData = new FormDataShoppingListItemEdit(application);
-        args = startupArgs;
-        isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
-        infoFullscreenLive = new MutableLiveData<>();
-        offlineLive = new MutableLiveData<>(false);
-    }
-
-    public FormDataShoppingListItemEdit getFormData() {
-        return formData;
-    }
-
-    public void loadFromDatabase(boolean downloadAfterLoading) {
-        repository.loadFromDatabase((shoppingLists, products, barcodes, qUs, conversions) -> {
-            this.shoppingLists = shoppingLists;
-            this.products = products;
-            this.barcodes = barcodes;
-            this.quantityUnits = qUs;
-            this.unitConversions = conversions;
-            formData.getProductsLive().setValue(products);
-            if(!isActionEdit) formData.getShoppingListLive().setValue(getLastShoppingList());
-            fillWithSoppingListItemIfNecessary();
-            if(downloadAfterLoading) downloadData();
-        });
-    }
-
-    public void downloadData(@Nullable String dbChangedTime) {
-        if(currentQueueLoading != null) {
-            currentQueueLoading.reset(true);
-            currentQueueLoading = null;
-        }
-        if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }
-        if(dbChangedTime == null) {
-            dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
-            return;
-        }
-
-        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        queue.append(
-                dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
-                    this.shoppingLists = shoppingLists;
-                    if(!isActionEdit) {
-                        formData.getShoppingListLive().setValue(getLastShoppingList());
-                    }
-                }), dlHelper.updateProducts(dbChangedTime, products -> {
-                    this.products = products;
-                    formData.getProductsLive().setValue(products);
-                }), dlHelper.updateQuantityUnitConversions(
-                        dbChangedTime, conversions -> this.unitConversions = conversions
-                ), dlHelper.updateProductBarcodes(
-                        dbChangedTime, barcodes -> this.barcodes = barcodes
-                ), dlHelper.updateQuantityUnits(
-                        dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
-                )
-        );
-        if(queue.isEmpty()) return;
-
-        currentQueueLoading = queue;
-        queue.start();
-    }
-
-    public void downloadData() {
-        downloadData(null);
-    }
-
-    public void downloadDataForceUpdate() {
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-        editPrefs.apply();
-        downloadData();
-    }
-
-    private void onQueueEmpty() {
-        if(isOffline()) setOfflineLive(false);
-        fillWithSoppingListItemIfNecessary();
-        repository.updateDatabase(shoppingLists, products, barcodes,
-                quantityUnits, unitConversions, () -> {});
-    }
-
-    private void onDownloadError(@Nullable VolleyError error) {
-        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        showMessage(getString(R.string.msg_no_connection));
-        if(!isOffline()) setOfflineLive(true);
-    }
-
-    public void saveItem() {
-        if(!formData.isFormValid()) return;
-
-        ShoppingListItem item = null;
-        if(isActionEdit) item = args.getShoppingListItem();
-        item = formData.fillShoppingListItem(item);
-        JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, debug, TAG);
-
-        if(isActionEdit) {
-            dlHelper.put(
-                    grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, item.getId()),
-                    jsonObject,
-                    response -> saveProductBarcodeAndNavigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveItem: " + error);
-                    }
-            );
-        } else {
-            dlHelper.post(
-                    grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
-                    jsonObject,
-                    response -> saveProductBarcodeAndNavigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveItem: " + error);
-                    }
-            );
-        }
-    }
-
-    private void saveProductBarcodeAndNavigateUp() {
-        ProductBarcode productBarcode = formData.fillProductBarcode(null);
-        if(productBarcode.getBarcode() == null) {
-            navigateUp();
-            return;
-        }
-        dlHelper.addProductBarcode(
-                ProductBarcode.getJsonFromProductBarcode(productBarcode, debug, TAG),
-                this::navigateUp,
-                error -> navigateUp()
-        ).perform(dlHelper.getUuid());
-    }
-
-    private void fillWithSoppingListItemIfNecessary() {
-        if(!isActionEdit || formData.isFilledWithShoppingListItem()) return;
-
-        ShoppingListItem item = args.getShoppingListItem();
-        assert item != null;
-
-        ShoppingList shoppingList = getShoppingList(item.getShoppingListId());
-        formData.getShoppingListLive().setValue(shoppingList);
-
-        double amount = item.getAmountDouble();
-        QuantityUnit quantityUnit = null;
-
-        Product product = item.getProductId() != null ? getProduct(item.getProductIdInt()) : null;
-        if(product != null) {
-            formData.getProductLive().setValue(product);
-            formData.getProductNameLive().setValue(product.getName());
-            HashMap<QuantityUnit, Double> unitFactors = setProductQuantityUnitsAndFactors(product);
-
-            quantityUnit = getQuantityUnit(item.getQuIdInt());
-            if(unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
-                Double factor = unitFactors.get(quantityUnit);
-                assert factor != null;
-                if(factor != -1 && quantityUnit.getId() == product.getQuIdPurchase()) {
-                    amount = amount / factor;
-                } else if(factor != -1) {
-                    amount = amount * factor;
-                }
-            }
-        }
-        formData.getAmountLive().setValue(NumUtil.trim(amount));
-        formData.getQuantityUnitLive().setValue(quantityUnit);
-
-        formData.getNoteLive().setValue(item.getNote());
-        formData.setFilledWithShoppingListItem(true);
-    }
-
-    private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
-        QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
-        QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
-
-        if(stock == null || purchase == null) {
-            showMessage(getString(R.string.error_loading_qus));
-            return null;
-        }
-
-        HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-        ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-        unitFactors.put(stock, (double) -1);
-        quIdsInHashMap.add(stock.getId());
-        if(!quIdsInHashMap.contains(purchase.getId())) {
-            unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
-        }
-        for(QuantityUnitConversion conversion : unitConversions) {
-            if(product.getId() != conversion.getProductId()) continue;
-            QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-            if(unit == null || quIdsInHashMap.contains(unit.getId())) continue;
-            unitFactors.put(unit, conversion.getFactor());
-        }
-        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-
-        if(!isActionEdit) {
-            formData.getQuantityUnitLive().setValue(purchase);
-        }
-        return unitFactors;
-    }
-
-    public void setProduct(Product product) {
-        if(product == null) return;
-        formData.getProductLive().setValue(product);
-        formData.getProductNameLive().setValue(product.getName());
-        setProductQuantityUnitsAndFactors(product);
-        formData.isFormValid();
-    }
-
-    public void onBarcodeRecognized(String barcode) {
-        Product product = getProductFromBarcode(barcode);
-        if(product != null) {
-            setProduct(product);
-        } else {
-            formData.getBarcodeLive().setValue(barcode);
-            formData.isFormValid();
-        }
-    }
-
-    public void showProductDetailsBottomSheet() {
-        Product product = checkProductInput();
-        if(product == null) {
-            showMessage(getString(R.string.error_no_product_selected));
-            return;
-        }
-        dlHelper.getProductDetails(product.getId(), details -> showBottomSheet(
-                new ProductOverviewBottomSheet(),
-                new ProductOverviewBottomSheetArgs.Builder()
-                        .setProductDetails(details).build().toBundle()
-        )).perform(dlHelper.getUuid());
-    }
-
-    public void deleteItem() {
-        if(!isActionEdit()) return;
-        ShoppingListItem shoppingListItem = args.getShoppingListItem();
-        assert shoppingListItem != null;
-        dlHelper.delete(
-                grocyApi.getObject(
-                        GrocyApi.ENTITY.SHOPPING_LIST,
-                        shoppingListItem.getId()
-                ),
-                response -> navigateUp(),
-                error -> showErrorMessage()
-        );
-    }
-
-    public Product checkProductInput() {
-        formData.isProductNameValid();
-        String input = formData.getProductNameLive().getValue();
-        if(input == null || input.isEmpty()) return null;
-        Product product = getProductFromName(input);
-
-        Product currentProduct = formData.getProductLive().getValue();
-        if(currentProduct != null && currentProduct.getId() == product.getId()) {
-            return product;
-        }
-
-        if(product != null) {
-            setProduct(product);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
-            showBottomSheet(new InputProductBottomSheet(), bundle);
-        }
-        return product;
-    }
-
-    private QuantityUnit getQuantityUnit(int id) {
-        for(QuantityUnit quantityUnit : quantityUnits) {
-            if(quantityUnit.getId() == id) return quantityUnit;
-        } return null;
-    }
-
-    private ShoppingList getLastShoppingList() {
-        int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
-        return getShoppingList(lastId);
-    }
-
-    private ShoppingList getShoppingList(int id) {
-        for(ShoppingList shoppingList : shoppingLists) {
-            if(shoppingList.getId() == id) return shoppingList;
-        } return null;
-    }
-
-    @Nullable
-    public Product getProduct(int id) {
-        for(Product product : products) {
-            if(product.getId() == id) return product;
-        } return null;
-    }
-
-    private Product getProductFromName(String name) {
-        for(Product product : products) {
-            if(product.getName().equals(name)) return product;
-        } return null;
-    }
-
-    private Product getProductFromBarcode(String barcode) {
-        for(ProductBarcode code : barcodes) {
-            if(code.getBarcode().equals(barcode)) return getProduct(code.getProductId());
-        } return null;
-    }
-
-    public boolean isActionEdit() {
-        return isActionEdit;
-    }
-
-    public boolean isFeatureMultiShoppingListsEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
-        );
+      this.application = application;
+      this.args = args;
     }
 
     @NonNull
-    public MutableLiveData<Boolean> getOfflineLive() {
-        return offlineLive;
-    }
-
-    public Boolean isOffline() {
-        return offlineLive.getValue();
-    }
-
-    public void setOfflineLive(boolean isOffline) {
-        offlineLive.setValue(isOffline);
-    }
-
-    @NonNull
-    public MutableLiveData<Boolean> getIsLoadingLive() {
-        return isLoadingLive;
-    }
-
-    @NonNull
-    public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
-        return infoFullscreenLive;
-    }
-
-    public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
-        currentQueueLoading = queueLoading;
-    }
-
-    public boolean getUseFrontCam() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SCANNER.FRONT_CAM,
-                Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-        );
-    }
-
-    public boolean getExternalScannerEnabled() {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
-                Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
-        );
-    }
-
-    private void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    private void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
-
-    private void navigateUp() {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return Event.NAVIGATE_UP;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
-    public boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
-    }
-
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
-    }
-
     @Override
-    protected void onCleared() {
-        dlHelper.destroy();
-        super.onCleared();
+    @SuppressWarnings("unchecked")
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new ShoppingListItemEditViewModel(application, args);
     }
-
-    public static class ShoppingListItemEditViewModelFactory implements ViewModelProvider.Factory {
-        private final Application application;
-        private final ShoppingListItemEditFragmentArgs args;
-
-        public ShoppingListItemEditViewModelFactory(
-                Application application,
-                ShoppingListItemEditFragmentArgs args
-        ) {
-            this.application = application;
-            this.args = args;
-        }
-
-        @NonNull
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new ShoppingListItemEditViewModel(application, args);
-        }
-    }
+  }
 }

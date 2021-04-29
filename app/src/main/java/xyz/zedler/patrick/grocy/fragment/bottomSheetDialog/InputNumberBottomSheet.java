@@ -25,13 +25,10 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputNumberBinding;
@@ -40,89 +37,91 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class InputNumberBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = InputNumberBottomSheet.class.getSimpleName();
+  private final static String TAG = InputNumberBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
-    private FragmentBottomsheetInputNumberBinding binding;
+  private MainActivity activity;
+  private FragmentBottomsheetInputNumberBinding binding;
 
-    private MutableLiveData<String> numberInputLive;
+  private MutableLiveData<String> numberInputLive;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentBottomsheetInputNumberBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    activity = (MainActivity) requireActivity();
+    binding.setBottomsheet(this);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    numberInputLive = new MutableLiveData<>();
+    Object number = requireArguments().get(Constants.ARGUMENT.NUMBER);
+    if (number instanceof Double) {
+      numberInputLive.setValue(NumUtil.trim((Double) number));
+    } else if (number instanceof Integer) {
+      numberInputLive.setValue(NumUtil.trim((Integer) number));
     }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentBottomsheetInputNumberBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
+    binding.editText.setInputType(
+        number instanceof Double
+            ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+            : InputType.TYPE_CLASS_NUMBER
+    );
+
+    if (requireArguments().containsKey(Constants.ARGUMENT.HINT)) {
+      binding.textInput.setHint(requireArguments().getString(Constants.ARGUMENT.HINT));
+    } else {
+      binding.textInput.setHint(getString(R.string.property_number));
     }
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        activity = (MainActivity) requireActivity();
-        binding.setBottomsheet(this);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
+  public MutableLiveData<String> getNumberInputLive() {
+    return numberInputLive;
+  }
 
-        numberInputLive = new MutableLiveData<>();
-        Object number = requireArguments().get(Constants.ARGUMENT.NUMBER);
-        if(number instanceof Double) {
-            numberInputLive.setValue(NumUtil.trim((Double) number));
-        } else if(number instanceof Integer) {
-            numberInputLive.setValue(NumUtil.trim((Integer) number));
-        }
-
-        binding.editText.setInputType(
-                number instanceof Double
-                        ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                        : InputType.TYPE_CLASS_NUMBER
-        );
-
-        if(requireArguments().containsKey(Constants.ARGUMENT.HINT)) {
-            binding.textInput.setHint(requireArguments().getString(Constants.ARGUMENT.HINT));
-        } else {
-            binding.textInput.setHint(getString(R.string.property_number));
-        }
+  public void more() {
+    String currentInput = numberInputLive.getValue();
+    String nextInput;
+    if (!NumUtil.isStringNum(currentInput)) {
+      nextInput = String.valueOf(1);
+    } else {
+      nextInput = NumUtil.trim(Double.parseDouble(currentInput) + 1);
     }
+    numberInputLive.setValue(nextInput);
+  }
 
-    public MutableLiveData<String> getNumberInputLive() {
-        return numberInputLive;
+  public void less() {
+    String currentInput = numberInputLive.getValue();
+    if (!NumUtil.isStringNum(currentInput)) {
+      return;
     }
+    String nextInput = NumUtil.trim(Double.parseDouble(currentInput) - 1);
+    numberInputLive.setValue(nextInput);
+  }
 
-    public void more() {
-        String currentInput = numberInputLive.getValue();
-        String nextInput;
-        if(!NumUtil.isStringNum(currentInput)) {
-            nextInput = String.valueOf(1);
-        } else {
-            nextInput = NumUtil.trim(Double.parseDouble(currentInput) + 1);
-        }
-        numberInputLive.setValue(nextInput);
-    }
+  public void save() {
+    activity.getCurrentFragment().saveNumber(numberInputLive.getValue(), requireArguments());
+    dismiss();
+  }
 
-    public void less() {
-        String currentInput = numberInputLive.getValue();
-        if(!NumUtil.isStringNum(currentInput)) return;
-        String nextInput = NumUtil.trim(Double.parseDouble(currentInput) - 1);
-        numberInputLive.setValue(nextInput);
-    }
-
-    public void save() {
-        activity.getCurrentFragment().saveNumber(numberInputLive.getValue(), requireArguments());
-        dismiss();
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,63 +18,63 @@
   -->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
 
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="?android:actionBarSize"
+    android:orientation="vertical"
+    android:background="@color/primary">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        android:orientation="vertical"
-        android:background="@color/primary">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center_vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical">
+      <FrameLayout
+        android:id="@+id/frame_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/actionBarItemBackground"
+        android:clickable="true"
+        android:gravity="center"
+        android:contentDescription="@string/action_back"
+        android:tooltipText="@string/action_back"
+        android:focusable="true"
+        tools:targetApi="o">
 
-            <FrameLayout
-                android:id="@+id/frame_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_back"
-                android:tooltipText="@string/action_back"
-                android:focusable="true"
-                tools:targetApi="o">
+        <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_arrow_back" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_round_arrow_back" />
+      </FrameLayout>
 
-            </FrameLayout>
+      <TextView
+        style="@style/Widget.Grocy.TextView.Toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/title_barcode_input" />
 
-            <TextView
-                style="@style/Widget.Grocy.TextView.Toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/title_barcode_input" />
+    </LinearLayout>
 
-        </LinearLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/barcode_scan_input"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?android:actionBarSize"
-        app:zxing_scanner_layout="@layout/partial_scanner"/>
+  <com.journeyapps.barcodescanner.DecoratedBarcodeView
+    android:id="@+id/barcode_scan_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?android:actionBarSize"
+    app:zxing_scanner_layout="@layout/partial_scanner" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

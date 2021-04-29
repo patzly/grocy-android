@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,24 +18,24 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="32dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:paddingTop="4dp"
+  android:paddingBottom="8dp"
+  android:paddingStart="16dp"
+  android:paddingEnd="16dp"
+  android:gravity="center_vertical">
+
+  <TextView
+    android:id="@+id/text_shopping_bottom_notes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="32dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:paddingTop="4dp"
-    android:paddingBottom="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:gravity="center_vertical">
-
-    <TextView
-        android:id="@+id/text_shopping_bottom_notes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textColor="@color/on_background" />
+    android:textSize="22sp"
+    android:textColor="@color/on_background" />
 
 </LinearLayout>

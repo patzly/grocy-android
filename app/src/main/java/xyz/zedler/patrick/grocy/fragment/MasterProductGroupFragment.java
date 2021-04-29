@@ -27,21 +27,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
+import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -55,395 +50,423 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterProductGroupFragment extends BaseFragment {
 
-    private final static String TAG = MasterProductGroupFragment.class.getSimpleName();
+  private final static String TAG = MasterProductGroupFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private Gson gson;
-    private GrocyApi grocyApi;
-    private DownloadHelper dlHelper;
-    private FragmentMasterProductGroupBinding binding;
+  private MainActivity activity;
+  private Gson gson;
+  private GrocyApi grocyApi;
+  private DownloadHelper dlHelper;
+  private FragmentMasterProductGroupBinding binding;
 
-    private ArrayList<ProductGroup> productGroups;
-    private ArrayList<String> productGroupNames;
-    private ProductGroup editProductGroup;
+  private ArrayList<ProductGroup> productGroups;
+  private ArrayList<String> productGroupNames;
+  private ProductGroup editProductGroup;
 
-    private boolean isRefresh;
-    private boolean debug;
+  private boolean isRefresh;
+  private boolean debug;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentMasterProductGroupBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentMasterProductGroupBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    binding = null;
+    dlHelper.destroy();
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    if (isHidden()) {
+      return;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-        dlHelper.destroy();
+    activity = (MainActivity) requireActivity();
+
+    // PREFERENCES
+
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+
+    // WEB
+
+    dlHelper = new DownloadHelper(activity, TAG);
+    grocyApi = activity.getGrocyApi();
+    gson = new Gson();
+
+    // VARIABLES
+
+    productGroups = new ArrayList<>();
+    productGroupNames = new ArrayList<>();
+    editProductGroup = null;
+
+    isRefresh = false;
+
+    // VIEWS
+
+    binding.frameMasterProductGroupCancel.setOnClickListener(v -> activity.onBackPressed());
+
+    // swipe refresh
+    binding.swipeMasterProductGroup.setProgressBackgroundColorSchemeColor(
+        ContextCompat.getColor(activity, R.color.surface)
+    );
+    binding.swipeMasterProductGroup.setColorSchemeColors(
+        ContextCompat.getColor(activity, R.color.secondary)
+    );
+    binding.swipeMasterProductGroup.setOnRefreshListener(this::refresh);
+
+    // name
+    binding.editTextMasterProductGroupName.setOnFocusChangeListener(
+        (View v, boolean hasFocus) -> {
+          if (hasFocus) {
+            IconUtil.start(binding.imageMasterProductGroupName);
+          }
+        });
+
+    // description
+    binding.editTextMasterProductGroupDescription.setOnFocusChangeListener(
+        (View v, boolean hasFocus) -> {
+          if (hasFocus) {
+            IconUtil.start(binding.imageMasterProductGroupDescription);
+          }
+        });
+
+    MasterProductGroupFragmentArgs args = MasterProductGroupFragmentArgs
+        .fromBundle(requireArguments());
+    editProductGroup = args.getProductGroup();
+    if (editProductGroup != null) {
+      fillWithEditReferences();
+    } else {
+      resetAll();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        if(isHidden()) return;
+    // START
 
-        activity = (MainActivity) requireActivity();
+    if (savedInstanceState == null) {
+      load();
+    } else {
+      restoreSavedInstanceState(savedInstanceState);
+    }
 
-        // PREFERENCES
+    // UPDATE UI
+    updateUI((getArguments() == null
+        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        && savedInstanceState == null);
+  }
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(R.id.scroll_master_product_group);
+    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.END,
+        R.menu.menu_master_item_edit,
+        animated,
+        this::setUpBottomMenu
+    );
+    activity.updateFab(
+        R.drawable.ic_round_backup,
+        R.string.action_save,
+        Constants.FAB.TAG.SAVE,
+        animated,
+        this::saveProductGroup
+    );
+  }
 
-        // WEB
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    if (isHidden()) {
+      return;
+    }
 
-        dlHelper = new DownloadHelper(activity, TAG);
-        grocyApi = activity.getGrocyApi();
-        gson = new Gson();
+    outState.putParcelableArrayList("productGroups", productGroups);
+    outState.putStringArrayList("productGroupNames", productGroupNames);
 
-        // VARIABLES
+    outState.putParcelable("editProductGroup", editProductGroup);
 
-        productGroups = new ArrayList<>();
-        productGroupNames = new ArrayList<>();
-        editProductGroup = null;
+    outState.putBoolean("isRefresh", isRefresh);
+  }
 
-        isRefresh = false;
+  private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
+    if (isHidden()) {
+      return;
+    }
 
-        // VIEWS
+    productGroups = savedInstanceState.getParcelableArrayList("productGroups");
+    productGroupNames = savedInstanceState.getStringArrayList("productGroupNames");
 
-        binding.frameMasterProductGroupCancel.setOnClickListener(v -> activity.onBackPressed());
+    editProductGroup = savedInstanceState.getParcelable("editProductGroup");
 
-        // swipe refresh
-        binding.swipeMasterProductGroup.setProgressBackgroundColorSchemeColor(
-                ContextCompat.getColor(activity, R.color.surface)
-        );
-        binding.swipeMasterProductGroup.setColorSchemeColors(
-                ContextCompat.getColor(activity, R.color.secondary)
-        );
-        binding.swipeMasterProductGroup.setOnRefreshListener(this::refresh);
+    isRefresh = savedInstanceState.getBoolean("isRefresh");
 
-        // name
-        binding.editTextMasterProductGroupName.setOnFocusChangeListener(
-                (View v, boolean hasFocus) -> {
-                    if(hasFocus) IconUtil.start(binding.imageMasterProductGroupName);
-                });
+    binding.swipeMasterProductGroup.setRefreshing(false);
+  }
 
-        // description
-        binding.editTextMasterProductGroupDescription.setOnFocusChangeListener(
-                (View v, boolean hasFocus) -> {
-                    if(hasFocus) IconUtil.start(binding.imageMasterProductGroupDescription);
-                });
+  @Override
+  public void onHiddenChanged(boolean hidden) {
+    if (!hidden && getView() != null) {
+      onViewCreated(getView(), null);
+    }
+  }
 
-        MasterProductGroupFragmentArgs args = MasterProductGroupFragmentArgs
-                .fromBundle(requireArguments());
-        editProductGroup = args.getProductGroup();
-        if(editProductGroup != null) {
+  private void load() {
+    if (activity.isOnline()) {
+      download();
+    }
+  }
+
+  private void refresh() {
+    // for only fill with up-to-date data on refresh,
+    // not on startup as the bundle should contain everything needed
+    isRefresh = true;
+    if (activity.isOnline()) {
+      download();
+    } else {
+      binding.swipeMasterProductGroup.setRefreshing(false);
+      activity.showSnackbar(
+          Snackbar.make(
+              activity.binding.frameMainContainer,
+              activity.getString(R.string.msg_no_connection),
+              Snackbar.LENGTH_SHORT
+          ).setActionTextColor(
+              ContextCompat.getColor(activity, R.color.secondary)
+          ).setAction(
+              activity.getString(R.string.action_retry),
+              v1 -> refresh()
+          )
+      );
+    }
+  }
+
+  private void download() {
+    binding.swipeMasterProductGroup.setRefreshing(true);
+    downloadProductGroups();
+  }
+
+  private void downloadProductGroups() {
+    dlHelper.get(
+        grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+        response -> {
+          productGroups = gson.fromJson(
+              response,
+              new TypeToken<ArrayList<ProductGroup>>() {
+              }.getType()
+          );
+          SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
+          productGroupNames = getProductGroupNames();
+
+          binding.swipeMasterProductGroup.setRefreshing(false);
+
+          updateEditReferences();
+
+          if (isRefresh && editProductGroup != null) {
             fillWithEditReferences();
-        } else {
+          } else {
             resetAll();
+          }
+        },
+        error -> {
+          binding.swipeMasterProductGroup.setRefreshing(false);
+          activity.showSnackbar(
+              Snackbar.make(
+                  activity.binding.frameMainContainer,
+                  activity.getString(R.string.error_undefined),
+                  Snackbar.LENGTH_SHORT
+              ).setActionTextColor(
+                  ContextCompat.getColor(activity, R.color.secondary)
+              ).setAction(
+                  activity.getString(R.string.action_retry),
+                  v1 -> download()
+              )
+          );
         }
+    );
+  }
 
-        // START
+  private void updateEditReferences() {
+    if (editProductGroup != null) {
+      ProductGroup editProductGroup = getProductGroup(this.editProductGroup.getId());
+      if (editProductGroup != null) {
+        this.editProductGroup = editProductGroup;
+      }
+    }
+  }
 
-        if(savedInstanceState == null) {
-            load();
+  private ArrayList<String> getProductGroupNames() {
+    ArrayList<String> names = new ArrayList<>();
+    if (productGroups != null) {
+      for (ProductGroup productGroup : productGroups) {
+        if (editProductGroup != null) {
+          if (productGroup.getId() != editProductGroup.getId()) {
+            names.add(productGroup.getName().trim());
+          }
         } else {
-            restoreSavedInstanceState(savedInstanceState);
+          names.add(productGroup.getName().trim());
         }
+      }
+    }
+    return names;
+  }
 
-        // UPDATE UI
-        updateUI((getArguments() == null
-                || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-                && savedInstanceState == null);
+  private ProductGroup getProductGroup(int productGroupId) {
+    for (ProductGroup productGroup : productGroups) {
+      if (productGroup.getId() == productGroupId) {
+        return productGroup;
+      }
+    }
+    return null;
+  }
+
+  private void fillWithEditReferences() {
+    clearInputFocusAndErrors();
+    if (editProductGroup != null) {
+      // name
+      binding.editTextMasterProductGroupName.setText(editProductGroup.getName());
+      // description
+      binding.editTextMasterProductGroupDescription.setText(
+          editProductGroup.getDescription()
+      );
+    }
+  }
+
+  private void clearInputFocusAndErrors() {
+    activity.hideKeyboard();
+    binding.textInputMasterProductGroupName.clearFocus();
+    binding.textInputMasterProductGroupName.setErrorEnabled(false);
+    binding.textInputMasterProductGroupDescription.clearFocus();
+    binding.textInputMasterProductGroupDescription.setErrorEnabled(false);
+  }
+
+  public void saveProductGroup() {
+    if (isFormInvalid()) {
+      return;
     }
 
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(R.id.scroll_master_product_group);
-        activity.getScrollBehavior().setHideOnScroll(false);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.END,
-                R.menu.menu_master_item_edit,
-                animated,
-                this::setUpBottomMenu
-        );
-        activity.updateFab(
-                R.drawable.ic_round_backup,
-                R.string.action_save,
-                Constants.FAB.TAG.SAVE,
-                animated,
-                this::saveProductGroup
-        );
+    JSONObject jsonObject = new JSONObject();
+    try {
+      Editable name = binding.editTextMasterProductGroupName.getText();
+      Editable description = binding.editTextMasterProductGroupDescription.getText();
+      jsonObject.put("name", (name != null ? name : "").toString().trim());
+      jsonObject.put(
+          "description", (description != null ? description : "").toString().trim()
+      );
+    } catch (JSONException e) {
+      if (debug) {
+        Log.e(TAG, "saveProductGroup: " + e);
+      }
     }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if(isHidden()) return;
-
-        outState.putParcelableArrayList("productGroups", productGroups);
-        outState.putStringArrayList("productGroupNames", productGroupNames);
-
-        outState.putParcelable("editProductGroup", editProductGroup);
-
-        outState.putBoolean("isRefresh", isRefresh);
-    }
-
-    private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
-        if(isHidden()) return;
-
-        productGroups = savedInstanceState.getParcelableArrayList("productGroups");
-        productGroupNames = savedInstanceState.getStringArrayList("productGroupNames");
-
-        editProductGroup = savedInstanceState.getParcelable("editProductGroup");
-
-        isRefresh = savedInstanceState.getBoolean("isRefresh");
-
-        binding.swipeMasterProductGroup.setRefreshing(false);
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if(!hidden && getView() != null) onViewCreated(getView(), null);
-    }
-
-    private void load() {
-        if(activity.isOnline()) {
-            download();
-        }
-    }
-
-    private void refresh() {
-        // for only fill with up-to-date data on refresh,
-        // not on startup as the bundle should contain everything needed
-        isRefresh = true;
-        if(activity.isOnline()) {
-            download();
-        } else {
-            binding.swipeMasterProductGroup.setRefreshing(false);
-            activity.showSnackbar(
-                    Snackbar.make(
-                            activity.binding.frameMainContainer,
-                            activity.getString(R.string.msg_no_connection),
-                            Snackbar.LENGTH_SHORT
-                    ).setActionTextColor(
-                            ContextCompat.getColor(activity, R.color.secondary)
-                    ).setAction(
-                            activity.getString(R.string.action_retry),
-                            v1 -> refresh()
-                    )
-            );
-        }
-    }
-
-    private void download() {
-        binding.swipeMasterProductGroup.setRefreshing(true);
-        downloadProductGroups();
-    }
-
-    private void downloadProductGroups() {
-        dlHelper.get(
-                grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
-                response -> {
-                    productGroups = gson.fromJson(
-                            response,
-                            new TypeToken<ArrayList<ProductGroup>>(){}.getType()
-                    );
-                    SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
-                    productGroupNames = getProductGroupNames();
-
-                    binding.swipeMasterProductGroup.setRefreshing(false);
-
-                    updateEditReferences();
-
-                    if(isRefresh && editProductGroup != null) {
-                        fillWithEditReferences();
-                    } else {
-                        resetAll();
-                    }
-                },
-                error -> {
-                    binding.swipeMasterProductGroup.setRefreshing(false);
-                    activity.showSnackbar(
-                            Snackbar.make(
-                                    activity.binding.frameMainContainer,
-                                    activity.getString(R.string.error_undefined),
-                                    Snackbar.LENGTH_SHORT
-                            ).setActionTextColor(
-                                    ContextCompat.getColor(activity, R.color.secondary)
-                            ).setAction(
-                                    activity.getString(R.string.action_retry),
-                                    v1 -> download()
-                            )
-                    );
-                }
-        );
-    }
-
-    private void updateEditReferences() {
-        if(editProductGroup != null) {
-            ProductGroup editProductGroup = getProductGroup(this.editProductGroup.getId());
-            if(editProductGroup != null) this.editProductGroup = editProductGroup;
-        }
-    }
-
-    private ArrayList<String> getProductGroupNames() {
-        ArrayList<String> names = new ArrayList<>();
-        if(productGroups != null) {
-            for(ProductGroup productGroup : productGroups) {
-                if(editProductGroup != null) {
-                    if(productGroup.getId() != editProductGroup.getId()) {
-                        names.add(productGroup.getName().trim());
-                    }
-                } else {
-                    names.add(productGroup.getName().trim());
-                }
+    if (editProductGroup != null) {
+      dlHelper.put(
+          grocyApi.getObject(
+              GrocyApi.ENTITY.PRODUCT_GROUPS,
+              editProductGroup.getId()
+          ),
+          jsonObject,
+          response -> activity.navigateUp(),
+          error -> {
+            showErrorMessage();
+            if (debug) {
+              Log.e(TAG, "saveProductGroup: " + error);
             }
-        }
-        return names;
-    }
-
-    private ProductGroup getProductGroup(int productGroupId) {
-        for(ProductGroup productGroup : productGroups) {
-            if(productGroup.getId() == productGroupId) {
-                return productGroup;
+          }
+      );
+    } else {
+      dlHelper.post(
+          grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+          jsonObject,
+          response -> activity.navigateUp(),
+          error -> {
+            showErrorMessage();
+            if (debug) {
+              Log.e(TAG, "saveProductGroup: " + error);
             }
-        } return null;
+          }
+      );
+    }
+  }
+
+  private boolean isFormInvalid() {
+    clearInputFocusAndErrors();
+    boolean isInvalid = false;
+
+    String name = String.valueOf(binding.editTextMasterProductGroupName.getText()).trim();
+    if (name.isEmpty()) {
+      binding.textInputMasterProductGroupName.setError(
+          activity.getString(R.string.error_empty)
+      );
+      isInvalid = true;
+    } else if (!productGroupNames.isEmpty() && productGroupNames.contains(name)) {
+      binding.textInputMasterProductGroupName.setError(
+          activity.getString(R.string.error_duplicate)
+      );
+      isInvalid = true;
     }
 
-    private void fillWithEditReferences() {
-        clearInputFocusAndErrors();
-        if(editProductGroup != null) {
-            // name
-            binding.editTextMasterProductGroupName.setText(editProductGroup.getName());
-            // description
-            binding.editTextMasterProductGroupDescription.setText(
-                    editProductGroup.getDescription()
-            );
-        }
+    return isInvalid;
+  }
+
+  private void resetAll() {
+    if (editProductGroup != null) {
+      return;
     }
+    clearInputFocusAndErrors();
+    binding.editTextMasterProductGroupName.setText(null);
+    binding.editTextMasterProductGroupDescription.setText(null);
+  }
 
-    private void clearInputFocusAndErrors() {
-        activity.hideKeyboard();
-        binding.textInputMasterProductGroupName.clearFocus();
-        binding.textInputMasterProductGroupName.setErrorEnabled(false);
-        binding.textInputMasterProductGroupDescription.clearFocus();
-        binding.textInputMasterProductGroupDescription.setErrorEnabled(false);
+  public void deleteProductGroupSafely() {
+    if (editProductGroup == null) {
+      return;
     }
+    Bundle bundle = new Bundle();
+    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCT_GROUPS);
+    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editProductGroup.getId());
+    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editProductGroup.getName());
+    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
+  }
 
-    public void saveProductGroup() {
-        if(isFormInvalid()) return;
+  @Override
+  public void deleteObject(int productGroupId) {
+    dlHelper.delete(
+        grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
+        response -> activity.navigateUp(),
+        error -> showErrorMessage()
+    );
+  }
 
-        JSONObject jsonObject = new JSONObject();
-        try {
-            Editable name = binding.editTextMasterProductGroupName.getText();
-            Editable description = binding.editTextMasterProductGroupDescription.getText();
-            jsonObject.put("name", (name != null ? name : "").toString().trim());
-            jsonObject.put(
-                    "description", (description != null ? description : "").toString().trim()
-            );
-        } catch (JSONException e) {
-            if(debug) Log.e(TAG, "saveProductGroup: " + e);
-        }
-        if(editProductGroup != null) {
-            dlHelper.put(
-                    grocyApi.getObject(
-                            GrocyApi.ENTITY.PRODUCT_GROUPS,
-                            editProductGroup.getId()
-                    ),
-                    jsonObject,
-                    response -> activity.navigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveProductGroup: " + error);
-                    }
-            );
-        } else {
-            dlHelper.post(
-                    grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
-                    jsonObject,
-                    response -> activity.navigateUp(),
-                    error -> {
-                        showErrorMessage();
-                        if(debug) Log.e(TAG, "saveProductGroup: " + error);
-                    }
-            );
-        }
+  private void showErrorMessage() {
+    activity.showSnackbar(
+        Snackbar.make(
+            activity.binding.frameMainContainer,
+            activity.getString(R.string.error_undefined),
+            Snackbar.LENGTH_SHORT
+        )
+    );
+  }
+
+  public void setUpBottomMenu() {
+    MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
+    if (delete != null) {
+      delete.setOnMenuItemClickListener(item -> {
+        IconUtil.start(item);
+        deleteProductGroupSafely();
+        return true;
+      });
+      delete.setVisible(editProductGroup != null);
     }
+  }
 
-    private boolean isFormInvalid() {
-        clearInputFocusAndErrors();
-        boolean isInvalid = false;
-
-        String name = String.valueOf(binding.editTextMasterProductGroupName.getText()).trim();
-        if(name.isEmpty()) {
-            binding.textInputMasterProductGroupName.setError(
-                    activity.getString(R.string.error_empty)
-            );
-            isInvalid = true;
-        } else if(!productGroupNames.isEmpty() && productGroupNames.contains(name)) {
-            binding.textInputMasterProductGroupName.setError(
-                    activity.getString(R.string.error_duplicate)
-            );
-            isInvalid = true;
-        }
-
-        return isInvalid;
-    }
-
-    private void resetAll() {
-        if(editProductGroup != null) return;
-        clearInputFocusAndErrors();
-        binding.editTextMasterProductGroupName.setText(null);
-        binding.editTextMasterProductGroupDescription.setText(null);
-    }
-
-    public void deleteProductGroupSafely() {
-        if(editProductGroup == null) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCT_GROUPS);
-        bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editProductGroup.getId());
-        bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editProductGroup.getName());
-        activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-    }
-
-    @Override
-    public void deleteObject(int productGroupId) {
-        dlHelper.delete(
-                grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
-                response -> activity.navigateUp(),
-                error -> showErrorMessage()
-        );
-    }
-
-    private void showErrorMessage() {
-        activity.showSnackbar(
-                Snackbar.make(
-                        activity.binding.frameMainContainer,
-                        activity.getString(R.string.error_undefined),
-                        Snackbar.LENGTH_SHORT
-                )
-        );
-    }
-
-    public void setUpBottomMenu() {
-        MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
-        if(delete != null) {
-            delete.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                deleteProductGroupSafely();
-                return true;
-            });
-            delete.setVisible(editProductGroup != null);
-        }
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

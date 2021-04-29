@@ -25,31 +25,30 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.StockLocation;
 
 @Dao
 public interface StockLocationDao {
-    @Query("SELECT * FROM stock_current_location_table")
-    LiveData<List<StockLocation>> getAllLive();
 
-    @Query("SELECT * FROM stock_current_location_table")
-    List<StockLocation> getAll();
+  @Query("SELECT * FROM stock_current_location_table")
+  LiveData<List<StockLocation>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM stock_current_location_table")
-    int count();
+  @Query("SELECT * FROM stock_current_location_table")
+  List<StockLocation> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<StockLocation> stockLocation);
+  @Query("SELECT COUNT(*) FROM stock_current_location_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(StockLocation stockLocation);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<StockLocation> stockLocation);
 
-    @Delete
-    void delete(StockLocation stockLocation);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(StockLocation stockLocation);
 
-    @Query("DELETE FROM stock_current_location_table")
-    void deleteAll();
+  @Delete
+  void delete(StockLocation stockLocation);
+
+  @Query("DELETE FROM stock_current_location_table")
+  void deleteAll();
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,102 +18,102 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <TextView
+      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:layout_margin="16dp"
+      android:text="@string/title_product" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar_master_product"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="visible"
+      app:contentInsetStart="12dp"
+      app:menu="@menu/menu_actions_master_product" />
+
+  </LinearLayout>
+
+  <View
+    style="@style/Theme.Grocy.Divider"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp" />
+
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none"
+    android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_marginTop="8dp"
+      android:paddingBottom="8dp">
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <xyz.zedler.patrick.grocy.view.ExpandableCard
+        android:id="@+id/card_master_product_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_margin="16dp" />
 
-        <TextView
-            style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:text="@string/title_product"/>
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_master_product"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:contentInsetStart="12dp"
-            app:menu="@menu/menu_actions_master_product" />
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_min_stock_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_qu_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_qu_stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_qu_factor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_product_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_master_product_barcodes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     </LinearLayout>
 
-    <View
-        style="@style/Theme.Grocy.Divider"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:overScrollMode="ifContentScrolls">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:paddingBottom="8dp">
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ExpandableCard
-                android:id="@+id/card_master_product_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_min_stock_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_qu_purchase"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_qu_stock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_qu_factor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_product_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <xyz.zedler.patrick.grocy.view.ListItem
-                android:id="@+id/item_master_product_barcodes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+  </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

@@ -26,42 +26,41 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
 @Dao
 public interface ShoppingListItemDao {
-    @Query("SELECT * FROM shopping_list_item_table")
-    LiveData<List<ShoppingListItem>> getAllLive();
 
-    @Query("SELECT * FROM shopping_list_item_table")
-    List<ShoppingListItem> getAll();
+  @Query("SELECT * FROM shopping_list_item_table")
+  LiveData<List<ShoppingListItem>> getAllLive();
 
-    @Query("SELECT * FROM shopping_list_item_table WHERE id LIKE :id LIMIT 1")
-    ShoppingListItem findById(int id);
+  @Query("SELECT * FROM shopping_list_item_table")
+  List<ShoppingListItem> getAll();
 
-    @Query("SELECT COUNT(*) FROM shopping_list_item_table")
-    int count();
+  @Query("SELECT * FROM shopping_list_item_table WHERE id LIKE :id LIMIT 1")
+  ShoppingListItem findById(int id);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ArrayList<ShoppingListItem> shoppingListItems);
+  @Query("SELECT COUNT(*) FROM shopping_list_item_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ShoppingListItem... shoppingListItems);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(ArrayList<ShoppingListItem> shoppingListItems);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ShoppingListItem shoppingListItem);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(ShoppingListItem... shoppingListItems);
 
-    @Update
-    void update(ShoppingListItem shoppingListItem);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(ShoppingListItem shoppingListItem);
 
-    @Delete
-    void delete(ShoppingListItem shoppingListItem);
+  @Update
+  void update(ShoppingListItem shoppingListItem);
 
-    @Query("DELETE FROM shopping_list_item_table")
-    void deleteAll();
+  @Delete
+  void delete(ShoppingListItem shoppingListItem);
+
+  @Query("DELETE FROM shopping_list_item_table")
+  void deleteAll();
 
 }

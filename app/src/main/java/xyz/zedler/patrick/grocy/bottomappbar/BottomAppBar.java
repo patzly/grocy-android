@@ -74,7 +74,7 @@ import java.util.List;
 
 /**
  * Modification of the official Material Components' BottomAppBar.
- *
+ * <p>
  * The Bottom App Bar is an extension of Toolbar that supports a shaped background that "cradles" an
  * attached {@link FloatingActionButton}. A FAB is anchored to {@link BottomAppBar} by calling
  * {@link CoordinatorLayout.LayoutParams#setAnchorId(int)}, or by setting {@code app:layout_anchor}
@@ -89,7 +89,8 @@ import java.util.List;
  * BottomAppBar}. {@link #FAB_ALIGNMENT_MODE_CENTER} mode is the primary mode with the FAB is
  * centered. {@link #FAB_ALIGNMENT_MODE_END} is the secondary mode with the FAB on the side.
  *
- * <p>Do not use the {@code android:background} attribute or call {@code BottomAppBar.setBackground}
+ * <p>Do not use the {@code android:background} attribute or call {@code
+ * BottomAppBar.setBackground}
  * because the BottomAppBar manages its background internally. Instead use {@code
  * app:backgroundTint}.
  *
@@ -114,7 +115,9 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    */
   @IntDef({FAB_ALIGNMENT_MODE_CENTER, FAB_ALIGNMENT_MODE_END})
   @Retention(RetentionPolicy.SOURCE)
-  public @interface FabAlignmentMode {}
+  public @interface FabAlignmentMode {
+
+  }
 
   public static final int FAB_ANIMATION_MODE_SCALE = 0;
   public static final int FAB_ANIMATION_MODE_SLIDE = 1;
@@ -127,21 +130,29 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    */
   @IntDef({FAB_ANIMATION_MODE_SCALE, FAB_ANIMATION_MODE_SLIDE})
   @Retention(RetentionPolicy.SOURCE)
-  public @interface FabAnimationMode {}
+  public @interface FabAnimationMode {
+
+  }
 
   private final int fabOffsetEndMode;
   private final MaterialShapeDrawable materialShapeDrawable = new MaterialShapeDrawable();
 
-  @Nullable private Animator modeAnimator;
-  @Nullable private Animator menuAnimator;
-  @FabAlignmentMode private int fabAlignmentMode;
-  @FabAnimationMode private int fabAnimationMode;
+  @Nullable
+  private Animator modeAnimator;
+  @Nullable
+  private Animator menuAnimator;
+  @FabAlignmentMode
+  private int fabAlignmentMode;
+  @FabAnimationMode
+  private int fabAnimationMode;
   private boolean hideOnScroll;
   private final boolean paddingBottomSystemWindowInsets;
   private final boolean paddingLeftSystemWindowInsets;
   private final boolean paddingRightSystemWindowInsets;
 
-  /** Keeps track of the number of currently running animations. */
+  /**
+   * Keeps track of the number of currently running animations.
+   */
   private int animatingModeChangeCounter = 0;
 
   private ArrayList<AnimationListener> animationListeners;
@@ -153,11 +164,15 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    */
   private static final int NO_MENU_RES_ID = 0;
 
-  @MenuRes private int pendingMenuResId = NO_MENU_RES_ID;
+  @MenuRes
+  private int pendingMenuResId = NO_MENU_RES_ID;
   private boolean menuAnimatingWithFabAlignmentMode = false;
 
-  /** Callback to be invoked when the BottomAppBar is animating. */
+  /**
+   * Callback to be invoked when the BottomAppBar is animating.
+   */
   interface AnimationListener {
+
     void onAnimationStart(BottomAppBar bar);
 
     void onAnimationEnd(BottomAppBar bar);
@@ -196,7 +211,9 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
         }
       };
 
-  /** Listens to any transformations applied to the FAB so the cutout can react. */
+  /**
+   * Listens to any transformations applied to the FAB so the cutout can react.
+   */
   @NonNull
   TransformationCallback<FloatingActionButton> fabTransformationCallback =
       new TransformationCallback<FloatingActionButton>() {
@@ -287,34 +304,34 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
         attrs,
         defStyleAttr,
         DEF_STYLE_RES,
-            (view, insets, initialPadding) -> {
-              // Just read the insets here. doOnApplyWindowInsets will apply the padding under the
-              // hood.
-              boolean leftInsetsChanged = false;
-              boolean rightInsetsChanged = false;
-              if (paddingBottomSystemWindowInsets) {
-                bottomInset = insets.getSystemWindowInsetBottom();
-              }
-              if (paddingLeftSystemWindowInsets) {
-                leftInsetsChanged = leftInset != insets.getSystemWindowInsetLeft();
-                leftInset = insets.getSystemWindowInsetLeft();
-              }
-              if (paddingRightSystemWindowInsets) {
-                rightInsetsChanged = rightInset != insets.getSystemWindowInsetRight();
-                rightInset = insets.getSystemWindowInsetRight();
-              }
+        (view, insets, initialPadding) -> {
+          // Just read the insets here. doOnApplyWindowInsets will apply the padding under the
+          // hood.
+          boolean leftInsetsChanged = false;
+          boolean rightInsetsChanged = false;
+          if (paddingBottomSystemWindowInsets) {
+            bottomInset = insets.getSystemWindowInsetBottom();
+          }
+          if (paddingLeftSystemWindowInsets) {
+            leftInsetsChanged = leftInset != insets.getSystemWindowInsetLeft();
+            leftInset = insets.getSystemWindowInsetLeft();
+          }
+          if (paddingRightSystemWindowInsets) {
+            rightInsetsChanged = rightInset != insets.getSystemWindowInsetRight();
+            rightInset = insets.getSystemWindowInsetRight();
+          }
 
-              // We may need to change the position of the cutout or the action menu if the side
-              // insets have changed.
-              if (leftInsetsChanged || rightInsetsChanged) {
-                cancelAnimations();
+          // We may need to change the position of the cutout or the action menu if the side
+          // insets have changed.
+          if (leftInsetsChanged || rightInsetsChanged) {
+            cancelAnimations();
 
-                setCutoutState();
-                setActionMenuViewPosition();
-              }
+            setCutoutState();
+            setActionMenuViewPosition();
+          }
 
-              return insets;
-            });
+          return insets;
+        });
   }
 
   /**
@@ -331,7 +348,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    * modes will be played.
    *
    * @param fabAlignmentMode the desired fabAlignmentMode, either {@link #FAB_ALIGNMENT_MODE_CENTER}
-   *     or {@link #FAB_ALIGNMENT_MODE_END}.
+   *                         or {@link #FAB_ALIGNMENT_MODE_END}.
    */
   public void setFabAlignmentMode(@FabAlignmentMode int fabAlignmentMode) {
     setFabAlignmentModeAndReplaceMenu(fabAlignmentMode, NO_MENU_RES_ID, null);
@@ -343,11 +360,12 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    * coordination with a menu resource swap animation.
    *
    * @param fabAlignmentMode the desired fabAlignmentMode, either {@link #FAB_ALIGNMENT_MODE_CENTER}
-   *     or {@link #FAB_ALIGNMENT_MODE_END}.
-   * @param newMenu the menu resource of a new menu to be inflated and swapped during the animation.
-   *     Passing 0 for newMenu will not clear the menu but will skip all menu manipulation. If you'd
-   *     like to animate the FAB's alignment and clear the menu at the same time, use {@code
-   *     getMenu().clear()} and {@link #setFabAlignmentMode(int)}.
+   *                         or {@link #FAB_ALIGNMENT_MODE_END}.
+   * @param newMenu          the menu resource of a new menu to be inflated and swapped during the
+   *                         animation. Passing 0 for newMenu will not clear the menu but will skip
+   *                         all menu manipulation. If you'd like to animate the FAB's alignment and
+   *                         clear the menu at the same time, use {@code getMenu().clear()} and
+   *                         {@link #setFabAlignmentMode(int)}.
    */
   public void setFabAlignmentModeAndReplaceMenu(
       @FabAlignmentMode int fabAlignmentMode, @MenuRes int newMenu, @Nullable Runnable onChanged) {
@@ -372,7 +390,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    * animated from from one {@link FabAlignmentMode} to another.
    *
    * @param fabAnimationMode the desired fabAlignmentMode, either {@link #FAB_ALIGNMENT_MODE_CENTER}
-   *     or {@link #FAB_ALIGNMENT_MODE_END}.
+   *                         or {@link #FAB_ALIGNMENT_MODE_END}.
    */
   public void setFabAnimationMode(@FabAnimationMode int fabAnimationMode) {
     this.fabAnimationMode = fabAnimationMode;
@@ -388,7 +406,8 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   /**
-   * Returns the cradle margin for the fab cutout. This is the space between the fab and the cutout.
+   * Returns the cradle margin for the fab cutout. This is the space between the fab and the
+   * cutout.
    */
   public float getFabCradleMargin() {
     return getTopEdgeTreatment().getFabCradleMargin();
@@ -404,13 +423,17 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
     }
   }
 
-  /** Returns the rounded corner radius for the cutout. A value of 0 will be a sharp edge. */
+  /**
+   * Returns the rounded corner radius for the cutout. A value of 0 will be a sharp edge.
+   */
   @Dimension
   public float getFabCradleRoundedCornerRadius() {
     return getTopEdgeTreatment().getFabCradleRoundedCornerRadius();
   }
 
-  /** Sets the rounded corner radius for the fab cutout. A value of 0 will be a sharp edge. */
+  /**
+   * Sets the rounded corner radius for the fab cutout. A value of 0 will be a sharp edge.
+   */
   public void setFabCradleRoundedCornerRadius(@Dimension float roundedCornerRadius) {
     if (roundedCornerRadius != getFabCradleRoundedCornerRadius()) {
       getTopEdgeTreatment().setFabCradleRoundedCornerRadius(roundedCornerRadius);
@@ -450,20 +473,23 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   /**
-   * Sets if the {@link BottomAppBar} should hide when a {@link
-   * androidx.core.view.NestedScrollingChild} is scrolled. This is handled by {@link
-   * BottomAppBar.Behavior}.
+   * Sets if the {@link BottomAppBar} should hide when a {@link androidx.core.view.NestedScrollingChild}
+   * is scrolled. This is handled by {@link BottomAppBar.Behavior}.
    */
   public void setHideOnScroll(boolean hide) {
     hideOnScroll = hide;
   }
 
-  /** Animates the {@link BottomAppBar} so it hides off the screen. */
+  /**
+   * Animates the {@link BottomAppBar} so it hides off the screen.
+   */
   public void performHide() {
     getBehavior().slideDown(this);
   }
 
-  /** Animates the {@link BottomAppBar} so it is shown on the screen. */
+  /**
+   * Animates the {@link BottomAppBar} so it is shown on the screen.
+   */
   public void performShow() {
     getBehavior().slideUp(this);
   }
@@ -491,7 +517,9 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
     }
   }
 
-  /** Add a listener to watch for animation changes to the BottomAppBar and FAB */
+  /**
+   * Add a listener to watch for animation changes to the BottomAppBar and FAB
+   */
   void addAnimationListener(@NonNull AnimationListener listener) {
     if (animationListeners == null) {
       animationListeners = new ArrayList<>();
@@ -643,13 +671,16 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
     animators.add(animator);
   }
 
-  private void maybeAnimateMenuView(@FabAlignmentMode int targetMode, boolean newFabAttached, @Nullable Runnable onChanged) {
+  private void maybeAnimateMenuView(@FabAlignmentMode int targetMode, boolean newFabAttached,
+      @Nullable Runnable onChanged) {
     if (!ViewCompat.isLaidOut(this)) {
       menuAnimatingWithFabAlignmentMode = false;
       // If this method is called before the BottomAppBar is laid out and able to animate, make sure
       // the desired menu is still set even if the animation is skipped.
       replaceMenu(pendingMenuResId);
-      if(onChanged != null) onChanged.run();
+      if (onChanged != null) {
+        onChanged.run();
+      }
       return;
     }
 
@@ -725,7 +756,9 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
               if (!cancelled) {
                 boolean replaced = pendingMenuResId != NO_MENU_RES_ID;
                 replaceMenu(pendingMenuResId);
-                if(onChanged != null) onChanged.run();
+                if (onChanged != null) {
+                  onChanged.run();
+                }
                 translateActionMenuView(actionMenuView, targetMode, targetAttached, replaced);
               }
             }
@@ -740,24 +773,26 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
       Animator fadeOut = ObjectAnimator.ofFloat(actionMenuView, "alpha", 0);
 
       fadeOut.addListener(
-              new AnimatorListenerAdapter() {
-                public boolean cancelled;
+          new AnimatorListenerAdapter() {
+            public boolean cancelled;
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                  cancelled = true;
-                }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+              cancelled = true;
+            }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                  if (!cancelled) {
-                    boolean replaced = pendingMenuResId != NO_MENU_RES_ID;
-                    replaceMenu(pendingMenuResId);
-                    if(onChanged != null) onChanged.run();
-                    translateActionMenuView(actionMenuView, targetMode, targetAttached, replaced);
-                  }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+              if (!cancelled) {
+                boolean replaced = pendingMenuResId != NO_MENU_RES_ID;
+                replaceMenu(pendingMenuResId);
+                if (onChanged != null) {
+                  onChanged.run();
                 }
-              });
+                translateActionMenuView(actionMenuView, targetMode, targetAttached, replaced);
+              }
+            }
+          });
 
       AnimatorSet set = new AnimatorSet();
       set.setDuration(ANIMATION_DURATION);
@@ -813,10 +848,10 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    * and if the fab is attached. The view will be translated to the left when the fab is attached
    * and on the end. Otherwise it will be in its normal position.
    *
-   * @param actionMenuView the ActionMenuView to translate
+   * @param actionMenuView   the ActionMenuView to translate
    * @param fabAlignmentMode the fabAlignmentMode used to determine the position of the
-   *     ActionMenuView
-   * @param fabAttached whether the ActionMenuView should be moved
+   *                         ActionMenuView
+   * @param fabAttached      whether the ActionMenuView should be moved
    */
   private void translateActionMenuView(
       @NonNull final ActionMenuView actionMenuView,
@@ -857,8 +892,8 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
       boolean isAlignedToStart =
           view.getLayoutParams() instanceof LayoutParams
               && (((LayoutParams) view.getLayoutParams()).gravity
-                      & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
-                  == Gravity.START;
+              & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
+              == Gravity.START;
       if (isAlignedToStart) {
         toolbarLeftContentEnd =
             isRtl
@@ -1006,7 +1041,8 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    */
   public static class Behavior extends HideBottomViewOnScrollBehavior<BottomAppBar> {
 
-    @NonNull private final Rect fabContentRect;
+    @NonNull
+    private final Rect fabContentRect;
 
     private WeakReference<BottomAppBar> viewRef;
 
@@ -1080,7 +1116,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
 
     @Override
     public boolean onLayoutChild(
-            @NonNull CoordinatorLayout parent, @NonNull BottomAppBar child, int layoutDirection) {
+        @NonNull CoordinatorLayout parent, @NonNull BottomAppBar child, int layoutDirection) {
       viewRef = new WeakReference<>(child);
 
       View dependentView = child.findDependentView();
@@ -1125,7 +1161,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
       // We will ask to start on nested scroll if the BottomAppBar is set to hide.
       return child.getHideOnScroll()
           && super.onStartNestedScroll(
-              coordinatorLayout, child, directTargetChild, target, axes, type);
+          coordinatorLayout, child, directTargetChild, target, axes, type);
     }
   }
 
@@ -1152,7 +1188,9 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
   }
 
   static class SavedState extends AbsSavedState {
-    @FabAlignmentMode int fabAlignmentMode;
+
+    @FabAlignmentMode
+    int fabAlignmentMode;
     boolean fabAttached;
 
     public SavedState(Parcelable superState) {

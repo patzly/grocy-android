@@ -26,95 +26,94 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapter.ViewHolder> {
 
-    private final static String TAG = QuantityUnitAdapter.class.getSimpleName();
+  private final static String TAG = QuantityUnitAdapter.class.getSimpleName();
 
-    private final ArrayList<QuantityUnit> quantityUnits;
-    private final int selectedId;
-    private final QuantityUnitAdapterListener listener;
+  private final ArrayList<QuantityUnit> quantityUnits;
+  private final int selectedId;
+  private final QuantityUnitAdapterListener listener;
 
-    public QuantityUnitAdapter(
-            ArrayList<QuantityUnit> quantityUnits,
-            Object selectedId,
-            QuantityUnitAdapterListener listener
-    ) {
-        this.quantityUnits = quantityUnits;
-        this.selectedId = selectedId != null ? (Integer) selectedId : -1;
-        this.listener = listener;
+  public QuantityUnitAdapter(
+      ArrayList<QuantityUnit> quantityUnits,
+      Object selectedId,
+      QuantityUnitAdapterListener listener
+  ) {
+    this.quantityUnits = quantityUnits;
+    this.selectedId = selectedId != null ? (Integer) selectedId : -1;
+    this.listener = listener;
+  }
+
+  public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    private final LinearLayout linearLayoutContainer;
+    private final TextView textViewName;
+    private final ImageView imageViewSelected;
+
+    public ViewHolder(View view) {
+      super(view);
+
+      linearLayoutContainer = view.findViewById(R.id.linear_master_edit_selection_container);
+      textViewName = view.findViewById(R.id.text_master_edit_selection_name);
+      imageViewSelected = view.findViewById(R.id.image_master_edit_selection_selected);
+    }
+  }
+
+  @NonNull
+  @Override
+  public QuantityUnitAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new QuantityUnitAdapter.ViewHolder(
+        LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.row_master_edit_selection_sheet,
+            parent,
+            false
+        )
+    );
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  @Override
+  public void onBindViewHolder(
+      @NonNull final QuantityUnitAdapter.ViewHolder holder,
+      int position
+  ) {
+    QuantityUnit quantityUnit = quantityUnits.get(holder.getAdapterPosition());
+
+    // NAME
+
+    holder.textViewName.setText(quantityUnit.getName());
+
+    // SELECTED
+
+    if (quantityUnit.getId() == selectedId) {
+      holder.imageViewSelected.setVisibility(View.VISIBLE);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final LinearLayout linearLayoutContainer;
-        private final TextView textViewName;
-        private final ImageView imageViewSelected;
+    // CONTAINER
 
-        public ViewHolder(View view) {
-            super(view);
+    holder.linearLayoutContainer.setOnClickListener(
+        view -> listener.onItemRowClicked(holder.getAdapterPosition())
+    );
+  }
 
-            linearLayoutContainer = view.findViewById(R.id.linear_master_edit_selection_container);
-            textViewName = view.findViewById(R.id.text_master_edit_selection_name);
-            imageViewSelected = view.findViewById(R.id.image_master_edit_selection_selected);
-        }
-    }
+  @Override
+  public long getItemId(int position) {
+    return quantityUnits.get(position).getId();
+  }
 
-    @NonNull
-    @Override
-    public QuantityUnitAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new QuantityUnitAdapter.ViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_master_edit_selection_sheet,
-                        parent,
-                        false
-                )
-        );
-    }
+  @Override
+  public int getItemCount() {
+    return quantityUnits.size();
+  }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public void onBindViewHolder(
-            @NonNull final QuantityUnitAdapter.ViewHolder holder,
-            int position
-    ) {
-        QuantityUnit quantityUnit = quantityUnits.get(holder.getAdapterPosition());
+  public interface QuantityUnitAdapterListener {
 
-        // NAME
-
-        holder.textViewName.setText(quantityUnit.getName());
-
-        // SELECTED
-
-        if(quantityUnit.getId() == selectedId) {
-            holder.imageViewSelected.setVisibility(View.VISIBLE);
-        }
-
-        // CONTAINER
-
-        holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(holder.getAdapterPosition())
-        );
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return quantityUnits.get(position).getId();
-    }
-
-    @Override
-    public int getItemCount() {
-        return quantityUnits.size();
-    }
-
-    public interface QuantityUnitAdapterListener {
-        void onItemRowClicked(int position);
-    }
+    void onItemRowClicked(int position);
+  }
 }

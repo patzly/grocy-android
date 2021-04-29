@@ -23,15 +23,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -47,172 +44,187 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatBarcodesViewModel;
 
-public class MasterProductCatBarcodesFragment extends BaseFragment implements ProductBarcodeAdapter.ProductBarcodeAdapterListener {
+public class MasterProductCatBarcodesFragment extends BaseFragment implements
+    ProductBarcodeAdapter.ProductBarcodeAdapterListener {
 
-    private final static String TAG = MasterProductCatBarcodesFragment.class.getSimpleName();
+  private final static String TAG = MasterProductCatBarcodesFragment.class.getSimpleName();
 
-    private MainActivity activity;
-    private ClickUtil clickUtil;
-    private FragmentMasterProductCatBarcodesBinding binding;
-    private MasterProductCatBarcodesViewModel viewModel;
-    private InfoFullscreenHelper infoFullscreenHelper;
+  private MainActivity activity;
+  private ClickUtil clickUtil;
+  private FragmentMasterProductCatBarcodesBinding binding;
+  private MasterProductCatBarcodesViewModel viewModel;
+  private InfoFullscreenHelper infoFullscreenHelper;
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentMasterProductCatBarcodesBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentMasterProductCatBarcodesBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+
+    if (infoFullscreenHelper != null) {
+      infoFullscreenHelper.destroyInstance();
+      infoFullscreenHelper = null;
+    }
+    if (binding != null) {
+      binding.recycler.animate().cancel();
+      binding = null;
+    }
+  }
+
+  @Override
+  public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
+    activity = (MainActivity) requireActivity();
+    clickUtil = new ClickUtil();
+
+    MasterProductFragmentArgs args = MasterProductFragmentArgs
+        .fromBundle(requireArguments());
+    viewModel = new ViewModelProvider(this, new MasterProductCatBarcodesViewModel
+        .MasterProductCatBarcodesViewModelFactory(activity.getApplication(), args)
+    ).get(MasterProductCatBarcodesViewModel.class);
+
+    binding.setActivity(activity);
+    binding.setViewModel(viewModel);
+    binding.setFragment(this);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
+      if (event.getType() == Event.SNACKBAR_MESSAGE) {
+        SnackbarMessage message = (SnackbarMessage) event;
+        Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+        activity.showSnackbar(snack);
+      } else if (event.getType() == Event.NAVIGATE_UP) {
+        activity.navigateUp();
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
+      }
+    });
+
+    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
+    viewModel.getInfoFullscreenLive().observe(
+        getViewLifecycleOwner(),
+        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
+    );
+
+    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
+      if (!isLoading) {
+        viewModel.setCurrentQueueLoading(null);
+      }
+    });
+
+    binding.recycler.setLayoutManager(
+        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+    );
+    binding.recycler.setItemAnimator(new DefaultItemAnimator());
+    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+
+    viewModel.getProductBarcodesLive().observe(getViewLifecycleOwner(), barcodes -> {
+      if (barcodes == null) {
+        return;
+      }
+      if (barcodes.isEmpty()) {
+        InfoFullscreen info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_PRODUCT_BARCODES);
+        viewModel.getInfoFullscreenLive().setValue(info);
+      } else {
+        viewModel.getInfoFullscreenLive().setValue(null);
+      }
+      if (binding.recycler.getAdapter() instanceof ProductBarcodeAdapter) {
+        ((ProductBarcodeAdapter) binding.recycler.getAdapter()).updateData(barcodes);
+      } else {
+        binding.recycler.setAdapter(new ProductBarcodeAdapter(
+            barcodes,
+            this
+        ));
+      }
+    });
+
+    if (savedInstanceState == null) {
+      viewModel.loadFromDatabase(true);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    updateUI(savedInstanceState == null);
+  }
 
-        if(infoFullscreenHelper != null) {
-            infoFullscreenHelper.destroyInstance();
-            infoFullscreenHelper = null;
+  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setUpScroll(R.id.scroll);
+    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.updateBottomAppBar(
+        Constants.FAB.POSITION.END,
+        R.menu.menu_master_product_edit,
+        menuItem -> {
+          if (menuItem.getItemId() != R.id.action_delete) {
+            return false;
+          }
+          setForDestination(
+              R.id.masterProductFragment,
+              Constants.ARGUMENT.ACTION,
+              Constants.ACTION.DELETE
+          );
+          activity.onBackPressed();
+          return true;
         }
-        if(binding != null) {
-            binding.recycler.animate().cancel();
-            binding = null;
+    );
+    activity.updateFab(
+        R.drawable.ic_round_backup,
+        R.string.action_save,
+        Constants.FAB.TAG.SAVE,
+        animated,
+        () -> {
+          setForDestination(
+              R.id.masterProductFragment,
+              Constants.ARGUMENT.ACTION,
+              Constants.ACTION.SAVE
+          );
+          activity.onBackPressed();
         }
+    );
+  }
+
+  @Override
+  public void onItemRowClicked(ProductBarcode productBarcode) {
+    if (clickUtil.isDisabled()) {
+      return;
     }
+  }
 
-    @Override
-    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
-        activity = (MainActivity) requireActivity();
-        clickUtil = new ClickUtil();
+  public void clearInputFocus() {
+    activity.hideKeyboard();
+  }
 
-        MasterProductFragmentArgs args = MasterProductFragmentArgs
-                .fromBundle(requireArguments());
-        viewModel = new ViewModelProvider(this, new MasterProductCatBarcodesViewModel
-                .MasterProductCatBarcodesViewModelFactory(activity.getApplication(), args)
-        ).get(MasterProductCatBarcodesViewModel.class);
+  @Override
+  public boolean onBackPressed() {
+    setForDestination(
+        R.id.masterProductFragment,
+        Constants.ARGUMENT.PRODUCT,
+        viewModel.getFilledProduct()
+    );
+    return false;
+  }
 
-        binding.setActivity(activity);
-        binding.setViewModel(viewModel);
-        binding.setFragment(this);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
-
-        viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
-            if(event.getType() == Event.SNACKBAR_MESSAGE) {
-                SnackbarMessage message = (SnackbarMessage) event;
-                Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
-                activity.showSnackbar(snack);
-            } else if(event.getType() == Event.NAVIGATE_UP) {
-                activity.navigateUp();
-            } else if(event.getType() == Event.BOTTOM_SHEET) {
-                BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
-                activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-            }
-        });
-
-        infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-        viewModel.getInfoFullscreenLive().observe(
-                getViewLifecycleOwner(),
-                infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-        );
-
-        viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
-            if(!isLoading) viewModel.setCurrentQueueLoading(null);
-        });
-
-        binding.recycler.setLayoutManager(
-                new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        );
-        binding.recycler.setItemAnimator(new DefaultItemAnimator());
-        binding.recycler.setAdapter(new MasterPlaceholderAdapter());
-
-        viewModel.getProductBarcodesLive().observe(getViewLifecycleOwner(), barcodes -> {
-            if(barcodes == null) return;
-            if(barcodes.isEmpty()) {
-                InfoFullscreen info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_PRODUCT_BARCODES);
-                viewModel.getInfoFullscreenLive().setValue(info);
-            } else {
-                viewModel.getInfoFullscreenLive().setValue(null);
-            }
-            if(binding.recycler.getAdapter() instanceof ProductBarcodeAdapter) {
-                ((ProductBarcodeAdapter) binding.recycler.getAdapter()).updateData(barcodes);
-            } else {
-                binding.recycler.setAdapter(new ProductBarcodeAdapter(
-                        barcodes,
-                        this
-                ));
-            }
-        });
-
-        if(savedInstanceState == null) viewModel.loadFromDatabase(true);
-
-        updateUI(savedInstanceState == null);
+  @Override
+  public void updateConnectivity(boolean isOnline) {
+    if (!isOnline == viewModel.isOffline()) {
+      return;
     }
-
-    private void updateUI(boolean animated) {
-        activity.getScrollBehavior().setUpScroll(R.id.scroll);
-        activity.getScrollBehavior().setHideOnScroll(true);
-        activity.updateBottomAppBar(
-                Constants.FAB.POSITION.END,
-                R.menu.menu_master_product_edit,
-                menuItem -> {
-                    if(menuItem.getItemId() != R.id.action_delete) return false;
-                    setForDestination(
-                            R.id.masterProductFragment,
-                            Constants.ARGUMENT.ACTION,
-                            Constants.ACTION.DELETE
-                    );
-                    activity.onBackPressed();
-                    return true;
-                }
-        );
-        activity.updateFab(
-                R.drawable.ic_round_backup,
-                R.string.action_save,
-                Constants.FAB.TAG.SAVE,
-                animated,
-                () -> {
-                    setForDestination(
-                            R.id.masterProductFragment,
-                            Constants.ARGUMENT.ACTION,
-                            Constants.ACTION.SAVE
-                    );
-                    activity.onBackPressed();
-                }
-        );
+    viewModel.setOfflineLive(!isOnline);
+    if (isOnline) {
+      viewModel.downloadData();
     }
+  }
 
-    @Override
-    public void onItemRowClicked(ProductBarcode productBarcode) {
-        if(clickUtil.isDisabled()) return;
-    }
-
-    public void clearInputFocus() {
-        activity.hideKeyboard();
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        setForDestination(
-                R.id.masterProductFragment,
-                Constants.ARGUMENT.PRODUCT,
-                viewModel.getFilledProduct()
-        );
-        return false;
-    }
-
-    @Override
-    public void updateConnectivity(boolean isOnline) {
-        if(!isOnline == viewModel.isOffline()) return;
-        viewModel.setOfflineLive(!isOnline);
-        if(isOnline) viewModel.downloadData();
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

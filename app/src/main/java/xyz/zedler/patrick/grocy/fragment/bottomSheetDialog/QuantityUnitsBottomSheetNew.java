@@ -26,16 +26,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitAdapter;
@@ -43,74 +39,74 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class QuantityUnitsBottomSheetNew extends BaseBottomSheet
-        implements QuantityUnitAdapter.QuantityUnitAdapterListener {
+    implements QuantityUnitAdapter.QuantityUnitAdapterListener {
 
-    private final static String TAG = QuantityUnitsBottomSheetNew.class.getSimpleName();
+  private final static String TAG = QuantityUnitsBottomSheetNew.class.getSimpleName();
 
-    private MainActivity activity;
-    private ArrayList<QuantityUnit> quantityUnits;
+  private MainActivity activity;
+  private ArrayList<QuantityUnit> quantityUnits;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_list_selection, container, false
+    );
+
+    activity = (MainActivity) requireActivity();
+
+    int selectedId = activity.getCurrentFragment()
+        .getSelectedQuantityUnitId();
+    quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
+    if (quantityUnits == null) {
+      activity.showMessage(R.string.error_undefined);
+      dismiss();
+      return view;
     }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_list_selection, container, false
-        );
+    TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
+    textViewTitle.setText(activity.getString(R.string.property_quantity_units));
 
-        activity = (MainActivity) requireActivity();
+    RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
+    recyclerView.setLayoutManager(
+        new LinearLayoutManager(
+            activity,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+    );
+    recyclerView.setItemAnimator(new DefaultItemAnimator());
+    recyclerView.setAdapter(
+        new QuantityUnitAdapter(quantityUnits, selectedId, this)
+    );
 
-        int selectedId = activity.getCurrentFragment()
-                .getSelectedQuantityUnitId();
-        quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
-        if(quantityUnits == null) {
-            activity.showMessage(R.string.error_undefined);
-            dismiss();
-            return view;
-        }
+    return view;
+  }
 
-        TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
-        textViewTitle.setText(activity.getString(R.string.property_quantity_units));
+  @Override
+  public void onItemRowClicked(int position) {
+    activity.getCurrentFragment().selectQuantityUnit(quantityUnits.get(position));
+    dismiss();
+  }
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(
-                        activity,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                )
-        );
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(
-                new QuantityUnitAdapter(quantityUnits, selectedId, this)
-        );
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    activity.getCurrentFragment().onBottomSheetDismissed();
+    super.onDismiss(dialog);
+  }
 
-        return view;
-    }
-
-    @Override
-    public void onItemRowClicked(int position) {
-        activity.getCurrentFragment().selectQuantityUnit(quantityUnits.get(position));
-        dismiss();
-    }
-
-    @Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        activity.getCurrentFragment().onBottomSheetDismissed();
-        super.onDismiss(dialog);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

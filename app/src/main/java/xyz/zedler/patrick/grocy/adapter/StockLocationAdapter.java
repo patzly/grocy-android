@@ -26,12 +26,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -39,118 +36,120 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class StockLocationAdapter
-        extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
+    extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
 
-    private final static String TAG = StockLocationAdapter.class.getSimpleName();
+  private final static String TAG = StockLocationAdapter.class.getSimpleName();
 
-    private final ArrayList<StockLocation> stockLocations;
-    private final ProductDetails productDetails;
-    private final QuantityUnit quantityUnitStock;
-    private final int selectedId;
-    private final StockLocationAdapterListener listener;
+  private final ArrayList<StockLocation> stockLocations;
+  private final ProductDetails productDetails;
+  private final QuantityUnit quantityUnitStock;
+  private final int selectedId;
+  private final StockLocationAdapterListener listener;
 
-    public StockLocationAdapter(
-            ArrayList<StockLocation> stockLocations,
-            ProductDetails productDetails,
-            QuantityUnit quantityUnitStock,
-            int selectedId,
-            StockLocationAdapterListener listener
-    ) {
-        this.stockLocations = stockLocations;
-        this.productDetails = productDetails;
-        this.quantityUnitStock = quantityUnitStock;
-        this.selectedId = selectedId;
-        this.listener = listener;
+  public StockLocationAdapter(
+      ArrayList<StockLocation> stockLocations,
+      ProductDetails productDetails,
+      QuantityUnit quantityUnitStock,
+      int selectedId,
+      StockLocationAdapterListener listener
+  ) {
+    this.stockLocations = stockLocations;
+    this.productDetails = productDetails;
+    this.quantityUnitStock = quantityUnitStock;
+    this.selectedId = selectedId;
+    this.listener = listener;
+  }
+
+  public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    private final LinearLayout linearLayoutContainer;
+    private final TextView textDefault;
+    private final TextView textViewName;
+    private final TextView textViewAmount;
+    private final ImageView imageViewSelected;
+
+    public ViewHolder(View view) {
+      super(view);
+
+      linearLayoutContainer = view.findViewById(R.id.linear_container);
+      textDefault = view.findViewById(R.id.text_default);
+      textViewName = view.findViewById(R.id.text_name);
+      textViewAmount = view.findViewById(R.id.text_amount);
+      imageViewSelected = view.findViewById(R.id.image_selected);
+    }
+  }
+
+  @NonNull
+  @Override
+  public StockLocationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new StockLocationAdapter.ViewHolder(
+        LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.row_stock_location,
+            parent,
+            false
+        )
+    );
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  @Override
+  public void onBindViewHolder(
+      @NonNull final StockLocationAdapter.ViewHolder holder,
+      int position
+  ) {
+    StockLocation stockLocation = stockLocations.get(holder.getAdapterPosition());
+
+    // NAME
+
+    holder.textViewName.setText(stockLocation.getLocationName());
+
+    // DEFAULT
+
+    if (stockLocation.getLocationId() == productDetails.getLocation().getId()) {
+      holder.textDefault.setVisibility(View.VISIBLE);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final LinearLayout linearLayoutContainer;
-        private final TextView textDefault;
-        private final TextView textViewName;
-        private final TextView textViewAmount;
-        private final ImageView imageViewSelected;
+    // AMOUNT
 
-        public ViewHolder(View view) {
-            super(view);
+    String unit = "";
+    if (quantityUnitStock != null && stockLocation.getAmountDouble() == 1) {
+      unit = quantityUnitStock.getName();
+    } else if (quantityUnitStock != null) {
+      unit = quantityUnitStock.getNamePlural();
+    }
+    holder.textViewAmount.setText(
+        holder.textViewAmount.getContext().getString(
+            R.string.subtitle_amount,
+            NumUtil.trim(stockLocation.getAmountDouble()),
+            unit
+        )
+    );
 
-            linearLayoutContainer = view.findViewById(R.id.linear_container);
-            textDefault = view.findViewById(R.id.text_default);
-            textViewName = view.findViewById(R.id.text_name);
-            textViewAmount = view.findViewById(R.id.text_amount);
-            imageViewSelected = view.findViewById(R.id.image_selected);
-        }
+    // SELECTED
+
+    if (stockLocation.getLocationId() == selectedId) {
+      holder.imageViewSelected.setVisibility(View.VISIBLE);
     }
 
-    @NonNull
-    @Override
-    public StockLocationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new StockLocationAdapter.ViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_stock_location,
-                        parent,
-                        false
-                )
-        );
-    }
+    // CONTAINER
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public void onBindViewHolder(
-            @NonNull final StockLocationAdapter.ViewHolder holder,
-            int position
-    ) {
-        StockLocation stockLocation = stockLocations.get(holder.getAdapterPosition());
+    holder.linearLayoutContainer.setOnClickListener(
+        view -> listener.onItemRowClicked(holder.getAdapterPosition())
+    );
+  }
 
-        // NAME
+  @Override
+  public long getItemId(int position) {
+    return stockLocations.get(position).getProductId();
+  }
 
-        holder.textViewName.setText(stockLocation.getLocationName());
+  @Override
+  public int getItemCount() {
+    return stockLocations.size();
+  }
 
-        // DEFAULT
+  public interface StockLocationAdapterListener {
 
-        if(stockLocation.getLocationId() == productDetails.getLocation().getId()) {
-            holder.textDefault.setVisibility(View.VISIBLE);
-        }
-
-        // AMOUNT
-
-        String unit = "";
-        if(quantityUnitStock != null && stockLocation.getAmountDouble() == 1) {
-            unit = quantityUnitStock.getName();
-        } else if (quantityUnitStock != null) {
-            unit = quantityUnitStock.getNamePlural();
-        }
-        holder.textViewAmount.setText(
-                holder.textViewAmount.getContext().getString(
-                        R.string.subtitle_amount,
-                        NumUtil.trim(stockLocation.getAmountDouble()),
-                        unit
-                )
-        );
-
-        // SELECTED
-
-        if(stockLocation.getLocationId() == selectedId) {
-            holder.imageViewSelected.setVisibility(View.VISIBLE);
-        }
-
-        // CONTAINER
-
-        holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(holder.getAdapterPosition())
-        );
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return stockLocations.get(position).getProductId();
-    }
-
-    @Override
-    public int getItemCount() {
-        return stockLocations.size();
-    }
-
-    public interface StockLocationAdapterListener {
-        void onItemRowClicked(int position);
-    }
+    void onItemRowClicked(int position);
+  }
 }

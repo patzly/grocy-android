@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,65 +18,65 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    android:orientation="vertical"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/container"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="64dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:background="@drawable/bg_list_item"
+  android:padding="16dp"
+  android:gravity="center_vertical">
+
+  <TextView
+    android:id="@+id/name"
+    style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="64dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/bg_list_item"
-    android:padding="16dp"
-    android:gravity="center_vertical">
+    android:singleLine="true" />
+
+  <TextView
+    android:id="@+id/note_as_name"
+    style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textStyle="italic"
+    android:visibility="gone" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="20dp"
+    android:gravity="bottom">
 
     <TextView
-        android:id="@+id/name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true" />
+      android:id="@+id/amount"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/note_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="20dp"
+    android:visibility="gone"
+    android:gravity="bottom">
 
     <TextView
-        android:id="@+id/note_as_name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:visibility="gone" />
+      android:id="@+id/note"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textStyle="italic" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="20dp"
-        android:gravity="bottom">
-
-        <TextView
-            android:id="@+id/amount"
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/note_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="20dp"
-        android:visibility="gone"
-        android:gravity="bottom">
-
-        <TextView
-            android:id="@+id/note"
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="italic" />
-
-    </LinearLayout>
+  </LinearLayout>
 
 </LinearLayout>

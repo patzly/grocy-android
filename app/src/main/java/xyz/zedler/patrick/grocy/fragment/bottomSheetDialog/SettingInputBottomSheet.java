@@ -27,13 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -41,129 +38,129 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SettingInputBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = SettingInputBottomSheet.class.getSimpleName();
+  private final static String TAG = SettingInputBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
+  private MainActivity activity;
 
-    private EditText editText;
+  private EditText editText;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_setting_input, container, false
+    );
+
+    activity = (MainActivity) requireActivity();
+    Bundle bundle = requireArguments();
+
+    String option = bundle.getString(Constants.ARGUMENT.PREFERENCE);
+    if (option == null) {
+      dismiss();
+      return view;
     }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_setting_input, container, false
-        );
+    // INITIALIZE VIEWS
 
-        activity = (MainActivity) requireActivity();
-        Bundle bundle = requireArguments();
+    TextView textViewTitle = view.findViewById(R.id.text_setting_input_title);
 
-        String option = bundle.getString(Constants.ARGUMENT.PREFERENCE);
-        if(option == null) {
-            dismiss();
-            return view;
+    TextInputLayout textInput = view.findViewById(R.id.text_input_setting_input);
+    editText = textInput.getEditText();
+    assert editText != null;
+    editText.setInputType(
+        option.equals(Constants.SETTINGS.STOCK.DUE_SOON_DAYS)
+            ? InputType.TYPE_CLASS_NUMBER
+            : InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+    );
+
+    view.findViewById(R.id.button_setting_input_more).setOnClickListener(v -> {
+      if (editText.getText().toString().isEmpty()) {
+        editText.setText(String.valueOf(1));
+      } else {
+        double amountNew = Double.parseDouble(editText.getText().toString()) + 1;
+        editText.setText(NumUtil.trim(amountNew));
+      }
+    });
+
+    view.findViewById(R.id.button_setting_input_less).setOnClickListener(v -> {
+      if (!editText.getText().toString().isEmpty()) {
+        double amountNew = Double.parseDouble(editText.getText().toString()) - 1;
+        if (amountNew >= 0) {
+          editText.setText(NumUtil.trim(amountNew));
         }
+      }
+    });
 
-        // INITIALIZE VIEWS
+    MaterialButton buttonClear = view.findViewById(R.id.button_setting_input_clear);
+    buttonClear.setOnClickListener(v -> {
+      editText.setText(null);
+      textInput.clearFocus();
+      activity.hideKeyboard();
+    });
 
-        TextView textViewTitle = view.findViewById(R.id.text_setting_input_title);
+    view.findViewById(R.id.button_setting_input_save).setOnClickListener(v -> {
+      if (option.equals(Constants.SETTINGS.STOCK.DUE_SOON_DAYS)) {
+        if (editText.getText().toString().isEmpty()) {
+          textInput.setError(activity.getString(R.string.error_empty));
+          return;
+        } else {
+          textInput.setErrorEnabled(false);
+        }
+      }
+      activity.getCurrentFragment().setOption(editText.getText().toString(), option);
+      dismiss();
+    });
 
-        TextInputLayout textInput = view.findViewById(R.id.text_input_setting_input);
-        editText = textInput.getEditText();
-        assert editText != null;
-        editText.setInputType(
-                option.equals(Constants.SETTINGS.STOCK.DUE_SOON_DAYS)
-                        ? InputType.TYPE_CLASS_NUMBER
-                        : InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-        );
-
-        view.findViewById(R.id.button_setting_input_more).setOnClickListener(v -> {
-            if(editText.getText().toString().isEmpty()) {
-                editText.setText(String.valueOf(1));
-            } else {
-                double amountNew = Double.parseDouble(editText.getText().toString()) + 1;
-                editText.setText(NumUtil.trim(amountNew));
-            }
-        });
-
-        view.findViewById(R.id.button_setting_input_less).setOnClickListener(v -> {
-            if(!editText.getText().toString().isEmpty()) {
-                double amountNew = Double.parseDouble(editText.getText().toString()) - 1;
-                if(amountNew >= 0) {
-                    editText.setText(NumUtil.trim(amountNew));
-                }
-            }
-        });
-
-        MaterialButton buttonClear = view.findViewById(R.id.button_setting_input_clear);
+    String title = null;
+    String hint = null;
+    String input = bundle.getString(Constants.ARGUMENT.TEXT);
+    switch (option) {
+      case Constants.SETTINGS.STOCK.DUE_SOON_DAYS:
+        title = activity.getString(R.string.setting_expiring_soon_days);
+        hint = activity.getString(R.string.property_days);
+        buttonClear.setText(activity.getString(R.string.action_reset));
         buttonClear.setOnClickListener(v -> {
-            editText.setText(null);
-            textInput.clearFocus();
-            activity.hideKeyboard();
+          editText.setText(String.valueOf(5));
+          textInput.setErrorEnabled(false);
+          textInput.clearFocus();
+          activity.hideKeyboard();
         });
-
-        view.findViewById(R.id.button_setting_input_save).setOnClickListener(v -> {
-            if(option.equals(Constants.SETTINGS.STOCK.DUE_SOON_DAYS)) {
-                if(editText.getText().toString().isEmpty()) {
-                    textInput.setError(activity.getString(R.string.error_empty));
-                    return;
-                } else {
-                    textInput.setErrorEnabled(false);
-                }
-            }
-            activity.getCurrentFragment().setOption(editText.getText().toString(), option);
-            dismiss();
-        });
-
-        String title = null;
-        String hint = null;
-        String input = bundle.getString(Constants.ARGUMENT.TEXT);
-        switch (option) {
-            case Constants.SETTINGS.STOCK.DUE_SOON_DAYS:
-                title = activity.getString(R.string.setting_expiring_soon_days);
-                hint = activity.getString(R.string.property_days);
-                buttonClear.setText(activity.getString(R.string.action_reset));
-                buttonClear.setOnClickListener(v -> {
-                    editText.setText(String.valueOf(5));
-                    textInput.setErrorEnabled(false);
-                    textInput.clearFocus();
-                    activity.hideKeyboard();
-                });
-                break;
-            case Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT:
-                title = activity.getString(R.string.setting_default_amount_purchase);
-                hint = activity.getString(R.string.property_amount);
-                break;
-            case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
-                title = activity.getString(R.string.setting_default_amount_consume);
-                hint = activity.getString(R.string.property_amount);
-                break;
-            case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
-                title = activity.getString(R.string.setting_shopping_mode_update_interval);
-                hint = activity.getString(R.string.property_seconds);
-                break;
-        }
-
-        textViewTitle.setText(title);
-
-        textInput.setHint(hint);
-
-        editText.setText(input == null || input.isEmpty() || input.equals("null") ? null : input);
-
-        return view;
+        break;
+      case Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT:
+        title = activity.getString(R.string.setting_default_amount_purchase);
+        hint = activity.getString(R.string.property_amount);
+        break;
+      case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
+        title = activity.getString(R.string.setting_default_amount_consume);
+        hint = activity.getString(R.string.property_amount);
+        break;
+      case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
+        title = activity.getString(R.string.setting_shopping_mode_update_interval);
+        hint = activity.getString(R.string.property_seconds);
+        break;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+    textViewTitle.setText(title);
+
+    textInput.setHint(hint);
+
+    editText.setText(input == null || input.isEmpty() || input.equals("null") ? null : input);
+
+    return view;
+  }
+
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

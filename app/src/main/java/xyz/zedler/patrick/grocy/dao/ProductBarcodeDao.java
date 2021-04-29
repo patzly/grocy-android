@@ -25,32 +25,31 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 
 @Dao
 public interface ProductBarcodeDao {
-    @Query("SELECT * FROM product_barcode_table")
-    LiveData<List<ProductBarcode>> getAllLive();
 
-    @Query("SELECT * FROM product_barcode_table")
-    List<ProductBarcode> getAll();
+  @Query("SELECT * FROM product_barcode_table")
+  LiveData<List<ProductBarcode>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM product_barcode_table")
-    int count();
+  @Query("SELECT * FROM product_barcode_table")
+  List<ProductBarcode> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<ProductBarcode> productBarcodes);
+  @Query("SELECT COUNT(*) FROM product_barcode_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ProductBarcode productBarcode);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<ProductBarcode> productBarcodes);
 
-    @Delete
-    void delete(ProductBarcode productBarcode);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(ProductBarcode productBarcode);
 
-    @Query("DELETE FROM product_barcode_table")
-    void deleteAll();
+  @Delete
+  void delete(ProductBarcode productBarcode);
+
+  @Query("DELETE FROM product_barcode_table")
+  void deleteAll();
 
 }

@@ -24,30 +24,29 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.StockItem;
 
 @Dao
 public interface StockItemDao {
-    @Query("SELECT * FROM stock_item_table")
-    LiveData<List<StockItem>> getAllLive();
 
-    @Query("SELECT * FROM stock_item_table")
-    List<StockItem> getAll();
+  @Query("SELECT * FROM stock_item_table")
+  LiveData<List<StockItem>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM stock_item_table")
-    int count();
+  @Query("SELECT * FROM stock_item_table")
+  List<StockItem> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ArrayList<StockItem> stockItems);
+  @Query("SELECT COUNT(*) FROM stock_item_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(StockItem... stockItems);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(ArrayList<StockItem> stockItems);
 
-    @Query("DELETE FROM stock_item_table")
-    void deleteAll();
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(StockItem... stockItems);
+
+  @Query("DELETE FROM stock_item_table")
+  void deleteAll();
 
 }

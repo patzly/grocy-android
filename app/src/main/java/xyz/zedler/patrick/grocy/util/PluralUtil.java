@@ -20,24 +20,23 @@
 package xyz.zedler.patrick.grocy.util;
 
 import java.util.HashMap;
-
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class PluralUtil {
 
-    public static String getQuantityUnitPlural(QuantityUnit quantityUnit, double amount) {
-        return quantityUnit != null
-                ? amount == 1
-                ? quantityUnit.getName()
-                : quantityUnit.getNamePlural()
-                : "";
-    }
+  public static String getQuantityUnitPlural(QuantityUnit quantityUnit, double amount) {
+    return quantityUnit != null
+        ? amount == 1
+        ? quantityUnit.getName()
+        : quantityUnit.getNamePlural()
+        : "";
+  }
 
-    public static String getQuantityUnitPlural(
-            HashMap<Integer, QuantityUnit> unitHashMap,
-            int quantityUnitId,
-            double amount
-    ) {
-        return getQuantityUnitPlural(unitHashMap.get(quantityUnitId), amount);
-    }
+  public static String getQuantityUnitPlural(
+      HashMap<Integer, QuantityUnit> unitHashMap,
+      int quantityUnitId,
+      double amount
+  ) {
+    return getQuantityUnitPlural(unitHashMap.get(quantityUnitId), amount);
+  }
 }

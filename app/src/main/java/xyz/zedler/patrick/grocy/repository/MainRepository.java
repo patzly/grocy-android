@@ -21,31 +21,32 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 
 public class MainRepository {
+
+  private final AppDatabase appDatabase;
+
+  public MainRepository(Application application) {
+    this.appDatabase = AppDatabase.getAppDatabase(application);
+  }
+
+  public void clearAllTables() {
+    new clearAsyncTask(appDatabase).execute();
+  }
+
+  private static class clearAsyncTask extends AsyncTask<Void, Void, Void> {
+
     private final AppDatabase appDatabase;
 
-    public MainRepository(Application application) {
-        this.appDatabase = AppDatabase.getAppDatabase(application);
+    clearAsyncTask(AppDatabase appDatabase) {
+      this.appDatabase = appDatabase;
     }
 
-    public void clearAllTables() {
-        new clearAsyncTask(appDatabase).execute();
+    @Override
+    protected final Void doInBackground(Void... params) {
+      appDatabase.clearAllTables();
+      return null;
     }
-
-    private static class clearAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final AppDatabase appDatabase;
-
-        clearAsyncTask(AppDatabase appDatabase) {
-            this.appDatabase = appDatabase;
-        }
-
-        @Override
-        protected final Void doInBackground(Void... params) {
-            appDatabase.clearAllTables();
-            return null;
-        }
-    }
+  }
 }

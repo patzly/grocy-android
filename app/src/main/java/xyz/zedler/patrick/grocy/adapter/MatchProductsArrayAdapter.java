@@ -26,107 +26,106 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import xyz.zedler.patrick.grocy.model.Product;
 
 public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
 
-    Context context;
-    int resource;
-    List<Product> items, suggestions;
-    HashMap<String, Product> tempItems;
+  Context context;
+  int resource;
+  List<Product> items, suggestions;
+  HashMap<String, Product> tempItems;
 
-    public MatchProductsArrayAdapter(Context context, int resource, List<Product> items) {
-        super(context, resource, items);
-        this.context = context;
-        this.resource = resource;
-        this.items = items;
-        suggestions = new ArrayList<>();
-        tempItems = new HashMap<>(); // this makes the difference.
-        for(Product product : items) {
-            tempItems.put(product.getName().toLowerCase(), product);
-        }
+  public MatchProductsArrayAdapter(Context context, int resource, List<Product> items) {
+    super(context, resource, items);
+    this.context = context;
+    this.resource = resource;
+    this.items = items;
+    suggestions = new ArrayList<>();
+    tempItems = new HashMap<>(); // this makes the difference.
+    for (Product product : items) {
+      tempItems.put(product.getName().toLowerCase(), product);
     }
+  }
 
-    @NonNull
+  @NonNull
+  @Override
+  public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    View view = convertView;
+    if (convertView == null) {
+      LayoutInflater inflater = (LayoutInflater) context
+          .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      view = inflater.inflate(resource, parent, false);
+    }
+    Product product = items.get(position);
+    if (product != null) {
+      TextView name = view.findViewById(android.R.id.text1);
+      if (name != null) {
+        name.setText(product.getName());
+      }
+    }
+    return view;
+  }
+
+  @NonNull
+  @Override
+  public Filter getFilter() {
+    return nameFilter;
+  }
+
+  /**
+   * Custom Filter implementation for custom suggestions we provide.
+   */
+  Filter nameFilter = new Filter() {
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(resource, parent, false);
-        }
-        Product product = items.get(position);
-        if (product != null) {
-            TextView name = view.findViewById(android.R.id.text1);
-            if (name != null)
-                name.setText(product.getName());
-        }
-        return view;
+    public CharSequence convertResultToString(Object resultValue) {
+      return ((Product) resultValue).getName();
     }
 
-    @NonNull
     @Override
-    public Filter getFilter() {
-        return nameFilter;
-    }
-
-    /**
-     * Custom Filter implementation for custom suggestions we provide.
-     */
-    Filter nameFilter = new Filter() {
-        @Override
-        public CharSequence convertResultToString(Object resultValue) {
-            return ((Product) resultValue).getName();
+    protected FilterResults performFiltering(CharSequence constraint) {
+      if (constraint != null) {
+        suggestions.clear();
+        List<ExtractedResult> results = FuzzySearch.extractSorted(
+            constraint.toString().toLowerCase(),
+            tempItems.keySet(),
+            50
+        );
+        for (ExtractedResult result : results) {
+          suggestions.add(tempItems.get(result.getString()));
         }
 
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            if (constraint != null) {
-                suggestions.clear();
-                List<ExtractedResult> results = FuzzySearch.extractSorted(
-                        constraint.toString().toLowerCase(),
-                        tempItems.keySet(),
-                        50
-                );
-                for(ExtractedResult result : results) {
-                    suggestions.add(tempItems.get(result.getString()));
-                }
-
-                //alternative without fuzzy
+        //alternative without fuzzy
                 /*for (Product product : tempItems) {
                     if (product.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(product);
                     }
                 }*/
 
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = suggestions;
-                filterResults.count = suggestions.size();
-                return filterResults;
-            } else {
-                return new FilterResults();
-            }
-        }
+        FilterResults filterResults = new FilterResults();
+        filterResults.values = suggestions;
+        filterResults.count = suggestions.size();
+        return filterResults;
+      } else {
+        return new FilterResults();
+      }
+    }
 
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            List<Product> filterList = (ArrayList<Product>) results.values;
-            if (results.count > 0) {
-                clear();
-                for (Product product : filterList) {
-                    add(product);
-                    notifyDataSetChanged();
-                }
-            }
+    @Override
+    protected void publishResults(CharSequence constraint, FilterResults results) {
+      List<Product> filterList = (ArrayList<Product>) results.values;
+      if (results.count > 0) {
+        clear();
+        for (Product product : filterList) {
+          add(product);
+          notifyDataSetChanged();
         }
-    };
+      }
+    }
+  };
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,36 +18,36 @@
   -->
 
 <com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_expandable_card"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/card_expandable_card"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:contentPadding="16dp"
+  app:cardElevation="0dp"
+  app:cardCornerRadius="12dp"
+  app:cardBackgroundColor="@color/on_surface_area"
+  app:rippleColor="@color/transparent">
+
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:contentPadding="16dp"
-    app:cardElevation="0dp"
-    app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="@color/on_surface_area"
-    app:rippleColor="@color/transparent">
+    android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+      android:id="@+id/text_expandable_card_collapsed"
+      style="@style/Widget.Grocy.TextView.Paragraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top"
+      android:maxLines="3"
+      android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/text_expandable_card_collapsed"
-            style="@style/Widget.Grocy.TextView.Paragraph"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:maxLines="3"
-            android:visibility="invisible" />
+    <TextView
+      android:id="@+id/text_expandable_card_expanded"
+      style="@style/Widget.Grocy.TextView.Paragraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/text_expandable_card_expanded"
-            style="@style/Widget.Grocy.TextView.Paragraph"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </FrameLayout>
+  </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>

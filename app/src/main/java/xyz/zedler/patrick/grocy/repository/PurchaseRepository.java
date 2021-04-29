@@ -21,9 +21,7 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -33,139 +31,148 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class PurchaseRepository {
+
+  private final AppDatabase appDatabase;
+
+  public PurchaseRepository(Application application) {
+    this.appDatabase = AppDatabase.getAppDatabase(application);
+  }
+
+  public interface DataListener {
+
+    void actionFinished(
+        ArrayList<Product> products,
+        ArrayList<ProductBarcode> barcodes,
+        ArrayList<QuantityUnit> quantityUnits,
+        ArrayList<QuantityUnitConversion> quantityUnitConversions,
+        ArrayList<Store> stores,
+        ArrayList<Location> locations
+    );
+  }
+
+  public interface DataUpdatedListener {
+
+    void actionFinished();
+  }
+
+  public void loadFromDatabase(DataListener listener) {
+    new loadAsyncTask(appDatabase, listener).execute();
+  }
+
+  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
+
     private final AppDatabase appDatabase;
+    private final DataListener listener;
 
-    public PurchaseRepository(Application application) {
-        this.appDatabase = AppDatabase.getAppDatabase(application);
+    private ArrayList<Product> products;
+    private ArrayList<ProductBarcode> barcodes;
+    private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<QuantityUnitConversion> quantityUnitConversions;
+    private ArrayList<Store> stores;
+    private ArrayList<Location> locations;
+
+
+    loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
+      this.appDatabase = appDatabase;
+      this.listener = listener;
     }
 
-    public interface DataListener {
-        void actionFinished(
-                ArrayList<Product> products,
-                ArrayList<ProductBarcode> barcodes,
-                ArrayList<QuantityUnit> quantityUnits,
-                ArrayList<QuantityUnitConversion> quantityUnitConversions,
-                ArrayList<Store> stores,
-                ArrayList<Location> locations
-        );
+    @Override
+    protected final Void doInBackground(Void... params) {
+      products = new ArrayList<>(appDatabase.productDao().getAll());
+      barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
+      quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
+      quantityUnitConversions
+          = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
+      stores = new ArrayList<>(appDatabase.storeDao().getAll());
+      locations = new ArrayList<>(appDatabase.locationDao().getAll());
+      return null;
     }
 
-    public interface DataUpdatedListener {
-        void actionFinished();
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      if (listener != null) {
+        listener.actionFinished(products, barcodes,
+            quantityUnits, quantityUnitConversions, stores, locations);
+      }
     }
+  }
 
-    public void loadFromDatabase(DataListener listener) {
-        new loadAsyncTask(appDatabase, listener).execute();
-    }
+  public void updateDatabase(
+      ArrayList<Product> products,
+      ArrayList<ProductBarcode> barcodes,
+      ArrayList<QuantityUnit> quantityUnits,
+      ArrayList<QuantityUnitConversion> quantityUnitConversions,
+      ArrayList<Store> stores,
+      ArrayList<Location> locations,
+      DataUpdatedListener listener
+  ) {
+    new updateAsyncTask(
+        appDatabase,
+        products,
+        barcodes,
+        quantityUnits,
+        quantityUnitConversions,
+        stores,
+        locations,
+        listener
+    ).execute();
+  }
 
-    private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final AppDatabase appDatabase;
-        private final DataListener listener;
+  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private ArrayList<Product> products;
-        private ArrayList<ProductBarcode> barcodes;
-        private ArrayList<QuantityUnit> quantityUnits;
-        private ArrayList<QuantityUnitConversion> quantityUnitConversions;
-        private ArrayList<Store> stores;
-        private ArrayList<Location> locations;
+    private final AppDatabase appDatabase;
+    private final DataUpdatedListener listener;
 
+    private final ArrayList<Product> products;
+    private final ArrayList<ProductBarcode> barcodes;
+    private final ArrayList<QuantityUnit> quantityUnits;
+    private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
+    private final ArrayList<Store> stores;
+    private final ArrayList<Location> locations;
 
-        loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
-            this.appDatabase = appDatabase;
-            this.listener = listener;
-        }
-
-        @Override
-        protected final Void doInBackground(Void... params) {
-            products = new ArrayList<>(appDatabase.productDao().getAll());
-            barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
-            quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-            quantityUnitConversions
-                    = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
-            stores = new ArrayList<>(appDatabase.storeDao().getAll());
-            locations = new ArrayList<>(appDatabase.locationDao().getAll());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished(products, barcodes,
-                    quantityUnits, quantityUnitConversions, stores, locations);
-        }
-    }
-
-    public void updateDatabase(
-            ArrayList<Product> products,
-            ArrayList<ProductBarcode> barcodes,
-            ArrayList<QuantityUnit> quantityUnits,
-            ArrayList<QuantityUnitConversion> quantityUnitConversions,
-            ArrayList<Store> stores,
-            ArrayList<Location> locations,
-            DataUpdatedListener listener
+    updateAsyncTask(
+        AppDatabase appDatabase,
+        ArrayList<Product> products,
+        ArrayList<ProductBarcode> barcodes,
+        ArrayList<QuantityUnit> quantityUnits,
+        ArrayList<QuantityUnitConversion> quantityUnitConversions,
+        ArrayList<Store> stores,
+        ArrayList<Location> locations,
+        DataUpdatedListener listener
     ) {
-        new updateAsyncTask(
-                appDatabase,
-                products,
-                barcodes,
-                quantityUnits,
-                quantityUnitConversions,
-                stores,
-                locations,
-                listener
-        ).execute();
+      this.appDatabase = appDatabase;
+      this.listener = listener;
+      this.products = products;
+      this.barcodes = barcodes;
+      this.quantityUnits = quantityUnits;
+      this.quantityUnitConversions = quantityUnitConversions;
+      this.stores = stores;
+      this.locations = locations;
     }
 
-    private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final AppDatabase appDatabase;
-        private final DataUpdatedListener listener;
-
-        private final ArrayList<Product> products;
-        private final ArrayList<ProductBarcode> barcodes;
-        private final ArrayList<QuantityUnit> quantityUnits;
-        private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
-        private final ArrayList<Store> stores;
-        private final ArrayList<Location> locations;
-
-        updateAsyncTask(
-                AppDatabase appDatabase,
-                ArrayList<Product> products,
-                ArrayList<ProductBarcode> barcodes,
-                ArrayList<QuantityUnit> quantityUnits,
-                ArrayList<QuantityUnitConversion> quantityUnitConversions,
-                ArrayList<Store> stores,
-                ArrayList<Location> locations,
-                DataUpdatedListener listener
-        ) {
-            this.appDatabase = appDatabase;
-            this.listener = listener;
-            this.products = products;
-            this.barcodes = barcodes;
-            this.quantityUnits = quantityUnits;
-            this.quantityUnitConversions = quantityUnitConversions;
-            this.stores = stores;
-            this.locations = locations;
-        }
-
-        @Override
-        protected final Void doInBackground(Void... params) {
-            appDatabase.productDao().deleteAll();
-            appDatabase.productDao().insertAll(products);
-            appDatabase.productBarcodeDao().deleteAll();
-            appDatabase.productBarcodeDao().insertAll(barcodes);
-            appDatabase.quantityUnitDao().deleteAll();
-            appDatabase.quantityUnitDao().insertAll(quantityUnits);
-            appDatabase.quantityUnitConversionDao().deleteAll();
-            appDatabase.quantityUnitConversionDao().insertAll(quantityUnitConversions);
-            appDatabase.storeDao().deleteAll();
-            appDatabase.storeDao().insertAll(stores);
-            appDatabase.locationDao().deleteAll();
-            appDatabase.locationDao().insertAll(locations);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(listener != null) listener.actionFinished();
-        }
+    @Override
+    protected final Void doInBackground(Void... params) {
+      appDatabase.productDao().deleteAll();
+      appDatabase.productDao().insertAll(products);
+      appDatabase.productBarcodeDao().deleteAll();
+      appDatabase.productBarcodeDao().insertAll(barcodes);
+      appDatabase.quantityUnitDao().deleteAll();
+      appDatabase.quantityUnitDao().insertAll(quantityUnits);
+      appDatabase.quantityUnitConversionDao().deleteAll();
+      appDatabase.quantityUnitConversionDao().insertAll(quantityUnitConversions);
+      appDatabase.storeDao().deleteAll();
+      appDatabase.storeDao().insertAll(stores);
+      appDatabase.locationDao().deleteAll();
+      appDatabase.locationDao().insertAll(locations);
+      return null;
     }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      if (listener != null) {
+        listener.actionFinished();
+      }
+    }
+  }
 }

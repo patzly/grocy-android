@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -32,11 +31,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-
 import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
@@ -55,214 +51,231 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class MasterProductCatLocationViewModel extends AndroidViewModel {
 
-    private static final String TAG = MasterProductCatLocationViewModel.class.getSimpleName();
+  private static final String TAG = MasterProductCatLocationViewModel.class.getSimpleName();
 
-    private final SharedPreferences sharedPrefs;
-    private final DownloadHelper dlHelper;
-    private final GrocyApi grocyApi;
-    private final EventHandler eventHandler;
-    private final MasterProductRepository repository;
-    private final FormDataMasterProductCatLocation formData;
+  private final SharedPreferences sharedPrefs;
+  private final DownloadHelper dlHelper;
+  private final GrocyApi grocyApi;
+  private final EventHandler eventHandler;
+  private final MasterProductRepository repository;
+  private final FormDataMasterProductCatLocation formData;
+  private final MasterProductFragmentArgs args;
+
+  private final MutableLiveData<Boolean> isLoadingLive;
+  private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
+  private final MutableLiveData<Boolean> offlineLive;
+
+  private ArrayList<Location> locations;
+  private ArrayList<Store> stores;
+
+  private DownloadHelper.Queue currentQueueLoading;
+  private final boolean debug;
+  private final boolean isActionEdit;
+
+  public MasterProductCatLocationViewModel(
+      @NonNull Application application,
+      @NonNull MasterProductFragmentArgs startupArgs
+  ) {
+    super(application);
+
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+
+    isLoadingLive = new MutableLiveData<>(false);
+    dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
+    grocyApi = new GrocyApi(getApplication());
+    eventHandler = new EventHandler();
+    repository = new MasterProductRepository(application);
+    formData = new FormDataMasterProductCatLocation(application);
+    args = startupArgs;
+    isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
+
+    infoFullscreenLive = new MutableLiveData<>();
+    offlineLive = new MutableLiveData<>(false);
+  }
+
+  public FormDataMasterProductCatLocation getFormData() {
+    return formData;
+  }
+
+  public boolean isActionEdit() {
+    return isActionEdit;
+  }
+
+  public Product getFilledProduct() {
+    return formData.fillProduct(args.getProduct());
+  }
+
+  public void loadFromDatabase(boolean downloadAfterLoading) {
+    repository.loadLocationsStoresFromDatabase((locations, stores) -> {
+      this.locations = locations;
+      this.stores = stores;
+      formData.getLocationsLive().setValue(locations);
+      formData.getStoresLive().setValue(stores);
+      formData.fillWithProductIfNecessary(args.getProduct());
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
+  }
+
+  public void downloadData(@Nullable String dbChangedTime) {
+    if (currentQueueLoading != null) {
+      currentQueueLoading.reset(true);
+      currentQueueLoading = null;
+    }
+    if (isOffline()) { // skip downloading
+      isLoadingLive.setValue(false);
+      return;
+    }
+    if (dbChangedTime == null) {
+      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      return;
+    }
+
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    queue.append(
+        dlHelper.updateLocations(dbChangedTime, locations -> {
+          this.locations = locations;
+          formData.getLocationsLive().setValue(locations);
+        }),
+        dlHelper.updateStores(dbChangedTime, stores -> {
+          this.stores = stores;
+          formData.getStoresLive().setValue(stores);
+        })
+    );
+    if (queue.isEmpty()) {
+      return;
+    }
+
+    currentQueueLoading = queue;
+    queue.start();
+  }
+
+  public void downloadData() {
+    downloadData(null);
+  }
+
+  public void downloadDataForceUpdate() {
+    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
+    editPrefs.apply();
+    downloadData();
+  }
+
+  private void onQueueEmpty() {
+    if (isOffline()) {
+      setOfflineLive(false);
+    }
+    formData.fillWithProductIfNecessary(args.getProduct());
+    repository.updateLocationsStoresDatabase(locations, stores, () -> {
+    });
+  }
+
+  private void onDownloadError(@Nullable VolleyError error) {
+    if (debug) {
+      Log.e(TAG, "onError: VolleyError: " + error);
+    }
+    showMessage(getString(R.string.msg_no_connection));
+    if (!isOffline()) {
+      setOfflineLive(true);
+    }
+  }
+
+  @NonNull
+  public MutableLiveData<Boolean> getOfflineLive() {
+    return offlineLive;
+  }
+
+  public Boolean isOffline() {
+    return offlineLive.getValue();
+  }
+
+  public void setOfflineLive(boolean isOffline) {
+    offlineLive.setValue(isOffline);
+  }
+
+  @NonNull
+  public MutableLiveData<Boolean> getIsLoadingLive() {
+    return isLoadingLive;
+  }
+
+  @NonNull
+  public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
+    return infoFullscreenLive;
+  }
+
+  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+    currentQueueLoading = queueLoading;
+  }
+
+  public void showErrorMessage() {
+    showMessage(getString(R.string.error_undefined));
+  }
+
+  private void showMessage(@NonNull String message) {
+    showSnackbar(new SnackbarMessage(message));
+  }
+
+  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
+    eventHandler.setValue(snackbarMessage);
+  }
+
+  private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
+    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
+  }
+
+  private void navigateUp() {
+    eventHandler.setValue(new Event() {
+      @Override
+      public int getType() {
+        return Event.NAVIGATE_UP;
+      }
+    });
+  }
+
+  @NonNull
+  public EventHandler getEventHandler() {
+    return eventHandler;
+  }
+
+  public boolean isFeatureEnabled(String pref) {
+    if (pref == null) {
+      return true;
+    }
+    return sharedPrefs.getBoolean(pref, true);
+  }
+
+  private String getString(@StringRes int resId) {
+    return getApplication().getString(resId);
+  }
+
+  @Override
+  protected void onCleared() {
+    dlHelper.destroy();
+    super.onCleared();
+  }
+
+  public static class MasterProductCatLocationViewModelFactory implements
+      ViewModelProvider.Factory {
+
+    private final Application application;
     private final MasterProductFragmentArgs args;
 
-    private final MutableLiveData<Boolean> isLoadingLive;
-    private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-    private final MutableLiveData<Boolean> offlineLive;
-
-    private ArrayList<Location> locations;
-    private ArrayList<Store> stores;
-
-    private DownloadHelper.Queue currentQueueLoading;
-    private final boolean debug;
-    private final boolean isActionEdit;
-
-    public MasterProductCatLocationViewModel(
-            @NonNull Application application,
-            @NonNull MasterProductFragmentArgs startupArgs
+    public MasterProductCatLocationViewModelFactory(
+        Application application,
+        MasterProductFragmentArgs args
     ) {
-        super(application);
-
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
-
-        isLoadingLive = new MutableLiveData<>(false);
-        dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-        grocyApi = new GrocyApi(getApplication());
-        eventHandler = new EventHandler();
-        repository = new MasterProductRepository(application);
-        formData = new FormDataMasterProductCatLocation(application);
-        args = startupArgs;
-        isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-
-        infoFullscreenLive = new MutableLiveData<>();
-        offlineLive = new MutableLiveData<>(false);
-    }
-
-    public FormDataMasterProductCatLocation getFormData() {
-        return formData;
-    }
-
-    public boolean isActionEdit() {
-        return isActionEdit;
-    }
-
-    public Product getFilledProduct() {
-        return formData.fillProduct(args.getProduct());
-    }
-
-    public void loadFromDatabase(boolean downloadAfterLoading) {
-        repository.loadLocationsStoresFromDatabase((locations, stores) -> {
-            this.locations = locations;
-            this.stores = stores;
-            formData.getLocationsLive().setValue(locations);
-            formData.getStoresLive().setValue(stores);
-            formData.fillWithProductIfNecessary(args.getProduct());
-            if(downloadAfterLoading) downloadData();
-        });
-    }
-
-    public void downloadData(@Nullable String dbChangedTime) {
-        if(currentQueueLoading != null) {
-            currentQueueLoading.reset(true);
-            currentQueueLoading = null;
-        }
-        if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }
-        if(dbChangedTime == null) {
-            dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
-            return;
-        }
-
-        DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-        queue.append(
-                dlHelper.updateLocations(dbChangedTime, locations -> {
-                    this.locations = locations;
-                    formData.getLocationsLive().setValue(locations);
-                }),
-                dlHelper.updateStores(dbChangedTime, stores -> {
-                    this.stores = stores;
-                    formData.getStoresLive().setValue(stores);
-                })
-        );
-        if(queue.isEmpty()) return;
-
-        currentQueueLoading = queue;
-        queue.start();
-    }
-
-    public void downloadData() {
-        downloadData(null);
-    }
-
-    public void downloadDataForceUpdate() {
-        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-        editPrefs.apply();
-        downloadData();
-    }
-
-    private void onQueueEmpty() {
-        if(isOffline()) setOfflineLive(false);
-        formData.fillWithProductIfNecessary(args.getProduct());
-        repository.updateLocationsStoresDatabase(locations, stores, () -> {});
-    }
-
-    private void onDownloadError(@Nullable VolleyError error) {
-        if(debug) Log.e(TAG, "onError: VolleyError: " + error);
-        showMessage(getString(R.string.msg_no_connection));
-        if(!isOffline()) setOfflineLive(true);
+      this.application = application;
+      this.args = args;
     }
 
     @NonNull
-    public MutableLiveData<Boolean> getOfflineLive() {
-        return offlineLive;
-    }
-
-    public Boolean isOffline() {
-        return offlineLive.getValue();
-    }
-
-    public void setOfflineLive(boolean isOffline) {
-        offlineLive.setValue(isOffline);
-    }
-
-    @NonNull
-    public MutableLiveData<Boolean> getIsLoadingLive() {
-        return isLoadingLive;
-    }
-
-    @NonNull
-    public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
-        return infoFullscreenLive;
-    }
-
-    public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
-        currentQueueLoading = queueLoading;
-    }
-
-    public void showErrorMessage() {
-        showMessage(getString(R.string.error_undefined));
-    }
-
-    private void showMessage(@NonNull String message) {
-        showSnackbar(new SnackbarMessage(message));
-    }
-
-    private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-        eventHandler.setValue(snackbarMessage);
-    }
-
-    private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-        eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-    }
-
-    private void navigateUp() {
-        eventHandler.setValue(new Event() {
-            @Override
-            public int getType() {return Event.NAVIGATE_UP;}
-        });
-    }
-
-    @NonNull
-    public EventHandler getEventHandler() {
-        return eventHandler;
-    }
-
-    public boolean isFeatureEnabled(String pref) {
-        if(pref == null) return true;
-        return sharedPrefs.getBoolean(pref, true);
-    }
-
-    private String getString(@StringRes int resId) {
-        return getApplication().getString(resId);
-    }
-
     @Override
-    protected void onCleared() {
-        dlHelper.destroy();
-        super.onCleared();
+    @SuppressWarnings("unchecked")
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new MasterProductCatLocationViewModel(application, args);
     }
-
-    public static class MasterProductCatLocationViewModelFactory implements ViewModelProvider.Factory {
-        private final Application application;
-        private final MasterProductFragmentArgs args;
-
-        public MasterProductCatLocationViewModelFactory(
-                Application application,
-                MasterProductFragmentArgs args
-        ) {
-            this.application = application;
-            this.args = args;
-        }
-
-        @NonNull
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MasterProductCatLocationViewModel(application, args);
-        }
-    }
+  }
 }

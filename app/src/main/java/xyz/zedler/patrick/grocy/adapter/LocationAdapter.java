@@ -26,95 +26,94 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Location;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
-    private final static String TAG = LocationAdapter.class.getSimpleName();
+  private final static String TAG = LocationAdapter.class.getSimpleName();
 
-    private ArrayList<Location> locations;
-    private int selectedId;
-    private LocationAdapterListener listener;
+  private final ArrayList<Location> locations;
+  private final int selectedId;
+  private final LocationAdapterListener listener;
 
-    public LocationAdapter(
-            ArrayList<Location> locations,
-            int selectedId,
-            LocationAdapterListener listener
-    ) {
-        this.locations = locations;
-        this.selectedId = selectedId;
-        this.listener = listener;
+  public LocationAdapter(
+      ArrayList<Location> locations,
+      int selectedId,
+      LocationAdapterListener listener
+  ) {
+    this.locations = locations;
+    this.selectedId = selectedId;
+    this.listener = listener;
+  }
+
+  public static class ViewHolder extends RecyclerView.ViewHolder {
+
+    private final LinearLayout linearLayoutContainer;
+    private final TextView textViewName;
+    private final ImageView imageViewSelected;
+
+    public ViewHolder(View view) {
+      super(view);
+
+      linearLayoutContainer = view.findViewById(R.id.linear_master_edit_selection_container);
+      textViewName = view.findViewById(R.id.text_master_edit_selection_name);
+      imageViewSelected = view.findViewById(R.id.image_master_edit_selection_selected);
+    }
+  }
+
+  @NonNull
+  @Override
+  public LocationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new LocationAdapter.ViewHolder(
+        LayoutInflater.from(parent.getContext()).inflate(
+            R.layout.row_master_edit_selection_sheet,
+            parent,
+            false
+        )
+    );
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  @Override
+  public void onBindViewHolder(
+      @NonNull final LocationAdapter.ViewHolder holder,
+      int position
+  ) {
+    Location location = locations.get(holder.getAdapterPosition());
+
+    // NAME
+
+    holder.textViewName.setText(location.getName());
+
+    // SELECTED
+
+    if (location.getId() == selectedId) {
+      holder.imageViewSelected.setVisibility(View.VISIBLE);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayoutContainer;
-        private TextView textViewName;
-        private ImageView imageViewSelected;
+    // CONTAINER
 
-        public ViewHolder(View view) {
-            super(view);
+    holder.linearLayoutContainer.setOnClickListener(
+        view -> listener.onItemRowClicked(holder.getAdapterPosition())
+    );
+  }
 
-            linearLayoutContainer = view.findViewById(R.id.linear_master_edit_selection_container);
-            textViewName = view.findViewById(R.id.text_master_edit_selection_name);
-            imageViewSelected = view.findViewById(R.id.image_master_edit_selection_selected);
-        }
-    }
+  @Override
+  public long getItemId(int position) {
+    return locations.get(position).getId();
+  }
 
-    @NonNull
-    @Override
-    public LocationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new LocationAdapter.ViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.row_master_edit_selection_sheet,
-                        parent,
-                        false
-                )
-        );
-    }
+  @Override
+  public int getItemCount() {
+    return locations.size();
+  }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public void onBindViewHolder(
-            @NonNull final LocationAdapter.ViewHolder holder,
-            int position
-    ) {
-        Location location = locations.get(holder.getAdapterPosition());
+  public interface LocationAdapterListener {
 
-        // NAME
-
-        holder.textViewName.setText(location.getName());
-
-        // SELECTED
-
-        if(location.getId() == selectedId) {
-            holder.imageViewSelected.setVisibility(View.VISIBLE);
-        }
-
-        // CONTAINER
-
-        holder.linearLayoutContainer.setOnClickListener(
-                view -> listener.onItemRowClicked(holder.getAdapterPosition())
-        );
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return locations.get(position).getId();
-    }
-
-    @Override
-    public int getItemCount() {
-        return locations.size();
-    }
-
-    public interface LocationAdapterListener {
-        void onItemRowClicked(int position);
-    }
+    void onItemRowClicked(int position);
+  }
 }

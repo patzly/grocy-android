@@ -23,10 +23,10 @@ import android.content.SharedPreferences;
 
 public class PrefsUtil {
 
-    public static boolean isDebuggingEnabled(SharedPreferences sharedPrefs) {
-        return sharedPrefs.getBoolean(
-                Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
-                Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
-        );
-    }
+  public static boolean isDebuggingEnabled(SharedPreferences sharedPrefs) {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+        Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+    );
+  }
 }

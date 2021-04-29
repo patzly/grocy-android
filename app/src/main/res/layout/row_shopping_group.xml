@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,26 +18,26 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:layout_marginStart="16dp"
+  android:layout_marginTop="8dp"
+  android:layout_marginBottom="8dp">
+
+  <View
+    android:id="@+id/separator"
+    android:layout_width="4dp"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/retro_green_fg"
+    android:background="@drawable/bg_group_divider" />
+
+  <TextView
+    android:id="@+id/text_shopping_group_name"
+    style="@style/Widget.Grocy.TextView.ShoppingModeGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
-
-    <View
-        android:id="@+id/separator"
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/retro_green_fg"
-        android:background="@drawable/bg_group_divider"/>
-
-    <TextView
-        android:id="@+id/text_shopping_group_name"
-        style="@style/Widget.Grocy.TextView.ShoppingModeGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="13dp" />
+    android:layout_marginStart="13dp" />
 
 </LinearLayout>

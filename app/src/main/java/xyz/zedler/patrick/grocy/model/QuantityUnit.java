@@ -21,149 +21,151 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Objects;
 
 @Entity(tableName = "quantity_unit_table")
 public class QuantityUnit implements Parcelable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
-    private int id;
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
 
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
-    private String name;
+  @ColumnInfo(name = "name")
+  @SerializedName("name")
+  private String name;
 
-    @ColumnInfo(name = "description")
-    @SerializedName("description")
-    private String description;
+  @ColumnInfo(name = "description")
+  @SerializedName("description")
+  private String description;
 
-    @ColumnInfo(name = "name_plural")
-    @SerializedName("name_plural")
-    private String namePlural;
+  @ColumnInfo(name = "name_plural")
+  @SerializedName("name_plural")
+  private String namePlural;
 
-    @ColumnInfo(name = "plural_forms")
-    @SerializedName("plural_forms")
-    private String pluralForms;
+  @ColumnInfo(name = "plural_forms")
+  @SerializedName("plural_forms")
+  private String pluralForms;
 
-    public QuantityUnit() {}
+  public QuantityUnit() {
+  }
 
-    @Ignore
-    public QuantityUnit(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  @Ignore
+  public QuantityUnit(int id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    @Ignore
-    public QuantityUnit(Parcel parcel) {
-        id = parcel.readInt();
-        name = parcel.readString();
-        description = parcel.readString();
-        namePlural = parcel.readString();
-        pluralForms = parcel.readString();
+  @Ignore
+  public QuantityUnit(Parcel parcel) {
+    id = parcel.readInt();
+    name = parcel.readString();
+    description = parcel.readString();
+    namePlural = parcel.readString();
+    pluralForms = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(name);
+    dest.writeString(description);
+    dest.writeString(namePlural);
+    dest.writeString(pluralForms);
+  }
+
+  public static final Creator<QuantityUnit> CREATOR = new Creator<QuantityUnit>() {
+
+    @Override
+    public QuantityUnit createFromParcel(Parcel in) {
+      return new QuantityUnit(in);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(namePlural);
-        dest.writeString(pluralForms);
+    public QuantityUnit[] newArray(int size) {
+      return new QuantityUnit[size];
     }
+  };
 
-    public static final Creator<QuantityUnit> CREATOR = new Creator<QuantityUnit>() {
+  public int getId() {
+    return id;
+  }
 
-        @Override
-        public QuantityUnit createFromParcel(Parcel in) {
-            return new QuantityUnit(in);
-        }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-        @Override
-        public QuantityUnit[] newArray(int size) {
-            return new QuantityUnit[size];
-        }
-    };
+  public String getName() {
+    return name;
+  }
 
-    public int getId() {
-        return id;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getNamePlural() {
+    return namePlural == null ? name : namePlural;
+  }
+
+  public String getNamePluralCanNull() {
+    return namePlural;
+  }
+
+  public void setNamePlural(String namePlural) {
+    this.namePlural = namePlural;
+  }
+
+  public String getPluralForms() {
+    return pluralForms;
+  }
+
+  public void setPluralForms(String pluralForms) {
+    this.pluralForms = pluralForms;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    QuantityUnit that = (QuantityUnit) o;
+    return id == that.id &&
+        Objects.equals(name, that.name) &&
+        Objects.equals(description, that.description) &&
+        Objects.equals(namePlural, that.namePlural) &&
+        Objects.equals(pluralForms, that.pluralForms);
+  }
 
-    public String getName() {
-        return name;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, description, namePlural, pluralForms);
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getNamePlural() {
-        return namePlural == null ? name : namePlural;
-    }
-
-    public String getNamePluralCanNull() {
-        return namePlural;
-    }
-
-    public void setNamePlural(String namePlural) {
-        this.namePlural = namePlural;
-    }
-
-    public String getPluralForms() {
-        return pluralForms;
-    }
-
-    public void setPluralForms(String pluralForms) {
-        this.pluralForms = pluralForms;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        QuantityUnit that = (QuantityUnit) o;
-        return id == that.id &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(namePlural, that.namePlural) &&
-                Objects.equals(pluralForms, that.pluralForms);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, namePlural, pluralForms);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "QuantityUnit(" + name + ')';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "QuantityUnit(" + name + ')';
+  }
 }

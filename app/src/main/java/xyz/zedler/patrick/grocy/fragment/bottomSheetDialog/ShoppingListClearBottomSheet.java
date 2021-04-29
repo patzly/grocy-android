@@ -24,13 +24,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShoppingListClearBinding;
@@ -39,66 +36,66 @@ import xyz.zedler.patrick.grocy.util.Constants;
 
 public class ShoppingListClearBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = ShoppingListClearBottomSheet.class.getSimpleName();
+  private final static String TAG = ShoppingListClearBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
-    private FragmentBottomsheetShoppingListClearBinding binding;
+  private MainActivity activity;
+  private FragmentBottomsheetShoppingListClearBinding binding;
 
-    private ShoppingList shoppingList;
-    private MutableLiveData<Integer> selectionLive;
+  private ShoppingList shoppingList;
+  private MutableLiveData<Integer> selectionLive;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-    }
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
+  }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentBottomsheetShoppingListClearBinding.inflate(
-                inflater, container, false
-        );
-        return binding.getRoot();
-    }
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    binding = FragmentBottomsheetShoppingListClearBinding.inflate(
+        inflater, container, false
+    );
+    return binding.getRoot();
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        setSkipCollapsedInPortrait();
-        super.onViewCreated(view, savedInstanceState);
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    setSkipCollapsedInPortrait();
+    super.onViewCreated(view, savedInstanceState);
 
-        activity = (MainActivity) requireActivity();
-        binding.setBottomsheet(this);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
+    activity = (MainActivity) requireActivity();
+    binding.setBottomsheet(this);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
 
-        shoppingList = requireArguments().getParcelable(Constants.ARGUMENT.SHOPPING_LIST);
+    shoppingList = requireArguments().getParcelable(Constants.ARGUMENT.SHOPPING_LIST);
 
-        selectionLive = new MutableLiveData<>(1);
-    }
+    selectionLive = new MutableLiveData<>(1);
+  }
 
-    public void proceed() {
-        assert selectionLive.getValue() != null;
-        activity.getCurrentFragment().clearShoppingList(
-                shoppingList,
-                selectionLive.getValue() == 1
-        );
-        dismiss();
-    }
+  public void proceed() {
+    assert selectionLive.getValue() != null;
+    activity.getCurrentFragment().clearShoppingList(
+        shoppingList,
+        selectionLive.getValue() == 1
+    );
+    dismiss();
+  }
 
-    public MutableLiveData<Integer> getSelectionLive() {
-        return selectionLive;
-    }
+  public MutableLiveData<Integer> getSelectionLive() {
+    return selectionLive;
+  }
 
-    public void setSelectionLive(int selection) {
-        selectionLive.setValue(selection);
-    }
+  public void setSelectionLive(int selection) {
+    selectionLive.setValue(selection);
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

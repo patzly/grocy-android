@@ -25,32 +25,31 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.MissingItem;
 
 @Dao
 public interface MissingItemDao {
-    @Query("SELECT * FROM missing_item_table")
-    LiveData<List<MissingItem>> getAllLive();
 
-    @Query("SELECT * FROM missing_item_table")
-    List<MissingItem> getAll();
+  @Query("SELECT * FROM missing_item_table")
+  LiveData<List<MissingItem>> getAllLive();
 
-    @Query("SELECT COUNT(*) FROM missing_item_table")
-    int count();
+  @Query("SELECT * FROM missing_item_table")
+  List<MissingItem> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<MissingItem> missingItems);
+  @Query("SELECT COUNT(*) FROM missing_item_table")
+  int count();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(MissingItem missingItem);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertAll(List<MissingItem> missingItems);
 
-    @Delete
-    void delete(MissingItem missingItem);
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insert(MissingItem missingItem);
 
-    @Query("DELETE FROM missing_item_table")
-    void deleteAll();
+  @Delete
+  void delete(MissingItem missingItem);
+
+  @Query("DELETE FROM missing_item_table")
+  void deleteAll();
 
 }

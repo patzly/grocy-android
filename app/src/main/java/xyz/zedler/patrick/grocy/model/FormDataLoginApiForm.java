@@ -21,216 +21,223 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.content.SharedPreferences;
 import android.webkit.URLUtil;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class FormDataLoginApiForm {
-    private final MutableLiveData<Boolean> showHelpTexts;
-    private final MutableLiveData<Boolean> httpRadioButtonCheckedLive;
-    private final MutableLiveData<Boolean> httpsRadioButtonCheckedLive;
-    private final MutableLiveData<String> serverUrlLive;
-    private final MutableLiveData<Integer> serverUrlErrorLive;
-    private final MutableLiveData<String> longLivedAccessTokenLive;
-    private final MutableLiveData<Integer> longLivedAccessTokenErrorLive;
-    private final MutableLiveData<String> ingressProxyIdLive;
-    private final MutableLiveData<Integer> ingressProxyIdErrorLive;
-    private final MutableLiveData<String> apiKeyLive;
-    private final MutableLiveData<Integer> apiKeyErrorLive;
-    private final MutableLiveData<Boolean> usingGrocyHassAddOnLive;
 
-    public FormDataLoginApiForm(SharedPreferences sharedPrefsPrivate, LoginApiFormFragmentArgs args) {
-        showHelpTexts = new MutableLiveData<>(false);
-        usingGrocyHassAddOnLive = new MutableLiveData<>(args.getGrocyIngressProxyId() != null);
-        httpRadioButtonCheckedLive = new MutableLiveData<>(false);
-        httpsRadioButtonCheckedLive = new MutableLiveData<>(false);
-        serverUrlLive = new MutableLiveData<>();
-        serverUrlErrorLive = new MutableLiveData<>();
-        longLivedAccessTokenLive = new MutableLiveData<>();
-        longLivedAccessTokenErrorLive = new MutableLiveData<>();
-        ingressProxyIdLive = new MutableLiveData<>(args.getGrocyIngressProxyId());
-        ingressProxyIdErrorLive = new MutableLiveData<>();
-        apiKeyLive = new MutableLiveData<>(args.getGrocyApiKey());
-        apiKeyErrorLive = new MutableLiveData<>();
+  private final MutableLiveData<Boolean> showHelpTexts;
+  private final MutableLiveData<Boolean> httpRadioButtonCheckedLive;
+  private final MutableLiveData<Boolean> httpsRadioButtonCheckedLive;
+  private final MutableLiveData<String> serverUrlLive;
+  private final MutableLiveData<Integer> serverUrlErrorLive;
+  private final MutableLiveData<String> longLivedAccessTokenLive;
+  private final MutableLiveData<Integer> longLivedAccessTokenErrorLive;
+  private final MutableLiveData<String> ingressProxyIdLive;
+  private final MutableLiveData<Integer> ingressProxyIdErrorLive;
+  private final MutableLiveData<String> apiKeyLive;
+  private final MutableLiveData<Integer> apiKeyErrorLive;
+  private final MutableLiveData<Boolean> usingGrocyHassAddOnLive;
 
-        if(sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null) != null) {
-            serverUrlLive.setValue(
-                    sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null)
-            );
-        }
-        if(sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null) != null) {
-            apiKeyLive.setValue(
-                    sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null)
-            );
-        }
+  public FormDataLoginApiForm(SharedPreferences sharedPrefsPrivate, LoginApiFormFragmentArgs args) {
+    showHelpTexts = new MutableLiveData<>(false);
+    usingGrocyHassAddOnLive = new MutableLiveData<>(args.getGrocyIngressProxyId() != null);
+    httpRadioButtonCheckedLive = new MutableLiveData<>(false);
+    httpsRadioButtonCheckedLive = new MutableLiveData<>(false);
+    serverUrlLive = new MutableLiveData<>();
+    serverUrlErrorLive = new MutableLiveData<>();
+    longLivedAccessTokenLive = new MutableLiveData<>();
+    longLivedAccessTokenErrorLive = new MutableLiveData<>();
+    ingressProxyIdLive = new MutableLiveData<>(args.getGrocyIngressProxyId());
+    ingressProxyIdErrorLive = new MutableLiveData<>();
+    apiKeyLive = new MutableLiveData<>(args.getGrocyApiKey());
+    apiKeyErrorLive = new MutableLiveData<>();
+
+    if (sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null) != null) {
+      serverUrlLive.setValue(
+          sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null)
+      );
     }
-
-    public MutableLiveData<Boolean> getShowHelpTexts() {
-        return showHelpTexts;
+    if (sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null) != null) {
+      apiKeyLive.setValue(
+          sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null)
+      );
     }
+  }
 
-    public void toggleShowHelpTexts() {
-        assert showHelpTexts.getValue() != null;
-        showHelpTexts.setValue(!showHelpTexts.getValue());
-    }
+  public MutableLiveData<Boolean> getShowHelpTexts() {
+    return showHelpTexts;
+  }
 
-    public MutableLiveData<Boolean> getUsingGrocyHassAddOnLive() {
-        return usingGrocyHassAddOnLive;
-    }
+  public void toggleShowHelpTexts() {
+    assert showHelpTexts.getValue() != null;
+    showHelpTexts.setValue(!showHelpTexts.getValue());
+  }
 
-    public boolean getUsingGrocyHassAddOn() {
-        assert usingGrocyHassAddOnLive.getValue() != null;
-        return usingGrocyHassAddOnLive.getValue();
-    }
+  public MutableLiveData<Boolean> getUsingGrocyHassAddOnLive() {
+    return usingGrocyHassAddOnLive;
+  }
 
-    public void toggleUsingGrocyHassAddOn() {
-        usingGrocyHassAddOnLive.setValue(!getUsingGrocyHassAddOn());
-    }
+  public boolean getUsingGrocyHassAddOn() {
+    assert usingGrocyHassAddOnLive.getValue() != null;
+    return usingGrocyHassAddOnLive.getValue();
+  }
 
-    public MutableLiveData<Boolean> getHttpRadioButtonCheckedLive() {
-        return httpRadioButtonCheckedLive;
-    }
+  public void toggleUsingGrocyHassAddOn() {
+    usingGrocyHassAddOnLive.setValue(!getUsingGrocyHassAddOn());
+  }
 
-    public MutableLiveData<Boolean> getHttpsRadioButtonCheckedLive() {
-        return httpsRadioButtonCheckedLive;
-    }
+  public MutableLiveData<Boolean> getHttpRadioButtonCheckedLive() {
+    return httpRadioButtonCheckedLive;
+  }
 
-    public MutableLiveData<String> getServerUrlLive() {
-        return serverUrlLive;
-    }
+  public MutableLiveData<Boolean> getHttpsRadioButtonCheckedLive() {
+    return httpsRadioButtonCheckedLive;
+  }
 
-    @NonNull
-    public String getServerUrlTrimmed() {
-        if(serverUrlLive.getValue() == null) return "";
-        return serverUrlLive.getValue().replaceAll("/+$", "").trim();
-    }
+  public MutableLiveData<String> getServerUrlLive() {
+    return serverUrlLive;
+  }
 
-    public MutableLiveData<Integer> getServerUrlErrorLive() {
-        return serverUrlErrorLive;
+  @NonNull
+  public String getServerUrlTrimmed() {
+    if (serverUrlLive.getValue() == null) {
+      return "";
     }
+    return serverUrlLive.getValue().replaceAll("/+$", "").trim();
+  }
 
-    public void clearServerUrlErrorAndUpdateRadioButtons() {
-        serverUrlErrorLive.setValue(null);
-        updateRadioButtons();
-    }
+  public MutableLiveData<Integer> getServerUrlErrorLive() {
+    return serverUrlErrorLive;
+  }
 
-    public void onCheckedHttpsButton() {
-        String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
-        if(!serverUrl.contains("https://") && !serverUrl.contains("http://")) {
-            serverUrlLive.setValue("https://" + serverUrl);
-        } else if(serverUrl.contains("http://")) {
-            serverUrlLive.setValue(serverUrl.replace("http://", "https://"));
-        }
-        updateRadioButtons();
-    }
+  public void clearServerUrlErrorAndUpdateRadioButtons() {
+    serverUrlErrorLive.setValue(null);
+    updateRadioButtons();
+  }
 
-    public void onCheckedHttpButton() {
-        String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
-        if(!serverUrl.contains("https://") && !serverUrl.contains("http://")) {
-            serverUrlLive.setValue("http://" + serverUrl);
-        } else if(serverUrl.contains("https://")) {
-            serverUrlLive.setValue(serverUrl.replace("https://", "http://"));
-        }
-        updateRadioButtons();
+  public void onCheckedHttpsButton() {
+    String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
+    if (!serverUrl.contains("https://") && !serverUrl.contains("http://")) {
+      serverUrlLive.setValue("https://" + serverUrl);
+    } else if (serverUrl.contains("http://")) {
+      serverUrlLive.setValue(serverUrl.replace("http://", "https://"));
     }
+    updateRadioButtons();
+  }
 
-    public void updateRadioButtons() {
-        String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
-        httpsRadioButtonCheckedLive.setValue(serverUrl.contains("https://"));
-        httpRadioButtonCheckedLive.setValue(serverUrl.contains("http://"));
+  public void onCheckedHttpButton() {
+    String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
+    if (!serverUrl.contains("https://") && !serverUrl.contains("http://")) {
+      serverUrlLive.setValue("http://" + serverUrl);
+    } else if (serverUrl.contains("https://")) {
+      serverUrlLive.setValue(serverUrl.replace("https://", "http://"));
     }
+    updateRadioButtons();
+  }
 
-    public MutableLiveData<String> getLongLivedAccessTokenLive() {
-        return longLivedAccessTokenLive;
-    }
+  public void updateRadioButtons() {
+    String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
+    httpsRadioButtonCheckedLive.setValue(serverUrl.contains("https://"));
+    httpRadioButtonCheckedLive.setValue(serverUrl.contains("http://"));
+  }
 
-    @Nullable
-    public String getLongLivedAccessTokenTrimmed() {
-        String longLivedAccessToken = longLivedAccessTokenLive.getValue();
-        if(longLivedAccessToken != null) longLivedAccessToken = longLivedAccessToken.trim();
-        return longLivedAccessToken != null && longLivedAccessToken.isEmpty()
-                ? null : longLivedAccessToken;
-    }
+  public MutableLiveData<String> getLongLivedAccessTokenLive() {
+    return longLivedAccessTokenLive;
+  }
 
-    public MutableLiveData<Integer> getLongLivedAccessTokenErrorLive() {
-        return longLivedAccessTokenErrorLive;
+  @Nullable
+  public String getLongLivedAccessTokenTrimmed() {
+    String longLivedAccessToken = longLivedAccessTokenLive.getValue();
+    if (longLivedAccessToken != null) {
+      longLivedAccessToken = longLivedAccessToken.trim();
     }
+    return longLivedAccessToken != null && longLivedAccessToken.isEmpty()
+        ? null : longLivedAccessToken;
+  }
 
-    public MutableLiveData<String> getIngressProxyIdLive() {
-        return ingressProxyIdLive;
-    }
+  public MutableLiveData<Integer> getLongLivedAccessTokenErrorLive() {
+    return longLivedAccessTokenErrorLive;
+  }
 
-    @Nullable
-    public String getIngressProxyIdTrimmed() {
-        String proxyId = ingressProxyIdLive.getValue();
-        if(proxyId != null) proxyId = proxyId.trim();
-        return proxyId != null && proxyId.isEmpty() ? null : proxyId;
-    }
+  public MutableLiveData<String> getIngressProxyIdLive() {
+    return ingressProxyIdLive;
+  }
 
-    public MutableLiveData<Integer> getIngressProxyIdErrorLive() {
-        return ingressProxyIdErrorLive;
+  @Nullable
+  public String getIngressProxyIdTrimmed() {
+    String proxyId = ingressProxyIdLive.getValue();
+    if (proxyId != null) {
+      proxyId = proxyId.trim();
     }
+    return proxyId != null && proxyId.isEmpty() ? null : proxyId;
+  }
 
-    public MutableLiveData<String> getApiKeyLive() {
-        return apiKeyLive;
-    }
+  public MutableLiveData<Integer> getIngressProxyIdErrorLive() {
+    return ingressProxyIdErrorLive;
+  }
 
-    @NonNull
-    public String getApiKeyTrimmed() {
-        if(apiKeyLive.getValue() == null) return "";
-        return apiKeyLive.getValue().trim();
-    }
+  public MutableLiveData<String> getApiKeyLive() {
+    return apiKeyLive;
+  }
 
-    public MutableLiveData<Integer> getApiKeyErrorLive() {
-        return apiKeyErrorLive;
+  @NonNull
+  public String getApiKeyTrimmed() {
+    if (apiKeyLive.getValue() == null) {
+      return "";
     }
+    return apiKeyLive.getValue().trim();
+  }
 
-    public void clearApiKeyError() {
-        apiKeyErrorLive.setValue(null);
-    }
+  public MutableLiveData<Integer> getApiKeyErrorLive() {
+    return apiKeyErrorLive;
+  }
 
-    public boolean isServerUrlValid() {
-        String serverUrl = getServerUrlTrimmed();
-        if(serverUrl.isEmpty()) {
-            serverUrlErrorLive.setValue(R.string.error_empty);
-            return false;
-        } else if(!URLUtil.isValidUrl(serverUrl)) {
-            serverUrlErrorLive.setValue(R.string.error_invalid_url);
-            return false;
-        }
-        serverUrlErrorLive.setValue(null);
-        return true;
-    }
+  public void clearApiKeyError() {
+    apiKeyErrorLive.setValue(null);
+  }
 
-    public boolean isAccessTokenUrlValid() {
-        String accessToken = getLongLivedAccessTokenTrimmed();
-        if(getUsingGrocyHassAddOn() && accessToken == null) {
-            longLivedAccessTokenErrorLive.setValue(R.string.error_empty);
-            return false;
-        }
-        longLivedAccessTokenErrorLive.setValue(null);
-        return true;
+  public boolean isServerUrlValid() {
+    String serverUrl = getServerUrlTrimmed();
+    if (serverUrl.isEmpty()) {
+      serverUrlErrorLive.setValue(R.string.error_empty);
+      return false;
+    } else if (!URLUtil.isValidUrl(serverUrl)) {
+      serverUrlErrorLive.setValue(R.string.error_invalid_url);
+      return false;
     }
+    serverUrlErrorLive.setValue(null);
+    return true;
+  }
 
-    public boolean isIngressProxyIdValid() {
-        String proxyId = getIngressProxyIdTrimmed();
-        if(getUsingGrocyHassAddOn() && proxyId == null) {
-            ingressProxyIdErrorLive.setValue(R.string.error_empty);
-            return false;
-        }
-        ingressProxyIdErrorLive.setValue(null);
-        return true;
+  public boolean isAccessTokenUrlValid() {
+    String accessToken = getLongLivedAccessTokenTrimmed();
+    if (getUsingGrocyHassAddOn() && accessToken == null) {
+      longLivedAccessTokenErrorLive.setValue(R.string.error_empty);
+      return false;
     }
+    longLivedAccessTokenErrorLive.setValue(null);
+    return true;
+  }
 
-    public boolean isFormValid() {
-        boolean valid = isServerUrlValid();
-        valid = isAccessTokenUrlValid() && valid;
-        valid = isIngressProxyIdValid() && valid;
-        return valid;
+  public boolean isIngressProxyIdValid() {
+    String proxyId = getIngressProxyIdTrimmed();
+    if (getUsingGrocyHassAddOn() && proxyId == null) {
+      ingressProxyIdErrorLive.setValue(R.string.error_empty);
+      return false;
     }
+    ingressProxyIdErrorLive.setValue(null);
+    return true;
+  }
+
+  public boolean isFormValid() {
+    boolean valid = isServerUrlValid();
+    valid = isAccessTokenUrlValid() && valid;
+    valid = isIngressProxyIdValid() && valid;
+    return valid;
+  }
 }

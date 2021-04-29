@@ -28,13 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -42,55 +39,55 @@ import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class TextEditBottomSheet extends BaseBottomSheet {
 
-    private final static String TAG = TextEditBottomSheet.class.getSimpleName();
+  private final static String TAG = TextEditBottomSheet.class.getSimpleName();
 
-    private MainActivity activity;
+  private MainActivity activity;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new BottomSheetDialog(
-                requireContext(), R.style.Theme_Grocy_BottomSheetDialog_SoftInput
-        );
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new BottomSheetDialog(
+        requireContext(), R.style.Theme_Grocy_BottomSheetDialog_SoftInput
+    );
+  }
+
+  @Override
+  public View onCreateView(
+      @NonNull LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState
+  ) {
+    View view = inflater.inflate(
+        R.layout.fragment_bottomsheet_text_edit, container, false
+    );
+
+    activity = (MainActivity) getActivity();
+    assert activity != null;
+
+    if (getArguments() == null
+        || getArguments().getString(Constants.ARGUMENT.TITLE) == null
+    ) {
+      dismissWithMessage(activity.getString(R.string.error_undefined));
+      return view;
     }
 
-    @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        View view = inflater.inflate(
-                R.layout.fragment_bottomsheet_text_edit, container, false
-        );
+    TextView textView = view.findViewById(R.id.text_text_edit_title);
+    textView.setText(getArguments().getString(Constants.ARGUMENT.TITLE));
 
-        activity = (MainActivity) getActivity();
-        assert activity != null;
+    TextInputLayout textInputLayout = view.findViewById(R.id.text_input_text_edit_text);
+    if (getArguments().getString(Constants.ARGUMENT.HINT) != null) {
+      textInputLayout.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
+    }
+    EditText editText = textInputLayout.getEditText();
+    assert editText != null;
+    if (getArguments().getString(Constants.ARGUMENT.TEXT) != null) {
+      editText.setText(getArguments().getString(Constants.ARGUMENT.TEXT));
+    } else if (getArguments().getString(Constants.ARGUMENT.HTML) != null) {
+      Spanned text = Html.fromHtml(getArguments().getString(Constants.ARGUMENT.HTML));
+      editText.setText(TextUtil.trimCharSequence(text));
+    }
 
-        if(getArguments() == null
-                || getArguments().getString(Constants.ARGUMENT.TITLE) == null
-        ) {
-            dismissWithMessage(activity.getString(R.string.error_undefined));
-            return view;
-        }
-
-        TextView textView = view.findViewById(R.id.text_text_edit_title);
-        textView.setText(getArguments().getString(Constants.ARGUMENT.TITLE));
-
-        TextInputLayout textInputLayout = view.findViewById(R.id.text_input_text_edit_text);
-        if(getArguments().getString(Constants.ARGUMENT.HINT) != null) {
-            textInputLayout.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
-        }
-        EditText editText = textInputLayout.getEditText();
-        assert editText != null;
-        if(getArguments().getString(Constants.ARGUMENT.TEXT) != null) {
-            editText.setText(getArguments().getString(Constants.ARGUMENT.TEXT));
-        } else if(getArguments().getString(Constants.ARGUMENT.HTML) != null) {
-            Spanned text = Html.fromHtml(getArguments().getString(Constants.ARGUMENT.HTML));
-            editText.setText(TextUtil.trimCharSequence(text));
-        }
-
-        view.findViewById(R.id.button_text_edit_save).setOnClickListener(v -> {
+    view.findViewById(R.id.button_text_edit_save).setOnClickListener(v -> {
             /*Fragment current = activity.getCurrentFragment();
             if(current.getClass() == MasterProductSimpleFragment.class) {
                 ((MasterProductSimpleFragment) current).editDescription(
@@ -107,32 +104,32 @@ public class TextEditBottomSheet extends BaseBottomSheet {
                 );
             }*/
 
-            Spanned spanned = (Spanned) TextUtil.trimCharSequence(editText.getText());
-            activity.getCurrentFragment().saveText(spanned);
-            dismiss();
-        });
+      Spanned spanned = (Spanned) TextUtil.trimCharSequence(editText.getText());
+      activity.getCurrentFragment().saveText(spanned);
+      dismiss();
+    });
 
-        view.findViewById(R.id.button_text_edit_clear).setOnClickListener(
-                v -> editText.setText(null)
-        );
+    view.findViewById(R.id.button_text_edit_clear).setOnClickListener(
+        v -> editText.setText(null)
+    );
 
-        return view;
-    }
+    return view;
+  }
 
-    private void dismissWithMessage(String msg) {
-        activity.showSnackbar(
-                Snackbar.make(
-                        activity.findViewById(R.id.frame_main_container),
-                        msg,
-                        Snackbar.LENGTH_SHORT
-                )
-        );
-        dismiss();
-    }
+  private void dismissWithMessage(String msg) {
+    activity.showSnackbar(
+        Snackbar.make(
+            activity.findViewById(R.id.frame_main_container),
+            msg,
+            Snackbar.LENGTH_SHORT
+        )
+    );
+    dismiss();
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return TAG;
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return TAG;
+  }
 }

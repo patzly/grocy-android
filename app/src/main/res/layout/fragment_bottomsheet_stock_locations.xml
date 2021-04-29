@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -19,57 +18,57 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/property_locations" />
+
+    <TextView
+      android:id="@+id/text_stock_locations_subtitle"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  </LinearLayout>
+
+  <View
+    style="@style/Theme.Grocy.Divider"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp" />
+
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none"
+    android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:paddingTop="8dp"
+      android:paddingBottom="8dp">
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_stock_locations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/property_locations"/>
-
-        <TextView
-            android:id="@+id/text_stock_locations_subtitle"
-            style="@style/Widget.Grocy.TextView.ListItem.Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:overScrollMode="never" />
 
     </LinearLayout>
 
-    <View
-        style="@style/Theme.Grocy.Divider"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp" />
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:overScrollMode="ifContentScrolls">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_stock_locations"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"/>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+  </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

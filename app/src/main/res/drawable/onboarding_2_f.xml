@@ -17,15 +17,16 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+<vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="24dp"
+  android:height="24dp"
+  android:viewportWidth="24"
+  android:viewportHeight="24">
   <path
-      android:pathData="M11.89,10.5h5.77a1,1 0,0 1,1 1v2a1,1 0,0 1,-1 1H11.9a1,1 0,0 1,-1 -1v-2a1,1 0,0 1,1 -1z"
-      android:fillColor="@color/primary"/>
+    android:pathData="M11.89,10.5h5.77a1,1 0,0 1,1 1v2a1,1 0,0 1,-1 1H11.9a1,1 0,0 1,-1 -1v-2a1,1 0,0 1,1 -1z"
+    android:fillColor="@color/primary" />
   <path
-      android:pathData="M15.2,11.96l0.48,0.48c0.03,0.03 0.03,0.09 0,0.12l-0.48,0.48c-0.05,0.06 -0.15,0.02 -0.15,-0.06v-0.3h-1.03a0.17,0.17 0,0 1,-0.18 -0.18c0,-0.1 0.08,-0.17 0.18,-0.17h1.03v-0.31c0,-0.08 0.1,-0.12 0.15,-0.06z"
-      android:fillColor="@color/retro_blue_fg"/>
+    android:pathData="M15.2,11.96l0.48,0.48c0.03,0.03 0.03,0.09 0,0.12l-0.48,0.48c-0.05,0.06 -0.15,0.02 -0.15,-0.06v-0.3h-1.03a0.17,0.17 0,0 1,-0.18 -0.18c0,-0.1 0.08,-0.17 0.18,-0.17h1.03v-0.31c0,-0.08 0.1,-0.12 0.15,-0.06z"
+    android:fillColor="@color/retro_blue_fg" />
 </vector>

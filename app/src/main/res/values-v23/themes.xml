@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -20,16 +19,16 @@
 
 <resources>
 
-    <style name="Theme.Grocy" parent="Base.Grocy">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@color/background</item>
-        <item name="android:navigationBarColor">@color/black</item>
-    </style>
+  <style name="Theme.Grocy" parent="Base.Grocy">
+    <item name="android:windowLightStatusBar">true</item>
+    <item name="android:statusBarColor">@color/background</item>
+    <item name="android:navigationBarColor">@color/black</item>
+  </style>
 
-    <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
+  <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
+    <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+    <item name="android:windowLightStatusBar">false</item>
+  </style>
 
 </resources>
