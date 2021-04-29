@@ -22,7 +22,7 @@
 
     <translate
         android:fromYDelta="0%p"
-        android:toYDelta="50%p"
+        android:toYDelta="30%p"
         android:duration="@integer/default_anim_duration"/>
 
     <alpha

@@ -21,7 +21,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <translate
-        android:fromYDelta="50%p"
+        android:fromYDelta="30%p"
         android:toYDelta="0%p"
         android:duration="@integer/default_anim_duration"/>
 
