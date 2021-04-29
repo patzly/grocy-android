@@ -50,6 +50,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -330,6 +331,31 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(mode, newMenuId, onMenuChanged);
+    }
+
+    public void updateBottomAppBar(
+            int newFabPosition,
+            @MenuRes int newMenuId,
+            Toolbar.OnMenuItemClickListener onMenuItemClickListener
+    ) {
+        int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
+        switch (newFabPosition) {
+            case Constants.FAB.POSITION.CENTER:
+                if(!binding.fabMain.isShown() && !isServerUrlEmpty()) binding.fabMain.show();
+                scrollBehavior.setTopScrollVisibility(true);
+                break;
+            case Constants.FAB.POSITION.END:
+                if(!binding.fabMain.isShown() && !isServerUrlEmpty()) binding.fabMain.show();
+                mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
+                scrollBehavior.setTopScrollVisibility(false);
+                break;
+            case Constants.FAB.POSITION.GONE:
+                if(binding.fabMain.isShown()) binding.fabMain.hide();
+                scrollBehavior.setTopScrollVisibility(true);
+                break;
+        }
+        binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(mode, newMenuId, null);
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
     }
 
     public void updateFab(

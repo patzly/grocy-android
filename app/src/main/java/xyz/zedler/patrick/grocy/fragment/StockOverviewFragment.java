@@ -308,8 +308,7 @@ public class StockOverviewFragment extends BaseFragment implements
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.GONE,
                 R.menu.menu_stock,
-                animated,
-                this::setUpBottomMenu
+                this::onMenuItemClick
         );
     }
 
@@ -380,62 +379,52 @@ public class StockOverviewFragment extends BaseFragment implements
         } return false;
     }
 
-    public void setUpBottomMenu() {
-        if(activity == null) return; // Fixes crash on theme change
-        MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
-        if(search != null) {
-            search.setOnMenuItemClickListener(item -> {
-                IconUtil.start(item);
-                setUpSearch();
-                return true;
-            });
-        }
-        SubMenu menuSort = activity.getBottomMenu().findItem(R.id.action_sort).getSubMenu();
-        if(menuSort == null) return;
-        MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
-        MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
-        switch (viewModel.getSortMode()) {
-            case Constants.STOCK.SORT.NAME:
-                sortName.setChecked(true);
-                break;
-            case Constants.STOCK.SORT.BBD:
-                sortBBD.setChecked(true);
-                break;
-        }
-        sortName.setOnMenuItemClickListener(item -> {
+    private boolean onMenuItemClick(MenuItem item) {
+        if(item.getItemId() == R.id.action_search) {
+            IconUtil.start(item);
+            setUpSearch();
+            return true;
+        } else if(item.getItemId() == R.id.action_sort) {
+            SubMenu menuSort = item.getSubMenu();
+            MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
+            MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
+            MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
+            switch (viewModel.getSortMode()) {
+                case Constants.STOCK.SORT.NAME:
+                    sortName.setChecked(true);
+                    break;
+                case Constants.STOCK.SORT.BBD:
+                    sortBBD.setChecked(true);
+                    break;
+            }
+            sortAscending.setChecked(viewModel.isSortAscending());
+            return true;
+        } else if(item.getItemId() == R.id.action_sort_name) {
             if(!item.isChecked()) {
                 item.setChecked(true);
                 viewModel.setSortMode(Constants.STOCK.SORT.NAME);
                 viewModel.updateFilteredStockItems();
             }
             return true;
-        });
-        sortBBD.setOnMenuItemClickListener(item -> {
+        } else if(item.getItemId() == R.id.action_sort_bbd) {
             if(!item.isChecked()) {
                 item.setChecked(true);
                 viewModel.setSortMode(Constants.STOCK.SORT.BBD);
                 viewModel.updateFilteredStockItems();
             }
             return true;
-        });
-        MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
-        if(sortAscending != null) {
-            sortAscending.setChecked(viewModel.isSortAscending());
-            sortAscending.setOnMenuItemClickListener(item -> {
-                item.setChecked(!item.isChecked());
-                viewModel.setSortAscending(item.isChecked());
-                return true;
-            });
-        }
-        viewModel.getProductGroupsLive().observe(getViewLifecycleOwner(), productGroups -> {
-            if(productGroups == null) return;
-            MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_product_group);
-            if(menuItem == null) return;
-            SubMenu menuProductGroups = menuItem.getSubMenu();
+        } else if(item.getItemId() == R.id.action_sort_ascending) {
+            item.setChecked(!item.isChecked());
+            viewModel.setSortAscending(item.isChecked());
+            return true;
+        } else if(item.getItemId() == R.id.action_filter_product_group) {
+            SubMenu menuProductGroups = item.getSubMenu();
             menuProductGroups.clear();
+            ArrayList<ProductGroup> productGroups = viewModel.getProductGroupsLive().getValue();
+            if(productGroups == null) return true;
             SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
             for(ProductGroup pg : productGroups) {
-                menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
+                menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(pgItem -> {
                     if(binding.recycler.getAdapter() == null) return false;
                     viewModel.getHorizontalFilterBarMulti().addFilter(
                             HorizontalFilterBarMulti.PRODUCT_GROUP,
@@ -445,17 +434,14 @@ public class StockOverviewFragment extends BaseFragment implements
                     return true;
                 });
             }
-            menuItem.setVisible(!productGroups.isEmpty());
-        });
-        viewModel.getLocationsLive().observe(getViewLifecycleOwner(), locations -> {
-            if(locations == null) return;
-            MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter_location);
-            if(menuItem == null) return;
-            SubMenu menuLocations = menuItem.getSubMenu();
+        } else if(item.getItemId() == R.id.action_filter_location) {
+            SubMenu menuLocations = item.getSubMenu();
             menuLocations.clear();
+            ArrayList<Location> locations = viewModel.getLocationsLive().getValue();
+            if(locations == null) return true;
             SortUtil.sortLocationsByName(requireContext(), locations, true);
             for(Location loc : locations) {
-                menuLocations.add(loc.getName()).setOnMenuItemClickListener(item -> {
+                menuLocations.add(loc.getName()).setOnMenuItemClickListener(locItem -> {
                     if(binding.recycler.getAdapter() == null) return false;
                     viewModel.getHorizontalFilterBarMulti().addFilter(
                             HorizontalFilterBarMulti.LOCATION,
@@ -465,8 +451,8 @@ public class StockOverviewFragment extends BaseFragment implements
                     return true;
                 });
             }
-            menuItem.setVisible(!locations.isEmpty());
-        });
+        }
+        return false;
     }
 
     @Override

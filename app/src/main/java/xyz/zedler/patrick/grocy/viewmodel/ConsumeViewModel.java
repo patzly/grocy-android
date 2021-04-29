@@ -98,11 +98,18 @@ public class ConsumeViewModel extends BaseViewModel {
         formData = new FormDataConsume(application, sharedPrefs, args);
 
         infoFullscreenLive = new MutableLiveData<>();
-        quickModeEnabled = new MutableLiveData<>(sharedPrefs.getBoolean(
-                Constants.PREF.QUICK_MODE_ACTIVE_CONSUME,
-                false
-        ));
-        if(args.getStartWithScanner()) quickModeEnabled.setValue(true);
+        boolean quickModeStart;
+        if(args.getStartWithScanner()) {
+            quickModeStart = true;
+        } else if(!args.getCloseWhenFinished()) {
+            quickModeStart = sharedPrefs.getBoolean(
+                    Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,
+                    false
+            );
+        } else {
+            quickModeStart = false;
+        }
+        quickModeEnabled = new MutableLiveData<>(quickModeStart);
 
         barcodes = new ArrayList<>();
     }

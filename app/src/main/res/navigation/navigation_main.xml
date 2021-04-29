@@ -33,12 +33,6 @@
         <action
             android:id="@+id/action_stockFragment_to_productOverviewBottomSheetDialogFragment"
             app:destination="@id/productOverviewBottomSheetDialogFragment" />
-        <action
-            android:id="@+id/action_stockFragment_to_scanInputFragment"
-            app:destination="@id/scanInputFragment"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_no"
-            app:popExitAnim="@anim/slide_out_down" />
     </fragment>
     <fragment
         android:id="@+id/purchaseFragment"
@@ -50,7 +44,7 @@
             android:defaultValue="false"
             app:argType="boolean" />
         <argument
-            android:name="productName"
+            android:name="productId"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
@@ -110,6 +104,18 @@
             android:name="showActions"
             android:defaultValue="false"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_purchaseFragment"
+            app:destination="@id/purchaseFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down"/>
+        <action
+            android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
+            app:destination="@id/consumeFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_no"
+            app:popExitAnim="@anim/slide_out_down"/>
     </dialog>
     <dialog
         android:id="@+id/drawerBottomSheetDialogFragment"
@@ -780,7 +786,7 @@
             android:defaultValue="false"
             app:argType="boolean" />
         <argument
-            android:name="productName"
+            android:name="productId"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />

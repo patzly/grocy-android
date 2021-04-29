@@ -207,8 +207,6 @@ public class StockFragment extends BaseFragment implements StockItemAdapter.Stoc
 
         binding.frameStockSearchClose.setOnClickListener(v -> dismissSearch());
         binding.frameStockSearchScan.setOnClickListener(v -> {
-            navigate(StockFragmentDirections.actionStockFragmentToScanInputFragment());
-            dismissSearch();
         });
         binding.editTextStockSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

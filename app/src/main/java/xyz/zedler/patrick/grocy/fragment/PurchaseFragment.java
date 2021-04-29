@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener {
@@ -150,10 +151,15 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
             }
         });
 
-        Integer productId = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
-        if(productId != null) {
+        if(getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID) != null) {
+            int productId = (int) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
             removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
             viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
+        } else if(NumUtil.isStringInt(args.getProductId())) {
+            int productId = Integer.parseInt(args.getProductId());
+            setArguments(new PurchaseFragmentArgs.Builder(args)
+                    .setProductId(null).build().toBundle());
+            viewModel.setProduct(productId, null);
         }
 
         viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
@@ -189,6 +195,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
 
         focusProductInputIfNecessary();
 
+        setHasOptionsMenu(true);
+
         updateUI(args.getAnimateStart() && savedInstanceState == null);
     }
 
@@ -198,8 +206,7 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
                 R.menu.menu_purchase,
-                animated,
-                this::setUpBottomMenu
+                this::onMenuItemClick
         );
         activity.updateFab(
                 R.drawable.ic_round_local_grocery_store,
@@ -436,17 +443,9 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
         }
     }
 
-    private void setUpBottomMenu() {
-        MenuItem menuItemDetails, menuItemClear, menuItemSkipItem;
-        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
-        menuItemSkipItem = activity.getBottomMenu().findItem(R.id.action_shopping_list_item_skip);
-        if(menuItemDetails == null || menuItemClear == null
-                || menuItemSkipItem == null
-        ) return;
-
-        menuItemDetails.setOnMenuItemClickListener(item -> {
-            IconUtil.start(menuItemDetails);
+    private boolean onMenuItemClick(MenuItem item) {
+        if(item.getItemId() == R.id.action_product_overview) {
+            IconUtil.start(item);
             if(!viewModel.getFormData().isProductNameValid()) return false;
             activity.showBottomSheet(
                     new ProductOverviewBottomSheet(),
@@ -455,9 +454,8 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                     ).build().toBundle()
             );
             return true;
-        });
-        menuItemClear.setOnMenuItemClickListener(item -> {
-            IconUtil.start(menuItemClear);
+        } else if(item.getItemId() == R.id.action_clear_form) {
+            IconUtil.start(item);
             clearInputFocus();
             viewModel.getFormData().clearForm();
             if(viewModel.getFormData().isScannerVisible()) {
@@ -465,15 +463,16 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
                 capture.decode();
             }
             return true;
-        });
-        if(args.getShoppingListItems() != null) {
+        }
+        /*if(args.getShoppingListItems() != null) {
             menuItemSkipItem.setVisible(true);
             menuItemSkipItem.setOnMenuItemClickListener(item -> {
                 IconUtil.start(menuItemSkipItem);
                 //viewModel.nextShoppingListItemPos();
                 return true;
             });
-        }
+        }*/
+        return false;
     }
 
     @NonNull

@@ -104,9 +104,9 @@ public class FormDataPurchase {
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
         ));
         scannerVisibilityLive = new MutableLiveData<>(false);
-        if(args.getStartWithScanner() && !getExternalScannerEnabled()) {
+        if(args.getStartWithScanner() && !getExternalScannerEnabled() && !args.getCloseWhenFinished()) {
             scannerVisibilityLive.setValue(true);
-        } else if(getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled()) {
+        } else if(getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args.getCloseWhenFinished()) {
             scannerVisibilityLive.setValue(true);
         }
         productsLive = new MutableLiveData<>(new ArrayList<>());

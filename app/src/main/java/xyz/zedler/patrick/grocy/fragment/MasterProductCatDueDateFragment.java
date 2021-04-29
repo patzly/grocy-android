@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -121,8 +120,16 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
                 viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
-                animated,
-                this::setUpBottomMenu
+                menuItem -> {
+                    if(menuItem.getItemId() != R.id.action_delete) return false;
+                    setForDestination(
+                            R.id.masterProductFragment,
+                            Constants.ARGUMENT.ACTION,
+                            Constants.ACTION.DELETE
+                    );
+                    activity.onBackPressed();
+                    return true;
+                }
         );
         activity.updateFab(
                 R.drawable.ic_round_backup,
@@ -149,21 +156,6 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
         bundle.putInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, type);
         bundle.putInt(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getDaysNumber(type));
         activity.showBottomSheet(new InputNumberBottomSheet(), bundle);
-    }
-
-    public void setUpBottomMenu() {
-        MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
-        if(delete != null) {
-            delete.setOnMenuItemClickListener(item -> {
-                setForDestination(
-                        R.id.masterProductFragment,
-                        Constants.ARGUMENT.ACTION,
-                        Constants.ACTION.DELETE
-                );
-                activity.onBackPressed();
-                return true;
-            });
-        }
     }
 
     @Override

@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
 
 public class ConsumeFragment extends BaseFragment implements ScanInputCaptureManager.BarcodeListener {
@@ -144,10 +145,15 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
             }
         });
 
-        Integer productId = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
-        if(productId != null) {
+        if(getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID) != null) {
+            int productId = (int) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
             removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
             viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
+        } else if(NumUtil.isStringInt(args.getProductId())) {
+            int productId = Integer.parseInt(args.getProductId());
+            setArguments(new ConsumeFragmentArgs.Builder(args)
+                    .setProductId(null).build().toBundle());
+            viewModel.setProduct(productId, null);
         }
 
         viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
@@ -201,8 +207,7 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
                 R.menu.menu_consume,
-                animated,
-                this::setUpBottomMenu
+                this::onMenuItemClick
         );
         activity.updateFab(
                 R.drawable.ic_round_consume_product,
@@ -385,15 +390,9 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
         }*/
     }
 
-    private void setUpBottomMenu() {
-        MenuItem menuItemDetails, menuItemClear, menuItemOpen;
-        menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
-        menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
-        menuItemOpen = activity.getBottomMenu().findItem(R.id.action_open);
-        if(menuItemDetails == null || menuItemClear == null || menuItemOpen == null) return;
-
-        menuItemDetails.setOnMenuItemClickListener(item -> {
-            IconUtil.start(menuItemDetails);
+    private boolean onMenuItemClick(MenuItem item) {
+        if(item.getItemId() == R.id.action_product_overview) {
+            IconUtil.start(item);
             if(!viewModel.getFormData().isProductNameValid()) return false;
             activity.showBottomSheet(
                     new ProductOverviewBottomSheet(),
@@ -402,9 +401,8 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                     ).build().toBundle()
             );
             return true;
-        });
-        menuItemClear.setOnMenuItemClickListener(item -> {
-            IconUtil.start(menuItemClear);
+        } else if(item.getItemId() == R.id.action_clear_form) {
+            IconUtil.start(item);
             clearInputFocus();
             viewModel.getFormData().clearForm();
             if(viewModel.getFormData().isScannerVisible()) {
@@ -412,15 +410,15 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
                 capture.decode();
             }
             return true;
-        });
-        menuItemOpen.setOnMenuItemClickListener(item -> {
+        } else if(item.getItemId() == R.id.action_open) {
             if(viewModel.isQuickModeEnabled()) {
                 focusNextInvalidView();
             } else {
                 viewModel.consumeProduct(true);
             }
             return true;
-        });
+        }
+        return false;
     }
 
     @NonNull

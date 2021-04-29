@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -125,8 +124,16 @@ public class MasterProductCatLocationFragment extends BaseFragment {
         activity.updateBottomAppBar(
                 Constants.FAB.POSITION.END,
                 viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
-                animated,
-                this::setUpBottomMenu
+                menuItem -> {
+                    if(menuItem.getItemId() != R.id.action_delete) return false;
+                    setForDestination(
+                            R.id.masterProductFragment,
+                            Constants.ARGUMENT.ACTION,
+                            Constants.ACTION.DELETE
+                    );
+                    activity.onBackPressed();
+                    return true;
+                }
         );
         activity.updateFab(
                 R.drawable.ic_round_backup,
@@ -177,21 +184,6 @@ public class MasterProductCatLocationFragment extends BaseFragment {
         int storeId = store != null ? store.getId() : -1;
         bundle.putInt(Constants.ARGUMENT.SELECTED_ID, storeId);
         activity.showBottomSheet(new StoresBottomSheet(), bundle);
-    }
-
-    public void setUpBottomMenu() {
-        MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
-        if(delete != null) {
-            delete.setOnMenuItemClickListener(item -> {
-                setForDestination(
-                        R.id.masterProductFragment,
-                        Constants.ARGUMENT.ACTION,
-                        Constants.ACTION.DELETE
-                );
-                activity.onBackPressed();
-                return true;
-            });
-        }
     }
 
     @Override

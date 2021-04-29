@@ -310,56 +310,6 @@ public class MasterObjectListFragment extends BaseFragment
         );
     }
 
-    private void filterProductGroup(ProductGroup productGroup) {
-        /*if(filterProductGroupId != productGroup.getId()) {
-            if(debug) Log.i(TAG, "filterProductGroup: " + productGroup);
-            filterProductGroupId = productGroup.getId();
-            if(inputChipFilterProductGroup != null) {
-                inputChipFilterProductGroup.changeText(productGroup.getName());
-            } else {
-                inputChipFilterProductGroup = new InputChip(
-                        activity,
-                        productGroup.getName(),
-                        R.drawable.ic_round_category,
-                        true,
-                        () -> {
-                            filterProductGroupId = -1;
-                            inputChipFilterProductGroup = null;
-                            filterProducts();
-                        });
-                binding.linearMasterProductsFilterContainer.addView(inputChipFilterProductGroup);
-            }
-            filterObjects();
-        } else {
-            if(debug) Log.i(TAG, "filterProductGroup: " + productGroup + " already filtered");
-        }*/
-    }
-
-    /**
-     * Sets the product group filter without filtering
-     */
-    private void updateProductGroupFilter(int filterProductGroupId) {
-        /*ProductGroup productGroup = productGroupsMap.get(filterProductGroupId);
-        if(productGroup == null) return;
-
-        this.filterProductGroupId = filterProductGroupId;
-        if(inputChipFilterProductGroup != null) {
-            inputChipFilterProductGroup.changeText(productGroup.getName());
-        } else {
-            inputChipFilterProductGroup = new InputChip(
-                    activity,
-                    productGroup.getName(),
-                    R.drawable.ic_round_category,
-                    true,
-                    () -> {
-                        this.filterProductGroupId = -1;
-                        inputChipFilterProductGroup = null;
-                        filterProducts();
-                    });
-            binding.linearMasterProductsFilterContainer.addView(inputChipFilterProductGroup);
-        }*/
-    }
-
     public void setUpBottomMenu() {
         // sorting
         MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);

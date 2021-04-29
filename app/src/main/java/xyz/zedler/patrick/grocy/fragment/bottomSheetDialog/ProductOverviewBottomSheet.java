@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuCompat;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -188,23 +189,21 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_purchase) {
-				activity.showMessage(R.string.msg_not_implemented_yet);
-				/*NavHostFragment.findNavController(this).navigate(
+				NavHostFragment.findNavController(this).navigate(
 						ProductOverviewBottomSheetDirections
 								.actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
 								.setCloseWhenFinished(true)
-								.setProductName(product.getName())
-				);*/
+								.setProductId(String.valueOf(product.getId()))
+				);
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_consume) {
-				activity.showMessage(R.string.msg_not_implemented_yet);
-				/*NavHostFragment.findNavController(this).navigate(
+				NavHostFragment.findNavController(this).navigate(
 						ProductOverviewBottomSheetDirections
 								.actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
 								.setCloseWhenFinished(true)
-								.setProductName(product.getName())
-				);*/
+								.setProductId(String.valueOf(product.getId()))
+				);
 				dismiss();
 				return true;
 			} else if(item.getItemId() == R.id.action_edit_product) {

@@ -75,8 +75,6 @@ public class FormDataConsume {
     private final MutableLiveData<Boolean> useSpecificLive;
     private ArrayList<StockEntry> stockEntries;
     private final MutableLiveData<StockEntry> specificStockEntryLive;
-    /*private final MutableLiveData<Recipe> recipeLive;
-    private final LiveData<String> recipeNameLive;*/
     private boolean torchOn = false;
 
     public FormDataConsume(
@@ -91,9 +89,9 @@ public class FormDataConsume {
                 Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
         ));
         scannerVisibilityLive = new MutableLiveData<>(false);
-        if(args.getStartWithScanner() && !getExternalScannerEnabled()) {
+        if(args.getStartWithScanner() && !getExternalScannerEnabled() && !args.getCloseWhenFinished()) {
             scannerVisibilityLive.setValue(true);
-        } else if(getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled()) {
+        } else if(getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args.getCloseWhenFinished()) {
             scannerVisibilityLive.setValue(true);
         }
         productsLive = new MutableLiveData<>(new ArrayList<>());

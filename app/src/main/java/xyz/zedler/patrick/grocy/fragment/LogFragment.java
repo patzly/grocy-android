@@ -81,8 +81,7 @@ public class LogFragment extends BaseFragment {
             activity.updateBottomAppBar(
                     Constants.FAB.POSITION.GONE,
                     R.menu.menu_log,
-                    true,
-                    this::setUpBottomMenu
+                    this::onMenuItemClick
             );
         }
 
@@ -143,20 +142,15 @@ public class LogFragment extends BaseFragment {
                 "Choreographer:S ";
     }
 
-    public void setUpBottomMenu() {
-        MenuItem menuItemRefresh, menuItemFeedback;
-        menuItemRefresh = activity.getBottomMenu().findItem(R.id.action_refresh);
-        menuItemFeedback = activity.getBottomMenu().findItem(R.id.action_feedback);
-        if(menuItemRefresh == null || menuItemFeedback == null) return;
-
-        menuItemRefresh.setOnMenuItemClickListener(item -> {
+    private boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.action_refresh) {
             new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
             return true;
-        });
-        menuItemFeedback.setOnMenuItemClickListener(item -> {
-            IconUtil.start(menuItemFeedback);
+        } else if (item.getItemId() == R.id.action_feedback) {
+            IconUtil.start(item);
             activity.showBottomSheet(new FeedbackBottomSheet(), null);
             return true;
-        });
+        }
+        return false;
     }
 }
