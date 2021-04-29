@@ -404,6 +404,7 @@
                         android:layout_marginEnd="@dimen/main_side_margin"
                         android:layout_marginBottom="8dp"
                         android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
+                        android:onLongClickVoid="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
                         app:clickUtil="@{clickUtil}">
 
                         <LinearLayout
