@@ -26,15 +26,6 @@
     app:startDestination="@id/overviewStartFragment">
 
     <fragment
-        android:id="@+id/stockFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.StockFragment"
-        android:label="StockFragment"
-        tools:layout="@layout/fragment_stock" >
-        <action
-            android:id="@+id/action_stockFragment_to_productOverviewBottomSheetDialogFragment"
-            app:destination="@id/productOverviewBottomSheetDialogFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/purchaseFragment"
         android:name="xyz.zedler.patrick.grocy.fragment.PurchaseFragment"
         android:label="PurchaseFragment"

@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -523,6 +524,11 @@ public class StockOverviewFragment extends BaseFragment implements
         activity.showSnackbar(
                 Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
         );
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
     }
 
     @NonNull
