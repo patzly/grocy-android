@@ -350,10 +350,6 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
     }
 
     public void focusNextInvalidView() {
-        if(!viewModel.isQuickModeEnabled()) {
-            clearInputFocus();
-            return;
-        }
         EditText nextView = null;
         if(!viewModel.getFormData().isProductNameValid()) {
             nextView = binding.autoCompleteConsumeProduct;
@@ -384,7 +380,11 @@ public class ConsumeFragment extends BaseFragment implements ScanInputCaptureMan
 
     @Override
     public void onBottomSheetDismissed() {
-        focusNextInvalidView();
+        if(!viewModel.isQuickModeEnabled()) {
+            clearInputFocus();
+        } else {
+            focusNextInvalidView();
+        }
     }
 
     private void hideDisabledFeatures() {

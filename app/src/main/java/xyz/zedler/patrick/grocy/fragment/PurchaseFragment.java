@@ -354,10 +354,6 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
     }
 
     public void focusNextInvalidView() {
-        if(!viewModel.isQuickModeEnabled()) {
-            clearInputFocus();
-            return;
-        }
         View nextView = null;
         if(!viewModel.getFormData().isProductNameValid()) {
             nextView = binding.autoCompletePurchaseProduct;
@@ -392,7 +388,11 @@ public class PurchaseFragment extends BaseFragment implements ScanInputCaptureMa
 
     @Override
     public void onBottomSheetDismissed() {
-        focusNextInvalidView();
+        if(!viewModel.isQuickModeEnabled()) {
+            clearInputFocus();
+        } else {
+            focusNextInvalidView();
+        }
     }
 
     private void fillWithShoppingListItem(int itemPos) {

@@ -6,6 +6,7 @@
 - Improved: Long-tap on shopping list card on start page to open shopping mode
 - Improved: Shopping list item edit page has the camera scanner frame now
 - Improved: Up and down page animations
+- Improved: Focus product field after unknown barcode was scanned
 - Fixed: Swipe buttons in stock overview didn't work for last two items
 - Fixed: Menu items on bottom were not clickable sometimes (#383)
 - Fixed: Parent product field is locked if product is already parent product (#349)

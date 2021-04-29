@@ -328,7 +328,7 @@ public class ConsumeViewModel extends BaseViewModel {
         } else {
             formData.getBarcodeLive().setValue(barcode);
             formData.isFormValid();
-            if(isQuickModeEnabled()) sendEvent(Event.FOCUS_INVALID_VIEWS);
+            sendEvent(Event.FOCUS_INVALID_VIEWS);
         }
     }
 
