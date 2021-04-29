@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -92,6 +93,8 @@ public class BaseFragment extends Fragment {
     public void clearFields() {}
 
     public void editObject(Object object) {}
+
+    public void copyProduct(Product product) {}
 
     public void deleteObjectSafely(Object object) {}
 

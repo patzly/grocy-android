@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             app:contentInsetStart="12dp"
-            app:menu="@menu/menu_actions_master_item" />
+            app:menu="@menu/menu_actions_master_product" />
 
     </LinearLayout>
 

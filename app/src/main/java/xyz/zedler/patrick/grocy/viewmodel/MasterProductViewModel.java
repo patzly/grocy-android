@@ -109,6 +109,10 @@ public class MasterProductViewModel extends BaseViewModel {
                     }
                 });
             }
+        } else if(args.getProduct() != null) {
+            Product product = args.getProduct();
+            product.setName(null);
+            setCurrentProduct(product);
         } else {
             Product product = new Product(sharedPrefs);
             if(args.getProductName() != null) {

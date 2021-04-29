@@ -31,6 +31,12 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
+        android:id="@+id/action_copy"
+        android:title="@string/action_copy"
+        android:icon="@drawable/ic_round_category"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_edit"
         android:title="@string/action_edit"
         android:icon="@drawable/ic_round_edit"

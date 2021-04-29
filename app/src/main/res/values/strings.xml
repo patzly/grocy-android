@@ -71,6 +71,7 @@
     <string name="action_undo">Undo</string>
     <string name="action_retry">Retry</string>
     <string name="action_edit">Edit</string>
+    <string name="action_copy">Copy</string>
     <string name="action_proceed">Proceed</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>

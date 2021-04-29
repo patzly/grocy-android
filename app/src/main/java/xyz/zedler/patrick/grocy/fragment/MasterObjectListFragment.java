@@ -433,6 +433,13 @@ public class MasterObjectListFragment extends BaseFragment
     }
 
     @Override
+    public void copyProduct(Product product) {
+        navigate(MasterObjectListFragmentDirections
+                .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE)
+                .setProduct(product));
+    }
+
+    @Override
     public void deleteObjectSafely(Object object) {
         viewModel.deleteObjectSafely(object);
     }

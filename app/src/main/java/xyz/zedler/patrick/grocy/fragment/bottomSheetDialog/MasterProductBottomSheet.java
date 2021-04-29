@@ -118,6 +118,8 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 			BaseFragment fragmentCurrent = activity.getCurrentFragment();
 			if(item.getItemId() == R.id.action_edit) {
 				fragmentCurrent.editObject(product);
+			} else if(item.getItemId() == R.id.action_copy) {
+				fragmentCurrent.copyProduct(product);
 			} else if(item.getItemId() == R.id.action_delete) {
 				fragmentCurrent.deleteObjectSafely(product);
 			}
