@@ -48,7 +48,7 @@ public class InputChip extends LinearLayout {
 
     private final static String TAG = "InputChip";
 
-    private Context context;
+    private final Context context;
     private LinearLayout linearLayoutThis;
     private ImageView imageViewIcon;
     private FrameLayout frameLayoutContainer, frameLayoutIcon;
@@ -64,13 +64,6 @@ public class InputChip extends LinearLayout {
         init(null, -1, false, null);
     }
 
-    public InputChip(Context context, String text, @DrawableRes int iconRes, boolean animate) {
-        super(context);
-
-        this.context = context;
-        init(text, iconRes, animate, null);
-    }
-
     public InputChip(
             Context context,
             String text,
@@ -82,29 +75,6 @@ public class InputChip extends LinearLayout {
 
         this.context = context;
         init(text, iconRes, animate, onClose);
-    }
-
-    public InputChip(
-            Context context,
-            String text,
-            boolean animate,
-            Runnable onClose
-    ) {
-        super(context);
-
-        this.context = context;
-        init(text, -1, animate, onClose);
-    }
-
-    public InputChip(
-            Context context,
-            String text,
-            boolean animate
-    ) {
-        super(context);
-
-        this.context = context;
-        init(text, -1, animate, null);
     }
 
     public InputChip(Context context, @Nullable AttributeSet attrs) {
@@ -130,9 +100,25 @@ public class InputChip extends LinearLayout {
         view.setText(text);
     }
 
+    public void setText(String text) {
+        textView.setText(text);
+        if(textAttrChange != null) textAttrChange.onChange();
+        if(text == null) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
+        }
+    }
+
     @InverseBindingAdapter(attribute = "text")
     public static String getText(InputChip view) {
         return view.getText();
+    }
+
+    public String getText() {
+        if(textView.getText() == null) return null;
+        if(textView.getText().toString().isEmpty()) return null;
+        return textView.getText().toString();
     }
 
     @BindingAdapter("textAttrChanged")
@@ -170,22 +156,6 @@ public class InputChip extends LinearLayout {
         }
     }
 
-    public void setText(String text) {
-        textView.setText(text);
-        if(textAttrChange != null) textAttrChange.onChange();
-        if(text == null) {
-            setVisibility(GONE);
-        } else {
-            setVisibility(VISIBLE);
-        }
-    }
-
-    public String getText() {
-        if(textView.getText() == null) return null;
-        if(textView.getText().toString().isEmpty()) return null;
-        return textView.getText().toString();
-    }
-
     @Override
     public void setPadding(int left, int top, int right, int bottom) {
         frameLayoutContainer.setPadding(
@@ -197,12 +167,14 @@ public class InputChip extends LinearLayout {
     }
 
     public void close() {
+        if(runnableOnClose == null) {
+            setText(null);
+            return;
+        }
         // DURATIONS
         int fade = 200, disappear = 300;
         // run action
-        if(runnableOnClose != null) {
-            new Handler().postDelayed(runnableOnClose, fade + disappear);
-        }
+        new Handler().postDelayed(runnableOnClose, fade + disappear);
         // first fade out
         frameLayoutContainer.animate().alpha(0).setDuration(fade).start();
         // then make shape disappear
@@ -237,9 +209,5 @@ public class InputChip extends LinearLayout {
         animatorWidth.setInterpolator(new FastOutSlowInInterpolator());
         animatorWidth.setStartDelay(fade);
         animatorWidth.setDuration(disappear).start();
-    }
-
-    public void changeText(String text) {
-        textView.setText(text);
     }
 }

@@ -9,6 +9,7 @@
 - Fixed: Swipe buttons in stock overview didn't work for last two items
 - Fixed: Menu items on bottom were not clickable sometimes (#383)
 - Fixed: Parent product field is locked if product is already parent product (#349)
+- Fixed: Barcode chips have not cleared the barcode when removed
 
 2.0.0-alpha06
 - New: Stock overview page now has list animations and offline loading
