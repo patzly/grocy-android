@@ -61,6 +61,64 @@
       app:argType="boolean"
       android:defaultValue="false" />
   </fragment>
+  <fragment
+    android:id="@+id/consumeFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
+    android:label="ConsumeFragmentNew"
+    tools:layout="@layout/fragment_consume">
+    <argument
+      android:name="closeWhenFinished"
+      android:defaultValue="false"
+      app:argType="boolean" />
+    <argument
+      android:name="productId"
+      android:defaultValue="@null"
+      app:argType="string"
+      app:nullable="true" />
+    <argument
+      android:name="amount"
+      android:defaultValue="@null"
+      app:argType="string"
+      app:nullable="true" />
+    <argument
+      android:name="animateStart"
+      android:defaultValue="true"
+      app:argType="boolean" />
+    <deepLink
+      android:id="@+id/deepLink4"
+      app:uri="@string/deep_link_consumeFragment" />
+    <argument
+      android:name="startWithScanner"
+      app:argType="boolean"
+      android:defaultValue="false" />
+  </fragment>
+  <fragment
+    android:id="@+id/transferFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.TransferFragment"
+    android:label="TransferFragment"
+    tools:layout="@layout/fragment_transfer">
+    <argument
+      android:name="closeWhenFinished"
+      android:defaultValue="false"
+      app:argType="boolean" />
+    <argument
+      android:name="productId"
+      android:defaultValue="@null"
+      app:argType="string"
+      app:nullable="true" />
+    <argument
+      android:name="amount"
+      android:defaultValue="@null"
+      app:argType="string"
+      app:nullable="true" />
+    <argument
+      android:name="animateStart"
+      android:defaultValue="true"
+      app:argType="boolean" />
+    <deepLink
+      android:id="@+id/deepLink6"
+      app:uri="@string/deep_link_transferFragment" />
+  </fragment>
   <activity
     android:id="@+id/settingsActivity"
     android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
@@ -482,12 +540,12 @@
       android:id="@+id/settingsCatStockFragment"
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatStockFragment"
       android:label="SettingsCatStockFragment"
-      tools:layout="@layout/fragment_settings_cat_stock"></fragment>
+      tools:layout="@layout/fragment_settings_cat_stock"/>
     <fragment
       android:id="@+id/settingsCatShoppingModeFragment"
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingModeFragment"
       android:label="SettingsCatShoppingModeFragment"
-      tools:layout="@layout/fragment_settings_cat_shopping_mode"></fragment>
+      tools:layout="@layout/fragment_settings_cat_shopping_mode"/>
     <fragment
       android:id="@+id/settingsCatNetworkFragment"
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNetworkFragment"
@@ -769,37 +827,6 @@
         app:argType="string" />
     </fragment>
   </navigation>
-  <fragment
-    android:id="@+id/consumeFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.ConsumeFragment"
-    android:label="ConsumeFragmentNew"
-    tools:layout="@layout/fragment_consume">
-    <argument
-      android:name="closeWhenFinished"
-      android:defaultValue="false"
-      app:argType="boolean" />
-    <argument
-      android:name="productId"
-      android:defaultValue="@null"
-      app:argType="string"
-      app:nullable="true" />
-    <argument
-      android:name="amount"
-      android:defaultValue="@null"
-      app:argType="string"
-      app:nullable="true" />
-    <argument
-      android:name="animateStart"
-      android:defaultValue="true"
-      app:argType="boolean" />
-    <deepLink
-      android:id="@+id/deepLink4"
-      app:uri="@string/deep_link_consumeFragment" />
-    <argument
-      android:name="startWithScanner"
-      app:argType="boolean"
-      android:defaultValue="false" />
-  </fragment>
   <fragment
     android:id="@+id/stockOverviewFragment"
     android:name="xyz.zedler.patrick.grocy.fragment.StockOverviewFragment"

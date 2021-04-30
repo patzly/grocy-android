@@ -190,7 +190,7 @@
   <string name="msg_help_external_scanner_ready">Sie können einen externen Scanner für das Feld unten verwenden, während es fokussiert und leer ist.</string>
   <string name="msg_help_external_scanner_settings">Diese App unterstützt externe Scanner-Geräte, welche wie eine Tastatur Eingaben senden und über USB oder Bluetooth verbunden werden können. Die folgenden Optionen müssen in Ihrem externen Scanner eingestellt sein:\n\nPräfix: Keines\nSuffix: TAB oder ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">Der erste Eintrag in dieser Liste würde von der Standardregel \"Geöffnete zuerst, dann zuerst fällige, dann First In - First Out\" ausgewählt werden.</string>
+  <string name="msg_help_specific_item">Der erste Eintrag in dieser Liste würde von der Standardregel \"Geöffnete zuerst, dann zuerst fällige, dann First In - First Out\" ausgewählt werden.</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Dies wird nur für Auswertezwecke benötigt.</string>
   <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>

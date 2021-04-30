@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
@@ -17,22 +17,12 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<menu
-  xmlns:tools="http://schemas.android.com/tools"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
-
-  <item
-    android:id="@+id/action_edit"
-    android:title="@string/action_edit"
-    android:icon="@drawable/ic_round_edit"
-    app:showAsAction="always" />
-
-  <item
-    android:id="@+id/action_delete"
-    android:title="@string/action_delete"
-    android:icon="@drawable/ic_round_delete_anim"
-    app:showAsAction="always"
-    tools:ignore="AlwaysShowAction" />
-
-</menu>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M6.14,11.86l-2.78,2.79c-0.19,0.2 -0.19,0.51 0,0.71l2.78,2.79c0.31,0.32 0.85,0.09 0.85,-0.35L6.99,16L13,16c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1L6.99,14v-1.79c0,-0.45 -0.54,-0.67 -0.85,-0.35zM20.65,8.65l-2.78,-2.79c-0.31,-0.32 -0.85,-0.09 -0.85,0.35L17.02,8L11,8c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h6.01v1.79c0,0.45 0.54,0.67 0.85,0.35l2.78,-2.79c0.2,-0.19 0.2,-0.51 0.01,-0.7z"
+      android:fillColor="@color/icon"/>
+</vector>

@@ -23,11 +23,10 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/action_delete"
-    android:title="@string/action_delete"
-    android:icon="@drawable/ic_round_delete_anim"
-    app:showAsAction="always"
-    tools:ignore="AlwaysShowAction" />
+    android:id="@+id/action_edit"
+    android:title="@string/action_edit"
+    android:icon="@drawable/ic_round_edit"
+    app:showAsAction="always" />
 
   <item
     android:id="@+id/action_copy"
@@ -36,9 +35,10 @@
     app:showAsAction="always" />
 
   <item
-    android:id="@+id/action_edit"
-    android:title="@string/action_edit"
-    android:icon="@drawable/ic_round_edit"
-    app:showAsAction="always" />
+    android:id="@+id/action_delete"
+    android:title="@string/action_delete"
+    android:icon="@drawable/ic_round_delete_anim"
+    app:showAsAction="always"
+    tools:ignore="AlwaysShowAction" />
 
 </menu>

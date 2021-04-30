@@ -176,7 +176,7 @@
   <string name="msg_help_external_scanner_ready">Můžete použít externí skener pro políčko níže pokud je vybrané a prázdné.</string>
   <string name="msg_help_external_scanner_settings">Tato aplikace podporuje externí skenery čárových kódů, které simulují klávesnici a mohou být připojeny přes USB nebo Bluetooth. Následující parametry musejí být nastaveny ve vašem externím skeneru:\n\nPrefix: Žádný\nSuffix: TAB nebo ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">První položka v tomto seznamu by byla vybrána automaticky, dle výchozího pravidla, které zní: \"Nejprve otevřené, poté s nejbližší expirací a pak první přidané do zásob\".</string>
+  <string name="msg_help_specific_item">První položka v tomto seznamu by byla vybrána automaticky, dle výchozího pravidla, které zní: \"Nejprve otevřené, poté s nejbližší expirací a pak první přidané do zásob\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Toto je pouze pro statistické údaje.</string>
   <string name="msg_help_loading_circle_settings">Na každé stránce, kde něco musí být načteno ze serveru, aplikace nejprve zkontroluje pomocí maličkého požadavku, zda se databáze na serveru změnila od poslední aktualizace a pouze načte zastaralá data. Zapněte volbu níže, pokud chcete zobrazit načítací kolečko i pro tyto maličké požadavky.</string>

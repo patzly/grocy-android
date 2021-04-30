@@ -25,7 +25,8 @@
   <string name="deep_link_shoppingModeFragment">grocy://shoppingModeFragment</string>
   <string name="deep_link_purchaseFragment">grocy://purchaseFragment</string>
   <string name="deep_link_consumeFragment">grocy://consumeFragment</string>
-  <string name="deep_link_batchModeFragment">grocy://batchModeFragment</string>
+  <string name="deep_link_transferFragment">grocy://transferFragment</string>
+  <string name="deep_link_inventoryFragment">grocy://inventoryFragment</string>
   <string name="deep_link_settingsFragment">grocy://settingsFragment?showCategory={showCategory}</string>
   <string name="deep_link_settingsCatServerFragment">grocy://settingsCatServerFragment</string>
   <string name="deep_link_settingsCatBehaviorFragment">grocy://settingsCatBehaviorFragment</string>

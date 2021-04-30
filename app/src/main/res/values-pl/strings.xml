@@ -176,7 +176,7 @@
   <string name="msg_help_external_scanner_ready">Możesz używać skanera zewnętrznego dla pola poniżej, jeżeli jest puste i wyostrzone.</string>
   <string name="msg_help_external_scanner_settings">Ta aplikacja wspiera skanery zewnętrzne które zachowują się jak klawiatura i mogą być podłączone przez USB lub Bluetooth. Następujące opcje muszą być skonfigurowane w twoim skanerze:\n\nPrefix: None\nSuffix: TAB lub ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">Pierwsza pozycja z tej listy zostanie wybrany za pomocą domyślnej zasady \"Najpierw otwarte, potem najbliżej terminu przydatności, potem pierwsze które zostały dodane pierwsze wychodzi\".</string>
+  <string name="msg_help_specific_item">Pierwsza pozycja z tej listy zostanie wybrany za pomocą domyślnej zasady \"Najpierw otwarte, potem najbliżej terminu przydatności, potem pierwsze które zostały dodane pierwsze wychodzi\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Służy to jedynie celom statystycznym.</string>
   <string name="msg_help_loading_circle_settings">Na każdej stronie na której jakieś dane ładowane są z serwera, aplikacja najpierw sprawdza za pomocą małego pojedynczego żądania czy baza danych została zmieniona od ostatniego razu i aktualizuje jedynie nieaktualne dane. Włącz opcję poniżej aby widzieć kółko ładowania nawet dla tego żądania.</string>

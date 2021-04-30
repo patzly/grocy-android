@@ -188,7 +188,7 @@
   <string name="msg_help_external_scanner_ready">Ви можете використовувати зовнішній сканер для поля нижче, коли на нього встановлено фокус та воно порожнє.</string>
   <string name="msg_help_external_scanner_settings">Ця програма підтримує зовнішні сканери, які виконують роль клавіатури та можуть бути підключені через USB або Bluetooth. У зовнішньому сканері мають бути налаштовані такі параметри:\n\nПрефікс: Немає\nСуфікс: TAB або ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">Перший елемент у цьому списку буде обрано за правилом за замовчуванням, яке має значення \'Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло.</string>
+  <string name="msg_help_specific_item">Перший елемент у цьому списку буде обрано за правилом за замовчуванням, яке має значення \'Спочатку відкрите, потім з найближчим терміном, а потім перше прийшло перше пішло.</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Це лише для статистичних цілей.</string>
   <string name="msg_help_quick_mode">Ви можете довго натискати на рядок заголовка вище, щоб активувати швидкий режим. У цьому режимі транзакція буде виконана негайно, якщо товар було введено або відскановано, а всі поля можуть бути автоматично заповнені (за продуктами та/або штрих-кодами за замовчуванням).</string>

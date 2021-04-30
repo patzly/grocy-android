@@ -194,7 +194,7 @@
   <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
   <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">The first item in this list would be picked by the default rule which is \"Opened first, then first due first, then first in first out\".</string>
+  <string name="msg_help_specific_item">The first item in this list would be picked by the default rule which is \"Opened first, then first due first, then first in first out\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
@@ -272,6 +272,8 @@
   <string name="title_stock_overview">Stock overview</string>
   <string name="title_purchase">Purchase</string>
   <string name="title_consume">Consume</string>
+  <string name="title_transfer">Transfer</string>
+  <string name="title_inventory">Inventory</string>
   <string name="title_barcode_input">Barcode input</string>
   <string name="title_product_overview">Product overview</string>
   <string name="title_product">Product</string>
@@ -308,6 +310,10 @@
   <string name="title_specific">Specific stock item</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Consume exact amount</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">From location</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">To location</string>
   <string name="title_recipe">Recipe</string>
   <string name="title_total_price">Total price</string>
   <string name="title_unit_price">Unit price</string>

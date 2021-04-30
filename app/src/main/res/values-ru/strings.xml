@@ -180,7 +180,7 @@
   <string name="msg_help_external_scanner_ready">Вы можете использовать внешний сканер для поля ниже, пока оно активно и не заполнено.</string>
   <string name="msg_help_external_scanner_settings">Это приложение поддерживает внешние сканеры, которые действуют как клавиатура и могут быть подключены через USB или Bluetooth. Во внешнем сканере должны быть настроены следующие параметры:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">Первый элемент в этом списке будет выбран по правилу \"сначала вскрытый, потом с меньшим сроком годности, остальные по очереди\".</string>
+  <string name="msg_help_specific_item">Первый элемент в этом списке будет выбран по правилу \"сначала вскрытый, потом с меньшим сроком годности, остальные по очереди\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Это только для статистических целей.</string>
   <string name="msg_help_quick_mode">Нажмите и удерживайте панель заголовка, чтобы включить быстрый режим. В этом режиме операция будет выполнена немедленно при вводе или сканировании продукта, если удастся автоматически заполнить все поля (значениями по умолчанию для продукта и/или штрихкода).</string>

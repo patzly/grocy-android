@@ -438,7 +438,7 @@
               android:orientation="horizontal"
               android:paddingStart="@dimen/main_side_margin"
               android:paddingEnd="@dimen/main_side_margin"
-              android:paddingBottom="16dp"
+              android:paddingBottom="8dp"
               android:clipToPadding="false"
               android:clipChildren="false">
 
@@ -500,6 +500,81 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_purchase" />
+
+                </LinearLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:paddingStart="@dimen/main_side_margin"
+              android:paddingEnd="@dimen/main_side_margin"
+              android:paddingBottom="16dp"
+              android:clipToPadding="false"
+              android:clipChildren="false">
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card"
+                android:layout_width="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:onClick="@{() -> fragment.navigate(R.id.transferFragment)}"
+                app:clickUtil="@{clickUtil}">
+
+                <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="center_horizontal"
+                  tools:ignore="UseCompoundDrawables">
+
+                  <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_round_swap_horiz"
+                    tools:ignore="ContentDescription,TooDeepLayout" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_transfer" />
+
+                </LinearLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
+                app:clickUtil="@{clickUtil}">
+
+                <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="center_horizontal"
+                  tools:ignore="UseCompoundDrawables">
+
+                  <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_round_inventory"
+                    tools:ignore="ContentDescription,TooDeepLayout" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_inventory" />
 
                 </LinearLayout>
 

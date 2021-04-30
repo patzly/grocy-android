@@ -176,7 +176,7 @@
   <string name="msg_help_external_scanner_ready">Puoi utilizzare uno scanner esterno per il campo sottostante mentre è selezionato e vuoto.</string>
   <string name="msg_help_external_scanner_settings">Questa applicazione supporta dispositivi di scansione esterni che agiscono come tastiere e possono essere connessi via USB o Bluetooth. Le seguenti opzioni devono essere configurate nel tuo scanner esterno:\n\nPrefisso: Nessuno\nSuffisso: TAB o INVIO</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">Il primo oggetto in questa lista sarà selezionato dalla regola predefinita che è \"Aperto per primo, quindi da consumarsi per primo, ovvero aggiunto prima uscito prima\".</string>
+  <string name="msg_help_specific_item">Il primo oggetto in questa lista sarà selezionato dalla regola predefinita che è \"Aperto per primo, quindi da consumarsi per primo, ovvero aggiunto prima uscito prima\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Usato solo per motivi statistici.</string>
   <string name="msg_help_loading_circle_settings">Su ogni pagina, l\'app invia una richiesta al server per trovare eventuali cambiamenti nel database. Abilita questa opzione se vuoi visualizzare il cerchio di caricamento anche per questa richiesta.</string>

@@ -176,7 +176,7 @@
   <string name="msg_help_external_scanner_ready">Pode usar um scanner externo para o campo abaixo enquanto estiver seleccionado e vazio.</string>
   <string name="msg_help_external_scanner_settings">Esta applicação suporta dispositivos de scanner externos que podem ser usados como teclado e podem ser connectados por USB ou Bluetooth. As seguintes opções tem que ser configuradas no scanner externo:\n\nPrefixo: Nenhum\nSufixo: TAB ou ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">O primeiro item nesta lista seria seleccionado de acordo com a regra por defeito que é \"Aberto primeiro, depois primeiro a expirar primeiro,depois primeiro a entrar primerio a sair\".</string>
+  <string name="msg_help_specific_item">O primeiro item nesta lista seria seleccionado de acordo com a regra por defeito que é \"Aberto primeiro, depois primeiro a expirar primeiro,depois primeiro a entrar primerio a sair\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Isto é apenas para análise estatistica.</string>
   <string name="msg_help_loading_circle_settings">Em cada página em que algo tem que ser carregado do servidor, a aplicação confirma primeiro com um pequeno pedido se a base de dados foi modificada desde a última vez e apenas actualiza os dados desactualizados. Active a opção em baixo para mostrar a animação de carregamento mesmo para este pequeno pedido.</string>

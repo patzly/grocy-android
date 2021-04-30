@@ -174,7 +174,7 @@
   <string name="msg_help_external_scanner_ready">Je kan een externe scanner gebruiken voor het veld hieronder als het geselecteerd is en leeg.</string>
   <string name="msg_help_external_scanner_settings">Deze app ondersteunt externe scanner apparaten die zich voordoen als toetsenbord en verbonden kunnen worden via USB of Bluetooth. De volgende opties moeten worden ingesteld in de externe scanner:\n\nVoorvoegsel: Geen\nAchtervoegsel: TAB of ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">Het eerste item in deze lijst wordt gekozen met de standaardregel: \"Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit\".</string>
+  <string name="msg_help_specific_item">Het eerste item in deze lijst wordt gekozen met de standaardregel: \"Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Dit is alleen voor de statistiek</string>
   <string name="msg_help_loading_circle_settings">Op elke pagina waar gegevens van de server geladen moeten worden controleert de app eerst met een klein verzoek of de gegevens op de server veranderd zijn en wisselt alleen de nieuwe gegevens uit. Activeer de optie hieronder om ook een laadcirkel weer te geven voor dit kleine verzoek.</string>

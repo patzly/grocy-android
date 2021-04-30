@@ -176,7 +176,7 @@
   <string name="msg_help_external_scanner_ready">您可以在下面的字段聚焦且空白时使用外部扫描仪。</string>
   <string name="msg_help_external_scanner_settings">此应用支持外部扫描仪设备，可作为键盘，可以通过USB或蓝牙连接。必须在外部扫描仪中配置以下选项：\n\n Prefix: None \n Suffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item_consume">此列表中的第一个项目将由“首先打开，然后先到期，然后先进先出 ”的默认规则。</string>
+  <string name="msg_help_specific_item">此列表中的第一个项目将由“首先打开，然后先到期，然后先进先出 ”的默认规则。</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">这仅用于统计目的。</string>
   <string name="msg_help_loading_circle_settings">在必须从服务器加载的每个页面上，应用程序首先用微小的请求检查服务器数据库是否自上次更改并仅更新过时的数据。即使对于此小型请求，请启用下面的选项以显示加载圆圈。</string>
