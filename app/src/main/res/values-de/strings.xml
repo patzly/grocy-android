@@ -25,6 +25,9 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Verbrauchen</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Umlagern</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Alles verbrauchen</string>
 
@@ -68,6 +71,7 @@
   <string name="action_undo">Rückgängig</string>
   <string name="action_retry">Wiederholen</string>
   <string name="action_edit">Bearbeiten</string>
+  <string name="action_copy">Kopieren</string>
   <string name="action_proceed">Weiter</string>
   <string name="action_delete">Löschen</string>
   <string name="action_save">Speichern</string>
@@ -108,13 +112,18 @@
   <string name="msg_missing_products">%1$d unter Mindestbestand</string>
   <!-- %1$s is the number of products which are in stock -->
   <string name="msg_in_stock_products">%1$d im Bestand</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">%1$s %2$s %3$s aus dem Bestand entfernt</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">%1$s %2$s %3$s als verdorben aus dem Bestand entfernt</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%1$s %2$s %3$s als geöffnet markiert</string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d unerledigt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">%1$s %2$s %3$s umgelagert</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s ist nicht im Bestand</string>
   <string name="msg_no_connection">Keine Verbindung</string>
@@ -139,12 +148,15 @@
   <string name="msg_master_delete_product">Produkt \"%1$s\" wirklich löschen?\n\nDadurch wird auch der Bestand, das Journal und alle anderen Referenzen dieses Produkts entfernt - ziehe stattdessen in Betracht, dieses Produkt zu deaktivieren, wenn du dies behalten und nur das Produkt ausblenden willst.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
+  <string name="msg_transfer_tare_weight">Produkte mit aktivierter Taragewichtbehandlung können aktuell nicht umgelagert werden.</string>
   <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s umlagern\nVon Standort: %4$s\nNach Standort: %5$s</string>
   <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
   <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
   <string name="msg_logout_demo">Sie verwenden den öffentlichen Demo-Server <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (einmal täglich).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
@@ -268,6 +280,8 @@
   <string name="title_stock_overview">Bestand</string>
   <string name="title_purchase">Einkauf</string>
   <string name="title_consume">Verbrauch</string>
+  <string name="title_transfer">Umlagern</string>
+  <string name="title_inventory">Inventur</string>
   <string name="title_barcode_input">Barcode-Eingabe</string>
   <string name="title_product_overview">Produktübersicht</string>
   <string name="title_product">Produkt</string>
@@ -298,6 +312,10 @@
   <string name="title_specific">Bestimmter Bestandseintrag</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Exakte Menge verbrauchen</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Von Standort</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Nach Standort</string>
   <string name="title_recipe">Rezept</string>
   <string name="title_total_price">Gesamtpreis</string>
   <string name="title_unit_price">Einzelpreis</string>
@@ -665,4 +683,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://de.demo.grocy.info</string>
-</resources>
+  </resources>
