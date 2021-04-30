@@ -68,6 +68,7 @@
   <string name="action_undo">Скасувати</string>
   <string name="action_retry">Повторити</string>
   <string name="action_edit">Редагувати</string>
+  <string name="action_copy">Копіювати</string>
   <string name="action_proceed">Приступити</string>
   <string name="action_delete">Видалити</string>
   <string name="action_save">Зберегти</string>
@@ -162,6 +163,8 @@
   <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">На сторінці огляду запасів перераховані всі товари, які зараз є на складі або їх менше мін. кількості. Увімкніть це, щоб завжди приховувати цей продукт там.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Цей продукт не може мати батьківський продукт, оскільки він уже використовується як батьківський продукт в іншому продукті.</string>
   <string name="msg_help_due_date_type">Залежно від вибраного типу терміну, підсвічування на сторінці огляду запасів буде різним. \"Краще вжити до\" означає, що продукт, можливо, все ще безпечний для споживання після закінчення його терміну. «Термін придатності» означає, що продукт не є безпечним для споживання після закінчення його терміну.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Для покупок ця кількість днів буде додана до сьогоднішнього дня для пропозиції терміну (-1 означає, що цей продукт ніколи не буде прострочений).</string>
@@ -266,6 +269,8 @@
   <string name="title_stock_overview">Огляд запасів</string>
   <string name="title_purchase">Купувати</string>
   <string name="title_consume">Спожити</string>
+  <string name="title_transfer">Переміщення</string>
+  <string name="title_inventory">Інвентаризація</string>
   <string name="title_barcode_input">Введення штрих-коду</string>
   <string name="title_product_overview">Огляд продукту</string>
   <string name="title_product">Продукт</string>
@@ -296,6 +301,10 @@
   <string name="title_specific">Конкретный запас</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Споживати точну кількість</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">З місця зберігання</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">До місця зберігання</string>
   <string name="title_recipe">Рецепт</string>
   <string name="title_total_price">Загальна ціна</string>
   <string name="title_unit_price">Ціна одиниці</string>
@@ -703,4 +712,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://en.demo.grocy.info</string>
-</resources>
+  </resources>
