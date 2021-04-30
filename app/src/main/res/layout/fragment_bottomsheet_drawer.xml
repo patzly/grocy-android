@@ -92,81 +92,53 @@
         android:id="@+id/divider_drawer_shopping_list"
         style="@style/Theme.Grocy.Divider" />
 
-      <!--<LinearLayout
-          android:id="@+id/linear_drawer_recipes"
-          style="@style/Theme.Grocy.DrawerItem">
+      <LinearLayout
+        android:id="@+id/linear_drawer_consume"
+        style="@style/Widget.Grocy.LinearLayout.Drawer">
 
-          <ImageView
-              style="@style/Theme.Grocy.DrawerItem.Icon"
-              android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_pasta" />
+        <ImageView
+          style="@style/Widget.Grocy.ImageView.Drawer"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_consume_product" />
 
-          <TextView
-              android:id="@+id/text_drawer_recipes"
-              style="@style/Theme.Grocy.DrawerItem.Text"
-              android:text="Recipes" />
+        <TextView
+          android:id="@+id/text_drawer_consume"
+          style="@style/Widget.Grocy.TextView.DrawerItem"
+          android:text="@string/title_consume" />
 
-      </LinearLayout>-->
+      </LinearLayout>
 
-      <!--<LinearLayout
-          android:id="@+id/linear_drawer_meal_plan"
-          style="@style/Theme.Grocy.DrawerItem">
+      <LinearLayout
+        android:id="@+id/linear_drawer_purchase"
+        style="@style/Widget.Grocy.LinearLayout.Drawer">
 
-          <ImageView
-              style="@style/Theme.Grocy.DrawerItem.Icon"
-              android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_copyright_anim" />
+        <ImageView
+          style="@style/Widget.Grocy.ImageView.Drawer"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_local_grocery_store" />
 
-          <TextView
-              android:id="@+id/text_drawer_meal_plan"
-              style="@style/Theme.Grocy.DrawerItem.Text"
-              android:text="Meal plan" />
+        <TextView
+          android:id="@+id/text_drawer_purchase"
+          style="@style/Widget.Grocy.TextView.DrawerItem"
+          android:text="@string/title_purchase" />
 
-      </LinearLayout>-->
+      </LinearLayout>
 
-      <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+      <LinearLayout
+        android:id="@+id/linear_drawer_transfer"
+        style="@style/Widget.Grocy.LinearLayout.Drawer">
 
-        <LinearLayout
-          android:id="@+id/linear_drawer_consume"
-          style="@style/Widget.Grocy.LinearLayout.Drawer">
+        <ImageView
+          style="@style/Widget.Grocy.ImageView.Drawer"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_swap_horiz" />
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Drawer"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_consume_product" />
+        <TextView
+          android:id="@+id/text_drawer_transfer"
+          style="@style/Widget.Grocy.TextView.DrawerItem"
+          android:text="@string/title_transfer" />
 
-          <TextView
-            android:id="@+id/text_drawer_consume"
-            style="@style/Widget.Grocy.TextView.DrawerItem"
-            android:text="@string/title_consume" />
-
-        </LinearLayout>
-
-      </FrameLayout>
-
-      <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-          android:id="@+id/linear_drawer_purchase"
-          style="@style/Widget.Grocy.LinearLayout.Drawer">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Drawer"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_local_grocery_store" />
-
-          <TextView
-            android:id="@+id/text_drawer_purchase"
-            style="@style/Widget.Grocy.TextView.DrawerItem"
-            android:text="@string/title_purchase" />
-
-        </LinearLayout>
-
-      </FrameLayout>
+      </LinearLayout>
 
       <View style="@style/Theme.Grocy.Divider" />
 

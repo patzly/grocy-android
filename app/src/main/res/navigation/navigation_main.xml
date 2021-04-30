@@ -178,6 +178,9 @@
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_purchaseFragment"
       app:destination="@id/purchaseFragment" />
     <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_transferFragment"
+      app:destination="@id/transferFragment" />
+    <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsActivity"
       app:destination="@id/settingsActivity" />
     <action

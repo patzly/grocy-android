@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.SettingsFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
+import xyz.zedler.patrick.grocy.fragment.TransferFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
@@ -88,6 +89,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         binding.linearDrawerShoppingList,
         binding.linearDrawerConsume,
         binding.linearDrawerPurchase,
+        binding.linearDrawerTransfer,
         binding.linearDrawerMasterData,
         binding.linearDrawerSettings,
         binding.linearDrawerFeedback,
@@ -109,6 +111,8 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       select(binding.linearDrawerConsume, binding.textDrawerConsume);
     } else if (currentFragment instanceof PurchaseFragment) {
       select(binding.linearDrawerPurchase, binding.textDrawerPurchase);
+    } else if (currentFragment instanceof TransferFragment) {
+      select(binding.linearDrawerTransfer, binding.textDrawerTransfer);
     } else if (currentFragment instanceof MasterObjectListFragment) {
       select(binding.linearDrawerMasterData, binding.textDrawerMasterData);
     } else if (currentFragment instanceof SettingsFragment) {
@@ -143,6 +147,9 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
     } else if (v.getId() == R.id.linear_drawer_purchase) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
+    } else if (v.getId() == R.id.linear_drawer_transfer) {
+      navigateCustom(DrawerBottomSheetDirections
+          .actionDrawerBottomSheetDialogFragmentToTransferFragment());
     } else if (v.getId() == R.id.linear_drawer_master_data) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());
