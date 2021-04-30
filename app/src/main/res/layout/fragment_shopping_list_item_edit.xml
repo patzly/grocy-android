@@ -129,7 +129,7 @@
               android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}">
 
               <ImageView
-                android:id="@+id/image_shopping_list_item_edit_shopping_list"
+                android:id="@+id/image_shopping_list"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 android:src="@drawable/ic_round_shopping_list"
                 tools:ignore="ContentDescription" />
@@ -191,7 +191,7 @@
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_shopping_list_item_edit_product"
+                android:id="@+id/text_input_product"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_round_barcode_scan"
@@ -205,7 +205,7 @@
                 app:errorText="@{formData.productNameErrorLive}">
 
                 <xyz.zedler.patrick.grocy.view.CustomAutoCompleteTextView
-                  android:id="@+id/auto_complete_shopping_list_item_edit_product"
+                  android:id="@+id/auto_complete_product"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"
@@ -288,16 +288,18 @@
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                  android:id="@+id/text_input_shopping_list_item_edit_amount"
+                  android:id="@+id/text_input_amount"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                   android:hint="@{formData.amountHintLive ?? @string/property_amount}"
                   app:helperTextEnabled="true"
                   app:helperText="@{formData.amountHelperLive ?? ` `}"
                   app:helperTextTextColor="@color/retro_blue_fg"
-                  app:errorText="@{formData.amountErrorLive}">
+                  app:errorText="@{formData.amountErrorLive}"
+                  app:endIconMode="clear_text"
+                  app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">
 
                   <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_shopping_list_item_edit_amount"
+                    android:id="@+id/edit_text_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number|numberDecimal"
@@ -343,20 +345,20 @@
               android:paddingBottom="0dp">
 
               <ImageView
-                android:id="@+id/image_shopping_list_item_edit_note"
+                android:id="@+id/image_note"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
                 android:src="@drawable/ic_round_subject_anim"
                 android:layout_marginTop="16sp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_shopping_list_item_edit_note"
+                android:id="@+id/text_input_note"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                 android:hint="@string/property_note"
                 app:errorText="@{formData.noteErrorLive}">
 
                 <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_shopping_list_item_edit_note"
+                  android:id="@+id/edit_text_note"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"

@@ -337,11 +337,16 @@ public class ConsumeFragment extends BaseFragment implements
       }
   }
 
+  public void clearAmountFieldAndFocusIt() {
+    binding.editTextAmount.setText("");
+    activity.showKeyboard(binding.editTextAmount);
+  }
+
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.autoCompleteConsumeProduct.clearFocus();
     binding.quantityUnitContainer.clearFocus();
-    binding.textInputShoppingListItemEditAmount.clearFocus();
+    binding.textInputAmount.clearFocus();
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -379,7 +384,7 @@ public class ConsumeFragment extends BaseFragment implements
     if (!viewModel.getFormData().isProductNameValid()) {
       nextView = binding.autoCompleteConsumeProduct;
     } else if (!viewModel.getFormData().isAmountValid()) {
-      nextView = binding.editTextShoppingListItemEditAmount;
+      nextView = binding.editTextAmount;
     }
     if (nextView == null) {
       clearInputFocus();

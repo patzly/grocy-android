@@ -412,17 +412,12 @@ public class FormDataPurchase {
     }
   }
 
-  public String getTransactionSuccessMsg() {
-    double amountAdded = Double.parseDouble(amountStockLive.getValue());
-    if (isTareWeightEnabled()) {
-      amountAdded -= productDetailsLive.getValue().getStockAmount();
-      amountAdded -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
-    }
+  public String getTransactionSuccessMsg(double amountPurchased) {
     QuantityUnit stock = quantityUnitStockLive.getValue();
     return application.getString(
         R.string.msg_purchased,
-        NumUtil.trim(amountAdded),
-        amountAdded == 1 ? stock.getName() : stock.getNamePlural(),
+        NumUtil.trim(amountPurchased),
+        amountPurchased == 1 ? stock.getName() : stock.getNamePlural(),
         productDetailsLive.getValue().getProduct().getName()
     );
   }
@@ -763,7 +758,7 @@ public class FormDataPurchase {
       }
     } catch (JSONException e) {
       if (isDebuggingEnabled()) {
-        Log.e(TAG, "purchaseProduct: " + e);
+        Log.e(TAG, "getFilledJSONObject: " + e);
       }
     }
     return json;

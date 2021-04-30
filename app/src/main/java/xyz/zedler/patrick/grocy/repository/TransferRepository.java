@@ -23,6 +23,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -41,6 +42,7 @@ public class TransferRepository {
     void actionFinished(
         ArrayList<Product> products,
         ArrayList<ProductBarcode> barcodes,
+        ArrayList<Location> locations,
         ArrayList<QuantityUnit> quantityUnits,
         ArrayList<QuantityUnitConversion> quantityUnitConversions
     );
@@ -62,6 +64,7 @@ public class TransferRepository {
 
     private ArrayList<Product> products;
     private ArrayList<ProductBarcode> barcodes;
+    private ArrayList<Location> locations;
     private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<QuantityUnitConversion> quantityUnitConversions;
 
@@ -75,6 +78,7 @@ public class TransferRepository {
     protected final Void doInBackground(Void... params) {
       products = new ArrayList<>(appDatabase.productDao().getAll());
       barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
+      locations = new ArrayList<>(appDatabase.locationDao().getAll());
       quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
       quantityUnitConversions
           = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
@@ -84,7 +88,7 @@ public class TransferRepository {
     @Override
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
-        listener.actionFinished(products, barcodes,
+        listener.actionFinished(products, barcodes, locations,
             quantityUnits, quantityUnitConversions);
       }
     }
@@ -93,6 +97,7 @@ public class TransferRepository {
   public void updateDatabase(
       ArrayList<Product> products,
       ArrayList<ProductBarcode> barcodes,
+      ArrayList<Location> locations,
       ArrayList<QuantityUnit> quantityUnits,
       ArrayList<QuantityUnitConversion> quantityUnitConversions,
       DataUpdatedListener listener
@@ -101,6 +106,7 @@ public class TransferRepository {
         appDatabase,
         products,
         barcodes,
+        locations,
         quantityUnits,
         quantityUnitConversions,
         listener
@@ -114,6 +120,7 @@ public class TransferRepository {
 
     private final ArrayList<Product> products;
     private final ArrayList<ProductBarcode> barcodes;
+    private final ArrayList<Location> locations;
     private final ArrayList<QuantityUnit> quantityUnits;
     private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
 
@@ -121,6 +128,7 @@ public class TransferRepository {
         AppDatabase appDatabase,
         ArrayList<Product> products,
         ArrayList<ProductBarcode> barcodes,
+        ArrayList<Location> locations,
         ArrayList<QuantityUnit> quantityUnits,
         ArrayList<QuantityUnitConversion> quantityUnitConversions,
         DataUpdatedListener listener
@@ -129,6 +137,7 @@ public class TransferRepository {
       this.listener = listener;
       this.products = products;
       this.barcodes = barcodes;
+      this.locations = locations;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
     }
@@ -139,6 +148,8 @@ public class TransferRepository {
       appDatabase.productDao().insertAll(products);
       appDatabase.productBarcodeDao().deleteAll();
       appDatabase.productBarcodeDao().insertAll(barcodes);
+      appDatabase.locationDao().deleteAll();
+      appDatabase.locationDao().insertAll(locations);
       appDatabase.quantityUnitDao().deleteAll();
       appDatabase.quantityUnitDao().insertAll(quantityUnits);
       appDatabase.quantityUnitConversionDao().deleteAll();

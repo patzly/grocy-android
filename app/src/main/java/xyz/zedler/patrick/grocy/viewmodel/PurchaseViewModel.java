@@ -425,20 +425,22 @@ public class PurchaseViewModel extends BaseViewModel {
         response -> {
           // UNDO OPTION
           String transactionId = null;
+          double amountPurchased = 0;
           try {
-            JSONObject jsonObject = (JSONObject) response.get(0);
-            transactionId = jsonObject.getString("transaction_id");
-          } catch (JSONException e) {
-              if (debug) {
-                  Log.e(TAG, "purchaseProduct: " + e);
-              }
-          }
-            if (debug) {
-                Log.i(TAG, "purchaseProduct: transaction successful");
+            transactionId = response.getJSONObject(0)
+                .getString("transaction_id");
+            for (int i = 0; i < response.length(); i++) {
+              amountPurchased += response.getJSONObject(i).getDouble("amount");
             }
+          } catch (JSONException e) {
+            if (debug)
+              Log.e(TAG, "purchaseProduct: " + e);
+          }
+          if (debug)
+            Log.i(TAG, "purchaseProduct: transaction successful");
 
           SnackbarMessage snackbarMessage = new SnackbarMessage(
-              formData.getTransactionSuccessMsg()
+              formData.getTransactionSuccessMsg(amountPurchased)
           );
           if (transactionId != null) {
             String transId = transactionId;

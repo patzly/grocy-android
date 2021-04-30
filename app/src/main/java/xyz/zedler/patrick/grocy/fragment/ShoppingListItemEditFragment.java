@@ -256,11 +256,16 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
     }
   }
 
+  public void clearAmountFieldAndFocusIt() {
+    binding.editTextAmount.setText("");
+    activity.showKeyboard(binding.editTextAmount);
+  }
+
   public void clearInputFocus() {
     activity.hideKeyboard();
-    binding.textInputShoppingListItemEditProduct.clearFocus();
-    binding.textInputShoppingListItemEditAmount.clearFocus();
-    binding.textInputShoppingListItemEditNote.clearFocus();
+    binding.textInputProduct.clearFocus();
+    binding.textInputAmount.clearFocus();
+    binding.textInputNote.clearFocus();
     binding.shoppingListContainer.clearFocus();
     binding.quantityUnitContainer.clearFocus();
   }
@@ -287,7 +292,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
         && viewModel.getFormData().getQuantityUnitsLive().getValue() != null
         && viewModel.getFormData().getQuantityUnitsLive().getValue().size() <= 1
     ) {
-      nextView = binding.container.findViewById(R.id.edit_text_shopping_list_item_edit_amount);
+      nextView = binding.container.findViewById(R.id.edit_text_amount);
     }
     nextView.requestFocus();
     if (nextView instanceof EditText) {

@@ -336,11 +336,16 @@ public class PurchaseFragment extends BaseFragment implements
     }
   }
 
+  public void clearAmountFieldAndFocusIt() {
+    binding.editTextAmount.setText("");
+    activity.showKeyboard(binding.editTextAmount);
+  }
+
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.autoCompletePurchaseProduct.clearFocus();
     binding.quantityUnitContainer.clearFocus();
-    binding.textInputShoppingListItemEditAmount.clearFocus();
+    binding.textInputAmount.clearFocus();
     binding.linearDueDate.clearFocus();
     binding.textInputPurchasePrice.clearFocus();
   }
@@ -380,7 +385,7 @@ public class PurchaseFragment extends BaseFragment implements
     if (!viewModel.getFormData().isProductNameValid()) {
       nextView = binding.autoCompletePurchaseProduct;
     } else if (!viewModel.getFormData().isAmountValid()) {
-      nextView = binding.editTextShoppingListItemEditAmount;
+      nextView = binding.editTextAmount;
     } else if (!viewModel.getFormData().isDueDateValid()) {
       nextView = binding.linearDueDate;
     }

@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ConsumeViewModel extends BaseViewModel {
@@ -98,7 +99,7 @@ public class ConsumeViewModel extends BaseViewModel {
       quickModeStart = true;
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
-          Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,
+          PREF.QUICK_MODE_ACTIVE_CONSUME,
           false
       );
     } else {
@@ -120,9 +121,9 @@ public class ConsumeViewModel extends BaseViewModel {
       this.quantityUnits = qUs;
       this.unitConversions = conversions;
       formData.getProductsLive().setValue(getActiveProductsOnly(products));
-        if (downloadAfterLoading) {
-            downloadData();
-        }
+      if (downloadAfterLoading) {
+        downloadData();
+      }
     });
   }
 
@@ -186,9 +187,9 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
-      if (debug) {
-          Log.e(TAG, "onError: VolleyError: " + error);
-      }
+    if (debug) {
+      Log.e(TAG, "onError: VolleyError: " + error);
+    }
     showMessage(getString(R.string.msg_no_connection));
   }
 
@@ -257,9 +258,9 @@ public class ConsumeViewModel extends BaseViewModel {
       formData.getSpecificStockEntryLive().setValue(null);
 
       formData.isFormValid();
-        if (isQuickModeEnabled()) {
-            sendEvent(Event.FOCUS_INVALID_VIEWS);
-        }
+      if (isQuickModeEnabled()) {
+        sendEvent(Event.FOCUS_INVALID_VIEWS);
+      }
     };
 
     dlHelper.newQueue(onQueueEmptyListener, error -> {
@@ -298,13 +299,13 @@ public class ConsumeViewModel extends BaseViewModel {
       unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
-        if (product.getId() != conversion.getProductId()) {
-            continue;
-        }
+      if (product.getId() != conversion.getProductId()) {
+        continue;
+      }
       QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-        if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-            continue;
-        }
+      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
+        continue;
+      }
       unitFactors.put(unit, conversion.getFactor());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
@@ -341,9 +342,9 @@ public class ConsumeViewModel extends BaseViewModel {
   public void checkProductInput() {
     formData.isProductNameValid();
     String input = formData.getProductNameLive().getValue();
-      if (input == null || input.isEmpty()) {
-          return;
-      }
+    if (input == null || input.isEmpty()) {
+      return;
+    }
     Product product = getProductFromName(input);
 
     if (product == null) {
@@ -399,20 +400,22 @@ public class ConsumeViewModel extends BaseViewModel {
         response -> {
           // UNDO OPTION
           String transactionId = null;
+          double amountConsumed = 0;
           try {
-            JSONObject jsonObject = (JSONObject) response.get(0);
-            transactionId = jsonObject.getString("transaction_id");
-          } catch (JSONException e) {
-              if (debug) {
-                  Log.e(TAG, "consumeProduct: " + e);
-              }
-          }
-            if (debug) {
-                Log.i(TAG, "consumeProduct: transaction successful");
+            transactionId = response.getJSONObject(0)
+                .getString("transaction_id");
+            for (int i = 0; i < response.length(); i++) {
+              amountConsumed -= response.getJSONObject(i).getDouble("amount");
             }
+          } catch (JSONException e) {
+            if (debug)
+              Log.e(TAG, "consumeProduct: " + e);
+          }
+          if (debug)
+            Log.i(TAG, "consumeProduct: transaction successful");
 
           SnackbarMessage snackbarMessage = new SnackbarMessage(
-              formData.getTransactionSuccessMsg(isActionOpen)
+              formData.getTransactionSuccessMsg(isActionOpen, amountConsumed)
           );
           if (transactionId != null) {
             String transId = transactionId;
@@ -427,9 +430,9 @@ public class ConsumeViewModel extends BaseViewModel {
         },
         error -> {
           showErrorMessage();
-            if (debug) {
-                Log.i(TAG, "consumeProduct: " + error);
-            }
+          if (debug) {
+            Log.i(TAG, "consumeProduct: " + error);
+          }
         }
     );
   }
@@ -439,9 +442,9 @@ public class ConsumeViewModel extends BaseViewModel {
         grocyApi.undoStockTransaction(transactionId),
         success -> {
           showMessage(getString(R.string.msg_undone_transaction));
-            if (debug) {
-                Log.i(TAG, "undoTransaction: undone");
-            }
+          if (debug) {
+            Log.i(TAG, "undoTransaction: undone");
+          }
         },
         error -> showErrorMessage()
     );
@@ -453,30 +456,30 @@ public class ConsumeViewModel extends BaseViewModel {
     dlHelper.addProductBarcode(body, () -> {
       formData.getBarcodeLive().setValue(null);
       barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
-        if (onSuccess != null) {
-            onSuccess.run();
-        }
+      if (onSuccess != null) {
+        onSuccess.run();
+      }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
   }
 
   @Nullable
   public Product getProductFromName(@Nullable String name) {
-      if (name == null) {
-          return null;
-      }
+    if (name == null) {
+      return null;
+    }
     for (Product product : products) {
-        if (product.getName().equals(name)) {
-            return product;
-        }
+      if (product.getName().equals(name)) {
+        return product;
+      }
     }
     return null;
   }
 
   public Product getProduct(int id) {
     for (Product product : products) {
-        if (product.getId() == id) {
-            return product;
-        }
+      if (product.getId() == id) {
+        return product;
+      }
     }
     return null;
   }
@@ -484,27 +487,27 @@ public class ConsumeViewModel extends BaseViewModel {
   private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
     ArrayList<Product> activeProductsOnly = new ArrayList<>();
     for (Product product : allProducts) {
-        if (product.isActive()) {
-            activeProductsOnly.add(product);
-        }
+      if (product.isActive()) {
+        activeProductsOnly.add(product);
+      }
     }
     return activeProductsOnly;
   }
 
   private QuantityUnit getQuantityUnit(int id) {
     for (QuantityUnit quantityUnit : quantityUnits) {
-        if (quantityUnit.getId() == id) {
-            return quantityUnit;
-        }
+      if (quantityUnit.getId() == id) {
+        return quantityUnit;
+      }
     }
     return null;
   }
 
   private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
     for (StockLocation stockLocation : locations) {
-        if (stockLocation.getLocationId() == locationId) {
-            return stockLocation;
-        }
+      if (stockLocation.getLocationId() == locationId) {
+        return stockLocation;
+      }
     }
     return null;
   }
@@ -516,9 +519,9 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void showQuantityUnitsBottomSheet(boolean hasFocus) {
-      if (!hasFocus) {
-          return;
-      }
+    if (!hasFocus) {
+      return;
+    }
     HashMap<QuantityUnit, Double> unitsFactors = getFormData()
         .getQuantityUnitsFactorsLive().getValue();
     Bundle bundle = new Bundle();
@@ -530,9 +533,9 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void showStockEntriesBottomSheet() {
-      if (!formData.isProductNameValid()) {
-          return;
-      }
+    if (!formData.isProductNameValid()) {
+      return;
+    }
     ArrayList<StockEntry> stockEntries = formData.getStockEntries();
     StockEntry currentStockEntry = formData.getSpecificStockEntryLive().getValue();
     String selectedId = currentStockEntry != null ? currentStockEntry.getStockId() : null;
@@ -541,9 +544,9 @@ public class ConsumeViewModel extends BaseViewModel {
     assert stockLocation != null;
     int locationId = stockLocation.getLocationId();
     for (StockEntry stockEntry : stockEntries) {
-        if (stockEntry.getLocationId() == locationId) {
-            filteredStockEntries.add(stockEntry);
-        }
+      if (stockEntry.getLocationId() == locationId) {
+        filteredStockEntries.add(stockEntry);
+      }
     }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(
@@ -555,9 +558,9 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void showStockLocationsBottomSheet() {
-      if (!formData.isProductNameValid()) {
-          return;
-      }
+    if (!formData.isProductNameValid()) {
+      return;
+    }
     ArrayList<StockLocation> stockLocations = formData.getStockLocations();
     StockLocation currentStockLocation = formData.getStockLocationLive().getValue();
     int selectedId = currentStockLocation != null ? currentStockLocation.getLocationId() : -1;
@@ -592,9 +595,9 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public boolean isQuickModeEnabled() {
-      if (quickModeEnabled.getValue() == null) {
-          return false;
-      }
+    if (quickModeEnabled.getValue() == null) {
+      return false;
+    }
     return quickModeEnabled.getValue();
   }
 
@@ -619,9 +622,9 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public boolean isFeatureEnabled(String pref) {
-      if (pref == null) {
-          return true;
-      }
+    if (pref == null) {
+      return true;
+    }
     return sharedPrefs.getBoolean(pref, true);
   }
 

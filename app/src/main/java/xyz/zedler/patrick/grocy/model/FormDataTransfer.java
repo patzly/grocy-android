@@ -35,7 +35,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -50,10 +50,8 @@ public class FormDataTransfer {
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<ProductDetails> productDetailsLive;
-  private final LiveData<Boolean> isTareWeightEnabledLive;
   private final MutableLiveData<String> productNameLive;
   private final MutableLiveData<Integer> productNameErrorLive;
-  private final MutableLiveData<Boolean> consumeExactAmountLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
   private final LiveData<QuantityUnit> quantityUnitStockLive;
@@ -66,9 +64,12 @@ public class FormDataTransfer {
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
   private ArrayList<StockLocation> stockLocations;
-  private final MutableLiveData<StockLocation> stockLocationLive;
-  private final LiveData<String> stockLocationNameLive;
-  private final MutableLiveData<Boolean> spoiledLive;
+  private final MutableLiveData<StockLocation> fromLocationLive;
+  private final LiveData<String> fromLocationNameLive;
+  private ArrayList<Location> locations;
+  private final MutableLiveData<Location> toLocationLive;
+  private final LiveData<String> toLocationNameLive;
+  private final MutableLiveData<Boolean> toLocationErrorLive;
   private final MutableLiveData<Boolean> useSpecificLive;
   private ArrayList<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
@@ -77,7 +78,7 @@ public class FormDataTransfer {
   public FormDataTransfer(
       Application application,
       SharedPreferences sharedPrefs,
-      ConsumeFragmentArgs args
+      TransferFragmentArgs args
   ) {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
@@ -86,24 +87,15 @@ public class FormDataTransfer {
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
     scannerVisibilityLive = new MutableLiveData<>(false);
-    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
-    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
+    if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
-    isTareWeightEnabledLive = Transformations.map(
-        productDetailsLive,
-        productDetails -> productDetails != null
-            && productDetails.getProduct().getEnableTareWeightHandlingBoolean()
-    );
     productDetailsLive.setValue(null);
     productNameLive = new MutableLiveData<>();
     productNameErrorLive = new MutableLiveData<>();
-    consumeExactAmountLive = new MutableLiveData<>(false);
     barcodeLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
     quantityUnitStockLive = Transformations.map(
@@ -132,19 +124,25 @@ public class FormDataTransfer {
     amountStockLive = new MediatorLiveData<>();
     amountStockLive.addSource(amountLive, i -> amountStockLive.setValue(getAmountStock()));
     amountStockLive.addSource(quantityUnitLive, i -> amountStockLive.setValue(getAmountStock()));
-    amountStockLive
-        .addSource(consumeExactAmountLive, i -> amountStockLive.setValue(getAmountStock()));
     amountHelperLive = new MediatorLiveData<>();
     amountHelperLive
         .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
-    stockLocationLive = new MutableLiveData<>();
-    stockLocationNameLive = Transformations.map(
-        stockLocationLive,
+    fromLocationLive = new MutableLiveData<>();
+    fromLocationNameLive = Transformations.map(
+        fromLocationLive,
         location -> location != null ? location.getLocationName() : null
     );
-    spoiledLive = new MutableLiveData<>(false);
+    toLocationLive = new MutableLiveData<>();
+    toLocationNameLive = Transformations.map(
+        toLocationLive,
+        location -> location != null ? location.getName() : null
+    );
+    toLocationErrorLive = (MutableLiveData<Boolean>) Transformations.map(
+        toLocationLive,
+        quantityUnit -> !isToLocationValid()
+    );
     useSpecificLive = new MutableLiveData<>(false);
     specificStockEntryLive = new MutableLiveData<>();
   }
@@ -180,15 +178,6 @@ public class FormDataTransfer {
 
   public MutableLiveData<ProductDetails> getProductDetailsLive() {
     return productDetailsLive;
-  }
-
-  public LiveData<Boolean> getIsTareWeightEnabledLive() {
-    return isTareWeightEnabledLive;
-  }
-
-  public boolean isTareWeightEnabled() {
-    assert isTareWeightEnabledLive.getValue() != null && consumeExactAmountLive.getValue() != null;
-    return isTareWeightEnabledLive.getValue() && !consumeExactAmountLive.getValue();
   }
 
   public MutableLiveData<String> getProductNameLive() {
@@ -231,10 +220,6 @@ public class FormDataTransfer {
     return null;
   }
 
-  public MutableLiveData<Boolean> getConsumeExactAmountLive() {
-    return consumeExactAmountLive;
-  }
-
   public MutableLiveData<String> getBarcodeLive() {
     return barcodeLive;
   }
@@ -274,9 +259,7 @@ public class FormDataTransfer {
       return null;
     }
     double amountMultiplied;
-    if (isTareWeightEnabled() || (double) currentFactor == -1) {
-      amountMultiplied = amount;
-    } else if (current.getId() == productDetails.getProduct()
+    if (current.getId() == productDetails.getProduct()
         .getQuIdPurchase()) {
       amountMultiplied = amount * (double) currentFactor;
     } else {
@@ -303,11 +286,8 @@ public class FormDataTransfer {
   public void moreAmount(ImageView view) {
     IconUtil.start(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      if (!isTareWeightEnabled() || productDetailsLive.getValue() == null) {
+      if (productDetailsLive.getValue() == null) {
         amountLive.setValue(String.valueOf(1));
-      } else {
-        amountLive.setValue(NumUtil.trim(productDetailsLive.getValue()
-            .getProduct().getTareWeightDouble() + 1));
       }
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
@@ -329,26 +309,16 @@ public class FormDataTransfer {
     }
   }
 
-  public String getTransactionSuccessMsg(boolean isActionOpen) {
+  public String getTransactionSuccessMsg(double amountTransferred) {
     ProductDetails productDetails = productDetailsLive.getValue();
     QuantityUnit stock = quantityUnitStockLive.getValue();
-    assert productDetails != null && stock != null && amountStockLive.getValue() != null;
-    double amountRemoved = Double.parseDouble(amountStockLive.getValue());
-    if (isTareWeightEnabled()) {
-      amountRemoved = productDetails.getStockAmount();
-      amountRemoved -= Double.parseDouble(amountStockLive.getValue());
-      amountRemoved += productDetails.getProduct().getTareWeightDouble();
-    }
+    assert productDetails != null && stock != null;
     return application.getString(
-        isActionOpen ? R.string.msg_opened : R.string.msg_consumed,
-        NumUtil.trim(amountRemoved),
-        amountRemoved == 1 ? stock.getName() : stock.getNamePlural(),
+        R.string.msg_transferred,
+        NumUtil.trim(amountTransferred),
+        amountTransferred == 1 ? stock.getName() : stock.getNamePlural(),
         productDetails.getProduct().getName()
     );
-  }
-
-  public MutableLiveData<Boolean> getSpoiledLive() {
-    return spoiledLive;
   }
 
   public MutableLiveData<Boolean> getUseSpecificLive() {
@@ -375,12 +345,28 @@ public class FormDataTransfer {
     this.stockLocations = stockLocations;
   }
 
-  public MutableLiveData<StockLocation> getStockLocationLive() {
-    return stockLocationLive;
+  public MutableLiveData<StockLocation> getFromLocationLive() {
+    return fromLocationLive;
   }
 
-  public LiveData<String> getStockLocationNameLive() {
-    return stockLocationNameLive;
+  public LiveData<String> getFromLocationNameLive() {
+    return fromLocationNameLive;
+  }
+
+  public void setLocations(ArrayList<Location> locations) {
+    this.locations = locations;
+  }
+
+  public MutableLiveData<Location> getToLocationLive() {
+    return toLocationLive;
+  }
+
+  public LiveData<String> getToLocationNameLive() {
+    return toLocationNameLive;
+  }
+
+  public MutableLiveData<Boolean> getToLocationErrorLive() {
+    return toLocationErrorLive;
   }
 
   public boolean isTorchOn() {
@@ -441,25 +427,15 @@ public class FormDataTransfer {
       return false;
     }
     // below
-    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (Double.parseDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
-      ));
-      return false;
-    } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
-        && Double.parseDouble(amountLive.getValue())
-        < productDetailsLive.getValue().getProduct().getTareWeightDouble()
-    ) {
-      amountErrorLive.setValue(application.getString(
-          R.string.error_bounds_min,
-          NumUtil.trim(productDetailsLive.getValue().getProduct()
-              .getTareWeightDouble())
       ));
       return false;
     }
 
     // over
-    StockLocation currentLocation = stockLocationLive.getValue();
+    StockLocation currentLocation = fromLocationLive.getValue();
     if (currentLocation == null) {
       amountErrorLive.setValue(null);
       return true;
@@ -477,9 +453,7 @@ public class FormDataTransfer {
     HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
     Double currentFactor = hashMap != null ? hashMap.get(current) : null;
     double maxAmount;
-    if (isTareWeightEnabled() && productDetails != null) {
-      maxAmount = stockAmount + productDetails.getProduct().getTareWeightDouble();
-    } else if (currentFactor == null || currentFactor == -1) {
+    if (currentFactor == null || currentFactor == -1) {
       maxAmount = stockAmount;
     } else if (current != null && productDetails != null
         && current.getId() == productDetails.getProduct().getQuIdPurchase()) {
@@ -488,19 +462,9 @@ public class FormDataTransfer {
       maxAmount = stockAmount * currentFactor;
     }
 
-    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) > maxAmount) {
+    if (Double.parseDouble(amountLive.getValue()) > maxAmount) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_max, NumUtil.trim(maxAmount)
-      ));
-      return false;
-    } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
-        && Double.parseDouble(amountLive.getValue())
-        > productDetailsLive.getValue().getProduct().getTareWeightDouble() + stockAmount
-    ) {
-      amountErrorLive.setValue(application.getString(
-          R.string.error_bounds_max,
-          NumUtil.trim(productDetailsLive.getValue().getProduct()
-              .getTareWeightDouble() + stockAmount)
       ));
       return false;
     }
@@ -508,10 +472,20 @@ public class FormDataTransfer {
     return true;
   }
 
+  public boolean isToLocationValid() {
+    if (toLocationLive.getValue() == null) {
+      toLocationErrorLive.setValue(true);
+      return false;
+    }
+    toLocationErrorLive.setValue(false);
+    return true;
+  }
+
   public boolean isFormValid() {
     boolean valid = isProductNameValid();
     valid = isQuantityUnitValid() && valid;
     valid = isAmountValid() && valid;
+    valid = isToLocationValid() && valid;
     return valid;
   }
 
@@ -519,53 +493,39 @@ public class FormDataTransfer {
     ProductDetails productDetails = productDetailsLive.getValue();
     assert productDetails != null && amountStockLive.getValue() != null;
     double amountRemoved = Double.parseDouble(amountStockLive.getValue());
-    if (isTareWeightEnabled()) {
-      amountRemoved = productDetails.getStockAmount();
-      amountRemoved -= Double.parseDouble(amountStockLive.getValue());
-      amountRemoved += productDetails.getProduct().getTareWeightDouble();
-    }
     QuantityUnit qU = quantityUnitLive.getValue();
-    StockLocation stockLocation = stockLocationLive.getValue();
-    assert qU != null && stockLocation != null;
+    StockLocation fromLocation = fromLocationLive.getValue();
+    Location toLocation = toLocationLive.getValue();
+    assert qU != null && fromLocation != null && toLocation != null;
     return application.getString(
-        R.string.msg_quick_mode_confirm_consume,
+        R.string.msg_quick_mode_confirm_transfer,
         NumUtil.trim(amountRemoved),
         amountRemoved == 1 ? qU.getName() : qU.getNamePlural(),
         productDetails.getProduct().getName(),
-        stockLocation.getLocationName()
+        fromLocation.getLocationName(),
+        toLocation.getName()
     );
   }
 
-  public JSONObject getFilledJSONObject(boolean isActionOpen) {
+  public JSONObject getFilledJSONObject() {
     String amount = getAmountStock();
-    assert amount != null && spoiledLive.getValue() != null;
-    assert isTareWeightEnabledLive.getValue() != null;
-    StockLocation location = stockLocationLive.getValue();
+    assert amount != null;
+    StockLocation fromLocation = fromLocationLive.getValue();
+    Location toLocation = toLocationLive.getValue();
     StockEntry stockEntry = specificStockEntryLive.getValue();
-    boolean spoiled = !isActionOpen && spoiledLive.getValue();
-    boolean tareWeightEnabled = isTareWeightEnabledLive.getValue();
+    assert fromLocation != null && toLocation != null;
 
     JSONObject json = new JSONObject();
     try {
       json.put("amount", amount);
-      if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
-        json.put("location_id", String.valueOf(location.getLocationId()));
-      }
-      json.put("allow_subproduct_substitution", true);
-      if (tareWeightEnabled) {
-        json.put("exact_amount", consumeExactAmountLive.getValue());
-      }
+      json.put("location_id_from", String.valueOf(fromLocation.getLocationId()));
+      json.put("location_id_to", String.valueOf(toLocation.getId()));
       if (stockEntry != null) {
         json.put("stock_entry_id", stockEntry.getStockId());
       }
-      if (spoiled) {
-        json.put("spoiled", true);
-      }
-      if (isRecipesFeatureEnabled()) {
-      }
     } catch (JSONException e) {
       if (isDebuggingEnabled()) {
-        Log.e(TAG, "purchaseProduct: " + e);
+        Log.e(TAG, "getFilledJSONObject: " + e);
       }
     }
     return json;
@@ -590,9 +550,9 @@ public class FormDataTransfer {
     quantityUnitsFactorsLive.setValue(null);
     productDetailsLive.setValue(null);
     productNameLive.setValue(null);
-    consumeExactAmountLive.setValue(false);
-    stockLocationLive.setValue(null);
-    spoiledLive.setValue(false);
+    fromLocationLive.setValue(null);
+    toLocationLive.setValue(null);
+    toLocationErrorLive.setValue(false);
     useSpecificLive.setValue(false);
     specificStockEntryLive.setValue(null);
     new Handler().postDelayed(() -> {
@@ -621,10 +581,6 @@ public class FormDataTransfer {
         Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
         Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
     );
-  }
-
-  public boolean isRecipesFeatureEnabled() {
-    return isFeatureEnabled(Constants.PREF.FEATURE_RECIPES);
   }
 
   private boolean isDebuggingEnabled() {

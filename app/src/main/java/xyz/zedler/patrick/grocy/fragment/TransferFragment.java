@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottom
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -51,6 +52,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TransferViewModel;
@@ -62,7 +64,7 @@ public class TransferFragment extends BaseFragment implements
   private final static String TAG = TransferFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private ConsumeFragmentArgs args;
+  private TransferFragmentArgs args;
   private FragmentTransferBinding binding;
   private TransferViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
@@ -94,7 +96,7 @@ public class TransferFragment extends BaseFragment implements
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
 
-    args = ConsumeFragmentArgs.fromBundle(requireArguments());
+    args = TransferFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new TransferViewModelFactory(activity.getApplication(), args)
     ).get(TransferViewModel.class);
@@ -149,7 +151,7 @@ public class TransferFragment extends BaseFragment implements
       viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
-      setArguments(new ConsumeFragmentArgs.Builder(args)
+      setArguments(new TransferFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
       viewModel.setProduct(productId, null);
     }
@@ -208,7 +210,7 @@ public class TransferFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
+    activity.getScrollBehavior().setUpScroll(R.id.scroll_transfer);
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
@@ -217,8 +219,8 @@ public class TransferFragment extends BaseFragment implements
     );
     activity.updateFab(
         R.drawable.ic_round_swap_horiz,
-        R.string.action_consume,
-        Constants.FAB.TAG.CONSUME,
+        R.string.action_transfer,
+        FAB.TAG.TRANSFER,
         animated,
         () -> {
           if (viewModel.isQuickModeEnabled()) {
@@ -226,7 +228,7 @@ public class TransferFragment extends BaseFragment implements
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
           } else {
-            viewModel.consumeProduct(false);
+            viewModel.transferProduct();
           }
         }
     );
@@ -301,15 +303,18 @@ public class TransferFragment extends BaseFragment implements
   @Override
   public void selectStockLocation(StockLocation stockLocation) {
     MutableLiveData<StockLocation> stockLocationLive = viewModel.getFormData()
-        .getStockLocationLive();
+        .getFromLocationLive();
     boolean locationHasChanged = stockLocation != stockLocationLive.getValue();
     stockLocationLive.setValue(stockLocation);
-      if (!locationHasChanged) {
-          return;
-      }
+    if (!locationHasChanged) return;
     viewModel.getFormData().getUseSpecificLive().setValue(false);
     viewModel.getFormData().getSpecificStockEntryLive().setValue(null);
     viewModel.getFormData().isAmountValid();
+  }
+
+  @Override
+  public void selectLocation(Location location) {
+    viewModel.getFormData().getToLocationLive().setValue(location);
   }
 
   @Override
@@ -337,11 +342,16 @@ public class TransferFragment extends BaseFragment implements
       }
   }
 
+  public void clearAmountFieldAndFocusIt() {
+    binding.editTextAmount.setText("");
+    activity.showKeyboard(binding.editTextAmount);
+  }
+
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.autoCompleteConsumeProduct.clearFocus();
     binding.quantityUnitContainer.clearFocus();
-    binding.textInputShoppingListItemEditAmount.clearFocus();
+    binding.textInputAmount.clearFocus();
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
@@ -375,11 +385,13 @@ public class TransferFragment extends BaseFragment implements
   }
 
   public void focusNextInvalidView() {
-    EditText nextView = null;
+    View nextView = null;
     if (!viewModel.getFormData().isProductNameValid()) {
       nextView = binding.autoCompleteConsumeProduct;
     } else if (!viewModel.getFormData().isAmountValid()) {
-      nextView = binding.editTextShoppingListItemEditAmount;
+      nextView = binding.editTextAmount;
+    } else if (!viewModel.getFormData().isToLocationValid()) {
+      nextView = binding.linearToLocation;
     }
     if (nextView == null) {
       clearInputFocus();
@@ -387,7 +399,7 @@ public class TransferFragment extends BaseFragment implements
       return;
     }
     nextView.requestFocus();
-    activity.showKeyboard(nextView);
+    if (nextView instanceof EditText) activity.showKeyboard((EditText) nextView);
   }
 
   private void lockOrUnlockRotation(boolean scannerIsVisible) {
@@ -400,7 +412,7 @@ public class TransferFragment extends BaseFragment implements
 
   @Override
   public void startTransaction() {
-    viewModel.consumeProduct(false);
+    viewModel.transferProduct();
   }
 
   @Override
@@ -438,13 +450,6 @@ public class TransferFragment extends BaseFragment implements
       if (viewModel.getFormData().isScannerVisible()) {
         capture.onResume();
         capture.decode();
-      }
-      return true;
-    } else if (item.getItemId() == R.id.action_open) {
-      if (viewModel.isQuickModeEnabled()) {
-        focusNextInvalidView();
-      } else {
-        viewModel.consumeProduct(true);
       }
       return true;
     }

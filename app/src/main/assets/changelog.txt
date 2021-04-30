@@ -1,4 +1,5 @@
 2.0.0-alpha07
+- New: Transfer page (finally!) (#385)
 - New: We use Conscrypt now to support TLS1.3 on older Android versions (#163)
 - New: You can duplicate products now (#146)
 - Improved: List sorting uses rules of currently selected language (#371)
@@ -7,10 +8,12 @@
 - Improved: Shopping list item edit page has the camera scanner frame now
 - Improved: Up and down page animations
 - Improved: Focus product field after unknown barcode was scanned
+- Improved: Amount field in forms has a clear button which also opens keyboard
 - Fixed: Swipe buttons in stock overview didn't work for last two items
 - Fixed: Menu items on bottom were not clickable sometimes (#383)
 - Fixed: Parent product field is locked if product is already parent product (#349)
 - Fixed: Barcode chips have not cleared the barcode when removed
+- Fixed: Quick mode on consume page had wrong initial state sometimes
 
 2.0.0-alpha06
 - New: Stock overview page now has list animations and offline loading

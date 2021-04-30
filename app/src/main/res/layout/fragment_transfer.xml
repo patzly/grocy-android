@@ -141,7 +141,7 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-          android:id="@+id/scroll_consume"
+          android:id="@+id/scroll_transfer"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:overScrollMode="never"
@@ -284,7 +284,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.stockLocationNameLive ?? @string/subtitle_none_selected}" />
+                  android:text="@{formData.fromLocationNameLive ?? @string/subtitle_none_selected}" />
 
               </LinearLayout>
 
@@ -340,21 +340,23 @@
                 <ImageView
                   android:id="@+id/image_amount"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@{formData.isTareWeightEnabledLive ? @drawable/ic_round_scale_anim : @drawable/ic_round_scatter_plot_anim}"
+                  android:src="@drawable/ic_round_scatter_plot_anim"
                   android:layout_marginBottom="4dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                  android:id="@+id/text_input_shopping_list_item_edit_amount"
+                  android:id="@+id/text_input_amount"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                   android:hint="@{formData.amountHintLive ?? @string/property_amount}"
                   app:helperTextEnabled="true"
                   app:helperText="@{formData.amountHelperLive ?? ` `}"
                   app:helperTextTextColor="@color/retro_blue_fg"
-                  app:errorText="@{formData.amountErrorLive}">
+                  app:errorText="@{formData.amountErrorLive}"
+                  app:endIconMode="clear_text"
+                  app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">
 
                   <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_shopping_list_item_edit_amount"
+                    android:id="@+id/edit_text_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number|numberDecimal"
@@ -395,8 +397,11 @@
             </LinearLayout>
 
             <LinearLayout
+              android:id="@+id/linear_to_location"
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
+              android:focusableInTouchMode="true"
+              android:onClick="@{() -> viewModel.showLocationsBottomSheet(true)}"
+              app:onFocusChangeListener="@{(v, focus) -> viewModel.showLocationsBottomSheet(focus)}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -407,11 +412,12 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/title_location_to" />
+                  android:text="@string/title_location_to"
+                  android:textColor="@{formData.toLocationErrorLive ? @color/retro_red : @color/on_background_secondary}"/>
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.stockLocationNameLive ?? @string/subtitle_none_selected}" />
+                  android:text="@{formData.toLocationNameLive ?? @string/subtitle_none_selected}" />
 
               </LinearLayout>
 

@@ -36,8 +36,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
@@ -46,6 +47,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataTransfer;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -56,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.TransferRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class TransferViewModel extends BaseViewModel {
@@ -73,6 +76,7 @@ public class TransferViewModel extends BaseViewModel {
   private ArrayList<QuantityUnit> quantityUnits;
   private ArrayList<QuantityUnitConversion> unitConversions;
   private ArrayList<ProductBarcode> barcodes;
+  private ArrayList<Location> locations;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -80,7 +84,7 @@ public class TransferViewModel extends BaseViewModel {
 
   private Runnable queueEmptyAction;
 
-  public TransferViewModel(@NonNull Application application, ConsumeFragmentArgs args) {
+  public TransferViewModel(@NonNull Application application, TransferFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -94,11 +98,9 @@ public class TransferViewModel extends BaseViewModel {
 
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
-    if (args.getStartWithScanner()) {
-      quickModeStart = true;
-    } else if (!args.getCloseWhenFinished()) {
+    if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
-          Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,
+          PREF.QUICK_MODE_ACTIVE_TRANSFER,
           false
       );
     } else {
@@ -114,15 +116,17 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, qUs, conversions) -> {
+    repository.loadFromDatabase((products, barcodes, locations, qUs, conversions) -> {
       this.products = products;
       this.barcodes = barcodes;
+      this.locations = locations;
+      formData.setLocations(locations);
       this.quantityUnits = qUs;
       this.unitConversions = conversions;
       formData.getProductsLive().setValue(getActiveProductsOnly(products));
-        if (downloadAfterLoading) {
-            downloadData();
-        }
+      if (downloadAfterLoading) {
+        downloadData();
+      }
     });
   }
 
@@ -141,10 +145,13 @@ public class TransferViewModel extends BaseViewModel {
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           formData.getProductsLive().setValue(getActiveProductsOnly(products));
+        }), dlHelper.updateProductBarcodes(
+            dbChangedTime, barcodes -> this.barcodes = barcodes
+        ), dlHelper.updateLocations(dbChangedTime, locations -> {
+          this.locations = locations;
+          formData.setLocations(locations);
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateProductBarcodes(
-            dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateQuantityUnits(
             dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
         )
@@ -169,6 +176,7 @@ public class TransferViewModel extends BaseViewModel {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
@@ -176,7 +184,7 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    repository.updateDatabase(products, barcodes,
+    repository.updateDatabase(products, barcodes, locations,
         quantityUnits, unitConversions, () -> {
         });
     if (queueEmptyAction != null) {
@@ -186,9 +194,9 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
-      if (debug) {
-          Log.e(TAG, "onError: VolleyError: " + error);
-      }
+    if (debug) {
+      Log.e(TAG, "onError: VolleyError: " + error);
+    }
     showMessage(getString(R.string.msg_no_connection));
   }
 
@@ -204,10 +212,25 @@ public class TransferViewModel extends BaseViewModel {
         formData.clearForm();
         return;
       }
+      if (productDetails.getProduct().getEnableTareWeightHandlingBoolean()) {
+        showMessage(getApplication().getString(R.string.msg_transfer_tare_weight));
+        formData.clearForm();
+        return;
+      }
 
       formData.getProductDetailsLive().setValue(productDetails);
       formData.getProductNameLive().setValue(product.getName());
-      formData.getConsumeExactAmountLive().setValue(false);
+
+      // stock location (from location)
+      ArrayList<StockLocation> stockLocations = formData.getStockLocations();
+      StockLocation stockLocation = getStockLocation(
+          stockLocations,
+          product.getLocationIdInt()
+      );
+      if (stockLocation == null && !stockLocations.isEmpty()) {
+        stockLocation = stockLocations.get(stockLocations.size() - 1);
+      }
+      formData.getFromLocationLive().setValue(stockLocation);
 
       // quantity unit
       try {
@@ -219,12 +242,11 @@ public class TransferViewModel extends BaseViewModel {
       }
 
       // amount
-      boolean isTareWeightEnabled = formData.isTareWeightEnabled();
-      if (!isTareWeightEnabled && barcode != null && barcode.hasAmount()) {
-        // if barcode contains amount, take this (with tare weight handling off)
+      if (barcode != null && barcode.hasAmount()) {
+        // if barcode contains amount, take this
         // quick mode status doesn't matter
         formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
-      } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
+      } else if (!isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
             Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
@@ -236,30 +258,19 @@ public class TransferViewModel extends BaseViewModel {
             && Double.parseDouble(defaultAmount) > 0) {
           formData.getAmountLive().setValue(defaultAmount);
         }
-      } else if (!isTareWeightEnabled) {
+      } else {
         // if quick mode enabled, always fill with amount 1
         formData.getAmountLive().setValue(NumUtil.trim(1));
       }
-
-      // stock location
-      ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-      StockLocation stockLocation = getStockLocation(
-          stockLocations,
-          product.getLocationIdInt()
-      );
-      if (stockLocation == null && !stockLocations.isEmpty()) {
-        stockLocation = stockLocations.get(stockLocations.size() - 1);
-      }
-      formData.getStockLocationLive().setValue(stockLocation);
 
       // stock entry
       formData.getUseSpecificLive().setValue(false);
       formData.getSpecificStockEntryLive().setValue(null);
 
       formData.isFormValid();
-        if (isQuickModeEnabled()) {
-            sendEvent(Event.FOCUS_INVALID_VIEWS);
-        }
+      if (isQuickModeEnabled()) {
+        sendEvent(Event.FOCUS_INVALID_VIEWS);
+      }
     };
 
     dlHelper.newQueue(onQueueEmptyListener, error -> {
@@ -298,13 +309,13 @@ public class TransferViewModel extends BaseViewModel {
       unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
-        if (product.getId() != conversion.getProductId()) {
-            continue;
-        }
+      if (product.getId() != conversion.getProductId()) {
+        continue;
+      }
       QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-        if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-            continue;
-        }
+      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
+        continue;
+      }
       unitFactors.put(unit, conversion.getFactor());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
@@ -341,9 +352,9 @@ public class TransferViewModel extends BaseViewModel {
   public void checkProductInput() {
     formData.isProductNameValid();
     String input = formData.getProductNameLive().getValue();
-      if (input == null || input.isEmpty()) {
-          return;
-      }
+    if (input == null || input.isEmpty()) {
+      return;
+    }
     Product product = getProductFromName(input);
 
     if (product == null) {
@@ -379,40 +390,45 @@ public class TransferViewModel extends BaseViewModel {
     formData.getProductNameLive().setValue(null);
   }
 
-  public void consumeProduct(boolean isActionOpen) {
+  public void transferProduct() {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
     }
     if (formData.getBarcodeLive().getValue() != null) {
-      uploadProductBarcode(() -> consumeProduct(isActionOpen));
+      uploadProductBarcode(this::transferProduct);
       return;
     }
 
     Product product = formData.getProductDetailsLive().getValue().getProduct();
-    JSONObject body = formData.getFilledJSONObject(isActionOpen);
-    dlHelper.postWithArray(
-        isActionOpen
-            ? grocyApi.openProduct(product.getId())
-            : grocyApi.consumeProduct(product.getId()),
+    JSONObject body = formData.getFilledJSONObject();
+    dlHelper.postWithArray(grocyApi.consumeProduct(product.getId()),
         body,
         response -> {
           // UNDO OPTION
           String transactionId = null;
+          double amountTransferred = 0;
           try {
-            JSONObject jsonObject = (JSONObject) response.get(0);
-            transactionId = jsonObject.getString("transaction_id");
-          } catch (JSONException e) {
-              if (debug) {
-                  Log.e(TAG, "consumeProduct: " + e);
+            transactionId = response.getJSONObject(0)
+                .getString("transaction_id");
+            for (int i = 0; i < response.length(); i++) {
+              if (response.getJSONObject(i).getString("transaction_type")
+                  .equals("transfer_from")) {
+                continue;
               }
-          }
-            if (debug) {
-                Log.i(TAG, "consumeProduct: transaction successful");
+              amountTransferred += response.getJSONObject(i).getDouble("amount");
             }
+          } catch (JSONException e) {
+            if (debug) {
+              Log.e(TAG, "transferProduct: " + e);
+            }
+          }
+          if (debug) {
+            Log.i(TAG, "transferProduct: transaction successful");
+          }
 
           SnackbarMessage snackbarMessage = new SnackbarMessage(
-              formData.getTransactionSuccessMsg(isActionOpen)
+              formData.getTransactionSuccessMsg(amountTransferred)
           );
           if (transactionId != null) {
             String transId = transactionId;
@@ -427,9 +443,9 @@ public class TransferViewModel extends BaseViewModel {
         },
         error -> {
           showErrorMessage();
-            if (debug) {
-                Log.i(TAG, "consumeProduct: " + error);
-            }
+          if (debug) {
+            Log.i(TAG, "transferProduct: " + error);
+          }
         }
     );
   }
@@ -439,9 +455,9 @@ public class TransferViewModel extends BaseViewModel {
         grocyApi.undoStockTransaction(transactionId),
         success -> {
           showMessage(getString(R.string.msg_undone_transaction));
-            if (debug) {
-                Log.i(TAG, "undoTransaction: undone");
-            }
+          if (debug) {
+            Log.i(TAG, "undoTransaction: undone");
+          }
         },
         error -> showErrorMessage()
     );
@@ -453,30 +469,30 @@ public class TransferViewModel extends BaseViewModel {
     dlHelper.addProductBarcode(body, () -> {
       formData.getBarcodeLive().setValue(null);
       barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
-        if (onSuccess != null) {
-            onSuccess.run();
-        }
+      if (onSuccess != null) {
+        onSuccess.run();
+      }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
   }
 
   @Nullable
   public Product getProductFromName(@Nullable String name) {
-      if (name == null) {
-          return null;
-      }
+    if (name == null) {
+      return null;
+    }
     for (Product product : products) {
-        if (product.getName().equals(name)) {
-            return product;
-        }
+      if (product.getName().equals(name)) {
+        return product;
+      }
     }
     return null;
   }
 
   public Product getProduct(int id) {
     for (Product product : products) {
-        if (product.getId() == id) {
-            return product;
-        }
+      if (product.getId() == id) {
+        return product;
+      }
     }
     return null;
   }
@@ -484,27 +500,27 @@ public class TransferViewModel extends BaseViewModel {
   private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
     ArrayList<Product> activeProductsOnly = new ArrayList<>();
     for (Product product : allProducts) {
-        if (product.isActive()) {
-            activeProductsOnly.add(product);
-        }
+      if (product.isActive()) {
+        activeProductsOnly.add(product);
+      }
     }
     return activeProductsOnly;
   }
 
   private QuantityUnit getQuantityUnit(int id) {
     for (QuantityUnit quantityUnit : quantityUnits) {
-        if (quantityUnit.getId() == id) {
-            return quantityUnit;
-        }
+      if (quantityUnit.getId() == id) {
+        return quantityUnit;
+      }
     }
     return null;
   }
 
   private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
     for (StockLocation stockLocation : locations) {
-        if (stockLocation.getLocationId() == locationId) {
-            return stockLocation;
-        }
+      if (stockLocation.getLocationId() == locationId) {
+        return stockLocation;
+      }
     }
     return null;
   }
@@ -516,9 +532,9 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void showQuantityUnitsBottomSheet(boolean hasFocus) {
-      if (!hasFocus) {
-          return;
-      }
+    if (!hasFocus) {
+      return;
+    }
     HashMap<QuantityUnit, Double> unitsFactors = getFormData()
         .getQuantityUnitsFactorsLive().getValue();
     Bundle bundle = new Bundle();
@@ -530,20 +546,20 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void showStockEntriesBottomSheet() {
-      if (!formData.isProductNameValid()) {
-          return;
-      }
+    if (!formData.isProductNameValid()) {
+      return;
+    }
     ArrayList<StockEntry> stockEntries = formData.getStockEntries();
     StockEntry currentStockEntry = formData.getSpecificStockEntryLive().getValue();
     String selectedId = currentStockEntry != null ? currentStockEntry.getStockId() : null;
     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
-    StockLocation stockLocation = formData.getStockLocationLive().getValue();
+    StockLocation stockLocation = formData.getFromLocationLive().getValue();
     assert stockLocation != null;
     int locationId = stockLocation.getLocationId();
     for (StockEntry stockEntry : stockEntries) {
-        if (stockEntry.getLocationId() == locationId) {
-            filteredStockEntries.add(stockEntry);
-        }
+      if (stockEntry.getLocationId() == locationId) {
+        filteredStockEntries.add(stockEntry);
+      }
     }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(
@@ -554,12 +570,12 @@ public class TransferViewModel extends BaseViewModel {
     showBottomSheet(new StockEntriesBottomSheet(), bundle);
   }
 
-  public void showStockLocationsBottomSheet() {
-      if (!formData.isProductNameValid()) {
-          return;
-      }
+  public void showStockLocationsBottomSheet() {  // from location
+    if (!formData.isProductNameValid()) {
+      return;
+    }
     ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-    StockLocation currentStockLocation = formData.getStockLocationLive().getValue();
+    StockLocation currentStockLocation = formData.getFromLocationLive().getValue();
     int selectedId = currentStockLocation != null ? currentStockLocation.getLocationId() : -1;
     ProductDetails productDetails = formData.getProductDetailsLive().getValue();
     QuantityUnit quantityUnitStock = formData.getQuantityUnitStockLive().getValue();
@@ -569,6 +585,21 @@ public class TransferViewModel extends BaseViewModel {
     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
     bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnitStock);
     showBottomSheet(new StockLocationsBottomSheet(), bundle);
+  }
+
+  public void showLocationsBottomSheet(boolean hasFocus) {  // to location
+    if (!hasFocus) {
+      return;
+    }
+    if (!formData.isProductNameValid()) {
+      return;
+    }
+    Location currentToLocation = formData.getToLocationLive().getValue();
+    int selectedId = currentToLocation != null ? currentToLocation.getId() : -1;
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
+    showBottomSheet(new LocationsBottomSheet(), bundle);
   }
 
   public void showConfirmationBottomSheet() {
@@ -592,9 +623,9 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public boolean isQuickModeEnabled() {
-      if (quickModeEnabled.getValue() == null) {
-          return false;
-      }
+    if (quickModeEnabled.getValue() == null) {
+      return false;
+    }
     return quickModeEnabled.getValue();
   }
 
@@ -606,7 +637,7 @@ public class TransferViewModel extends BaseViewModel {
     quickModeEnabled.setValue(!isQuickModeEnabled());
     sendEvent(isQuickModeEnabled() ? Event.QUICK_MODE_ENABLED : Event.QUICK_MODE_DISABLED);
     sharedPrefs.edit()
-        .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_CONSUME, isQuickModeEnabled())
+        .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_TRANSFER, isQuickModeEnabled())
         .apply();
     return true;
   }
@@ -619,9 +650,9 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public boolean isFeatureEnabled(String pref) {
-      if (pref == null) {
-          return true;
-      }
+    if (pref == null) {
+      return true;
+    }
     return sharedPrefs.getBoolean(pref, true);
   }
 
@@ -634,9 +665,9 @@ public class TransferViewModel extends BaseViewModel {
   public static class TransferViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final ConsumeFragmentArgs args;
+    private final TransferFragmentArgs args;
 
-    public TransferViewModelFactory(Application application, ConsumeFragmentArgs args) {
+    public TransferViewModelFactory(Application application, TransferFragmentArgs args) {
       this.application = application;
       this.args = args;
     }

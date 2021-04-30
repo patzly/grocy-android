@@ -19,8 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +35,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.activity.SettingsActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
-import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 
@@ -46,7 +44,7 @@ public class LocationsBottomSheet extends BaseBottomSheet
 
   private final static String TAG = LocationsBottomSheet.class.getSimpleName();
 
-  private Activity activity;
+  private MainActivity activity;
   private ArrayList<Location> locations;
 
   @NonNull
@@ -65,7 +63,7 @@ public class LocationsBottomSheet extends BaseBottomSheet
         R.layout.fragment_bottomsheet_list_selection, container, false
     );
 
-    activity = requireActivity();
+    activity = (MainActivity) requireActivity();
 
     locations = requireArguments().getParcelableArrayList(Constants.ARGUMENT.LOCATIONS);
     int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
@@ -95,19 +93,14 @@ public class LocationsBottomSheet extends BaseBottomSheet
 
   @Override
   public void onItemRowClicked(int position) {
-    if (activity.getClass() == MainActivity.class) {
-      BaseFragment currentFragment = ((MainActivity) activity).getCurrentFragment();
-      currentFragment.selectLocation(locations.get(position));
-    } else if (activity.getClass() == SettingsActivity.class) {
-      int locationId = locations.get(position).getId();
-      ((SettingsActivity) activity).setLocation(locationId);
-    }
-    ((MainActivity) activity).getCurrentFragment().setOption(
-        locations.get(position),
-        requireArguments().getString(Constants.ARGUMENT.PREFERENCE)
-    );
-
+    activity.getCurrentFragment().selectLocation(locations.get(position));
     dismiss();
+  }
+
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    activity.getCurrentFragment().onBottomSheetDismissed();
+    super.onDismiss(dialog);
   }
 
   @NonNull
