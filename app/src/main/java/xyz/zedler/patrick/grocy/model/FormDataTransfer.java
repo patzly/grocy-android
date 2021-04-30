@@ -259,7 +259,9 @@ public class FormDataTransfer {
       return null;
     }
     double amountMultiplied;
-    if (current.getId() == productDetails.getProduct()
+    if ((double) currentFactor == -1) {
+      amountMultiplied = amount;
+    } else if (current.getId() == productDetails.getProduct()
         .getQuIdPurchase()) {
       amountMultiplied = amount * (double) currentFactor;
     } else {
@@ -476,6 +478,12 @@ public class FormDataTransfer {
     if (toLocationLive.getValue() == null) {
       toLocationErrorLive.setValue(true);
       return false;
+    }
+    if (toLocationLive.getValue() != null && fromLocationLive.getValue() != null) {
+      if (toLocationLive.getValue().getId() == fromLocationLive.getValue().getLocationId()) {
+        toLocationErrorLive.setValue(true);
+        return false;
+      }
     }
     toLocationErrorLive.setValue(false);
     return true;

@@ -352,6 +352,7 @@ public class TransferFragment extends BaseFragment implements
     binding.autoCompleteConsumeProduct.clearFocus();
     binding.quantityUnitContainer.clearFocus();
     binding.textInputAmount.clearFocus();
+    binding.linearToLocation.clearFocus();
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {

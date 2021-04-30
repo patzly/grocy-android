@@ -402,7 +402,7 @@ public class TransferViewModel extends BaseViewModel {
 
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
-    dlHelper.postWithArray(grocyApi.consumeProduct(product.getId()),
+    dlHelper.postWithArray(grocyApi.transferProduct(product.getId()),
         body,
         response -> {
           // UNDO OPTION

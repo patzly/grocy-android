@@ -216,6 +216,14 @@ public class GrocyApi {
   }
 
   /**
+   * Transfers the given amount of the given product from one location to another
+   * (this is currently not supported for tare weight handling enabled products)
+   */
+  public String transferProduct(int productId) {
+    return getUrl("/stock/products/" + productId + "/transfer");
+  }
+
+  /**
    * Marks the given amount of the given product as opened
    */
   public String openProduct(int productId) {
