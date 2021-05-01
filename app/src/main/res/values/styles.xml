@@ -22,13 +22,17 @@
   <!-- SNACKBAR -->
   <!-- TODO: try to set button text color in style instead of programmatically -->
 
-  <style name="Widget.Grocy.Button.TextButton.Snackbar" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+  <style
+    name="Widget.Grocy.Button.TextButton.Snackbar"
+    parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
     <item name="android:fontFamily">@font/jost_bold</item>
   </style>
 
   <!-- TOOLBAR MENU BUTTON -->
 
-  <style name="Widget.Grocy.ActionButton.OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+  <style
+    name="Widget.Grocy.ActionButton.OverFlow"
+    parent="Widget.AppCompat.ActionButton.Overflow">
     <item name="android:tint">@color/icon</item>
   </style>
 
@@ -74,7 +78,9 @@
   <!-- TEXT INPUT -->
   <!-- TODO: remove unused attributes -->
 
-  <style name="Widget.Grocy.TextInputLayout.FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+  <style
+    name="Widget.Grocy.TextInputLayout.FilledBox"
+    parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="boxCornerRadiusTopStart">6dp</item>
@@ -89,7 +95,9 @@
     <item name="boxStrokeErrorColor">@color/error</item>
   </style>
 
-  <style name="Widget.Grocy.TextInputLayout.FilledBox.DropDown" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
+  <style
+    name="Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+    parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="boxCornerRadiusTopStart">6dp</item>
@@ -104,7 +112,9 @@
     <item name="boxStrokeErrorColor">@color/error</item>
   </style>
 
-  <style name="Widget.Grocy.TextInputLayout.FilledBox.Dense" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+  <style
+    name="Widget.Grocy.TextInputLayout.FilledBox.Dense"
+    parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="boxBackgroundColor">@color/on_background_tertiary</item>
@@ -119,7 +129,9 @@
     <item name="boxCornerRadiusTopEnd">6dp</item>
   </style>
 
-  <style name="Widget.Grocy.TextInputEditText.FilledBox.Dense" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
+  <style
+    name="Widget.Grocy.TextInputEditText.FilledBox.Dense"
+    parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
     <item name="android:padding">8dp</item>
   </style>
 
@@ -146,7 +158,9 @@
 
   <!-- TAB LAYOUT -->
 
-  <style name="Widget.Grocy.TabLayout.PageIndicator" parent="@style/Widget.MaterialComponents.TabLayout">
+  <style
+    name="Widget.Grocy.TabLayout.PageIndicator"
+    parent="@style/Widget.MaterialComponents.TabLayout">
     <item name="android:background">@color/primary</item>
     <item name="tabIndicatorColor">@color/secondary</item>
     <item name="tabIndicatorFullWidth">false</item>
@@ -155,7 +169,9 @@
 
   <!-- BUTTON -->
 
-  <style name="Widget.Grocy.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+  <style
+    name="Widget.Grocy.Button.OutlinedButton"
+    parent="Widget.MaterialComponents.Button.OutlinedButton">
     <item name="rippleColor">@color/secondary_translucent</item>
     <item name="iconTint">@color/icon</item>
     <item name="android:textColor">@color/secondary</item>
@@ -166,7 +182,9 @@
     <item name="cornerRadius">6dp</item>
   </style>
 
-  <style name="Widget.Grocy.Button.UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+  <style
+    name="Widget.Grocy.Button.UnelevatedButton"
+    parent="Widget.MaterialComponents.Button.UnelevatedButton">
     <item name="rippleColor">@color/highlight_on_secondary</item>
     <item name="android:textColor">@color/button_text_color_selector</item>
     <item name="android:textStyle">bold</item>
@@ -185,17 +203,23 @@
 
   <!-- PROGRESS BAR -->
 
-  <style name="Widget.Grocy.ProgressBar.Horizontal" parent="@android:style/Widget.ProgressBar.Horizontal">
+  <style
+    name="Widget.Grocy.ProgressBar.Horizontal"
+    parent="@android:style/Widget.ProgressBar.Horizontal">
     <item name="android:layout_height">4dp</item>
     <item name="android:progressDrawable">@drawable/progress_bar</item>
   </style>
 
-  <style name="Widget.Grocy.ProgressBar.Horizontal.Red" parent="@android:style/Widget.ProgressBar.Horizontal">
+  <style
+    name="Widget.Grocy.ProgressBar.Horizontal.Red"
+    parent="@android:style/Widget.ProgressBar.Horizontal">
     <item name="android:layout_height">4dp</item>
     <item name="android:progressDrawable">@drawable/progress_bar_red</item>
   </style>
 
-  <style name="Widget.Grocy.ProgressBar.Horizontal.Green" parent="@android:style/Widget.ProgressBar.Horizontal">
+  <style
+    name="Widget.Grocy.ProgressBar.Horizontal.Green"
+    parent="@android:style/Widget.ProgressBar.Horizontal">
     <item name="android:layout_height">4dp</item>
     <item name="android:progressDrawable">@drawable/progress_bar_green</item>
   </style>
@@ -218,43 +242,61 @@
     <item name="android:orientation">horizontal</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.Clickable" parent="Widget.Grocy.LinearLayout.ListItem">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.SingleLine" parent="Widget.Grocy.LinearLayout.ListItem">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine"
+    parent="Widget.Grocy.LinearLayout.ListItem">
     <item name="android:minHeight">48dp</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon" parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:minHeight">56dp</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable" parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable" parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.TwoLine" parent="Widget.Grocy.LinearLayout.ListItem">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine"
+    parent="Widget.Grocy.LinearLayout.ListItem">
     <item name="android:minHeight">64dp</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon" parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:minHeight">72dp</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable" parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable" parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
@@ -265,7 +307,9 @@
     <item name="android:orientation">vertical</item>
   </style>
 
-  <style name="Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch" parent="Widget.Grocy.LinearLayout.ListItem.TextBox">
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
+    parent="Widget.Grocy.LinearLayout.ListItem.TextBox">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_weight">1</item>
   </style>
@@ -278,13 +322,17 @@
     <item name="android:importantForAccessibility">no</item>
   </style>
 
-  <style name="Widget.Grocy.ImageView.ListItem.Icon.Top" parent="Widget.Grocy.ImageView.ListItem.Icon">
+  <style
+    name="Widget.Grocy.ImageView.ListItem.Icon.Top"
+    parent="Widget.Grocy.ImageView.ListItem.Icon">
     <item name="android:layout_gravity">start|top</item>
   </style>
 
   <!-- RADIO BUTTON -->
 
-  <style name="Widget.Grocy.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+  <style
+    name="Widget.Grocy.RadioButton"
+    parent="Widget.MaterialComponents.CompoundButton.RadioButton">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">16sp</item>
