@@ -140,6 +140,22 @@
 
       </LinearLayout>
 
+      <LinearLayout
+        android:id="@+id/linear_drawer_inventory"
+        style="@style/Widget.Grocy.LinearLayout.Drawer">
+
+        <ImageView
+          style="@style/Widget.Grocy.ImageView.Drawer"
+          android:importantForAccessibility="no"
+          android:src="@drawable/ic_round_inventory" />
+
+        <TextView
+          android:id="@+id/text_drawer_inventory"
+          style="@style/Widget.Grocy.TextView.DrawerItem"
+          android:text="@string/title_inventory" />
+
+      </LinearLayout>
+
       <View style="@style/Theme.Grocy.Divider" />
 
       <LinearLayout

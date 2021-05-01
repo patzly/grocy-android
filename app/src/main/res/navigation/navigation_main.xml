@@ -119,6 +119,37 @@
       android:id="@+id/deepLink6"
       app:uri="@string/deep_link_transferFragment" />
   </fragment>
+  <fragment
+    android:id="@+id/inventoryFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.InventoryFragment"
+    android:label="InventoryFragment"
+    tools:layout="@layout/fragment_inventory">
+    <argument
+      android:name="closeWhenFinished"
+      android:defaultValue="false"
+      app:argType="boolean" />
+    <argument
+      android:name="productId"
+      android:defaultValue="@null"
+      app:argType="string"
+      app:nullable="true" />
+    <argument
+      android:name="amount"
+      android:defaultValue="@null"
+      app:argType="string"
+      app:nullable="true" />
+    <argument
+      android:name="animateStart"
+      android:defaultValue="true"
+      app:argType="boolean" />
+    <deepLink
+      android:id="@+id/deepLink7"
+      app:uri="@string/deep_link_inventoryFragment" />
+    <argument
+      android:name="startWithScanner"
+      app:argType="boolean"
+      android:defaultValue="false" />
+  </fragment>
   <activity
     android:id="@+id/settingsActivity"
     android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
@@ -180,6 +211,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_transferFragment"
       app:destination="@id/transferFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_inventoryFragment"
+      app:destination="@id/inventoryFragment" />
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsActivity"
       app:destination="@id/settingsActivity" />

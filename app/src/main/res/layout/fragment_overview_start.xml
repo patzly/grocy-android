@@ -553,7 +553,7 @@
                 style="@style/Widget.Grocy.Card"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
+                android:onClick="@{() -> fragment.navigate(R.id.inventoryFragment)}"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout

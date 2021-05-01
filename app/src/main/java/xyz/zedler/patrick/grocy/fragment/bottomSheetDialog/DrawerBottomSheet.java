@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDrawerBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
+import xyz.zedler.patrick.grocy.fragment.InventoryFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
 import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
@@ -90,6 +91,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         binding.linearDrawerConsume,
         binding.linearDrawerPurchase,
         binding.linearDrawerTransfer,
+        binding.linearDrawerInventory,
         binding.linearDrawerMasterData,
         binding.linearDrawerSettings,
         binding.linearDrawerFeedback,
@@ -113,6 +115,8 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       select(binding.linearDrawerPurchase, binding.textDrawerPurchase);
     } else if (currentFragment instanceof TransferFragment) {
       select(binding.linearDrawerTransfer, binding.textDrawerTransfer);
+    } else if (currentFragment instanceof InventoryFragment) {
+      select(binding.linearDrawerInventory, binding.textDrawerInventory);
     } else if (currentFragment instanceof MasterObjectListFragment) {
       select(binding.linearDrawerMasterData, binding.textDrawerMasterData);
     } else if (currentFragment instanceof SettingsFragment) {
@@ -150,6 +154,9 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
     } else if (v.getId() == R.id.linear_drawer_transfer) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToTransferFragment());
+    } else if (v.getId() == R.id.linear_drawer_inventory) {
+      navigateCustom(DrawerBottomSheetDirections
+          .actionDrawerBottomSheetDialogFragmentToInventoryFragment());
     } else if (v.getId() == R.id.linear_drawer_master_data) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());
