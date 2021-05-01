@@ -24,7 +24,7 @@
   <color name="transparent">#00000000</color>
 
   <color name="retro_red">#e06a4e</color>
-  <color name="retro_red_fg">#c14f33</color>
+  <color name="retro_red_fg">#af513a</color>
   <color name="retro_red_bg_black">#ee7e62</color>
   <color name="retro_red_bg_white">#c35d45</color>
   <color name="retro_red_only_day">#ffae9a</color>
