@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.InventoryFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -253,7 +254,7 @@ public class FormDataInventory {
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
     sharedPrefs.edit()
-        .putBoolean(Constants.PREF.CAMERA_SCANNER_VISIBLE_PURCHASE, isScannerVisible())
+        .putBoolean(PREF.CAMERA_SCANNER_VISIBLE_INVENTORY, isScannerVisible())
         .apply();
   }
 
@@ -810,7 +811,7 @@ public class FormDataInventory {
 
   public boolean getCameraScannerWasVisibleLastTime() {
     return sharedPrefs.getBoolean(
-        Constants.PREF.CAMERA_SCANNER_VISIBLE_PURCHASE,
+        PREF.CAMERA_SCANNER_VISIBLE_INVENTORY,
         false
     );
   }

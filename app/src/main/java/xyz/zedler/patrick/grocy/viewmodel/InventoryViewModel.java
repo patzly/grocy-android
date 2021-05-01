@@ -102,7 +102,7 @@ public class InventoryViewModel extends BaseViewModel {
       quickModeStart = true;
     } else if (!args.getCloseWhenFinished()) {
       quickModeStart = sharedPrefs.getBoolean(
-          Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE,
+          Constants.PREF.QUICK_MODE_ACTIVE_INVENTORY,
           false
       );
     } else {
@@ -657,7 +657,7 @@ public class InventoryViewModel extends BaseViewModel {
     quickModeEnabled.setValue(!isQuickModeEnabled());
     sendEvent(isQuickModeEnabled() ? Event.QUICK_MODE_ENABLED : Event.QUICK_MODE_DISABLED);
     sharedPrefs.edit()
-        .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE, isQuickModeEnabled())
+        .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_INVENTORY, isQuickModeEnabled())
         .apply();
     return true;
   }

@@ -78,10 +78,12 @@ public final class Constants {
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
     public final static String QUICK_MODE_ACTIVE_SHOPPING_ITEM = "quick_mode_active_shopping_item";
     public final static String QUICK_MODE_ACTIVE_TRANSFER = "quick_mode_active_transfer";
+    public final static String QUICK_MODE_ACTIVE_INVENTORY = "quick_mode_active_inventory";
     public final static String CAMERA_SCANNER_VISIBLE_CONSUME = "camera_scanner_visible_consume";
     public final static String CAMERA_SCANNER_VISIBLE_PURCHASE = "camera_scanner_visible_purchase";
     public final static String CAMERA_SCANNER_VISIBLE_SHOPPING_ITEM = "camera_scanner_visible_shopping_item";
     public final static String CAMERA_SCANNER_VISIBLE_TRANSFER = "camera_scanner_visible_transfer";
+    public final static String CAMERA_SCANNER_VISIBLE_INVENTORY = "camera_scanner_visible_inventory";
 
     public final static String DARK_MODE = "force_dark_mode";
     public final static String FOOD_FACTS = "use_open_food_facts";

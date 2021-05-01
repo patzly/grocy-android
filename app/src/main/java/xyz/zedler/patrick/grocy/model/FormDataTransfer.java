@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -168,7 +169,7 @@ public class FormDataTransfer {
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
     sharedPrefs.edit()
-        .putBoolean(Constants.PREF.CAMERA_SCANNER_VISIBLE_CONSUME, isScannerVisible())
+        .putBoolean(PREF.CAMERA_SCANNER_VISIBLE_TRANSFER, isScannerVisible())
         .apply();
   }
 
@@ -579,7 +580,7 @@ public class FormDataTransfer {
 
   public boolean getCameraScannerWasVisibleLastTime() {
     return sharedPrefs.getBoolean(
-        Constants.PREF.CAMERA_SCANNER_VISIBLE_CONSUME,
+        PREF.CAMERA_SCANNER_VISIBLE_TRANSFER,
         false
     );
   }

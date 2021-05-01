@@ -148,10 +148,10 @@ public class InventoryFragment extends BaseFragment implements
       }
     });
 
-    if (getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID) != null) {
-      int productId = (int) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
+    Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
+    if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate, null));
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new InventoryFragmentArgs.Builder(args)
