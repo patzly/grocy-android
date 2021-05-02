@@ -97,13 +97,15 @@
   <string name="action_demo_server">Demoserver</string>
   <string name="action_own_server">Egen server</string>
   <string name="action_enter_data_manually">Skriv inn data manuelt</string>
-
   <!-- %1$s is the number of products which are expired -->
   <string name="msg_expired_products">%1$d gått ut på dato</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
   <string name="msg_missing_products">%1$d under min. lagerbeholdning</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Forbrukt %1$s %2$s av %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Forbrukt %1$s %2$s av %3$s som ødelagt</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Merk %1$s %2$s av %3$s som åpnet</string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d uferdige</string>
@@ -427,7 +429,6 @@
   <string name="info_intro">Spill av intro igjen</string>
   <string name="info_intro_description">Fremvisende funksjoner</string>
   <string name="info_dev_beginning_date">April 2020</string>
-  <string name="info_material_components_built_with">Bygd med</string>
   <string name="info_version">Versjon</string>
   <string name="info_grocy_version">Grocy versjon</string>
   <string name="info_changelog">Endringslogg</string>
@@ -503,4 +504,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://no.demo.grocy.info</string>
-</resources>
+  </resources>
