@@ -98,7 +98,6 @@
   <string name="action_demo_server">Демонстраційний сервер</string>
   <string name="action_own_server">Власний сервер</string>
   <string name="action_enter_data_manually">Введіть дані вручну</string>
-
   <!-- %1$s is the number of products which are due soon -->
   <string name="msg_due_products">%1$d скоро спливає термін</string>
   <!-- %1$s is the number of products which are overdue -->
@@ -109,8 +108,11 @@
   <string name="msg_missing_products">на %1$d нижче мінімального запасу</string>
   <!-- %1$s is the number of products which are in stock -->
   <string name="msg_in_stock_products">%1$d в запасах</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Зіпсовано %1$s %2$s %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d скасовано</string>
