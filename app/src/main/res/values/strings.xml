@@ -107,6 +107,7 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Own server</string>
   <string name="action_enter_data_manually">Enter data manually</string>
+  <string name="action_perform">Perform action</string>
 
   <!-- %1$s is the number of products which are due soon -->
   <string name="msg_due_products">%1$d due soon</string>
