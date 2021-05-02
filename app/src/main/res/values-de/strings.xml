@@ -28,6 +28,9 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in transfer screen for example. -->
   <string name="action_transfer">Umlagern</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Menge aktualisieren</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Alles verbrauchen</string>
 
@@ -124,6 +127,8 @@
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_transferred">%1$s %2$s %3$s umgelagert</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Bestandsmenge von %1$s ist jetzt %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s ist nicht im Bestand</string>
   <string name="msg_no_connection">Keine Verbindung</string>
@@ -148,6 +153,16 @@
   <string name="msg_master_delete_product">Produkt \"%1$s\" wirklich löschen?\n\nDadurch wird auch der Bestand, das Journal und alle anderen Referenzen dieses Produkts entfernt - ziehe stattdessen in Betracht, dieses Produkt zu deaktivieren, wenn du dies behalten und nur das Produkt ausblenden willst.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s wird zum Bestand hinzugefügt.</item>
+    <item quantity="other">%1$s %2$s werden zum Bestand hinzugefügt.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s wird vom Bestand entfernt.</item>
+    <item quantity="other">%1$s %2$s werden vom Bestand entfernt.</item>
+  </plurals>
   <string name="msg_transfer_tare_weight">Produkte mit aktivierter Taragewichtbehandlung können aktuell nicht umgelagert werden.</string>
   <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
@@ -157,6 +172,8 @@
   <string name="msg_quick_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s umlagern\nVon Standort: %4$s\nNach Standort: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Folgende Transaktion wird ausgeführt:\n\nBestandsmenge von %1$s zu %2$s %3$s ändern\nFür hinzugefügte Einträge gilt:\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nErforderlich:\nMin. Server-Version: %2$s\nMax. Server-Version: %3$s\n\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
   <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
   <string name="msg_logout_demo">Sie verwenden den öffentlichen Demo-Server <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (einmal täglich).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
@@ -199,6 +216,7 @@
   <string name="msg_help_tare_weight_purchase">Taragewichtbehandlung aktiviert - bitte den gesamten Behälter wiegen, die zu buchende Menge wird automatisch berechnet.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Dies wird als Standardeinstellung verwendet, wenn dieses Produkt als Rezeptzutat hinzugefügt wird.</string>
+  <string name="msg_help_inventory_fields">Die folgenden Felder gelten für neu hinzugefügte Einträge.</string>
   <string name="msg_help_external_scanner_ready">Sie können einen externen Scanner für das Feld unten verwenden, während es fokussiert und leer ist.</string>
   <string name="msg_help_external_scanner_settings">Diese App unterstützt externe Scanner-Geräte, welche wie eine Tastatur Eingaben senden und über USB oder Bluetooth verbunden werden können. Die folgenden Optionen müssen in Ihrem externen Scanner eingestellt sein:\n\nPräfix: Keines\nSuffix: TAB oder ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -247,6 +265,8 @@
   <string name="error_invalid_factor">Ungültiger Faktor</string>
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Darf nicht gleich %1$s sein</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Muss zwischen %1$s und %2$s sein</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -465,8 +485,12 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Menge in %1$s</string>
   <string name="property_price">Preis</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Preis pro %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Preis in %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Preis pro %1$s in %2$s</string>
   <string name="property_quantity_unit">Mengeneinheit</string>
   <string name="property_quantity_units">Mengeneinheiten</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
