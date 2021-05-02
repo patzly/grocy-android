@@ -67,7 +67,6 @@ public class FormDataTransfer {
   private ArrayList<StockLocation> stockLocations;
   private final MutableLiveData<StockLocation> fromLocationLive;
   private final LiveData<String> fromLocationNameLive;
-  private ArrayList<Location> locations;
   private final MutableLiveData<Location> toLocationLive;
   private final LiveData<String> toLocationNameLive;
   private final MutableLiveData<Boolean> toLocationErrorLive;
@@ -356,10 +355,6 @@ public class FormDataTransfer {
     return fromLocationNameLive;
   }
 
-  public void setLocations(ArrayList<Location> locations) {
-    this.locations = locations;
-  }
-
   public MutableLiveData<Location> getToLocationLive() {
     return toLocationLive;
   }
@@ -544,6 +539,7 @@ public class FormDataTransfer {
     if (!isFormValid()) {
       return null;
     }
+    assert productDetailsLive.getValue() != null;
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
 

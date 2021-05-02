@@ -722,6 +722,7 @@ public class FormDataInventory {
     if (!isFormValid()) {
       return null;
     }
+    assert productDetailsLive.getValue() != null;
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
 
