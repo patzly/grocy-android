@@ -251,20 +251,20 @@
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-              android:paddingTop="8dp"
+              android:paddingTop="0dp"
               android:paddingBottom="0dp">
 
               <ImageView
                 android:id="@+id/image_purchase_product"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 android:src="@drawable/ic_round_widgets"
-                android:layout_marginBottom="4dp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_purchase_product"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
                 android:hint="@string/property_product"
+                android:layout_marginTop="8dp"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_round_barcode_scan"
                 app:endIconTint="@color/icon"
@@ -371,7 +371,7 @@
                 style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:paddingTop="8dp"
+                android:paddingTop="0dp"
                 android:paddingBottom="0dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
@@ -382,13 +382,13 @@
                   android:id="@+id/image_amount"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                   android:src="@{formData.isTareWeightEnabledLive ? @drawable/ic_round_scale_anim : @drawable/ic_round_scatter_plot_anim}"
-                  android:layout_marginBottom="4dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
                   android:id="@+id/text_input_amount"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                   android:hint="@{formData.amountHintLive ?? @string/property_amount}"
+                  android:layout_marginTop="8dp"
                   app:helperTextEnabled="true"
                   app:helperText="@{formData.amountHelperLive ?? ` `}"
                   app:helperTextTextColor="@color/retro_blue_fg"
@@ -418,7 +418,6 @@
                 android:id="@+id/amount_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_less"
                 app:tint="@color/icon"
@@ -428,7 +427,6 @@
                 android:id="@+id/amount_less"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="12dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_more"
@@ -558,7 +556,7 @@
                 style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:paddingTop="8dp"
+                android:paddingTop="0dp"
                 android:paddingBottom="0dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
@@ -569,13 +567,13 @@
                   android:id="@+id/image_price"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                   android:src="@drawable/ic_round_cash_multiple"
-                  android:layout_marginBottom="4dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
                   android:id="@+id/text_input_purchase_price"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                   android:hint="@{formData.priceHintLive}"
+                  android:layout_marginTop="8dp"
                   app:helperTextEnabled="true"
                   app:helperText=" "
                   app:helperTextTextColor="@color/retro_blue_fg"
@@ -602,7 +600,6 @@
                 android:id="@+id/button_purchase_price_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:onClick="@{() -> formData.morePrice()}"
                 app:icon="@drawable/ic_round_expand_less"
                 app:tint="@color/icon"
@@ -612,7 +609,6 @@
                 android:id="@+id/button_purchase_price_less"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="12dp"
                 android:onClick="@{() -> formData.lessPrice()}"
                 app:icon="@drawable/ic_round_expand_more"
