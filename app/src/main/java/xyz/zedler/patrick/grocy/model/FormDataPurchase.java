@@ -401,10 +401,6 @@ public class FormDataPurchase {
       Double amountNew = null;
       if (amountCurrent > 1) {
         amountNew = amountCurrent - 1;
-      } else if (amountCurrent > 0.1) {
-        amountNew = amountCurrent - 0.1;
-      } else if (amountCurrent > 0.01) {
-        amountNew = amountCurrent - 0.01;
       }
       if (amountNew != null) {
         amountLive.setValue(NumUtil.trim(amountNew));
@@ -693,6 +689,7 @@ public class FormDataPurchase {
   }
 
   public String getConfirmationText() {
+    assert productDetailsLive.getValue() != null && amountStockLive.getValue() != null;
     double amountAdded = Double.parseDouble(amountStockLive.getValue());
     if (isTareWeightEnabled()) {
       amountAdded -= productDetailsLive.getValue().getStockAmount();

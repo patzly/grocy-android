@@ -1,5 +1,6 @@
 2.0.0-alpha07
 - New: Transfer page (finally!) (#385)
+- New: Inventory page (#115)
 - New: We use Conscrypt now to support TLS1.3 on older Android versions (#163)
 - New: You can duplicate products now (#146)
 - Improved: List sorting uses rules of currently selected language (#371)

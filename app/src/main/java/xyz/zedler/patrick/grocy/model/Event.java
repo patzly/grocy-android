@@ -24,7 +24,7 @@ import android.os.Bundle;
 public abstract class Event {
 
   public final static int SNACKBAR_MESSAGE = 0;
-  public final static int PURCHASE_SUCCESS = 2;
+  public final static int TRANSACTION_SUCCESS = 2;
   public final static int BARCODE_UNKNOWN = 4;
   public final static int BOTTOM_SHEET = 6;
   public final static int NAVIGATE_UP = 8;

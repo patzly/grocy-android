@@ -204,16 +204,15 @@ public class InventoryViewModel extends BaseViewModel {
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  public void setProduct(int productId, ProductBarcode barcode) {
+  public void setProduct(int productId) {
     DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
       Product updatedProduct = productDetails.getProduct();
       formData.getProductDetailsLive().setValue(productDetails);
       formData.getProductNameLive().setValue(updatedProduct.getName());
 
       // quantity unit
-      double initialUnitFactor;
       try {
-        initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+        setProductQuantityUnitsAndFactors(updatedProduct);
       } catch (IllegalArgumentException e) {
         showMessage(e.getMessage());
         formData.clearForm();
@@ -222,25 +221,8 @@ public class InventoryViewModel extends BaseViewModel {
 
       // amount
       boolean isTareWeightEnabled = formData.isTareWeightEnabled();
-      if (!isTareWeightEnabled && barcode != null && barcode.hasAmount()) {
-        // if barcode contains amount, take this (with tare weight handling off)
-        // quick mode status doesn't matter
-        formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
-      } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
-        String defaultAmount = sharedPrefs.getString(
-            Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
-            Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
-        );
-        if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
-        }
-        if (NumUtil.isStringDouble(defaultAmount)
-            && Double.parseDouble(defaultAmount) > 0) {
-          formData.getAmountLive().setValue(defaultAmount);
-        }
-      } else if (!isTareWeightEnabled) {
-        // if quick mode enabled, always fill with amount 1
-        formData.getAmountLive().setValue(NumUtil.trim(1));
+      if (!isTareWeightEnabled && !isQuickModeEnabled()) {
+        formData.getAmountLive().setValue(NumUtil.trim(productDetails.getStockAmount()));
       }
 
       // purchased date
@@ -260,31 +242,15 @@ public class InventoryViewModel extends BaseViewModel {
       }
 
       // price
-      String lastPrice;
-      if (barcode != null && barcode.hasLastPrice()) {
-        // if barcode contains last price, take this
-        lastPrice = barcode.getLastPrice();
-      } else {
-        lastPrice = productDetails.getLastPrice();
-      }
+      String lastPrice = productDetails.getLastPrice();
       if (lastPrice != null && !lastPrice.isEmpty()) {
-        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor);
+        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
       }
       formData.getPriceLive().setValue(lastPrice);
 
       // store
-      String storeId;
-      if (barcode != null && barcode.hasStoreId()) {
-        // if barcode contains store, take this
-        storeId = barcode.getStoreId();
-      } else {
-        storeId = productDetails.getLastShoppingLocationId();
-      }
-      if (!NumUtil.isStringInt(storeId)) {
-        storeId = productDetails.getDefaultShoppingLocationId();
-      }
-      Store store = NumUtil.isStringInt(storeId)
-          ? getStore(Integer.parseInt(storeId)) : null;
+      String storeId = productDetails.getDefaultShoppingLocationId();
+      Store store = NumUtil.isStringInt(storeId) ? getStore(Integer.parseInt(storeId)) : null;
       formData.getStoreLive().setValue(store);
       formData.getShowStoreSection().setValue(store != null || !stores.isEmpty());
 
@@ -303,10 +269,7 @@ public class InventoryViewModel extends BaseViewModel {
     }).perform(dlHelper.getUuid());
   }
 
-  private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
-      Product product,
-      ProductBarcode barcode
-  ) {
+  private void setProductQuantityUnitsAndFactors(Product product) {
     QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
     QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
 
@@ -332,33 +295,18 @@ public class InventoryViewModel extends BaseViewModel {
       unitFactors.put(unit, conversion.getFactor());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-
-    QuantityUnit barcodeUnit = null;
-    if (barcode != null && barcode.hasQuId()) {
-      barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
-    }
-    Double factor;
-    if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
-      formData.getQuantityUnitLive().setValue(barcodeUnit);
-      factor = unitFactors.get(barcodeUnit);
-    } else {
-      formData.getQuantityUnitLive().setValue(purchase);
-      factor = unitFactors.get(purchase);
-    }
-    return factor != null && factor != -1 ? factor : 1;
+    formData.getQuantityUnitLive().setValue(stock);
   }
 
   public void onBarcodeRecognized(String barcode) {
-    ProductBarcode productBarcode = null;
     Product product = null;
     for (ProductBarcode code : barcodes) {
       if (code.getBarcode().equals(barcode)) {
-        productBarcode = code;
         product = getProduct(code.getProductId());
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode);
+      setProduct(product.getId());
     } else {
       formData.getBarcodeLive().setValue(barcode);
       formData.isFormValid();
@@ -375,15 +323,13 @@ public class InventoryViewModel extends BaseViewModel {
     Product product = getProductFromName(input);
 
     if (product == null) {
-      ProductBarcode productBarcode = null;
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
-          productBarcode = code;
           product = getProduct(code.getProductId());
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode);
+        setProduct(product.getId());
         return;
       }
     }
@@ -396,7 +342,7 @@ public class InventoryViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product.getId(), null);
+      setProduct(product.getId());
     } else {
       showInputProductBottomSheet(input);
     }
@@ -407,40 +353,40 @@ public class InventoryViewModel extends BaseViewModel {
     formData.getProductNameLive().setValue(null);
   }
 
-  public void purchaseProduct() {
+  public void inventoryProduct() {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
     }
     if (formData.getBarcodeLive().getValue() != null) {
-      uploadProductBarcode(this::purchaseProduct);
+      uploadProductBarcode(this::inventoryProduct);
       return;
     }
 
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
     dlHelper.postWithArray(
-        grocyApi.purchaseProduct(product.getId()),
+        grocyApi.inventoryProduct(product.getId()),
         body,
         response -> {
           // UNDO OPTION
           String transactionId = null;
-          double amountPurchased = 0;
+          double amountDiff = 0;
           try {
             transactionId = response.getJSONObject(0)
                 .getString("transaction_id");
             for (int i = 0; i < response.length(); i++) {
-              amountPurchased += response.getJSONObject(i).getDouble("amount");
+              amountDiff += response.getJSONObject(i).getDouble("amount");
             }
           } catch (JSONException e) {
             if (debug)
-              Log.e(TAG, "purchaseProduct: " + e);
+              Log.e(TAG, "inventoryProduct: " + e);
           }
           if (debug)
-            Log.i(TAG, "purchaseProduct: transaction successful");
+            Log.i(TAG, "inventoryProduct: transaction successful");
 
           SnackbarMessage snackbarMessage = new SnackbarMessage(
-              formData.getTransactionSuccessMsg(amountPurchased)
+              formData.getTransactionSuccessMsg(amountDiff)
           );
           if (transactionId != null) {
             String transId = transactionId;
@@ -451,12 +397,12 @@ public class InventoryViewModel extends BaseViewModel {
             snackbarMessage.setDurationSecs(20);
           }
           showSnackbar(snackbarMessage);
-          sendEvent(Event.PURCHASE_SUCCESS);
+          sendEvent(Event.TRANSACTION_SUCCESS);
         },
         error -> {
           showErrorMessage();
             if (debug) {
-                Log.i(TAG, "purchaseProduct: " + error);
+                Log.i(TAG, "inventoryProduct: " + error);
             }
         }
     );

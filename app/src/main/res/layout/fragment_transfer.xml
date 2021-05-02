@@ -268,6 +268,29 @@
             </LinearLayout>
 
             <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_transfer_from"
+                tools:ignore="ContentDescription" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:text="@string/title_location_from" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@{formData.fromLocationNameLive ?? @string/subtitle_none_selected}" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
               android:id="@+id/quantity_unit_container"
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
               android:focusableInTouchMode="true"
@@ -370,29 +393,6 @@
                 app:icon="@drawable/ic_round_expand_more"
                 app:tint="@color/icon"
                 app:dense="true" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_transfer_from"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/title_location_from" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.fromLocationNameLive ?? @string/subtitle_none_selected}" />
-
-              </LinearLayout>
 
             </LinearLayout>
 

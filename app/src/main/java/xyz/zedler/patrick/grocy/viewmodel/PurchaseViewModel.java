@@ -451,7 +451,7 @@ public class PurchaseViewModel extends BaseViewModel {
             snackbarMessage.setDurationSecs(20);
           }
           showSnackbar(snackbarMessage);
-          sendEvent(Event.PURCHASE_SUCCESS);
+          sendEvent(Event.TRANSACTION_SUCCESS);
         },
         error -> {
           showErrorMessage();

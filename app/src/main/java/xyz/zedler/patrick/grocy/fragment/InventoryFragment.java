@@ -95,7 +95,8 @@ public class InventoryFragment extends BaseFragment implements
 
     args = InventoryFragmentArgs.fromBundle(requireArguments());
 
-    viewModel = new ViewModelProvider(this, new InventoryViewModelFactory(activity.getApplication(), args)
+    viewModel = new ViewModelProvider(this,
+        new InventoryViewModelFactory(activity.getApplication(), args)
     ).get(InventoryViewModel.class);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
@@ -106,10 +107,6 @@ public class InventoryFragment extends BaseFragment implements
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
     // INITIALIZE VIEWS
-
-        /*binding.linearPurchaseShoppingListItem.container.setBackground(
-                ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
-        );*/
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -124,7 +121,7 @@ public class InventoryFragment extends BaseFragment implements
             activity,
             activity.binding.frameMainContainer
         ));
-      } else if (event.getType() == Event.PURCHASE_SUCCESS) {
+      } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
         if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
           activity.navigateUp();
@@ -151,12 +148,12 @@ public class InventoryFragment extends BaseFragment implements
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate, null));
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate));
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new InventoryFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
-      viewModel.setProduct(productId, null);
+      viewModel.setProduct(productId);
     }
 
     viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
@@ -169,8 +166,6 @@ public class InventoryFragment extends BaseFragment implements
       lockOrUnlockRotation(visible);
     });
     // following lines are necessary because no observers are set in Views
-    viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {
-    });
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
@@ -205,7 +200,7 @@ public class InventoryFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
+    activity.getScrollBehavior().setUpScroll(R.id.scroll_inventory);
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
@@ -223,7 +218,7 @@ public class InventoryFragment extends BaseFragment implements
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
           } else {
-            viewModel.purchaseProduct();
+            viewModel.inventoryProduct();
           }
         }
     );
@@ -355,7 +350,7 @@ public class InventoryFragment extends BaseFragment implements
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null);
+    viewModel.setProduct(product.getId());
   }
 
   public void clearFocusAndCheckProductInput() {
@@ -409,7 +404,7 @@ public class InventoryFragment extends BaseFragment implements
 
   @Override
   public void startTransaction() {
-    viewModel.purchaseProduct();
+    viewModel.inventoryProduct();
   }
 
   @Override
@@ -423,7 +418,6 @@ public class InventoryFragment extends BaseFragment implements
 
   private void hideDisabledFeatures() {
     if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
       binding.linearPurchasePrice.setVisibility(View.GONE);
     }
     if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {

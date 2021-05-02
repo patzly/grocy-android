@@ -67,6 +67,7 @@ public class FormDataInventory {
   private final MediatorLiveData<String> amountHelperLive;
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
+  private final MediatorLiveData<String> transactionAmountHelperLive;
   private final MutableLiveData<String> purchasedDateLive;
   private final LiveData<String> purchasedDateTextLive;
   private final LiveData<String> purchasedDateTextHumanLive;
@@ -75,12 +76,8 @@ public class FormDataInventory {
   private final LiveData<String> dueDateTextHumanLive;
   private final MutableLiveData<Boolean> dueDateErrorLive;
   private final MutableLiveData<String> priceLive;
-  private final MediatorLiveData<String> priceStockLive;
   private final MutableLiveData<String> priceErrorLive;
-  private final MediatorLiveData<String> priceHelperLive;
-  private final String priceHint;
-  private final LiveData<String> unitPriceTextLive;
-  private final MutableLiveData<Boolean> isTotalPriceLive;
+  private final MediatorLiveData<String> priceHintLive;
   private final MutableLiveData<Boolean> showStoreSection;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
@@ -152,6 +149,13 @@ public class FormDataInventory {
         .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+    transactionAmountHelperLive = new MediatorLiveData<>();
+    transactionAmountHelperLive
+        .addSource(amountStockLive,
+            i -> transactionAmountHelperLive.setValue(getTransactionAmountHelpText()));
+    transactionAmountHelperLive
+        .addSource(quantityUnitsFactorsLive,
+            i -> transactionAmountHelperLive.setValue(getTransactionAmountHelpText()));
     purchasedDateLive = new MutableLiveData<>();
     purchasedDateTextLive = Transformations.map(
         purchasedDateLive,
@@ -198,28 +202,21 @@ public class FormDataInventory {
     dueDateLive.setValue(null);
     dueDateErrorLive = new MutableLiveData<>();
     priceLive = new MutableLiveData<>();
-    isTotalPriceLive = new MutableLiveData<>(false);
-    priceStockLive = new MediatorLiveData<>();
-    priceStockLive.addSource(amountLive, i -> priceStockLive.setValue(getPriceStock()));
-    priceStockLive.addSource(priceLive, i -> priceStockLive.setValue(getPriceStock()));
-    priceStockLive.addSource(isTotalPriceLive, i -> priceStockLive.setValue(getPriceStock()));
-    priceStockLive.addSource(quantityUnitLive, i -> priceStockLive.setValue(getPriceStock()));
     priceErrorLive = new MutableLiveData<>();
-    priceHelperLive = new MediatorLiveData<>();
-    priceHelperLive.addSource(priceStockLive, i -> priceHelperLive.setValue(getPriceHelpText()));
-    priceHelperLive.addSource(quantityUnitLive, i -> priceHelperLive.setValue(getPriceHelpText()));
-    if (currency != null && !currency.isEmpty()) {
-      priceHint = application.getString(R.string.property_price_in, currency);
-    } else {
-      priceHint = getString(R.string.property_price);
-    }
-    unitPriceTextLive = Transformations.map(
-        quantityUnitLive,
-        quantityUnit -> quantityUnit != null
-            ? application
-            .getString(R.string.title_unit_price_specific, quantityUnit.getName())
-            : getString(R.string.title_unit_price)
-    );
+    priceHintLive = new MediatorLiveData<>();
+    priceHintLive.addSource(quantityUnitStockLive, i -> {
+      if (currency != null && !currency.isEmpty() && i != null) {
+        priceHintLive.setValue(
+            application.getString(R.string.property_price_unit_in, i.getName(), currency));
+      } else if (currency != null && !currency.isEmpty()) {
+        priceHintLive.setValue(application.getString(R.string.property_price_in, currency));
+      } else if (i != null) {
+        priceHintLive.setValue(application.getString(R.string.property_price_unit, i.getName()));
+      } else {
+        priceHintLive.setValue(getString(R.string.property_price));
+      }
+    });
+    quantityUnitLive.setValue(null);
     showStoreSection = new MutableLiveData<>(true);
     storeLive = new MutableLiveData<>();
     storeNameLive = Transformations.map(
@@ -271,6 +268,7 @@ public class FormDataInventory {
   }
 
   public boolean isTareWeightEnabled() {
+    assert isTareWeightEnabledLive.getValue() != null;
     return isTareWeightEnabledLive.getValue();
   }
 
@@ -400,12 +398,8 @@ public class FormDataInventory {
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
       double amountCurrent = Double.parseDouble(amountLive.getValue());
       Double amountNew = null;
-      if (amountCurrent > 1) {
+      if (amountCurrent >= 1) {
         amountNew = amountCurrent - 1;
-      } else if (amountCurrent > 0.1) {
-        amountNew = amountCurrent - 0.1;
-      } else if (amountCurrent > 0.01) {
-        amountNew = amountCurrent - 0.01;
       }
       if (amountNew != null) {
         amountLive.setValue(NumUtil.trim(amountNew));
@@ -413,13 +407,40 @@ public class FormDataInventory {
     }
   }
 
-  public String getTransactionSuccessMsg(double amountPurchased) {
-    QuantityUnit stock = quantityUnitStockLive.getValue();
+  private String getTransactionAmountHelpText() {
+    ProductDetails productDetails = productDetailsLive.getValue();
+    QuantityUnit stockUnit = quantityUnitStockLive.getValue();
+    String amountStock = amountStockLive.getValue();
+    if (productDetails == null || stockUnit == null || !NumUtil.isStringDouble(amountStock)
+        || Double.parseDouble(amountStock) == productDetails.getStockAmount()) {
+      return null;
+    }
+    double amountDiff = Double.parseDouble(amountStock) - productDetails.getStockAmount();
+    double amountDiffAbs = Math.abs(amountDiff);
+    @StringRes int msg = amountDiff > 0
+        ? R.string.msg_inventory_transaction_add
+        : R.string.msg_inventory_transaction_remove;
     return application.getString(
-        R.string.msg_purchased,
-        NumUtil.trim(amountPurchased),
-        amountPurchased == 1 ? stock.getName() : stock.getNamePlural(),
-        productDetailsLive.getValue().getProduct().getName()
+        msg,
+        NumUtil.trim(amountDiffAbs),
+        amountDiffAbs == 1 ? stockUnit.getName() : stockUnit.getNamePlural()
+    );
+  }
+
+  public MediatorLiveData<String> getTransactionAmountHelperLive() {
+    return transactionAmountHelperLive;
+  }
+
+  public String getTransactionSuccessMsg(double amountDiff) {
+    QuantityUnit stockUnit = quantityUnitStockLive.getValue();
+    String amountStock = amountStockLive.getValue();
+    assert productDetailsLive.getValue() != null && stockUnit != null && amountStock != null;
+    return application.getString(
+        R.string.msg_inventoried,
+        productDetailsLive.getValue().getProduct().getName(),
+        amountStock,
+        amountDiff == 1 ? stockUnit.getName() : stockUnit.getNamePlural(),
+        NumUtil.trim(amountDiff)
     );
   }
 
@@ -455,79 +476,12 @@ public class FormDataInventory {
     return priceLive;
   }
 
-  private String getPriceStock() {
-    ProductDetails productDetails = productDetailsLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    QuantityUnit current = quantityUnitLive.getValue();
-    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
-    String amountString = amountLive.getValue();
-    String priceString = priceLive.getValue();
-    boolean isTotalPrice = isTotalPriceLive.getValue();
-
-    if (!NumUtil.isStringDouble(priceString) || !NumUtil.isStringDouble(amountString)) {
-      return null;
-    }
-    if (stock == null || current == null || productDetails == null || hashMap == null) {
-      return null;
-    }
-
-    double amount = Double.parseDouble(amountString);
-    double price = Double.parseDouble(priceString);
-    Object currentFactor = hashMap.get(current);
-    if (currentFactor == null) {
-      return null;
-    }
-
-    double priceMultiplied;
-    if (isTareWeightEnabled() || (double) currentFactor == -1) {
-      priceMultiplied = price;
-    } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchase()) {
-      priceMultiplied = price / (double) currentFactor;
-    } else {
-      priceMultiplied = price * (double) currentFactor;
-    }
-    if (isTotalPrice) {
-      priceMultiplied /= amount;
-    }
-    return NumUtil.trimPrice(priceMultiplied);
-  }
-
-  public MediatorLiveData<String> getPriceStockLive() {
-    return priceStockLive;
-  }
-
   public MutableLiveData<String> getPriceErrorLive() {
     return priceErrorLive;
   }
 
-  public String getPriceHint() {
-    return priceHint;
-  }
-
-  public LiveData<String> getPriceHelperLive() {
-    return priceHelperLive;
-  }
-
-  private String getPriceHelpText() {
-    QuantityUnit current = quantityUnitLive.getValue();
-    QuantityUnit stock = quantityUnitStockLive.getValue();
-    if (current == null || stock == null
-        || current.getId() == stock.getId() && !isTotalPriceLive.getValue()) {
-      return " ";
-    }
-    if (priceStockLive.getValue() == null) {
-      return " ";
-    }
-    String priceWithCurrency = priceStockLive.getValue();
-    if (currency != null && !currency.isEmpty()) {
-      priceWithCurrency += " " + currency;
-    }
-    return application.getString(
-        R.string.subtitle_price_means,
-        priceWithCurrency,
-        stock.getName()
-    );
+  public MediatorLiveData<String> getPriceHintLive() {
+    return priceHintLive;
   }
 
   public void morePrice() {
@@ -549,18 +503,6 @@ public class FormDataInventory {
     } else {
       priceLive.setValue(null);
     }
-  }
-
-  public MutableLiveData<Boolean> getIsTotalPriceLive() {
-    return isTotalPriceLive;
-  }
-
-  public void setIsTotalPriceLive(boolean isTotal) {
-    isTotalPriceLive.setValue(isTotal);
-  }
-
-  public LiveData<String> getUnitPriceTextLive() {
-    return unitPriceTextLive;
   }
 
   public MutableLiveData<Boolean> getShowStoreSection() {
@@ -640,9 +582,17 @@ public class FormDataInventory {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
       return false;
     }
-    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) <= 0) {
+    if (productDetailsLive.getValue() != null && NumUtil
+        .isStringDouble(amountLive.getValue())
+        && Double.parseDouble(amountLive.getValue()) == productDetailsLive.getValue()
+        .getStockAmount()) {
+      amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
+          NumUtil.trim(productDetailsLive.getValue().getStockAmount())));
+      return false;
+    }
+    if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) < 0) {
       amountErrorLive.setValue(application.getString(
-          R.string.error_bounds_higher, String.valueOf(0)
+          R.string.error_bounds_min, String.valueOf(0)
       ));
       return false;
     } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
@@ -694,6 +644,7 @@ public class FormDataInventory {
   }
 
   public String getConfirmationText() {
+    assert productDetailsLive.getValue() != null && amountStockLive.getValue() != null;
     double amountAdded = Double.parseDouble(amountStockLive.getValue());
     if (isTareWeightEnabled()) {
       amountAdded -= productDetailsLive.getValue().getStockAmount();
@@ -717,10 +668,10 @@ public class FormDataInventory {
     }
 
     return application.getString(
-        R.string.msg_quick_mode_confirm_purchase,
+        R.string.msg_quick_mode_confirm_inventory,
+        details.getProduct().getName(),
         NumUtil.trim(amountAdded),
         amountAdded == 1 ? qU.getName() : qU.getNamePlural(),
-        details.getProduct().getName(),
         dueDateTextLive.getValue(),
         price,
         store,
@@ -731,7 +682,7 @@ public class FormDataInventory {
   public JSONObject getFilledJSONObject() {
     String amount = getAmountStock();
     assert amount != null;
-    String price = priceStockLive.getValue();
+    String price = priceLive.getValue();
     Store store = storeLive.getValue();
     String storeId = store != null ? String.valueOf(store.getId()) : null;
     Location location = locationLive.getValue();
@@ -743,7 +694,7 @@ public class FormDataInventory {
 
     JSONObject json = new JSONObject();
     try {
-      json.put("amount", amount);
+      json.put("new_amount", amount);
       if (NumUtil.isStringDouble(price)) {
         json.put("price", price);
       }
@@ -771,14 +722,10 @@ public class FormDataInventory {
     }
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
-    Store store = storeLive.getValue();
 
     ProductBarcode productBarcode = new ProductBarcode();
     productBarcode.setProductId(product.getId());
     productBarcode.setBarcode(barcode);
-    if (store != null) {
-      productBarcode.setStoreId(String.valueOf(store.getId()));
-    }
     return productBarcode;
   }
 

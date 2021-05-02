@@ -127,6 +127,8 @@
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_transferred">Transferred %1$s %2$s of %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Stock amount of %1$s is now %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s is not in stock</string>
   <string name="msg_no_connection">No connection</string>
@@ -151,6 +153,10 @@
   <string name="msg_master_delete_product">Are you sure to delete product \"%1$s\"?\n\nThis also removes any stock amount, the journal and all other references of this product - consider disabling it instead, if you want to keep that and just hide the product.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">This %1$s is still in use</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit -->
+  <string name="msg_inventory_transaction_add">%1$s %2$s will be added to stock.</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit -->
+  <string name="msg_inventory_transaction_remove">%1$s %2$s will be removed from stock.</string>
   <string name="msg_transfer_tare_weight">Products with tare weight enabled are currently not supported for transfer.</string>
   <string name="msg_item_marked_as_done">Marked item as done</string>
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
@@ -160,6 +166,8 @@
   <string name="msg_quick_mode_confirm_consume">Transaction which will be executed:\n\nRemove %1$s %2$s of %3$s from stock\nLocation: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transaction which will be executed:\n\nTransfer %1$s %2$s of %3$s\nFrom Location: %4$s\nTo Location: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Transaction which will be executed:\n\nSet stock amount of %1$s to %2$s %3$s\nApply for added items:\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nRequired:\nMin. server version: %2$s\nMax. server version: %3$s\n\nIf you ignore this warning, data loss (unlikely) and crashes (likely) may occur.\nYou have been warned!</string>
   <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
   <string name="msg_logout_demo">You\'re using the public demo server <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
@@ -202,6 +210,7 @@
   <string name="msg_help_tare_weight_purchase">Tare weight handling enabled - please weigh the whole container, the amount to be posted will be automatically calculated.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
+  <string name="msg_help_inventory_fields">The following fields apply to newly added products.</string>
   <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
   <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -250,6 +259,8 @@
   <string name="error_invalid_factor">Invalid factor</string>
   <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Cannot be equal to %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Must be between %1$s and %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -474,8 +485,12 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Amount in %1$s</string>
   <string name="property_price">Price</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Price per %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Price in %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Price per %1$s in %2$s</string>
   <string name="property_quantity_unit">Quantity unit</string>
   <string name="property_quantity_units">Quantity units</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -224,6 +224,13 @@ public class GrocyApi {
   }
 
   /**
+   * Inventories the given product (adds/removes based on the given new amount)
+   */
+  public String inventoryProduct(int productId) {
+    return getUrl("/stock/products/" + productId + "/inventory");
+  }
+
+  /**
    * Marks the given amount of the given product as opened
    */
   public String openProduct(int productId) {

@@ -125,7 +125,7 @@ public class PurchaseFragment extends BaseFragment implements
             activity,
             activity.binding.frameMainContainer
         ));
-      } else if (event.getType() == Event.PURCHASE_SUCCESS) {
+      } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
         if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
           activity.navigateUp();

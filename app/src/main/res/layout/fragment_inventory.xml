@@ -142,7 +142,7 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-          android:id="@+id/scroll_purchase"
+          android:id="@+id/scroll_inventory"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:overScrollMode="never"
@@ -437,6 +437,53 @@
 
             </LinearLayout>
 
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="0dp"
+              android:layout_marginTop="8dp"
+              android:visibility="@{formData.transactionAmountHelperLive != null ? View.VISIBLE : View.GONE}"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{formData.transactionAmountHelperLive}" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+              android:layout_width="match_parent"
+              android:layout_height="8dp"
+              android:visibility="@{formData.displayHelpLive ? View.GONE : View.VISIBLE}"/>
+
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="8dp"
+              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_help_inventory_fields" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
               android:onClick="@{() -> viewModel.showPurchasedDateBottomSheet()}"
@@ -528,9 +575,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                   android:id="@+id/text_input_purchase_price"
                   style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                  android:hint="@{formData.priceHint}"
+                  android:hint="@{formData.priceHintLive}"
                   app:helperTextEnabled="true"
-                  app:helperText="@{formData.priceHelperLive ?? ` `}"
+                  app:helperText=" "
                   app:helperTextTextColor="@color/retro_blue_fg"
                   app:errorText="@{formData.priceErrorLive}">
 
@@ -571,40 +618,6 @@
                 app:icon="@drawable/ic_round_expand_more"
                 app:tint="@color/icon"
                 app:dense="true" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/linear_purchase_total_price"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:background="@null"
-              android:paddingTop="0dp"
-              android:paddingBottom="0dp"
-              android:paddingStart="0dp"
-              android:paddingEnd="0dp"
-              android:layout_marginStart="72dp"
-              android:weightSum="2"
-              android:visibility="@{formData.priceLive == null || formData.priceLive.empty ? View.GONE : View.VISIBLE}">
-
-              <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/Widget.Grocy.RadioButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingEnd="12dp"
-                android:paddingStart="0dp"
-                android:text="@{formData.unitPriceTextLive ?? @string/title_unit_price}"
-                android:checked="@{!formData.isTotalPriceLive}"
-                android:onClick="@{() -> formData.setIsTotalPriceLive(false)}" />
-
-              <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/Widget.Grocy.RadioButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/title_total_price"
-                android:checked="@{formData.isTotalPriceLive}"
-                android:onClick="@{() -> formData.setIsTotalPriceLive(true)}" />
 
             </LinearLayout>
 
