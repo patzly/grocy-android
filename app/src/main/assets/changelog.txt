@@ -14,6 +14,7 @@
 - Fixed: Parent product field is locked if product is already parent product (#349)
 - Fixed: Barcode chips have not cleared the barcode when removed
 - Fixed: Quick mode on consume page had wrong initial state sometimes
+- Fixed: Remove barcode from forms during 'clear form' action
 
 2.0.0-alpha06
 - New: Stock overview page now has list animations and offline loading

@@ -779,6 +779,7 @@ public class FormDataPurchase {
   }
 
   public void clearForm() {
+    barcodeLive.setValue(null);
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);

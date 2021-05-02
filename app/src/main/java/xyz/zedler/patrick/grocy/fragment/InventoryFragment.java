@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel;
@@ -113,7 +114,7 @@ public class InventoryFragment extends BaseFragment implements
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-        binding.swipePurchase.setRefreshing(isDownloading)
+        binding.swipe.setRefreshing(isDownloading)
     );
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -123,7 +124,7 @@ public class InventoryFragment extends BaseFragment implements
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
-        if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+        if (InventoryFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
           activity.navigateUp();
         } else {
           viewModel.getFormData().clearForm();
@@ -204,13 +205,13 @@ public class InventoryFragment extends BaseFragment implements
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        R.menu.menu_purchase,
+        R.menu.menu_inventory,
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_local_grocery_store,
-        R.string.action_purchase,
-        Constants.FAB.TAG.PURCHASE,
+        R.drawable.ic_round_inventory,
+        R.string.action_inventory,
+        FAB.TAG.INVENTORY,
         animated,
         () -> {
           if (viewModel.isQuickModeEnabled()) {
