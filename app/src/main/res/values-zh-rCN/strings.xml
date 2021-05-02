@@ -97,13 +97,15 @@
   <string name="action_demo_server">演示服务器</string>
   <string name="action_own_server">自己的服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
-
   <!-- %1$s is the number of products which are expired -->
   <string name="msg_expired_products">%1$d已过期</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
   <string name="msg_missing_products">最低%1$d.库存数量</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%3$s中的%1$s%2$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">消耗%3$s中的%1$s%2$s作为损耗</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">标记%3$s中的%1$s%2$s为已打开</string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d未完成</string>
@@ -515,7 +517,6 @@
   <string name="info_intro_description">展示功能</string>
   <string name="info_dev_beginning">开始开发</string>
   <string name="info_dev_beginning_date">2020年4月</string>
-  <string name="info_material_components_built_with">Built with</string>
   <string name="info_version">版本</string>
   <string name="info_grocy_version">Grocy版本</string>
   <string name="info_changelog">更新日志</string>
@@ -600,4 +601,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://zh-tw.demo.grocy.info</string>
-</resources>
+  </resources>
