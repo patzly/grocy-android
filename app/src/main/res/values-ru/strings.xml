@@ -97,13 +97,21 @@
   <string name="action_demo_server">Демо сервер</string>
   <string name="action_own_server">Собственный сервер</string>
   <string name="action_enter_data_manually">Ввести данные вручную</string>
-
+  <!-- %1$s is the number of products which are due soon -->
+  <string name="msg_due_products">%1$d скоро испортится</string>
+  <!-- %1$s is the number of products which are overdue -->
+  <string name="msg_overdue_products">%1$d испортилось</string>
   <!-- %1$s is the number of products which are expired -->
   <string name="msg_expired_products">%1$d испортилось</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
   <string name="msg_missing_products">%1$d меньше минимального запаса</string>
+  <!-- %1$s is the number of products which are in stock -->
+  <string name="msg_in_stock_products">%1$d в запасах</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Испортилось %1$s %2$s %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Вскрыть %1$s %2$s %3$s </string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d отменено</string>
@@ -204,6 +212,7 @@
   <string name="error_empty_shopping_list">Пустой список покупок</string>
   <string name="error_empty_shopping_list_sub">Добавьте нужные продукты</string>
   <string name="error_empty_master_data_sub">Создайте с помощью кнопки внизу</string>
+  <string name="error_empty_product_barcodes">Нет штрихкодов продуктов</string>
   <string name="error_empty_locations">Нет мест хранения</string>
   <string name="error_empty_product_groups">Нет продуктовых групп</string>
   <string name="error_empty_products">Нет продуктов</string>
@@ -346,6 +355,11 @@
   <string name="subtitle_supported">Поддерживается</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">Не поддерживается</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Количество: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Единица измерения: %1$d</string>
+
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
@@ -362,6 +376,48 @@
     <item quantity="few">У вас есть %1$d продукта в запасах.</item>
     <item quantity="many">У вас есть %1$d продуктов в запасах.</item>
     <item quantity="other">У вас есть %1$d продуктов в запасах.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d продукт испортится через %2$d дн.</item>
+    <item quantity="few">%1$d продукта испортятся через %2$d дн.</item>
+    <item quantity="many">%1$d продуктов испортятся через %2$d дн.</item>
+    <item quantity="other">%1$d продуктов испортятся через %2$d дн.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d продукт испорчен.</item>
+    <item quantity="few">%1$d продукта испорчены.</item>
+    <item quantity="many">%1$d продуктов испорчены.</item>
+    <item quantity="other">%1$d продуктов испорчены.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d продукт сегодня испортится.</item>
+    <item quantity="few">%1$d продукта сегодня испортятся.</item>
+    <item quantity="many">%1$d продуктов сегодня испортятся.</item>
+    <item quantity="other">%1$d продуктов сегодня испортятся.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d продукт меньше заданного мин. количества.</item>
+    <item quantity="few">%1$d продукта меньше заданного мин. количества.</item>
+    <item quantity="many">%1$d продуктов меньше заданного мин. количества.</item>
+    <item quantity="other">%1$d продуктов меньше заданного мин. количества.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d из них в списке покупок.</item>
+    <item quantity="few">%1$d из них в списке покупок.</item>
+    <item quantity="many">%1$d из них в списке покупок.</item>
+    <item quantity="other">%1$d из них в списке покупок.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d из них в списках покупок.</item>
+    <item quantity="few">%1$d из них в списках покупок.</item>
+    <item quantity="many">%1$d из них в списках покупок.</item>
+    <item quantity="other">%1$d из них в списках покупок.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
@@ -562,7 +618,6 @@
   <string name="info_intro_description">Демонстрация возможностей</string>
   <string name="info_dev_beginning">Начало разработки</string>
   <string name="info_dev_beginning_date">Апрель 2020</string>
-  <string name="info_material_components_built_with">Собрано при помощи</string>
   <string name="info_version">Версия</string>
   <string name="info_grocy_version">Версия Grocy</string>
   <string name="info_changelog">Список изменений</string>
@@ -647,4 +702,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://ru.demo.grocy.info</string>
-</resources>
+  </resources>
