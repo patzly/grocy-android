@@ -97,13 +97,15 @@
   <string name="action_demo_server">Serwer demonstracyjny</string>
   <string name="action_own_server">Własny serwer</string>
   <string name="action_enter_data_manually">Wpisz dane ręcznie</string>
-
   <!-- %1$s is the number of products which are expired -->
   <string name="msg_expired_products">%1$d po terminie przydatności</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
   <string name="msg_missing_products">%1$d poniżej min. ilości zapasu</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Spożyto %1$s %2$s z %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Oznaczono %1$s %2$s z %3$s jako zepsute</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Oznaczono %1$s %2$s z %3$s jako otwarte</string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d niekupione</string>
@@ -548,7 +550,6 @@
   <string name="info_intro_description">Prezentacja funkcji</string>
   <string name="info_dev_beginning">Początek rozwoju</string>
   <string name="info_dev_beginning_date">Kwiecień 2020</string>
-  <string name="info_material_components_built_with">Zbudowane z</string>
   <string name="info_version">Wersja</string>
   <string name="info_grocy_version">Wersja Grocy</string>
   <string name="info_changelog">Lista zmian</string>
@@ -632,4 +633,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://pl.demo.grocy.info</string>
-</resources>
+  </resources>
