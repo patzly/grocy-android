@@ -215,16 +215,16 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 android:src="@drawable/ic_round_widgets"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="8dp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+                android:hint="@string/property_product"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_round_barcode_scan"
                 app:endIconTint="@color/icon"
                 app:endIconContentDescription="Scan barcode"
-                android:hint="@string/property_product"
                 app:helperTextEnabled="true"
                 app:helperText=" "
                 app:errorIconDrawable="@{null}"
@@ -341,7 +341,7 @@
                   android:id="@+id/image_amount"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                   android:src="@drawable/ic_round_scatter_plot_anim"
-                  android:layout_marginBottom="4dp"
+                  android:layout_marginBottom="8dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -377,7 +377,7 @@
                 android:id="@+id/amount_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="4dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_less"
                 app:tint="@color/icon"
@@ -387,8 +387,8 @@
                 android:id="@+id/amount_less"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="12dp"
+                android:layout_marginBottom="4dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_more"
                 app:tint="@color/icon"
