@@ -385,8 +385,7 @@ public class FormDataInventory {
         amountLive.setValue(String.valueOf(1));
       } else {
         amountLive.setValue(NumUtil.trim(productDetailsLive.getValue()
-            .getProduct().getTareWeightDouble()
-            + productDetailsLive.getValue().getStockAmount() + 1));
+            .getProduct().getTareWeightDouble()));
       }
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
@@ -417,6 +416,9 @@ public class FormDataInventory {
       return null;
     }
     double amountDiff = Double.parseDouble(amountStock) - productDetails.getStockAmount();
+    if(isTareWeightEnabled()) {
+      amountDiff -= productDetails.getProduct().getTareWeightDouble();
+    }
     double amountDiffAbs = Math.abs(amountDiff);
     @PluralsRes int msg = amountDiff > 0
         ? R.plurals.msg_inventory_transaction_add
@@ -437,12 +439,16 @@ public class FormDataInventory {
     QuantityUnit stockUnit = quantityUnitStockLive.getValue();
     String amountStock = amountStockLive.getValue();
     assert productDetailsLive.getValue() != null && stockUnit != null && amountStock != null;
+    if (isTareWeightEnabled()) {
+      amountStock = NumUtil.trim(Double.parseDouble(amountStock)
+          - productDetailsLive.getValue().getProduct().getTareWeightDouble());
+    }
     return application.getString(
         R.string.msg_inventoried,
         productDetailsLive.getValue().getProduct().getName(),
         amountStock,
         amountDiff == 1 ? stockUnit.getName() : stockUnit.getNamePlural(),
-        NumUtil.trim(amountDiff)
+        amountDiff >= 0 ? "+" + NumUtil.trim(amountDiff) : NumUtil.trim(amountDiff)
     );
   }
 
@@ -572,7 +578,8 @@ public class FormDataInventory {
   }
 
   public boolean isAmountValid() {
-    if (productDetailsLive.getValue() == null) {
+    ProductDetails productDetails = productDetailsLive.getValue();
+    if (productDetails == null) {
       amountErrorLive.setValue(null);
       return true;
     }
@@ -584,12 +591,18 @@ public class FormDataInventory {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
       return false;
     }
-    if (productDetailsLive.getValue() != null && NumUtil
-        .isStringDouble(amountLive.getValue())
-        && Double.parseDouble(amountLive.getValue()) == productDetailsLive.getValue()
-        .getStockAmount()) {
+    if (!isTareWeightEnabled()&& NumUtil.isStringDouble(amountLive.getValue())
+        && Double.parseDouble(amountLive.getValue()) == productDetails.getStockAmount()) {
       amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
-          NumUtil.trim(productDetailsLive.getValue().getStockAmount())));
+          NumUtil.trim(productDetails.getStockAmount())));
+      return false;
+    }
+    if (isTareWeightEnabled() && NumUtil.isStringDouble(amountLive.getValue())
+        && Double.parseDouble(amountLive.getValue()) == productDetails.getStockAmount()
+        + productDetails.getProduct().getTareWeightDouble()) {
+      amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
+          NumUtil.trim(productDetails.getStockAmount()
+              + productDetails.getProduct().getTareWeightDouble())));
       return false;
     }
     if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) < 0) {
@@ -597,15 +610,12 @@ public class FormDataInventory {
           R.string.error_bounds_min, String.valueOf(0)
       ));
       return false;
-    } else if (isTareWeightEnabled() && productDetailsLive.getValue() != null
-        && Double.parseDouble(amountLive.getValue())
-        <= productDetailsLive.getValue().getProduct().getTareWeightDouble()
-        + productDetailsLive.getValue().getStockAmount()
+    } else if (isTareWeightEnabled() && Double.parseDouble(amountLive.getValue())
+        < productDetails.getProduct().getTareWeightDouble()
     ) {
       amountErrorLive.setValue(application.getString(
-          R.string.error_bounds_higher,
-          NumUtil.trim(productDetailsLive.getValue().getProduct()
-              .getTareWeightDouble() + productDetailsLive.getValue().getStockAmount())
+          R.string.error_bounds_min,
+          NumUtil.trim(productDetails.getProduct().getTareWeightDouble())
       ));
       return false;
     }
@@ -647,10 +657,9 @@ public class FormDataInventory {
 
   public String getConfirmationText() {
     assert productDetailsLive.getValue() != null && amountStockLive.getValue() != null;
-    double amountAdded = Double.parseDouble(amountStockLive.getValue());
+    double amountNew = Double.parseDouble(amountStockLive.getValue());
     if (isTareWeightEnabled()) {
-      amountAdded -= productDetailsLive.getValue().getStockAmount();
-      amountAdded -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
+      amountNew -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
     }
     QuantityUnit qU = quantityUnitLive.getValue();
     ProductDetails details = productDetailsLive.getValue();
@@ -672,8 +681,8 @@ public class FormDataInventory {
     return application.getString(
         R.string.msg_quick_mode_confirm_inventory,
         details.getProduct().getName(),
-        NumUtil.trim(amountAdded),
-        amountAdded == 1 ? qU.getName() : qU.getNamePlural(),
+        NumUtil.trim(amountNew),
+        amountNew == 1 ? qU.getName() : qU.getNamePlural(),
         dueDateTextLive.getValue(),
         price,
         store,
