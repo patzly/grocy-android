@@ -156,12 +156,15 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
     boolean isInStock = stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(toolbar.getMenu(), true);
-    // disable consume actions if necessary
+    // disable actions if necessary
     toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
     toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
         isInStock && product.getEnableTareWeightHandling() == 0
     );
     toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
+    toolbar.getMenu().findItem(R.id.action_transfer).setEnabled(
+        isInStock && product.getEnableTareWeightHandling() == 0
+    );
     toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
         activity.showMessage(R.string.msg_not_implemented_yet);
@@ -197,6 +200,24 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         NavHostFragment.findNavController(this).navigate(
             ProductOverviewBottomSheetDirections
                 .actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
+                .setCloseWhenFinished(true)
+                .setProductId(String.valueOf(product.getId()))
+        );
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_transfer) {
+        NavHostFragment.findNavController(this).navigate(
+            ProductOverviewBottomSheetDirections
+                .actionProductOverviewBottomSheetDialogFragmentToTransferFragment()
+                .setCloseWhenFinished(true)
+                .setProductId(String.valueOf(product.getId()))
+        );
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_inventory) {
+        NavHostFragment.findNavController(this).navigate(
+            ProductOverviewBottomSheetDirections
+                .actionProductOverviewBottomSheetDialogFragmentToInventoryFragment()
                 .setCloseWhenFinished(true)
                 .setProductId(String.valueOf(product.getId()))
         );

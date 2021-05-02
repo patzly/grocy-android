@@ -185,14 +185,26 @@
       android:defaultValue="false"
       app:argType="boolean" />
     <action
+      android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
+      app:destination="@id/consumeFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down" />
+    <action
       android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_purchaseFragment"
       app:destination="@id/purchaseFragment"
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down" />
     <action
-      android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_consumeFragment"
-      app:destination="@id/consumeFragment"
+      android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_transferFragment"
+      app:destination="@id/transferFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down" />
+    <action
+      android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_inventoryFragment"
+      app:destination="@id/inventoryFragment"
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down" />
