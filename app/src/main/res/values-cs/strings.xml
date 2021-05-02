@@ -97,13 +97,15 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Vlastní server</string>
   <string name="action_enter_data_manually">Zadejte údaje ručně</string>
-
   <!-- %1$s is the number of products which are expired -->
   <string name="msg_expired_products">%1$d po expiraci</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
   <string name="msg_missing_products">%1$d nemá dostatečnou min. zásobu</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Zkonzumováno %1$s %2$s z %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Zkonzumováno %1$s %2$s z %3$s jako zkažené</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Označit %1$s %2$s z %3$s jako otevřené</string>
   <!-- %1$s is the number of undone items in shopping list -->
   <string name="msg_undone_items">%1$d nehotovo</string>
@@ -557,7 +559,6 @@
   <string name="info_intro_description">Představení funkcí</string>
   <string name="info_dev_beginning">Začátek vývoje</string>
   <string name="info_dev_beginning_date">Duben 2020</string>
-  <string name="info_material_components_built_with">Vytvořeno s</string>
   <string name="info_version">Verze</string>
   <string name="info_grocy_version">Verze Grocy</string>
   <string name="info_changelog">Log změn</string>
@@ -642,4 +643,4 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://cs.demo.grocy.info</string>
-</resources>
+  </resources>
