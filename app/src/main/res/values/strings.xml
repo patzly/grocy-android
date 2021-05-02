@@ -156,10 +156,16 @@
   <string name="msg_master_delete_product">Are you sure to delete product \"%1$s\"?\n\nThis also removes any stock amount, the journal and all other references of this product - consider disabling it instead, if you want to keep that and just hide the product.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">This %1$s is still in use</string>
-  <!-- %1$s is an amount and %2$s is a quantity unit -->
-  <string name="msg_inventory_transaction_add">%1$s %2$s will be added to stock.</string>
-  <!-- %1$s is an amount and %2$s is a quantity unit -->
-  <string name="msg_inventory_transaction_remove">%1$s %2$s will be removed from stock.</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s will be added to stock.</item>
+    <item quantity="other">%1$s %2$s will be added to stock.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s will be removed from stock.</item>
+    <item quantity="other">%1$s %2$s will be removed from stock.</item>
+  </plurals>
   <string name="msg_transfer_tare_weight">Products with tare weight enabled are currently not supported for transfer.</string>
   <string name="msg_item_marked_as_done">Marked item as done</string>
   <string name="msg_item_marked_as_undone">Marked item as undone</string>

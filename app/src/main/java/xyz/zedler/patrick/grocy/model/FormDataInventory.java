@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+import androidx.annotation.PluralsRes;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -417,11 +418,12 @@ public class FormDataInventory {
     }
     double amountDiff = Double.parseDouble(amountStock) - productDetails.getStockAmount();
     double amountDiffAbs = Math.abs(amountDiff);
-    @StringRes int msg = amountDiff > 0
-        ? R.string.msg_inventory_transaction_add
-        : R.string.msg_inventory_transaction_remove;
-    return application.getString(
+    @PluralsRes int msg = amountDiff > 0
+        ? R.plurals.msg_inventory_transaction_add
+        : R.plurals.msg_inventory_transaction_remove;
+    return application.getResources().getQuantityString(
         msg,
+        (int) Math.ceil(amountDiffAbs),
         NumUtil.trim(amountDiffAbs),
         amountDiffAbs == 1 ? stockUnit.getName() : stockUnit.getNamePlural()
     );
