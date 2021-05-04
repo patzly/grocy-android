@@ -1,3 +1,7 @@
+2.0.0-alpha08
+- Improved: Updated translations
+- Fixed: Menus were not displayed after first app start (#365)
+
 2.0.0-alpha07
 - New: Transfer page and inventory page (finally!) (#385 and #115)
 - New: We use Conscrypt now to support TLS1.3 on older Android versions (#163)

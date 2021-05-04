@@ -46,6 +46,7 @@
     app:contentInsetStartWithNavigation="0dp"
     app:backgroundTint="@color/primary"
     app:navigationIcon="@drawable/ic_round_menu_anim"
+    app:menu="@menu/menu_empty"
     app:fabAnimationMode="scale" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
