@@ -25,6 +25,12 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Spożycie</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Przenieś</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Zaktualizuj ilość</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Spożyj wszystko</string>
 
@@ -68,6 +74,7 @@
   <string name="action_undo">Cofnij</string>
   <string name="action_retry">Spróbuj ponownie</string>
   <string name="action_edit">Edytuj</string>
+  <string name="action_copy">Kopiuj</string>
   <string name="action_proceed">Kontynuuj</string>
   <string name="action_delete">Usuń</string>
   <string name="action_save">Zapisz</string>
@@ -97,10 +104,18 @@
   <string name="action_demo_server">Serwer demonstracyjny</string>
   <string name="action_own_server">Własny serwer</string>
   <string name="action_enter_data_manually">Wpisz dane ręcznie</string>
+  <string name="action_perform">Wykonaj akcję</string>
+
+  <!-- %1$s is the number of products which are due soon -->
+  <string name="msg_due_products">%1$d blisko terminu</string>
+  <!-- %1$s is the number of products which are overdue -->
+  <string name="msg_overdue_products">%1$d po terminie</string>
   <!-- %1$s is the number of products which are expired -->
   <string name="msg_expired_products">%1$d po terminie przydatności</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
   <string name="msg_missing_products">%1$d poniżej min. ilości zapasu</string>
+  <!-- %1$s is the number of products which are in stock -->
+  <string name="msg_in_stock_products">%1$d na stanie</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Spożyto %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -111,6 +126,10 @@
   <string name="msg_undone_items">%1$d niekupione</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Zakup %1$s %2$s z %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">Przeniesiono %1$s %2$s z %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Ilość %1$s na stanie to teraz %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s brak na stanie</string>
   <string name="msg_no_connection">Brak połączenia</string>
@@ -135,8 +154,31 @@
   <string name="msg_master_delete_product">Czy na pewno usunąć produkt \"%1$s\"?\n\nTo również wyzeruje stan zapasu, dziennik i wszystkie inne odniesienia do produktu - rozważ czy nie lepiej go wyłączyć, jeśli chcesz zachować wszelkie odniesienia a po prostu ukryć produkt.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">%1$s jest wciąż w użyciu</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s zostanie dodany do stanu.</item>
+    <item quantity="few">%1$s %2$s zostanie dodane do stanu.</item>
+    <item quantity="many">%1$s %2$s zostanie dodane do stanu.</item>
+    <item quantity="other">%1$s %2$s zostanie dodane do stanu.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s zostanie usunięty ze stanu.</item>
+    <item quantity="few">%1$s %2$s zostaną usunięte ze stanu.</item>
+    <item quantity="many">%1$s %2$s zostanie usunięte ze stanu.</item>
+    <item quantity="other">%1$s %2$s zostanie usunięte ze stanu.</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Produkty z włączoną wagą tary są obecnie niemożliwe do przeniesienia.</string>
   <string name="msg_item_marked_as_done">Pozycja oznaczona jako zakończona</string>
   <string name="msg_item_marked_as_undone">Pozycja oznaczona jako niezakończona</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Transakcja która zostanie wykonana:\n\nDodaj %1$s %2$s z %3$s na stan\nDo daty: %4$s\nCena: %5$s\nSklep: %6$s\nLokacja: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Transakcja która zostanie wykonana:\n\nUsuń %1$s %2$s z %3$s ze stanu\nLokacja: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Transakcja która zostanie wykonana:\n\nPrzenieś %1$s %2$s z %3$s\nZ lokacji: %4$s\nDo lokacji: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Transakcja która zostanie wykonana:\n\nUstaw ilość stanu z %1$s na %2$s%3$s\nWykonaj dla dodanych produktów:\nDo daty: %4$s\nCena: %5$s\nSklep: %6$s\nLokacja: %7$s</string>
   <string name="msg_compatibility">Ta wersja aplikacji nie jest kompatybilna z wersją grocy na serwerze.\n\nAktualna wersja na serwerze: %1$s\n\nWymagana:\nMinimalna wersja na serwerze: %2$s\nMaksymalna wersja na serwerze: %3$s\n\nJeżeli zignorujesz tą wiadomość, może wystąpić utrata danych (mało prawdopodobne), bądź błędy (prawdopodobne).\nZostałeś ostrzeżony!</string>
   <string name="msg_logout">Nic na serwerze nie ulegnie zmianie. Zostaniesz przekierowany do strony logowania.</string>
   <string name="msg_logout_demo">Masz uruchomioną wersję demo grocy z <u>https://grocy.info</u>.\n\n<b>Żadne zmiany które wprowadzisz nie są zapisywane!\nWszystkie dane są publicznie dostępne dopóki nie zostaną nadpisane przez serwer.</b>\n\nNa stronie logowania możesz wpisać swój własny adres serwera.</string>
@@ -152,6 +194,10 @@
   <string name="msg_choose_option_below">Wybierz z poniższych jedna opcję.</string>
   <string name="msg_qr_code_scan">Odwiedź stronę grocy na innym urządzeniu i przejdź do strony \"Zarządzaj kluczami API\". Kliknij na \"Dodaj\", następnie kliknij na mały symbol kodu QR i zeskanuj kod QR.</string>
   <string name="msg_not_implemented_yet">Niedługo zostanie to zaimplementowane. Na razie używaj interfejsu serwera.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">Strona przeglądu stanu zawiera listę wszystkich produktów które znajdują się aktualnie na stanie lub są poniżej zdefiniowanego minimum. Włącz to, aby zawsze ukrywać takie produkty.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Ten produkt nie może mieć rodzica produktu, ponieważ jest już używany jako rodzic produktu w innym produkcie.</string>
   <string name="msg_help_due_date_type">Na podstawie wybranego typu daty przydatności, wyróżnienie na stronie przeglądu stanu zapasu będzie inne. \"Najlepiej spożyć przed\" oznacza, że produkt może być bezpiecznie spożyty po osiągnięciu daty przydatności. \"Data utraty ważności\" oznacza, że produktu nie powinno się spożywać po osiągnięciu daty przydatności.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Dla zakupów, ta ilość dni zostanie dodana do dzisiejszej daty dla sugestii terminu przydatności (-1 oznacza że produkt nigdy się nie przeterminuje).</string>
@@ -175,17 +221,25 @@
   <string name="msg_help_tare_weight_purchase">Obsługa wagi tara włączona - proszę ważyć cały pojemnik, ilość rzeczywista będzie obliczana automatycznie.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Będzie to używane jako domyślne ustawienie kiedy dodajesz ten produkt jako składnik do przepisu.</string>
+  <string name="msg_help_inventory_fields">Następujące pola odnoszą się do nowo dodanych produktów.</string>
   <string name="msg_help_external_scanner_ready">Możesz używać skanera zewnętrznego dla pola poniżej, jeżeli jest puste i wyostrzone.</string>
   <string name="msg_help_external_scanner_settings">Ta aplikacja wspiera skanery zewnętrzne które zachowują się jak klawiatura i mogą być podłączone przez USB lub Bluetooth. Następujące opcje muszą być skonfigurowane w twoim skanerze:\n\nPrefix: None\nSuffix: TAB lub ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">Pierwsza pozycja z tej listy zostanie wybrany za pomocą domyślnej zasady \"Najpierw otwarte, potem najbliżej terminu przydatności, potem pierwsze które zostały dodane pierwsze wychodzi\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Służy to jedynie celom statystycznym.</string>
+  <string name="msg_help_quick_mode">Możesz nacisnąć i przytrzymać powyższy pasek tytułowy, aby aktywować tryb szybki. W tym trybie transakcje zostaną wykonane natychmiastowo jeżeli produkt został wprowadzony lub zeskanowany, a wszystkie pola zostaną automatycznie wypełnione (przez domyślne wartości dla produktu i/lub kody kreskowego).</string>
   <string name="msg_help_loading_circle_settings">Na każdej stronie na której jakieś dane ładowane są z serwera, aplikacja najpierw sprawdza za pomocą małego pojedynczego żądania czy baza danych została zmieniona od ostatniego razu i aktualizuje jedynie nieaktualne dane. Włącz opcję poniżej aby widzieć kółko ładowania nawet dla tego żądania.</string>
   <string name="msg_help_start">Tryb początkującego jest aktywny: Teksty pomocy są wyświetlane domyślnie na wszystkich stronach na których są dostępne. Stuknij aby zmienić.</string>
   <string name="msg_help_purchased_date_settings">Jeżeli poniższa opcja jest włączona, pole dla daty zakupu będzie wyświetlane na stronach zakupu oraz zapasu. W innym wypadku data zakupu będzie ustawiana na dzisiaj.</string>
   <string name="msg_help_normal_login">Stuknij na tą kartę, jeżeli używasz grocy jako dodatek w Home Assistant.</string>
   <string name="msg_help_home_assistant_login">Używasz grocy jako dodatek w Home Assistant. Przez to potrzebne jest jeszcze kilka detali. Stuknij na tą kartę aby przełączyć na normalny login.</string>
+  <string name="msg_help_home_assistant_login_help_show">Naciśnij tutaj aby zobaczyć teksty pomocy.</string>
+  <string name="msg_help_home_assistant_login_help_hide">Naciśnij tutaj aby ukryć teksty pomocy.</string>
+  <string name="msg_help_home_assistant_login_server">W polu poniżej możesz także wpisać swój adres URL chmury Nabu Casa jeżeli używasz tego serwisu. Naciśnij tą kartę aby odwiedzić stronę Nabu Casa.</string>
+  <string name="msg_help_home_assistant_login_token">Możesz utworzyć długoterminowy token dostępu w ustawieniach profilu Home Assistant (ostatnia sekcja). Naciśnij tutaj aby otworzyć powyższy adres URL.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Cofnij się lub naciśnij tą kartę aby zeskanować kod QR który wypełni poniższe pola.</string>
+
   <string name="error_api_not_working">Klucz API nie działa</string>
   <string name="error_orbot_not_installed">Orbot nie jest zainstalowany</string>
   <string name="error_select_product">Wybierz produkt</string>
@@ -194,7 +248,9 @@
   <string name="error_empty_stock_sub">Kup jakieś produkty</string>
   <string name="error_empty_shopping_list">Lista zakupów jest pusta</string>
   <string name="error_empty_shopping_list_sub">Dodaj jakieś produkty których potrzebujesz</string>
+  <string name="error_empty_barcodes_sub">Dodaj kod kreskowy za pomocą poniższego przycisku</string>
   <string name="error_empty_master_data_sub">Utwórz coś za pomocą przycisku poniżej</string>
+  <string name="error_empty_product_barcodes">Brak kodów kreskowych produktu</string>
   <string name="error_empty_locations">Brak lokacji</string>
   <string name="error_empty_product_groups">Brak grup produktów</string>
   <string name="error_empty_products">Brak produktów</string>
@@ -214,6 +270,8 @@
   <string name="error_invalid_factor">Błędny czynnik</string>
   <string name="error_api_qr_code">Nie jest to kod QR z danymi uwierzytelniającymi API grocy</string>
   <string name="error_loading_qus">Nie udało się załadować jednostki ilości dla produktu</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Nie może być równe %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Pomiędzy %1$s a %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -227,11 +285,14 @@
   <string name="error_name_exists">Nazwa już istnieje</string>
   <string name="error_network">Błąd sieci</string>
   <string name="error_network_subtitle">Żądane dane nie mogły zostać w całości załadowane</string>
+  <string name="error_unknown">Ups!</string>
   <string name="error_not_grocy_instance">Nieprawidłowa instancja grocy</string>
   <string name="error_timeout">Przekroczono czas połączenia</string>
   <string name="error_no_product_selected">Nie wybrano produktu</string>
   <string name="error_failed_to_connect_to">Nie udało się połączyć z serwerem</string>
   <string name="error_missing_information">Nie wszystkie wymagane pola zostały uzupełnione</string>
+  <string name="error_handshake">Niepoprawny certyfikat</string>
+  <string name="error_handshake_description">Ten serwer wymaga certyfikatu który nie jest znany lub zaufany przez Androida.\nCertyfikat serwera musi być podpisany przez zaufany organ (n.p. letsencypt.org) lub przechowywany na tym urządzeniu w miejscu certyfikatów użytkownika Androida.</string>
   <string name="error_unexpected_response_code">Niespodziewany kod odpowiedzi</string>
   <string name="error_unexpected_response">Niespodziewana odpowiedź serwera</string>
   <string name="error_no_browser">Zainstaluj przeglądarkę internetową aby wyświetlić stronę pomocy</string>
@@ -244,6 +305,8 @@
   <string name="title_stock_overview">Przegląd zapasów</string>
   <string name="title_purchase">Zakup</string>
   <string name="title_consume">Spożycie</string>
+  <string name="title_transfer">Przenieś</string>
+  <string name="title_inventory">Inwentaryzacja</string>
   <string name="title_barcode_input">Dane wejściowe kodu kreskowego</string>
   <string name="title_product_overview">Opis produktu</string>
   <string name="title_product">Produkt</string>
@@ -274,6 +337,10 @@
   <string name="title_specific">Określona pozycja zapasów</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Spożyj dokładną ilość</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Z lokacji</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Do lokacji</string>
   <string name="title_recipe">Przepis</string>
   <string name="title_total_price">Cena całkowita</string>
   <string name="title_unit_price">Cena jednostkowa</string>
@@ -334,6 +401,11 @@
   <string name="subtitle_supported">Wspierane</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">Nie wpierane</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Ilość: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Jednostka ilości: %1$d</string>
+
   <string name="description_input_product_part1">Pole produktu zawiera:</string>
   <string name="description_input_product_part2">Wybierz jak kontynuować:</string>
   <string name="description_input_product_option1">Utwórz nowy produkt i użyj danej wejściowej jako nazwy</string>
@@ -350,6 +422,48 @@
     <item quantity="few">Masz %1$d produkty na stanie</item>
     <item quantity="many">Masz %1$d produktów na stanie</item>
     <item quantity="other">Masz %1$d produktów na stanie</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d produkt przeterminuje się w ciągu kolejnych %2$d dni.</item>
+    <item quantity="few">%1$d produkty przeterminują się w ciągu kolejnych %2$d dni.</item>
+    <item quantity="many">%1$d produktów przeterminuje się w ciągu kolejnych %2$d dni.</item>
+    <item quantity="other">%1$d produktów przeterminuje się w ciągu kolejnych %2$d dni.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d produkt jest po terminie.</item>
+    <item quantity="few">%1$d produkty są po terminie.</item>
+    <item quantity="many">%1$d produktów jest po terminie.</item>
+    <item quantity="other">%1$d produktów jest po terminie.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d produkt jest przeterminowany.</item>
+    <item quantity="few">%1$d produkty są przeterminowane.</item>
+    <item quantity="many">%1$d produktów jest przeterminowanych.</item>
+    <item quantity="other">%1$d produktów jest przeterminowanych.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d jest poniżej zdefiniowanego minimum.</item>
+    <item quantity="few">%1$d produkty jest poniżej zdefiniowanego minimum.</item>
+    <item quantity="many">%1$d produktów jest poniżej zdefiniowanego minimum.</item>
+    <item quantity="other">%1$d produktów jest poniżej zdefiniowanego minimum.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d z nich jest na twojej liście zakupów.</item>
+    <item quantity="few">%1$d z nich jest na twojej liście zakupów.</item>
+    <item quantity="many">%1$d z nich jest na twojej liście zakupów.</item>
+    <item quantity="other">%1$d z nich jest na twojej liście zakupów.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d z nich jest na twoich listach zakupów.</item>
+    <item quantity="few">%1$d z nich jest na twoich listach zakupów.</item>
+    <item quantity="many">%1$d z nich jest na twoich listach zakupów.</item>
+    <item quantity="other">%1$d z nich jest na twoich listach zakupów.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
@@ -398,8 +512,12 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Ilość w %1$s</string>
   <string name="property_price">Cena</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Cena per %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Cena w %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Cena per %1$s w %2$s</string>
   <string name="property_quantity_unit">Jednostka miary</string>
   <string name="property_quantity_units">Jednostki miar</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -584,6 +702,7 @@
   <string name="setting_language">Język</string>
   <string name="setting_language_description">Wybierz język</string>
   <string name="setting_language_info">Duże podziękowania dla wszystkich wolontariuszy tłumaczących na Transifex!\nOdwiedź nas na GitHub aby dowiedzieć się jak możesz pomóc w udostępnieniu Grocy Android w twoim języku.</string>
+  <string name="setting_language_system">Domyślne systemowo: %1$s</string>
   <string name="setting_language_not_available">Nie dostępne</string>
   <string name="setting_open_food_facts">Użyj Open Food Facts</string>
   <string name="setting_open_food_facts_description">Zbierz informacje z kodów kreskowych</string>
