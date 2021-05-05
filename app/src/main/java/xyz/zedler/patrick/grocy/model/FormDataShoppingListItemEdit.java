@@ -57,6 +57,7 @@ public class FormDataShoppingListItemEdit {
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final LiveData<String> quantityUnitNameLive;
   private final MutableLiveData<Boolean> quantityUnitErrorLive;
+  private final MutableLiveData<Boolean> useMultilineNoteLive;
   private final MutableLiveData<String> noteLive;
   private final MutableLiveData<Integer> noteErrorLive;
   private boolean filledWithShoppingListItem;
@@ -111,6 +112,7 @@ public class FormDataShoppingListItemEdit {
         .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+    useMultilineNoteLive = new MutableLiveData<>(false);
     noteLive = new MutableLiveData<>();
     noteErrorLive = new MutableLiveData<>();
     filledWithShoppingListItem = false;
@@ -276,6 +278,14 @@ public class FormDataShoppingListItemEdit {
         Double.parseDouble(amountStockLive.getValue()) == 1
             ? stock.getName() : stock.getNamePlural()
     );
+  }
+
+  public MutableLiveData<Boolean> getUseMultilineNoteLive() {
+    return useMultilineNoteLive;
+  }
+
+  public void setUseMultilineNoteLive(boolean useMultiline) {
+    useMultilineNoteLive.setValue(useMultiline);
   }
 
   public MutableLiveData<String> getNoteLive() {

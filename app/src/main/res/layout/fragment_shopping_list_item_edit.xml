@@ -111,12 +111,13 @@
           android:id="@+id/scroll_shopping_list_item_edit"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:overScrollMode="never">
+          android:overScrollMode="never"
+          android:fillViewport="true">
 
           <LinearLayout
             android:id="@+id/shopping_list_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingTop="8dp"
             android:paddingBottom="90dp"
             android:orientation="vertical"
@@ -340,8 +341,39 @@
             </LinearLayout>
 
             <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+              android:background="@null"
+              android:paddingTop="0dp"
+              android:paddingBottom="0dp"
+              android:paddingStart="0dp"
+              android:paddingEnd="0dp"
+              android:layout_marginStart="72dp">
+
+              <com.google.android.material.radiobutton.MaterialRadioButton
+                style="@style/Widget.Grocy.RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingEnd="8dp"
+                android:paddingStart="0dp"
+                android:text="Single-line note"
+                android:checked="@{!formData.useMultilineNoteLive}"
+                android:onClick="@{() -> formData.setUseMultilineNoteLive(false)}"/>
+
+              <com.google.android.material.radiobutton.MaterialRadioButton
+                style="@style/Widget.Grocy.RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingEnd="6dp"
+                android:paddingStart="0dp"
+                android:text="Multi-line note"
+                android:checked="@{formData.useMultilineNoteLive}"
+                android:onClick="@{() -> formData.setUseMultilineNoteLive(true)}"/>
+
+            </LinearLayout>
+
+            <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="8dp"
+              android:paddingTop="0dp"
               android:paddingBottom="0dp">
 
               <ImageView
@@ -362,7 +394,8 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"
-                  android:text="@={formData.noteLive}" />
+                  android:text="@={formData.noteLive}"
+                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 
               </com.google.android.material.textfield.TextInputLayout>
 

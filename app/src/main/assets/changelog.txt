@@ -1,4 +1,5 @@
 2.0.0-alpha08
+- Improved: 'Add shopping list item' page has a better workflow now
 - Improved: Updated translations
 - Fixed: Menus were not displayed after first app start (#365)
 - Fixed: Inactive products cannot be added to shopping list now (#398)

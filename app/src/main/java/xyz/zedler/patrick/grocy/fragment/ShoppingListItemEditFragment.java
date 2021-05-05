@@ -22,12 +22,14 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
@@ -139,19 +141,24 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
       lockOrUnlockRotation(visible);
     });
 
-        /*viewModel.getQuickModeEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
-            if(isEnabled) {
-                binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT
-                        | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-                binding.editTextShoppingListItemEditNote.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            } else {
-                binding.editTextShoppingListItemEditNote.setInputType(InputType.TYPE_CLASS_TEXT
-                        | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-                        | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                binding.editTextShoppingListItemEditNote.setImeOptions(EditorInfo.IME_ACTION_NONE);
-            }
-            clearInputFocus();
-        });*/
+    viewModel.getFormData().getUseMultilineNoteLive().observe(getViewLifecycleOwner(), multi -> {
+      if(multi) {
+        binding.editTextNote.setInputType(InputType.TYPE_CLASS_TEXT
+            | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        binding.editTextNote.setImeOptions(EditorInfo.IME_ACTION_UNSPECIFIED);
+      } else {
+        binding.editTextNote.setInputType(InputType.TYPE_CLASS_TEXT
+            | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        binding.editTextNote.setImeOptions(EditorInfo.IME_ACTION_DONE);
+      }
+      if(binding.editTextNote.isFocused()) {
+        activity.hideKeyboard();
+        binding.editTextNote.setSelection(binding.editTextNote.getText().length());
+        binding.editTextNote.clearFocus();
+        activity.showKeyboard(binding.editTextNote);
+      }
+    });
 
     // necessary because else getValue() doesn't give current value (?)
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {
