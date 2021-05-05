@@ -1,6 +1,7 @@
 2.0.0-alpha08
 - Improved: Updated translations
 - Fixed: Menus were not displayed after first app start (#365)
+- Fixed: Inactive products cannot be added to shopping list now (#398)
 
 2.0.0-alpha07
 - New: Transfer page and inventory page (finally!) (#385 and #115)
