@@ -284,8 +284,8 @@ public class StockOverviewFragment extends BaseFragment implements
           }
         }
       };
-      swipeBehavior.attachToRecyclerView(binding.recycler);
     }
+    swipeBehavior.attachToRecyclerView(binding.recycler);
 
     hideDisabledFeatures();
 
