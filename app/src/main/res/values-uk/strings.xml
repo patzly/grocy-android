@@ -25,6 +25,12 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Використати</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Переміщення</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Оновити суму</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Використати все</string>
 
@@ -98,6 +104,8 @@
   <string name="action_demo_server">Демонстраційний сервер</string>
   <string name="action_own_server">Власний сервер</string>
   <string name="action_enter_data_manually">Введіть дані вручну</string>
+  <string name="action_perform">Виконати дію</string>
+
   <!-- %1$s is the number of products which are due soon -->
   <string name="msg_due_products">%1$d скоро спливає термін</string>
   <!-- %1$s is the number of products which are overdue -->
@@ -118,6 +126,10 @@
   <string name="msg_undone_items">%1$d скасовано</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Придбано %1$s %2$s %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">Переміщено %1$s %2$s %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Залишок в запасі %1$s зараз %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">Немає в запасах %1$s</string>
   <string name="msg_no_connection">Немає з\'єднання</string>
@@ -142,12 +154,31 @@
   <string name="msg_master_delete_product">Ви впевнені у видаленні продукту \"%1$s\"?\n\nЦе також видаляє будь-яку суму запасів, журнал та всі інші посилання на цей продукт - замість цього вимкніть його, якщо ви хочете зберегти все та просто приховати продукт.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">%1$s ще використовується</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s буде додано до запасу.</item>
+    <item quantity="few">%1$s %2$s буде додано до запасу.</item>
+    <item quantity="many">%1$s %2$s буде додано до запасу.</item>
+    <item quantity="other">%1$s %2$s буде додано до запасу.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s буде вилучено з запасу.</item>
+    <item quantity="few">%1$s %2$s буде вилучено з запасу.</item>
+    <item quantity="many">%1$s %2$s буде вилучено з запасу.</item>
+    <item quantity="other">%1$s %2$s буде вилучено з запасу.</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Продукти з увімкненою вагою тари наразі не підтримуються для переміщення.</string>
   <string name="msg_item_marked_as_done">Пункт виконано</string>
   <string name="msg_item_marked_as_undone">Пункт скасовано</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Транзакція, яка буде виконана:\n\nПереміщення %1$s %2$s %3$s\nЗ: %4$s\nДо:%5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Транзакція, яка буде виконана:\n\nВстановити кількість запасу %1$s в %2$s%3$s\nЗастосувати до доданих елементів:\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
   <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
   <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
   <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
@@ -190,6 +221,7 @@
   <string name="msg_help_tare_weight_purchase">Увімкнено обробку ваги тари - зважте весь контейнер, кількість, яку потрібно оприбуткувати, буде автоматично розрахована.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Цей продукт буде використано як типовий під час додавання цього продукту як складової рецепта.</string>
+  <string name="msg_help_inventory_fields">Наступні поля стосуються нещодавно доданих продуктів.</string>
   <string name="msg_help_external_scanner_ready">Ви можете використовувати зовнішній сканер для поля нижче, коли на нього встановлено фокус та воно порожнє.</string>
   <string name="msg_help_external_scanner_settings">Ця програма підтримує зовнішні сканери, які виконують роль клавіатури та можуть бути підключені через USB або Bluetooth. У зовнішньому сканері мають бути налаштовані такі параметри:\n\nПрефікс: Немає\nСуфікс: TAB або ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -238,6 +270,8 @@
   <string name="error_invalid_factor">Некоректний коефіцієнт</string>
   <string name="error_api_qr_code">Це не QR-код з обліковими даними API grocy</string>
   <string name="error_loading_qus">Не вдалося завантажити одиниці виміру з продукту</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Не може бути рівним %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Має бути в межах від %1$s до %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -478,8 +512,12 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s містить</string>
   <string name="property_price">Ціна</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Ціна за %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Ціна в %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Ціна за %1$s в %2$s</string>
   <string name="property_quantity_unit">Одиниця виміру</string>
   <string name="property_quantity_units">Одиниці виміру</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
