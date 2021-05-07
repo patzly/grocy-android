@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -221,6 +222,7 @@ public class MasterStoreFragment extends BaseFragment {
     }
   }
 
+  @SuppressLint("ShowToast")
   private void refresh() {
     // for only fill with up-to-date data on refresh,
     // not on startup as the bundle should contain everything needed
@@ -249,6 +251,7 @@ public class MasterStoreFragment extends BaseFragment {
     downloadStores();
   }
 
+  @SuppressLint("ShowToast")
   private void downloadStores() {
     dlHelper.get(
         grocyApi.getObjects(GrocyApi.ENTITY.STORES),

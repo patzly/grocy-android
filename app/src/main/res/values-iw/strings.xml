@@ -98,11 +98,8 @@
   <string name="action_own_server">שרת עצמאי</string>
   <string name="action_enter_data_manually">מילוי המידע ידנית</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">התוקף של %1$d פג</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d מתחת לכמות מינימום</string>
   <!-- %1$s is the number of products which are in stock -->
-  <string name="msg_in_stock_products">%1$d במלאי</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">נצרכו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -110,7 +107,6 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">סמן %1$s %2$s מתוך %3$s כפתוחים</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d לטיפול</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a product name -->
@@ -394,7 +390,6 @@
   <string name="property_amount">כמות</string>
   <string name="property_seconds">שניות</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d שניות</string>
   <string name="property_amount_min_stock">כמות מזערית במלאי</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">כמות ב%1$s</string>

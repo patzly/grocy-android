@@ -107,15 +107,10 @@
   <string name="action_perform">Виконати дію</string>
 
   <!-- %1$s is the number of products which are due soon -->
-  <string name="msg_due_products">%1$d скоро спливає термін</string>
   <!-- %1$s is the number of products which are overdue -->
-  <string name="msg_overdue_products">%1$d прострочений</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d зіпсувалось</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">на %1$d нижче мінімального запасу</string>
   <!-- %1$s is the number of products which are in stock -->
-  <string name="msg_in_stock_products">%1$d в запасах</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -123,7 +118,6 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d скасовано</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Придбано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -507,7 +501,6 @@
   <string name="property_amount">Кількість</string>
   <string name="property_seconds">Секунди</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d сек.</string>
   <string name="property_amount_min_stock">Мін. кількість в запасі</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s містить</string>

@@ -98,15 +98,10 @@
   <string name="action_own_server">Собственный сервер</string>
   <string name="action_enter_data_manually">Ввести данные вручную</string>
   <!-- %1$s is the number of products which are due soon -->
-  <string name="msg_due_products">%1$d скоро испортится</string>
   <!-- %1$s is the number of products which are overdue -->
-  <string name="msg_overdue_products">%1$d испортилось</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d испортилось</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d меньше минимального запаса</string>
   <!-- %1$s is the number of products which are in stock -->
-  <string name="msg_in_stock_products">%1$d в запасах</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -114,7 +109,6 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Вскрыть %1$s %2$s %3$s </string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d отменено</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
   <!-- %1$s is a product name -->
@@ -461,7 +455,6 @@
   <string name="property_amount">Количество</string>
   <string name="property_seconds">Секунды</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d сек.</string>
   <string name="property_amount_min_stock">Мин. количество в запасе</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s содержит</string>

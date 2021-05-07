@@ -56,12 +56,14 @@ public class FormDataMasterProductCatQuantityUnit {
         quStockLive,
         qu -> qu != null ? qu.getName() : null
     );
+    //noinspection Convert2MethodRef
     quStockErrorLive = Transformations.map(quStockLive, qu -> qu == null);
     quPurchaseLive = new MutableLiveData<>();
     quPurchaseNameLive = Transformations.map(
         quPurchaseLive,
         qu -> qu != null ? qu.getName() : null
     );
+    //noinspection Convert2MethodRef
     quPurchaseErrorLive = Transformations.map(quPurchaseLive, qu -> qu == null);
 
     productLive = new MutableLiveData<>();

@@ -151,7 +151,7 @@ public class StockOverviewItemAdapter extends
       chipDueNext = new FilterChip(
           context,
           R.color.retro_yellow_bg,
-          context.getString(R.string.msg_due_products,
+          context.getResources().getQuantityString(R.plurals.msg_due_products,
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)),
           () -> {
             FilterChip.changeStateToInactive(chipOverdue, chipExpired, chipMissing, chipInStock);
@@ -162,7 +162,7 @@ public class StockOverviewItemAdapter extends
       chipOverdue = new FilterChip(
           context,
           R.color.retro_dirt,
-          context.getString(R.string.msg_overdue_products,
+          context.getResources().getQuantityString(R.plurals.msg_overdue_products,
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipExpired, chipMissing, chipInStock);
@@ -173,7 +173,7 @@ public class StockOverviewItemAdapter extends
       chipExpired = new FilterChip(
           context,
           R.color.retro_red_bg_black,
-          context.getString(R.string.msg_expired_products,
+          context.getResources().getQuantityString(R.plurals.msg_expired_products,
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipMissing, chipInStock);
@@ -184,7 +184,7 @@ public class StockOverviewItemAdapter extends
       chipMissing = new FilterChip(
           context,
           R.color.retro_blue_bg,
-          context.getString(R.string.msg_missing_products,
+          context.getResources().getQuantityString(R.plurals.msg_missing_products,
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipInStock);
@@ -195,7 +195,7 @@ public class StockOverviewItemAdapter extends
       chipInStock = new FilterChip(
           context,
           R.color.retro_green_bg_black,
-          context.getString(R.string.msg_in_stock_products,
+          context.getResources().getQuantityString(R.plurals.msg_in_stock_products,
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing);
@@ -230,24 +230,24 @@ public class StockOverviewItemAdapter extends
         FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing);
         FilterChip.changeStateToActive(chipInStock);
       }
-      chipDueNext.setText(weakContext.get().getString(
-          R.string.msg_due_products,
+      chipDueNext.setText(weakContext.get().getResources().getQuantityString(
+          R.plurals.msg_due_products,
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)
       ));
-      chipOverdue.setText(weakContext.get().getString(
-          R.string.msg_overdue_products,
+      chipOverdue.setText(weakContext.get().getResources().getQuantityString(
+          R.plurals.msg_overdue_products,
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)
       ));
-      chipExpired.setText(weakContext.get().getString(
-          R.string.msg_expired_products,
+      chipExpired.setText(weakContext.get().getResources().getQuantityString(
+          R.plurals.msg_expired_products,
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)
       ));
-      chipMissing.setText(weakContext.get().getString(
-          R.string.msg_missing_products,
+      chipMissing.setText(weakContext.get().getResources().getQuantityString(
+          R.plurals.msg_missing_products,
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
       ));
-      chipInStock.setText(weakContext.get().getString(
-          R.string.msg_in_stock_products,
+      chipInStock.setText(weakContext.get().getResources().getQuantityString(
+          R.plurals.msg_in_stock_products,
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)
       ));
     }

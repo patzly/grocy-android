@@ -398,6 +398,7 @@ public class TransferViewModel extends BaseViewModel {
       return;
     }
 
+    assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
     dlHelper.postWithArray(grocyApi.transferProduct(product.getId()),

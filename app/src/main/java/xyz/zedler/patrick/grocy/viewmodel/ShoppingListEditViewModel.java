@@ -357,7 +357,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     eventHandler.setValue(snackbarMessage);
   }
 
-  private void sendEvent(int type) {
+  private void sendEvent(@SuppressWarnings("SameParameterValue") int type) {
     eventHandler.setValue(new Event() {
       @Override
       public int getType() {
@@ -366,7 +366,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     });
   }
 
-  private void sendEvent(int type, Bundle bundle) {
+  private void sendEvent(@SuppressWarnings("SameParameterValue") int type, Bundle bundle) {
     eventHandler.setValue(new Event() {
       @Override
       public int getType() {
@@ -396,7 +396,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     return getApplication().getString(resId);
   }
 
-  private String getString(@StringRes int resId, Object... formatArgs) {
+  private String getString(@SuppressWarnings("SameParameterValue") @StringRes int resId, Object... formatArgs) {
     return getApplication().getString(resId, formatArgs);
   }
 

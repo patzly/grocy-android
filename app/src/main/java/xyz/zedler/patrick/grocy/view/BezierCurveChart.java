@@ -44,8 +44,6 @@ import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class BezierCurveChart extends View {
 
-  private static final String TAG = BezierCurveChart.class.getSimpleName();
-
   private static final float CURVE_LINE_WIDTH = 2f;
   private static final float BADGE_HEIGHT = 10; // percentage of chartRect height
   private static final float BADGE_MARGIN = 5;
@@ -55,8 +53,8 @@ public class BezierCurveChart extends View {
 
   public static class Point {
 
-    float x;
-    float y;
+    final float x;
+    final float y;
 
     public Point(float x, float y) {
       this.x = x;

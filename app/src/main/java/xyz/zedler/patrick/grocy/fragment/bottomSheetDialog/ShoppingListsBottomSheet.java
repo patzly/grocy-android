@@ -204,6 +204,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
   }
 
   private void showAndStartProgress(View buttonView, ShoppingList shoppingList) {
+    assert getView() != null;
     TransitionManager.beginDelayedTransition((ViewGroup) getView());
     progressConfirm.setVisibility(View.VISIBLE);
     int startValue = 0;
@@ -265,6 +266,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
   }
 
   private void showMessage(@StringRes int message) {
+    assert getView() != null;
     Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
   }
 

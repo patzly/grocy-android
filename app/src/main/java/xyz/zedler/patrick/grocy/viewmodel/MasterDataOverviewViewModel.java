@@ -320,7 +320,7 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     return sharedPrefs.getBoolean(pref, true);
   }
 
-  private String getString(@StringRes int resId) {
+  private String getString(@SuppressWarnings("SameParameterValue") @StringRes int resId) {
     return getApplication().getString(resId);
   }
 

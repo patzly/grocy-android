@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -237,6 +238,7 @@ public class MasterLocationFragment extends BaseFragment {
     }
   }
 
+  @SuppressLint("ShowToast")
   private void refresh() {
     // for only fill with up-to-date data on refresh,
     // not on startup as the bundle should contain everything needed
@@ -265,6 +267,7 @@ public class MasterLocationFragment extends BaseFragment {
     downloadLocations();
   }
 
+  @SuppressLint("ShowToast")
   private void downloadLocations() {
     dlHelper.get(
         grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),

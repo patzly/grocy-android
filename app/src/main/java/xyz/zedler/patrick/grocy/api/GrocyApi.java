@@ -63,15 +63,11 @@ public class GrocyApi {
     baseUrl = serverUrl;
   }
 
-  public void loadCredentials() {
-
-  }
-
   private String getUrl(String command) {
     return baseUrl + "/api" + command;
   }
 
-  private String getUrl(String command, String... params) {
+  private String getUrl(@SuppressWarnings("SameParameterValue") String command, String... params) {
     StringBuilder url = new StringBuilder(getUrl(command));
     if (params.length > 0) {
       url.append("?");

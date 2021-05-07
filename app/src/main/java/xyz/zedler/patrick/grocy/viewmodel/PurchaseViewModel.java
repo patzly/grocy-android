@@ -417,6 +417,7 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
 
+    assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
     dlHelper.postWithArray(
@@ -572,14 +573,14 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showDueDateBottomSheet(boolean hasFocus) {
-      if (!hasFocus || !formData.isProductNameValid()) {
-          return;
-      }
-    Product product = formData.getProductDetailsLive().getValue().getProduct();
+    ProductDetails productDetails = formData.getProductDetailsLive().getValue();
+    if (!hasFocus || !formData.isProductNameValid() || productDetails == null) {
+        return;
+    }
     Bundle bundle = new Bundle();
     bundle.putString(
         Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW,
-        String.valueOf(product.getDefaultDueDays())
+        String.valueOf(productDetails.getProduct().getDefaultDueDays())
     );
     bundle.putString(
         Constants.ARGUMENT.SELECTED_DATE,

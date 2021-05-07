@@ -23,6 +23,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
+    <!--suppress AndroidDomInspection -->
     <import type="xyz.zedler.patrick.grocy.fragment.SettingsFragmentDirections" />
     <variable
       name="activity"

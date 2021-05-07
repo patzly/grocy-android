@@ -107,15 +107,10 @@
   <string name="action_perform">Wykonaj akcję</string>
 
   <!-- %1$s is the number of products which are due soon -->
-  <string name="msg_due_products">%1$d blisko terminu</string>
   <!-- %1$s is the number of products which are overdue -->
-  <string name="msg_overdue_products">%1$d po terminie</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d po terminie przydatności</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d poniżej min. ilości zapasu</string>
   <!-- %1$s is the number of products which are in stock -->
-  <string name="msg_in_stock_products">%1$d na stanie</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Spożyto %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -123,7 +118,6 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Oznaczono %1$s %2$s z %3$s jako otwarte</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d niekupione</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Zakup %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -507,7 +501,6 @@
   <string name="property_amount">Ilość</string>
   <string name="property_seconds">Sekund</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d sekund</string>
   <string name="property_amount_min_stock">Minimalna ilość zapasu</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Ilość w %1$s</string>

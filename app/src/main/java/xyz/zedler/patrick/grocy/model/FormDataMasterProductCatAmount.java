@@ -84,6 +84,7 @@ public class FormDataMasterProductCatAmount {
                 quantityUnit.getNamePlural()
             )
     );
+    //noinspection Convert2MethodRef
     tareWeightErrorLive = Transformations.map(
         tareWeightLive,
         weight -> weight == null

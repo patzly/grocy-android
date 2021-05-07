@@ -188,7 +188,7 @@ public class ShoppingListViewModel extends BaseViewModel {
         String name;
         if (item.hasProduct()) {
           Product product = productHashMap.get(item.getProductIdInt());
-          name = product.getName();
+          name = product != null ? product.getName() : null;
         } else {
           name = item.getNote();
         }

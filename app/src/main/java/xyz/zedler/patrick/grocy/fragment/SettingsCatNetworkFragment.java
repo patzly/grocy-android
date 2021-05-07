@@ -104,8 +104,8 @@ public class SettingsCatNetworkFragment extends BaseFragment {
   }
 
   private void updateTimeoutValue() {
-    binding.timeoutSeconds.setText(getString(
-        R.string.property_seconds_num,
+    binding.timeoutSeconds.setText(getResources().getQuantityString(
+        R.plurals.property_seconds_num,
         viewModel.getLoadingTimeout()
     ));
   }

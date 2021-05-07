@@ -316,14 +316,14 @@ public class ShoppingModeItemAdapter extends
 
   static class DiffCallback extends DiffUtil.Callback {
 
-    ArrayList<GroupedListItem> oldItems;
-    ArrayList<GroupedListItem> newItems;
-    HashMap<Integer, Product> productHashMapOld;
-    HashMap<Integer, Product> productHashMapNew;
-    HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
-    HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
-    ArrayList<Integer> missingProductIdsOld;
-    ArrayList<Integer> missingProductIdsNew;
+    final ArrayList<GroupedListItem> oldItems;
+    final ArrayList<GroupedListItem> newItems;
+    final HashMap<Integer, Product> productHashMapOld;
+    final HashMap<Integer, Product> productHashMapNew;
+    final HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
+    final HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+    final ArrayList<Integer> missingProductIdsOld;
+    final ArrayList<Integer> missingProductIdsNew;
 
     public DiffCallback(
         ArrayList<GroupedListItem> newItems,

@@ -50,6 +50,7 @@ public class FormDataMasterProductCatLocation {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    //noinspection Convert2MethodRef
     locationErrorLive = Transformations.map(
         locationLive,
         location -> location == null

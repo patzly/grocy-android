@@ -91,16 +91,12 @@
   <string name="action_clear_done">Klar</string>
 
   <!-- %1$s is the number of products which expire soon -->
-  <string name="msg_due_products">%1$d går snart ut</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d utgångna</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d under förinställt lagerbelopp</string>
   <string name="msg_consumed">Konsumerade %1$s %2$s av %3$s</string>
   <string name="msg_consumed_spoiled">Konsumerade %1$s %2$s av %3$s som skämd</string>
   <string name="msg_opened">Markerade %1$s %2$s av %3$s som öppnad</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d ångrade</string>
   <!-- %1$s is a product name -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Köpte %1$s %2$s av %3$s</string>
@@ -248,7 +244,6 @@
   <string name="property_amount">Antal</string>
   <string name="property_seconds">Sekunder</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d sekunder</string>
   <string name="property_amount_min_stock">Minsta lagerbelopp</string>
   <!-- &1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Mängd i %1$s</string>
@@ -339,7 +334,6 @@
   <string name="info_acknowledgement">Vi vill tacka Bernd Bestel, utan vars fantastiska arbete denna app inte skulle kunna existera.</string>
   <string name="info_intro">Visa introduktion igen</string>
   <string name="info_intro_description">Demonstrera funktioner</string>
-  <string name="info_material_components_built_with">Byggd med</string>
   <string name="info_version">Version</string>
   <string name="info_grocy_version">Version av Grocy</string>
   <string name="subtitle_not_supported">Stöds inte</string>

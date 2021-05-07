@@ -197,7 +197,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    * to the change.
    */
   @NonNull
-  AnimatorListenerAdapter fabAnimationListener =
+  final AnimatorListenerAdapter fabAnimationListener =
       new AnimatorListenerAdapter() {
         @Override
         public void onAnimationStart(Animator animation) {
@@ -215,7 +215,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
    * Listens to any transformations applied to the FAB so the cutout can react.
    */
   @NonNull
-  TransformationCallback<FloatingActionButton> fabTransformationCallback =
+  final TransformationCallback<FloatingActionButton> fabTransformationCallback =
       new TransformationCallback<FloatingActionButton>() {
         @Override
         public void onScaleChanged(@NonNull FloatingActionButton fab) {
@@ -814,7 +814,7 @@ public class BottomAppBar extends Toolbar implements AttachedBehavior {
     if (fabAlignmentMode == FAB_ALIGNMENT_MODE_END) {
       int systemEndInset = isRtl ? leftInset : rightInset;
       int totalEndInset = fabOffsetEndMode + systemEndInset;
-      return (getMeasuredWidth() / 2 - totalEndInset) * (isRtl ? -1 : 1);
+      return (getMeasuredWidth() / 2f - totalEndInset) * (isRtl ? -1 : 1);
     } else {
       return 0;
     }

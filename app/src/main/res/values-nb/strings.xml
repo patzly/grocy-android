@@ -98,9 +98,7 @@
   <string name="action_own_server">Egen server</string>
   <string name="action_enter_data_manually">Skriv inn data manuelt</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d gått ut på dato</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d under min. lagerbeholdning</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Forbrukt %1$s %2$s av %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -108,7 +106,6 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Merk %1$s %2$s av %3$s som åpnet</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d uferdige</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Kjøpt %1$s %2$s av %3$s</string>
   <!-- %1$s is a product name -->
@@ -327,7 +324,6 @@
   <string name="property_amount">Beløp</string>
   <string name="property_seconds">Sekunder</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d sekunder</string>
   <string name="property_amount_min_stock">Min. lagerbeholdning</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Mengde i %1$s</string>

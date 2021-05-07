@@ -155,7 +155,6 @@ public class BottomAppBarTopEdgeTreatment extends EdgeTreatment implements Clone
   /**
    * Returns current fab diameter in pixels.
    *
-   * @hide
    */
   @RestrictTo(LIBRARY_GROUP)
   public float getFabDiameter() {
@@ -165,7 +164,6 @@ public class BottomAppBarTopEdgeTreatment extends EdgeTreatment implements Clone
   /**
    * Sets the fab diameter the size of the fab in pixels.
    *
-   * @hide
    */
   @RestrictTo(LIBRARY_GROUP)
   public void setFabDiameter(float fabDiameter) {
@@ -182,7 +180,6 @@ public class BottomAppBarTopEdgeTreatment extends EdgeTreatment implements Clone
   /**
    * Returns the horizontal offset, in pixels, of the cradle from center.
    *
-   * @hide
    */
   @RestrictTo(LIBRARY_GROUP)
   public float getHorizontalOffset() {

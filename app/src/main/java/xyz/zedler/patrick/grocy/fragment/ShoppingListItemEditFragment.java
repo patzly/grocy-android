@@ -154,7 +154,9 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
       }
       if(binding.editTextNote.isFocused()) {
         activity.hideKeyboard();
-        binding.editTextNote.setSelection(binding.editTextNote.getText().length());
+        if (binding.editTextNote.getText() != null) {
+          binding.editTextNote.setSelection(binding.editTextNote.getText().length());
+        }
         binding.editTextNote.clearFocus();
         activity.showKeyboard(binding.editTextNote);
       }

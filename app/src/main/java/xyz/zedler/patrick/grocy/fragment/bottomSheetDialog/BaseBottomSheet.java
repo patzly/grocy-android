@@ -186,7 +186,7 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
     String linkPart = parts[0];
     String argsPart = parts[parts.length - 1];
     String[] pairs = argsPart.split("&");
-    String finalDeepLink = linkPart + "?";
+    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
     for (int i = 0; i <= pairs.length - 1; i++) {
       String pair = pairs[i];
       String key = pair.split("=")[0];
@@ -195,14 +195,15 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
         continue;
       }
       try {
-        finalDeepLink += key + "=" + URLEncoder.encode(valueBundle.toString(), "UTF-8");
+        finalDeepLink.append(key).append("=")
+            .append(URLEncoder.encode(valueBundle.toString(), "UTF-8"));
       } catch (Throwable ignore) {
       }
       if (i != pairs.length - 1) {
-        finalDeepLink += "&";
+        finalDeepLink.append("&");
       }
     }
-    return Uri.parse(finalDeepLink);
+    return Uri.parse(finalDeepLink.toString());
   }
 
   Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {

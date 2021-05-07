@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 
+@SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
 
   public boolean isSearchVisible() {
@@ -278,7 +279,7 @@ public class BaseFragment extends Fragment {
     String linkPart = parts[0];
     String argsPart = parts[parts.length - 1];
     String[] pairs = argsPart.split("&");
-    String finalDeepLink = linkPart + "?";
+    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
     for (int i = 0; i <= pairs.length - 1; i++) {
       String pair = pairs[i];
       String key = pair.split("=")[0];
@@ -287,14 +288,15 @@ public class BaseFragment extends Fragment {
         continue;
       }
       try {
-        finalDeepLink += key + "=" + URLEncoder.encode(valueBundle.toString(), "UTF-8");
+        finalDeepLink.append(key).append("=")
+            .append(URLEncoder.encode(valueBundle.toString(), "UTF-8"));
       } catch (Throwable ignore) {
       }
       if (i != pairs.length - 1) {
-        finalDeepLink += "&";
+        finalDeepLink.append("&");
       }
     }
-    return finalDeepLink;
+    return finalDeepLink.toString();
   }
 
   @SuppressLint("RestrictedApi")

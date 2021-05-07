@@ -98,9 +98,7 @@
   <string name="action_own_server">Vlastní server</string>
   <string name="action_enter_data_manually">Zadejte údaje ručně</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d po expiraci</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d nemá dostatečnou min. zásobu</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Zkonzumováno %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -108,7 +106,6 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Označit %1$s %2$s z %3$s jako otevřené</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d nehotovo</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Nakoupeno %1$s %2$s z %3$s</string>
   <!-- %1$s is a product name -->
@@ -402,7 +399,6 @@
   <string name="property_amount">Množství</string>
   <string name="property_seconds">Sekund</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d sekund</string>
   <string name="property_amount_min_stock">Min. množství zásob</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Množství v %1$s</string>

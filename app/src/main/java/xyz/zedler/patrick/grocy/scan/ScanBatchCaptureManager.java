@@ -62,7 +62,7 @@ public class ScanBatchCaptureManager {
 
   private final BarcodeListener barcodeListener;
 
-  public BarcodeCallback callback = new BarcodeCallback() {
+  public final BarcodeCallback callback = new BarcodeCallback() {
     @Override
     public void barcodeResult(final BarcodeResult result) {
       new VibratorUtil(activity).tick();

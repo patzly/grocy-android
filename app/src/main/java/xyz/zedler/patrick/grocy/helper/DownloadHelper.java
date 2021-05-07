@@ -414,6 +414,7 @@ public class DownloadHelper {
             uuid,
             response -> {
               Type type;
+              //noinspection IfCanBeSwitch
               if (grocyEntity
                   .equals(GrocyApi.ENTITY.QUANTITY_UNITS)) { // Don't change to switch-case!
                 type = new TypeToken<List<QuantityUnit>>() {

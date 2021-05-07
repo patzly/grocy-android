@@ -91,16 +91,12 @@
   <string name="action_clear_done">Listo</string>
 
   <!-- %1$s is the number of products which expire soon -->
-  <string name="msg_due_products">%1$d se vence pronto</string>
   <!-- %1$s is the number of products which are expired -->
-  <string name="msg_expired_products">%1$d vencido/s</string>
   <!-- %1$s is the number of products which are below min. stock amount -->
-  <string name="msg_missing_products">%1$d bajo mín. monto de stock</string>
   <string name="msg_consumed">Consumido %1$s %2$s de %3$s</string>
   <string name="msg_consumed_spoiled">Consumido %1$s %2$s de %3$s como vencido</string>
   <string name="msg_opened">Marcar %1$s %2$s de %3$s como abiertos</string>
   <!-- %1$s is the number of undone items in shopping list -->
-  <string name="msg_undone_items">%1$d deshecho/s</string>
   <!-- %1$s is a product name -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Comprado/s %1$s %2$s de %3$s</string>
@@ -248,7 +244,6 @@
   <string name="property_amount">Monto</string>
   <string name="property_seconds">Segundos</string>
   <!-- %1$d is a number (amount of seconds) -->
-  <string name="property_seconds_num">%1$d segundos</string>
   <string name="property_amount_min_stock">Mín. monto de stock</string>
   <!-- &1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Monto en %1$s</string>
@@ -339,7 +334,6 @@
   <string name="info_acknowledgement">Nos gustaría agradecerle a Bernd Bestel, sin su gran trabajo esta aplicación nunca hubiera sido posible.</string>
   <string name="info_intro">Repetir la introducción</string>
   <string name="info_intro_description">Exhibición de características</string>
-  <string name="info_material_components_built_with">Construido con</string>
   <string name="info_version">Versión</string>
   <string name="info_grocy_version">Versión de Grocy</string>
   <string name="subtitle_not_supported">No soportado</string>

@@ -79,7 +79,7 @@ public class BaseViewModel extends AndroidViewModel {
     });
   }
 
-  void sendEvent(int type, Bundle bundle) {
+  void sendEvent(@SuppressWarnings("SameParameterValue") int type, Bundle bundle) {
     eventHandler.setValue(new Event() {
       @Override
       public int getType() {

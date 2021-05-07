@@ -36,10 +36,11 @@ import xyz.zedler.patrick.grocy.model.Product;
 
 public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
 
-  Context context;
-  int resource;
-  List<Product> items, suggestions;
-  HashMap<String, Product> tempItems;
+  final Context context;
+  final int resource;
+  final List<Product> items;
+  final List<Product> suggestions;
+  final HashMap<String, Product> tempItems;
 
   public MatchProductsArrayAdapter(Context context, int resource, List<Product> items) {
     super(context, resource, items);
@@ -81,7 +82,7 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
   /**
    * Custom Filter implementation for custom suggestions we provide.
    */
-  Filter nameFilter = new Filter() {
+  final Filter nameFilter = new Filter() {
     @Override
     public CharSequence convertResultToString(Object resultValue) {
       return ((Product) resultValue).getName();
@@ -117,6 +118,7 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void publishResults(CharSequence constraint, FilterResults results) {
       List<Product> filterList = (ArrayList<Product>) results.values;
       if (results.count > 0) {
