@@ -174,7 +174,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити% %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
+  <string name="msg_quick_mode_confirm_consume">Транзакція, яка буде виконана:\n\nВидалити %1$s %2$s %3$s із запасів\nМісце розташування: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Транзакція, яка буде виконана:\n\nПереміщення %1$s %2$s %3$s\nЗ: %4$s\nДо:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
