@@ -166,7 +166,7 @@ public class ShortcutUtil {
     intent.setClass(context, MainActivity.class);
     return new ShortcutInfo.Builder(context, INVENTORY)
         .setShortLabel(label)
-        .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_inventory))
         .setIntent(intent).build();
   }
 
@@ -177,7 +177,7 @@ public class ShortcutUtil {
     intent.setClass(context, MainActivity.class);
     return new ShortcutInfo.Builder(context, TRANSFER)
         .setShortLabel(label)
-        .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_transfer))
         .setIntent(intent).build();
   }
 
