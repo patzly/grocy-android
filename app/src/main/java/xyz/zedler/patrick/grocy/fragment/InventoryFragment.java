@@ -347,7 +347,7 @@ public class InventoryFragment extends BaseFragment implements
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
     Product product = (Product) adapterView.getItemAtPosition(pos);
-    clearInputFocus();
+    if (!viewModel.isQuickModeEnabled()) clearInputFocus();
     if (product == null) {
       return;
     }

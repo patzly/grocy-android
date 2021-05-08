@@ -69,6 +69,7 @@ public class FormDataInventory {
   private final LiveData<String> amountHintLive;
   private final MediatorLiveData<String> amountStockLive;
   private final MediatorLiveData<String> transactionAmountHelperLive;
+  private final MediatorLiveData<Boolean> productWillBeAddedLive;
   private final MutableLiveData<String> purchasedDateLive;
   private final LiveData<String> purchasedDateTextLive;
   private final LiveData<String> purchasedDateTextHumanLive;
@@ -157,6 +158,14 @@ public class FormDataInventory {
     transactionAmountHelperLive
         .addSource(quantityUnitsFactorsLive,
             i -> transactionAmountHelperLive.setValue(getTransactionAmountHelpText()));
+    productWillBeAddedLive = new MediatorLiveData<>();
+    productWillBeAddedLive
+        .addSource(amountStockLive,
+            i -> productWillBeAddedLive.setValue(getProductWillBeAdded()));
+    productWillBeAddedLive
+        .addSource(quantityUnitsFactorsLive,
+            i -> productWillBeAddedLive.setValue(getProductWillBeAdded()));
+    productWillBeAddedLive.setValue(false);
     purchasedDateLive = new MutableLiveData<>();
     purchasedDateTextLive = Transformations.map(
         purchasedDateLive,
@@ -431,8 +440,26 @@ public class FormDataInventory {
     );
   }
 
+  private boolean getProductWillBeAdded() {
+    ProductDetails productDetails = productDetailsLive.getValue();
+    String amountStock = amountStockLive.getValue();
+    if (productDetails == null || !NumUtil.isStringDouble(amountStock)
+        || Double.parseDouble(amountStock) == productDetails.getStockAmount()) {
+      return false;
+    }
+    double amountDiff = Double.parseDouble(amountStock) - productDetails.getStockAmount();
+    if(isTareWeightEnabled()) {
+      amountDiff -= productDetails.getProduct().getTareWeightDouble();
+    }
+    return amountDiff > 0;
+  }
+
   public MediatorLiveData<String> getTransactionAmountHelperLive() {
     return transactionAmountHelperLive;
+  }
+
+  public MediatorLiveData<Boolean> getProductWillBeAddedLive() {
+    return productWillBeAddedLive;
   }
 
   public String getTransactionSuccessMsg(double amountDiff) {
@@ -624,16 +651,25 @@ public class FormDataInventory {
   }
 
   public boolean isDueDateValid() {
-    if (dueDateLive.getValue() == null || dueDateLive.getValue().isEmpty()) {
-      dueDateErrorLive.setValue(true);
-      return false;
-    } else {
+    assert productWillBeAddedLive.getValue() != null;
+    if (!productWillBeAddedLive.getValue()) {
       dueDateErrorLive.setValue(false);
       return true;
     }
+    if (dueDateLive.getValue() == null || dueDateLive.getValue().isEmpty()) {
+      dueDateErrorLive.setValue(true);
+      return false;
+    }
+    dueDateErrorLive.setValue(false);
+    return true;
   }
 
   public boolean isPriceValid() {
+    assert productWillBeAddedLive.getValue() != null;
+    if (!productWillBeAddedLive.getValue()) {
+      priceErrorLive.setValue(null);
+      return true;
+    }
     if (priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
       priceErrorLive.setValue(null);
       return true;
@@ -692,7 +728,7 @@ public class FormDataInventory {
 
   public JSONObject getFilledJSONObject() {
     String amount = getAmountStock();
-    assert amount != null;
+    assert amount != null && productWillBeAddedLive.getValue() != null;
     String price = priceLive.getValue();
     Store store = storeLive.getValue();
     String storeId = store != null ? String.valueOf(store.getId()) : null;
@@ -706,18 +742,20 @@ public class FormDataInventory {
     JSONObject json = new JSONObject();
     try {
       json.put("new_amount", amount);
-      if (NumUtil.isStringDouble(price)) {
-        json.put("price", price);
-      }
-      if (getPurchasedDateEnabled() && purchasedDate != null) {
-        json.put("purchased_date", purchasedDate);
-      }
-      json.put("best_before_date", dueDate);
-      if (storeId != null) {
-        json.put("shopping_location_id", storeId);
-      }
-      if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
-        json.put("location_id", String.valueOf(location.getId()));
+      if (productWillBeAddedLive.getValue()) {
+        if (NumUtil.isStringDouble(price)) {
+          json.put("price", price);
+        }
+        if (getPurchasedDateEnabled() && purchasedDate != null) {
+          json.put("purchased_date", purchasedDate);
+        }
+        json.put("best_before_date", dueDate);
+        if (storeId != null) {
+          json.put("shopping_location_id", storeId);
+        }
+        if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
+          json.put("location_id", String.valueOf(location.getId()));
+        }
       }
     } catch (JSONException e) {
       if (isDebuggingEnabled()) {
