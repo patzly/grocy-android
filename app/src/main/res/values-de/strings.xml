@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -106,18 +106,42 @@
   <string name="action_enter_data_manually">Daten manuell eingeben</string>
   <string name="action_perform">Aktion ausführen</string>
 
-  <!-- %1$s is the number of products which are due soon -->
-  <!-- %1$s is the number of products which are overdue -->
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
-  <!-- %1$s is the number of products which are in stock -->
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$d bald fällig</item>
+    <item quantity="other">%1$d bald fällig</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d abgelaufen</item>
+    <item quantity="other">%1$d abgelaufen</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d verdorben</item>
+    <item quantity="other">%1$d verdorben</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d unter Mindestbestand</item>
+    <item quantity="other">%1$d unter Mindestbestand</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d im Bestand</item>
+    <item quantity="other">%1$d im Bestand</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">%1$s %2$s %3$s aus dem Bestand entfernt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">%1$s %2$s %3$s als verdorben aus dem Bestand entfernt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%1$s %2$s %3$s als geöffnet markiert</string>
-  <!-- %1$s is the number of undone items in shopping list -->
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d unerledigt</item>
+    <item quantity="other">%1$d unerledigt</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -474,7 +498,11 @@
   <string name="property_status">Status</string>
   <string name="property_amount">Menge</string>
   <string name="property_seconds">Sekunden</string>
-  <!-- %1$d is a number (amount of seconds) -->
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d Sekunden</item>
+    <item quantity="other">%1$d Sekunden</item>
+  </plurals>
   <string name="property_amount_min_stock">Mindestbestand</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Menge in %1$s</string>
