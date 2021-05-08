@@ -152,6 +152,7 @@ public class StockOverviewItemAdapter extends
           context,
           R.color.retro_yellow_bg,
           context.getResources().getQuantityString(R.plurals.msg_due_products,
+              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT),
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)),
           () -> {
             FilterChip.changeStateToInactive(chipOverdue, chipExpired, chipMissing, chipInStock);
@@ -163,6 +164,7 @@ public class StockOverviewItemAdapter extends
           context,
           R.color.retro_dirt,
           context.getResources().getQuantityString(R.plurals.msg_overdue_products,
+              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE),
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipExpired, chipMissing, chipInStock);
@@ -174,6 +176,7 @@ public class StockOverviewItemAdapter extends
           context,
           R.color.retro_red_bg_black,
           context.getResources().getQuantityString(R.plurals.msg_expired_products,
+              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED),
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipMissing, chipInStock);
@@ -185,6 +188,7 @@ public class StockOverviewItemAdapter extends
           context,
           R.color.retro_blue_bg,
           context.getResources().getQuantityString(R.plurals.msg_missing_products,
+              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipInStock);
@@ -196,6 +200,7 @@ public class StockOverviewItemAdapter extends
           context,
           R.color.retro_green_bg_black,
           context.getResources().getQuantityString(R.plurals.msg_in_stock_products,
+              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK),
               horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)),
           () -> {
             FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing);
@@ -232,22 +237,27 @@ public class StockOverviewItemAdapter extends
       }
       chipDueNext.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_due_products,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)
       ));
       chipOverdue.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_overdue_products,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)
       ));
       chipExpired.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_expired_products,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)
       ));
       chipMissing.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_missing_products,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
       ));
       chipInStock.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_in_stock_products,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)
       ));
     }

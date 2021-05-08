@@ -145,7 +145,7 @@ public class ShoppingListItemAdapter extends
       chipMissing = new FilterChip(
           context,
           R.color.retro_blue_bg,
-          context.getResources().getQuantityString(R.plurals.msg_missing_products, 0),
+          context.getResources().getQuantityString(R.plurals.msg_missing_products, 0, 0),
           () -> {
             if (chipUndone.isActive()) {
               chipUndone.changeState(false);
@@ -157,7 +157,7 @@ public class ShoppingListItemAdapter extends
       chipUndone = new FilterChip(
           context,
           R.color.retro_yellow_bg,
-          context.getResources().getQuantityString(R.plurals.msg_undone_items, 0),
+          context.getResources().getQuantityString(R.plurals.msg_undone_items, 0, 0),
           () -> {
             if (chipMissing.isActive()) {
               chipMissing.changeState(false);
@@ -195,10 +195,12 @@ public class ShoppingListItemAdapter extends
       }
       chipMissing.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_missing_products,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
       ));
       chipUndone.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_undone_items,
+          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE),
           horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE)
       ));
     }
