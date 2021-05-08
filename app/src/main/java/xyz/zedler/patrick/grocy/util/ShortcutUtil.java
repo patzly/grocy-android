@@ -41,6 +41,8 @@ public class ShortcutUtil {
   public final static String SHOPPING_MODE = "shortcut_shopping_mode";
   public final static String PURCHASE = "shortcut_purchase";
   public final static String CONSUME = "shortcut_consume";
+  public final static String INVENTORY = "shortcut_inventory";
+  public final static String TRANSFER = "shortcut_transfer";
 
   @RequiresApi(api = Build.VERSION_CODES.N_MR1)
   public static List<ShortcutInfo> getDynamicShortcuts(Context context) {
@@ -152,6 +154,28 @@ public class ShortcutUtil {
     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
     intent.setClass(context, MainActivity.class);
     return new ShortcutInfo.Builder(context, CONSUME)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
+        .setIntent(intent).build();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutInventory(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_inventoryFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, INVENTORY)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
+        .setIntent(intent).build();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutTransfer(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_transferFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, TRANSFER)
         .setShortLabel(label)
         .setIcon(Icon.createWithResource(context, R.mipmap.ic_consume))
         .setIntent(intent).build();

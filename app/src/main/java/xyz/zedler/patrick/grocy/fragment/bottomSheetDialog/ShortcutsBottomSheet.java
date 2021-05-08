@@ -97,6 +97,10 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         setCheckBoxChecked(R.id.purchase);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.CONSUME)) {
         setCheckBoxChecked(R.id.consume);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.INVENTORY)) {
+        setCheckBoxChecked(R.id.inventory);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.TRANSFER)) {
+        setCheckBoxChecked(R.id.transfer);
       }
     }
 
@@ -158,6 +162,10 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         shortcutInfos.add(ShortcutUtil.createShortcutPurchase(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.consume) {
         shortcutInfos.add(ShortcutUtil.createShortcutConsume(context, checkBox.getText()));
+      } else if (checkBox.getId() == R.id.inventory) {
+        shortcutInfos.add(ShortcutUtil.createShortcutInventory(context, checkBox.getText()));
+      } else if (checkBox.getId() == R.id.transfer) {
+        shortcutInfos.add(ShortcutUtil.createShortcutTransfer(context, checkBox.getText()));
       }
     }
 
