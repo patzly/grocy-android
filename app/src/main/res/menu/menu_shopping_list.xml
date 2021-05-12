@@ -40,6 +40,11 @@
     app:showAsAction="never" />
 
   <item
+    android:id="@+id/action_purchase_done_items"
+    android:title="@string/action_purchase_done_items"
+    app:showAsAction="never" />
+
+  <item
     android:id="@+id/action_purchase_all_items"
     android:title="@string/action_purchase_all_items"
     app:showAsAction="never" />

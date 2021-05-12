@@ -1,5 +1,6 @@
 2.0.0-alpha08
 - New: Purchase actions on shopping list page are working again (#401)
+- New: It is possible now to purchase only done shopping list items (#221)
 - Improved: 'Add shopping list item' page has a better workflow now
 - Improved: Quick mode behavior is better for amount field of forms now
 - Improved: You can add inventory and transfer page as shortcuts now

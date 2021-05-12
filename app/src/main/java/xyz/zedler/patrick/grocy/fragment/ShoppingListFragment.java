@@ -402,9 +402,9 @@ public class ShoppingListFragment extends BaseFragment implements
       });
     }
 
-    MenuItem purchaseItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
-    if (purchaseItems != null) {
-      purchaseItems.setOnMenuItemClickListener(item -> {
+    MenuItem purchaseAllItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
+    if (purchaseAllItems != null) {
+      purchaseAllItems.setOnMenuItemClickListener(item -> {
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItems();
         if (shoppingListItemsSelected == null) {
@@ -426,6 +426,47 @@ public class ShoppingListFragment extends BaseFragment implements
         int[] array = new int[listItems.size()];
         for (int i = 0; i < array.length; i++) {
           array[i] = listItems.get(i).getId();
+        }
+        navigate(R.id.purchaseFragment,
+            new PurchaseFragmentArgs.Builder()
+                .setShoppingListItems(array)
+                .setCloseWhenFinished(true).build().toBundle());
+        return true;
+      });
+    }
+
+    MenuItem purchaseDoneItems = activity.getBottomMenu().findItem(R.id.action_purchase_done_items);
+    if (purchaseDoneItems != null) {
+      purchaseDoneItems.setOnMenuItemClickListener(item -> {
+        ArrayList<ShoppingListItem> shoppingListItemsSelected
+            = viewModel.getFilteredShoppingListItems();
+        if (shoppingListItemsSelected == null) {
+          showMessage(activity.getString(R.string.error_undefined));
+          return true;
+        }
+        if (shoppingListItemsSelected.isEmpty()) {
+          showMessage(activity.getString(R.string.error_empty_shopping_list));
+          return true;
+        }
+        ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
+        HashMap<Integer, String> productNamesHashMap = viewModel.getProductNamesHashMap();
+        if (productNamesHashMap == null) {
+          showMessage(activity.getString(R.string.error_undefined));
+          return true;
+        }
+        ArrayList<ShoppingListItem> doneItems = new ArrayList<>();
+        for (ShoppingListItem tempItem : listItems) {
+          if (!tempItem.isUndone()) doneItems.add(tempItem);
+        }
+        if (doneItems.isEmpty()) {
+          showMessage(activity.getString(R.string.error_no_done_items));
+          return true;
+        }
+        SortUtil
+            .sortShoppingListItemsByName(requireContext(), doneItems, productNamesHashMap, true);
+        int[] array = new int[doneItems.size()];
+        for (int i = 0; i < array.length; i++) {
+          array[i] = doneItems.get(i).getId();
         }
         navigate(R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
