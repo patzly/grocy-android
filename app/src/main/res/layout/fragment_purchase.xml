@@ -178,17 +178,8 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.journeyapps.barcodescanner.DecoratedBarcodeView
-              android:id="@+id/barcode_scan"
-              android:layout_width="350dp"
-              android:layout_height="160dp"
-              android:layout_gravity="center_horizontal"
-              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.toggleTorch()}"
-              app:zxing_scanner_layout="@layout/partial_scanner_embedded" />
-
             <LinearLayout
-              android:id="@+id/linear_purchase_batch_mode_section"
+              android:id="@+id/container_batch_mode"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
@@ -197,9 +188,8 @@
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
 
                 <ImageView
-                  android:id="@+id/image_purchase_batch"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@drawable/ic_round_shopping_list_long"
+                  android:src="@drawable/ic_round_shopping_list"
                   tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -210,7 +200,7 @@
 
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
-                    android:id="@+id/text_purchase_batch" />
+                    android:text="@{formData.batchModeTextLive}" />
 
                 </LinearLayout>
 
@@ -223,10 +213,23 @@
                 layout="@layout/row_shopping_list_item" />
 
               <View
-                android:id="@+id/divider_drawer_shopping_list"
-                style="@style/Theme.Grocy.Divider" />
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:background="@color/stroke_secondary"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
 
             </LinearLayout>
+
+            <com.journeyapps.barcodescanner.DecoratedBarcodeView
+              android:id="@+id/barcode_scan"
+              android:layout_width="350dp"
+              android:layout_height="160dp"
+              android:layout_gravity="center_horizontal"
+              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.toggleTorch()}"
+              app:zxing_scanner_layout="@layout/partial_scanner_embedded" />
 
             <com.google.android.material.card.MaterialCardView
               android:layout_width="match_parent"

@@ -211,7 +211,11 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
   }
 
   public boolean hasProduct() {
-    return productId != null && !productId.isEmpty();
+    return NumUtil.isStringInt(productId);
+  }
+
+  public boolean hasQuId() {
+    return NumUtil.isStringInt(quId);
   }
 
   public String getQuId() {
@@ -287,10 +291,14 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     );
   }
 
-  public static JSONObject getJsonFromShoppingListItem(ShoppingListItem item, boolean debug,
-      String TAG) {
+  public static JSONObject getJsonFromShoppingListItem(ShoppingListItem item, boolean addId,
+      boolean debug, String TAG) {
     JSONObject json = new JSONObject();
     try {
+      if (addId) {
+        json.put("id", item.getId());
+        json.put("done", item.getDone());
+      }
       Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
       Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
       Object note = item.getNote() == null || item.getNote().isEmpty()
@@ -306,5 +314,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
       }
     }
     return json;
+  }
+
+  public JSONObject getJsonFromShoppingListItem(boolean addId, boolean debug, String TAG) {
+    return getJsonFromShoppingListItem(this, addId, debug, TAG);
   }
 }

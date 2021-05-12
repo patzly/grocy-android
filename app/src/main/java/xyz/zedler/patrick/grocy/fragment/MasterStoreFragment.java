@@ -236,8 +236,6 @@ public class MasterStoreFragment extends BaseFragment {
               activity.findViewById(R.id.frame_main_container),
               activity.getString(R.string.msg_no_connection),
               Snackbar.LENGTH_SHORT
-          ).setActionTextColor(
-              ContextCompat.getColor(activity, R.color.secondary)
           ).setAction(
               activity.getString(R.string.action_retry),
               v1 -> refresh()
@@ -281,8 +279,6 @@ public class MasterStoreFragment extends BaseFragment {
                   activity.findViewById(R.id.frame_main_container),
                   activity.getString(R.string.error_undefined),
                   Snackbar.LENGTH_SHORT
-              ).setActionTextColor(
-                  ContextCompat.getColor(activity, R.color.secondary)
               ).setAction(
                   activity.getString(R.string.action_retry),
                   v1 -> download()

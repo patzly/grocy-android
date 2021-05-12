@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 
 public class PurchaseRepository {
@@ -46,7 +47,8 @@ public class PurchaseRepository {
         ArrayList<QuantityUnit> quantityUnits,
         ArrayList<QuantityUnitConversion> quantityUnitConversions,
         ArrayList<Store> stores,
-        ArrayList<Location> locations
+        ArrayList<Location> locations,
+        ArrayList<ShoppingListItem> shoppingListItems
     );
   }
 
@@ -55,8 +57,8 @@ public class PurchaseRepository {
     void actionFinished();
   }
 
-  public void loadFromDatabase(DataListener listener) {
-    new loadAsyncTask(appDatabase, listener).execute();
+  public void loadFromDatabase(DataListener listener, boolean loadShoppingListItems) {
+    new loadAsyncTask(appDatabase, listener, loadShoppingListItems).execute();
   }
 
   private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -70,11 +72,14 @@ public class PurchaseRepository {
     private ArrayList<QuantityUnitConversion> quantityUnitConversions;
     private ArrayList<Store> stores;
     private ArrayList<Location> locations;
+    private ArrayList<ShoppingListItem> shoppingListItems;
+    private final boolean loadShoppingListItems;
 
 
-    loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
+    loadAsyncTask(AppDatabase appDatabase, DataListener listener, boolean loadShoppingListItems) {
       this.appDatabase = appDatabase;
       this.listener = listener;
+      this.loadShoppingListItems = loadShoppingListItems;
     }
 
     @Override
@@ -86,6 +91,9 @@ public class PurchaseRepository {
           = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
       stores = new ArrayList<>(appDatabase.storeDao().getAll());
       locations = new ArrayList<>(appDatabase.locationDao().getAll());
+      if (loadShoppingListItems) {
+        shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
+      }
       return null;
     }
 
@@ -93,7 +101,7 @@ public class PurchaseRepository {
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
         listener.actionFinished(products, barcodes,
-            quantityUnits, quantityUnitConversions, stores, locations);
+            quantityUnits, quantityUnitConversions, stores, locations, shoppingListItems);
       }
     }
   }
@@ -105,7 +113,7 @@ public class PurchaseRepository {
       ArrayList<QuantityUnitConversion> quantityUnitConversions,
       ArrayList<Store> stores,
       ArrayList<Location> locations,
-      DataUpdatedListener listener
+      ArrayList<ShoppingListItem> shoppingListItems
   ) {
     new updateAsyncTask(
         appDatabase,
@@ -115,14 +123,13 @@ public class PurchaseRepository {
         quantityUnitConversions,
         stores,
         locations,
-        listener
+        shoppingListItems
     ).execute();
   }
 
   private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private final AppDatabase appDatabase;
-    private final DataUpdatedListener listener;
 
     private final ArrayList<Product> products;
     private final ArrayList<ProductBarcode> barcodes;
@@ -130,6 +137,7 @@ public class PurchaseRepository {
     private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
     private final ArrayList<Store> stores;
     private final ArrayList<Location> locations;
+    private final ArrayList<ShoppingListItem> shoppingListItems;
 
     updateAsyncTask(
         AppDatabase appDatabase,
@@ -139,16 +147,16 @@ public class PurchaseRepository {
         ArrayList<QuantityUnitConversion> quantityUnitConversions,
         ArrayList<Store> stores,
         ArrayList<Location> locations,
-        DataUpdatedListener listener
+        ArrayList<ShoppingListItem> shoppingListItems
     ) {
       this.appDatabase = appDatabase;
-      this.listener = listener;
       this.products = products;
       this.barcodes = barcodes;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
       this.stores = stores;
       this.locations = locations;
+      this.shoppingListItems = shoppingListItems;
     }
 
     @Override
@@ -165,14 +173,11 @@ public class PurchaseRepository {
       appDatabase.storeDao().insertAll(stores);
       appDatabase.locationDao().deleteAll();
       appDatabase.locationDao().insertAll(locations);
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
+      if (shoppingListItems != null) {
+        appDatabase.shoppingListItemDao().deleteAll();
+        appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
       }
+      return null;
     }
   }
 }

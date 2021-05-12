@@ -19,7 +19,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/container"
+  android:id="@+id/container_row"
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -47,24 +47,16 @@
     android:textStyle="italic"
     android:visibility="gone" />
 
-  <LinearLayout
-    android:id="@+id/note_container"
+  <TextView
+    android:id="@+id/note"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:maxWidth="150dp"
+    android:singleLine="true"
+    android:textStyle="italic"
     android:layout_marginEnd="10dp"
-    android:visibility="gone">
-
-    <TextView
-      android:id="@+id/note"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:maxWidth="150dp"
-      android:singleLine="true"
-      android:textStyle="italic" />
-
-  </LinearLayout>
+    android:visibility="gone"/>
 
   <TextView
     android:id="@+id/amount"

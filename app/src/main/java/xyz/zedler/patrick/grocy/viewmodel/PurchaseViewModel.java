@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper.OnJSONArrayResponseListener;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -53,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
@@ -72,11 +74,16 @@ public class PurchaseViewModel extends BaseViewModel {
   private final FormDataPurchase formData;
 
   private ArrayList<Product> products;
+  private HashMap<Integer, Product> productHashMap;
   private ArrayList<QuantityUnit> quantityUnits;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private ArrayList<QuantityUnitConversion> unitConversions;
   private ArrayList<ProductBarcode> barcodes;
   private ArrayList<Store> stores;
   private ArrayList<Location> locations;
+  private ArrayList<ShoppingListItem> shoppingListItems;
+  private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
+  private ArrayList<Integer> batchShoppingListItemIds;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -95,6 +102,13 @@ public class PurchaseViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
+
+    if (args.getShoppingListItems() != null) {
+      batchShoppingListItemIds = new ArrayList<>(args.getShoppingListItems().length);
+      for (int i : args.getShoppingListItems()) {
+        batchShoppingListItemIds.add(i);
+      }
+    }
 
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
@@ -118,18 +132,34 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, qUs, conversions, stores, locations) -> {
+    repository.loadFromDatabase((products, barcodes, qUs, conversions, stores,
+        locations, shoppingListItems) -> {
       this.products = products;
+      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+      productHashMap = new HashMap<>();
+      for (Product product : products) {
+        productHashMap.put(product.getId(), product);
+      }
       this.barcodes = barcodes;
       this.quantityUnits = qUs;
+      quantityUnitHashMap = new HashMap<>();
+      for (QuantityUnit quantityUnit : quantityUnits) {
+        quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+      }
       this.unitConversions = conversions;
       this.stores = stores;
       this.locations = locations;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
-        if (downloadAfterLoading) {
-            downloadData();
+      this.shoppingListItems = shoppingListItems;
+      if (shoppingListItems != null) {
+        shoppingListItemHashMap = new HashMap<>();
+        for (ShoppingListItem item : shoppingListItems) {
+          shoppingListItemHashMap.put(item.getId(), item);
         }
-    });
+      }
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    }, batchShoppingListItemIds != null);
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -142,28 +172,42 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(() -> onQueueEmpty(true), this::onDownloadError);
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
+          productHashMap = new HashMap<>();
+          for (Product product : products) {
+            productHashMap.put(product.getId(), product);
+          }
           formData.getProductsLive().setValue(getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
-        ), dlHelper.updateQuantityUnits(
-            dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
-        ), dlHelper.updateStores(
+        ), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
+          this.quantityUnits = quantityUnits;
+          quantityUnitHashMap = new HashMap<>();
+          for (QuantityUnit quantityUnit : quantityUnits) {
+            quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+          }
+        }), dlHelper.updateStores(
             dbChangedTime, stores -> this.stores = stores
         ), dlHelper.updateLocations(
             dbChangedTime, locations -> this.locations = locations
         )
     );
+    if (batchShoppingListItemIds != null) {
+      dlHelper.updateShoppingListItems(dbChangedTime, items -> {
+        this.shoppingListItems = items;
+        shoppingListItemHashMap = new HashMap<>();
+        for (ShoppingListItem item : shoppingListItems) {
+          shoppingListItemHashMap.put(item.getId(), item);
+        }
+      });
+    }
     if (queue.isEmpty()) {
-      if (queueEmptyAction != null) {
-        queueEmptyAction.run();
-        queueEmptyAction = null;
-      }
+      onQueueEmpty(false);
       return;
     }
 
@@ -187,24 +231,40 @@ public class PurchaseViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty() {
-    repository.updateDatabase(products, barcodes,
-        quantityUnits, unitConversions, stores, locations, () -> {
-        });
+  private void onQueueEmpty(boolean offlineDataUpdated) {
+    if (offlineDataUpdated) {
+      repository.updateDatabase(products, barcodes,
+          quantityUnits, unitConversions, stores, locations, shoppingListItems);
+    }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
+      return;
+    }
+    if (batchShoppingListItemIds != null) {
+      fillWithShoppingListItem();
     }
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
-      if (debug) {
-          Log.e(TAG, "onError: VolleyError: " + error);
-      }
+    if (debug) {
+      Log.e(TAG, "onError: VolleyError: " + error);
+    }
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  public void setProduct(int productId, ProductBarcode barcode) {
+  public void setProduct(
+      @Nullable Integer productId,
+      @Nullable ProductBarcode barcode,
+      @Nullable ShoppingListItem shoppingListItem
+  ) {
+    if (productId == null && barcode == null && shoppingListItem == null) {
+      return;
+    }
+    if (productId == null && barcode != null) {
+      return;
+    }
+
     DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
       Product updatedProduct = productDetails.getProduct();
       formData.getProductDetailsLive().setValue(productDetails);
@@ -213,7 +273,13 @@ public class PurchaseViewModel extends BaseViewModel {
       // quantity unit
       double initialUnitFactor;
       try {
-        initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, barcode);
+        Integer forcedQuId = null;
+        if (barcode != null && barcode.hasQuId()) {
+          forcedQuId = barcode.getQuIdInt();
+        } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
+          forcedQuId = shoppingListItem.getQuIdInt();
+        }
+        initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, forcedQuId);
       } catch (IllegalArgumentException e) {
         showMessage(e.getMessage());
         formData.clearForm();
@@ -226,6 +292,9 @@ public class PurchaseViewModel extends BaseViewModel {
         // if barcode contains amount, take this (with tare weight handling off)
         // quick mode status doesn't matter
         formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
+      }
+      if (!isTareWeightEnabled && shoppingListItem != null) {
+        formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
@@ -292,11 +361,17 @@ public class PurchaseViewModel extends BaseViewModel {
       formData.getLocationLive().setValue(productDetails.getLocation());
 
       formData.isFormValid();
-        if (isQuickModeEnabled()) {
-            sendEvent(Event.FOCUS_INVALID_VIEWS);
-        }
+      if (isQuickModeEnabled()) {
+        sendEvent(Event.FOCUS_INVALID_VIEWS);
+      }
     };
 
+    if (productId == null && shoppingListItem.hasProduct()) {
+      productId = shoppingListItem.getProductIdInt();
+    } else if (productId == null) {
+      formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
+      return;
+    }
     dlHelper.getProductDetails(productId, listener, error -> {
       showMessage(getString(R.string.error_no_product_details));
       formData.clearForm();
@@ -305,10 +380,10 @@ public class PurchaseViewModel extends BaseViewModel {
 
   private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
       Product product,
-      ProductBarcode barcode
+      Integer forcedQuId
   ) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
+    QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStock());
+    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchase());
 
     if (stock == null || purchase == null) {
       throw new IllegalArgumentException(getString(R.string.error_loading_qus));
@@ -322,25 +397,25 @@ public class PurchaseViewModel extends BaseViewModel {
       unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
-        if (product.getId() != conversion.getProductId()) {
-            continue;
-        }
-      QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-        if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-            continue;
-        }
+      if (product.getId() != conversion.getProductId()) {
+        continue;
+      }
+      QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
+      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
+        continue;
+      }
       unitFactors.put(unit, conversion.getFactor());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
-    QuantityUnit barcodeUnit = null;
-    if (barcode != null && barcode.hasQuId()) {
-      barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
+    QuantityUnit forcedUnit = null;
+    if (forcedQuId != null) {
+      forcedUnit = quantityUnitHashMap.get(forcedQuId);
     }
     Double factor;
-    if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
-      formData.getQuantityUnitLive().setValue(barcodeUnit);
-      factor = unitFactors.get(barcodeUnit);
+    if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
+      formData.getQuantityUnitLive().setValue(forcedUnit);
+      factor = unitFactors.get(forcedUnit);
     } else {
       formData.getQuantityUnitLive().setValue(purchase);
       factor = unitFactors.get(purchase);
@@ -354,11 +429,11 @@ public class PurchaseViewModel extends BaseViewModel {
     for (ProductBarcode code : barcodes) {
       if (code.getBarcode().equals(barcode)) {
         productBarcode = code;
-        product = getProduct(code.getProductId());
+        product = productHashMap.get(code.getProductId());
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode);
+      setProduct(product.getId(), productBarcode, null);
     } else {
       formData.getBarcodeLive().setValue(barcode);
       formData.isFormValid();
@@ -369,9 +444,9 @@ public class PurchaseViewModel extends BaseViewModel {
   public void checkProductInput() {
     formData.isProductNameValid();
     String input = formData.getProductNameLive().getValue();
-      if (input == null || input.isEmpty()) {
-          return;
-      }
+    if (input == null || input.isEmpty()) {
+      return;
+    }
     Product product = getProductFromName(input);
 
     if (product == null) {
@@ -379,11 +454,11 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = getProduct(code.getProductId());
+          product = productHashMap.get(code.getProductId());
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode);
+        setProduct(product.getId(), productBarcode, null);
         return;
       }
     }
@@ -396,7 +471,7 @@ public class PurchaseViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product.getId(), null);
+      setProduct(product.getId(), null, null);
     } else {
       showInputProductBottomSheet(input);
     }
@@ -405,6 +480,45 @@ public class PurchaseViewModel extends BaseViewModel {
   public void addBarcodeToExistingProduct(String barcode) {
     formData.getBarcodeLive().setValue(barcode);
     formData.getProductNameLive().setValue(null);
+  }
+
+  public void fillWithShoppingListItem() {
+    if (batchShoppingListItemIds == null) {
+      return;
+    }
+    if (formData.getBatchModeItemIndexLive().getValue() == null) {
+      return;
+    }
+    int index = formData.getBatchModeItemIndexLive().getValue();
+    if (index >= batchShoppingListItemIds.size()) {
+      return;
+    }
+    int currentItemId = batchShoppingListItemIds.get(index);
+    if (shoppingListItemHashMap == null) {
+      return;
+    }
+    ShoppingListItem currentItem = shoppingListItemHashMap.get(currentItemId);
+    if (currentItem == null) {
+      return;
+    }
+    formData.getShoppingListItemLive().setValue(currentItem);
+    setProduct(null, null, currentItem);
+  }
+
+  public boolean batchModeNextItem() {  // also returns whether there was a next item
+    if (batchShoppingListItemIds == null) {
+      return false;
+    }
+    if (formData.getBatchModeItemIndexLive().getValue() == null) {
+      return false;
+    }
+    int index = formData.getBatchModeItemIndexLive().getValue();
+    if (index >= batchShoppingListItemIds.size() - 1) {
+      return false;
+    }
+    formData.getBatchModeItemIndexLive().setValue(index + 1);
+    fillWithShoppingListItem();
+    return true;
   }
 
   public void purchaseProduct() {
@@ -420,57 +534,71 @@ public class PurchaseViewModel extends BaseViewModel {
     assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
+
+    OnJSONArrayResponseListener onResponse = response -> {
+      // UNDO OPTION
+      String transactionId = null;
+      double amountPurchased = 0;
+      try {
+        transactionId = response.getJSONObject(0)
+            .getString("transaction_id");
+        for (int i = 0; i < response.length(); i++) {
+          amountPurchased += response.getJSONObject(i).getDouble("amount");
+        }
+      } catch (JSONException e) {
+        if (debug) {
+          Log.e(TAG, "purchaseProduct: " + e);
+        }
+      }
+      if (debug) {
+        Log.i(TAG, "purchaseProduct: transaction successful");
+      }
+
+      SnackbarMessage snackbarMessage = new SnackbarMessage(
+          formData.getTransactionSuccessMsg(amountPurchased)
+      );
+      if (transactionId != null) {
+        String transId = transactionId;
+        ShoppingListItem shoppingListItem = formData.getShoppingListItemLive().getValue();
+        snackbarMessage.setAction(
+            getString(R.string.action_undo),
+            v -> undoTransaction(transId, shoppingListItem)
+        );
+        snackbarMessage.setDurationSecs(20);
+      }
+      showSnackbar(snackbarMessage);
+      sendEvent(Event.TRANSACTION_SUCCESS);
+    };
+
     dlHelper.postWithArray(
         grocyApi.purchaseProduct(product.getId()),
         body,
         response -> {
-          // UNDO OPTION
-          String transactionId = null;
-          double amountPurchased = 0;
-          try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
-            for (int i = 0; i < response.length(); i++) {
-              amountPurchased += response.getJSONObject(i).getDouble("amount");
-            }
-          } catch (JSONException e) {
-            if (debug)
-              Log.e(TAG, "purchaseProduct: " + e);
+          ShoppingListItem shoppingListItem = formData.getShoppingListItemLive().getValue();
+          if (batchShoppingListItemIds != null && shoppingListItem != null) {
+            deleteShoppingListItem(shoppingListItem.getId(), () -> onResponse.onResponse(response));
+          } else {
+            onResponse.onResponse(response);
           }
-          if (debug)
-            Log.i(TAG, "purchaseProduct: transaction successful");
-
-          SnackbarMessage snackbarMessage = new SnackbarMessage(
-              formData.getTransactionSuccessMsg(amountPurchased)
-          );
-          if (transactionId != null) {
-            String transId = transactionId;
-            snackbarMessage.setAction(
-                getString(R.string.action_undo),
-                v -> undoTransaction(transId)
-            );
-            snackbarMessage.setDurationSecs(20);
-          }
-          showSnackbar(snackbarMessage);
-          sendEvent(Event.TRANSACTION_SUCCESS);
         },
         error -> {
           showErrorMessage();
-            if (debug) {
-                Log.i(TAG, "purchaseProduct: " + error);
-            }
+          if (debug) {
+            Log.i(TAG, "purchaseProduct: " + error);
+          }
         }
     );
   }
 
-  private void undoTransaction(String transactionId) {
+  private void undoTransaction(String transactionId, @Nullable ShoppingListItem shoppingListItem) {
     dlHelper.post(
         grocyApi.undoStockTransaction(transactionId),
         success -> {
           showMessage(getString(R.string.msg_undone_transaction));
-            if (debug) {
-                Log.i(TAG, "undoTransaction: undone");
-            }
+          if (shoppingListItem != null) undoDeleteShoppingListItem(shoppingListItem);
+          if (debug) {
+            Log.i(TAG, "undoTransaction: undone");
+          }
         },
         error -> showErrorMessage()
     );
@@ -482,58 +610,74 @@ public class PurchaseViewModel extends BaseViewModel {
     dlHelper.addProductBarcode(body, () -> {
       formData.getBarcodeLive().setValue(null);
       barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
-        if (onSuccess != null) {
-            onSuccess.run();
-        }
+      if (onSuccess != null) {
+        onSuccess.run();
+      }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
+  }
+
+  private void deleteShoppingListItem(int itemId, @NonNull Runnable onFinish) {
+    dlHelper.delete(
+        grocyApi.getObject(GrocyApi.ENTITY.SHOPPING_LIST, itemId),
+        response -> onFinish.run(),
+        error -> {
+          if (debug) {
+            Log.e(TAG, "deleteShoppingListItem: " + error);
+          }
+          onFinish.run();
+        }
+    );
+  }
+
+  private void undoDeleteShoppingListItem(@NonNull ShoppingListItem item) {
+    dlHelper.post(
+        grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+        item.getJsonFromShoppingListItem(true, debug, TAG),
+        response -> {},
+        error -> {
+          if (debug) {
+            Log.e(TAG, "undoDeleteShoppingListItem: " + error);
+          }
+        }
+    );
   }
 
   @Nullable
   public Product getProductFromName(@Nullable String name) {
-      if (name == null) {
-          return null;
-      }
+    if (name == null) {
+      return null;
+    }
     for (Product product : products) {
-        if (product.getName().equals(name)) {
-            return product;
-        }
+      if (product.getName().equals(name)) {
+        return product;
+      }
     }
     return null;
   }
 
-  public Product getProduct(int id) {
-    for (Product product : products) {
-        if (product.getId() == id) {
-            return product;
-        }
-    }
-    return null;
+  public HashMap<Integer, Product> getProductHashMap() {
+    return productHashMap;
   }
 
   private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
     ArrayList<Product> activeProductsOnly = new ArrayList<>();
     for (Product product : allProducts) {
-        if (product.isActive()) {
-            activeProductsOnly.add(product);
-        }
+      if (product.isActive()) {
+        activeProductsOnly.add(product);
+      }
     }
     return activeProductsOnly;
   }
 
-  private QuantityUnit getQuantityUnit(int id) {
-    for (QuantityUnit quantityUnit : quantityUnits) {
-        if (quantityUnit.getId() == id) {
-            return quantityUnit;
-        }
-    }
-    return null;
+  public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
+    return quantityUnitHashMap;
   }
 
   private Store getStore(int id) {
     for (Store store : stores) {
-        if (store.getId() == id) {
-            return store;
-        }
+      if (store.getId() == id) {
+        return store;
+      }
     }
     return null;
   }
@@ -545,9 +689,9 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showQuantityUnitsBottomSheet(boolean hasFocus) {
-      if (!hasFocus) {
-          return;
-      }
+    if (!hasFocus) {
+      return;
+    }
     HashMap<QuantityUnit, Double> unitsFactors = getFormData()
         .getQuantityUnitsFactorsLive().getValue();
     Bundle bundle = new Bundle();
@@ -559,9 +703,9 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showPurchasedDateBottomSheet() {
-      if (!formData.isProductNameValid()) {
-          return;
-      }
+    if (!formData.isProductNameValid()) {
+      return;
+    }
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW, String.valueOf(0));
     bundle.putString(
@@ -575,7 +719,7 @@ public class PurchaseViewModel extends BaseViewModel {
   public void showDueDateBottomSheet(boolean hasFocus) {
     ProductDetails productDetails = formData.getProductDetailsLive().getValue();
     if (!hasFocus || !formData.isProductNameValid() || productDetails == null) {
-        return;
+      return;
     }
     Bundle bundle = new Bundle();
     bundle.putString(
@@ -591,9 +735,9 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showStoresBottomSheet() {
-      if (!formData.isProductNameValid() || stores == null || stores.isEmpty()) {
-          return;
-      }
+    if (!formData.isProductNameValid() || stores == null || stores.isEmpty()) {
+      return;
+    }
     Bundle bundle = new Bundle();
     if (stores.get(0).getId() != -1) {
       stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
@@ -609,9 +753,9 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void showLocationsBottomSheet() {
-      if (!formData.isProductNameValid()) {
-          return;
-      }
+    if (!formData.isProductNameValid()) {
+      return;
+    }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
     bundle.putInt(
@@ -644,9 +788,9 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public boolean isQuickModeEnabled() {
-      if (quickModeEnabled.getValue() == null) {
-          return false;
-      }
+    if (quickModeEnabled.getValue() == null) {
+      return false;
+    }
     return quickModeEnabled.getValue();
   }
 
@@ -671,9 +815,9 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public boolean isFeatureEnabled(String pref) {
-      if (pref == null) {
-          return true;
-      }
+    if (pref == null) {
+      return true;
+    }
     return sharedPrefs.getBoolean(pref, true);
   }
 

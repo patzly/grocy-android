@@ -30,12 +30,14 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
@@ -46,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
@@ -108,9 +109,12 @@ public class PurchaseFragment extends BaseFragment implements
 
     // INITIALIZE VIEWS
 
-        /*binding.linearPurchaseShoppingListItem.container.setBackground(
-                ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
-        );*/
+    if (args.getShoppingListItems() != null) {
+      binding.containerBatchMode.setVisibility(View.VISIBLE);
+      binding.linearPurchaseShoppingListItem.containerRow.setBackground(
+          ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
+      );
+    }
 
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -127,7 +131,12 @@ public class PurchaseFragment extends BaseFragment implements
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
-        if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
+        if (args.getShoppingListItems() != null) {
+          clearInputFocus();
+          viewModel.getFormData().clearForm();
+          boolean nextItemValid = viewModel.batchModeNextItem();
+          if (!nextItemValid) activity.navigateUp();
+        } else if (PurchaseFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
           activity.navigateUp();
         } else {
           viewModel.getFormData().clearForm();
@@ -152,13 +161,26 @@ public class PurchaseFragment extends BaseFragment implements
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate, null));
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(
+          productIdSavedSate, null, null
+      ));
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new PurchaseFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
-      viewModel.setProduct(productId, null);
+      viewModel.setProduct(productId, null, null);
     }
+
+    viewModel.getFormData().getShoppingListItemLive().observe(getViewLifecycleOwner(), item -> {
+      if(args.getShoppingListItems() == null || item == null) return;
+      ShoppingListItemAdapter.fillShoppingListItem(
+          requireContext(),
+          item,
+          binding.linearPurchaseShoppingListItem,
+          viewModel.getProductHashMap(),
+          viewModel.getQuantityUnitHashMap()
+      );
+    });
 
     viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
       if (visible) {
@@ -210,7 +232,9 @@ public class PurchaseFragment extends BaseFragment implements
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        R.menu.menu_purchase,
+        args.getShoppingListItems() != null
+            ? R.menu.menu_purchase_shopping_list
+            : R.menu.menu_purchase,
         this::onMenuItemClick
     );
     activity.updateFab(
@@ -356,7 +380,7 @@ public class PurchaseFragment extends BaseFragment implements
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null);
+    viewModel.setProduct(product.getId(), null, null);
   }
 
   public void clearFocusAndCheckProductInput() {
@@ -422,47 +446,6 @@ public class PurchaseFragment extends BaseFragment implements
     }
   }
 
-  private void fillWithShoppingListItem(int itemPos) {
-    if (args.getShoppingListItems() == null) {
-      return;
-    }
-    ShoppingListItem listItem = args.getShoppingListItems()[itemPos];
-    //if(viewModel.getQuantityUnitsLive().getValue() == null) return;
-
-    binding.textPurchaseBatch.setText(activity.getString(
-        R.string.subtitle_entry_num_of_num,
-        itemPos + 1,
-        args.getShoppingListItems().length
-    ));
-        /*ShoppingListItemAdapter.fillShoppingListItem(
-                activity,
-                listItem,
-                binding.linearPurchaseShoppingListItem,
-                viewModel.getQuantityUnitsLive().getValue()
-        );*/
-    if (listItem.getProductId() != null) {
-      //viewModel.loadProductDetails(Integer.parseInt(listItem.getProductId()));
-    } else {
-      //viewModel.getProductDetailsLive().setValue(null);
-      //fillWithProductDetails(null);
-    }
-    //viewModel.setForcedAmount(NumUtil.trim(listItem.getAmount()));
-  }
-
-  /**
-   * Fills the form.
-   *
-   * @param productDetails (ProductDetails): if null, the form won't be filled with these details
-   */
-  private void fillWithProductDetails(
-      @Nullable ProductDetails productDetails
-  ) {
-        /*
-        // PRODUCT
-        binding.autoCompletePurchaseProduct.setText(productDetails.getProduct().getName());
-        binding.autoCompletePurchaseProduct.dismissDropDown(); // necessary for lower Android versions, tested on 5.1*/
-  }
-
   private void hideDisabledFeatures() {
     if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
@@ -498,15 +481,14 @@ public class PurchaseFragment extends BaseFragment implements
         capture.decode();
       }
       return true;
+    } else if (item.getItemId() == R.id.action_skip) {
+      IconUtil.start(item);
+      clearInputFocus();
+      viewModel.getFormData().clearForm();
+      boolean nextItemValid = viewModel.batchModeNextItem();
+      if (!nextItemValid) activity.navigateUp();
+      return true;
     }
-        /*if(args.getShoppingListItems() != null) {
-            menuItemSkipItem.setVisible(true);
-            menuItemSkipItem.setOnMenuItemClickListener(item -> {
-                IconUtil.start(menuItemSkipItem);
-                //viewModel.nextShoppingListItemPos();
-                return true;
-            });
-        }*/
     return false;
   }
 

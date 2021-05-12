@@ -213,7 +213,8 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
       item = args.getShoppingListItem();
     }
     item = formData.fillShoppingListItem(item);
-    JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, debug, TAG);
+    JSONObject jsonObject = ShoppingListItem.getJsonFromShoppingListItem(item, false,
+        debug, TAG);
 
     if (isActionEdit) {
       dlHelper.put(

@@ -61,7 +61,7 @@ public class SnackbarMessage extends Event {
     Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
     if (actionText != null) {
       snackbar.setAction(actionText, action);
-      snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.secondary));
+      snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.retro_green_fg_invert));
     }
     if (NumUtil.isStringInt(duration)) {
       snackbar.setDuration(Integer.parseInt(duration));

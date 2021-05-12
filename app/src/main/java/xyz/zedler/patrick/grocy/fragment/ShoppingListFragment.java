@@ -297,10 +297,12 @@ public class ShoppingListFragment extends BaseFragment implements
     );
   }
 
+  @Override
   public void toggleDoneStatus(@NonNull ShoppingListItem shoppingListItem) {
     viewModel.toggleDoneStatus(shoppingListItem);
   }
 
+  @Override
   public void editItem(@NonNull ShoppingListItem shoppingListItem) {
     if (showOfflineError()) {
       return;
@@ -315,15 +317,17 @@ public class ShoppingListFragment extends BaseFragment implements
     viewModel.saveNotes(notes);
   }
 
+  @Override
   public void purchaseItem(@NonNull ShoppingListItem shoppingListItem) {
     if (showOfflineError()) {
       return;
     }
     navigate(R.id.purchaseFragment, new PurchaseFragmentArgs.Builder()
-        .setShoppingListItems(new ShoppingListItem[]{shoppingListItem})
+        .setShoppingListItems(new int[]{shoppingListItem.getId()})
         .setCloseWhenFinished(true).build().toBundle());
   }
 
+  @Override
   public void deleteItem(@NonNull ShoppingListItem shoppingListItem) {
     if (showOfflineError()) {
       return;
@@ -401,10 +405,6 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem purchaseItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
     if (purchaseItems != null) {
       purchaseItems.setOnMenuItemClickListener(item -> {
-        if (true) {
-          showMessage(getString(R.string.msg_not_implemented_yet));
-          return true;
-        }
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItems();
         if (shoppingListItemsSelected == null) {
@@ -423,9 +423,9 @@ public class ShoppingListFragment extends BaseFragment implements
         }
         SortUtil
             .sortShoppingListItemsByName(requireContext(), listItems, productNamesHashMap, true);
-        ShoppingListItem[] array = new ShoppingListItem[listItems.size()];
+        int[] array = new int[listItems.size()];
         for (int i = 0; i < array.length; i++) {
-          array[i] = listItems.get(i);
+          array[i] = listItems.get(i).getId();
         }
         navigate(R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
@@ -527,10 +527,10 @@ public class ShoppingListFragment extends BaseFragment implements
     if (item == null) {
       return;
     }
-
     Bundle bundle = new Bundle();
     if (item.hasProduct()) {
       Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
+      assert product != null;
       bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
       QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchase());
       if (quantityUnit != null && item.getAmountDouble() == 1) {

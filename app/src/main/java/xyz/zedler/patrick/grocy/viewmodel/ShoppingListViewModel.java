@@ -276,6 +276,7 @@ public class ShoppingListViewModel extends BaseViewModel {
             }
         ), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
+          productHashMap = new HashMap<>();
           for (Product product : products) {
             productHashMap.put(product.getId(), product);
           }

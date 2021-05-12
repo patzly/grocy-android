@@ -49,6 +49,9 @@ public class FormDataPurchase {
   private final SharedPreferences sharedPrefs;
   private final String currency;
   private final MutableLiveData<Boolean> displayHelpLive;
+  private final MutableLiveData<Integer> batchModeItemIndexLive;
+  private final LiveData<String> batchModeTextLive;
+  private final MutableLiveData<ShoppingListItem> shoppingListItemLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<ProductDetails> productDetailsLive;
@@ -100,6 +103,15 @@ public class FormDataPurchase {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    batchModeItemIndexLive = new MutableLiveData<>(args.getShoppingListItems() != null ? 0 : null);
+    batchModeTextLive = Transformations.map(
+        batchModeItemIndexLive,
+        index -> index != null && args.getShoppingListItems() != null ? application.getString(
+            R.string.subtitle_entry_num_of_num,
+            index+1, args.getShoppingListItems().length
+        ) : null
+    );
+    shoppingListItemLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
     if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
@@ -241,6 +253,18 @@ public class FormDataPurchase {
     displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
+  public MutableLiveData<Integer> getBatchModeItemIndexLive() {
+    return batchModeItemIndexLive;
+  }
+
+  public LiveData<String> getBatchModeTextLive() {
+    return batchModeTextLive;
+  }
+
+  public MutableLiveData<ShoppingListItem> getShoppingListItemLive() {
+    return shoppingListItemLive;
+  }
+
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
     return scannerVisibilityLive;
   }
@@ -270,6 +294,7 @@ public class FormDataPurchase {
   }
 
   public boolean isTareWeightEnabled() {
+    assert isTareWeightEnabledLive.getValue() != null;
     return isTareWeightEnabledLive.getValue();
   }
 

@@ -19,7 +19,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/container"
+  android:id="@+id/container_row"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -45,38 +45,19 @@
     android:textStyle="italic"
     android:visibility="gone" />
 
-  <LinearLayout
+  <TextView
+    android:id="@+id/amount"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:minHeight="20dp"
-    android:gravity="bottom">
+    android:singleLine="true" />
 
-    <TextView
-      android:id="@+id/amount"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true" />
-
-  </LinearLayout>
-
-  <LinearLayout
-    android:id="@+id/note_container"
+  <TextView
+    android:id="@+id/note"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:minHeight="20dp"
-    android:visibility="gone"
-    android:gravity="bottom">
-
-    <TextView
-      android:id="@+id/note"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textStyle="italic" />
-
-  </LinearLayout>
+    android:textStyle="italic"
+    android:visibility="gone"/>
 
 </LinearLayout>

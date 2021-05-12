@@ -26,12 +26,10 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -92,25 +90,20 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
       view.findViewById(R.id.action_purchase).setVisibility(View.GONE);
     }
     toolbar.setOnMenuItemClickListener(item -> {
-      Fragment fragmentCurrent = activity.getCurrentFragment();
-      if (fragmentCurrent.getClass() != ShoppingListFragment.class) {
-        return false;
-      }
       if (item.getItemId() == R.id.action_toggle_done) {
-        ((ShoppingListFragment) fragmentCurrent).toggleDoneStatus(shoppingListItem);
+        activity.getCurrentFragment().toggleDoneStatus(shoppingListItem);
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_purchase) {
-        activity.showMessage(R.string.msg_not_implemented_yet);
-        //((ShoppingListFragment) fragmentCurrent).purchaseItem(shoppingListItem);
+        activity.getCurrentFragment().purchaseItem(shoppingListItem);
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_edit) {
-        ((ShoppingListFragment) fragmentCurrent).editItem(shoppingListItem);
+        activity.getCurrentFragment().editItem(shoppingListItem);
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_delete) {
-        ((ShoppingListFragment) fragmentCurrent).deleteItem(shoppingListItem);
+        activity.getCurrentFragment().deleteItem(shoppingListItem);
         dismiss();
         return true;
       }

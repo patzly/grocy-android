@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
@@ -91,9 +92,6 @@ public class BaseFragment extends Fragment {
   public void addBarcode(String barcode) {
   }
 
-  public void createProductFromBarcode(String barcode) {
-  }
-
   public void clearFields() {
   }
 
@@ -113,6 +111,18 @@ public class BaseFragment extends Fragment {
   }
 
   public void clearShoppingList(ShoppingList shoppingList, boolean onlyDoneItems) {
+  }
+
+  public void toggleDoneStatus(ShoppingListItem shoppingListItem) {
+  }
+
+  public void purchaseItem(ShoppingListItem shoppingListItem) {
+  }
+
+  public void deleteItem(ShoppingListItem shoppingListItem) {
+  }
+
+  public void editItem(ShoppingListItem shoppingListItem) {
   }
 
   @Nullable

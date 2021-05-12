@@ -36,4 +36,11 @@
     app:showAsAction="always"
     tools:ignore="AlwaysShowAction" />
 
+  <item
+    android:id="@+id/action_skip"
+    android:title="@string/action_skip_entry"
+    android:icon="@drawable/ic_round_skip_next_anim_menu"
+    app:showAsAction="always"
+    tools:ignore="AlwaysShowAction" />
+
 </menu>

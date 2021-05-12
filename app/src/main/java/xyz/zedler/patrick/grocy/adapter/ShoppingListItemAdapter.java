@@ -371,7 +371,7 @@ public class ShoppingListItemAdapter extends
 
     if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
       if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.noteContainer.setVisibility(View.VISIBLE);
+        binding.note.setVisibility(View.VISIBLE);
         binding.note.setText(item.getNote().trim());
       } else {
         binding.noteAsName.setVisibility(View.VISIBLE);
@@ -379,7 +379,7 @@ public class ShoppingListItemAdapter extends
       }
     } else {
       if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.noteContainer.setVisibility(View.GONE);
+        binding.note.setVisibility(View.GONE);
         binding.note.setText(null);
       }
     }
@@ -407,7 +407,7 @@ public class ShoppingListItemAdapter extends
 
     // CONTAINER
 
-    binding.container.setOnClickListener(
+    binding.containerRow.setOnClickListener(
         view -> listener.onItemRowClicked(groupedListItem)
     );
 
@@ -428,13 +428,14 @@ public class ShoppingListItemAdapter extends
       Context context,
       ShoppingListItem item,
       RowShoppingListItemBinding binding,
-      ArrayList<QuantityUnit> quantityUnits
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap
   ) {
 
     // NAME
 
     Product product = null;
-    //if(listItem.hasProduct()) product = productHashMap.get(item.getProductIdInt()); TODO
+    if(item.hasProduct()) product = productHashMap.get(item.getProductIdInt());
 
     if (product != null) {
       binding.name.setText(product.getName());
@@ -463,14 +464,13 @@ public class ShoppingListItemAdapter extends
     // AMOUNT
 
     if (product != null) {
-      QuantityUnit quantityUnit = null;
-      // quantityUnit = quantityUnitHashMap.get(product.getQuIdStock()); // TODO
+      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
       if (quantityUnit == null) {
         quantityUnit = new QuantityUnit();
       }
 
       if (DEBUG) {
-        Log.i(TAG, "onBindViewHolder: " + quantityUnit.getName());
+        Log.i(TAG, "fillShoppingListItem: " + quantityUnit.getName());
       }
 
       binding.amount.setText(
@@ -486,22 +486,12 @@ public class ShoppingListItemAdapter extends
       binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
     }
 
-    //if(item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {  TODO
-    if (item.hasProduct()) {
-      binding.amount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
-      binding.amount.setTextColor(
-          ContextCompat.getColor(context, R.color.retro_blue_fg)
-      );
-    } else {
-      binding.amount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      binding.amount.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
-      );
-    }
+    binding.amount.setTypeface(
+        ResourcesCompat.getFont(context, R.font.jost_book)
+    );
+    binding.amount.setTextColor(
+        ContextCompat.getColor(context, R.color.on_background_secondary)
+    );
     if (item.isUndone()) {
       binding.amount.setPaintFlags(
           binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
@@ -516,7 +506,7 @@ public class ShoppingListItemAdapter extends
 
     if (item.getNote() != null && !item.getNote().isEmpty()) {
       if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.noteContainer.setVisibility(View.VISIBLE);
+        binding.note.setVisibility(View.VISIBLE);
         binding.note.setText(item.getNote().trim());
       } else {
         binding.noteAsName.setVisibility(View.VISIBLE);
@@ -524,7 +514,7 @@ public class ShoppingListItemAdapter extends
       }
     } else {
       if (binding.name.getVisibility() == View.VISIBLE) {
-        binding.noteContainer.setVisibility(View.GONE);
+        binding.note.setVisibility(View.GONE);
         binding.note.setText(null);
       }
     }

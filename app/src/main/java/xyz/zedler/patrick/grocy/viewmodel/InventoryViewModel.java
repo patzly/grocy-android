@@ -55,7 +55,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
+import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -68,7 +68,7 @@ public class InventoryViewModel extends BaseViewModel {
 
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final PurchaseRepository repository;
+  private final InventoryRepository repository;
   private final FormDataInventory formData;
 
   private ArrayList<Product> products;
@@ -93,7 +93,7 @@ public class InventoryViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new PurchaseRepository(application);
+    repository = new InventoryRepository(application);
     formData = new FormDataInventory(application, sharedPrefs, args);
 
     infoFullscreenLive = new MutableLiveData<>();

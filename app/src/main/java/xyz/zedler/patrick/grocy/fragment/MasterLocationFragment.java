@@ -252,8 +252,6 @@ public class MasterLocationFragment extends BaseFragment {
               activity.binding.frameMainContainer,
               activity.getString(R.string.msg_no_connection),
               Snackbar.LENGTH_SHORT
-          ).setActionTextColor(
-              ContextCompat.getColor(activity, R.color.secondary)
           ).setAction(
               activity.getString(R.string.action_retry),
               v1 -> refresh()
@@ -297,8 +295,6 @@ public class MasterLocationFragment extends BaseFragment {
                   activity.binding.frameMainContainer,
                   activity.getString(R.string.error_undefined),
                   Snackbar.LENGTH_SHORT
-              ).setActionTextColor(
-                  ContextCompat.getColor(activity, R.color.secondary)
               ).setAction(
                   activity.getString(R.string.action_retry),
                   v1 -> download()
