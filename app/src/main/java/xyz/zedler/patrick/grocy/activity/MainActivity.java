@@ -492,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
     } else if (binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       snackbar.setAnchorView(binding.bottomAppBar);
     }
+    snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.retro_green_fg_invert));
     snackbar.show();
   }
 
