@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class OverviewStartViewModel extends BaseViewModel {
@@ -501,8 +502,12 @@ public class OverviewStartViewModel extends BaseViewModel {
   }
 
   public boolean getIsDemoInstance() {
-    String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    String server = sharedPrefs.getString(PREF.SERVER_URL, null);
     return server != null && server.contains("grocy.info");
+  }
+
+  public boolean getIsStockDisabled() {
+    return !sharedPrefs.getBoolean(PREF.FEATURE_STOCK, true);
   }
 
   @Override

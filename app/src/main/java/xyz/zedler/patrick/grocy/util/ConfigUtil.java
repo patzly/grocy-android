@@ -75,6 +75,10 @@ public class ConfigUtil {
               jsonObject.getString("CURRENCY")
           )
           .putBoolean(
+              Constants.PREF.FEATURE_STOCK,
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK")
+          )
+          .putBoolean(
               Constants.PREF.FEATURE_SHOPPING_LIST,
               jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST")
           )

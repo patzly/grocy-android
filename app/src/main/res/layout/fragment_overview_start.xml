@@ -162,7 +162,7 @@
               android:paddingStart="@dimen/main_side_margin"
               android:paddingEnd="@dimen/main_side_margin"
               android:clipToPadding="false"
-              android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
+              android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance || viewModel.isStockDisabled ? View.VISIBLE : View.GONE}">
 
               <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.Grocy.Card.Filled"
@@ -183,6 +183,7 @@
                 style="@style/Widget.Grocy.Card.Filled"
                 android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> fragment.navigateToSettingsCatServer()}"
+                android:layout_marginBottom="8dp"
                 app:clickUtil="@{clickUtil}">
 
                 <TextView
@@ -195,12 +196,25 @@
 
               </com.google.android.material.card.MaterialCardView>
 
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Filled"
+                android:visibility="@{viewModel.isStockDisabled ? View.VISIBLE : View.GONE}"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/stock_disabled" />
+
+              </com.google.android.material.card.MaterialCardView>
+
               <View
                 android:layout_width="70dp"
                 android:layout_height="1dp"
                 android:background="@color/stroke_secondary"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp" />
 
             </LinearLayout>

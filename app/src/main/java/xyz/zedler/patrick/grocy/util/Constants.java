@@ -33,6 +33,7 @@ public final class Constants {
     public final static String GROCY_VERSION = "grocy_version";
     public final static String CREDENTIALS = "credentials";
 
+    public final static String FEATURE_STOCK = "feature_stock";
     public final static String FEATURE_SHOPPING_LIST = "feature_shopping_list";
     public final static String FEATURE_STOCK_PRICE_TRACKING = "feature_stock_price_tracking";
     public final static String FEATURE_STOCK_LOCATION_TRACKING = "feature_stock_location_tracking";

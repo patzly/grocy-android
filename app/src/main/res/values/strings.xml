@@ -212,6 +212,7 @@
   <string name="msg_choose_option_below">Please choose one option from below.</string>
   <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
+  <string name="stock_disabled">You have disabled the stock feature in your grocy configuration, probably because you don\'t need it. But this app can only do stock management at the moment, so it may not be of much use to you.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
