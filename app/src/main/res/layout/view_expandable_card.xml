@@ -26,7 +26,7 @@
   app:contentPadding="16dp"
   app:cardElevation="0dp"
   app:cardCornerRadius="12dp"
-  app:cardBackgroundColor="@color/on_surface_area"
+  app:cardBackgroundColor="@color/on_background_tertiary"
   app:rippleColor="@color/transparent">
 
   <FrameLayout

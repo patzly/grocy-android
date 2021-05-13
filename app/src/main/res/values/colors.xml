@@ -59,7 +59,7 @@
   <color name="grey500">#9aa0a6</color>
   <color name="grey600">#80868b</color>
   <color name="grey700">#5f6368</color>
-  <color name="grey800">#3c4043</color>
+  <color name="grey800">#3f4143</color>
   <color name="grey900">#202124</color>
 
   <!-- PRIMARY -->
@@ -90,7 +90,6 @@
   <color name="surface_secondary">@color/white</color>
   <color name="on_surface">@color/black</color>
   <color name="on_surface_secondary">@color/grey100</color>
-  <color name="on_surface_area">@color/grey100</color>
 
   <!-- TOOLTIP -->
 

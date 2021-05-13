@@ -121,7 +121,7 @@ public class BezierCurveChart extends View {
     paintFill.setPathEffect(new CornerPathEffect(cornerRadius));
 
     paintChartBg.setStyle(Paint.Style.FILL);
-    paintChartBg.setColor(getColor(R.color.on_surface_secondary));
+    paintChartBg.setColor(getColor(R.color.on_background_tertiary));
     paintChartBg.setAntiAlias(true);
 
     paintGrid.setStyle(Paint.Style.STROKE);
