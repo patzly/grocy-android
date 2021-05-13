@@ -50,8 +50,9 @@ public class BottomAppBarRefreshScrollBehavior {
   private int currentState = STATE_SCROLLED_UP;
   private final int pufferSize = 0; // distance before top scroll when overScroll is turned off
   private final int pufferDivider = 2; // distance gets divided to prevent cutoff of edge effect
-  private final int topScrollLimit = 100;
+  private int topScrollLimit;
   private int storedFirstBottomScrollY = 0;
+  private int scrollLimitY;
 
   private boolean isTopScroll = false;
   private boolean hideOnScroll = true;
@@ -67,7 +68,10 @@ public class BottomAppBarRefreshScrollBehavior {
     this.activity = activity;
     if (activity == null) {
       Log.e(TAG, "constructor: activity is null!");
+      return;
     }
+    topScrollLimit = UnitUtil.getDp(activity, 100);
+    scrollLimitY = UnitUtil.getDp(activity, 24);
   }
 
   /**
@@ -159,9 +163,7 @@ public class BottomAppBarRefreshScrollBehavior {
           if (currentState != STATE_SCROLLED_UP) {
             onScrollUp();
           }
-          if (scrollAbsoluteY < UnitUtil.getDp(activity, topScrollLimit)
-              && fabScroll != null && showTopScroll
-          ) {
+          if (scrollAbsoluteY < topScrollLimit && fabScroll != null && showTopScroll) {
             if (fabScroll.isOrWillBeShown()) {
               fabScroll.hide();
             }
@@ -170,16 +172,11 @@ public class BottomAppBarRefreshScrollBehavior {
           if (storedFirstBottomScrollY == 0) {
             storedFirstBottomScrollY = scrollAbsoluteY;
           }
-          int scrollYHide = storedFirstBottomScrollY + UnitUtil.getDp(
-              activity,
-              24
-          );
+          int scrollYHide = storedFirstBottomScrollY + scrollLimitY;
           if (currentState != STATE_SCROLLED_DOWN && scrollAbsoluteY > scrollYHide) { // DOWN
             onScrollDown();
           }
-          if (scrollAbsoluteY > UnitUtil.getDp(activity, topScrollLimit)
-              && fabScroll != null && showTopScroll
-          ) {
+          if (scrollAbsoluteY > topScrollLimit && fabScroll != null && showTopScroll) {
             if (fabScroll.isOrWillBeHidden()) {
               fabScroll.show();
             }
@@ -208,9 +205,7 @@ public class BottomAppBarRefreshScrollBehavior {
           if (currentState != STATE_SCROLLED_UP) {
             onScrollUp();
           }
-          if (scrollY < UnitUtil.getDp(activity, topScrollLimit)
-              && fabScroll != null && showTopScroll
-          ) {
+          if (scrollY < topScrollLimit && fabScroll != null && showTopScroll) {
             if (fabScroll.isOrWillBeShown()) {
               fabScroll.hide();
             }
@@ -219,16 +214,11 @@ public class BottomAppBarRefreshScrollBehavior {
           if (storedFirstBottomScrollY == 0) {
             storedFirstBottomScrollY = oldScrollY;
           }
-          int scrollYHide = storedFirstBottomScrollY + UnitUtil.getDp(
-              activity,
-              24
-          );
+          int scrollYHide = storedFirstBottomScrollY + scrollLimitY;
           if (currentState != STATE_SCROLLED_DOWN && scrollY > scrollYHide) { // DOWN
             onScrollDown();
           }
-          if (scrollY > UnitUtil.getDp(activity, topScrollLimit)
-              && fabScroll != null && showTopScroll
-          ) {
+          if (scrollY > topScrollLimit && fabScroll != null && showTopScroll) {
             if (fabScroll.isOrWillBeHidden()) {
               fabScroll.show();
             }

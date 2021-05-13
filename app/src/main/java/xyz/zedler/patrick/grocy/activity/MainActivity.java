@@ -185,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
       public void onReceive(Context context, Intent intent) {
         Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
         assert navHostFragment != null;
-          if (navHostFragment.getChildFragmentManager().getFragments().size() == 0) {
-              return;
-          }
+        if (navHostFragment.getChildFragmentManager().getFragments().size() == 0) {
+          return;
+        }
         getCurrentFragment().updateConnectivity(netUtil.isOnline());
       }
     };
@@ -232,9 +232,9 @@ public class MainActivity extends AppCompatActivity {
     // BOTTOM APP BAR
 
     binding.bottomAppBar.setNavigationOnClickListener(v -> {
-        if (clickUtil.isDisabled()) {
-            return;
-        }
+      if (clickUtil.isDisabled()) {
+        return;
+      }
       IconUtil.start(binding.bottomAppBar.getNavigationIcon());
       navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
     });
@@ -246,23 +246,23 @@ public class MainActivity extends AppCompatActivity {
 
     Runnable onSuccessConfigLoad = () -> {
       String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
-        if (version == null || version.isEmpty()) {
-            return;
-        }
+      if (version == null || version.isEmpty()) {
+        return;
+      }
       ArrayList<String> supportedVersions = new ArrayList<>(
           Arrays.asList(getResources().getStringArray(R.array.compatible_grocy_versions))
       );
-        if (supportedVersions.contains(version)) {
-            return;
-        }
+      if (supportedVersions.contains(version)) {
+        return;
+      }
 
       // If user already ignored warning, do not display again
       String ignoredVersion = sharedPrefs.getString(
           Constants.PREF.VERSION_COMPATIBILITY_IGNORED, null
       );
-        if (ignoredVersion != null && ignoredVersion.equals(version)) {
-            return;
-        }
+      if (ignoredVersion != null && ignoredVersion.equals(version)) {
+        return;
+      }
 
       Bundle bundle = new Bundle();
       bundle.putString(Constants.ARGUMENT.VERSION, version);
@@ -296,9 +296,9 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onDestroy() {
-      if (networkReceiver != null) {
-          unregisterReceiver(networkReceiver);
-      }
+    if (networkReceiver != null) {
+      unregisterReceiver(networkReceiver);
+    }
     super.onDestroy();
   }
 
@@ -323,22 +323,22 @@ public class MainActivity extends AppCompatActivity {
     int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
     switch (newFabPosition) {
       case Constants.FAB.POSITION.CENTER:
-          if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-              binding.fabMain.show();
-          }
+        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+          binding.fabMain.show();
+        }
         scrollBehavior.setTopScrollVisibility(true);
         break;
       case Constants.FAB.POSITION.END:
-          if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-              binding.fabMain.show();
-          }
+        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+          binding.fabMain.show();
+        }
         mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
         scrollBehavior.setTopScrollVisibility(false);
         break;
       case Constants.FAB.POSITION.GONE:
-          if (binding.fabMain.isShown()) {
-              binding.fabMain.hide();
-          }
+        if (binding.fabMain.isShown()) {
+          binding.fabMain.hide();
+        }
         scrollBehavior.setTopScrollVisibility(true);
         break;
     }
@@ -353,22 +353,22 @@ public class MainActivity extends AppCompatActivity {
     int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
     switch (newFabPosition) {
       case Constants.FAB.POSITION.CENTER:
-          if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-              binding.fabMain.show();
-          }
+        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+          binding.fabMain.show();
+        }
         scrollBehavior.setTopScrollVisibility(true);
         break;
       case Constants.FAB.POSITION.END:
-          if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-              binding.fabMain.show();
-          }
+        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+          binding.fabMain.show();
+        }
         mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
         scrollBehavior.setTopScrollVisibility(false);
         break;
       case Constants.FAB.POSITION.GONE:
-          if (binding.fabMain.isShown()) {
-              binding.fabMain.hide();
-          }
+        if (binding.fabMain.isShown()) {
+          binding.fabMain.hide();
+        }
         scrollBehavior.setTopScrollVisibility(true);
         break;
     }
@@ -422,19 +422,19 @@ public class MainActivity extends AppCompatActivity {
     replaceFabIcon(icon, tag, animated);
     binding.fabMain.setOnClickListener(v -> {
       Drawable drawable = binding.fabMain.getDrawable();
-        if (drawable instanceof AnimationDrawable) {
-            IconUtil.start(drawable);
-        }
+      if (drawable instanceof AnimationDrawable) {
+        IconUtil.start(drawable);
+      }
       onClick.run();
     });
     binding.fabMain.setOnLongClickListener(v -> {
-        if (onLongClick == null) {
-            return false;
-        }
+      if (onLongClick == null) {
+        return false;
+      }
       Drawable drawable = binding.fabMain.getDrawable();
-        if (drawable instanceof AnimationDrawable) {
-            IconUtil.start(drawable);
-        }
+      if (drawable instanceof AnimationDrawable) {
+        IconUtil.start(drawable);
+      }
       onLongClick.run();
       return true;
     });
@@ -450,12 +450,12 @@ public class MainActivity extends AppCompatActivity {
       currentFragment.dismissSearch();
     } else {
       boolean handled = currentFragment.onBackPressed();
-        if (!handled) {
-            super.onBackPressed();
-        }
-        if (!isServerUrlEmpty()) {
-            binding.bottomAppBar.show();
-        }
+      if (!handled) {
+        super.onBackPressed();
+      }
+      if (!isServerUrlEmpty()) {
+        binding.bottomAppBar.show();
+      }
     }
     hideKeyboard();
   }
@@ -511,9 +511,9 @@ public class MainActivity extends AppCompatActivity {
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
     String tag = bottomSheet.toString();
     bottomSheet.show(fragmentManager, tag);
-      if (debug) {
-          Log.i(TAG, "showBottomSheet: " + bottomSheet.toString());
-      }
+    if (debug) {
+      Log.i(TAG, "showBottomSheet: " + bottomSheet.toString());
+    }
   }
 
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
@@ -651,9 +651,9 @@ public class MainActivity extends AppCompatActivity {
         binding.fabMain.setTag(tag);
       }
     } else {
-        if (debug) {
-            Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
-        }
+      if (debug) {
+        Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
+      }
     }
   }
 
@@ -668,7 +668,7 @@ public class MainActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= 28) {
       getWindow().setNavigationBarDividerColor(ContextCompat.getColor(this, color));
     } else if (debug) {
-        Log.i(TAG, "setNavBarDividerColor: activity is null or SDK < 28");
+      Log.i(TAG, "setNavBarDividerColor: activity is null or SDK < 28");
     }
   }
 
@@ -695,9 +695,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void startIconAnimation(View view, boolean hasFocus) {
-      if (!hasFocus) {
-          return;
-      }
+    if (!hasFocus) {
+      return;
+    }
     IconUtil.start(view);
   }
 
@@ -716,19 +716,19 @@ public class MainActivity extends AppCompatActivity {
   private void insertConscrypt() {
     try {
       Conscrypt.Version version = Conscrypt.version();
-        if (debug) {
-            Log.i(TAG, "insertConscrypt: Using Conscrypt/" + version.major() + "."
-                + version.minor() + "." + version.patch() + " for TLS");
-        }
+      if (debug) {
+        Log.i(TAG, "insertConscrypt: Using Conscrypt/" + version.major() + "."
+            + version.minor() + "." + version.patch() + " for TLS");
+      }
       SSLEngine engine = SSLContext.getDefault().createSSLEngine();
-        if (debug) {
-            Log.i(TAG, "Enabled protocols: "
-                + Arrays.toString(engine.getEnabledProtocols()) + " }");
-        }
-        if (debug) {
-            Log.i(TAG, "Enabled ciphers: "
-                + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
-        }
+      if (debug) {
+        Log.i(TAG, "Enabled protocols: "
+            + Arrays.toString(engine.getEnabledProtocols()) + " }");
+      }
+      if (debug) {
+        Log.i(TAG, "Enabled ciphers: "
+            + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+      }
     } catch (NoSuchAlgorithmException e) {
       Log.e(TAG, "insertConscrypt: NoSuchAlgorithmException");
       Log.e(TAG, e.getMessage() != null ? e.getMessage() : e.toString());
