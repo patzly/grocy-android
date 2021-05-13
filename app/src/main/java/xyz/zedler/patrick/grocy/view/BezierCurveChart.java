@@ -99,7 +99,7 @@ public class BezierCurveChart extends View {
 
     this.context = context;
 
-    cornerRadius = UnitUtil.getDp(context, 4);
+    cornerRadius = UnitUtil.getDp(context, 6);
     dotRadius = UnitUtil.getDp(context, 3);
 
     paintCurve.setStyle(Paint.Style.STROKE);
