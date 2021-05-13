@@ -26,18 +26,12 @@
 
   <com.google.android.material.card.MaterialCardView
     android:id="@+id/card_shopping_item_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    style="@style/Widget.Grocy.Card"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/surface_secondary"
-    app:contentPadding="16dp"
-    android:stateListAnimator="@animator/card_elevation"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp"
-    app:rippleColor="@color/highlight_secondary">
+    app:strokeWidth="1.5dp">
 
     <LinearLayout
       android:id="@+id/linear_shopping_item_container"
