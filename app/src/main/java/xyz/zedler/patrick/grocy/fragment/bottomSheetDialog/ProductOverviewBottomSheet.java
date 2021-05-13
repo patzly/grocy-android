@@ -39,6 +39,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -161,10 +162,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
         isInStock && product.getEnableTareWeightHandling() == 0
     );
-    toolbar.getMenu().findItem(R.id.action_consume).setEnabled(isInStock);
-    toolbar.getMenu().findItem(R.id.action_transfer).setEnabled(
-        isInStock && product.getEnableTareWeightHandling() == 0
-    );
     toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
         activity.showMessage(R.string.msg_not_implemented_yet);
@@ -187,42 +184,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         );
         dismiss();
         return true;
-      } else if (item.getItemId() == R.id.action_purchase) {
-        NavHostFragment.findNavController(this).navigate(
-            ProductOverviewBottomSheetDirections
-                .actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
-                .setCloseWhenFinished(true)
-                .setProductId(String.valueOf(product.getId()))
-        );
-        dismiss();
-        return true;
-      } else if (item.getItemId() == R.id.action_consume) {
-        NavHostFragment.findNavController(this).navigate(
-            ProductOverviewBottomSheetDirections
-                .actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
-                .setCloseWhenFinished(true)
-                .setProductId(String.valueOf(product.getId()))
-        );
-        dismiss();
-        return true;
-      } else if (item.getItemId() == R.id.action_transfer) {
-        NavHostFragment.findNavController(this).navigate(
-            ProductOverviewBottomSheetDirections
-                .actionProductOverviewBottomSheetDialogFragmentToTransferFragment()
-                .setCloseWhenFinished(true)
-                .setProductId(String.valueOf(product.getId()))
-        );
-        dismiss();
-        return true;
-      } else if (item.getItemId() == R.id.action_inventory) {
-        NavHostFragment.findNavController(this).navigate(
-            ProductOverviewBottomSheetDirections
-                .actionProductOverviewBottomSheetDialogFragmentToInventoryFragment()
-                .setCloseWhenFinished(true)
-                .setProductId(String.valueOf(product.getId()))
-        );
-        dismiss();
-        return true;
       } else if (item.getItemId() == R.id.action_edit_product) {
         String productId = String.valueOf(product.getId());
         navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
@@ -233,6 +194,57 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       }
       return false;
     });
+
+    Chip chipConsume = view.findViewById(R.id.chip_consume);
+    chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
+    chipConsume.setOnClickListener(v -> {
+      NavHostFragment.findNavController(this).navigate(
+          ProductOverviewBottomSheetDirections
+              .actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
+              .setCloseWhenFinished(true)
+              .setProductId(String.valueOf(product.getId()))
+      );
+      dismiss();
+    });
+
+    Chip chipPurchase = view.findViewById(R.id.chip_purchase);
+    chipPurchase.setOnClickListener(v -> {
+      NavHostFragment.findNavController(this).navigate(
+          ProductOverviewBottomSheetDirections
+              .actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
+              .setCloseWhenFinished(true)
+              .setProductId(String.valueOf(product.getId()))
+      );
+      dismiss();
+    });
+
+    Chip chipTransfer = view.findViewById(R.id.chip_transfer);
+    chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandling() == 0
+        ? View.VISIBLE : View.GONE);
+    chipTransfer.setOnClickListener(v -> {
+      NavHostFragment.findNavController(this).navigate(
+          ProductOverviewBottomSheetDirections
+              .actionProductOverviewBottomSheetDialogFragmentToTransferFragment()
+              .setCloseWhenFinished(true)
+              .setProductId(String.valueOf(product.getId()))
+      );
+      dismiss();
+    });
+
+    Chip chipInventory = view.findViewById(R.id.chip_inventory);
+    chipInventory.setOnClickListener(v -> {
+      NavHostFragment.findNavController(this).navigate(
+          ProductOverviewBottomSheetDirections
+              .actionProductOverviewBottomSheetDialogFragmentToInventoryFragment()
+              .setCloseWhenFinished(true)
+              .setProductId(String.valueOf(product.getId()))
+      );
+      dismiss();
+    });
+
+    if (!showActions) {
+      view.findViewById(R.id.container_chips).setVisibility(View.GONE);
+    }
 
     // DESCRIPTION
 

@@ -40,40 +40,6 @@
 
   </group>
 
-  <group android:id="@+id/group_2">
-
-    <item
-      android:title="@string/action_perform"
-      app:showAsAction="never">
-
-      <menu>
-
-        <item
-          android:id="@+id/action_consume"
-          android:title="@string/title_consume"
-          app:showAsAction="never" />
-
-        <item
-          android:id="@+id/action_purchase"
-          android:title="@string/title_purchase"
-          app:showAsAction="never" />
-
-        <item
-          android:id="@+id/action_transfer"
-          android:title="@string/title_transfer"
-          app:showAsAction="never" />
-
-        <item
-          android:id="@+id/action_inventory"
-          android:title="@string/title_inventory"
-          app:showAsAction="never" />
-
-      </menu>
-
-    </item>
-
-  </group>
-
   <group android:id="@+id/group_3">
 
     <item
