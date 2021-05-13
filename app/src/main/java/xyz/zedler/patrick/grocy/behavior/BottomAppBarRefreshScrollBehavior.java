@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
@@ -144,6 +145,9 @@ public class BottomAppBarRefreshScrollBehavior {
     if (bottomAppBar != null) {
       bottomAppBar.show();
       onChangeBottomAppBarVisibility(true, "setUpScroll");
+      if (scrollView.getScrollY() == 0 && activity instanceof MainActivity) {
+        ((MainActivity) activity).isScrollRestored = false;
+      }
     }
     if (DEBUG) {
       Log.i(TAG, "setUpScroll with ScrollView");
@@ -274,8 +278,18 @@ public class BottomAppBarRefreshScrollBehavior {
     scrollView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
     if (bottomAppBar != null) {
       if (hideOnScroll) {
-        bottomAppBar.hide();
-        onChangeBottomAppBarVisibility(false, "onScrollDown");
+        if (activity instanceof MainActivity) {
+          boolean isScrollRestored = ((MainActivity) activity).isScrollRestored;
+          if (!isScrollRestored) {
+            bottomAppBar.hide();
+            onChangeBottomAppBarVisibility(false, "onScrollDown");
+          } else {
+            ((MainActivity) activity).isScrollRestored = false;
+          }
+        } else {
+          bottomAppBar.hide();
+          onChangeBottomAppBarVisibility(false, "onScrollDown");
+        }
       }
     } else if (DEBUG) {
       Log.e(TAG, "onScrollDown: bottomAppBar is null!");

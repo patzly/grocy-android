@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
   private BroadcastReceiver networkReceiver;
   private BottomAppBarRefreshScrollBehavior scrollBehavior;
 
+  public boolean isScrollRestored = false;
   private boolean debug;
 
   @Override
@@ -455,6 +456,7 @@ public class MainActivity extends AppCompatActivity {
       }
       if (!isServerUrlEmpty()) {
         binding.bottomAppBar.show();
+        //isScrollRestored = true;
       }
     }
     hideKeyboard();
