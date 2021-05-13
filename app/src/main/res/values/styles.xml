@@ -76,6 +76,21 @@
     <item name="strokeWidth">0dp</item>
   </style>
 
+  <!-- CHIP -->
+
+  <style name="Widget.Grocy.Chip" parent="Widget.MaterialComponents.Chip.Action">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="chipStartPadding">7dp</item>
+    <item name="chipIconSize">18dp</item>
+    <item name="textStartPadding">11dp</item>
+    <item name="chipIconTint">@color/icon</item>
+    <item name="chipBackgroundColor">@color/on_background_tertiary</item>
+    <item name="rippleColor">@color/highlight</item>
+    <item name="android:textAppearance">@style/TextAppearance.Grocy.Chip</item>
+    <item name="android:stateListAnimator">@null</item>
+  </style>
+
   <!-- TEXT INPUT -->
   <!-- TODO: remove unused attributes -->
 
@@ -498,6 +513,10 @@
   </style>
 
   <style name="TextAppearance.Grocy.Error" parent="TextAppearance.Design.Error">
+    <item name="fontFamily">@font/jost_medium</item>
+  </style>
+
+  <style name="TextAppearance.Grocy.Chip" parent="TextAppearance.MaterialComponents.Body1">
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 

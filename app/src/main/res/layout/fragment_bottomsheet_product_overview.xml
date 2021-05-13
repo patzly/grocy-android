@@ -85,52 +85,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="0dp"
         android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="ifContentScrolls">
 
         <com.google.android.material.chip.ChipGroup
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          android:clipToPadding="false"
+          app:singleLine="true"
           app:chipSpacing="8dp">
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_consume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Grocy.Chip"
             android:text="@string/title_consume"
-            android:fontFamily="@font/jost_medium"
-            app:chipIcon="@drawable/ic_round_consume_product"
-            app:iconStartPadding="8dp"/>
+            app:chipIcon="@drawable/ic_round_consume_product"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_purchase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Grocy.Chip"
             android:text="@string/title_purchase"
-            android:fontFamily="@font/jost_medium"
-            app:chipIcon="@drawable/ic_round_local_grocery_store"
-            app:iconStartPadding="8dp"/>
+            app:chipIcon="@drawable/ic_round_local_grocery_store"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_transfer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Grocy.Chip"
             android:text="@string/title_transfer"
-            android:fontFamily="@font/jost_medium"
-            app:chipIcon="@drawable/ic_round_swap_horiz"
-            app:iconStartPadding="8dp"/>
+            app:chipIcon="@drawable/ic_round_swap_horiz"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_inventory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Grocy.Chip"
             android:text="@string/title_inventory"
-            android:fontFamily="@font/jost_medium"
-            app:chipIcon="@drawable/ic_round_inventory"
-            app:iconStartPadding="8dp"/>
+            app:chipIcon="@drawable/ic_round_inventory"/>
 
         </com.google.android.material.chip.ChipGroup>
 
