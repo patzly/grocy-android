@@ -89,6 +89,7 @@
   <string name="action_toggle_done">Status wechseln</string>
   <string name="action_edit_notes">Notizen bearbeiten</string>
   <string name="action_add_missing">Fehlende Produkte hinzufügen</string>
+  <string name="action_purchase_done_items">Erledigte Einträge einkaufen</string>
   <string name="action_purchase_all_items">Alle Einträge einkaufen</string>
   <string name="action_skip_entry">Eintrag überspringen</string>
   <string name="action_toggle_flash">Blitz umschalten</string>
@@ -296,6 +297,7 @@
   <string name="error_bounds_higher">Muss größer als %1$s sein</string>
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Diese Seite funktioniert nur mit Internet-Zugriff. Überprüfen Sie Ihre Verbindung.</string>
+  <string name="error_no_done_items">Es sind keine Einträge als erledigt markiert</string>
   <string name="error_name_exists">Name existiert bereits</string>
   <string name="error_network">Netzwerkfehler</string>
   <string name="error_network_subtitle">Die benötigten Daten konnten nicht vollständig geladen werden</string>
