@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -42,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class ShoppingModeItemAdapter extends
     RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
@@ -51,19 +53,22 @@ public class ShoppingModeItemAdapter extends
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
+  private final PluralUtil pluralUtil;
 
   public ShoppingModeItemAdapter(
       ArrayList<GroupedListItem> groupedListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       ArrayList<Integer> missingProductIds,
-      ShoppingModeItemClickListener listener
+      ShoppingModeItemClickListener listener,
+      Locale currentLocale
   ) {
     this.groupedListItems = new ArrayList<>(groupedListItems);
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
+    pluralUtil = new PluralUtil(currentLocale);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {

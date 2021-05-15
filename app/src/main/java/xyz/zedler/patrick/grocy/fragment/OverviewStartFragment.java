@@ -133,6 +133,9 @@ public class OverviewStartFragment extends BaseFragment {
     updateUI((getArguments() == null
         || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
         && savedInstanceState == null);
+
+    int n = 0;
+    int i = (n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);
   }
 
   private void updateUI(boolean animated) {

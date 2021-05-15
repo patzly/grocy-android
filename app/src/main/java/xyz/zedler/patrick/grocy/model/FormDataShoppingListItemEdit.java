@@ -34,6 +34,7 @@ import java.util.Map;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class FormDataShoppingListItemEdit {
 
@@ -60,6 +61,7 @@ public class FormDataShoppingListItemEdit {
   private final MutableLiveData<Boolean> useMultilineNoteLive;
   private final MutableLiveData<String> noteLive;
   private final MutableLiveData<Integer> noteErrorLive;
+  private final PluralUtil pluralUtil;
   private boolean filledWithShoppingListItem;
   private boolean torchOn = false;
 
@@ -115,6 +117,7 @@ public class FormDataShoppingListItemEdit {
     useMultilineNoteLive = new MutableLiveData<>(false);
     noteLive = new MutableLiveData<>();
     noteErrorLive = new MutableLiveData<>();
+    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
     filledWithShoppingListItem = false;
   }
 
@@ -275,8 +278,7 @@ public class FormDataShoppingListItemEdit {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        Double.parseDouble(amountStockLive.getValue()) == 1
-            ? stock.getName() : stock.getNamePlural()
+        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
     );
   }
 

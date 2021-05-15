@@ -29,11 +29,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class StockLocationAdapter
     extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
@@ -43,6 +45,7 @@ public class StockLocationAdapter
   private final ArrayList<StockLocation> stockLocations;
   private final ProductDetails productDetails;
   private final QuantityUnit quantityUnitStock;
+  private final PluralUtil pluralUtil;
   private final int selectedId;
   private final StockLocationAdapterListener listener;
 
@@ -50,6 +53,7 @@ public class StockLocationAdapter
       ArrayList<StockLocation> stockLocations,
       ProductDetails productDetails,
       QuantityUnit quantityUnitStock,
+      Locale currentLocale,
       int selectedId,
       StockLocationAdapterListener listener
   ) {
@@ -58,6 +62,7 @@ public class StockLocationAdapter
     this.quantityUnitStock = quantityUnitStock;
     this.selectedId = selectedId;
     this.listener = listener;
+    pluralUtil = new PluralUtil(currentLocale);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -112,10 +117,8 @@ public class StockLocationAdapter
     // AMOUNT
 
     String unit = "";
-    if (quantityUnitStock != null && stockLocation.getAmountDouble() == 1) {
-      unit = quantityUnitStock.getName();
-    } else if (quantityUnitStock != null) {
-      unit = quantityUnitStock.getNamePlural();
+    if (quantityUnitStock != null) {
+      unit = pluralUtil.getQuantityUnitPlural(quantityUnitStock, stockLocation.getAmountDouble());
     }
     holder.textViewAmount.setText(
         holder.textViewAmount.getContext().getString(

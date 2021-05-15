@@ -34,6 +34,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import xyz.zedler.patrick.grocy.R;
@@ -139,6 +140,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         getViewLifecycleOwner(), this::changeAppBarTitle
     );
 
+    Locale currentLocale = getResources().getConfiguration().locale;
     viewModel.getFilteredGroupedListItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) {
         return;
@@ -163,7 +165,8 @@ public class ShoppingModeFragment extends BaseFragment implements
                 viewModel.getProductHashMap(),
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getMissingProductIds(),
-                this
+                this,
+                currentLocale
             )
         );
       }
