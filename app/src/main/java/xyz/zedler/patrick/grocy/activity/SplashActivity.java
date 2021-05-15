@@ -67,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
         AnimatedVectorDrawable logo = (AnimatedVectorDrawable) splashLogo;
         logo.start();
         new Handler(Looper.getMainLooper()).postDelayed(
-            this::startMainActivity, 800
+            this::startMainActivity, 600
         );
       }
     } catch (Exception e) {
