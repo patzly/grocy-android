@@ -726,7 +726,7 @@
   <string name="setting_expand_bottom_sheets">Bottom sheets vollständig ausfahren</string>
   <string name="setting_expand_bottom_sheets_description">Im Querformat</string>
   <string name="setting_speed_up_start">App-Start beschleunigen</string>
-  <string name="setting_speed_up_start_description">Hat nur eine Auswirkung auf schnellen Geräten</string>
+  <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
   <string name="setting_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
