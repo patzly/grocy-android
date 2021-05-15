@@ -332,17 +332,14 @@ public class ShoppingListItemAdapter extends
 
     if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
-      if (quantityUnit == null) {
-        quantityUnit = new QuantityUnit();
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
+      if (quStr != null) {
+        binding.amount.setText(
+            context.getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+        );
+      } else {
+        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
       }
-
-      binding.amount.setText(
-          context.getString(
-              R.string.subtitle_amount,
-              NumUtil.trim(item.getAmountDouble()),
-              pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble())
-          )
-      );
     } else {
       binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
     }

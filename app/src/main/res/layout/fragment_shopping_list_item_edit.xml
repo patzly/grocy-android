@@ -244,6 +244,7 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
               android:focusableInTouchMode="true"
               android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet(true)}"
+              android:visibility="@{formData.quantityUnitsFactorsLive.size > 1 ? View.VISIBLE : View.GONE}"
               app:onFocusChangeListener="@{(v, focus) -> fragment.showQuantityUnitsBottomSheet(focus)}">
 
               <ImageView

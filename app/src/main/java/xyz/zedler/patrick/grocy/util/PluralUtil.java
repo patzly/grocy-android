@@ -80,6 +80,9 @@ public class PluralUtil {
   }
 
   public String getQuantityUnitPlural(QuantityUnit quantityUnit, double amount) {
+    if (quantityUnit == null) {
+      return null;
+    }
     if (pluralDetails.nPlurals == 1) {
       return quantityUnit.getName();
     } else if (pluralDetails.nPlurals == 2) {
