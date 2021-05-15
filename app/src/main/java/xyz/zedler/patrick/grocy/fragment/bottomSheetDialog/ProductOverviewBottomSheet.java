@@ -603,11 +603,23 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
   private String getAggregatedAmount() {
     double amountAggregated = stockItem.getAmountAggregatedDouble();
-    return "∑ " + activity.getString(
+    StringBuilder amountStr = new StringBuilder();
+    amountStr.append("∑ ");
+    amountStr.append(activity.getString(
         R.string.subtitle_amount,
         NumUtil.trim(amountAggregated),
         pluralUtil.getQuantityUnitPlural(quantityUnit, amountAggregated)
-    );
+    ));
+    if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
+      amountStr.append(" ");
+      amountStr.append(
+          activity.getString(
+              R.string.subtitle_amount_opened,
+              NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
+          )
+      );
+    }
+    return amountStr.toString();
   }
 
   private boolean isFeatureEnabled(String pref) {

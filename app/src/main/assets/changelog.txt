@@ -14,6 +14,7 @@
 - Fixed: Due date was always mandatory on inventory page (#400)
 - Fixed: White icons on white navigation bar with SDK 23-25 (#366)
 - Fixed: Plurals in languages with multiple plurals are displayed correctly (#348)
+- Fixed: Show opened aggregated amount in stock overview if necessary
 
 2.0.0-alpha07
 - New: Transfer page and inventory page (finally!) (#385 and #115)

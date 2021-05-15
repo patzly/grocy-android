@@ -437,6 +437,15 @@ public class StockOverviewItemAdapter extends
               unitAggregated
           )
       );
+      if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
+        stringBuilderAmount.append(" ");
+        stringBuilderAmount.append(
+            context.getString(
+                R.string.subtitle_amount_opened,
+                NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
+            )
+        );
+      }
     }
     holder.binding.textAmount.setText(stringBuilderAmount);
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
