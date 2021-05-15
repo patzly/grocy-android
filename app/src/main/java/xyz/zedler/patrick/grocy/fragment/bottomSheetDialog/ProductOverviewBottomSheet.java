@@ -49,6 +49,7 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -167,10 +168,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     );
     toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
-        activity.showMessage(R.string.msg_not_implemented_yet);
-				/*navigate(R.id.shoppingListItemEditFragment,
+				navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
 						new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-								.setProductName(product.getName()).build().toBundle());*/
+								.setProductId(String.valueOf(product.getId())).build().toBundle());
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_consume_all) {
@@ -189,7 +189,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         return true;
       } else if (item.getItemId() == R.id.action_edit_product) {
         String productId = String.valueOf(product.getId());
-        navigateDeepLink(getString(R.string.deep_link_masterProductFragment),
+        navigateDeepLink(R.string.deep_link_masterProductFragment,
             new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
                 .setProductId(productId).build().toBundle());
         dismiss();

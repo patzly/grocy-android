@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
@@ -28,12 +27,10 @@ import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavBackStackEntry;
@@ -197,9 +194,6 @@ public class BaseFragment extends Fragment {
   public void login(boolean checkVersion) {
   }
 
-  public void requestLogin(String server, String key, boolean checkVersion, boolean isDemo) {
-  }
-
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
     if (nextAnim == 0) {
@@ -245,10 +239,6 @@ public class BaseFragment extends Fragment {
     findNavController().navigate(directions, navigatorExtras);
   }
 
-  void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
-    findNavController().navigate(directions, navOptions);
-  }
-
   public void navigate(@IdRes int destination) {
     navigate(destination, (Bundle) null);
   }
@@ -266,25 +256,25 @@ public class BaseFragment extends Fragment {
   }
 
   public void navigateDeepLink(@NonNull String uri) {
+    navigateDeepLink(Uri.parse(uri));
+  }
+
+  void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+    navigateDeepLink(getUriWithArgs(getString(uri), args));
+  }
+
+  private void navigateDeepLink(@NonNull Uri uri) {
     NavOptions.Builder builder = new NavOptions.Builder();
     builder.setEnterAnim(R.anim.slide_in_up)
         .setPopExitAnim(R.anim.slide_out_down)
         .setExitAnim(R.anim.slide_no);
-    findNavController().navigate(Uri.parse(uri), builder.build());
+    findNavController().navigate(uri, builder.build());
   }
 
-  public void navigateDeepLink(@StringRes int uri) {
-    navigateDeepLink(getString(uri));
-  }
-
-  void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    navigateDeepLink(fillUriWithArgs(getString(uri), args));
-  }
-
-  String fillUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+  private Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
     String[] parts = uri.split("\\?");
     if (parts.length == 1) {
-      return uri;
+      return Uri.parse(uri);
     }
     String linkPart = parts[0];
     String argsPart = parts[parts.length - 1];
@@ -306,7 +296,7 @@ public class BaseFragment extends Fragment {
         finalDeepLink.append("&");
       }
     }
-    return finalDeepLink.toString();
+    return Uri.parse(finalDeepLink.toString());
   }
 
   @SuppressLint("RestrictedApi")
@@ -463,10 +453,6 @@ public class BaseFragment extends Fragment {
       @ColorRes int color
   ) {
     return setStatusBarColor(transit, enter, nextAnim, activity, color, null);
-  }
-
-  Drawable getDrawable(@DrawableRes int drawable) {
-    return ContextCompat.getDrawable(requireContext(), drawable);
   }
 
   public void setOption(Object value, String option) {

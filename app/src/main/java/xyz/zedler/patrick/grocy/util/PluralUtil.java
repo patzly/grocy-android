@@ -29,7 +29,7 @@ public class PluralUtil {
 
   public PluralUtil(Locale locale) {
     String localeCode = locale.getLanguage();
-    if (locale.getCountry().isEmpty()) {
+    if (!locale.getCountry().isEmpty()) {
       localeCode += "_" + locale.getCountry();
     }
 

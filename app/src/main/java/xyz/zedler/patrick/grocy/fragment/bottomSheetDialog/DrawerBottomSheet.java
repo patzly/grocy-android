@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
@@ -81,7 +82,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
     binding.buttonDrawerShoppingMode.setOnClickListener(
-        v -> navigateDeepLink(getString(R.string.deep_link_shoppingModeFragment))
+        v -> navigateDeepLink(R.string.deep_link_shoppingModeFragment)
     );
 
     ClickUtil.setOnClickListeners(
@@ -188,7 +189,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
   }
 
   @Override
-  void navigateDeepLink(@NonNull String uri) {
+  void navigateDeepLink(@StringRes int uri) {
     NavOptions.Builder builder = new NavOptions.Builder();
     builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
     builder.setPopUpTo(R.id.overviewStartFragment, false);
@@ -198,7 +199,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       builder.setExitAnim(R.anim.slide_no);
     }
     dismiss();
-    findNavController().navigate(Uri.parse(uri), builder.build());
+    findNavController().navigate(Uri.parse(getString(uri)), builder.build());
   }
 
   private void select(LinearLayout linearLayout, TextView textView) {

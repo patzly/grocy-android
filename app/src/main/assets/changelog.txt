@@ -1,6 +1,7 @@
 2.0.0-alpha08
-- New: Purchase actions on shopping list page are working again (#401)
+- New: 'Purchase' actions on shopping list page are working again (#401)
 - New: It is now possible to purchase only done shopping list items (#221)
+- New: 'Add to shopping list' action on stock overview page is working again
 - Improved: 'Add shopping list item' page now has a better workflow
 - Improved: Quick mode behavior now is better for amount field of forms
 - Improved: Now you can add inventory and transfer page as shortcuts
@@ -14,7 +15,7 @@
 - Fixed: Inactive products now cannot be added to shopping list (#398)
 - Fixed: Swipe items wasn't possible after going back to shopping list or stock
 - Fixed: Due date was always mandatory on inventory page (#400)
-- Fixed: White icons on white navigation bar with SDK 23-25 (#366)
+- Fixed: White icons on white navigation bar with SDK 21-25 (#366)
 - Fixed: Plurals in languages with multiple plurals are displayed correctly (#348)
 - Fixed: Show opened aggregated amount in stock overview if necessary
 

@@ -151,7 +151,7 @@ public class ConsumeFragment extends BaseFragment implements
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new ConsumeFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
-      viewModel.setProduct(productId, null);
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
     }
 
     viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {

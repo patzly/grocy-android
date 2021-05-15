@@ -81,6 +81,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
   private ArrayList<QuantityUnitConversion> unitConversions;
 
   private DownloadHelper.Queue currentQueueLoading;
+  private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
 
@@ -142,7 +143,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(() -> onQueueEmpty(true), this::onDownloadError);
     queue.append(
         dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
           this.shoppingLists = shoppingLists;
@@ -161,6 +162,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
         )
     );
     if (queue.isEmpty()) {
+      onQueueEmpty(false);
       return;
     }
 
@@ -183,14 +185,20 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty() {
+  private void onQueueEmpty(boolean offlineDataUpdated) {
     if (isOffline()) {
       setOfflineLive(false);
     }
+    if (offlineDataUpdated) {
+      repository.updateDatabase(shoppingLists, products, barcodes,
+          quantityUnits, unitConversions, null);
+    }
+    if (queueEmptyAction != null) {
+      queueEmptyAction.run();
+      queueEmptyAction = null;
+      return;
+    }
     fillWithSoppingListItemIfNecessary();
-    repository.updateDatabase(shoppingLists, products, barcodes,
-        quantityUnits, unitConversions, () -> {
-        });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -336,6 +344,17 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     formData.getProductNameLive().setValue(product.getName());
     setProductQuantityUnitsAndFactors(product);
     formData.isFormValid();
+  }
+
+  public void setProduct(int productId) {
+    if (products == null) {
+      return;
+    }
+    Product product = getProduct(productId);
+    if (product == null) {
+      return;
+    }
+    setProduct(product);
   }
 
   public void onBarcodeRecognized(String barcode) {
@@ -492,6 +511,10 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
+  }
+
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {

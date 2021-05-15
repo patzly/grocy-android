@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
 
 public class ShoppingListItemEditFragment extends BaseFragment implements
@@ -110,6 +111,17 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
+
+    Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
+    if (productIdSavedSate != null) {
+      removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate));
+    } else if (NumUtil.isStringInt(args.getProductId())) {
+      int productId = Integer.parseInt(args.getProductId());
+      setArguments(new ShoppingListItemEditFragmentArgs.Builder(args)
+          .setProductId(null).build().toBundle());
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId));
+    }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
@@ -195,9 +207,10 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        R.menu.menu_shopping_list_item_edit,
-        animated,
-        this::setUpBottomMenu
+        viewModel.isActionEdit()
+            ? R.menu.menu_shopping_list_item_edit_edit
+            : R.menu.menu_shopping_list_item_edit_create,
+        this::onMenuItemClick
     );
     activity.updateFab(
         R.drawable.ic_round_backup,
@@ -390,6 +403,23 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
         return true;
       });
     }
+  }
+
+  private boolean onMenuItemClick(MenuItem item) {
+    if (item.getItemId() == R.id.action_delete) {
+      IconUtil.start(item);
+      viewModel.deleteItem();
+      return true;
+    } else if (item.getItemId() == R.id.action_product_overview) {
+      IconUtil.start(item);
+      viewModel.showProductDetailsBottomSheet();
+      return true;
+    } else if (item.getItemId() == R.id.action_clear_form) {
+      clearInputFocus();
+      viewModel.getFormData().clearForm();
+      return true;
+    }
+    return false;
   }
 
   @Override
