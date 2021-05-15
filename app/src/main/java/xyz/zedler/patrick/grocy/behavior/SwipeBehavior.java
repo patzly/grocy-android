@@ -296,7 +296,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     float left = itemView.getLeft();
 
     Paint paint = new Paint();
-    paint.setColor(ContextCompat.getColor(context, R.color.secondary));
+    paint.setColor(ContextCompat.getColor(context, R.color.retro_green_bg_white));
     if (dX < UnitUtil.getDp(context, 24)) {
       if (dX > 0) {
         float friction = dX / UnitUtil.getDp(context, 24);
