@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -28,6 +29,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 
 public class OverviewStartRepository {
+
+  private final static String TAG = OverviewStartRepository.class.getSimpleName();
 
   private final AppDatabase appDatabase;
 
@@ -69,9 +72,14 @@ public class OverviewStartRepository {
 
     @Override
     protected final Void doInBackground(Void... params) {
-      stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
-      shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
-      products = new ArrayList<>(appDatabase.productDao().getAll());
+      try {
+        products = new ArrayList<>(appDatabase.productDao().getAll());
+        stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
+        shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
+      } catch (Exception e) {
+        Log.e(TAG, "doInBackground: " + e);
+      }
+
       return null;
     }
 
