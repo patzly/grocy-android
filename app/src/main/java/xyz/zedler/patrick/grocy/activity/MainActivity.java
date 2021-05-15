@@ -29,7 +29,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -217,13 +216,6 @@ public class MainActivity extends AppCompatActivity {
     navController = navHostFragment.getNavController();
 
     updateStartDestination();
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= VERSION_CODES.N_MR1) {
-      int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-      if (nightModeFlags != Configuration.UI_MODE_NIGHT_YES) {
-        getWindow().setNavigationBarColor(Color.BLACK);
-      }
-    }
 
     navController.addOnDestinationChangedListener((controller, dest, args) -> {
       if (isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment
@@ -532,27 +524,6 @@ public class MainActivity extends AppCompatActivity {
     showBottomSheet(bottomSheet);
   }
 
-  public void setNavBarColor(@ColorRes int color) {
-    int nightModeFlags = getResources().getConfiguration().uiMode
-        & Configuration.UI_MODE_NIGHT_MASK;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && Build.VERSION.SDK_INT <= VERSION_CODES.N_MR1
-        && nightModeFlags != Configuration.UI_MODE_NIGHT_YES
-    ) {
-      color = R.color.black;
-    }
-    getWindow().setNavigationBarColor(ResourcesCompat.getColor(getResources(), color, null));
-  }
-
-  public void setStatusBarColor(@ColorRes int color) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-        && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
-    ) {
-      color = R.color.black;
-    }
-    getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), color, null));
-  }
-
   public void showKeyboard(EditText editText) {
     new Handler().postDelayed(() -> {
       editText.requestFocus();
@@ -665,6 +636,27 @@ public class MainActivity extends AppCompatActivity {
 
   public void setFabIcon(Drawable icon) {
     binding.fabMain.setImageDrawable(icon);
+  }
+
+  public void setNavBarColor(@ColorRes int color) {
+    int nightModeFlags = getResources().getConfiguration().uiMode
+        & Configuration.UI_MODE_NIGHT_MASK;
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP
+        && Build.VERSION.SDK_INT <= VERSION_CODES.N_MR1
+        && nightModeFlags != Configuration.UI_MODE_NIGHT_YES
+    ) {
+      color = R.color.black;
+    }
+    getWindow().setNavigationBarColor(ResourcesCompat.getColor(getResources(), color, null));
+  }
+
+  public void setStatusBarColor(@ColorRes int color) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+        && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
+    ) {
+      color = R.color.black;
+    }
+    getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), color, null));
   }
 
   /**
