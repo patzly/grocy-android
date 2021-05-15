@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -29,7 +30,9 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -47,14 +50,26 @@ public class SplashActivity extends AppCompatActivity {
 
     getWindow().setBackgroundDrawable(splashContent);
 
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    boolean speedUpStart = sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
+    );
+
     try {
-      assert splashContent != null;
-      Drawable splashLogo = splashContent.findDrawableByLayerId(R.id.splash_logo);
-      AnimatedVectorDrawable logo = (AnimatedVectorDrawable) splashLogo;
-      logo.start();
-      new Handler(Looper.getMainLooper()).postDelayed(
-          this::startMainActivity, 800
-      );
+      if (speedUpStart) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::startMainActivity, 50
+        );
+      } else {
+        assert splashContent != null;
+        Drawable splashLogo = splashContent.findDrawableByLayerId(R.id.splash_logo);
+        AnimatedVectorDrawable logo = (AnimatedVectorDrawable) splashLogo;
+        logo.start();
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::startMainActivity, 800
+        );
+      }
     } catch (Exception e) {
       startMainActivity();
     }

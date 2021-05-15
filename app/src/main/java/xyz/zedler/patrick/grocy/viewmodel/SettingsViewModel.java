@@ -222,6 +222,18 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.BEHAVIOR.EXPAND_BOTTOM_SHEETS, enabled).apply();
   }
 
+  public boolean getSpeedUpStartEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
+    );
+  }
+
+  public void setSpeedUpStartEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
+  }
+
   public boolean getFrontCamEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.SCANNER.FRONT_CAM,

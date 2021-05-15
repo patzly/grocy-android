@@ -734,6 +734,8 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Expand bottom sheets</string>
   <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
+  <string name="setting_speed_up_start">Reduce app startup time</string>
+  <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_synchronized">These settings are synchronized with your server.</string>
