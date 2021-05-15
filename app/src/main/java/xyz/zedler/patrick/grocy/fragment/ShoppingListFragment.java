@@ -61,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
@@ -77,6 +78,7 @@ public class ShoppingListFragment extends BaseFragment implements
   private SwipeBehavior swipeBehavior;
   private FragmentShoppingListBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private PluralUtil pluralUtil;
 
   @Override
   public View onCreateView(
@@ -118,6 +120,7 @@ public class ShoppingListFragment extends BaseFragment implements
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
 
     // APP BAR BEHAVIOR
 
@@ -574,10 +577,11 @@ public class ShoppingListFragment extends BaseFragment implements
       assert product != null;
       bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
       QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchase());
-      if (quantityUnit != null && item.getAmountDouble() == 1) {
-        bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getName());
-      } else if (quantityUnit != null) {
-        bundle.putString(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnit.getNamePlural());
+      if (quantityUnit != null) {
+        bundle.putString(
+            Constants.ARGUMENT.QUANTITY_UNIT,
+            pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble())
+        );
       }
     }
     bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, item);

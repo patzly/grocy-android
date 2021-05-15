@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment implements
@@ -67,6 +68,7 @@ public class PurchaseFragment extends BaseFragment implements
   private PurchaseViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private ScanInputCaptureManager capture;
+  private PluralUtil pluralUtil;
 
   @Override
   public View onCreateView(
@@ -171,6 +173,7 @@ public class PurchaseFragment extends BaseFragment implements
       viewModel.setProduct(productId, null, null);
     }
 
+    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
     viewModel.getFormData().getShoppingListItemLive().observe(getViewLifecycleOwner(), item -> {
       if(args.getShoppingListItems() == null || item == null) return;
       ShoppingListItemAdapter.fillShoppingListItem(
@@ -178,7 +181,8 @@ public class PurchaseFragment extends BaseFragment implements
           item,
           binding.linearPurchaseShoppingListItem,
           viewModel.getProductHashMap(),
-          viewModel.getQuantityUnitHashMap()
+          viewModel.getQuantityUnitHashMap(),
+          pluralUtil
       );
     });
 

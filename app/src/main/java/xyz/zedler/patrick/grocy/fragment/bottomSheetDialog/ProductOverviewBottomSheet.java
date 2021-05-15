@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.BezierCurveChart;
@@ -77,6 +78,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
   private ProductDetails productDetails;
   private Product product;
   private QuantityUnit quantityUnit;
+  private PluralUtil pluralUtil;
   private Location location;
   private ActionButton actionButtonConsume, actionButtonOpen;
   private BezierCurveChart priceHistory;
@@ -111,6 +113,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     activity = (MainActivity) requireActivity();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
 
     ProductOverviewBottomSheetArgs args =
         ProductOverviewBottomSheetArgs.fromBundle(requireArguments());
@@ -583,7 +586,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         activity.getString(
             R.string.subtitle_amount,
             NumUtil.trim(amount),
-            amount == 1 ? quantityUnit.getName() : quantityUnit.getNamePlural()
+            pluralUtil.getQuantityUnitPlural(quantityUnit, amount)
         )
     );
     if (opened > 0) {
@@ -600,13 +603,23 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
   private String getAggregatedAmount() {
     double amountAggregated = stockItem.getAmountAggregatedDouble();
-    return "∑ " + activity.getString(
+    StringBuilder amountStr = new StringBuilder();
+    amountStr.append("∑ ");
+    amountStr.append(activity.getString(
         R.string.subtitle_amount,
         NumUtil.trim(amountAggregated),
-        amountAggregated == 1
-            ? quantityUnit.getName()
-            : quantityUnit.getNamePlural()
-    );
+        pluralUtil.getQuantityUnitPlural(quantityUnit, amountAggregated)
+    ));
+    if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
+      amountStr.append(" ");
+      amountStr.append(
+          activity.getString(
+              R.string.subtitle_amount_opened,
+              NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
+          )
+      );
+    }
+    return amountStr.toString();
   }
 
   private boolean isFeatureEnabled(String pref) {

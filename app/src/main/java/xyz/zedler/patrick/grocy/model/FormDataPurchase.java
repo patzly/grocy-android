@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class FormDataPurchase {
 
@@ -88,6 +89,7 @@ public class FormDataPurchase {
   private final LiveData<String> storeNameLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
+  private final PluralUtil pluralUtil;
   private boolean torchOn = false;
 
   public FormDataPurchase(
@@ -242,6 +244,7 @@ public class FormDataPurchase {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -398,8 +401,7 @@ public class FormDataPurchase {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        Double.parseDouble(amountStockLive.getValue()) == 1
-            ? stock.getName() : stock.getNamePlural()
+        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
     );
   }
 
@@ -435,10 +437,11 @@ public class FormDataPurchase {
 
   public String getTransactionSuccessMsg(double amountPurchased) {
     QuantityUnit stock = quantityUnitStockLive.getValue();
+    assert stock != null && productDetailsLive.getValue() != null;
     return application.getString(
         R.string.msg_purchased,
         NumUtil.trim(amountPurchased),
-        amountPurchased == 1 ? stock.getName() : stock.getNamePlural(),
+        pluralUtil.getQuantityUnitPlural(stock, amountPurchased),
         productDetailsLive.getValue().getProduct().getName()
     );
   }
@@ -740,7 +743,7 @@ public class FormDataPurchase {
     return application.getString(
         R.string.msg_quick_mode_confirm_purchase,
         NumUtil.trim(amountAdded),
-        amountAdded == 1 ? qU.getName() : qU.getNamePlural(),
+        pluralUtil.getQuantityUnitPlural(qU, amountAdded),
         details.getProduct().getName(),
         dueDateTextLive.getValue(),
         price,

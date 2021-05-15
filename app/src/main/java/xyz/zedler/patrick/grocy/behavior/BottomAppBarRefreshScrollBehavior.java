@@ -145,7 +145,7 @@ public class BottomAppBarRefreshScrollBehavior {
     if (bottomAppBar != null) {
       bottomAppBar.show();
       onChangeBottomAppBarVisibility(true, "setUpScroll");
-      if (scrollView.getScrollY() == 0 && activity instanceof MainActivity) {
+      if (scrollView != null && scrollView.getScrollY() == 0 && activity instanceof MainActivity) {
         ((MainActivity) activity).isScrollRestored = false;
       }
     }

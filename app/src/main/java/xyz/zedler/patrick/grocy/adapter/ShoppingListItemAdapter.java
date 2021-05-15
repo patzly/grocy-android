@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 
 public class ShoppingListItemAdapter extends
@@ -63,6 +64,7 @@ public class ShoppingListItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
   private final HorizontalFilterBarSingle horizontalFilterBarSingle;
+  private final PluralUtil pluralUtil;
 
 
   public ShoppingListItemAdapter(
@@ -81,6 +83,7 @@ public class ShoppingListItemAdapter extends
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     this.horizontalFilterBarSingle = horizontalFilterBarSingle;
+    pluralUtil = new PluralUtil(context.getResources().getConfiguration().locale);
   }
 
   @Override
@@ -329,19 +332,14 @@ public class ShoppingListItemAdapter extends
 
     if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
-      if (quantityUnit == null) {
-        quantityUnit = new QuantityUnit();
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
+      if (quStr != null) {
+        binding.amount.setText(
+            context.getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+        );
+      } else {
+        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
       }
-
-      binding.amount.setText(
-          context.getString(
-              R.string.subtitle_amount,
-              NumUtil.trim(item.getAmountDouble()),
-              item.getAmountDouble() == 1
-                  ? quantityUnit.getName()
-                  : quantityUnit.getNamePlural()
-          )
-      );
     } else {
       binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
     }
@@ -429,7 +427,8 @@ public class ShoppingListItemAdapter extends
       ShoppingListItem item,
       RowShoppingListItemBinding binding,
       HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, QuantityUnit> quantityUnitHashMap
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      PluralUtil pluralUtil
   ) {
 
     // NAME
@@ -477,9 +476,7 @@ public class ShoppingListItemAdapter extends
           context.getString(
               R.string.subtitle_amount,
               NumUtil.trim(item.getAmountDouble()),
-              item.getAmountDouble() == 1
-                  ? quantityUnit.getName()
-                  : quantityUnit.getNamePlural()
+              pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble())
           )
       );
     } else {

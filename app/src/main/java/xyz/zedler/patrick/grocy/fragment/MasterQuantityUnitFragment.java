@@ -311,12 +311,12 @@ public class MasterQuantityUnitFragment extends BaseFragment {
       for (QuantityUnit quantityUnit : quantityUnits) {
         if (editQuantityUnit != null) {
           if (quantityUnit.getId() != editQuantityUnit.getId()) {
-            names.add(quantityUnit.getName().trim());
-            names.add(quantityUnit.getNamePlural().trim());
+            names.add(quantityUnit.getName());
+            names.add(quantityUnit.getNamePlural());
           }
         } else {
-          names.add(quantityUnit.getName().trim());
-          names.add(quantityUnit.getNamePlural().trim());
+          names.add(quantityUnit.getName());
+          names.add(quantityUnit.getNamePlural());
         }
       }
     }

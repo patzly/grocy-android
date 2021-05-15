@@ -1,6 +1,6 @@
 cs
 cs.demo.grocy.info
-Jarda Tesar, Radim Kabeláč
+InToSSH, Radimek
 
 de
 de.demo.grocy.info
@@ -12,51 +12,51 @@ Dominic Zedler, Patrick Zedler
 
 es
 es.demo.grocy.info
-adrigrillo, recognitium
+ami232, martinvolantin, recognitium, rubensancor, adrigrillo
 
 fr
 fr.demo.grocy.info
-prohand, Zorvalt, Clément Chotard, Eric Robert, voslin
+Zorvalt, Keiishu, MrAlucardDante, lapourgagner, tesseract241, Clem844, prohand, voslin, erobertc, Mquiles
 
 it
 it.demo.grocy.info
-Matteo Schiff, Nur Fadel, racerider, Riccardo Bonesini
+lucanomax, silkevicious, alex.bernocchi.ab, bonerserk, sandman91, racerider, Matte23, nuraiman, mellotanica, wisewtf, tesseract241
 
 iw
 en.demo.grocy.info
-Yaron Shahrabani, Sefi Ninio
+sefi.ninio, Yaron
 
 nb
 no.demo.grocy.info
-Tor Eirik Trandal
+teitrand
 
 nl
 nl.demo.grocy.info
-Maarten Siersema, 4lloyd, Sam Bouwer
+emielverstegen, 4lloyd, Llewy, knnnrd, MaartenSiersema, Wazzaaam
 
 pl
 pl.demo.grocy.info
-smiglo
+smiglo, micwoj92, smigima
 
 pt_BR
 pt-br.demo.grocy.info
-recognitium, Alejandro Mohamad
+jeffersantoss, recognitium, JST, alemoh1234
 
 pt_PT
 pt-pt.demo.grocy.info
-Joao Santos, Duarte Grilo
+zedascouves, JST
 
 ru
 ru.demo.grocy.info
-unwarkz, Pavel Peganov
+unwarkz, rrader, Dside, SergeyKodolov, iluhis
 
 sv
 sv.demo.grocy.info
-Johan Hedlin
+Busan15, googleoo, duxleon
 
 uk
 en.demo.grocy.info
-NazimUa, Roman Rader
+NazimUa, rrader
 
 zh_CN
 zh-cn.demo.grocy.info

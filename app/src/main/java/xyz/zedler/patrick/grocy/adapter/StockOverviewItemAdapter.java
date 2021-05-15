@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
@@ -57,6 +58,7 @@ public class StockOverviewItemAdapter extends
   private final ArrayList<StockItem> stockItems;
   private final ArrayList<String> shoppingListItemsProductIds;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
   private final HorizontalFilterBarSingle horizontalFilterBarSingle;
@@ -87,6 +89,7 @@ public class StockOverviewItemAdapter extends
     this.stockItems = new ArrayList<>(stockItems);
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+    this.pluralUtil = new PluralUtil(context.getResources().getConfiguration().locale);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
     this.horizontalFilterBarSingle = horizontalFilterBarSingle;
@@ -400,11 +403,9 @@ public class StockOverviewItemAdapter extends
 
     QuantityUnit quantityUnit = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStock());
 
-    String unit = null;
-    if (quantityUnit != null && stockItem.getAmountDouble() == 1) {
-      unit = quantityUnit.getName();
-    } else if (quantityUnit != null) {
-      unit = quantityUnit.getNamePlural();
+    String unit = "";
+    if (quantityUnit != null) {
+      unit = pluralUtil.getQuantityUnitPlural(quantityUnit, stockItem.getAmountDouble());
     }
     StringBuilder stringBuilderAmount = new StringBuilder(
         context.getString(
@@ -424,19 +425,27 @@ public class StockOverviewItemAdapter extends
     }
     // aggregated amount
     if (stockItem.getIsAggregatedAmount() == 1) {
-      if (quantityUnit != null && stockItem.getAmountAggregatedDouble() == 1) {
-        unit = quantityUnit.getName();
-      } else if (quantityUnit != null) {
-        unit = quantityUnit.getNamePlural();
+      String unitAggregated = "";
+      if (quantityUnit != null) {
+        unitAggregated = pluralUtil.getQuantityUnitPlural(quantityUnit, stockItem.getAmountAggregatedDouble());
       }
       stringBuilderAmount.append("  ∑ ");
       stringBuilderAmount.append(
           context.getString(
               R.string.subtitle_amount,
               NumUtil.trim(stockItem.getAmountAggregatedDouble()),
-              unit
+              unitAggregated
           )
       );
+      if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
+        stringBuilderAmount.append(" ");
+        stringBuilderAmount.append(
+            context.getString(
+                R.string.subtitle_amount_opened,
+                NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
+            )
+        );
+      }
     }
     holder.binding.textAmount.setText(stringBuilderAmount);
     if (missingItemsProductIds.contains(stockItem.getProductId())) {

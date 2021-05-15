@@ -19,24 +19,113 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class PluralUtil {
+  final LangPluralDetails pluralDetails;
 
-  public static String getQuantityUnitPlural(QuantityUnit quantityUnit, double amount) {
-    return quantityUnit != null
-        ? amount == 1
-        ? quantityUnit.getName()
-        : quantityUnit.getNamePlural()
-        : "";
+  public PluralUtil(Locale locale) {
+    String localeCode = locale.getLanguage();
+    if (locale.getCountry().isEmpty()) {
+      localeCode += "_" + locale.getCountry();
+    }
+
+    switch (localeCode) {
+      case "cs":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n == 1 && n % 1 == 0) ? 0
+                : (n >= 2 && n <= 4 && n % 1 == 0) ? 1 : (n % 1 != 0) ? 2 : 3
+        );
+        break;
+      case "fr":
+      case "pt_BR":
+      case "pt_PT":
+        pluralDetails = new LangPluralDetails(2, (n) -> (n > 1) ? 1 : 0);
+        break;
+      case "iw":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n == 1 && n % 1 == 0) ? 0
+                : (n == 2 && n % 1 == 0) ? 1 : (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3
+        );
+        break;
+      case "pl":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n == 1 ? 0
+                : (n % 10 >= 2 && n % 10 <= 4) && (n % 100 < 12 || n % 100 > 14) ? 1
+                    : n != 1 && (n % 10 >= 0 && n % 10 <= 1) || (n % 10 >= 5 && n % 10 <= 9)
+                        || (n % 100 >= 12 && n % 100 <= 14) ? 2 : 3)
+        );
+        break;
+      case "ru":
+      case "uk":
+        pluralDetails = new LangPluralDetails(
+            4,
+            n -> (n%10==1 && n%100!=11 ? 0
+                : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1
+                    : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14) ? 2 : 3)
+        );
+        break;
+      case "zh_CN":
+        pluralDetails = new LangPluralDetails(1, n -> 0);
+        break;
+      default:  // en de es it nb nl sv
+        pluralDetails = new LangPluralDetails(2, (n) -> (n != 1) ? 1 : 0);
+    }
   }
 
-  public static String getQuantityUnitPlural(
+  public String getQuantityUnitPlural(QuantityUnit quantityUnit, double amount) {
+    if (quantityUnit == null) {
+      return null;
+    }
+    if (pluralDetails.nPlurals == 1) {
+      return quantityUnit.getName();
+    } else if (pluralDetails.nPlurals == 2) {
+      return pluralDetails.pluralRule.getPluralPos(amount) == 0
+          ? quantityUnit.getName() : quantityUnit.getNamePlural();
+    } else {
+      if (quantityUnit.getPluralForms() == null || quantityUnit.getPluralForms().isEmpty()) {
+        return quantityUnit.getName();
+      }
+      String[] plurals = quantityUnit.getPluralForms().split("\n");
+      ArrayList<String> pluralsFiltered = new ArrayList<>();
+      for (String plural : plurals) {
+        if (!plural.isEmpty()) {
+          pluralsFiltered.add(plural);
+        }
+      }
+      int pluralPos = pluralDetails.pluralRule.getPluralPos(amount);
+      if (pluralsFiltered.size() != pluralDetails.nPlurals || pluralPos >= pluralsFiltered.size()) {
+        return quantityUnit.getName();
+      }
+      return pluralsFiltered.get(pluralPos);
+    }
+  }
+
+  public String getQuantityUnitPlural(
       HashMap<Integer, QuantityUnit> unitHashMap,
       int quantityUnitId,
       double amount
   ) {
     return getQuantityUnitPlural(unitHashMap.get(quantityUnitId), amount);
+  }
+
+  interface PluralRule {
+    int getPluralPos(double n);
+  }
+
+  static class LangPluralDetails {
+    final int nPlurals;
+    final PluralRule pluralRule;
+
+    public LangPluralDetails(int nPlurals, PluralRule pluralRule) {
+      this.nPlurals = nPlurals;
+      this.pluralRule = pluralRule;
+    }
   }
 }

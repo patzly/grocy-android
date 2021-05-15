@@ -62,6 +62,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final StockOverviewRepository repository;
+  private final PluralUtil pluralUtil;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -113,6 +114,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
     repository = new StockOverviewRepository(application);
+    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -545,7 +547,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           String msg = getApplication().getString(
               spoiled ? R.string.msg_consumed_spoiled : R.string.msg_consumed,
               NumUtil.trim(amountConsumed),
-              PluralUtil.getQuantityUnitPlural(
+              pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   stockItem.getProduct().getQuIdStock(),
                   amountConsumed
@@ -619,7 +621,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           String msg = getApplication().getString(
               R.string.msg_opened,
               NumUtil.trim(amountOpened),
-              PluralUtil.getQuantityUnitPlural(
+              pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   stockItem.getProduct().getQuIdStock(),
                   amountOpened

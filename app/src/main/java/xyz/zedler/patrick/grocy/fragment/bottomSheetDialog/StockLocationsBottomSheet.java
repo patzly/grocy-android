@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
@@ -83,6 +84,7 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
       textViewSubtitle.setVisibility(View.GONE);
     }
 
+    Locale locale = getResources().getConfiguration().locale;
     RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_locations);
     recyclerView.setLayoutManager(
         new LinearLayoutManager(
@@ -93,7 +95,7 @@ public class StockLocationsBottomSheet extends BaseBottomSheet
     );
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(new StockLocationAdapter(
-        stockLocations, productDetails, quantityUnitStock, selected, this
+        stockLocations, productDetails, quantityUnitStock, locale, selected, this
     ));
 
     return view;

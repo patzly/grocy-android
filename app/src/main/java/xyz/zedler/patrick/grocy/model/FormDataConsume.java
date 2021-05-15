@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class FormDataConsume {
 
@@ -72,6 +73,7 @@ public class FormDataConsume {
   private final MutableLiveData<Boolean> useSpecificLive;
   private ArrayList<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
+  private final PluralUtil pluralUtil;
   private boolean torchOn = false;
 
   public FormDataConsume(
@@ -147,6 +149,7 @@ public class FormDataConsume {
     spoiledLive = new MutableLiveData<>(false);
     useSpecificLive = new MutableLiveData<>(false);
     specificStockEntryLive = new MutableLiveData<>();
+    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -295,8 +298,7 @@ public class FormDataConsume {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        Double.parseDouble(amountStockLive.getValue()) == 1
-            ? stock.getName() : stock.getNamePlural()
+        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
     );
   }
 
@@ -336,7 +338,7 @@ public class FormDataConsume {
     return application.getString(
         isActionOpen ? R.string.msg_opened : R.string.msg_consumed,
         NumUtil.trim(amountConsumed),
-        amountConsumed == 1 ? stock.getName() : stock.getNamePlural(),
+        pluralUtil.getQuantityUnitPlural(stock, amountConsumed),
         productDetails.getProduct().getName()
     );
   }
@@ -524,7 +526,7 @@ public class FormDataConsume {
     return application.getString(
         R.string.msg_quick_mode_confirm_consume,
         NumUtil.trim(amountRemoved),
-        amountRemoved == 1 ? qU.getName() : qU.getNamePlural(),
+        pluralUtil.getQuantityUnitPlural(qU, amountRemoved),
         productDetails.getProduct().getName(),
         stockLocation.getLocationName()
     );

@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class FormDataInventory {
 
@@ -85,6 +86,7 @@ public class FormDataInventory {
   private final LiveData<String> storeNameLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
+  private final PluralUtil pluralUtil;
   private boolean torchOn = false;
 
   public FormDataInventory(
@@ -238,6 +240,7 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -382,8 +385,7 @@ public class FormDataInventory {
     return application.getString(
         R.string.subtitle_amount_compare,
         amountStockLive.getValue(),
-        Double.parseDouble(amountStockLive.getValue()) == 1
-            ? stock.getName() : stock.getNamePlural()
+        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
     );
   }
 
@@ -436,7 +438,7 @@ public class FormDataInventory {
         msg,
         (int) Math.ceil(amountDiffAbs),
         NumUtil.trim(amountDiffAbs),
-        amountDiffAbs == 1 ? stockUnit.getName() : stockUnit.getNamePlural()
+        pluralUtil.getQuantityUnitPlural(stockUnit, amountDiffAbs)
     );
   }
 
@@ -474,7 +476,7 @@ public class FormDataInventory {
         R.string.msg_inventoried,
         productDetailsLive.getValue().getProduct().getName(),
         amountStock,
-        amountDiff == 1 ? stockUnit.getName() : stockUnit.getNamePlural(),
+        pluralUtil.getQuantityUnitPlural(stockUnit, amountDiff),
         amountDiff >= 0 ? "+" + NumUtil.trim(amountDiff) : NumUtil.trim(amountDiff)
     );
   }
@@ -718,7 +720,7 @@ public class FormDataInventory {
         R.string.msg_quick_mode_confirm_inventory,
         details.getProduct().getName(),
         NumUtil.trim(amountNew),
-        amountNew == 1 ? qU.getName() : qU.getNamePlural(),
+        pluralUtil.getQuantityUnitPlural(qU, amountNew),
         dueDateTextLive.getValue(),
         price,
         store,
