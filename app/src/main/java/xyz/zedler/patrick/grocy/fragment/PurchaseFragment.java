@@ -170,7 +170,9 @@ public class PurchaseFragment extends BaseFragment implements
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new PurchaseFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
-      viewModel.setProduct(productId, null, null);
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(
+          productId, null, null
+      ));
     }
 
     pluralUtil = new PluralUtil(getResources().getConfiguration().locale);

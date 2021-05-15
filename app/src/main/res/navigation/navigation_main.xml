@@ -413,7 +413,7 @@
         android:name="action"
         app:argType="string" />
       <argument
-        android:name="productName"
+        android:name="productId"
         android:defaultValue="@null"
         app:argType="string"
         app:nullable="true" />

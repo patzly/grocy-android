@@ -27,14 +27,12 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
-import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -138,31 +136,19 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
     findNavController().navigate(directions);
   }
 
-  void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
-    findNavController().navigate(directions, navigatorExtras);
-  }
-
   void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
     findNavController().navigate(directions, navOptions);
   }
 
-  void navigate(@IdRes int destination) {
-    navigate(destination, (Bundle) null);
+  void navigateDeepLink(@StringRes int uri) {
+    navigateDeepLink(Uri.parse(getString(uri)));
   }
 
-  void navigate(@IdRes int destination, Bundle arguments) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_in_up)
-        .setPopExitAnim(R.anim.slide_out_down)
-        .setExitAnim(R.anim.slide_no);
-    findNavController().navigate(destination, arguments, builder.build());
+  void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+    navigateDeepLink(getUriWithArgs(getString(uri), args));
   }
 
-  void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
-    findNavController().navigate(destination, null, navOptions);
-  }
-
-  void navigateDeepLink(@NonNull Uri uri) {
+  private void navigateDeepLink(@NonNull Uri uri) {
     NavOptions.Builder builder = new NavOptions.Builder();
     builder.setEnterAnim(R.anim.slide_in_up)
         .setPopExitAnim(R.anim.slide_out_down)
@@ -170,15 +156,7 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
     findNavController().navigate(uri, builder.build());
   }
 
-  void navigateDeepLink(@NonNull String uri) {
-    navigateDeepLink(Uri.parse(uri));
-  }
-
-  void navigateDeepLink(@NonNull String uri, @NonNull Bundle args) {
-    navigateDeepLink(getUriWithArgs(uri, args));
-  }
-
-  Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+  private Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
     String[] parts = uri.split("\\?");
     if (parts.length == 1) {
       return Uri.parse(uri);

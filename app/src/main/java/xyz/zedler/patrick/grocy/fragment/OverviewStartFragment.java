@@ -112,7 +112,7 @@ public class OverviewStartFragment extends BaseFragment {
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_about) {
-        navigateDeepLink(R.string.deep_link_aboutFragment);
+        navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_changelog) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.info_changelog));
@@ -133,9 +133,6 @@ public class OverviewStartFragment extends BaseFragment {
     updateUI((getArguments() == null
         || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
         && savedInstanceState == null);
-
-    int n = 0;
-    int i = (n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);
   }
 
   private void updateUI(boolean animated) {
@@ -179,7 +176,7 @@ public class OverviewStartFragment extends BaseFragment {
           .build().toBundle();
       navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      navigateDeepLink(R.string.deep_link_settingsCatServerFragment);
+      navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
   }
 
