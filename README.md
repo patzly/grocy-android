@@ -6,11 +6,8 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-**Version 2.0.0 will come soon but it takes some time to [test](https://github.com/patzly/grocy-android/issues/266) it before release.  
-Meanwhile you can use the web interface of grocy if you want to use the new server v3.0.0 with a stable experience.  
+**Version 2.0.0 is finished soon. You can download the latest beta version on the [releases page](https://github.com/patzly/grocy-android/releases/).  
 Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
-
-⚠️ **Click [here](https://github.com/patzly/grocy-android/issues/266) if you want to test the new version before its official release.** ⚠️
 
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
@@ -22,10 +19,11 @@ You can try it using the demo option available on the login screen.
 
 ## Downloads
 
-**Attention: The three sources below contain the outdated version 1.10.1 which doesn't work with the current grocy server version 3.0.x!**
-**Alpha builds of our new version 2.0.0 which is compatible with grocy server version 3.0.x are [here](https://github.com/patzly/grocy-android/issues/266).**
+**Attention: On Google Play and f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x!.
+We will update them as soon as v2.0.0 is officially released.  
+You can download the pre-releases [here](https://github.com/patzly/grocy-android/releases/).**
 
-**For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our alpha versions. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo?fingerprint=DFDB0A58E78704CAEB609389B81AB2BE6A090662F860635D760E76ACBC700AF8) to your client. Thank you silkevicious!**
+**For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our pre-releases. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo?fingerprint=DFDB0A58E78704CAEB609389B81AB2BE6A090662F860635D760E76ACBC700AF8) to your client. Thank you silkevicious!**
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://f-droid.org/de/packages/xyz.zedler.patrick.grocy/'><img alt='Get it on F-Droid' height="80" src='assets/badge_fdroid.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a>
 
@@ -76,7 +74,7 @@ Like the grocy project, Grocy Android can be translated, too. The main language 
 You can help translating this project at [Transifex](https://www.transifex.com/grocy-android/grocy-android), if your language is incomplete, contains typos or is not available yet.
 Translations which reached a completion level of 80% will be included in releases.  
 
-Translated languages (14): Chinese (China), Czech, French, German, Hebrew, Italian, Polish, Portuguese (Brazil), Russian, Spanish, Swedish, Ukrainian, Dutch, Norwegian Bokmål  
+Translated languages (15): Chinese (China), Czech, French, German, Hebrew, Italian, Polish, Portuguese (Brazil), Portuguese (Portugal), Russian, Spanish, Swedish, Ukrainian, Dutch, Norwegian Bokmål  
 
 Thanks for your contributions!
 
