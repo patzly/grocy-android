@@ -43,8 +43,8 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 31
-        versionName "2.0.0-alpha07"
+        versionCode 32
+        versionName "2.0.0-beta01"
 
         javaCompileOptions {
             annotationProcessorOptions {
