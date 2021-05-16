@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -25,6 +25,12 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Ипользовать</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Переместить</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Обновить количество</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Использовать все</string>
 
@@ -68,6 +74,7 @@
   <string name="action_undo">Отменить</string>
   <string name="action_retry">Повторить</string>
   <string name="action_edit">Изменить</string>
+  <string name="action_copy">Копировать</string>
   <string name="action_proceed">Продолжить</string>
   <string name="action_delete">Удалить</string>
   <string name="action_save">Сохранить</string>
@@ -97,20 +104,20 @@
   <string name="action_demo_server">Демо сервер</string>
   <string name="action_own_server">Собственный сервер</string>
   <string name="action_enter_data_manually">Ввести данные вручную</string>
-  <!-- %1$s is the number of products which are due soon -->
-  <!-- %1$s is the number of products which are overdue -->
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
-  <!-- %1$s is the number of products which are in stock -->
+  <string name="action_perform">Выполнить действие</string>
+
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Испортилось %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Вскрыть %1$s %2$s %3$s </string>
-  <!-- %1$s is the number of undone items in shopping list -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">Перенесено %1$s %2$s %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Количество %1$s в запасе - %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">В запасах нет %1$s</string>
   <string name="msg_no_connection">Нет соединения</string>
@@ -135,12 +142,31 @@
   <string name="msg_master_delete_product">Вы уверены, что хотите удалить \"%1$s\"?\n\nЭто также удалит запасы, журнал и все другие ссылки на этот продукт - рассмотрите возможность отключения вместо удаления, если вы хотите просто скрыть продукт.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">%1$s еще используется</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s добавится в запасы.</item>
+    <item quantity="few">%1$s %2$s будут добавлены в запасы.</item>
+    <item quantity="many">%1$s %2$s будут добавлены в запасы.</item>
+    <item quantity="other">%1$s %2$s будет добавлено в запасы.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s удалится из запасов.</item>
+    <item quantity="few">%1$s %2$s будут удалены из запасов.</item>
+    <item quantity="many">%1$s %2$s будут удалены из запасов.</item>
+    <item quantity="other">%1$s %2$s будет удалено из запасов.</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Продукты с включенным учетом веса тары в данный момент недоступны для переноса.</string>
   <string name="msg_item_marked_as_done">Пункт выполнен</string>
   <string name="msg_item_marked_as_undone">Пункт не выполнен</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Операция, которая будет выполнена:\n\nДобавить %1$s %2$s %3$s в запасы\nСрок годности: %4$s\nЦена: %5$s\nМагазин:%6$s\nМесто: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Операция, которая будет выполнена:\n\nУдалить %1$s %2$s %3$s из запасов\nМесто: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Операция, которая будет выполнена:\n\nПереместить %1$s %2$s %3$s\nИз места: %4$s\nВ место: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Операция, которая будет выполнена:\n\nУстановить количество %1$s в запасах равное %2$s %3$s\nПримерить для добавленных элементов:\nСрок годности: %4$s\nЦена: %5$s\nМагазин: %6$s\nМесто: %7$s</string>
   <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере,\n\nТекущая версия сервера %1$s\n\nТребуется:\nминимальная версия: %2$s\nмаксимальная версия: %3$s\n\nЕсли вы проигнорируете это предупреждение, могут возникнуть потери данных (маловероятно) и сбои (весьма вероятно).\nВас предупредили!</string>
   <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
   <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
@@ -156,6 +182,8 @@
   <string name="msg_choose_option_below">Пожалуйста, выберите один вариант снизу</string>
   <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
   <string name="msg_not_implemented_yet">Скоро это будет реализовано. До тех пор используйте, пожалуйста, веб-интерфейс.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Продукт не может иметь родительский продукт потому что этот продукт уже используется как родительский продукт для другого продукта.</string>
   <string name="msg_help_due_date_type">В зависимости от выбранного типа срока годности, отображение на странице обзора запасов будет другим. «Рекомендуемый» означает, что продукт может быть безопасным для употребления после наступления срока его годности. «Обязательный» означает, что продукт небезопасно употреблять после наступления срока его годности.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Данное количество дней будет добавлено к предлагаемому сроку годности при покупке (-1 означает, что этот товар никогда не будет просрочен).</string>
@@ -205,6 +233,7 @@
   <string name="error_empty_stock_sub">Купите что-нибудь</string>
   <string name="error_empty_shopping_list">Пустой список покупок</string>
   <string name="error_empty_shopping_list_sub">Добавьте нужные продукты</string>
+  <string name="error_empty_barcodes_sub">Добавьте штрихкод с помощью кнопки ниже</string>
   <string name="error_empty_master_data_sub">Создайте с помощью кнопки внизу</string>
   <string name="error_empty_product_barcodes">Нет штрихкодов продуктов</string>
   <string name="error_empty_locations">Нет мест хранения</string>
@@ -226,6 +255,8 @@
   <string name="error_invalid_factor">Неверный фактор</string>
   <string name="error_api_qr_code">QR-код без учетных данных Grocy API</string>
   <string name="error_loading_qus">Не удалось загрузить единицы количества из продукта</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Не может быть равно %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Между %1$s и %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -259,6 +290,8 @@
   <string name="title_stock_overview">Обзор запасов</string>
   <string name="title_purchase">Купить</string>
   <string name="title_consume">Использовать</string>
+  <string name="title_transfer">Переместить</string>
+  <string name="title_inventory">Инвентаризировать</string>
   <string name="title_barcode_input">Ввод штрих-кода</string>
   <string name="title_product_overview">Обзор продуктов</string>
   <string name="title_product">Продукт</string>
@@ -289,6 +322,10 @@
   <string name="title_specific">Конкретный товар в запасах</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Использовать точное количество</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Откуда</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Куда</string>
   <string name="title_recipe">Рецепт</string>
   <string name="title_total_price">Общая цена</string>
   <string name="title_unit_price">Цена за единицу</string>
@@ -454,13 +491,16 @@
   <string name="property_status">Статус</string>
   <string name="property_amount">Количество</string>
   <string name="property_seconds">Секунды</string>
-  <!-- %1$d is a number (amount of seconds) -->
   <string name="property_amount_min_stock">Мин. количество в запасе</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s содержит</string>
   <string name="property_price">Цена</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Цена за %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Цена в %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Цена за %1$s в %2$s</string>
   <string name="property_quantity_unit">Единица измерения</string>
   <string name="property_quantity_units">Единицы измерения</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -537,7 +577,6 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Накапливать мин. заданное количество субпродуктов</string>
   <string name="property_picture">Изображение</string>
-
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->
