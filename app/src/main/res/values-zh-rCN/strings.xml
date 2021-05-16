@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -97,15 +97,12 @@
   <string name="action_demo_server">演示服务器</string>
   <string name="action_own_server">自己的服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%3$s中的%1$s%2$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">消耗%3$s中的%1$s%2$s作为损耗</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">标记%3$s中的%1$s%2$s为已打开</string>
-  <!-- %1$s is the number of undone items in shopping list -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">已购买%3$s中的%1$s%2$s</string>
   <!-- %1$s is a product name -->
@@ -383,7 +380,6 @@
   <string name="property_status">状态</string>
   <string name="property_amount">数量</string>
   <string name="property_seconds">秒</string>
-  <!-- %1$d is a number (amount of seconds) -->
   <string name="property_amount_min_stock">最小库存量</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">量单位%1$s</string>
@@ -466,7 +462,6 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">累计子产品最小库存量 </string>
   <string name="property_picture">图片</string>
-
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
