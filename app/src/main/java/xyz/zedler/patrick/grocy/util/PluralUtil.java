@@ -27,6 +27,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class PluralUtil {
   final LangPluralDetails pluralDetails;
+  boolean rulesImplemented = true;
 
   public PluralUtil(Locale locale) {
     String localeCode = locale.getLanguage();
@@ -75,9 +76,27 @@ public class PluralUtil {
       case "zh_CN":
         pluralDetails = new LangPluralDetails(1, n -> 0);
         break;
+      case "en":
+      case "de":
+      case "es":
+      case "it":
+      case "nb":
+      case "nl":
+      case "sv":
+        pluralDetails = new LangPluralDetails(2, (n) -> (n != 1) ? 1 : 0);
+        break;
       default:  // en de es it nb nl sv
         pluralDetails = new LangPluralDetails(2, (n) -> (n != 1) ? 1 : 0);
+        rulesImplemented = false;
     }
+  }
+
+  public boolean languageRulesNotImplemented() {
+    return !rulesImplemented;
+  }
+
+  public boolean isPluralFormsFieldNecessary() {
+    return pluralDetails.nPlurals > 2;
   }
 
   public String getQuantityUnitPlural(QuantityUnit quantityUnit, double amount) {

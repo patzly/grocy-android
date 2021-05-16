@@ -153,6 +153,51 @@
 
         </LinearLayout>
 
+        <com.google.android.material.card.MaterialCardView
+          style="@style/Widget.Grocy.Card.Filled"
+          android:id="@+id/card_plural_forms_not_supported_info"
+          android:visibility="gone"
+          android:layout_margin="16dp">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/msg_quantity_unit_plurals" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+          android:id="@+id/linear_master_quantity_unit_forms"
+          style="@style/Widget.Grocy.LinearLayout.ListItem"
+          android:paddingTop="4dp"
+          android:paddingBottom="0dp"
+          android:visibility="gone">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_scatter_plot_anim"
+            android:layout_marginBottom="5dp"
+            tools:ignore="ContentDescription" />
+
+          <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_master_quantity_unit_forms"
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:hint="Plural forms"
+            app:helperTextEnabled="true"
+            app:helperText=" ">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/edit_text_master_quantity_unit_forms"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/on_background"
+              android:inputType="text|textCapSentences|textMultiLine" />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem"
           android:paddingTop="4dp"

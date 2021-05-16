@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterQuantityUnitFragment extends BaseFragment {
@@ -58,6 +59,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
   private GrocyApi grocyApi;
   private DownloadHelper dlHelper;
   private FragmentMasterQuantityUnitBinding binding;
+  private PluralUtil pluralUtil;
 
   private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
   private ArrayList<String> quantityUnitNames = new ArrayList<>();
@@ -100,6 +102,8 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     grocyApi = activity.getGrocyApi();
     gson = new Gson();
 
+    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
+
     // VARIABLES
 
     quantityUnits = new ArrayList<>();
@@ -107,8 +111,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     editQuantityUnit = null;
 
     isRefresh = false;
-
-    //PluralRules pluralRules = PluralRules.forLocale(LocaleUtil.getUserLocale(activity));
 
     // VIEWS
 
@@ -138,6 +140,13 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             IconUtil.start(binding.imageMasterQuantityUnitNamePlural);
           }
         });
+    binding.linearMasterQuantityUnitForms.setVisibility(
+        pluralUtil.isPluralFormsFieldNecessary() ? View.VISIBLE : View.GONE
+    );
+
+    if (pluralUtil.languageRulesNotImplemented()) {
+      binding.cardPluralFormsNotSupportedInfo.setVisibility(View.VISIBLE);
+    }
 
     // description
     binding.editTextMasterQuantityUnitDescription.setOnFocusChangeListener(
@@ -312,11 +321,9 @@ public class MasterQuantityUnitFragment extends BaseFragment {
         if (editQuantityUnit != null) {
           if (quantityUnit.getId() != editQuantityUnit.getId()) {
             names.add(quantityUnit.getName());
-            names.add(quantityUnit.getNamePlural());
           }
         } else {
           names.add(quantityUnit.getName());
-          names.add(quantityUnit.getNamePlural());
         }
       }
     }
@@ -341,6 +348,10 @@ public class MasterQuantityUnitFragment extends BaseFragment {
       binding.editTextMasterQuantityUnitNamePlural.setText(
           editQuantityUnit.getNamePluralCanNull()
       );
+      // plural forms
+      binding.editTextMasterQuantityUnitForms.setText(
+          editQuantityUnit.getPluralForms()
+      );
       // description
       binding.editTextMasterQuantityUnitDescription.setText(
           editQuantityUnit.getDescription()
@@ -354,6 +365,8 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     binding.textInputMasterQuantityUnitName.setErrorEnabled(false);
     binding.textInputMasterQuantityUnitNamePlural.clearFocus();
     binding.textInputMasterQuantityUnitNamePlural.setErrorEnabled(false);
+    binding.textInputMasterQuantityUnitForms.clearFocus();
+    binding.textInputMasterQuantityUnitForms.setErrorEnabled(false);
     binding.textInputMasterQuantityUnitDescription.clearFocus();
     binding.textInputMasterQuantityUnitDescription.setErrorEnabled(false);
   }
@@ -367,9 +380,13 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     try {
       Editable name = binding.editTextMasterQuantityUnitName.getText();
       Editable plural = binding.editTextMasterQuantityUnitNamePlural.getText();
+      Editable forms = binding.editTextMasterQuantityUnitForms.getText();
       Editable description = binding.editTextMasterQuantityUnitDescription.getText();
       jsonObject.put("name", (name != null ? name : "").toString().trim());
       jsonObject.put("name_plural", (plural != null ? plural : "").toString().trim());
+      if(forms != null && !forms.toString().isEmpty()) {
+        jsonObject.put("plural_forms", forms.toString().replaceAll("(?m)^\\s+$", ""));
+      }
       jsonObject.put(
           "description", (description != null ? description : "").toString().trim()
       );
@@ -422,16 +439,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
       isInvalid = true;
     }
 
-    String namePlural = String.valueOf(
-        binding.editTextMasterQuantityUnitNamePlural.getText()
-    ).trim();
-    if (!quantityUnitNames.isEmpty() && quantityUnitNames.contains(namePlural)) {
-      binding.textInputMasterQuantityUnitNamePlural.setError(
-          activity.getString(R.string.error_duplicate)
-      );
-      isInvalid = true;
-    }
-
     return isInvalid;
   }
 
@@ -442,6 +449,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     clearInputFocusAndErrors();
     binding.editTextMasterQuantityUnitName.setText(null);
     binding.editTextMasterQuantityUnitNamePlural.setText(null);
+    binding.editTextMasterQuantityUnitForms.setText(null);
     binding.editTextMasterQuantityUnitDescription.setText(null);
   }
 
