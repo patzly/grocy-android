@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -25,6 +25,12 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">לצרוך</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">העברה</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">עדכון כמות</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">לצרוך הכול</string>
 
@@ -68,6 +74,7 @@
   <string name="action_undo">החזרה</string>
   <string name="action_retry">ניסיון חוזר</string>
   <string name="action_edit">עריכה</string>
+  <string name="action_copy">העתקה</string>
   <string name="action_proceed">להמשיך</string>
   <string name="action_delete">מחיקה</string>
   <string name="action_save">שמירה</string>
@@ -82,6 +89,7 @@
   <string name="action_toggle_done">החלפת מצב ביצוע</string>
   <string name="action_edit_notes">עריכת הערות</string>
   <string name="action_add_missing">הוספת מוצרים חסרים</string>
+  <string name="action_purchase_done_items">לרכוש מוצרים שהסתיימו</string>
   <string name="action_purchase_all_items">לרכוש את כל הפריטים</string>
   <string name="action_skip_entry">לדלג על רשומה</string>
   <string name="action_toggle_flash">להחליף מצב מבזק</string>
@@ -97,18 +105,27 @@
   <string name="action_demo_server">שרת הדגמה</string>
   <string name="action_own_server">שרת עצמאי</string>
   <string name="action_enter_data_manually">מילוי המידע ידנית</string>
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
-  <!-- %1$s is the number of products which are in stock -->
+  <string name="action_perform">ביצוע פעולה</string>
+
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d במלאי</item>
+    <item quantity="two">%1$d במלאי</item>
+    <item quantity="many">%1$d במלאי</item>
+    <item quantity="other">%1$d במלאי</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">נצרכו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">נצרכו %1$s %2$s מתוך %3$s כמקולקלים</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">סמן %1$s %2$s מתוך %3$s כפתוחים</string>
-  <!-- %1$s is the number of undone items in shopping list -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">%1$s %2$s של %3$s הועברו</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">כמות המלאי של %1$s היא כעת %2$s %3$s (%4$s )</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s לא במלאי</string>
   <string name="msg_no_connection">אין חיבור</string>
@@ -241,6 +258,8 @@
   <string name="title_stock_overview">סקירת מלאי</string>
   <string name="title_purchase">רכישה</string>
   <string name="title_consume">צריכה</string>
+  <string name="title_transfer">העברה</string>
+  <string name="title_inventory">מאגר</string>
   <string name="title_barcode_input">קלט ברקוד</string>
   <string name="title_product_overview">סקירת מוצר</string>
   <string name="title_product">מוצר</string>
@@ -271,6 +290,10 @@
   <string name="title_specific">פריט מסוים במלאי</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">לצרוך כמות מדויקת</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">ממיקום</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">אל מיקום</string>
   <string name="title_recipe">מתכון</string>
   <string name="title_total_price">מחיר כולל</string>
   <string name="title_unit_price">מחיר ליחידה</string>
@@ -331,6 +354,11 @@
   <string name="subtitle_supported">נתמך</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">לא נתמך</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">כמות: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">יחידת כמות: %1$d</string>
+
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
@@ -389,13 +417,23 @@
   <string name="property_status">מצב</string>
   <string name="property_amount">כמות</string>
   <string name="property_seconds">שניות</string>
-  <!-- %1$d is a number (amount of seconds) -->
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">שנייה</item>
+    <item quantity="two">%1$d שניות</item>
+    <item quantity="many">%1$d שניות</item>
+    <item quantity="other">%1$d שניות</item>
+  </plurals>
   <string name="property_amount_min_stock">כמות מזערית במלאי</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">כמות ב%1$s</string>
   <string name="property_price">מחיר</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">מחיר ל%1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">מחיר ב־%1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">מחיר ל%1$s ב־%2$s</string>
   <string name="property_quantity_unit">יחידת כמות</string>
   <string name="property_quantity_units">יחידות כמות</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -464,11 +502,12 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_tare_weight_in">משקל טרה ב%1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_stock_check">להשבית בדיקת מילוי מלאי עבור הרכיב הזה</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_amount_quick_consume">כמות לצריכה מהירה</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">כמות לצריכה מהירה ב%1$s</string>
   <string name="property_picture">תמונה</string>
-
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->
