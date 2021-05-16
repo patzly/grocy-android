@@ -65,6 +65,7 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    debug = true;
 
     insertConscrypt();
 
@@ -712,6 +714,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void insertConscrypt() {
+    Security.insertProviderAt(Conscrypt.newProvider(), 1);
+
     try {
       Conscrypt.Version version = Conscrypt.version();
       if (debug) {

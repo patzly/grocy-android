@@ -27,6 +27,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class RequestQueueSingleton {
@@ -65,9 +73,73 @@ public class RequestQueueSingleton {
     if (serverUrl != null && serverUrl.contains(".onion")) {
       network = new BasicNetwork(new ProxyHurlStack());
     } else {
-      network = new BasicNetwork(new HurlStack());
+      HurlStack stack;
+      try {
+        stack = new HurlStack(null, new TLSSocketFactory());
+      } catch (NoSuchAlgorithmException | KeyManagementException e) {
+        stack = new HurlStack();
+      }
+      network = new BasicNetwork(stack);
     }
     requestQueue = new RequestQueue(cache, network, 6);
     requestQueue.start();
+  }
+
+  private static class TLSSocketFactory extends SSLSocketFactory {
+
+    private final SSLSocketFactory internalSSLSocketFactory;
+
+    public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
+      SSLContext context = SSLContext.getInstance("TLS");
+      context.init(null, null, null);
+      internalSSLSocketFactory = context.getSocketFactory();
+    }
+
+    @Override
+    public String[] getDefaultCipherSuites() {
+      return internalSSLSocketFactory.getDefaultCipherSuites();
+    }
+
+    @Override
+    public String[] getSupportedCipherSuites() {
+      return internalSSLSocketFactory.getSupportedCipherSuites();
+    }
+
+    @Override
+    public Socket createSocket() throws IOException {
+      return enableTLSOnSocket(internalSSLSocketFactory.createSocket());
+    }
+
+    @Override
+    public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
+      return enableTLSOnSocket(internalSSLSocketFactory.createSocket(s, host, port, autoClose));
+    }
+
+    @Override
+    public Socket createSocket(String host, int port) throws IOException {
+      return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port));
+    }
+
+    @Override
+    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
+      return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port, localHost, localPort));
+    }
+
+    @Override
+    public Socket createSocket(InetAddress host, int port) throws IOException {
+      return enableTLSOnSocket(internalSSLSocketFactory.createSocket(host, port));
+    }
+
+    @Override
+    public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+      return enableTLSOnSocket(internalSSLSocketFactory.createSocket(address, port, localAddress, localPort));
+    }
+
+    private Socket enableTLSOnSocket(Socket socket) {
+      if((socket instanceof SSLSocket)) {
+        ((SSLSocket)socket).setEnabledProtocols(new String[] {"TLSv1.1", "TLSv1.2", "TLSv1.3"});
+      }
+      return socket;
+    }
   }
 }
