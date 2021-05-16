@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -25,6 +25,12 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">Spotřebovat</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Přesun</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Aktualizovat množství</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Spotřebovat vše</string>
 
@@ -68,6 +74,7 @@
   <string name="action_undo">Zpět</string>
   <string name="action_retry">Znovu</string>
   <string name="action_edit">Upravit</string>
+  <string name="action_copy">Kopírovat</string>
   <string name="action_proceed">Pokračovat</string>
   <string name="action_delete">Smazat</string>
   <string name="action_save">Uložit</string>
@@ -97,15 +104,14 @@
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Vlastní server</string>
   <string name="action_enter_data_manually">Zadejte údaje ručně</string>
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
+  <string name="action_perform">Provést akci</string>
+
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Zkonzumováno %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Zkonzumováno %1$s %2$s z %3$s jako zkažené</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Označit %1$s %2$s z %3$s jako otevřené</string>
-  <!-- %1$s is the number of undone items in shopping list -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Nakoupeno %1$s %2$s z %3$s</string>
   <!-- %1$s is a product name -->
@@ -132,6 +138,7 @@
   <string name="msg_master_delete_product">Opravdu chcete smazat produkt \"%1$s\"?\n\nTímto taktéž dojde ke smazání skladového množství, deníku a všech ostatních referencí tohoto produktu - zvažte pouze deaktivaci produktu, pokud vše chcete zachovat a jen produkt skrýt.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">Tento %1$s je stále používán</string>
+  <string name="msg_transfer_tare_weight">Produkty s povolenou tárou zatím nepodporují možnost přesunu.</string>
   <string name="msg_item_marked_as_done">Položka nastavena jako hotová</string>
   <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
   <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí Grocy na serveru\n\nVerze Grocy na serveru: %1$s\n\Vyžadována:\nMin. verze serveru: %2$s\nMax. verze serveru: %3$s\n\nPokud budete ignorovat toto varování, může nastat ztráta dat (nepravděpodobné) a pády aplikace (pravděpodobné).\nByli jste varováni!</string>
@@ -197,7 +204,9 @@
   <string name="error_empty_stock_sub">Nakoupit nějaké produkty</string>
   <string name="error_empty_shopping_list">Vyprázdnit nákupní seznam</string>
   <string name="error_empty_shopping_list_sub">Přidejte nějaké produkty, které jsou potřeba</string>
+  <string name="error_empty_barcodes_sub">Přidejte čárový kód pomocí tlačítka níže</string>
   <string name="error_empty_master_data_sub">Vytvořte nějaké tlačítkem níže</string>
+  <string name="error_empty_product_barcodes">Žádné čárové kódy produktu</string>
   <string name="error_empty_locations">Žádné umístění</string>
   <string name="error_empty_product_groups">Žádná skupina produktů</string>
   <string name="error_empty_products">Žádný produkt</string>
@@ -250,6 +259,7 @@
   <string name="title_stock_overview">Přehled zásob</string>
   <string name="title_purchase">Nakoupit</string>
   <string name="title_consume">Spotřebovat</string>
+  <string name="title_transfer">Přesun</string>
   <string name="title_barcode_input">Zadání čárového kódu</string>
   <string name="title_product_overview">Přehled produktů</string>
   <string name="title_product">Produkt</string>
@@ -280,6 +290,10 @@
   <string name="title_specific">Specifická položka zásob</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Spotřebovat přesné množství</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Z umístění</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Do umístění</string>
   <string name="title_recipe">Recept</string>
   <string name="title_total_price">Celková cena</string>
   <string name="title_unit_price">Jednotková cena</string>
@@ -340,6 +354,11 @@
   <string name="subtitle_supported">Podporováno</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">Není podporováno</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Množství: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Jednotka množství: %1$d</string>
+
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Prosím zvolte jak pokračovat:</string>
   <string name="description_input_product_option1">Vytvořit produkt a použít zadanou hodnotu jako jméno</string>
@@ -398,7 +417,6 @@
   <string name="property_status">Status</string>
   <string name="property_amount">Množství</string>
   <string name="property_seconds">Sekund</string>
-  <!-- %1$d is a number (amount of seconds) -->
   <string name="property_amount_min_stock">Min. množství zásob</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Množství v %1$s</string>
@@ -481,7 +499,6 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Sčítat minimální počet skladových zásob podřízených produktů</string>
   <string name="property_picture">Obrázek</string>
-
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznámý</string>
   <!-- This means the 'time' context -->
