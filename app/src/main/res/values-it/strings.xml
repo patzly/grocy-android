@@ -187,7 +187,7 @@
   <string name="msg_item_marked_as_done">Segna come fatto</string>
   <string name="msg_item_marked_as_undone">Segna da fare</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
-  <string name="msg_quick_mode_confirm_purchase">Lo spostamento sarà eseguito:\n\nAggiunta di %1$s %2$s di %3$s alla dispensa\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
+  <string name="msg_quick_mode_confirm_purchase">La transazione sarà eseguita:\n\nAggiunta di %1$s %2$s di %3$s alla dispensa\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">La transazione sarà eseguito:\n\nRimozione di %1$s %2$s di %3$s dalla dispensa\nPosizinoe: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
