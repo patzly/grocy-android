@@ -17,7 +17,7 @@ You can try it using the demo option available on the login screen.
 
 ## Downloads
 
-**Attention: On Google Play and f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x!.
+**Attention: On Google Play and f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x!
 We will update them as soon as v2.0.0 is officially released.  
 You can download the pre-releases [here](https://github.com/patzly/grocy-android/releases/).**
 
