@@ -601,6 +601,8 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumulate sub products min. stock amount</string>
   <string name="property_picture">Picture</string>
+  <string name="property_note_singleline">Single-line note</string>
+  <string name="property_note_multiline">Multi-line note</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

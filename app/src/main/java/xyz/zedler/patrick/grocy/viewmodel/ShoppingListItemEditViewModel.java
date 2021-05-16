@@ -370,7 +370,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
   public void showProductDetailsBottomSheet() {
     Product product = checkProductInput();
     if (product == null) {
-      showMessage(getString(R.string.error_no_product_selected));
       return;
     }
     dlHelper.getProductDetails(product.getId(), details -> showBottomSheet(

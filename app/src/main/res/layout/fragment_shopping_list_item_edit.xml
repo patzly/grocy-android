@@ -356,7 +356,7 @@
                 android:layout_height="match_parent"
                 android:paddingEnd="8dp"
                 android:paddingStart="0dp"
-                android:text="Single-line note"
+                android:text="@string/property_note_singleline"
                 android:checked="@{!formData.useMultilineNoteLive}"
                 android:onClick="@{() -> formData.setUseMultilineNoteLive(false)}"/>
 
@@ -366,7 +366,7 @@
                 android:layout_height="match_parent"
                 android:paddingEnd="6dp"
                 android:paddingStart="0dp"
-                android:text="Multi-line note"
+                android:text="@string/property_note_multiline"
                 android:checked="@{formData.useMultilineNoteLive}"
                 android:onClick="@{() -> formData.setUseMultilineNoteLive(true)}"/>
 
