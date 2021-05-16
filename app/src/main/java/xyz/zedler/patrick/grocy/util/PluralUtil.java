@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -89,21 +90,22 @@ public class PluralUtil {
       return pluralDetails.pluralRule.getPluralPos(amount) == 0
           ? quantityUnit.getName() : quantityUnit.getNamePlural();
     } else {
-      if (quantityUnit.getPluralForms() == null || quantityUnit.getPluralForms().isEmpty()) {
-        return quantityUnit.getName();
-      }
-      String[] plurals = quantityUnit.getPluralForms().split("\n");
-      ArrayList<String> pluralsFiltered = new ArrayList<>();
-      for (String plural : plurals) {
-        if (!plural.isEmpty()) {
-          pluralsFiltered.add(plural);
-        }
-      }
       int pluralPos = pluralDetails.pluralRule.getPluralPos(amount);
-      if (pluralsFiltered.size() != pluralDetails.nPlurals || pluralPos >= pluralsFiltered.size()) {
+      ArrayList<String> pluralForms = getFilteredPluralForms(quantityUnit.getPluralForms());
+
+      if (pluralForms.isEmpty() && pluralPos > 0) {
+        return quantityUnit.getNamePlural();
+      } else if (pluralForms.isEmpty()) {
+        return quantityUnit.getName();
+      } else if (pluralForms.size() == pluralDetails.nPlurals && pluralPos < pluralForms.size()) {
+        return pluralForms.get(pluralPos);
+      } else if (pluralForms.size() == pluralDetails.nPlurals) {
+        return pluralForms.get(0);
+      } else if (pluralPos > 0) {
+        return quantityUnit.getNamePlural();
+      } else {
         return quantityUnit.getName();
       }
-      return pluralsFiltered.get(pluralPos);
     }
   }
 
@@ -113,6 +115,20 @@ public class PluralUtil {
       double amount
   ) {
     return getQuantityUnitPlural(unitHashMap.get(quantityUnitId), amount);
+  }
+
+  private ArrayList<String> getFilteredPluralForms(@Nullable String pluralForms) {
+    ArrayList<String> pluralFormsFiltered = new ArrayList<>();
+    if (pluralForms == null || pluralForms.isEmpty()) {
+      return pluralFormsFiltered;
+    }
+    String[] plurals = pluralForms.split("\n");
+    for (String plural : plurals) {
+      if (!plural.isEmpty()) {
+        pluralFormsFiltered.add(plural);
+      }
+    }
+    return pluralFormsFiltered;
   }
 
   interface PluralRule {

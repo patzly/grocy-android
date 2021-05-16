@@ -118,7 +118,7 @@ public class QuantityUnit implements Parcelable {
   }
 
   public String getNamePlural() {
-    return namePlural == null ? name : namePlural;
+    return namePlural == null || namePlural.isEmpty() ? name : namePlural;
   }
 
   public String getNamePluralCanNull() {
