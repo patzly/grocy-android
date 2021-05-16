@@ -1,4 +1,4 @@
-2.0.0-alpha08
+2.0.0-beta01
 - New: 'Purchase' actions on shopping list page are working again (#401)
 - New: It is now possible to purchase only done shopping list items (#221)
 - New: 'Add to shopping list' action on stock overview page is working again
