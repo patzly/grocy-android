@@ -10,6 +10,7 @@
 - Improved: Few design tweaks on product overview sheet and in shopping mode
 - Improved: Hide quantity unit field on shopping list item page if there is only one
 - Improved: Add toggle in settings to reduce app startup time (disables logo animation)
+- Improved: stock overview and shopping list layout on tablets in portrait mode
 - Improved: Updated translations
 - Fixed: Menus were not displayed after first app start (#365)
 - Fixed: Inactive products now cannot be added to shopping list (#398)
