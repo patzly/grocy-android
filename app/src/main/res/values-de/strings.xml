@@ -592,6 +592,8 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Mindestbestände von untergeordneten Produkten aufsummieren</string>
   <string name="property_picture">Bild</string>
+  <string name="property_note_singleline">Einzeilige Notiz</string>
+  <string name="property_note_multiline">Mehrzeilige Notiz</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>
