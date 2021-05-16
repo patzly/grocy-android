@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -97,15 +97,12 @@
   <string name="action_demo_server">Serveur de démo</string>
   <string name="action_own_server">Votre serveur</string>
   <string name="action_enter_data_manually">Entrez les données manuellement</string>
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Consommé %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Consommé %1$s %2$s de %3$s comme abimé</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Marquer %1$s %2$s de %3$s comme ouvert</string>
-  <!-- %1$s is the number of undone items in shopping list -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Achetée %1$s %2$s pour %3$s</string>
   <!-- %1$s is a product name -->
@@ -388,7 +385,6 @@
   <string name="property_status">Statut</string>
   <string name="property_amount">Montant</string>
   <string name="property_seconds">Secondes</string>
-  <!-- %1$d is a number (amount of seconds) -->
   <string name="property_amount_min_stock">Min. montant du stock</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Quantité en %1$s</string>
@@ -471,7 +467,6 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Accumuler le stock minimal des sous produits</string>
   <string name="property_picture">Image</string>
-
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
   <!-- This means the 'time' context -->
