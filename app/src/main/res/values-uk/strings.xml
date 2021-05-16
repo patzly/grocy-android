@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -106,18 +106,12 @@
   <string name="action_enter_data_manually">Введіть дані вручну</string>
   <string name="action_perform">Виконати дію</string>
 
-  <!-- %1$s is the number of products which are due soon -->
-  <!-- %1$s is the number of products which are overdue -->
-  <!-- %1$s is the number of products which are expired -->
-  <!-- %1$s is the number of products which are below min. stock amount -->
-  <!-- %1$s is the number of products which are in stock -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Зіпсовано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
-  <!-- %1$s is the number of undone items in shopping list -->
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Придбано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -500,7 +494,6 @@
   <string name="property_status">Статус</string>
   <string name="property_amount">Кількість</string>
   <string name="property_seconds">Секунди</string>
-  <!-- %1$d is a number (amount of seconds) -->
   <string name="property_amount_min_stock">Мін. кількість в запасі</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s містить</string>
@@ -587,7 +580,6 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Накопичування під продуктів мін. запасу</string>
   <string name="property_picture">Зображення</string>
-
   <string name="date_today">Сьогодні</string>
   <string name="date_unknown">Невідомо</string>
   <!-- This means the 'time' context -->
