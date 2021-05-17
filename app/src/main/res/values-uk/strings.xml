@@ -89,6 +89,7 @@
   <string name="action_toggle_done">Помітити виконаним</string>
   <string name="action_edit_notes">Редагувати нотатки</string>
   <string name="action_add_missing">Додайте відсутні продукти</string>
+  <string name="action_purchase_done_items">Придбання виконаних елементів</string>
   <string name="action_purchase_all_items">Придбати все</string>
   <string name="action_skip_entry">Пропустити запис</string>
   <string name="action_toggle_flash">Перемкнути спалах</string>
@@ -106,12 +107,54 @@
   <string name="action_enter_data_manually">Введіть дані вручну</string>
   <string name="action_perform">Виконати дію</string>
 
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$d скоро спливає термін</item>
+    <item quantity="few">%1$d скоро спливає термін</item>
+    <item quantity="many">%1$d скоро спливає термін</item>
+    <item quantity="other">%1$d скоро спливає термін</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d прострочений</item>
+    <item quantity="few">%1$d прострочений</item>
+    <item quantity="many">%1$d прострочений</item>
+    <item quantity="other">%1$d прострочений</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d зіпсувалось</item>
+    <item quantity="few">%1$d зіпсувалось</item>
+    <item quantity="many">%1$d зіпсувалось</item>
+    <item quantity="other">%1$d зіпсувалось</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">на %1$d нижче мінімального запасу</item>
+    <item quantity="few">на %1$d нижче мінімального запасу</item>
+    <item quantity="many">на %1$d нижче мінімального запасу</item>
+    <item quantity="other">на %1$d нижче мінімального запасу</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d в запасах</item>
+    <item quantity="few">%1$d в запасах</item>
+    <item quantity="many">%1$d в запасах</item>
+    <item quantity="other">%1$d в запасах</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Використано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Зіпсовано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Позначити %1$s %2$s %3$s як відкриті</string>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d скасовано</item>
+    <item quantity="few">%1$d скасовано</item>
+    <item quantity="many">%1$d скасовано</item>
+    <item quantity="other">%1$d скасовано</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Придбано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -182,6 +225,7 @@
   <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
   <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
   <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
+  <string name="stock_disabled">Ви вимкнули функцію запасів у своїй конфігурації grocy, можливо, тому, що вона вам не потрібна. Але на даний момент ця програма може займатися лише управлінням запасами, тому вона може вам не принести великої користі.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">На сторінці огляду запасів перераховані всі товари, які зараз є на складі або їх менше мін. кількості. Увімкніть це, щоб завжди приховувати цей продукт там.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -270,6 +314,7 @@
   <string name="error_bounds_higher">Має бути більшим за %1$s</string>
   <string name="error_offline">Офлайн</string>
   <string name="error_offline_subtitle">Ця сторінка працює тільки з доступом до Інтернету. Перевірте підключення.</string>
+  <string name="error_no_done_items">Немає елементів, позначених як виконані</string>
   <string name="error_name_exists">Назва вже існує</string>
   <string name="error_network">Помилка мережі</string>
   <string name="error_network_subtitle">Не вдалося повністю завантажити потрібні дані</string>
@@ -494,6 +539,13 @@
   <string name="property_status">Статус</string>
   <string name="property_amount">Кількість</string>
   <string name="property_seconds">Секунди</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d сек.</item>
+    <item quantity="few">%1$d сек.</item>
+    <item quantity="many">%1$d сек.</item>
+    <item quantity="other">%1$d сек.</item>
+  </plurals>
   <string name="property_amount_min_stock">Мін. кількість в запасі</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s містить</string>
@@ -580,6 +632,9 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Накопичування під продуктів мін. запасу</string>
   <string name="property_picture">Зображення</string>
+  <string name="property_note_singleline">Однорядкова примітка</string>
+  <string name="property_note_multiline">Багаторядна примітка</string>
+
   <string name="date_today">Сьогодні</string>
   <string name="date_unknown">Невідомо</string>
   <!-- This means the 'time' context -->
@@ -730,6 +785,8 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Розгорнути нижні аркуші</string>
   <string name="setting_expand_bottom_sheets_description">У альбомному режимі</string>
+  <string name="setting_speed_up_start">Скорочення часу запуску програми</string>
+  <string name="setting_speed_up_start_description">Впливає тільки на швидкі пристрої</string>
   <string name="setting_loading_circle">Показувати коло завантаження для всіх запитів</string>
   <string name="setting_loading_circle_description">Корисно для повільних мереж</string>
   <string name="setting_synchronized">Ці параметри синхронізуються із сервером.</string>
