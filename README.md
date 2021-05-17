@@ -17,11 +17,11 @@ You can try it using the demo option available on the login screen.
 
 ## Downloads
 
-**Attention: On Google Play and f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x!.
+**Attention: On Google Play and f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x!
 We will update them as soon as v2.0.0 is officially released.  
 You can download the pre-releases [here](https://github.com/patzly/grocy-android/releases/).**
 
-**For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our pre-releases. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo?fingerprint=DFDB0A58E78704CAEB609389B81AB2BE6A090662F860635D760E76ACBC700AF8) to your client. Thank you silkevicious!**
+For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our pre-releases. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo?fingerprint=DFDB0A58E78704CAEB609389B81AB2BE6A090662F860635D760E76ACBC700AF8) to your client. Thank you silkevicious!
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://f-droid.org/de/packages/xyz.zedler.patrick.grocy/'><img alt='Get it on F-Droid' height="80" src='assets/badge_fdroid.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a>
 
