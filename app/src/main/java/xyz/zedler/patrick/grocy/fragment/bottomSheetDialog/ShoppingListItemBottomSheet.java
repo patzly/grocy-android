@@ -158,7 +158,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
     }
 
     // STATUS
-    if (shoppingListItem.getDone() == 1) {
+    if (shoppingListItem.getDoneInt() == 1) {
       itemStatus.setText(
           activity.getString(R.string.property_status),
           activity.getString(R.string.subtitle_done)

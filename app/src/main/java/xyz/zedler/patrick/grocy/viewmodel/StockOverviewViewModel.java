@@ -429,7 +429,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     }
 
     for (StockItem item : this.stockItems) {
-      if (item.getProduct().getHideOnStockOverview() == 1) {
+      if (item.getProduct().getHideOnStockOverviewInt() == 1) {
         continue;
       }
 
@@ -503,7 +503,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       case Constants.ACTION.CONSUME_ALL:
         consumeProduct(
             stockItem,
-            stockItem.getProduct().getEnableTareWeightHandling() == 0
+            stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
                 ? stockItem.getAmountDouble()
                 : stockItem.getProduct().getTareWeightDouble(),
             false
@@ -549,7 +549,7 @@ public class StockOverviewViewModel extends BaseViewModel {
               NumUtil.trim(amountConsumed),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
-                  stockItem.getProduct().getQuIdStock(),
+                  stockItem.getProduct().getQuIdStockInt(),
                   amountConsumed
               ), stockItem.getProduct().getName()
           );
@@ -623,7 +623,7 @@ public class StockOverviewViewModel extends BaseViewModel {
               NumUtil.trim(amountOpened),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
-                  stockItem.getProduct().getQuIdStock(),
+                  stockItem.getProduct().getQuIdStockInt(),
                   amountOpened
               ), stockItem.getProduct().getName()
           );
@@ -709,10 +709,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     ShoppingListItem shoppingListItem = listItem.getClone();
 
     if (shoppingListItem.getDoneSynced() == -1) {
-      shoppingListItem.setDoneSynced(shoppingListItem.getDone());
+      shoppingListItem.setDoneSynced(shoppingListItem.getDoneInt());
     }
 
-    shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
+    shoppingListItem.setDone(shoppingListItem.getDoneInt() == 0 ? 1 : 0);  // toggle state
 
     if (isOffline()) {
       updateDoneStatus(shoppingListItem);
@@ -721,7 +721,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     JSONObject body = new JSONObject();
     try {
-      body.put("done", shoppingListItem.getDone());
+      body.put("done", shoppingListItem.getDoneInt());
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "toggleDoneStatus: " + e);

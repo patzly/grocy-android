@@ -63,7 +63,7 @@ import xyz.zedler.patrick.grocy.model.Store;
         StockItem.class,
         StockLocation.class
     },
-    version = 16
+    version = 18
 )
 public abstract class AppDatabase extends RoomDatabase {
 

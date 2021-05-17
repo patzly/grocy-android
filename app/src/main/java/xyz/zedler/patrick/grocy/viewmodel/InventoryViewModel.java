@@ -231,7 +231,7 @@ public class InventoryViewModel extends BaseViewModel {
       }
 
       // due days
-      int dueDays = productDetails.getProduct().getDefaultDueDays();
+      int dueDays = productDetails.getProduct().getDefaultDueDaysInt();
       if (dueDays < 0) {
         formData.getDueDateLive().setValue(Constants.DATE.NEVER_OVERDUE);
       } else if (dueDays == 0) {
@@ -270,8 +270,8 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   private void setProductQuantityUnitsAndFactors(Product product) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
+    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
+    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
 
     if (stock == null || purchase == null) {
       throw new IllegalArgumentException(getString(R.string.error_loading_qus));
@@ -525,7 +525,7 @@ public class InventoryViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putString(
         Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW,
-        String.valueOf(product.getDefaultDueDays())
+        String.valueOf(product.getDefaultDueDaysInt())
     );
     bundle.putString(
         Constants.ARGUMENT.SELECTED_DATE,

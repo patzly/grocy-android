@@ -62,11 +62,11 @@ public class StockItem implements Parcelable {
 
   @ColumnInfo(name = "is_aggregated_amount")
   @SerializedName("is_aggregated_amount")
-  private int isAggregatedAmount;
+  private String isAggregatedAmount;
 
   @ColumnInfo(name = "due_type")
   @SerializedName("due_type")
-  private int dueType;
+  private String dueType;
 
   @PrimaryKey
   @ColumnInfo(name = "product_id")
@@ -117,8 +117,8 @@ public class StockItem implements Parcelable {
     bestBeforeDate = parcel.readString();
     amountOpened = parcel.readString();
     amountOpenedAggregated = parcel.readString();
-    isAggregatedAmount = parcel.readInt();
-    dueType = parcel.readInt();
+    isAggregatedAmount = parcel.readString();
+    dueType = parcel.readString();
     productId = parcel.readInt();
     product = parcel.readParcelable(Product.class.getClassLoader());
   }
@@ -131,8 +131,8 @@ public class StockItem implements Parcelable {
     dest.writeString(bestBeforeDate);
     dest.writeString(amountOpened);
     dest.writeString(amountOpenedAggregated);
-    dest.writeInt(isAggregatedAmount);
-    dest.writeInt(dueType);
+    dest.writeString(isAggregatedAmount);
+    dest.writeString(dueType);
     dest.writeInt(productId);
     dest.writeParcelable(product, 0);
   }
@@ -178,8 +178,12 @@ public class StockItem implements Parcelable {
     }
   }
 
-  public int getIsAggregatedAmount() {
+  public String getIsAggregatedAmount() {
     return isAggregatedAmount;
+  }
+
+  public int getIsAggregatedAmountInt() {
+    return NumUtil.isStringInt(isAggregatedAmount) ? Integer.parseInt(isAggregatedAmount) : 0;
   }
 
   public int getProductId() {
@@ -230,7 +234,7 @@ public class StockItem implements Parcelable {
     this.amountOpenedAggregated = amountOpenedAggregated;
   }
 
-  public void setIsAggregatedAmount(int isAggregatedAmount) {
+  public void setIsAggregatedAmount(String isAggregatedAmount) {
     this.isAggregatedAmount = isAggregatedAmount;
   }
 
@@ -250,11 +254,15 @@ public class StockItem implements Parcelable {
     return amountOpenedAggregated;
   }
 
-  public int getDueType() {
+  public String getDueType() {
     return dueType;
   }
 
-  public void setDueType(int dueType) {
+  public int getDueTypeInt() {
+    return NumUtil.isStringInt(dueType) ? Integer.parseInt(dueType) : 1;
+  }
+
+  public void setDueType(String dueType) {
     this.dueType = dueType;
   }
 
@@ -320,15 +328,20 @@ public class StockItem implements Parcelable {
       return false;
     }
     StockItem stockItem = (StockItem) o;
-    return isAggregatedAmount == stockItem.isAggregatedAmount &&
-        productId == stockItem.productId &&
-        dueType == stockItem.dueType &&
+    return itemDue == stockItem.itemDue &&
+        itemOverdue == stockItem.itemOverdue &&
+        itemExpired == stockItem.itemExpired &&
+        itemMissing == stockItem.itemMissing &&
+        itemMissingAndPartlyInStock == stockItem.itemMissingAndPartlyInStock &&
         Objects.equals(amount, stockItem.amount) &&
         Objects.equals(amountAggregated, stockItem.amountAggregated) &&
         Objects.equals(value, stockItem.value) &&
         Objects.equals(bestBeforeDate, stockItem.bestBeforeDate) &&
         Objects.equals(amountOpened, stockItem.amountOpened) &&
         Objects.equals(amountOpenedAggregated, stockItem.amountOpenedAggregated) &&
+        Objects.equals(isAggregatedAmount, stockItem.isAggregatedAmount) &&
+        Objects.equals(dueType, stockItem.dueType) &&
+        Objects.equals(productId, stockItem.productId) &&
         Objects.equals(product, stockItem.product);
   }
 
@@ -336,7 +349,8 @@ public class StockItem implements Parcelable {
   public int hashCode() {
     return Objects
         .hash(amount, amountAggregated, value, bestBeforeDate, amountOpened, amountOpenedAggregated,
-            isAggregatedAmount, productId, product);
+            isAggregatedAmount, dueType, productId, product, itemDue, itemOverdue, itemExpired,
+            itemMissing, itemMissingAndPartlyInStock);
   }
 
   @NonNull

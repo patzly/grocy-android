@@ -230,14 +230,14 @@ public class FormDataMasterProductCatOptional {
     assert isActiveLive.getValue() != null;
     assert neverShowOnStockLive.getValue() != null;
     ProductGroup pGroup = productGroupLive.getValue();
-    product.setActive(isActiveLive.getValue() ? 1 : 0);
+    product.setActive(isActiveLive.getValue());
     product.setParentProductId(parentProductLive.getValue() != null
         ? String.valueOf(parentProductLive.getValue().getId()) : null);
     product.setDescription(descriptionLive.getValue() != null
         ? Html.toHtml(descriptionLive.getValue()) : null);
     product.setProductGroupId(pGroup != null ? String.valueOf(pGroup.getId()) : null);
     product.setCalories(energyLive.getValue());
-    product.setHideOnStockOverview(neverShowOnStockLive.getValue() ? 1 : 0);
+    product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
     return product;
   }
 
@@ -263,7 +263,7 @@ public class FormDataMasterProductCatOptional {
         ? Html.fromHtml(product.getDescription()) : null);
     productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
     energyLive.setValue(product.getCalories());
-    neverShowOnStockLive.setValue(product.getHideOnStockOverview() == 1);
+    neverShowOnStockLive.setValue(product.getHideOnStockOverviewInt() == 1);
     filledWithProduct = true;
   }
 

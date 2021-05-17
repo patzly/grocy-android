@@ -280,7 +280,7 @@ public class FormDataConsume {
     if (isTareWeightEnabled() || (double) currentFactor == -1) {
       amountMultiplied = amount;
     } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchase()) {
+        .getQuIdPurchaseInt()) {
       amountMultiplied = amount * (double) currentFactor;
     } else {
       amountMultiplied = amount / (double) currentFactor;
@@ -478,7 +478,7 @@ public class FormDataConsume {
     } else if (currentFactor == null || currentFactor == -1) {
       maxAmount = stockAmount;
     } else if (current != null && productDetails != null
-        && current.getId() == productDetails.getProduct().getQuIdPurchase()) {
+        && current.getId() == productDetails.getProduct().getQuIdPurchaseInt()) {
       maxAmount = stockAmount / currentFactor;
     } else {
       maxAmount = stockAmount * currentFactor;

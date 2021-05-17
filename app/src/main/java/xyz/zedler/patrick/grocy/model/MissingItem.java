@@ -45,7 +45,7 @@ public class MissingItem implements Parcelable {
 
   @ColumnInfo(name = "is_partly_in_stock")
   @SerializedName("is_partly_in_stock")
-  private int isPartlyInStock;
+  private String isPartlyInStock;
 
   // for Room
   public MissingItem() {
@@ -55,7 +55,7 @@ public class MissingItem implements Parcelable {
     id = parcel.readInt();
     name = parcel.readString();
     amountMissing = parcel.readString();
-    isPartlyInStock = parcel.readInt();
+    isPartlyInStock = parcel.readString();
   }
 
   @Override
@@ -63,7 +63,7 @@ public class MissingItem implements Parcelable {
     dest.writeInt(id);
     dest.writeString(name);
     dest.writeString(amountMissing);
-    dest.writeInt(isPartlyInStock);
+    dest.writeString(isPartlyInStock);
   }
 
   public static final Creator<MissingItem> CREATOR = new Creator<MissingItem>() {
@@ -99,7 +99,7 @@ public class MissingItem implements Parcelable {
     return amountMissing;
   }
 
-  public int getIsPartlyInStock() {
+  public String getIsPartlyInStock() {
     return isPartlyInStock;
   }
 
@@ -115,7 +115,7 @@ public class MissingItem implements Parcelable {
     this.amountMissing = amountMissing;
   }
 
-  public void setIsPartlyInStock(int isPartlyInStock) {
+  public void setIsPartlyInStock(String isPartlyInStock) {
     this.isPartlyInStock = isPartlyInStock;
   }
 

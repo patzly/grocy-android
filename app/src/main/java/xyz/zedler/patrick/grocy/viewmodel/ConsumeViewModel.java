@@ -284,8 +284,8 @@ public class ConsumeViewModel extends BaseViewModel {
       Product product,
       ProductBarcode barcode
   ) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
+    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
+    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
 
     if (stock == null || purchase == null) {
       throw new IllegalArgumentException(getString(R.string.error_loading_qus));

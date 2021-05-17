@@ -50,7 +50,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
   @ColumnInfo(name = "shopping_list_id")
   @SerializedName("shopping_list_id")
-  private int shoppingListId;
+  private String shoppingListId;
 
   @ColumnInfo(name = "qu_id")
   @SerializedName("qu_id")
@@ -58,10 +58,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
 
   @ColumnInfo(name = "done")
   @SerializedName("done")
-  private int done;
+  private String done;
 
   @ColumnInfo(name = "done_synced")
-  @SerializedName("done_synced")
   private int doneSynced = -1;  // state of param "done" on server during time of last sync
   // -1 means that the "done" was not edited since sync
 
@@ -73,7 +72,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
   @SerializedName("row_created_timestamp")
   private String rowCreatedTimestamp;
 
-  public ShoppingListItem() {
+  public ShoppingListItem() {  // for Room
   }
 
   private ShoppingListItem( // for clone
@@ -81,9 +80,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
       String productId,
       String note,
       String amount,
-      int shoppingListId,
+      String shoppingListId,
       String quId,
-      int done,
+      String done,
       int doneSynced
   ) {
     this.id = id;
@@ -101,9 +100,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     productId = parcel.readString();
     note = parcel.readString();
     amount = parcel.readString();
-    shoppingListId = parcel.readInt();
+    shoppingListId = parcel.readString();
     quId = parcel.readString();
-    done = parcel.readInt();
+    done = parcel.readString();
     doneSynced = parcel.readInt();
   }
 
@@ -113,9 +112,9 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     dest.writeString(productId);
     dest.writeString(note);
     dest.writeString(amount);
-    dest.writeInt(shoppingListId);
+    dest.writeString(shoppingListId);
     dest.writeString(quId);
-    dest.writeInt(done);
+    dest.writeString(done);
     dest.writeInt(doneSynced);
   }
 
@@ -182,24 +181,40 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     this.amount = NumUtil.trim(amount);
   }
 
-  public int getShoppingListId() {
+  public String getShoppingListId() {
     return shoppingListId;
   }
 
-  public void setShoppingListId(int shoppingListId) {
+  public int getShoppingListIdInt() {
+    return NumUtil.isStringInt(shoppingListId) ? Integer.parseInt(shoppingListId) : 1;
+  }
+
+  public void setShoppingListId(String shoppingListId) {
     this.shoppingListId = shoppingListId;
   }
 
-  public int getDone() {
+  public void setShoppingListId(int shoppingListId) {
+    this.shoppingListId = String.valueOf(shoppingListId);
+  }
+
+  public String getDone() {
     return done;
   }
 
+  public int getDoneInt() {
+    return NumUtil.isStringInt(done) ? Integer.parseInt(done) : 0;
+  }
+
   public boolean isUndone() {
-    return getDone() != 1;
+    return getDoneInt() != 1;
+  }
+
+  public void setDone(String done) {
+    this.done = done;
   }
 
   public void setDone(int done) {
-    this.done = done;
+    this.done = String.valueOf(done);
   }
 
   public int getDoneSynced() {
@@ -258,17 +273,20 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     }
     ShoppingListItem that = (ShoppingListItem) o;
     return id == that.id &&
-        Objects.equals(amount, that.amount) &&
-        shoppingListId == that.shoppingListId &&
-        done == that.done &&
+        doneSynced == that.doneSynced &&
         Objects.equals(note, that.note) &&
+        Objects.equals(amount, that.amount) &&
+        Objects.equals(shoppingListId, that.shoppingListId) &&
+        Objects.equals(quId, that.quId) &&
+        Objects.equals(done, that.done) &&
         Objects.equals(productId, that.productId) &&
-        Objects.equals(quId, that.quId);
+        Objects.equals(rowCreatedTimestamp, that.rowCreatedTimestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, note, amount, shoppingListId, quId, done, productId);
+    return Objects.hash(id, note, amount, shoppingListId, quId, done, doneSynced, productId,
+        rowCreatedTimestamp);
   }
 
   @NonNull
@@ -297,13 +315,13 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     try {
       if (addId) {
         json.put("id", item.getId());
-        json.put("done", item.getDone());
+        json.put("done", item.getDoneInt());
       }
       Object productId = item.getProductId() != null ? item.getProductId() : JSONObject.NULL;
       Object quId = item.getQuId() != null ? item.getQuId() : JSONObject.NULL;
       Object note = item.getNote() == null || item.getNote().isEmpty()
           ? JSONObject.NULL : item.getNote();
-      json.put("shopping_list_id", item.getShoppingListId());
+      json.put("shopping_list_id", item.getShoppingListIdInt());
       json.put("amount", item.getAmountDouble());
       json.put("qu_id", quId);
       json.put("product_id", productId);

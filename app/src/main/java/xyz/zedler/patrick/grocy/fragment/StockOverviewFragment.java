@@ -241,7 +241,7 @@ public class StockOverviewFragment extends BaseFragment implements
           }
           StockItem stockItem = displayedItems.get(position);
           if (stockItem.getAmountAggregatedDouble() > 0
-              && stockItem.getProduct().getEnableTareWeightHandling() == 0
+              && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
           ) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_consume_product,
@@ -259,7 +259,7 @@ public class StockOverviewFragment extends BaseFragment implements
           }
           if (stockItem.getAmountAggregatedDouble()
               > stockItem.getAmountOpenedAggregatedDouble()
-              && stockItem.getProduct().getEnableTareWeightHandling() == 0
+              && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
               && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
           ) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
@@ -506,7 +506,7 @@ public class StockOverviewFragment extends BaseFragment implements
       return;
     }
     QuantityUnit quantityUnit = viewModel
-        .getQuantityUnitFromId(stockItem.getProduct().getQuIdStock());
+        .getQuantityUnitFromId(stockItem.getProduct().getQuIdStockInt());
     Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
     if (quantityUnit == null || location == null) {
       return;

@@ -177,12 +177,12 @@ public class ShoppingListRepository {
         ShoppingListItem serverItem = serverItemsHashMap.get(offlineItem.getId());
         if (serverItem != null  // sync only items which are still on server
             && offlineItem.getDoneSynced() != -1
-            && offlineItem.getDone() != offlineItem.getDoneSynced()
-            && offlineItem.getDone() != serverItem.getDone()
+            && offlineItem.getDoneInt() != offlineItem.getDoneSynced()
+            && offlineItem.getDoneInt() != serverItem.getDoneInt()
             || serverItem != null
             && serverItem.getDoneSynced() != -1  // server database hasn't changed
             && offlineItem.getDoneSynced() != -1
-            && offlineItem.getDone() != offlineItem.getDoneSynced()
+            && offlineItem.getDoneInt() != offlineItem.getDoneSynced()
         ) {
           itemsToSync.add(offlineItem);
         }

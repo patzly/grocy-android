@@ -576,7 +576,7 @@ public class ShoppingListFragment extends BaseFragment implements
       Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
       assert product != null;
       bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-      QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchase());
+      QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchaseInt());
       if (quantityUnit != null) {
         bundle.putString(
             Constants.ARGUMENT.QUANTITY_UNIT,

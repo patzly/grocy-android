@@ -272,7 +272,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     ShoppingListItem item = args.getShoppingListItem();
     assert item != null;
 
-    ShoppingList shoppingList = getShoppingList(item.getShoppingListId());
+    ShoppingList shoppingList = getShoppingList(item.getShoppingListIdInt());
     formData.getShoppingListLive().setValue(shoppingList);
 
     double amount = item.getAmountDouble();
@@ -288,7 +288,7 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
       if (unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
         Double factor = unitFactors.get(quantityUnit);
         assert factor != null;
-        if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchase()) {
+        if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
           amount = amount / factor;
         } else if (factor != -1) {
           amount = amount * factor;
@@ -303,8 +303,8 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
   }
 
   private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStock());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchase());
+    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
+    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
 
     if (stock == null || purchase == null) {
       showMessage(getString(R.string.error_loading_qus));

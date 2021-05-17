@@ -168,7 +168,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     ArrayList<ShoppingListItem> filteredShoppingListItems = new ArrayList<>();
 
     for (ShoppingListItem shoppingListItem : this.shoppingListItems) {
-      if (shoppingListItem.getShoppingListId() != getSelectedShoppingListId()) {
+      if (shoppingListItem.getShoppingListIdInt() != getSelectedShoppingListId()) {
         continue;
       }
       filteredShoppingListItems.add(shoppingListItem);
@@ -290,7 +290,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
               if (itemToUpdate == null) {
                 continue;
               }
-              itemToUpdate.setDone(itemToSync.getDone());
+              itemToUpdate.setDone(itemToSync.getDoneInt());
               itemsToUpdate.add(itemToUpdate);
             }
             repository.insertShoppingListItems(
@@ -309,7 +309,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
           for (ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
             try {
-              body.put("done", itemToSync.getDone());
+              body.put("done", itemToSync.getDoneInt());
             } catch (JSONException e) {
               if (debug) {
                 Log.e(TAG, "syncItems: " + e);
@@ -364,7 +364,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         }
     );
     for (ShoppingListItem listItem : shoppingListItems) {
-      if (listIds.contains(listItem.getShoppingListId())) {
+      if (listIds.contains(listItem.getShoppingListIdInt())) {
         continue;
       }
       if (debug) {
@@ -410,10 +410,10 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     ShoppingListItem shoppingListItem = listItem.getClone();
 
     if (shoppingListItem.getDoneSynced() == -1) {
-      shoppingListItem.setDoneSynced(shoppingListItem.getDone());
+      shoppingListItem.setDoneSynced(shoppingListItem.getDoneInt());
     }
 
-    shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
+    shoppingListItem.setDone(shoppingListItem.getDoneInt() == 0 ? 1 : 0);  // toggle state
 
     if (isOffline()) {
       updateDoneStatus(shoppingListItem);
@@ -422,7 +422,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
     JSONObject body = new JSONObject();
     try {
-      body.put("done", shoppingListItem.getDone());
+      body.put("done", shoppingListItem.getDoneInt());
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "toggleDoneStatus: " + e);

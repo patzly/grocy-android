@@ -23,7 +23,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +105,6 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
     itemQuStock = view.findViewById(R.id.item_master_product_qu_stock);
     itemQuFactor = view.findViewById(R.id.item_master_product_qu_factor);
     itemProductGroup = view.findViewById(R.id.item_master_product_product_group);
-    itemBarcodes = view.findViewById(R.id.item_master_product_barcodes);
 
     // TOOLBAR
 
@@ -197,17 +195,6 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
       );
     } else {
       itemProductGroup.setVisibility(View.GONE);
-    }
-
-    // BARCODES
-    if (product.getBarcode() != null && !product.getBarcode().trim().isEmpty()) {
-      itemBarcodes.setSingleLine(false);
-      itemBarcodes.setText(
-          activity.getString(R.string.property_barcodes),
-          TextUtils.join(", ", product.getBarcode().split(","))
-      );
-    } else {
-      itemBarcodes.setVisibility(View.GONE);
     }
   }
 

@@ -331,7 +331,7 @@ public class ShoppingListItemAdapter extends
     // AMOUNT
 
     if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
+      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
         binding.amount.setText(
@@ -463,7 +463,7 @@ public class ShoppingListItemAdapter extends
     // AMOUNT
 
     if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
+      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       if (quantityUnit == null) {
         quantityUnit = new QuantityUnit();
       }

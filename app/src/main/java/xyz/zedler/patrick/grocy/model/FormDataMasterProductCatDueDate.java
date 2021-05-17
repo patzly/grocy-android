@@ -162,7 +162,7 @@ public class FormDataMasterProductCatDueDate {
     if (product == null) {
       return true;
     }
-    int dueDateType = product.getDueDateType();
+    int dueDateType = product.getDueDateTypeInt();
     boolean valid = dueDateType == 1 || dueDateType == 2;
     return !valid;
   }
@@ -172,11 +172,11 @@ public class FormDataMasterProductCatDueDate {
       return product;
     }
     assert dueDateTypeLive.getValue() != null;
-    product.setDueDateType(dueDateTypeLive.getValue());
-    product.setDefaultDueDays(Integer.parseInt(dueDaysLive.getValue()));
-    product.setDefaultDueDaysAfterOpen(Integer.parseInt(dueDaysOpenedLive.getValue()));
-    product.setDefaultDueDaysAfterFreezing(Integer.parseInt(dueDaysFreezingLive.getValue()));
-    product.setDefaultDueDaysAfterThawing(Integer.parseInt(dueDaysThawingLive.getValue()));
+    product.setDueDateTypeInt(dueDateTypeLive.getValue());
+    product.setDefaultDueDays(dueDaysLive.getValue());
+    product.setDefaultDueDaysAfterOpen(dueDaysOpenedLive.getValue());
+    product.setDefaultDueDaysAfterFreezing(dueDaysFreezingLive.getValue());
+    product.setDefaultDueDaysAfterThawing(dueDaysThawingLive.getValue());
     return product;
   }
 
@@ -185,11 +185,11 @@ public class FormDataMasterProductCatDueDate {
       return;
     }
 
-    dueDateTypeLive.setValue(product.getDueDateType());
-    dueDaysLive.setValue(String.valueOf(product.getDefaultDueDays()));
-    dueDaysOpenedLive.setValue(String.valueOf(product.getDefaultDueDaysAfterOpen()));
-    dueDaysFreezingLive.setValue(String.valueOf(product.getDefaultDueDaysAfterFreezing()));
-    dueDaysThawingLive.setValue(String.valueOf(product.getDefaultDueDaysAfterThawing()));
+    dueDateTypeLive.setValue(product.getDueDateTypeInt());
+    dueDaysLive.setValue(product.getDefaultDueDays());
+    dueDaysOpenedLive.setValue(product.getDefaultDueDaysAfterOpen());
+    dueDaysFreezingLive.setValue(product.getDefaultDueDaysAfterFreezing());
+    dueDaysThawingLive.setValue(product.getDefaultDueDaysAfterThawing());
     filledWithProduct = true;
   }
 

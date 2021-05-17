@@ -257,7 +257,7 @@ public class FormDataMasterProductCatAmount {
     enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());
     tareWeightLive.setValue(tareWeight);
     disableStockCheckLive.setValue(product.getNotCheckStockFulfillmentForRecipesBoolean());
-    quantityUnitLive.setValue(getQuantityUnitFromId(quantityUnits, product.getQuIdStock()));
+    quantityUnitLive.setValue(getQuantityUnitFromId(quantityUnits, product.getQuIdStockInt()));
     filledWithProduct = true;
   }
 

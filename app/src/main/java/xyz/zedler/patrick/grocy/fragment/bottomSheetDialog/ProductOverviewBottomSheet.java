@@ -164,7 +164,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     // disable actions if necessary
     toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
     toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
-        isInStock && product.getEnableTareWeightHandling() == 0
+        isInStock && product.getEnableTareWeightHandlingInt() == 0
     );
     toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
@@ -222,7 +222,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     });
 
     Chip chipTransfer = view.findViewById(R.id.chip_transfer);
-    chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandling() == 0
+    chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
         ? View.VISIBLE : View.GONE);
     chipTransfer.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
@@ -354,7 +354,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       quantityUnit = productDetails.getQuantityUnitStock();
     }
     // aggregated amount
-    int isAggregatedAmount = stockItem.getIsAggregatedAmount();
+    int isAggregatedAmount = stockItem.getIsAggregatedAmountInt();
     // best before
     String bestBefore = stockItem.getBestBeforeDate();
     if (bestBefore == null) {
@@ -434,7 +434,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       }
 
       // SHELF LIFE
-      int shelfLife = productDetails.getAverageShelfLifeDays();
+      int shelfLife = productDetails.getAverageShelfLifeDaysInt();
       if (shelfLife != 0 && shelfLife != -1 && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_BBD_TRACKING
       )) {
@@ -545,9 +545,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
   private void refreshButtonStates(boolean animated) {
     boolean consume = stockItem.getAmountDouble() > 0
-        && stockItem.getProduct().getEnableTareWeightHandling() == 0;
+        && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0;
     boolean open = stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
-        && stockItem.getProduct().getEnableTareWeightHandling() == 0;
+        && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0;
     if (animated) {
       actionButtonConsume.refreshState(consume);
       actionButtonOpen.refreshState(open);

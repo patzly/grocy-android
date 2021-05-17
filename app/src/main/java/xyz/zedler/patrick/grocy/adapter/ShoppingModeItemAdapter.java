@@ -214,7 +214,7 @@ public class ShoppingModeItemAdapter extends
     // AMOUNT
 
     if (product != null) {
-      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStock());
+      QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       if (quantityUnit == null) {
         quantityUnit = new QuantityUnit();
       }
@@ -282,7 +282,7 @@ public class ShoppingModeItemAdapter extends
       }
     }
 
-    holder.linearLayoutContainer.setAlpha(item.getDone() == 1 ? 0.4f : 1);
+    holder.linearLayoutContainer.setAlpha(item.getDoneInt() == 1 ? 0.4f : 1);
 
     // CONTAINER
 

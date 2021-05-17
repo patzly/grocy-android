@@ -401,7 +401,7 @@ public class StockOverviewItemAdapter extends
 
     // AMOUNT
 
-    QuantityUnit quantityUnit = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStock());
+    QuantityUnit quantityUnit = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
 
     String unit = "";
     if (quantityUnit != null) {
@@ -424,7 +424,7 @@ public class StockOverviewItemAdapter extends
       );
     }
     // aggregated amount
-    if (stockItem.getIsAggregatedAmount() == 1) {
+    if (stockItem.getIsAggregatedAmountInt() == 1) {
       String unitAggregated = "";
       if (quantityUnit != null) {
         unitAggregated = pluralUtil.getQuantityUnitPlural(quantityUnit, stockItem.getAmountAggregatedDouble());
@@ -496,7 +496,7 @@ public class StockOverviewItemAdapter extends
       @ColorRes int color;
       if (Integer.parseInt(days) >= 0) {
         color = R.color.retro_yellow_fg;
-      } else if (stockItem.getDueType() == StockItem.DUE_TYPE_BEST_BEFORE) {
+      } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
         color = R.color.retro_dirt_fg;
       } else {
         color = R.color.retro_red_fg;
@@ -655,8 +655,8 @@ public class StockOverviewItemAdapter extends
         return false;
       }
 
-      QuantityUnit quOld = quantityUnitHashMapOld.get(oldItem.getProduct().getQuIdStock());
-      QuantityUnit quNew = quantityUnitHashMapNew.get(newItem.getProduct().getQuIdStock());
+      QuantityUnit quOld = quantityUnitHashMapOld.get(oldItem.getProduct().getQuIdStockInt());
+      QuantityUnit quNew = quantityUnitHashMapNew.get(newItem.getProduct().getQuIdStockInt());
       if (quOld == null && quNew != null
           || quOld != null && quNew != null && quOld.getId() != quNew.getId()
       ) {

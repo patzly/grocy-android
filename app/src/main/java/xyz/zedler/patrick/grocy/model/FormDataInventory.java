@@ -367,7 +367,7 @@ public class FormDataInventory {
     if (isTareWeightEnabled() || (double) currentFactor == -1) {
       amountMultiplied = amount;
     } else if (current.getId() == productDetails.getProduct()
-        .getQuIdPurchase()) {
+        .getQuIdPurchaseInt()) {
       amountMultiplied = amount * (double) currentFactor;
     } else {
       amountMultiplied = amount / (double) currentFactor;

@@ -259,7 +259,7 @@ public class FormDataShoppingListItemEdit {
       }
       double amountMultiplied;
       if (productLive.getValue() != null
-          && current.getId() == productLive.getValue().getQuIdPurchase()) {
+          && current.getId() == productLive.getValue().getQuIdPurchaseInt()) {
         amountMultiplied = amount * (double) currentFactor;
       } else {
         amountMultiplied = amount / (double) currentFactor;

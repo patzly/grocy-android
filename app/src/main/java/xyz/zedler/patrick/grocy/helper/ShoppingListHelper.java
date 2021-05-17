@@ -153,7 +153,7 @@ public class ShoppingListHelper {
     );
     // sort displayedItems by productGroup
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      if (shoppingListItem.getDone() == 1) {
+      if (shoppingListItem.getDoneInt() == 1) {
         doneItems.add(shoppingListItem);
         continue;
       }

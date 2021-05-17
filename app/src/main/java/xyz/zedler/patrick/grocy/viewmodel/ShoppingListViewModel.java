@@ -173,7 +173,7 @@ public class ShoppingListViewModel extends BaseViewModel {
     itemsUndoneCount = 0;
 
     for (ShoppingListItem item : this.shoppingListItems) {
-      if (item.getShoppingListId() != getSelectedShoppingListId()) {
+      if (item.getShoppingListIdInt() != getSelectedShoppingListId()) {
         continue;
       }
       if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
@@ -342,7 +342,7 @@ public class ShoppingListViewModel extends BaseViewModel {
               if (itemToUpdate == null) {
                 continue;
               }
-              itemToUpdate.setDone(itemToSync.getDone());
+              itemToUpdate.setDone(itemToSync.getDoneInt());
               itemsToUpdate.add(itemToUpdate);
             }
             repository.insertShoppingListItems(
@@ -361,7 +361,7 @@ public class ShoppingListViewModel extends BaseViewModel {
           for (ShoppingListItem itemToSync : itemsToSync) {
             JSONObject body = new JSONObject();
             try {
-              body.put("done", itemToSync.getDone());
+              body.put("done", itemToSync.getDoneInt());
             } catch (JSONException e) {
               if (debug) {
                 Log.e(TAG, "syncItems: " + e);
@@ -416,7 +416,7 @@ public class ShoppingListViewModel extends BaseViewModel {
         }
     );
     for (ShoppingListItem listItem : shoppingListItems) {
-      if (listIds.contains(listItem.getShoppingListId())) {
+      if (listIds.contains(listItem.getShoppingListIdInt())) {
         continue;
       }
       if (debug) {
@@ -465,10 +465,10 @@ public class ShoppingListViewModel extends BaseViewModel {
     ShoppingListItem shoppingListItem = listItem.getClone();
 
     if (shoppingListItem.getDoneSynced() == -1) {
-      shoppingListItem.setDoneSynced(shoppingListItem.getDone());
+      shoppingListItem.setDoneSynced(shoppingListItem.getDoneInt());
     }
 
-    shoppingListItem.setDone(shoppingListItem.getDone() == 0 ? 1 : 0);  // toggle state
+    shoppingListItem.setDone(shoppingListItem.getDoneInt() == 0 ? 1 : 0);  // toggle state
 
     if (isOffline()) {
       updateDoneStatus(shoppingListItem);
@@ -477,7 +477,7 @@ public class ShoppingListViewModel extends BaseViewModel {
 
     JSONObject body = new JSONObject();
     try {
-      body.put("done", shoppingListItem.getDone());
+      body.put("done", shoppingListItem.getDoneInt());
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "toggleDoneStatus: " + e);
@@ -690,10 +690,10 @@ public class ShoppingListViewModel extends BaseViewModel {
         }
     );
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      if (shoppingListItem.getShoppingListId() != shoppingList.getId()) {
+      if (shoppingListItem.getShoppingListIdInt() != shoppingList.getId()) {
         continue;
       }
-      if (shoppingListItem.getDone() == 0) {
+      if (shoppingListItem.getDoneInt() == 0) {
         continue;
       }
       queue.append(dlHelper.deleteShoppingListItem(shoppingListItem.getId()));

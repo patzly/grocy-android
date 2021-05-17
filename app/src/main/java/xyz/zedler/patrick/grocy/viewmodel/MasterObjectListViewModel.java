@@ -331,11 +331,11 @@ public class MasterObjectListViewModel extends BaseViewModel {
         );
         bundle.putParcelable(
             Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE,
-            getQuantityUnit(product.getQuIdPurchase())
+            getQuantityUnit(product.getQuIdPurchaseInt())
         );
         bundle.putParcelable(
             Constants.ARGUMENT.QUANTITY_UNIT_STOCK,
-            getQuantityUnit(product.getQuIdStock())
+            getQuantityUnit(product.getQuIdStockInt())
         );
         ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
             ? getProductGroup(Integer.parseInt(product.getProductGroupId()))

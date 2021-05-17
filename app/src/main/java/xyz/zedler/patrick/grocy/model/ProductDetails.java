@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ProductDetails implements Parcelable {
 
@@ -82,13 +83,13 @@ public class ProductDetails implements Parcelable {
   private final Location location;
 
   @SerializedName("average_shelf_life_days")
-  private final int averageShelfLifeDays;
+  private final String averageShelfLifeDays;
 
   @SerializedName("spoil_rate_percent")
   private final String spoilRatePercent;
 
   @SerializedName("is_aggregated_amount")
-  private final int isAggregatedAmount;
+  private final String isAggregatedAmount;
 
   public ProductDetails(Parcel parcel) {
     product = parcel.readParcelable(Product.class.getClassLoader());
@@ -110,9 +111,9 @@ public class ProductDetails implements Parcelable {
     defaultShoppingLocationId = parcel.readString();
     nextDueDate = parcel.readString();
     location = parcel.readParcelable(Location.class.getClassLoader());
-    averageShelfLifeDays = parcel.readInt();
+    averageShelfLifeDays = parcel.readString();
     spoilRatePercent = parcel.readString();
-    isAggregatedAmount = parcel.readInt();
+    isAggregatedAmount = parcel.readString();
   }
 
   @Override
@@ -135,9 +136,9 @@ public class ProductDetails implements Parcelable {
     dest.writeString(defaultShoppingLocationId);
     dest.writeString(nextDueDate);
     dest.writeParcelable(location, 0);
-    dest.writeInt(averageShelfLifeDays);
+    dest.writeString(averageShelfLifeDays);
     dest.writeString(spoilRatePercent);
-    dest.writeInt(isAggregatedAmount);
+    dest.writeString(isAggregatedAmount);
   }
 
   public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
@@ -166,35 +167,19 @@ public class ProductDetails implements Parcelable {
   }
 
   public double getStockAmount() {
-    if (stockAmount == null || stockAmount.isEmpty()) {
-      return 0;
-    } else {
-      return Double.parseDouble(stockAmount);
-    }
+    return NumUtil.isStringDouble(stockAmount) ? Double.parseDouble(stockAmount) : 0;
   }
 
   public double getStockAmountOpened() {
-    if (stockAmountOpened == null || stockAmountOpened.isEmpty()) {
-      return 0;
-    } else {
-      return Double.parseDouble(stockAmountOpened);
-    }
+    return NumUtil.isStringDouble(stockAmountOpened) ? Double.parseDouble(stockAmountOpened) : 0;
   }
 
   public double getStockAmountAggregated() {
-    if (stockAmountAggregated == null || stockAmountAggregated.isEmpty()) {
-      return 0;
-    } else {
-      return Double.parseDouble(stockAmountAggregated);
-    }
+    return NumUtil.isStringDouble(stockAmountAggregated) ? Double.parseDouble(stockAmountAggregated) : 0;
   }
 
   public double getStockAmountOpenedAggregated() {
-    if (stockAmountOpenedAggregated == null || stockAmountOpenedAggregated.isEmpty()) {
-      return 0;
-    } else {
-      return Double.parseDouble(stockAmountOpenedAggregated);
-    }
+    return NumUtil.isStringDouble(stockAmountOpenedAggregated) ? Double.parseDouble(stockAmountOpenedAggregated) : 0;
   }
 
   public QuantityUnit getQuantityUnitPurchase() {
@@ -217,8 +202,8 @@ public class ProductDetails implements Parcelable {
     return location;
   }
 
-  public int getAverageShelfLifeDays() {
-    return averageShelfLifeDays;
+  public int getAverageShelfLifeDaysInt() {
+    return NumUtil.isStringInt(averageShelfLifeDays) ? Integer.parseInt(averageShelfLifeDays) : 0;
   }
 
   public double getSpoilRatePercent() {
@@ -229,8 +214,12 @@ public class ProductDetails implements Parcelable {
     }
   }
 
-  public int getIsAggregatedAmount() {
+  public String getIsAggregatedAmount() {
     return isAggregatedAmount;
+  }
+
+  public boolean getIsAggregatedAmountBoolean() {
+    return NumUtil.isStringInt(isAggregatedAmount) && Integer.parseInt(isAggregatedAmount) == 1;
   }
 
   public String getLastShoppingLocationId() {
