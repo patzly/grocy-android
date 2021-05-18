@@ -1,3 +1,7 @@
+2.0.0-beta02
+- Improved: Updated translations
+- Fixed: Crash on startup with some servers (#407)
+
 2.0.0-beta01
 - New: 'Purchase' actions on shopping list page are working again (#401)
 - New: It is now possible to purchase only done shopping list items (#221)
