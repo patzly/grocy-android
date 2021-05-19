@@ -24,6 +24,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -38,6 +39,7 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -1824,6 +1826,27 @@ public class DownloadHelper {
     );
   }
 
+  public void uploadSetting(
+      String settingKey,
+      Object settingValue,
+      OnSettingUploadListener listener
+  ) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      jsonObject.put("value", settingValue);
+    } catch (JSONException e) {
+      e.printStackTrace();
+      listener.onFinished(R.string.option_synced_error);
+      return;
+    }
+    put(
+        grocyApi.getUserSetting(settingKey),
+        jsonObject,
+        response -> listener.onFinished(R.string.option_synced_success),
+        volleyError -> listener.onFinished(R.string.option_synced_error)
+    );
+  }
+
   public QueueItem getStringData(
       String url,
       OnStringResponseListener onResponseListener,
@@ -2275,5 +2298,10 @@ public class DownloadHelper {
   public interface OnLoadingListener {
 
     void onLoadingChanged(boolean isLoading);
+  }
+
+  public interface OnSettingUploadListener {
+
+    void onFinished(@StringRes int msg);
   }
 }

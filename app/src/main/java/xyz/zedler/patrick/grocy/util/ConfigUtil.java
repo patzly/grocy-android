@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 
 public class ConfigUtil {
 
@@ -126,23 +127,26 @@ public class ConfigUtil {
     try {
       JSONObject jsonObject = new JSONObject(response);
       prefs.edit().putInt(
-          Constants.PREF.PRODUCT_PRESETS_LOCATION_ID,
-          jsonObject.getInt("product_presets_location_id")
+          STOCK.LOCATION,
+          jsonObject.getInt(STOCK.LOCATION)
       ).putInt(
-          Constants.PREF.PRODUCT_PRESETS_PRODUCT_GROUP_ID,
-          jsonObject.getInt("product_presets_product_group_id")
+          STOCK.PRODUCT_GROUP,
+          jsonObject.getInt(STOCK.PRODUCT_GROUP)
       ).putInt(
-          Constants.PREF.PRODUCT_PRESETS_QU_ID,
-          jsonObject.getInt("product_presets_qu_id")
+          STOCK.QUANTITY_UNIT,
+          jsonObject.getInt(STOCK.QUANTITY_UNIT)
       ).putString(
-          Constants.PREF.STOCK_DUE_SOON_DAYS,
-          jsonObject.getString("stock_due_soon_days")
+          STOCK.DUE_SOON_DAYS,
+          jsonObject.getString(STOCK.DUE_SOON_DAYS)
+      ).putBoolean(
+          STOCK.SHOW_PURCHASED_DATE,
+          jsonObject.getBoolean(STOCK.SHOW_PURCHASED_DATE)
       ).putString(
-          Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT,
-          jsonObject.getString("stock_default_purchase_amount")
+          STOCK.DEFAULT_PURCHASE_AMOUNT,
+          jsonObject.getString(STOCK.DEFAULT_PURCHASE_AMOUNT)
       ).putString(
-          Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT,
-          jsonObject.getString("stock_default_consume_amount")
+          STOCK.DEFAULT_CONSUME_AMOUNT,
+          jsonObject.getString(STOCK.DEFAULT_CONSUME_AMOUNT)
       ).putString(
           Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
           jsonObject.getString(
@@ -158,23 +162,14 @@ public class ConfigUtil {
       // try to get boolean for indicator setting – but responses can also
       // contain this setting as number (0 or 1)
       prefs.edit().putBoolean(
-          Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-          new JSONObject(response).getBoolean(
-              "show_icon_on_stock_overview_page_" +
-                  "when_product_is_on_shopping_list"
-          )
+          STOCK.DISPLAY_DOTS_IN_STOCK,
+          new JSONObject(response).getBoolean(STOCK.DISPLAY_DOTS_IN_STOCK)
       ).apply();
     } catch (JSONException e) {
       try {
         // try to get boolean from number in json
-        int stateInt = new JSONObject(response).getInt(
-            "show_icon_on_stock_overview_page_" +
-                "when_product_is_on_shopping_list"
-        );
-        prefs.edit().putBoolean(
-            Constants.PREF.SHOW_SHOPPING_LIST_ICON_IN_STOCK,
-            stateInt == 1
-        ).apply();
+        int stateInt = new JSONObject(response).getInt(STOCK.DISPLAY_DOTS_IN_STOCK);
+        prefs.edit().putBoolean(STOCK.DISPLAY_DOTS_IN_STOCK, stateInt == 1).apply();
       } catch (JSONException e2) {
         if (debug) {
           Log.e(TAG, "downloadUserSettings: " + e2);

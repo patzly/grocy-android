@@ -23,12 +23,14 @@ import android.animation.LayoutTransition;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.List;
@@ -166,6 +168,21 @@ public class BindingAdaptersUtil {
     view.setOnLongClickListener(v -> {
       listener.run();
       return true;
+    });
+  }
+
+  @BindingAdapter(value = {"android:onCheckedChanged", "iconToAnimate", "initialChecked"}, requireAll = false)
+  public static void setOnCheckedChangedListener(SwitchMaterial view, CompoundButton.OnCheckedChangeListener listener, View iconToAnimate, Boolean initialChecked) {
+    if (initialChecked != null) {
+      view.setChecked(initialChecked);
+    }
+    view.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      if (iconToAnimate instanceof ImageView) {
+        IconUtil.start(iconToAnimate);
+      }
+      if (listener != null) {
+        listener.onCheckedChanged(view, isChecked);
+      }
     });
   }
 }

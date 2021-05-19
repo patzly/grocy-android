@@ -537,7 +537,7 @@
   <string name="setting_show_done_items">Voltooide items weergeven</string>
   <string name="setting_show_done_items_description">Onderaan</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_expiring_soon_days">\"Vervalt binnenkort\" dagen</string>
+  <string name="setting_due_soon_days">\"Vervalt binnenkort\" dagen</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Standaard aantal voor inkoop</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -561,7 +561,7 @@
   <string name="setting_expand_bottom_sheets_description">In landschapsmode</string>
   <string name="setting_loading_circle">Laat een laad cirkel zien voor alle verzoeken</string>
   <string name="setting_loading_circle_description">Handig voor langzame netwerken</string>
-  <string name="setting_synchronized">Deze instellingen worden gesynchroniseerd met je server.</string>
+  <string name="settings_synchronized">Deze instellingen worden gesynchroniseerd met je server.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

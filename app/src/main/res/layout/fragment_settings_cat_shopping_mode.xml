@@ -131,7 +131,7 @@
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.shoppingModeUpdateIntervalLive}"/>
+              android:text="@{viewModel.shoppingModeUpdateIntervalTextLive}"/>
 
           </LinearLayout>
 

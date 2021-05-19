@@ -279,7 +279,7 @@
 
           <TextView
             style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-            android:text="@string/setting_expiring_soon_days" />
+            android:text="@string/setting_due_soon_days" />
 
           <TextView
             android:id="@+id/text_setting_expiring_soon_days"

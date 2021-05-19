@@ -125,7 +125,7 @@ public class SettingInputBottomSheet extends BaseBottomSheet {
     String input = bundle.getString(Constants.ARGUMENT.TEXT);
     switch (option) {
       case Constants.SETTINGS.STOCK.DUE_SOON_DAYS:
-        title = activity.getString(R.string.setting_expiring_soon_days);
+        title = activity.getString(R.string.setting_due_soon_days);
         hint = activity.getString(R.string.property_days);
         buttonClear.setText(activity.getString(R.string.action_reset));
         buttonClear.setOnClickListener(v -> {

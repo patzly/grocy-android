@@ -375,7 +375,7 @@
   <string name="setting_shopping_mode_update_interval">Intervalo de actualización para modo de compras</string>
   <string name="setting_keep_screen_on">Mantener la pantalla encendida</string>
   <string name="setting_keep_screen_on_description">Mientras está en el modo de compras</string>
-  <string name="setting_expiring_soon_days">Dias cuando vencerá pronto</string>
+  <string name="setting_due_soon_days">Dias cuando vencerá pronto</string>
   <string name="setting_default_amount_purchase">Modo de compra por defecto</string>
   <string name="setting_default_amount_consume">Cantidad por defecto para consumir</string>
   <string name="setting_empty_value">Vacío</string>

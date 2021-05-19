@@ -763,7 +763,7 @@
   <string name="setting_show_done_items">Показати виконані елементи</string>
   <string name="setting_show_done_items_description">Знизу</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_expiring_soon_days">За скільки днів попереджати, що спливає термін придатності</string>
+  <string name="setting_due_soon_days">За скільки днів попереджати, що спливає термін придатності</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Кількість для покупки за замовчуванням</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -789,7 +789,7 @@
   <string name="setting_speed_up_start_description">Впливає тільки на швидкі пристрої</string>
   <string name="setting_loading_circle">Показувати коло завантаження для всіх запитів</string>
   <string name="setting_loading_circle_description">Корисно для повільних мереж</string>
-  <string name="setting_synchronized">Ці параметри синхронізуються із сервером.</string>
+  <string name="settings_synchronized">Ці параметри синхронізуються із сервером.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

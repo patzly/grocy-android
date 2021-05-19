@@ -708,7 +708,7 @@
   <string name="setting_show_done_items">Pokaż zakończone pozycje</string>
   <string name="setting_show_done_items_description">Na dole</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_expiring_soon_days">Dni wygaśnięcia przydatności</string>
+  <string name="setting_due_soon_days">Dni wygaśnięcia przydatności</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Domyślna ilość zakupu</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -732,7 +732,7 @@
   <string name="setting_expand_bottom_sheets_description">W trybie poziomym</string>
   <string name="setting_loading_circle">Pokaż kółko ładowania dla wszystkich żądań</string>
   <string name="setting_loading_circle_description">Pomocne dla wolnych połączeń</string>
-  <string name="setting_synchronized">Te ustawienia są synchronizowane z serwerem.</string>
+  <string name="settings_synchronized">Te ustawienia są synchronizowane z serwerem.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

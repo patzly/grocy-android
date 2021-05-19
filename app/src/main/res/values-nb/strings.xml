@@ -478,7 +478,7 @@
   <string name="setting_show_done_items">Vis ferdige elementer</string>
   <string name="setting_show_done_items_description">På bunnen</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_expiring_soon_days">Utløper snart dager</string>
+  <string name="setting_due_soon_days">Utløper snart dager</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Standard mengde for kjøp</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->

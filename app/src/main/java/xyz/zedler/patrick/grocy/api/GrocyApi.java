@@ -24,6 +24,8 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
 public class GrocyApi {
 
@@ -178,14 +180,10 @@ public class GrocyApi {
    * Returns all products which are currently in stock incl. the next due date per product
    */
   public String getStockVolatile() {
-    // TODO: https://de.demo.grocy.info/api/user/settings/stock_expring_soon_days PUT {"value":"5"}
-    // We have to make value changeable in the App, but also update it with the request above
-    // on the server; and get the value on the first App start from server
     return getUrl(
-        "/stock/volatile", "due_soon_days="
-            + sharedPrefs.getString(
-            Constants.PREF.STOCK_DUE_SOON_DAYS,
-            String.valueOf(5)
+        "/stock/volatile", "due_soon_days=" + sharedPrefs.getString(
+            STOCK.DUE_SOON_DAYS,
+            SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
         )
     );
   }

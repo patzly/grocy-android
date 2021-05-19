@@ -627,7 +627,7 @@
   <string name="setting_show_done_items">Zobrazit hotové položky</string>
   <string name="setting_show_done_items_description">Vespod</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_expiring_soon_days">Trvanlivost brzy skončí</string>
+  <string name="setting_due_soon_days">Trvanlivost brzy skončí</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Výchozí množství pro nákup</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -651,7 +651,7 @@
   <string name="setting_expand_bottom_sheets_description">V režimu na šířku</string>
   <string name="setting_loading_circle">Zobrazit načítací kolečko u všech požadavků načítání</string>
   <string name="setting_loading_circle_description">Dobré zapnout při pomalém připojení</string>
-  <string name="setting_synchronized">Tyto nastavení jsou synchronizována s vaším serverem.</string>
+  <string name="settings_synchronized">Tyto nastavení jsou synchronizována s vaším serverem.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

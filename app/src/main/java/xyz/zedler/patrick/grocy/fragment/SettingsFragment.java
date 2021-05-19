@@ -166,7 +166,7 @@ public class SettingsFragment extends BaseFragment {
             binding.linearBody.addView(new SettingEntryClick(
                     requireContext(),
                     Constants.SETTINGS.STOCK.DUE_SOON_DAYS,
-                    R.string.setting_expiring_soon_days,
+                    R.string.setting_due_soon_days,
                     days,
                     null,
                     R.drawable.ic_round_event,

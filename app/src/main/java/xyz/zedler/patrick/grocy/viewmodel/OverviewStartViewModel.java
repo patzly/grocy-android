@@ -42,6 +42,8 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class OverviewStartViewModel extends BaseViewModel {
@@ -138,9 +140,19 @@ public class OverviewStartViewModel extends BaseViewModel {
           if (count == null || count == 0) {
             return null;
           }
+          String days = sharedPrefs.getString(
+              STOCK.DUE_SOON_DAYS,
+              SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+          );
+          int daysInt;
+          if (NumUtil.isStringInt(days)) {
+            daysInt = Integer.parseInt(days);
+          } else {
+            daysInt = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+          }
           return getResources().getQuantityString(
               R.plurals.description_overview_stock_due_soon,
-              count, count, 5
+              count, count, daysInt
           );
         }
     );

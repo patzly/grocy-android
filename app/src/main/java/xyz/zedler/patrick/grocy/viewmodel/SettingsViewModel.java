@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -61,7 +62,8 @@ public class SettingsViewModel extends BaseViewModel {
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
-  private final MutableLiveData<String> shoppingModeUpdateIntervalLive;
+  private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
+  private final MutableLiveData<String> dueSoonDaysTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -80,7 +82,8 @@ public class SettingsViewModel extends BaseViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
-    shoppingModeUpdateIntervalLive = new MutableLiveData<>(getShoppingModeUpdateInterval());
+    shoppingModeUpdateIntervalTextLive = new MutableLiveData<>(getShoppingModeUpdateIntervalText());
+    dueSoonDaysTextLive = new MutableLiveData<>(getDueSoonDaysText());
   }
 
   public boolean isDemo() {
@@ -282,32 +285,49 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void showShoppingModeUpdateIntervalBottomSheet() {
     Bundle bundle = new Bundle();
-    bundle.putInt(ARGUMENT.NUMBER, Integer.parseInt(getShoppingModeUpdateInterval()));
-    bundle.putString(ARGUMENT.TYPE, SHOPPING_MODE.UPDATE_INTERVAL);
-    showBottomSheet(new InputNumberBottomSheet(), bundle);
-  }
-
-  public String getShoppingModeUpdateInterval() {
-    return String.valueOf(sharedPrefs.getInt(
+    bundle.putInt(ARGUMENT.NUMBER, sharedPrefs.getInt(
         SHOPPING_MODE.UPDATE_INTERVAL,
         SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
     ));
+    bundle.putString(ARGUMENT.TYPE, SHOPPING_MODE.UPDATE_INTERVAL);
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_seconds));
+    showBottomSheet(new InputNumberBottomSheet(), bundle);
   }
 
-  public MutableLiveData<String> getShoppingModeUpdateIntervalLive() {
-    return shoppingModeUpdateIntervalLive;
+  public String getShoppingModeUpdateIntervalText() {
+    return getApplication().getResources().getQuantityString(
+        R.plurals.property_seconds_num,
+        sharedPrefs.getInt(
+            SHOPPING_MODE.UPDATE_INTERVAL,
+            SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
+        ),
+        sharedPrefs.getInt(
+            SHOPPING_MODE.UPDATE_INTERVAL,
+            SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
+        )
+    );
+  }
+
+  public MutableLiveData<String> getShoppingModeUpdateIntervalTextLive() {
+    return shoppingModeUpdateIntervalTextLive;
   }
 
   public void setShoppingModeUpdateInterval(String text) {
     int interval = 10;
     if (NumUtil.isStringInt(text)) {
       interval = Integer.parseInt(text);
-      if (interval < 1) {
+      if (interval < 0) {
         interval = 10;
       }
     }
     sharedPrefs.edit().putInt(SHOPPING_MODE.UPDATE_INTERVAL, interval).apply();
-    shoppingModeUpdateIntervalLive.setValue(String.valueOf(interval));
+    shoppingModeUpdateIntervalTextLive.setValue(
+        getApplication().getResources().getQuantityString(
+            R.plurals.property_seconds_num,
+            interval,
+            interval
+        )
+    );
   }
 
   public boolean getKeepScreenOnEnabled() {
@@ -342,8 +362,52 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setListIndicatorEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK, enabled)
+    sharedPrefs.edit().putBoolean(STOCK.DISPLAY_DOTS_IN_STOCK, enabled)
         .apply();
+    dlHelper.uploadSetting(STOCK.DISPLAY_DOTS_IN_STOCK, enabled, this::showMessage);
+  }
+
+  public void showDueSoonDaysBottomSheet() {
+    Bundle bundle = new Bundle();
+    String days = sharedPrefs.getString(STOCK.DUE_SOON_DAYS, SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+    if (NumUtil.isStringInt(days)) {
+      bundle.putInt(ARGUMENT.NUMBER, Integer.parseInt(days));
+    } else {
+      bundle.putInt(ARGUMENT.NUMBER, Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS));
+    }
+    bundle.putString(ARGUMENT.TYPE, STOCK.DUE_SOON_DAYS);
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_days));
+    showBottomSheet(new InputNumberBottomSheet(), bundle);
+  }
+
+  public String getDueSoonDaysText() {
+    String days = sharedPrefs.getString(STOCK.DUE_SOON_DAYS, SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+    int daysInt;
+    if (NumUtil.isStringInt(days)) {
+      daysInt = Integer.parseInt(days);
+    } else {
+      daysInt = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+    }
+    return getApplication().getResources().getQuantityString(R.plurals.date_days, daysInt, daysInt);
+  }
+
+  public MutableLiveData<String> getDueSoonDaysTextLive() {
+    return dueSoonDaysTextLive;
+  }
+
+  public void setDueSoonDays(String text) {
+    int interval = 5;
+    if (NumUtil.isStringInt(text)) {
+      interval = Integer.parseInt(text);
+      if (interval < 1) {
+        interval = 5;
+      }
+    }
+    sharedPrefs.edit().putString(STOCK.DUE_SOON_DAYS, String.valueOf(interval)).apply();
+    dueSoonDaysTextLive.setValue(
+        getApplication().getResources().getQuantityString(R.plurals.date_days, interval, interval)
+    );
+    dlHelper.uploadSetting(STOCK.DUE_SOON_DAYS, String.valueOf(interval), this::showMessage);
   }
 
   public boolean getPurchasedDateEnabled() {
@@ -356,6 +420,7 @@ public class SettingsViewModel extends BaseViewModel {
   public void setPurchasedDateEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE, enabled)
         .apply();
+    dlHelper.uploadSetting(STOCK.SHOW_PURCHASED_DATE, enabled, this::showMessage);
   }
 
   public boolean getLoadingCircleEnabled() {

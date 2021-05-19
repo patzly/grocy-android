@@ -375,7 +375,7 @@
   <string name="setting_shopping_mode_update_interval">Uppdateringsintervall för shoppingläge</string>
   <string name="setting_keep_screen_on">Behåll skärmen på</string>
   <string name="setting_keep_screen_on_description">När shoppingläget används</string>
-  <string name="setting_expiring_soon_days">Antal dagar för \"går snart ut\"</string>
+  <string name="setting_due_soon_days">Antal dagar för \"går snart ut\"</string>
   <string name="setting_default_amount_purchase">Standardantal vid köp</string>
   <string name="setting_default_amount_consume">Standardantal vid konsumtion</string>
   <string name="setting_empty_value">Tom</string>

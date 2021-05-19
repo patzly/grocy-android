@@ -36,6 +36,8 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatStockFragment extends BaseFragment {
@@ -44,6 +46,7 @@ public class SettingsCatStockFragment extends BaseFragment {
 
   private FragmentSettingsCatStockBinding binding;
   private MainActivity activity;
+  private SettingsViewModel viewModel;
 
   @Override
   public View onCreateView(
@@ -64,12 +67,13 @@ public class SettingsCatStockFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setViewModel(viewModel);
     binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
     binding.setClickUtil(new ClickUtil());
+    binding.setLifecycleOwner(getViewLifecycleOwner());
 
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -97,6 +101,14 @@ public class SettingsCatStockFragment extends BaseFragment {
     }
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
+
+  @Override
+  public void saveNumber(String text, Bundle argsBundle) {
+    String type = argsBundle.getString(ARGUMENT.TYPE);
+    if (type != null && type.equals(STOCK.DUE_SOON_DAYS)) {
+      viewModel.setDueSoonDays(text);
+    }
   }
 
   @Override

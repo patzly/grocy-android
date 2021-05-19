@@ -705,7 +705,7 @@
   <string name="setting_show_done_items">Mostra voci completate</string>
   <string name="setting_show_done_items_description">In fondo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_expiring_soon_days">Numero di giorni per essere in scadenza</string>
+  <string name="setting_due_soon_days">Numero di giorni per essere in scadenza</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Quantità predefinita per acquista</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -731,7 +731,7 @@
   <string name="setting_speed_up_start_description">Ha effetto solo su dispositivi veloci</string>
   <string name="setting_loading_circle">Mostra cerchio di caricamento per tutte le richieste</string>
   <string name="setting_loading_circle_description">D\'aiuto per connessioni lente</string>
-  <string name="setting_synchronized">Queste impostazioni sono sincronizzate sul tuo server.</string>
+  <string name="settings_synchronized">Queste impostazioni sono sincronizzate sul tuo server.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
