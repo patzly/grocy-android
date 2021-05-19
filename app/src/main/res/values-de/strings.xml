@@ -186,6 +186,8 @@
   <string name="msg_transfer_tare_weight">Produkte mit aktivierter Taragewichtbehandlung können aktuell nicht umgelagert werden.</string>
   <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
+  <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
+  <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -704,14 +706,13 @@
   <string name="setting_keep_screen_on_description">Wenn im Shoppingmodus</string>
   <string name="setting_show_done_items">Erledigte Einträge anzeigen</string>
   <string name="setting_show_done_items_description">Am Listen-Ende</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_due_soon_days">Verfallsdatum in Tagen</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_due_soon_days">\"Bald fällig\" Tage</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Standardmenge für Einkauf</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Standardmenge für Verbrauch</string>
   <string name="setting_purchased_date">Nach Einkaufsdatum fragen</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">Auf der Einkauf- und Inventur-Seite</string>
   <string name="setting_empty_value">Leer</string>
   <string name="setting_sync_off">Synchonisation aus</string>
@@ -731,6 +732,7 @@
   <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
+  <string name="setting_synchronized">Die folgende Einstellung wird mit Ihrem Server synchronisiert.</string>
   <string name="settings_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
