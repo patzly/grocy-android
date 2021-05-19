@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NetUtil;
@@ -214,6 +215,18 @@ public class SettingsViewModel extends BaseViewModel {
   public void setBeginnerModeEnabled(boolean enabled) {
     sharedPrefs.edit()
         .putBoolean(Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE, enabled).apply();
+  }
+
+  public boolean getUseOpenFoodFactsEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.FOOD_FACTS,
+        SETTINGS_DEFAULT.BEHAVIOR.FOOD_FACTS
+    );
+  }
+
+  public void setUseOpenFoodFactsEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.FOOD_FACTS, enabled).apply();
   }
 
   public boolean getExpandBottomSheetsEnabled() {

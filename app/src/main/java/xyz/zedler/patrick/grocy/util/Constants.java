@@ -125,9 +125,9 @@ public final class Constants {
 
       public final static String BEGINNER_MODE = "beginner_mode";
       public final static String SHORTCUTS = "shortcuts";
+      public final static String FOOD_FACTS = "food_facts";
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
-      public final static String START_DESTINATION = "start_destination";
       public final static String QUICK_MODE_CONSUME = "scan_mode_consume_enabled";
       public final static String QUICK_MODE_PURCHASE = "scan_mode_purchase_enabled";
       public final static String QUICK_MODE_SHOPPING_ITEM = "scan_mode_shopping_item";
@@ -135,7 +135,6 @@ public final class Constants {
 
     public final static class SCANNER {
 
-      public final static String FOOD_FACTS = "food_facts";
       public final static String FRONT_CAM = "front_cam";
       public final static String EXTERNAL_SCANNER = "external_scanner";
     }
@@ -188,6 +187,7 @@ public final class Constants {
     public final static class BEHAVIOR {
 
       public final static boolean BEGINNER_MODE = true;
+      public final static boolean FOOD_FACTS = false;
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
       public final static boolean QUICK_MODE_CONSUME = false;
@@ -197,7 +197,6 @@ public final class Constants {
 
     public final static class SCANNER {
 
-      public final static boolean FOOD_FACTS = false;
       public final static boolean FRONT_CAM = false;
       public final static boolean EXTERNAL_SCANNER = false;
     }

@@ -116,7 +116,7 @@
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> switchLogging.setChecked(!switchLogging.isChecked())}">
+          android:onClick="@{v -> switchBeginner.setChecked(!switchBeginner.isChecked())}">
 
           <ImageView
             android:id="@+id/image_help"
@@ -137,7 +137,7 @@
           </LinearLayout>
 
           <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch_logging"
+            android:id="@+id/switch_beginner"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageHelp, true)}"
             android:checked="@={viewModel.beginnerModeEnabled}" />
@@ -168,6 +168,37 @@
               android:text="@string/subtitle_none_selected" />
 
           </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchOpenFoodFacts.setChecked(!switchOpenFoodFacts.isChecked())}">
+
+          <ImageView
+            android:id="@+id/image_open_food_facts"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_barcode"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_open_food_facts" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_open_food_facts_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_open_food_facts"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.useOpenFoodFactsEnabled}"/>
 
         </LinearLayout>
 
