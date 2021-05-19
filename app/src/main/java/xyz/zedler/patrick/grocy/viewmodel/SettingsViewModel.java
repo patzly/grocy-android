@@ -41,7 +41,11 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
@@ -56,6 +60,7 @@ public class SettingsViewModel extends BaseViewModel {
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
+  private final MutableLiveData<String> shoppingModeUpdateIntervalLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -74,6 +79,7 @@ public class SettingsViewModel extends BaseViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
+    shoppingModeUpdateIntervalLive = new MutableLiveData<>(getShoppingModeUpdateInterval());
   }
 
   public boolean isDemo() {
@@ -259,6 +265,36 @@ public class SettingsViewModel extends BaseViewModel {
   public void setExternalScannerEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER, enabled).apply();
     getExternalScannerEnabledLive.setValue(enabled);
+  }
+
+  public void showShoppingModeUpdateIntervalBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(ARGUMENT.NUMBER, Integer.parseInt(getShoppingModeUpdateInterval()));
+    bundle.putString(ARGUMENT.TYPE, SHOPPING_MODE.UPDATE_INTERVAL);
+    showBottomSheet(new InputNumberBottomSheet(), bundle);
+  }
+
+  public String getShoppingModeUpdateInterval() {
+    return String.valueOf(sharedPrefs.getInt(
+        SHOPPING_MODE.UPDATE_INTERVAL,
+        SETTINGS_DEFAULT.SHOPPING_MODE.UPDATE_INTERVAL
+    ));
+  }
+
+  public MutableLiveData<String> getShoppingModeUpdateIntervalLive() {
+    return shoppingModeUpdateIntervalLive;
+  }
+
+  public void setShoppingModeUpdateInterval(String text) {
+    int interval = 10;
+    if (NumUtil.isStringInt(text)) {
+      interval = Integer.parseInt(text);
+      if (interval < 1) {
+        interval = 10;
+      }
+    }
+    sharedPrefs.edit().putInt(SHOPPING_MODE.UPDATE_INTERVAL, interval).apply();
+    shoppingModeUpdateIntervalLive.setValue(String.valueOf(interval));
   }
 
   public boolean getKeepScreenOnEnabled() {

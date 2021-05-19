@@ -148,9 +148,9 @@ public class BindingAdaptersUtil {
       if (clickUtil != null && clickUtil.isDisabled()) {
         return;
       }
-      if (iconToAnimate instanceof ActionButton) {
+      if (iconToAnimate instanceof ActionButton && ((ActionButton) view).hasAnimatable()) {
         ((ActionButton) iconToAnimate).startIconAnimation();
-      } else if (view instanceof ActionButton) {
+      } else if (view instanceof ActionButton && ((ActionButton) view).hasAnimatable()) {
         ((ActionButton) view).startIconAnimation();
       } else if (iconToAnimate instanceof ImageView) {
         IconUtil.start(iconToAnimate);

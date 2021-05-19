@@ -28,6 +28,8 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 public class PluralUtil {
   final LangPluralDetails pluralDetails;
   boolean rulesImplemented = true;
+  
+  // TODO: https://github.com/populov/android-i18n-plurals/tree/master/library/src/main/java/com/seppius/i18n/plurals
 
   public PluralUtil(Locale locale) {
     String localeCode = locale.getLanguage();

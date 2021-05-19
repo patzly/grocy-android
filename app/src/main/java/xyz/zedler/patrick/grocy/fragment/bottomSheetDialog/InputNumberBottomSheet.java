@@ -115,7 +115,13 @@ public class InputNumberBottomSheet extends BaseBottomSheet {
   }
 
   public void save() {
-    activity.getCurrentFragment().saveNumber(numberInputLive.getValue(), requireArguments());
+    String text = numberInputLive.getValue();
+    if (text != null) {
+      text = text.trim();
+    } else {
+      text = "";
+    }
+    activity.getCurrentFragment().saveNumber(text, requireArguments());
     dismiss();
   }
 

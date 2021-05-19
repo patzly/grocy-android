@@ -133,6 +133,10 @@ public class ActionButton extends LinearLayout {
     frameLayoutButton.setClickable(enabled);
   }
 
+  public boolean hasAnimatable() {
+    return imageViewIcon.getDrawable() != null && imageViewIcon.getDrawable() instanceof Animatable;
+  }
+
   public void startIconAnimation() {
     try {
       ((Animatable) imageViewIcon.getDrawable()).start();
