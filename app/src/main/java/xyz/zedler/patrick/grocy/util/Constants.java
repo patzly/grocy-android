@@ -149,6 +149,7 @@ public final class Constants {
       public final static String SHOW_PURCHASED_DATE = "show_purchased_date_on_purchase"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String USE_QUICK_CONSUME_AMOUNT = "stock_default_consume_amount_use_quick_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
     }
 
     public final static class SHOPPING_MODE {
@@ -211,6 +212,7 @@ public final class Constants {
       public final static boolean SHOW_PURCHASED_DATE = false;
       public final static String DEFAULT_PURCHASE_AMOUNT = "1";
       public final static String DEFAULT_CONSUME_AMOUNT = "1";
+      public final static boolean USE_QUICK_CONSUME_AMOUNT = false;
     }
 
     public final static class SHOPPING_MODE {

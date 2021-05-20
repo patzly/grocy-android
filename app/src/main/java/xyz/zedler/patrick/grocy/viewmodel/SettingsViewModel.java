@@ -64,6 +64,8 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
   private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
   private final MutableLiveData<String> dueSoonDaysTextLive;
+  private final MutableLiveData<String> defaultPurchaseAmountTextLive;
+  private final MutableLiveData<String> defaultConsumeAmountTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -84,6 +86,8 @@ public class SettingsViewModel extends BaseViewModel {
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     shoppingModeUpdateIntervalTextLive = new MutableLiveData<>(getShoppingModeUpdateIntervalText());
     dueSoonDaysTextLive = new MutableLiveData<>(getDueSoonDaysText());
+    defaultPurchaseAmountTextLive = new MutableLiveData<>(getDefaultPurchaseAmountText());
+    defaultConsumeAmountTextLive = new MutableLiveData<>(getDefaultConsumeAmountText());
   }
 
   public boolean isDemo() {
@@ -410,6 +414,56 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.uploadSetting(STOCK.DUE_SOON_DAYS, String.valueOf(interval), this::showMessage);
   }
 
+  public void showDefaultPurchaseAmountBottomSheet() {
+    Bundle bundle = new Bundle();
+    String amount = sharedPrefs.getString(
+        STOCK.DEFAULT_PURCHASE_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
+    );
+    if (NumUtil.isStringDouble(amount)) {
+      bundle.putDouble(ARGUMENT.NUMBER, Double.parseDouble(amount));
+    } else {
+      bundle.putDouble(
+          ARGUMENT.NUMBER,
+          Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT)
+      );
+    }
+    bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_PURCHASE_AMOUNT);
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_amount));
+    showBottomSheet(new InputNumberBottomSheet(), bundle);
+  }
+
+  public String getDefaultPurchaseAmountText() {
+    String amount = sharedPrefs.getString(
+        STOCK.DEFAULT_PURCHASE_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
+    );
+    double amountDouble;
+    if (NumUtil.isStringDouble(amount)) {
+      amountDouble = Double.parseDouble(amount);
+    } else {
+      amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT);
+    }
+    return NumUtil.trim(amountDouble);
+  }
+
+  public MutableLiveData<String> getDefaultPurchaseAmountTextLive() {
+    return defaultPurchaseAmountTextLive;
+  }
+
+  public void setDefaultPurchaseAmount(String text) {
+    double amount = 0;
+    if (NumUtil.isStringDouble(text)) {
+      amount = Double.parseDouble(text);
+      if (amount < 0) {
+        amount = 0;
+      }
+    }
+    sharedPrefs.edit().putString(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trim(amount)).apply();
+    defaultPurchaseAmountTextLive.setValue(NumUtil.trim(amount));
+    dlHelper.uploadSetting(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trim(amount), this::showMessage);
+  }
+
   public boolean getPurchasedDateEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE,
@@ -421,6 +475,69 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.SHOW_PURCHASED_DATE, enabled)
         .apply();
     dlHelper.uploadSetting(STOCK.SHOW_PURCHASED_DATE, enabled, this::showMessage);
+  }
+
+  public void showDefaultConsumeAmountBottomSheet() {
+    Bundle bundle = new Bundle();
+    String amount = sharedPrefs.getString(
+        STOCK.DEFAULT_CONSUME_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
+    );
+    if (NumUtil.isStringDouble(amount)) {
+      bundle.putDouble(ARGUMENT.NUMBER, Double.parseDouble(amount));
+    } else {
+      bundle.putDouble(
+          ARGUMENT.NUMBER,
+          Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT)
+      );
+    }
+    bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_CONSUME_AMOUNT);
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_amount));
+    showBottomSheet(new InputNumberBottomSheet(), bundle);
+  }
+
+  public String getDefaultConsumeAmountText() {
+    String amount = sharedPrefs.getString(
+        STOCK.DEFAULT_CONSUME_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
+    );
+    double amountDouble;
+    if (NumUtil.isStringDouble(amount)) {
+      amountDouble = Double.parseDouble(amount);
+    } else {
+      amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT);
+    }
+    return NumUtil.trim(amountDouble);
+  }
+
+  public MutableLiveData<String> getDefaultConsumeAmountTextLive() {
+    return defaultConsumeAmountTextLive;
+  }
+
+  public void setDefaultConsumeAmount(String text) {
+    double amount = 0;
+    if (NumUtil.isStringDouble(text)) {
+      amount = Double.parseDouble(text);
+      if (amount < 0) {
+        amount = 0;
+      }
+    }
+    sharedPrefs.edit().putString(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trim(amount)).apply();
+    defaultConsumeAmountTextLive.setValue(NumUtil.trim(amount));
+    dlHelper.uploadSetting(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trim(amount), this::showMessage);
+  }
+
+  public boolean getUseQuickConsumeAmountEnabled() {
+    return sharedPrefs.getBoolean(
+        STOCK.USE_QUICK_CONSUME_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT
+    );
+  }
+
+  public void setUseQuickConsumeAmountEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.STOCK.USE_QUICK_CONSUME_AMOUNT, enabled)
+        .apply();
+    dlHelper.uploadSetting(STOCK.USE_QUICK_CONSUME_AMOUNT, enabled, this::showMessage);
   }
 
   public boolean getLoadingCircleEnabled() {

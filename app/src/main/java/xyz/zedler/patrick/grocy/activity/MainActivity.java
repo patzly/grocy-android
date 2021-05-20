@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-    debug = true;
 
     insertConscrypt();
 

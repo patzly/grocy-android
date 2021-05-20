@@ -724,6 +724,7 @@
   <string name="setting_default_amount_consume">Default amount for consume</string>
   <string name="setting_purchased_date">Ask for purchased date</string>
   <string name="setting_purchased_date_description">On purchase and inventory page</string>
+  <string name="setting_use_quick_consume_amount">Use the product\'s \"Quick consume amount\"</string>
   <string name="setting_empty_value">Empty</string>
   <string name="setting_sync_off">Sync off</string>
   <string name="setting_not_loaded">Could not be loaded</string>

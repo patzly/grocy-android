@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
 public class ConfigUtil {
 
@@ -139,14 +140,23 @@ public class ConfigUtil {
           STOCK.DUE_SOON_DAYS,
           jsonObject.getString(STOCK.DUE_SOON_DAYS)
       ).putBoolean(
+          STOCK.DISPLAY_DOTS_IN_STOCK,
+          getBoolean(jsonObject, STOCK.DISPLAY_DOTS_IN_STOCK,
+              SETTINGS_DEFAULT.STOCK.DISPLAY_DOTS_IN_STOCK, prefs)
+      ).putBoolean(
           STOCK.SHOW_PURCHASED_DATE,
-          jsonObject.getBoolean(STOCK.SHOW_PURCHASED_DATE)
+          getBoolean(jsonObject, STOCK.SHOW_PURCHASED_DATE,
+              SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE, prefs)
       ).putString(
           STOCK.DEFAULT_PURCHASE_AMOUNT,
           jsonObject.getString(STOCK.DEFAULT_PURCHASE_AMOUNT)
       ).putString(
           STOCK.DEFAULT_CONSUME_AMOUNT,
           jsonObject.getString(STOCK.DEFAULT_CONSUME_AMOUNT)
+      ).putBoolean(
+          STOCK.USE_QUICK_CONSUME_AMOUNT,
+          getBoolean(jsonObject, STOCK.USE_QUICK_CONSUME_AMOUNT,
+              SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT, prefs)
       ).putString(
           Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
           jsonObject.getString(
@@ -158,26 +168,38 @@ public class ConfigUtil {
         Log.e(TAG, "downloadUserSettings: " + e);
       }
     }
-    try {
-      // try to get boolean for indicator setting – but responses can also
-      // contain this setting as number (0 or 1)
-      prefs.edit().putBoolean(
-          STOCK.DISPLAY_DOTS_IN_STOCK,
-          new JSONObject(response).getBoolean(STOCK.DISPLAY_DOTS_IN_STOCK)
-      ).apply();
-    } catch (JSONException e) {
-      try {
-        // try to get boolean from number in json
-        int stateInt = new JSONObject(response).getInt(STOCK.DISPLAY_DOTS_IN_STOCK);
-        prefs.edit().putBoolean(STOCK.DISPLAY_DOTS_IN_STOCK, stateInt == 1).apply();
-      } catch (JSONException e2) {
-        if (debug) {
-          Log.e(TAG, "downloadUserSettings: " + e2);
-        }
-      }
-    }
     if (debug) {
       Log.i(TAG, "downloadUserSettings: settings = " + response);
+    }
+  }
+
+  private static boolean getBoolean(
+      JSONObject jsonObject,
+      String settingKey,
+      boolean settingDefault,
+      SharedPreferences prefs
+  ) {
+    try {
+      Object settingValue = jsonObject.get(settingKey);
+      if (settingValue instanceof Integer) {
+        return ((int) settingValue) == 1;
+      } else if (settingValue instanceof Boolean) {
+        return ((boolean) settingValue);
+      } else if (settingValue instanceof String && ((String) settingValue).isEmpty()) {
+        return false;
+      } else if (settingValue instanceof String && NumUtil.isStringInt((String) settingValue)) {
+        return Integer.parseInt((String) settingValue) == 1;
+      } else if (settingValue instanceof String && ((String) settingValue).equals("false")) {
+        return false;
+      } else if (settingValue instanceof String && ((String) settingValue).equals("true")) {
+        return true;
+      } else {
+        return prefs.getBoolean(settingKey, settingDefault);
+      }
+    } catch (JSONException e) {
+      Log.e(TAG, "downloadUserSettings: getBoolean: settingKey="
+          + settingKey + " Exception:" + e);
+      return prefs.getBoolean(settingKey, settingDefault);
     }
   }
 
