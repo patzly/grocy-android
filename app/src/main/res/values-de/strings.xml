@@ -714,12 +714,15 @@
   <string name="setting_default_amount_consume">Standardmenge für Verbrauch</string>
   <string name="setting_purchased_date">Nach Einkaufsdatum fragen</string>
   <string name="setting_purchased_date_description">Auf der Einkauf- und Inventur-Seite</string>
+  <string name="setting_use_quick_consume_amount">Die Schnell-Verbrauchs-Menge des Produkts verwenden</string>
   <string name="setting_empty_value">Leer</string>
   <string name="setting_sync_off">Synchonisation aus</string>
   <string name="setting_not_loaded">Konnte nicht geladen werden</string>
   <string name="setting_debug">Logging aktivieren</string>
-  <string name="setting_debug_description">Fehler in den Logs anzeigen</string>
-  <string name="setting_info_logs">Info-Logs anzeigen</string>
+  <string name="setting_debug_description">Für Debugging-Zwecke</string>
+  <string name="setting_log_level">Log-Level</string>
+  <string name="setting_error_logs">Nur Fehler-Logs anzeigen</string>
+  <string name="setting_info_logs">Fehler- und Info-Logs anzeigen</string>
   <string name="setting_logs_description">Logcat von diesem Prozess anzeigen</string>
   <string name="setting_timeout">Ladezeit-Überschreitung</string>
   <string name="setting_timeout_descriptions">Nach der das Laden abgebrochen wird</string>
