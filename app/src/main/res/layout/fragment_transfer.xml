@@ -366,7 +366,7 @@
                     android:text="@={formData.amountLive}"
                     android:afterTextChanged="@{() -> formData.isAmountValid()}"
                     app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"
-                    app:onDoneClickInSoftKeyboard="@{() -> fragment.focusNextInvalidView()}" />
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocusOrFocusNextInvalidView()}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

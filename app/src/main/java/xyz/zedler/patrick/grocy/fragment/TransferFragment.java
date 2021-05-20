@@ -391,6 +391,14 @@ public class TransferFragment extends BaseFragment implements
     if (nextView instanceof EditText) activity.showKeyboard((EditText) nextView);
   }
 
+  public void clearInputFocusOrFocusNextInvalidView() {
+    if (viewModel.isQuickModeEnabled()) {
+      focusNextInvalidView();
+    } else {
+      clearInputFocus();
+    }
+  }
+
   private void lockOrUnlockRotation(boolean scannerIsVisible) {
     if (scannerIsVisible) {
       activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
@@ -406,11 +414,7 @@ public class TransferFragment extends BaseFragment implements
 
   @Override
   public void onBottomSheetDismissed() {
-    if (!viewModel.isQuickModeEnabled()) {
-      clearInputFocus();
-    } else {
-      focusNextInvalidView();
-    }
+    clearInputFocusOrFocusNextInvalidView();
   }
 
   private void hideDisabledFeatures() {
