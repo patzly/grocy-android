@@ -1,6 +1,7 @@
 2.0.0-beta02
 - New: Almost all stock settings are available now (#395)
 - Improved: Debugging settings page was cleaned up
+- Improved: On consume page use stock amount if barcode amount is bigger than stock (#357)
 - Improved: Updated translations
 - Fixed: Crash on startup with some servers (#407)
 - Fixed: Pressing 'done' on keyboard in amount field always starts quick mode (#410)

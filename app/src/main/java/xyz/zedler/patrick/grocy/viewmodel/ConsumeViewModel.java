@@ -224,7 +224,11 @@ public class ConsumeViewModel extends BaseViewModel {
       if (!isTareWeightEnabled && barcode != null && barcode.hasAmount()) {
         // if barcode contains amount, take this (with tare weight handling off)
         // quick mode status doesn't matter
-        formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
+        if (barcode.getAmountDouble() < productDetails.getStockAmount()) {
+          formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
+        } else {
+          formData.getAmountLive().setValue(NumUtil.trim(productDetails.getStockAmount()));
+        }
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
