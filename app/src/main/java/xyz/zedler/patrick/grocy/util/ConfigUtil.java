@@ -143,13 +143,13 @@ public class ConfigUtil {
           STOCK.DISPLAY_DOTS_IN_STOCK,
           getBoolean(jsonObject, STOCK.DISPLAY_DOTS_IN_STOCK,
               SETTINGS_DEFAULT.STOCK.DISPLAY_DOTS_IN_STOCK, prefs)
+      ).putString(
+          STOCK.DEFAULT_PURCHASE_AMOUNT,
+          jsonObject.getString(STOCK.DEFAULT_PURCHASE_AMOUNT)
       ).putBoolean(
           STOCK.SHOW_PURCHASED_DATE,
           getBoolean(jsonObject, STOCK.SHOW_PURCHASED_DATE,
               SETTINGS_DEFAULT.STOCK.SHOW_PURCHASED_DATE, prefs)
-      ).putString(
-          STOCK.DEFAULT_PURCHASE_AMOUNT,
-          jsonObject.getString(STOCK.DEFAULT_PURCHASE_AMOUNT)
       ).putString(
           STOCK.DEFAULT_CONSUME_AMOUNT,
           jsonObject.getString(STOCK.DEFAULT_CONSUME_AMOUNT)

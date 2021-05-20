@@ -30,7 +30,29 @@
   <item
     android:id="@+id/action_feedback"
     android:title="@string/action_feedback"
-    android:icon="@drawable/ic_round_feedback_anim"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/action_log_level"
+    android:title="@string/setting_log_level"
+    app:showAsAction="never">
+
+    <menu>
+
+      <group android:checkableBehavior="single">
+
+        <item
+          android:id="@+id/action_error_logs"
+          android:title="@string/setting_error_logs" />
+
+        <item
+          android:id="@+id/action_info_logs"
+          android:title="@string/setting_info_logs" />
+
+      </group>
+
+    </menu>
+
+  </item>
 
 </menu>

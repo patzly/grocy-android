@@ -200,18 +200,6 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING, enabled).apply();
   }
 
-  public boolean getInfoLogsEnabled() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS,
-        Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_INFO_LOGS
-    );
-  }
-
-  public void setInfoLogsEnabled(boolean enabled) {
-    sharedPrefs.edit()
-        .putBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_INFO_LOGS, enabled).apply();
-  }
-
   public boolean getBeginnerModeEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,

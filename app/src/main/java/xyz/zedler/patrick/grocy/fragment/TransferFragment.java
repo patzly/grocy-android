@@ -169,18 +169,6 @@ public class TransferFragment extends BaseFragment implements
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    viewModel.getFormData().getProductDetailsLive().observe(
-        getViewLifecycleOwner(),
-        productDetails -> {
-          MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_open);
-            if (productDetails != null && productDetails.getProduct()
-                .getEnableTareWeightHandlingBoolean() || menuItem == null) {
-                return;
-            }
-          menuItem.setVisible(productDetails != null);
-        }
-    );
-
     //hideDisabledFeatures();
 
       if (savedInstanceState == null) {

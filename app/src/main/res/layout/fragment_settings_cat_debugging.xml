@@ -146,27 +146,6 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> switchInfo.setChecked(!switchInfo.isChecked())}">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/setting_info_logs"
-            android:paddingStart="56dp"
-            android:paddingEnd="0dp" />
-
-          <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch_info"
-            style="@style/Widget.Grocy.Switch"
-            android:checked="@={viewModel.infoLogsEnabled}" />
-
-        </LinearLayout>
-
-        <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

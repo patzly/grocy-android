@@ -162,8 +162,6 @@ public final class Constants {
     public final static class DEBUGGING {
 
       public final static String ENABLE_DEBUGGING = "enable_debugging";
-      public final static String ENABLE_INFO_LOGS = "enable_info_logs";
-      public final static String SHOW_LOGS = "show_logs";
     }
   }
 
@@ -225,7 +223,6 @@ public final class Constants {
     public final static class DEBUGGING {
 
       public final static boolean ENABLE_DEBUGGING = false;
-      public final static boolean ENABLE_INFO_LOGS = false;
     }
   }
 

@@ -44,7 +44,6 @@ public class SettingsCatDebuggingFragment extends BaseFragment {
 
   private FragmentSettingsCatDebuggingBinding binding;
   private MainActivity activity;
-  private SettingsViewModel viewModel;
 
   @Override
   public View onCreateView(
@@ -65,7 +64,7 @@ public class SettingsCatDebuggingFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setViewModel(viewModel);

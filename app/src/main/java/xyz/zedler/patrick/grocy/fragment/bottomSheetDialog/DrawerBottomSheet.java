@@ -99,12 +99,6 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         binding.linearDrawerHelp
     );
 
-    binding.linearDrawerSettings.setOnLongClickListener(v -> {
-      activity.getCurrentFragment().navigate(R.id.settingsActivity);
-      dismiss();
-      return true;
-    });
-
     BaseFragment currentFragment = activity.getCurrentFragment();
     if (currentFragment instanceof StockOverviewFragment) {
       select(binding.linearDrawerStock, binding.textDrawerStock);

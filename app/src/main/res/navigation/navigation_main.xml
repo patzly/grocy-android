@@ -150,11 +150,6 @@
       app:argType="boolean"
       android:defaultValue="false" />
   </fragment>
-  <activity
-    android:id="@+id/settingsActivity"
-    android:name="xyz.zedler.patrick.grocy.activity.SettingsActivity"
-    android:label="SettingsActivity"
-    tools:layout="@layout/activity_settings" />
   <dialog
     android:id="@+id/productOverviewBottomSheetDialogFragment"
     android:name="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet"
@@ -226,9 +221,6 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_inventoryFragment"
       app:destination="@id/inventoryFragment" />
-    <action
-      android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsActivity"
-      app:destination="@id/settingsActivity" />
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_settingsFragment"
       app:destination="@id/navigation_settings" />

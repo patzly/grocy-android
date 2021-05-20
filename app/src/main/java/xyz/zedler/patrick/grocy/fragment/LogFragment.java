@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +36,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentLogBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 
 public class LogFragment extends BaseFragment {
 
@@ -46,7 +43,7 @@ public class LogFragment extends BaseFragment {
 
   private FragmentLogBinding binding;
   private MainActivity activity;
-  private boolean showInfo;
+  private boolean showInfo = false;
 
   @Override
   public View onCreateView(
@@ -69,9 +66,6 @@ public class LogFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    showInfo = sharedPrefs.getBoolean(Constants.PREF.SHOW_INFO_LOGS, false);
-
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
       activity.getScrollBehavior().setHideOnScroll(false);
@@ -82,6 +76,10 @@ public class LogFragment extends BaseFragment {
       );
     }
 
+    if (savedInstanceState != null && savedInstanceState.containsKey("show_info")) {
+      showInfo = savedInstanceState.getBoolean("show_info");
+    }
+
     new Handler().postDelayed(
         () -> new loadAsyncTask(
             getLogcatCommand(),
@@ -89,6 +87,12 @@ public class LogFragment extends BaseFragment {
         ).execute(),
         300
     );
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    outState.putBoolean("show_info", showInfo);
+    super.onSaveInstanceState(outState);
   }
 
   private static class loadAsyncTask extends AsyncTask<Void, Void, String> {
@@ -149,8 +153,22 @@ public class LogFragment extends BaseFragment {
       new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
       return true;
     } else if (item.getItemId() == R.id.action_feedback) {
-      IconUtil.start(item);
       activity.showBottomSheet(new FeedbackBottomSheet(), null);
+      return true;
+    } else if (item.getItemId() == R.id.action_log_level) {
+      if (showInfo) {
+        item.getSubMenu().findItem(R.id.action_info_logs).setChecked(true);
+      } else {
+        item.getSubMenu().findItem(R.id.action_error_logs).setChecked(true);
+      }
+      return true;
+    } else if (item.getItemId() == R.id.action_error_logs) {
+      showInfo = false;
+      new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
+      return true;
+    } else if (item.getItemId() == R.id.action_info_logs) {
+      showInfo = true;
+      new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
       return true;
     }
     return false;

@@ -729,8 +729,10 @@
   <string name="setting_sync_off">Sync off</string>
   <string name="setting_not_loaded">Could not be loaded</string>
   <string name="setting_debug">Enable logging</string>
-  <string name="setting_debug_description">Display errors in the logs</string>
-  <string name="setting_info_logs">Show info logs</string>
+  <string name="setting_debug_description">For debugging purposes</string>
+  <string name="setting_log_level">Log level</string>
+  <string name="setting_error_logs">Show error logs only</string>
+  <string name="setting_info_logs">Show error and info logs</string>
   <string name="setting_logs_description">Display logcat of this process</string>
   <string name="setting_timeout">Loading timeout</string>
   <string name="setting_timeout_descriptions">After which loading is cancelled</string>
