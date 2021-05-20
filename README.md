@@ -17,9 +17,8 @@ You can try it using the demo option available on the login screen.
 
 ## Downloads
 
-**Attention: On Google Play and f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x!
-We will update them as soon as v2.0.0 is officially released.  
-You can download the pre-releases [here](https://github.com/patzly/grocy-android/releases/).**
+**Attention: On f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x! It will be updated as soon as we release the final version 2.0.0.  
+On Google Play you need to join our public beta channel to receive the prereleases.*
 
 For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our pre-releases. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo?fingerprint=DFDB0A58E78704CAEB609389B81AB2BE6A090662F860635D760E76ACBC700AF8) to your client. Thank you silkevicious!
 
