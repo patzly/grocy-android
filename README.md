@@ -4,7 +4,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-**Version 2.0.0 is finished soon. You can download the latest beta on the [releases page](https://github.com/patzly/grocy-android/releases/) or on [Google Play](https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy). Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
+**Version 2.0.0 is finished soon. You can download the latest beta from the sources listed below. Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
 
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
@@ -16,10 +16,7 @@ You can try it using the demo option available on the login screen.
 
 ## Downloads
 
-**Attention: On f-droid.org is only the outdated v1.10.1 available, which isn't compatible with the current grocy server version 3.0.x! It will be updated as soon as we release the final version 2.0.0.  
-On Google Play you need to join our public beta channel to receive the prereleases.**
-
-For F-Droid users: Someone nice has a F-Droid repository [on Codeberg](https://codeberg.org/silkevicious/apkrepo) which contains our pre-releases. Just add [this URL](https://codeberg.org/silkevicious/apkrepo/raw/branch/master/fdroid/repo?fingerprint=DFDB0A58E78704CAEB609389B81AB2BE6A090662F860635D760E76ACBC700AF8) to your client. Thank you silkevicious!
+**On Google Play you need to join our public beta channel to receive the prereleases.**
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a><a href='https://f-droid.org/de/packages/xyz.zedler.patrick.grocy/'><img alt='Get it on F-Droid' height="80" src='assets/badge_fdroid.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a>
 
