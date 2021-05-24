@@ -202,6 +202,8 @@
   <string name="msg_transfer_tare_weight">Продукти з увімкненою вагою тари наразі не підтримуються для переміщення.</string>
   <string name="msg_item_marked_as_done">Пункт виконано</string>
   <string name="msg_item_marked_as_undone">Пункт скасовано</string>
+  <string name="option_synced_success">Параметр успішно синхронізовано</string>
+  <string name="option_synced_error">Не вдалося синхронізувати параметр</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Транзакція, яка буде виконана:\n\nДодати %1$s %2$s %3$s на склад\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -762,21 +764,23 @@
   <string name="setting_keep_screen_on_description">В режимі покупок</string>
   <string name="setting_show_done_items">Показати виконані елементи</string>
   <string name="setting_show_done_items_description">Знизу</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_due_soon_days">За скільки днів попереджати, що спливає термін придатності</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_due_soon_days">Термін минає найближчими днями</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Кількість для покупки за замовчуванням</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Кількість для споживання за замовчуванням</string>
   <string name="setting_purchased_date">Запитувати дату купівлі</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">На сторінці купівлі та інвентаризації</string>
+  <string name="setting_use_quick_consume_amount">Використовуйте \"Кількість швидкого споживання\"</string>
   <string name="setting_empty_value">Порожньо</string>
   <string name="setting_sync_off">Синхронізацію вимкнено</string>
   <string name="setting_not_loaded">Не вдалося завантажити</string>
   <string name="setting_debug">Увімкнути ведення журналу</string>
-  <string name="setting_debug_description">Відображати помилки в журналах</string>
-  <string name="setting_info_logs">Показати інформаційні записи журналів</string>
+  <string name="setting_debug_description">Для налагодження</string>
+  <string name="setting_log_level">Рівень журналу</string>
+  <string name="setting_error_logs">Показати в журналі лише помилки</string>
+  <string name="setting_info_logs">Показати в журналі помилки та інформаційні записи</string>
   <string name="setting_logs_description">Показати журнал цього процесу</string>
   <string name="setting_timeout">Час очікування завантаження</string>
   <string name="setting_timeout_descriptions">Після чого завантаження скасовується</string>
@@ -789,6 +793,7 @@
   <string name="setting_speed_up_start_description">Впливає тільки на швидкі пристрої</string>
   <string name="setting_loading_circle">Показувати коло завантаження для всіх запитів</string>
   <string name="setting_loading_circle_description">Корисно для повільних мереж</string>
+  <string name="setting_synchronized">Наведений нижче параметр синхронізується із сервером.</string>
   <string name="settings_synchronized">Ці параметри синхронізуються із сервером.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
