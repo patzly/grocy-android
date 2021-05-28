@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -76,7 +77,11 @@ public class LogFragment extends BaseFragment {
       );
     }
 
-    if (savedInstanceState != null && savedInstanceState.containsKey("show_info")) {
+    String server = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        .getString(Constants.PREF.SERVER_URL, null);
+    if (server == null || server.isEmpty()) {
+      showInfo = true;
+    } else if (savedInstanceState != null && savedInstanceState.containsKey("show_info")) {
       showInfo = savedInstanceState.getBoolean("show_info");
     }
 
