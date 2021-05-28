@@ -32,12 +32,9 @@ public class PluralUtil {
   // TODO: https://github.com/populov/android-i18n-plurals/tree/master/library/src/main/java/com/seppius/i18n/plurals
 
   public PluralUtil(Locale locale) {
-    String localeCode = locale.getLanguage();
-    if (!locale.getCountry().isEmpty()) {
-      localeCode += "_" + locale.getCountry();
-    }
+    String langCode = locale.getLanguage();
 
-    switch (localeCode) {
+    switch (langCode) {
       case "cs":
         pluralDetails = new LangPluralDetails(
             4,
@@ -46,9 +43,8 @@ public class PluralUtil {
         );
         break;
       case "fr":
-      case "pt_BR":
-      case "pt_PT":
-        pluralDetails = new LangPluralDetails(2, (n) -> (n > 1) ? 1 : 0);
+      case "pt":
+        pluralDetails = new LangPluralDetails(2, (n) -> (n >= 0 && n < 2) ? 0 : 1);
         break;
       case "iw":
         pluralDetails = new LangPluralDetails(
@@ -75,7 +71,7 @@ public class PluralUtil {
                     : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14) ? 2 : 3)
         );
         break;
-      case "zh_CN":
+      case "zh":
         pluralDetails = new LangPluralDetails(1, n -> 0);
         break;
       case "en":
