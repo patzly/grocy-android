@@ -32,7 +32,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -63,6 +66,12 @@ public class SettingsViewModel extends BaseViewModel {
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
   private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
+  private ArrayList<Location> locations;
+  private final MutableLiveData<String> presetLocationTextLive;
+  private ArrayList<ProductGroup> productGroups;
+  private final MutableLiveData<String> presetProductGroupTextLive;
+  private ArrayList<QuantityUnit> quantityUnits;
+  private final MutableLiveData<String> presetQuantityUnitTextLive;
   private final MutableLiveData<String> dueSoonDaysTextLive;
   private final MutableLiveData<String> defaultPurchaseAmountTextLive;
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
@@ -85,6 +94,9 @@ public class SettingsViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
     shoppingModeUpdateIntervalTextLive = new MutableLiveData<>(getShoppingModeUpdateIntervalText());
+    presetLocationTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
+    presetProductGroupTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
+    presetQuantityUnitTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
     dueSoonDaysTextLive = new MutableLiveData<>(getDueSoonDaysText());
     defaultPurchaseAmountTextLive = new MutableLiveData<>(getDefaultPurchaseAmountText());
     defaultConsumeAmountTextLive = new MutableLiveData<>(getDefaultConsumeAmountText());
@@ -359,6 +371,117 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.uploadSetting(STOCK.DISPLAY_DOTS_IN_STOCK, enabled, this::showMessage);
   }
 
+  public MutableLiveData<String> getPresetLocationTextLive() {
+    return presetLocationTextLive;
+  }
+
+  public void setPresetLocation(Location location) {
+    sharedPrefs.edit().putInt(STOCK.LOCATION, location.getId()).apply();
+    dlHelper.uploadSetting(STOCK.LOCATION, location.getId(), this::showMessage);
+    presetLocationTextLive.setValue(location.getName());
+  }
+
+  public MutableLiveData<String> getPresetProductGroupTextLive() {
+    return presetProductGroupTextLive;
+  }
+
+  public void setPresetProductGroup(ProductGroup productGroup) {
+    sharedPrefs.edit().putInt(STOCK.PRODUCT_GROUP, productGroup.getId()).apply();
+    dlHelper.uploadSetting(STOCK.PRODUCT_GROUP, productGroup.getId(), this::showMessage);
+    presetProductGroupTextLive.setValue(productGroup.getName());
+  }
+
+  public MutableLiveData<String> getPresetQuantityUnitTextLive() {
+    return presetQuantityUnitTextLive;
+  }
+
+  public void setPresetQuantityUnit(QuantityUnit quantityUnit) {
+    sharedPrefs.edit().putInt(STOCK.QUANTITY_UNIT, quantityUnit.getId()).apply();
+    dlHelper.uploadSetting(STOCK.QUANTITY_UNIT, quantityUnit.getId(), this::showMessage);
+    presetQuantityUnitTextLive.setValue(quantityUnit.getName());
+  }
+
+  public void loadProductPresets() {
+    int locationId = sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION);
+    int groupId = sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP);
+    int unitId = sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT);
+    dlHelper.getLocations(
+        locations -> {
+          this.locations = locations;
+          this.locations.add(
+              0,
+              new Location(-1, getString(R.string.subtitle_none_selected))
+          );
+          Location location = getLocation(locationId);
+          presetLocationTextLive.setValue(location != null ? location.getName()
+              : getString(R.string.subtitle_none_selected));
+        }, error -> presetLocationTextLive.setValue(getString(R.string.setting_not_loaded))
+    ).perform(dlHelper.getUuid());
+    dlHelper.getProductGroups(
+        productGroups -> {
+          this.productGroups = productGroups;
+          this.productGroups.add(
+              0,
+              new ProductGroup(-1, getString(R.string.subtitle_none_selected))
+          );
+          ProductGroup productGroup = getProductGroup(groupId);
+          presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()
+              : getString(R.string.subtitle_none_selected));
+        }, error -> presetProductGroupTextLive.setValue(getString(R.string.setting_not_loaded))
+    ).perform(dlHelper.getUuid());
+    dlHelper.getQuantityUnits(
+        quantityUnits -> {
+          this.quantityUnits = quantityUnits;
+          this.quantityUnits.add(
+              0,
+              new QuantityUnit(-1, getString(R.string.subtitle_none_selected))
+          );
+          QuantityUnit quantityUnit = getQuantityUnit(unitId);
+          presetQuantityUnitTextLive.setValue(quantityUnit != null ? quantityUnit.getName()
+              : getString(R.string.subtitle_none_selected));
+        }, error -> presetQuantityUnitTextLive.setValue(getString(R.string.setting_not_loaded))
+    ).perform(dlHelper.getUuid());
+  }
+
+  public void showLocationsBottomSheet() {
+    if (locations == null) {
+      return;
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.LOCATIONS, locations);
+    bundle.putInt(
+        ARGUMENT.SELECTED_ID,
+        sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION)
+    );
+    showBottomSheet(new LocationsBottomSheet(), bundle);
+  }
+
+  public void showProductGroupsBottomSheet() {
+    if (productGroups == null) {
+      return;
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCT_GROUPS, productGroups);
+    bundle.putInt(
+        ARGUMENT.SELECTED_ID,
+        sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP)
+    );
+    showBottomSheet(new ProductGroupsBottomSheet(), bundle);
+  }
+
+  public void showQuantityUnitsBottomSheet() {
+    if (quantityUnits == null) {
+      return;
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
+    bundle.putInt(
+        ARGUMENT.SELECTED_ID,
+        sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT)
+    );
+    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
+  }
+
   public void showDueSoonDaysBottomSheet() {
     Bundle bundle = new Bundle();
     String days = sharedPrefs.getString(STOCK.DUE_SOON_DAYS, SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
@@ -551,7 +674,10 @@ public class SettingsViewModel extends BaseViewModel {
     return server != null && server.contains("grocy.info");
   }
 
-  public Location getLocation(ArrayList<Location> locations, int id) {
+  private Location getLocation(int id) {
+    if (id == -1) {
+      return null;
+    }
     for (Location location : locations) {
       if (location.getId() == id) {
         return location;
@@ -560,7 +686,10 @@ public class SettingsViewModel extends BaseViewModel {
     return null;
   }
 
-  public ProductGroup getProductGroup(ArrayList<ProductGroup> productGroups, int id) {
+  private ProductGroup getProductGroup(int id) {
+    if (id == -1) {
+      return null;
+    }
     for (ProductGroup productGroup : productGroups) {
       if (productGroup.getId() == id) {
         return productGroup;
@@ -569,7 +698,10 @@ public class SettingsViewModel extends BaseViewModel {
     return null;
   }
 
-  public QuantityUnit getQuantityUnit(ArrayList<QuantityUnit> quantityUnits, int id) {
+  private QuantityUnit getQuantityUnit(int id) {
+    if (id == -1) {
+      return null;
+    }
     for (QuantityUnit quantityUnit : quantityUnits) {
       if (quantityUnit.getId() == id) {
         return quantityUnit;

@@ -137,11 +137,11 @@
           android:text="@string/title_presets_new_products" />
 
         <LinearLayout
-          android:id="@+id/linear_setting_default_location"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:onClick="@{() -> viewModel.showLocationsBottomSheet()}"
+          clickUtil="@{clickUtil}">
 
           <ImageView
-            android:id="@+id/image_setting_default_location"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:src="@drawable/ic_round_place"
             tools:ignore="ContentDescription" />
@@ -153,19 +153,19 @@
               android:text="@string/property_location" />
 
             <TextView
-              android:id="@+id/text_setting_default_location"
-              style="@style/Widget.Grocy.TextView.ListItem.Title" />
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.presetLocationTextLive}"/>
 
           </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-          android:id="@+id/linear_setting_default_product_group"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:onClick="@{() -> viewModel.showProductGroupsBottomSheet()}"
+          clickUtil="@{clickUtil}">
 
           <ImageView
-            android:id="@+id/image_setting_default_product_group"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:src="@drawable/ic_round_category"
             tools:ignore="ContentDescription" />
@@ -177,19 +177,19 @@
               android:text="@string/property_product_group" />
 
             <TextView
-              android:id="@+id/text_setting_default_product_group"
-              style="@style/Widget.Grocy.TextView.ListItem.Title" />
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.presetProductGroupTextLive}"/>
 
           </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-          android:id="@+id/linear_setting_default_quantity_unit"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet()}"
+          clickUtil="@{clickUtil}">
 
           <ImageView
-            android:id="@+id/image_setting_default_quantity_unit"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:src="@drawable/ic_round_weights"
             tools:ignore="ContentDescription" />
@@ -201,8 +201,8 @@
               android:text="@string/property_quantity_unit" />
 
             <TextView
-              android:id="@+id/text_setting_default_quantity_unit"
-              style="@style/Widget.Grocy.TextView.ListItem.Title" />
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.presetQuantityUnitTextLive}"/>
 
           </LinearLayout>
 

@@ -33,6 +33,9 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatStockBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -101,6 +104,8 @@ public class SettingsCatStockFragment extends BaseFragment {
     }
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+
+    viewModel.loadProductPresets();
   }
 
   @Override
@@ -113,6 +118,21 @@ public class SettingsCatStockFragment extends BaseFragment {
     } else if (type != null && type.equals(STOCK.DEFAULT_CONSUME_AMOUNT)) {
       viewModel.setDefaultConsumeAmount(text);
     }
+  }
+
+  @Override
+  public void selectLocation(Location location) {
+    viewModel.setPresetLocation(location);
+  }
+
+  @Override
+  public void selectProductGroup(ProductGroup productGroup) {
+    viewModel.setPresetProductGroup(productGroup);
+  }
+
+  @Override
+  public void selectQuantityUnit(QuantityUnit quantityUnit) {
+    viewModel.setPresetQuantityUnit(quantityUnit);
   }
 
   @Override
