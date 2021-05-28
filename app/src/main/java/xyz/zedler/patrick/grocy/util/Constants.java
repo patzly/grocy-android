@@ -45,21 +45,7 @@ public final class Constants {
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
 
-    // DO NOT EDIT THE FOLLOWING STRINGS, THEY ARE FOR SERVER SYNC STUFF
-    // (but you can edit the variable names)
-    public final static String STOCK_DUE_SOON_DAYS = "stock_due_soon_days";
-    public final static String STOCK_DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount";
-    public final static String STOCK_DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount";
-    public final static String PRODUCT_PRESETS_LOCATION_ID = "product_presets_location_id";
-    public final static String PRODUCT_PRESETS_PRODUCT_GROUP_ID = "product_presets_product_group_id";
-    public final static String PRODUCT_PRESETS_QU_ID = "product_presets_qu_id";
-    public final static String SHOW_SHOPPING_LIST_ICON_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list";
-    public final static String RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP = "recipe_ingredients_group_by_product_group";
-    // end of server sync stuff
-
-    public final static String SHOPPING_MODE_UPDATE_INTERVAL = "shopping_mode_update_interval";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
-    public final static String KEEP_SHOPPING_SCREEN_ON = "shopping_keep_screen_on";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
     public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
@@ -86,11 +72,7 @@ public final class Constants {
     public final static String CAMERA_SCANNER_VISIBLE_TRANSFER = "camera_scanner_visible_transfer";
     public final static String CAMERA_SCANNER_VISIBLE_INVENTORY = "camera_scanner_visible_inventory";
 
-    public final static String DARK_MODE = "force_dark_mode";
-    public final static String FOOD_FACTS = "use_open_food_facts";
-    public final static String USE_FRONT_CAM = "use_front_camera";
     public final static String DEBUG = "debug";
-    public final static String SHOW_INFO_LOGS = "info_logs";
 
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";

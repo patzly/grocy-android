@@ -281,6 +281,13 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
     );
   }
 
+  public boolean getUseFrontCam() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.SCANNER.FRONT_CAM,
+        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
+    );
+  }
+
   @Override
   protected void onCleared() {
     dlHelper.destroy();

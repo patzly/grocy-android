@@ -157,11 +157,6 @@ public class ConfigUtil {
           STOCK.USE_QUICK_CONSUME_AMOUNT,
           getBoolean(jsonObject, STOCK.USE_QUICK_CONSUME_AMOUNT,
               SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT, prefs)
-      ).putString(
-          Constants.PREF.RECIPE_INGREDIENTS_GROUP_BY_PRODUCT_GROUP,
-          jsonObject.getString(
-              "recipe_ingredients_group_by_product_group"
-          )
       ).apply();
     } catch (JSONException e) {
       if (debug) {

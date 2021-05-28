@@ -34,6 +34,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SettingInputBottomSheet extends BaseBottomSheet {
@@ -135,15 +137,15 @@ public class SettingInputBottomSheet extends BaseBottomSheet {
           activity.hideKeyboard();
         });
         break;
-      case Constants.PREF.STOCK_DEFAULT_PURCHASE_AMOUNT:
+      case STOCK.DEFAULT_PURCHASE_AMOUNT:
         title = activity.getString(R.string.setting_default_amount_purchase);
         hint = activity.getString(R.string.property_amount);
         break;
-      case Constants.PREF.STOCK_DEFAULT_CONSUME_AMOUNT:
+      case STOCK.DEFAULT_CONSUME_AMOUNT:
         title = activity.getString(R.string.setting_default_amount_consume);
         hint = activity.getString(R.string.property_amount);
         break;
-      case Constants.PREF.SHOPPING_MODE_UPDATE_INTERVAL:
+      case SHOPPING_MODE.UPDATE_INTERVAL:
         title = activity.getString(R.string.setting_shopping_mode_update_interval);
         hint = activity.getString(R.string.property_seconds);
         break;

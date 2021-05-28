@@ -37,6 +37,7 @@ public class FormDataMasterProductCatOptional {
   private final Application application;
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isActiveLive;
+  private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<Product> parentProductLive;
   private final MutableLiveData<String> parentProductNameLive;
@@ -52,11 +53,13 @@ public class FormDataMasterProductCatOptional {
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
+  private boolean torchOn = false;
 
   public FormDataMasterProductCatOptional(Application application, boolean beginnerMode) {
     this.application = application;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     isActiveLive = new MutableLiveData<>();
+    scannerVisibilityLive = new MutableLiveData<>(false);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     parentProductLive = new MutableLiveData<>();
     parentProductNameLive = (MutableLiveData<String>) Transformations.map(
@@ -144,6 +147,27 @@ public class FormDataMasterProductCatOptional {
     neverShowOnStockLive.setValue(
         neverShowOnStockLive.getValue() == null || !neverShowOnStockLive.getValue()
     );
+  }
+
+  public MutableLiveData<Boolean> getScannerVisibilityLive() {
+    return scannerVisibilityLive;
+  }
+
+  public boolean isScannerVisible() {
+    assert scannerVisibilityLive.getValue() != null;
+    return scannerVisibilityLive.getValue();
+  }
+
+  public void toggleScannerVisibility() {
+    scannerVisibilityLive.setValue(!isScannerVisible());
+  }
+
+  public boolean isTorchOn() {
+    return torchOn;
+  }
+
+  public void setTorchOn(boolean torchOn) {
+    this.torchOn = torchOn;
   }
 
   public MutableLiveData<Product> getProductLive() {

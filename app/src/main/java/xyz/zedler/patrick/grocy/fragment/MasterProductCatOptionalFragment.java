@@ -19,9 +19,11 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
@@ -41,10 +46,12 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
 
-public class MasterProductCatOptionalFragment extends BaseFragment {
+public class MasterProductCatOptionalFragment extends BaseFragment implements
+    ScanInputCaptureManager.BarcodeListener {
 
   private final static String TAG = MasterProductCatOptionalFragment.class.getSimpleName();
 
@@ -52,6 +59,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
   private FragmentMasterProductCatOptionalBinding binding;
   private MasterProductCatOptionalViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private ScanInputCaptureManager capture;
 
   @Override
   public View onCreateView(
@@ -107,21 +115,42 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
+    viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
+      if (visible) {
+        capture.onResume();
+        capture.decode();
+      } else {
+        capture.onPause();
+      }
+      lockOrUnlockRotation(visible);
+    });
+
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
       if (!isLoading) {
         viewModel.setCurrentQueueLoading(null);
       }
     });
 
-    String barcode = (String) getFromThisDestinationNow(Constants.ARGUMENT.BARCODE);
-    if (barcode != null) {
-      removeForThisDestination(Constants.ARGUMENT.BARCODE);
-      viewModel.onBarcodeRecognized(barcode);
-    }
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
+
+    binding.barcodeScan.setTorchOff();
+    binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
+      @Override
+      public void onTorchOn() {
+        viewModel.getFormData().setTorchOn(true);
+      }
+
+      @Override
+      public void onTorchOff() {
+        viewModel.getFormData().setTorchOn(false);
+      }
+    });
+    CameraSettings cameraSettings = new CameraSettings();
+    cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
+    binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
+    capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
 
     updateUI(savedInstanceState == null);
   }
@@ -159,6 +188,56 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
           activity.onBackPressed();
         }
     );
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (viewModel.getFormData().isScannerVisible()) {
+      capture.onResume();
+    }
+  }
+
+  @Override
+  public void onPause() {
+    if (viewModel.getFormData().isScannerVisible()) {
+      capture.onPause();
+    }
+    super.onPause();
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (viewModel.getFormData().isScannerVisible()) {
+      return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    }
+    return super.onKeyDown(keyCode, event);
+  }
+
+  @Override
+  public void onDestroy() {
+    if (capture != null) {
+      capture.onDestroy();
+    }
+    super.onDestroy();
+  }
+
+  @Override
+  public void onBarcodeResult(BarcodeResult result) {
+    if (result == null || result.getText().isEmpty()) {
+      resumeScan();
+      return;
+    }
+    viewModel.getFormData().toggleScannerVisibility();
+    viewModel.onBarcodeRecognized(result.getText());
+  }
+
+  public void toggleTorch() {
+    if (viewModel.getFormData().isTorchOn()) {
+      binding.barcodeScan.setTorchOff();
+    } else {
+      binding.barcodeScan.setTorchOn();
+    }
   }
 
   public void clearInputFocus() {
@@ -223,6 +302,14 @@ public class MasterProductCatOptionalFragment extends BaseFragment {
         viewModel.getFilledProduct()
     );
     return false;
+  }
+
+  private void lockOrUnlockRotation(boolean scannerIsVisible) {
+    if (scannerIsVisible) {
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+    } else {
+      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
+    }
   }
 
   @Override

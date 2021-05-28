@@ -238,11 +238,6 @@
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
     app:destination="@id/drawerBottomSheetDialogFragment" />
   <fragment
-    android:id="@+id/scanInputFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.ScanInputFragment"
-    android:label="ScanInputFragment"
-    tools:layout="@layout/fragment_scan_input" />
-  <fragment
     android:id="@+id/onboardingFragment"
     android:name="xyz.zedler.patrick.grocy.fragment.OnboardingFragment"
     android:label="OnboardingFragment"
