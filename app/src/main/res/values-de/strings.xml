@@ -717,6 +717,7 @@
   <string name="setting_use_quick_consume_amount">Die Schnell-Verbrauchs-Menge des Produkts verwenden</string>
   <string name="setting_empty_value">Leer</string>
   <string name="setting_sync_off">Synchonisation aus</string>
+  <string name="setting_loading">Wert wird geladen</string>
   <string name="setting_not_loaded">Konnte nicht geladen werden</string>
   <string name="setting_debug">Logging aktivieren</string>
   <string name="setting_debug_description">Für Debugging-Zwecke</string>
