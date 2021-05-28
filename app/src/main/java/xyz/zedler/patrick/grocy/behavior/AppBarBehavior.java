@@ -27,7 +27,7 @@ import android.view.View;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class AppBarBehavior {
 
@@ -44,7 +44,7 @@ public class AppBarBehavior {
     this.activity = activity;
 
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     viewPrimary = activity.findViewById(primary);
     viewPrimary.setVisibility(View.VISIBLE);

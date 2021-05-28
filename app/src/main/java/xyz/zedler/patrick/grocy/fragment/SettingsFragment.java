@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsFragment extends BaseFragment {
@@ -70,7 +71,7 @@ public class SettingsFragment extends BaseFragment {
     viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
     clickUtil = new ClickUtil();
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     queue = viewModel.getDownloadHelper().newQueue(
         null,
         this::showVolleyError

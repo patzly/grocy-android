@@ -20,13 +20,11 @@
 package xyz.zedler.patrick.grocy.behavior;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class AppBarBehaviorNew {
 
@@ -41,8 +39,7 @@ public class AppBarBehaviorNew {
   private final boolean debug;
 
   public AppBarBehaviorNew(Activity activity, View primary, View secondary, Bundle savedState) {
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(activity);
 
     if (savedState == null) {
       isPrimary = true;

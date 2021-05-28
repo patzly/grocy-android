@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class MasterObjectListViewModel extends BaseViewModel {
 
@@ -84,7 +85,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     this.entity = entity;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);

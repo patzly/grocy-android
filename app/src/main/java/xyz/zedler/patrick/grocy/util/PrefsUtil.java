@@ -19,7 +19,9 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import androidx.preference.PreferenceManager;
 
 public class PrefsUtil {
 
@@ -28,5 +30,9 @@ public class PrefsUtil {
         Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
         Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
     );
+  }
+
+  public static boolean isDebuggingEnabled(Context context) {
+    return isDebuggingEnabled(PreferenceManager.getDefaultSharedPreferences(context));
   }
 }

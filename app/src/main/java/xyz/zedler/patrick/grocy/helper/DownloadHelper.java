@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.CustomStringRequest;
@@ -88,7 +89,7 @@ public class DownloadHelper {
   ) {
     this.tag = tag;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     dateUtil = new DateUtil(application);
     gson = new Gson();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
@@ -123,7 +124,7 @@ public class DownloadHelper {
   ) {
     this.tag = tag;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     gson = new Gson();
     dateUtil = new DateUtil(application);
     RequestQueueSingleton.getInstance(application).newRequestQueue(serverUrl);

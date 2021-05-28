@@ -52,11 +52,14 @@ import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
-  private static final String TAG = ShoppingListViewModel.class.getSimpleName();
+  private final static String TAG = ShoppingListViewModel.class.getSimpleName();
+  public final static String SORT_NAME = "sort_name";
+  public final static String SORT_DUE_DATE = "sort_due_date";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -108,7 +111,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -139,7 +142,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     horizontalFilterBarMulti = new HorizontalFilterBarMulti(
         this::updateFilteredStockItems
     );
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, Constants.STOCK.SORT.NAME);
+    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
     sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
   }
 
@@ -481,10 +484,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     }
 
     switch (sortMode) {
-      case Constants.STOCK.SORT.NAME:
+      case SORT_NAME:
         SortUtil.sortStockItemsByName(getApplication(), filteredStockItems, sortAscending);
         break;
-      case Constants.STOCK.SORT.BBD:
+      case SORT_DUE_DATE:
         SortUtil.sortStockItemsByBBD(filteredStockItems, sortAscending);
         break;
     }

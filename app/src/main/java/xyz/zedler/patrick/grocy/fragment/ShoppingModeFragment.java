@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
 public class ShoppingModeFragment extends BaseFragment implements
@@ -113,7 +114,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     handler = new Handler();
 
     if (savedInstanceState == null) {

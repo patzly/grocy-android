@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterProductGroupFragment extends BaseFragment {
@@ -96,7 +97,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     // PREFERENCES
 
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     // WEB
 

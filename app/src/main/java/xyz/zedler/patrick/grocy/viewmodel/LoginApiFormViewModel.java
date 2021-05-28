@@ -29,6 +29,7 @@ import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.model.FormDataLoginApiForm;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class LoginApiFormViewModel extends BaseViewModel {
 
@@ -48,7 +49,7 @@ public class LoginApiFormViewModel extends BaseViewModel {
         Constants.PREF.CREDENTIALS,
         Context.MODE_PRIVATE
     );
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     formData = new FormDataLoginApiForm(sharedPrefsPrivate, args);
   }

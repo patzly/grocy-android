@@ -414,10 +414,10 @@ public class StockOverviewFragment extends BaseFragment implements
       MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
       MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
       switch (viewModel.getSortMode()) {
-        case Constants.STOCK.SORT.NAME:
+        case StockOverviewViewModel.SORT_NAME:
           sortName.setChecked(true);
           break;
-        case Constants.STOCK.SORT.BBD:
+        case StockOverviewViewModel.SORT_DUE_DATE:
           sortBBD.setChecked(true);
           break;
       }
@@ -426,14 +426,14 @@ public class StockOverviewFragment extends BaseFragment implements
     } else if (item.getItemId() == R.id.action_sort_name) {
       if (!item.isChecked()) {
         item.setChecked(true);
-        viewModel.setSortMode(Constants.STOCK.SORT.NAME);
+        viewModel.setSortMode(StockOverviewViewModel.SORT_NAME);
         viewModel.updateFilteredStockItems();
       }
       return true;
     } else if (item.getItemId() == R.id.action_sort_bbd) {
       if (!item.isChecked()) {
         item.setChecked(true);
-        viewModel.setSortMode(Constants.STOCK.SORT.BBD);
+        viewModel.setSortMode(StockOverviewViewModel.SORT_DUE_DATE);
         viewModel.updateFilteredStockItems();
       }
       return true;

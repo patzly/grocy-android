@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -44,6 +42,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
 import xyz.zedler.patrick.grocy.util.BulletUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
@@ -71,8 +70,7 @@ public class TextBottomSheet extends BaseBottomSheet {
     Context context = requireContext();
     Bundle bundle = requireArguments();
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    debug = sharedPrefs.getBoolean(Constants.PREF.DEBUG, false);
+    debug = PrefsUtil.isDebuggingEnabled(requireActivity());
 
     binding.textTextTitle.setText(
         bundle.getString(Constants.ARGUMENT.TITLE)

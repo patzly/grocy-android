@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.util;
 import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -53,10 +52,7 @@ public class TextUtil {
 
   @NonNull
   public static String readFromFile(Context context, String file) {
-    // TODO: use this in all asset usages and improve fetching of debug setting
-    boolean debug = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
-        Constants.PREF.DEBUG, false
-    );
+    boolean debug = PrefsUtil.isDebuggingEnabled(context);
     StringBuilder text = new StringBuilder();
     try {
       InputStream inputStream = context.getAssets().open(file);
