@@ -114,7 +114,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     activity = (MainActivity) requireActivity();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(activity);
 
     ProductOverviewBottomSheetArgs args =
         ProductOverviewBottomSheetArgs.fromBundle(requireArguments());

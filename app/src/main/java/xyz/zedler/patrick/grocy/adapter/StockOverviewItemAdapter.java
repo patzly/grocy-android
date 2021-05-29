@@ -90,7 +90,7 @@ public class StockOverviewItemAdapter extends
     this.stockItems = new ArrayList<>(stockItems);
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.pluralUtil = new PluralUtil(context.getResources().getConfiguration().locale);
+    this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
     this.horizontalFilterBarSingle = horizontalFilterBarSingle;

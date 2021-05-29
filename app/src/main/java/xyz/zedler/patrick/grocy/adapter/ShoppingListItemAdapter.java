@@ -83,7 +83,7 @@ public class ShoppingListItemAdapter extends
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     this.horizontalFilterBarSingle = horizontalFilterBarSingle;
-    pluralUtil = new PluralUtil(context.getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(context);
   }
 
   @Override

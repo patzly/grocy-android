@@ -19,10 +19,10 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.content.Context;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
 public class PluralUtil {
@@ -31,8 +31,8 @@ public class PluralUtil {
   
   // TODO: https://github.com/populov/android-i18n-plurals/tree/master/library/src/main/java/com/seppius/i18n/plurals
 
-  public PluralUtil(Locale locale) {
-    String langCode = locale.getLanguage();
+  public PluralUtil(Context context) {
+    String langCode = context.getResources().getConfiguration().locale.getLanguage();
 
     switch (langCode) {
       case "cs":

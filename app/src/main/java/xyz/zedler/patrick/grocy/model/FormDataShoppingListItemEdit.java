@@ -117,7 +117,7 @@ public class FormDataShoppingListItemEdit {
     useMultilineNoteLive = new MutableLiveData<>(false);
     noteLive = new MutableLiveData<>();
     noteErrorLive = new MutableLiveData<>();
-    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(application);
     filledWithShoppingListItem = false;
   }
 

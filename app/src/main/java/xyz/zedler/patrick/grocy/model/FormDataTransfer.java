@@ -147,7 +147,7 @@ public class FormDataTransfer {
     );
     useSpecificLive = new MutableLiveData<>(false);
     specificStockEntryLive = new MutableLiveData<>();
-    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(application);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {

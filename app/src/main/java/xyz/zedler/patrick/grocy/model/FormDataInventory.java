@@ -240,7 +240,7 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
-    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(application);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {

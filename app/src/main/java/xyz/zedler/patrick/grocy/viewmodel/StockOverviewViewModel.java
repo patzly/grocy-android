@@ -117,7 +117,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
     repository = new StockOverviewRepository(application);
-    pluralUtil = new PluralUtil(application.getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);

@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -34,7 +35,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -56,19 +56,19 @@ public class ShoppingModeItemAdapter extends
   private final PluralUtil pluralUtil;
 
   public ShoppingModeItemAdapter(
+      Context context,
       ArrayList<GroupedListItem> groupedListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       ArrayList<Integer> missingProductIds,
-      ShoppingModeItemClickListener listener,
-      Locale currentLocale
+      ShoppingModeItemClickListener listener
   ) {
     this.groupedListItems = new ArrayList<>(groupedListItems);
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
-    pluralUtil = new PluralUtil(currentLocale);
+    pluralUtil = new PluralUtil(context);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {

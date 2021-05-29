@@ -120,7 +120,7 @@ public class ShoppingListFragment extends BaseFragment implements
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(activity);
 
     // APP BAR BEHAVIOR
 

@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -50,10 +50,10 @@ public class StockLocationAdapter
   private final StockLocationAdapterListener listener;
 
   public StockLocationAdapter(
+      Context context,
       ArrayList<StockLocation> stockLocations,
       ProductDetails productDetails,
       QuantityUnit quantityUnitStock,
-      Locale currentLocale,
       int selectedId,
       StockLocationAdapterListener listener
   ) {
@@ -62,7 +62,7 @@ public class StockLocationAdapter
     this.quantityUnitStock = quantityUnitStock;
     this.selectedId = selectedId;
     this.listener = listener;
-    pluralUtil = new PluralUtil(currentLocale);
+    pluralUtil = new PluralUtil(context);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {

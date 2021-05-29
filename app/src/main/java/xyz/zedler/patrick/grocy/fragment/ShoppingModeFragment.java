@@ -162,12 +162,12 @@ public class ShoppingModeFragment extends BaseFragment implements
       } else {
         binding.recycler.setAdapter(
             new ShoppingModeItemAdapter(
+                activity,
                 items,
                 viewModel.getProductHashMap(),
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getMissingProductIds(),
-                this,
-                currentLocale
+                this
             )
         );
       }

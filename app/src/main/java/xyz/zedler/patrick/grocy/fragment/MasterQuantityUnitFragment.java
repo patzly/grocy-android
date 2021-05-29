@@ -103,7 +103,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     grocyApi = activity.getGrocyApi();
     gson = new Gson();
 
-    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(activity);
 
     // VARIABLES
 

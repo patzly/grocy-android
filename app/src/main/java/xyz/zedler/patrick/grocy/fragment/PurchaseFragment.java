@@ -175,7 +175,7 @@ public class PurchaseFragment extends BaseFragment implements
       ));
     }
 
-    pluralUtil = new PluralUtil(getResources().getConfiguration().locale);
+    pluralUtil = new PluralUtil(activity);
     viewModel.getFormData().getShoppingListItemLive().observe(getViewLifecycleOwner(), item -> {
       if(args.getShoppingListItems() == null || item == null) return;
       ShoppingListItemAdapter.fillShoppingListItem(
