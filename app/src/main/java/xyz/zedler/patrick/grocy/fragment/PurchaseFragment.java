@@ -184,6 +184,7 @@ public class PurchaseFragment extends BaseFragment implements
           binding.linearPurchaseShoppingListItem,
           viewModel.getProductHashMap(),
           viewModel.getQuantityUnitHashMap(),
+          viewModel.getShoppingListItemAmountsHashMap(),
           pluralUtil
       );
     });

@@ -6,6 +6,7 @@
 - Fixed: Crash on startup with some servers (#407)
 - Fixed: Pressing 'done' on keyboard in amount field always starts quick mode (#410)
 - Fixed: Shopping list always displayed stock quantity unit and amount (#419)
+- Fixed: Shopping list purchases wrong amount if item has not stock unit selected (#416)
 
 2.0.0-beta01
 - New: 'Purchase' actions on shopping list page are working again (#401)

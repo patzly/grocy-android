@@ -58,6 +58,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
+import xyz.zedler.patrick.grocy.util.AmountUtil;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -79,6 +81,8 @@ public class PurchaseViewModel extends BaseViewModel {
   private ArrayList<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private ArrayList<QuantityUnitConversion> unitConversions;
+  private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
+  private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private ArrayList<ProductBarcode> barcodes;
   private ArrayList<Store> stores;
   private ArrayList<Location> locations;
@@ -137,26 +141,17 @@ public class PurchaseViewModel extends BaseViewModel {
         locations, shoppingListItems) -> {
       this.products = products;
       formData.getProductsLive().setValue(getActiveProductsOnly(products));
-      productHashMap = new HashMap<>();
-      for (Product product : products) {
-        productHashMap.put(product.getId(), product);
-      }
+      productHashMap = ArrayUtil.getProductsHashMap(products);
       this.barcodes = barcodes;
       this.quantityUnits = qUs;
-      quantityUnitHashMap = new HashMap<>();
-      for (QuantityUnit quantityUnit : quantityUnits) {
-        quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
-      }
+      quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
       this.unitConversions = conversions;
+      unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
       this.stores = stores;
       this.locations = locations;
       this.shoppingListItems = shoppingListItems;
-      if (shoppingListItems != null) {
-        shoppingListItemHashMap = new HashMap<>();
-        for (ShoppingListItem item : shoppingListItems) {
-          shoppingListItemHashMap.put(item.getId(), item);
-        }
-      }
+      shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
+      fillShoppingListItemAmountsHashMap();
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -177,21 +172,16 @@ public class PurchaseViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          productHashMap = new HashMap<>();
-          for (Product product : products) {
-            productHashMap.put(product.getId(), product);
-          }
+          productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(getActiveProductsOnly(products));
-        }), dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, conversions -> this.unitConversions = conversions
-        ), dlHelper.updateProductBarcodes(
+        }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
+          this.unitConversions = conversions;
+          unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
+        }), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
           this.quantityUnits = quantityUnits;
-          quantityUnitHashMap = new HashMap<>();
-          for (QuantityUnit quantityUnit : quantityUnits) {
-            quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
-          }
+          quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
         }), dlHelper.updateStores(
             dbChangedTime, stores -> this.stores = stores
         ), dlHelper.updateLocations(
@@ -201,10 +191,7 @@ public class PurchaseViewModel extends BaseViewModel {
     if (batchShoppingListItemIds != null) {
       dlHelper.updateShoppingListItems(dbChangedTime, items -> {
         this.shoppingListItems = items;
-        shoppingListItemHashMap = new HashMap<>();
-        for (ShoppingListItem item : shoppingListItems) {
-          shoppingListItemHashMap.put(item.getId(), item);
-        }
+        shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       });
     }
     if (queue.isEmpty()) {
@@ -233,6 +220,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty(boolean offlineDataUpdated) {
+    fillShoppingListItemAmountsHashMap();
     if (offlineDataUpdated) {
       repository.updateDatabase(products, barcodes,
           quantityUnits, unitConversions, stores, locations, shoppingListItems);
@@ -293,9 +281,15 @@ public class PurchaseViewModel extends BaseViewModel {
         // if barcode contains amount, take this (with tare weight handling off)
         // quick mode status doesn't matter
         formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
-      }
-      if (!isTareWeightEnabled && shoppingListItem != null) {
-        formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
+      } else if (!isTareWeightEnabled && shoppingListItem != null) {
+        Double amountInUnit = AmountUtil.getShoppingListItemAmount(
+            shoppingListItem, productHashMap, quantityUnitHashMap, unitConversionHashMap
+        );
+        if (amountInUnit != null) {
+          formData.getAmountLive().setValue(NumUtil.trim(amountInUnit));
+        } else {
+          formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
+        }
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,
@@ -681,6 +675,22 @@ public class PurchaseViewModel extends BaseViewModel {
       }
     }
     return null;
+  }
+
+  private void fillShoppingListItemAmountsHashMap() {
+    shoppingListItemAmountsHashMap = new HashMap<>();
+    for (ShoppingListItem item : shoppingListItems) {
+      Double amount = AmountUtil.getShoppingListItemAmount(
+          item, productHashMap, quantityUnitHashMap, unitConversionHashMap
+      );
+      if (amount != null) {
+        shoppingListItemAmountsHashMap.put(item.getId(), amount);
+      }
+    }
+  }
+
+  public HashMap<Integer, Double> getShoppingListItemAmountsHashMap() {
+    return shoppingListItemAmountsHashMap;
   }
 
   public void showInputProductBottomSheet(@NonNull String input) {

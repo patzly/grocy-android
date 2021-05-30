@@ -22,10 +22,30 @@ package xyz.zedler.patrick.grocy.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MissingItem;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
 public class ArrayUtil {
+
+  public static HashMap<Integer, Product> getProductsHashMap(ArrayList<Product> products) {
+    HashMap<Integer, Product> hashMap = new HashMap<>();
+    for (Product p : products) {
+      hashMap.put(p.getId(), p);
+    }
+    return hashMap;
+  }
+
+  public static ArrayList<Integer> getMissingProductsIds(ArrayList<MissingItem> missingItems) {
+    ArrayList<Integer> missingProductIds = new ArrayList<>();
+    for (MissingItem missingItem : missingItems) {
+      missingProductIds.add(missingItem.getId());
+    }
+    return missingProductIds;
+  }
 
   public static HashMap<Integer, Location> getLocationsHashMap(ArrayList<Location> locations) {
     HashMap<Integer, Location> hashMap = new HashMap<>();
@@ -51,6 +71,35 @@ public class ArrayUtil {
     HashMap<Integer, QuantityUnit> hashMap = new HashMap<>();
     for (QuantityUnit q : quantityUnits) {
       hashMap.put(q.getId(), q);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, ArrayList<QuantityUnitConversion>> getUnitConversionsHashMap(
+      ArrayList<QuantityUnitConversion> unitConversions
+  ) {
+    HashMap<Integer, ArrayList<QuantityUnitConversion>> hashMap = new HashMap<>();
+    for (QuantityUnitConversion unitConversion : unitConversions) {
+      ArrayList<QuantityUnitConversion> unitConversionArrayList
+          = hashMap.get(unitConversion.getProductId());
+      if (unitConversionArrayList == null) {
+        unitConversionArrayList = new ArrayList<>();
+        hashMap.put(unitConversion.getProductId(), unitConversionArrayList);
+      }
+      unitConversionArrayList.add(unitConversion);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, ShoppingListItem> getShoppingListItemHashMap(
+      ArrayList<ShoppingListItem> shoppingListItems
+  ) {
+    if (shoppingListItems == null) {
+      return null;
+    }
+    HashMap<Integer, ShoppingListItem> hashMap = new HashMap<>();
+    for (ShoppingListItem item : shoppingListItems) {
+      hashMap.put(item.getId(), item);
     }
     return hashMap;
   }

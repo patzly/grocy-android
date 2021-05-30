@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -443,6 +442,7 @@ public class ShoppingListItemAdapter extends
       RowShoppingListItemBinding binding,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       PluralUtil pluralUtil
   ) {
 
@@ -477,23 +477,27 @@ public class ShoppingListItemAdapter extends
 
     // AMOUNT
 
-    if (product != null) {
+    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
+    if (product != null && amountInQuUnit != null) {
+      QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+      if (quStr != null) {
+        binding.amount.setText(
+            context.getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
+        );
+      } else {
+        binding.amount.setText(NumUtil.trim(amountInQuUnit));
+      }
+    } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
-      if (quantityUnit == null) {
-        quantityUnit = new QuantityUnit();
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
+      if (quStr != null) {
+        binding.amount.setText(
+            context.getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+        );
+      } else {
+        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
       }
-
-      if (DEBUG) {
-        Log.i(TAG, "fillShoppingListItem: " + quantityUnit.getName());
-      }
-
-      binding.amount.setText(
-          context.getString(
-              R.string.subtitle_amount,
-              NumUtil.trim(item.getAmountDouble()),
-              pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble())
-          )
-      );
     } else {
       binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
     }
