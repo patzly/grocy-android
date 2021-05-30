@@ -569,14 +569,13 @@
   <string name="setting_keep_screen_on_description">Durante modo de compra</string>
   <string name="setting_show_done_items">Mostrar itens concluídos</string>
   <string name="setting_show_done_items_description">No fundo</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Dias a expirar em breve</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Quantidade de compra por defeito</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Quantidade de consumo por defeito</string>
   <string name="setting_purchased_date">Perguntar data de compra</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">Na compra e na página de inventário</string>
   <string name="setting_empty_value">Vazio</string>
   <string name="setting_sync_off">Syncronização desligada</string>
