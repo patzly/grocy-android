@@ -707,14 +707,13 @@
   <string name="setting_keep_screen_on_description">Podczas trybu zakupów</string>
   <string name="setting_show_done_items">Pokaż zakończone pozycje</string>
   <string name="setting_show_done_items_description">Na dole</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Dni wygaśnięcia przydatności</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Domyślna ilość zakupu</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Domyślna ilość spożycia</string>
   <string name="setting_purchased_date">Pytaj o datę zakupu</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">Na stronach zakupu i zapasu</string>
   <string name="setting_empty_value">Puste</string>
   <string name="setting_sync_off">Synchronizacja wyłączona</string>
