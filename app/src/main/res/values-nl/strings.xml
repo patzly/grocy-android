@@ -536,14 +536,13 @@
   <string name="setting_keep_screen_on_description">Wanneer in winkelmodus</string>
   <string name="setting_show_done_items">Voltooide items weergeven</string>
   <string name="setting_show_done_items_description">Onderaan</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">\"Vervalt binnenkort\" dagen</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Standaard aantal voor inkoop</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Standaard aantal bij consumeren</string>
   <string name="setting_purchased_date">Vraag naar aanschafdatum</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">Op aankoop en voorraad pagina</string>
   <string name="setting_empty_value">Leeg</string>
   <string name="setting_sync_off">Synchonisatie uit</string>
