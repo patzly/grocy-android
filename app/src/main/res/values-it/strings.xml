@@ -704,14 +704,13 @@
   <string name="setting_keep_screen_on_description">Quando in modalità spesa</string>
   <string name="setting_show_done_items">Mostra voci completate</string>
   <string name="setting_show_done_items_description">In fondo</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Numero di giorni per essere in scadenza</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Quantità predefinita per acquista</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Quantità predefinità per consuma</string>
   <string name="setting_purchased_date">Chiedi la data di acquisto</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">Sulle pagine acquista e inventario</string>
   <string name="setting_empty_value">Vuoto</string>
   <string name="setting_sync_off">Sincronizzazione spenta</string>
