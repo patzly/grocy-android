@@ -157,6 +157,7 @@ public class ShoppingModeFragment extends BaseFragment implements
             items,
             viewModel.getProductHashMap(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getShoppingListItemAmountsHashMap(),
             viewModel.getMissingProductIds()
         );
       } else {
@@ -166,6 +167,7 @@ public class ShoppingModeFragment extends BaseFragment implements
                 items,
                 viewModel.getProductHashMap(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getShoppingListItemAmountsHashMap(),
                 viewModel.getMissingProductIds(),
                 this
             )

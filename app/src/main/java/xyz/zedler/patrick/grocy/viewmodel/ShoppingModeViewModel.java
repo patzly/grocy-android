@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -76,6 +77,9 @@ public class ShoppingModeViewModel extends AndroidViewModel {
   private ArrayList<ProductGroup> productGroups;
   private ArrayList<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private ArrayList<QuantityUnitConversion> unitConversions;
+  private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
+  private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private ArrayList<Product> products;
   private HashMap<Integer, Product> productHashMap;
   private ArrayList<MissingItem> missingItems;
@@ -114,7 +118,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(
-        (shoppingListItems, shoppingLists, productGroups, quantityUnits, products, missingItems) -> {
+        (shoppingListItems, shoppingLists, productGroups, quantityUnits, unitConversions, products, missingItems) -> {
           this.shoppingListItems = shoppingListItems;
           this.shoppingLists = shoppingLists;
           this.productGroups = productGroups;
@@ -122,6 +126,17 @@ public class ShoppingModeViewModel extends AndroidViewModel {
           quantityUnitHashMap = new HashMap<>();
           for (QuantityUnit quantityUnit : quantityUnits) {
             quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
+          }
+          this.unitConversions = unitConversions;
+          unitConversionHashMap = new HashMap<>();
+          for (QuantityUnitConversion unitConversion : unitConversions) {
+            ArrayList<QuantityUnitConversion> unitConversionArrayList
+                = unitConversionHashMap.get(unitConversion.getProductId());
+            if (unitConversionArrayList == null) {
+              unitConversionArrayList = new ArrayList<>();
+              unitConversionHashMap.put(unitConversion.getProductId(), unitConversionArrayList);
+            }
+            unitConversionArrayList.add(unitConversion);
           }
           this.products = products;
           productHashMap = new HashMap<>();
@@ -133,6 +148,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
           for (MissingItem missingItem : missingItems) {
             missingProductIds.add(missingItem.getId());
           }
+          fillShoppingListItemAmountsHashMap();
           updateFilteredShoppingListItems();
           if (downloadAfterLoading) {
             downloadData();
@@ -223,6 +239,20 @@ public class ShoppingModeViewModel extends AndroidViewModel {
                 quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
               }
             }
+        ), dlHelper.updateQuantityUnitConversions(
+            dbChangedTime, unitConversions -> {
+              this.unitConversions = unitConversions;
+              unitConversionHashMap = new HashMap<>();
+              for (QuantityUnitConversion unitConversion : unitConversions) {
+                ArrayList<QuantityUnitConversion> unitConversionArrayList
+                    = unitConversionHashMap.get(unitConversion.getProductId());
+                if (unitConversionArrayList == null) {
+                  unitConversionArrayList = new ArrayList<>();
+                  unitConversionHashMap.put(unitConversion.getProductId(), unitConversionArrayList);
+                }
+                unitConversionArrayList.add(unitConversion);
+              }
+            }
         ), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           for (Product product : products) {
@@ -257,6 +287,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
@@ -269,6 +300,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         this.shoppingLists,
         this.productGroups,
         this.quantityUnits,
+        this.unitConversions,
         this.products,
         this.missingItems,
         (itemsToSync, serverItemHashMap) -> {
@@ -278,6 +310,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
               if (itemsChanged) {
                 downloadData();
               } else {
+                fillShoppingListItemAmountsHashMap();
                 updateFilteredShoppingListItems();
               }
             });
@@ -527,6 +560,58 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
   public QuantityUnit getQuantityUnitFromId(int id) {
     return quantityUnitHashMap.get(id);
+  }
+
+  private void fillShoppingListItemAmountsHashMap() {
+    shoppingListItemAmountsHashMap = new HashMap<>();
+    for (ShoppingListItem item : shoppingListItems) {
+      if (!item.hasProduct()) {
+        continue;
+      }
+      Product product = productHashMap.get(item.getProductIdInt());
+      ArrayList<QuantityUnitConversion> unitConversions
+          = unitConversionHashMap.get(item.getProductIdInt());
+      if (product == null) {
+        continue;
+      }
+      if (unitConversions == null) {
+        unitConversions = new ArrayList<>();
+      }
+
+      QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
+      QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+      if (stock == null || purchase == null) {
+        continue;
+      }
+      HashMap<Integer, Double> unitFactors = new HashMap<>();
+      ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
+      unitFactors.put(stock.getId(), (double) -1);
+      quIdsInHashMap.add(stock.getId());
+      if (!quIdsInHashMap.contains(purchase.getId())) {
+        unitFactors.put(purchase.getId(), product.getQuFactorPurchaseToStockDouble());
+      }
+      for (QuantityUnitConversion conversion : unitConversions) {
+        QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
+        if (unit == null || quIdsInHashMap.contains(unit.getId())) {
+          continue;
+        }
+        unitFactors.put(unit.getId(), conversion.getFactor());
+      }
+      if (!unitFactors.containsKey(item.getQuIdInt())) {
+        continue;
+      }
+      Double factor = unitFactors.get(item.getQuIdInt());
+      assert factor != null;
+      if (factor != -1 && item.getQuIdInt() == product.getQuIdPurchaseInt()) {
+        shoppingListItemAmountsHashMap.put(item.getId(), item.getAmountDouble() / factor);
+      } else if (factor != -1) {
+        shoppingListItemAmountsHashMap.put(item.getId(), item.getAmountDouble() * factor);
+      }
+    }
+  }
+
+  public HashMap<Integer, Double> getShoppingListItemAmountsHashMap() {
+    return shoppingListItemAmountsHashMap;
   }
 
   public ArrayList<Integer> getMissingProductIds() {

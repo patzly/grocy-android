@@ -30,6 +30,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
@@ -48,6 +49,7 @@ public class ShoppingListRepository {
         ArrayList<ShoppingList> shoppingLists,
         ArrayList<ProductGroup> productGroups,
         ArrayList<QuantityUnit> quantityUnits,
+        ArrayList<QuantityUnitConversion> unitConversions,
         ArrayList<Product> products,
         ArrayList<MissingItem> missingItems
     );
@@ -79,6 +81,7 @@ public class ShoppingListRepository {
     private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
+    private ArrayList<QuantityUnitConversion> unitConversions;
     private ArrayList<Product> products;
     private ArrayList<MissingItem> missingItems;
 
@@ -94,6 +97,7 @@ public class ShoppingListRepository {
       shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
       productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
       quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
+      unitConversions = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
       products = new ArrayList<>(appDatabase.productDao().getAll());
       missingItems = new ArrayList<>(appDatabase.missingItemDao().getAll());
       return null;
@@ -103,7 +107,7 @@ public class ShoppingListRepository {
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
         listener.actionFinished(shoppingListItems, shoppingLists, productGroups, quantityUnits,
-            products, missingItems);
+            unitConversions, products, missingItems);
       }
     }
   }
@@ -113,6 +117,7 @@ public class ShoppingListRepository {
       ArrayList<ShoppingList> shoppingLists,
       ArrayList<ProductGroup> productGroups,
       ArrayList<QuantityUnit> quantityUnits,
+      ArrayList<QuantityUnitConversion> unitConversions,
       ArrayList<Product> products,
       ArrayList<MissingItem> missingItems,
       ShoppingListDataUpdatedListener listener
@@ -123,6 +128,7 @@ public class ShoppingListRepository {
         shoppingLists,
         productGroups,
         quantityUnits,
+        unitConversions,
         products,
         missingItems,
         listener
@@ -138,6 +144,7 @@ public class ShoppingListRepository {
     private final ArrayList<ShoppingList> shoppingLists;
     private final ArrayList<ProductGroup> productGroups;
     private final ArrayList<QuantityUnit> quantityUnits;
+    private final ArrayList<QuantityUnitConversion> unitConversions;
     private final ArrayList<Product> products;
     private final ArrayList<MissingItem> missingItems;
     private final ArrayList<ShoppingListItem> itemsToSync;
@@ -149,6 +156,7 @@ public class ShoppingListRepository {
         ArrayList<ShoppingList> shoppingLists,
         ArrayList<ProductGroup> productGroups,
         ArrayList<QuantityUnit> quantityUnits,
+        ArrayList<QuantityUnitConversion> unitConversions,
         ArrayList<Product> products,
         ArrayList<MissingItem> missingItems,
         ShoppingListDataUpdatedListener listener
@@ -159,6 +167,7 @@ public class ShoppingListRepository {
       this.shoppingLists = shoppingLists;
       this.productGroups = productGroups;
       this.quantityUnits = quantityUnits;
+      this.unitConversions = unitConversions;
       this.products = products;
       this.missingItems = missingItems;
       this.itemsToSync = new ArrayList<>();
@@ -196,6 +205,8 @@ public class ShoppingListRepository {
       appDatabase.productGroupDao().insertAll(productGroups);
       appDatabase.quantityUnitDao().deleteAll();
       appDatabase.quantityUnitDao().insertAll(quantityUnits);
+      appDatabase.quantityUnitConversionDao().deleteAll();
+      appDatabase.quantityUnitConversionDao().insertAll(unitConversions);
       appDatabase.productDao().deleteAll();
       appDatabase.productDao().insertAll(products);
       appDatabase.missingItemDao().deleteAll();

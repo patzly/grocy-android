@@ -32,7 +32,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 
@@ -41,7 +40,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
   private final static String TAG = ShoppingListItemBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
-  private String productName, quantityUnit;
+  private String productName, amount;
   private ShoppingListItem shoppingListItem;
   private ListItem itemName, itemAmount, itemNote, itemStatus;
 
@@ -73,7 +72,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
     }
 
     productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
-    quantityUnit = bundle.getString(Constants.ARGUMENT.QUANTITY_UNIT);
+    amount = bundle.getString(Constants.ARGUMENT.AMOUNT);
     shoppingListItem = bundle.getParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM);
 
     // VIEWS
@@ -134,15 +133,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheet {
     }
 
     // AMOUNT
-    if (quantityUnit == null) {
-      quantityUnit = "";
-    }
-    String textAmount = activity.getString(
-        R.string.subtitle_amount,
-        NumUtil.trim(shoppingListItem.getAmountDouble()),
-        quantityUnit
-    );
-    itemAmount.setText(activity.getString(R.string.property_amount), textAmount);
+    itemAmount.setText(activity.getString(R.string.property_amount), amount);
 
     // NOTE
     String trimmedNote = (String) TextUtil.trimCharSequence(shoppingListItem.getNote());

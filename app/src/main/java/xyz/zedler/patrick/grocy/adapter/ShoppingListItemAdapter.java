@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
@@ -61,6 +62,7 @@ public class ShoppingListItemAdapter extends
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
   private final HorizontalFilterBarSingle horizontalFilterBarSingle;
@@ -72,6 +74,7 @@ public class ShoppingListItemAdapter extends
       ArrayList<GroupedListItem> groupedListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       ShoppingListItemAdapterListener listener,
       HorizontalFilterBarSingle horizontalFilterBarSingle
@@ -80,6 +83,7 @@ public class ShoppingListItemAdapter extends
     this.groupedListItems = new ArrayList<>(groupedListItems);
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+    this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     this.horizontalFilterBarSingle = horizontalFilterBarSingle;
@@ -330,7 +334,18 @@ public class ShoppingListItemAdapter extends
 
     // AMOUNT
 
-    if (product != null) {
+    Double amountInQuUnit = shoppingListItemAmountsHashMap.get(item.getId());
+    if (product != null && amountInQuUnit != null) {
+      QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+      if (quStr != null) {
+        binding.amount.setText(
+            context.getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
+        );
+      } else {
+        binding.amount.setText(NumUtil.trim(amountInQuUnit));
+      }
+    } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
@@ -542,6 +557,7 @@ public class ShoppingListItemAdapter extends
       ArrayList<GroupedListItem> newList,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       int itemsMissingCount,
       int itemsUndoneCount
@@ -562,6 +578,8 @@ public class ShoppingListItemAdapter extends
         productHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
+        this.shoppingListItemAmountsHashMap,
+        shoppingListItemAmountsHashMap,
         this.missingProductIds,
         missingProductIds
     );
@@ -572,6 +590,8 @@ public class ShoppingListItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.shoppingListItemAmountsHashMap.clear();
+    this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
@@ -585,6 +605,8 @@ public class ShoppingListItemAdapter extends
     HashMap<Integer, Product> productHashMapNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+    HashMap<Integer, Double> shoppingListItemAmountsHashMapOld;
+    HashMap<Integer, Double> shoppingListItemAmountsHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
 
@@ -595,6 +617,8 @@ public class ShoppingListItemAdapter extends
         HashMap<Integer, Product> productHashMapNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
+        HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
+        HashMap<Integer, Double> shoppingListItemAmountsHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew
     ) {
@@ -604,6 +628,8 @@ public class ShoppingListItemAdapter extends
       this.productHashMapNew = productHashMapNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
+      this.shoppingListItemAmountsHashMapOld = shoppingListItemAmountsHashMapOld;
+      this.shoppingListItemAmountsHashMapNew = shoppingListItemAmountsHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
     }
@@ -659,6 +685,9 @@ public class ShoppingListItemAdapter extends
             NumUtil.isStringInt(newItem.getQuId()) ? Integer.parseInt(newItem.getQuId()) : null;
         QuantityUnit quNew = quIdNew != null ? quantityUnitHashMapNew.get(quIdNew) : null;
 
+        Double amountOld = shoppingListItemAmountsHashMapOld.get(oldItem.getId());
+        Double amountNew = shoppingListItemAmountsHashMapNew.get(newItem.getId());
+
         Boolean missingOld =
             productIdOld != null ? missingProductIdsOld.contains(productIdOld) : null;
         Boolean missingNew =
@@ -668,6 +697,7 @@ public class ShoppingListItemAdapter extends
             || productOld != null && productNew != null && productOld.getId() != productNew.getId()
             || quOld == null && quNew != null
             || quOld != null && quNew != null && quOld.getId() != quNew.getId()
+            || !Objects.equals(amountOld, amountNew)
             || missingOld == null && missingNew != null
             || missingOld != null && missingNew != null && missingOld != missingNew
         ) {

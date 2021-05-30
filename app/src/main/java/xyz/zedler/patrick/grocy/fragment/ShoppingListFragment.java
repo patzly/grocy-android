@@ -60,7 +60,9 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
@@ -184,6 +186,7 @@ public class ShoppingListFragment extends BaseFragment implements
             items,
             viewModel.getProductHashMap(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getShoppingListItemAmountsHashMap(),
             viewModel.getMissingProductIds(),
             viewModel.getItemsMissingCount(),
             viewModel.getItemsUndoneCount()
@@ -195,6 +198,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 items,
                 viewModel.getProductHashMap(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getShoppingListItemAmountsHashMap(),
                 viewModel.getMissingProductIds(),
                 this,
                 viewModel.getHorizontalFilterBarSingle()
@@ -572,18 +576,29 @@ public class ShoppingListFragment extends BaseFragment implements
       return;
     }
     Bundle bundle = new Bundle();
-    if (item.hasProduct()) {
-      Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
-      assert product != null;
-      bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
-      QuantityUnit quantityUnit = viewModel.getQuantityUnitFromId(product.getQuIdPurchaseInt());
-      if (quantityUnit != null) {
-        bundle.putString(
-            Constants.ARGUMENT.QUANTITY_UNIT,
-            pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble())
-        );
+    Double amountInQuUnit = viewModel.getShoppingListItemAmountsHashMap().get(item.getId());
+    Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
+    String amountStr;
+    if (product != null && amountInQuUnit != null) {
+      QuantityUnit quantityUnit = viewModel.getQuantityUnitHashMap().get(item.getQuIdInt());
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
+      if (quStr != null) {
+        amountStr = getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr);
+      } else {
+        amountStr = NumUtil.trim(amountInQuUnit);
       }
+    } else if (product != null) {
+      QuantityUnit quantityUnit = viewModel.getQuantityUnitHashMap().get(product.getQuIdStockInt());
+      String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
+      if (quStr != null) {
+        amountStr = getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr);
+      } else {
+        amountStr = NumUtil.trim(item.getAmountDouble());
+      }
+    } else {
+      amountStr = NumUtil.trim(item.getAmountDouble());
     }
+    bundle.putString(ARGUMENT.AMOUNT, amountStr);
     bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, item);
     bundle.putBoolean(Constants.ARGUMENT.SHOW_OFFLINE, viewModel.isOffline());
     activity.showBottomSheet(new ShoppingListItemBottomSheet(), bundle);
