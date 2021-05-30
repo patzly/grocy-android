@@ -580,6 +580,7 @@ public class ShoppingListFragment extends BaseFragment implements
     Product product = viewModel.getProductHashMap().get(item.getProductIdInt());
     String amountStr;
     if (product != null && amountInQuUnit != null) {
+      bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
       QuantityUnit quantityUnit = viewModel.getQuantityUnitHashMap().get(item.getQuIdInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
       if (quStr != null) {
@@ -588,6 +589,7 @@ public class ShoppingListFragment extends BaseFragment implements
         amountStr = NumUtil.trim(amountInQuUnit);
       }
     } else if (product != null) {
+      bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
       QuantityUnit quantityUnit = viewModel.getQuantityUnitHashMap().get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
