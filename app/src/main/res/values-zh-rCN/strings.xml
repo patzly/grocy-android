@@ -562,14 +562,13 @@
   <string name="setting_keep_screen_on_description">在购物模式下</string>
   <string name="setting_show_done_items">显示完成项目</string>
   <string name="setting_show_done_items_description">在底部</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">即将过期</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">默认购买金额</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">默认消费量</string>
   <string name="setting_purchased_date">要求购买日期</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">在购买和库存页面上</string>
   <string name="setting_empty_value">空</string>
   <string name="setting_sync_off">同步关闭</string>
