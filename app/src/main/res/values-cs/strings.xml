@@ -626,14 +626,13 @@
   <string name="setting_keep_screen_on_description">Když je v módu nákupu</string>
   <string name="setting_show_done_items">Zobrazit hotové položky</string>
   <string name="setting_show_done_items_description">Vespod</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Trvanlivost brzy skončí</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Výchozí množství pro nákup</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Výchozí množství pro spotřebu</string>
   <string name="setting_purchased_date">Zeptat se na datum nákupu</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">Na stránce nákupu a inventáře</string>
   <string name="setting_empty_value">Prázdné</string>
   <string name="setting_sync_off">Synchronizace vypnuta</string>
