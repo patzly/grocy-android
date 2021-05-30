@@ -635,14 +635,13 @@
   <string name="setting_keep_screen_on_description">בזמן מצב קניות</string>
   <string name="setting_show_done_items">הצגת פריטים שהסתיימו</string>
   <string name="setting_show_done_items_description">למטה</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">ימים לתפוגה מתקרבת</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">כמות בררת מחדל לרכישה</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">כמות בררת מחדל לצריכה</string>
   <string name="setting_purchased_date">לבקש את תאריך הרכישה</string>
-  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_purchased_date_description">בעמודי הרכישה והמאגר</string>
   <string name="setting_empty_value">ריק</string>
   <string name="setting_sync_off">סנכרון כבוי</string>
