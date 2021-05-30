@@ -679,6 +679,9 @@ public class PurchaseViewModel extends BaseViewModel {
 
   private void fillShoppingListItemAmountsHashMap() {
     shoppingListItemAmountsHashMap = new HashMap<>();
+    if (shoppingListItems == null) {
+      return;
+    }
     for (ShoppingListItem item : shoppingListItems) {
       Double amount = AmountUtil.getShoppingListItemAmount(
           item, productHashMap, quantityUnitHashMap, unitConversionHashMap
