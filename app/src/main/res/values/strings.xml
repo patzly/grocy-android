@@ -749,15 +749,20 @@
   <string name="setting_synchronized">The option below is synchronized with your server.</string>
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
 
+  <string name="license_conscrypt" translatable="false">Conscrypt</string>
   <string name="license_author_google" translatable="false">Google</string>
-  <string name="license_material_icons" translatable="false">Material Design Icons</string>
-  <string name="license_material_components" translatable="false">Material Components Android</string>
+  <string name="license_fuzzywuzzy" translatable="false">JavaWuzzy</string>
+  <string name="license_fuzzywuzzy_author" translatable="false">Panayiotis aka xdrop</string>
+  <string name="license_gson" translatable="false">Gson</string>
   <string name="license_jost" translatable="false">Jost* Typeface</string>
   <string name="license_jost_author" translatable="false">Owen Earl</string>
-  <string name="license_gson" translatable="false">Gson</string>
+  <string name="license_material_components" translatable="false">Material Components Android</string>
+  <string name="license_material_icons" translatable="false">Material Design Icons</string>
+  <string name="license_netcipher" translatable="false">NetCipher</string>
+  <string name="license_netcipher_author" translatable="false">Guardian Project</string>
   <string name="license_volley" translatable="false">Volley</string>
   <string name="license_xzing_android" translatable="false">ZXing Android Embedded</string>
-  <string name="license_xzing_android_author" translatable="false">JourneyApps</string>
+  <string name="license_xzing_android_author" translatable="false">ZXing authors, Journey Mobile</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
@@ -766,11 +771,15 @@
   <string name="url_developer" translatable="false">http://play.google.com/store/apps/dev?id=8122479227040208191</string>
   <string name="url_github" translatable="false">https://github.com/patzly/grocy-android/</string>
   <string name="url_github_issues" translatable="false">https://github.com/patzly/grocy-android/issues/</string>
-  <string name="url_material_icons" translatable="false">https://github.com/google/material-design-icons</string>
-  <string name="url_material_components" translatable="false">https://github.com/material-components/material-components-android</string>
-  <string name="url_jost" translatable="false">https://github.com/indestructible-type/Jost</string>
-  <string name="url_volley" translatable="false">https://github.com/google/volley</string>
+
+  <string name="url_conscrypt" translatable="false">https://github.com/google/conscrypt/</string>
+  <string name="url_fuzzywuzzy" translatable="false">https://github.com/xdrop/fuzzywuzzy</string>
   <string name="url_gson" translatable="false">https://github.com/google/gson</string>
+  <string name="url_jost" translatable="false">https://github.com/indestructible-type/Jost</string>
+  <string name="url_material_components" translatable="false">https://github.com/material-components/material-components-android</string>
+  <string name="url_material_icons" translatable="false">https://github.com/google/material-design-icons</string>
+  <string name="url_netcipher" translatable="false">https://github.com/guardianproject/NetCipher</string>
+  <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
 
 </resources>

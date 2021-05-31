@@ -4,6 +4,7 @@
 - Improved: On consume page stock amount is used if barcode amount is bigger than stock (#357)
 - Improved: Backup by Android system now is allowed for this app
 - Improved: Updated translations
+- Improved: All open-source licenses listed in about section
 - Fixed: Crash on startup with some servers (#407)
 - Fixed: Pressing 'done' on keyboard in amount field always started quick mode (#410)
 - Fixed: Shopping list always displayed stock quantity unit and amount (#419)

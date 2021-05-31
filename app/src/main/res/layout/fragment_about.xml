@@ -260,6 +260,54 @@
           android:text="@string/category_licenses" />
 
         <LinearLayout
+          android:id="@+id/linear_license_conscrypt"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+
+          <ImageView
+            android:id="@+id/image_license_conscrypt"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_conscrypt" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_author_google" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:id="@+id/linear_license_fuzzywuzzy"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+
+          <ImageView
+            android:id="@+id/image_license_fuzzywuzzy"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_fuzzywuzzy" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_fuzzywuzzy_author" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
           android:id="@+id/linear_license_gson"
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
@@ -350,6 +398,30 @@
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Description"
               android:text="@string/license_author_google" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:id="@+id/linear_license_netcipher"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+
+          <ImageView
+            android:id="@+id/image_license_netcipher"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_copyright_anim"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/license_netcipher" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/license_netcipher_author" />
 
           </LinearLayout>
 
