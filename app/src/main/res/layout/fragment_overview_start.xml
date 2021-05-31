@@ -86,6 +86,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
             android:layout_gravity="center_vertical"
+            android:visibility="gone"
             android:src="@drawable/ic_round_dev"
             tools:ignore="ContentDescription" />
 
