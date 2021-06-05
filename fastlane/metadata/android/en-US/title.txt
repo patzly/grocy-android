@@ -1,1 +1,1 @@
-Grocy Android
+Grocy: Self-hosted Groceries Management

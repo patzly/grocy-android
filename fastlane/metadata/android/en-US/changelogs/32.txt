@@ -1,0 +1,3 @@
+After a few months in alpha, we are very excited to launch the beta phase of the next big release of Grocy Android! A few features are still not fully implemented.
+The update requires you to have grocy 3.0.x installed on your server! All versions below are no longer compatible.
+You can view all changes in the app or on GitHub.
