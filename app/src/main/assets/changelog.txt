@@ -2,7 +2,7 @@
 - New: Almost all stock settings are now available (#395)
 - Improved: Cleaner debugging settings page
 - Improved: On consume page stock amount is used if barcode amount is bigger than stock (#357)
-- Improved: Backup by Android system now is allowed for this app
+- Improved: Backup by Android system now is supported
 - Improved: Updated translations
 - Improved: All open-source licenses listed in about section
 - Fixed: Crash on startup with some servers (#407)
