@@ -775,6 +775,7 @@
   <string name="setting_use_quick_consume_amount">Використовуйте \"Кількість швидкого споживання\"</string>
   <string name="setting_empty_value">Порожньо</string>
   <string name="setting_sync_off">Синхронізацію вимкнено</string>
+  <string name="setting_loading">Завантаження значення</string>
   <string name="setting_not_loaded">Не вдалося завантажити</string>
   <string name="setting_debug">Увімкнути ведення журналу</string>
   <string name="setting_debug_description">Для налагодження</string>
