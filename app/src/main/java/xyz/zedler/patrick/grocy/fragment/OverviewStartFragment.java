@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -114,10 +114,7 @@ public class OverviewStartFragment extends BaseFragment {
       if (id == R.id.action_about) {
         navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_changelog) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.info_changelog));
-        bundle.putString(Constants.ARGUMENT.FILE, "changelog");
-        activity.showBottomSheet(new TextBottomSheet(), bundle);
+        activity.showBottomSheet(new ChangelogBottomSheet());
       }
       return false;
     });

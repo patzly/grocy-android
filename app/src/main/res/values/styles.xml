@@ -421,6 +421,10 @@
     <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
   </style>
 
+  <style name="Widget.Grocy.TextView.Paragraph.Fix" parent="Widget.Grocy.TextView.Paragraph">
+    <item name="android:breakStrategy" tools:targetApi="m">simple</item>
+  </style>
+
   <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
     <item name="android:textColor">@color/on_primary</item>
     <item name="android:textSize" tools:ignore="SpUsage">21.5dp</item>

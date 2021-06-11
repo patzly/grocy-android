@@ -33,6 +33,7 @@ import androidx.annotation.StringRes;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -116,7 +117,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       navigate(R.id.onboardingFragment);
     } else if (v.getId() == R.id.linear_changelog) {
       IconUtil.start(activity, R.id.image_changelog);
-      showTextBottomSheet(R.raw.changelog, R.string.info_changelog, 0);
+      activity.showBottomSheet(new ChangelogBottomSheet());
     } else if (v.getId() == R.id.linear_developers) {
       IconUtil.start(activity, R.id.image_developers);
       startActivity(new Intent(
