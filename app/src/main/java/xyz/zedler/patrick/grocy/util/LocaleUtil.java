@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Language;
 
 public class LocaleUtil {
@@ -61,7 +62,7 @@ public class LocaleUtil {
 
   public static List<Language> getLanguages(Context context) {
     List<Language> languages = new ArrayList<>();
-    String localesRaw = TextUtil.readFromFile(context, "locales.txt");
+    String localesRaw = TextUtil.getRawText(context, R.raw.locales);
     if (localesRaw.trim().isEmpty()) {
       return languages;
     }

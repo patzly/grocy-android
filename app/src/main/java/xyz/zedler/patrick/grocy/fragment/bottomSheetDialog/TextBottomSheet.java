@@ -25,17 +25,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
@@ -89,9 +84,9 @@ public class TextBottomSheet extends BaseBottomSheet {
       binding.frameTextOpenLink.setVisibility(View.GONE);
     }
 
-    String file = bundle.getString(Constants.ARGUMENT.FILE) + ".txt";
-    String content = TextUtil.readFromFile(context, file);
-    if (file.equals("changelog.txt")) {
+    int file = bundle.getInt(Constants.ARGUMENT.FILE);
+    String content = TextUtil.getRawText(context, file);
+    if (file == R.raw.changelog) {
       binding.textText.setText(
           BulletUtil.makeBulletList(
               context,
@@ -115,30 +110,6 @@ public class TextBottomSheet extends BaseBottomSheet {
   public void onDestroy() {
     super.onDestroy();
     binding = null;
-  }
-
-  private String readFromFile(Context context, String file) {
-    StringBuilder text = new StringBuilder();
-    try {
-      InputStream inputStream = context.getAssets().open(file);
-      InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-      BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-      for (String line; (line = bufferedReader.readLine()) != null; ) {
-        text.append(line).append('\n');
-      }
-      text.deleteCharAt(text.length() - 1);
-      inputStream.close();
-    } catch (FileNotFoundException e) {
-      if (debug) {
-        Log.e(TAG, "readFromFile: \"" + file + "\" not found!");
-      }
-      return null;
-    } catch (Exception e) {
-      if (debug) {
-        Log.e(TAG, "readFromFile: " + e.toString());
-      }
-    }
-    return text.toString();
   }
 
   @NonNull

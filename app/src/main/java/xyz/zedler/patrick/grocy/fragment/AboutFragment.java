@@ -116,7 +116,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       navigate(R.id.onboardingFragment);
     } else if (v.getId() == R.id.linear_changelog) {
       IconUtil.start(activity, R.id.image_changelog);
-      showTextBottomSheet("changelog", R.string.info_changelog, 0);
+      showTextBottomSheet(R.raw.changelog, R.string.info_changelog, 0);
     } else if (v.getId() == R.id.linear_developers) {
       IconUtil.start(activity, R.id.image_developers);
       startActivity(new Intent(
@@ -131,73 +131,73 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     } else if (v.getId() == R.id.linear_license_conscrypt) {
       IconUtil.start(activity, R.id.image_license_conscrypt);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_conscrypt,
           R.string.url_conscrypt
       );
     } else if (v.getId() == R.id.linear_license_fuzzywuzzy) {
       IconUtil.start(activity, R.id.image_license_fuzzywuzzy);
       showTextBottomSheet(
-          "gpl",
+          R.raw.license_gpl,
           R.string.license_fuzzywuzzy,
           R.string.url_fuzzywuzzy
       );
     } else if (v.getId() == R.id.linear_license_gson) {
       IconUtil.start(activity, R.id.image_license_gson);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_gson,
           R.string.url_gson
       );
     } else if (v.getId() == R.id.linear_license_jost) {
       IconUtil.start(activity, R.id.image_license_jost);
       showTextBottomSheet(
-          "ofl",
+          R.raw.license_ofl,
           R.string.license_jost,
           R.string.url_jost
       );
     } else if (v.getId() == R.id.linear_license_material_components) {
       IconUtil.start(activity, R.id.image_license_material_components);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_material_components,
           R.string.url_material_components
       );
     } else if (v.getId() == R.id.linear_license_material_icons) {
       IconUtil.start(activity, R.id.image_license_material_icons);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_material_icons,
           R.string.url_material_icons
       );
     } else if (v.getId() == R.id.linear_license_netcipher) {
       IconUtil.start(activity, R.id.image_license_netcipher);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_netcipher,
           R.string.url_netcipher
       );
     } else if (v.getId() == R.id.linear_license_volley) {
       IconUtil.start(activity, R.id.image_license_volley);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_volley,
           R.string.url_volley
       );
     } else if (v.getId() == R.id.linear_license_xzing_android) {
       IconUtil.start(activity, R.id.image_license_xzing_android);
       showTextBottomSheet(
-          "apache",
+          R.raw.license_apache,
           R.string.license_xzing_android,
           R.string.url_zxing_android
       );
     }
   }
 
-  private void showTextBottomSheet(String file, @StringRes int title, @StringRes int link) {
+  private void showTextBottomSheet(int file, @StringRes int title, @StringRes int link) {
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.TITLE, getString(title));
-    bundle.putString(Constants.ARGUMENT.FILE, file);
+    bundle.putInt(Constants.ARGUMENT.FILE, file);
     if (link != 0) {
       bundle.putString(Constants.ARGUMENT.LINK, getString(link));
     }

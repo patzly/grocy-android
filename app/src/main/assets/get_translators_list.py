@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# last update of translators list (locales.txt): 05/15/21
+# last update of translators list (res/raw/locales.txt): 05/15/21
 
 import requests
 import sys
