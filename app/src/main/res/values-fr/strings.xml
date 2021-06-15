@@ -717,6 +717,7 @@
   <string name="setting_use_quick_consume_amount">Utiliser le paramètre \"Quantité consommée par défaut\" du produit</string>
   <string name="setting_empty_value">Vide</string>
   <string name="setting_sync_off">Synchronisation désactivée</string>
+  <string name="setting_loading">Valeur chargée</string>
   <string name="setting_not_loaded">Impossible de charger</string>
   <string name="setting_debug">Activer la journalisation</string>
   <string name="setting_debug_description">À des fins de débogage</string>
