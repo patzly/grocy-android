@@ -25,6 +25,12 @@
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in consume screen for example. -->
   <string name="action_consume">消耗</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">转移</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">更新数量</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">消耗全部</string>
 
@@ -68,6 +74,7 @@
   <string name="action_undo">撤消</string>
   <string name="action_retry">重试</string>
   <string name="action_edit">编辑</string>
+  <string name="action_copy">复制</string>
   <string name="action_proceed">继续</string>
   <string name="action_delete">删除</string>
   <string name="action_save">保存</string>
@@ -82,6 +89,7 @@
   <string name="action_toggle_done">切换完成</string>
   <string name="action_edit_notes">编辑注释</string>
   <string name="action_add_missing">添加缺少的产品</string>
+  <string name="action_purchase_done_items">购买了物品</string>
   <string name="action_purchase_all_items">购买所有物品</string>
   <string name="action_skip_entry">跳过输入</string>
   <string name="action_toggle_flash">切换闪光灯</string>
@@ -97,14 +105,44 @@
   <string name="action_demo_server">演示服务器</string>
   <string name="action_own_server">自己的服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
+  <string name="action_perform">执行动作</string>
+
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="other">%1$d即将到期</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="other">%1$d过期</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="other">%1$d过期</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="other">%1$d低于最小库存数量</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="other">%1$d产品有库存</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%3$s中的%1$s%2$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">消耗%3$s中的%1$s%2$s作为损耗</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">标记%3$s中的%1$s%2$s为已打开</string>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="other">%1$d未完成</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">已购买%3$s中的%1$s%2$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">%1$s%2$s的%3$s已转移</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">%1$s的库存数量现在是%2$s%3$s（%4$s）</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s没有库存</string>
   <string name="msg_no_connection">未连接</string>
@@ -129,8 +167,27 @@
   <string name="msg_master_delete_product">您是否确定删除产品“%1$s”？\n\n 这也删除此产品的任何库存，日志和该产品的所有其他引用 - 考虑禁用它，而不是删除，如果你想只是隐藏产品。</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">这个%1$s还在用</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="other">%1$s%2$s将添加到库存</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="other">%1$s%2$s将从库存删除</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">允许皮重的产品目前不支持转移。</string>
   <string name="msg_item_marked_as_done">将项目标记为已完成</string>
   <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
+  <string name="option_synced_success">选项同步成功</string>
+  <string name="option_synced_error">选项无法同步</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">将被执行的事务: \n\n 添加%1$s%2$s的%3$s到库存 \n 到期日:%4$s \n 价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">将被执行的事务: \n\n %1$s%2$s的%3$s从库存删除 \n 位置:%4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">将被执行的事务: \n\n 设置%1$s的库存数量为%2$s%3$s \n 申请新增项目:\n 到期日:%4$s \n价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
   <string name="msg_compatibility">此应用版本与服务器上的常规版本不兼容。\n \n当前服务器版本：%1$s\n\n必填：\nMin。伺服器版本：%2$s\nMax。服务器版本：%3$s\n\n如果忽略此警告，可能会导致数据丢失（不太可能）和崩溃（可能）。\n已警告您！</string>
   <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
   <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
@@ -146,6 +203,11 @@
   <string name="msg_choose_option_below">请从下面选择一个选项。</string>
   <string name="msg_qr_code_scan">在另一个设备上，访问您的Groy网站并转到“API键”页面。单击“添加”，然后单击Little QR码符号并扫描QR码。</string>
   <string name="msg_not_implemented_yet">这将很快实施。请立即使用您的服务器界面。</string>
+  <string name="stock_disabled">您已经禁用了grocy配置中的常用特性，可能是因为您不需要它。但是这个应用目前只能做库存管理，所以可能对你没有太大的用处。</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">库存概述页面列出了所有当前在库存或低于其最低数量的产品。启用此功能可将此产品始终隐藏在那里。</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">这个产品不能有一个父产品，因为它已经作为另一个产品的父产品使用。</string>
   <string name="msg_help_due_date_type">基于所选的截止日期类型，库存概述页面上的突出显示将不同。 “赏味期”意味着在达到的截止日期后，产品仍然是安全的。 “到期日”意味着在达到的截止日期后，产品不安全。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">对于购买，此天数将添加到今天以作为到期日建议（-1表示该产品永远不会过期）。</string>
@@ -169,12 +231,14 @@
   <string name="msg_help_tare_weight_purchase">启用皮重处理-请称量整个容器的重量，将自动计算要过帐的数量。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">将此产品添加为配方成分时，这将用作默认设置。</string>
+  <string name="msg_help_inventory_fields">以下领域适用于新增产品。</string>
   <string name="msg_help_external_scanner_ready">您可以在下面的字段聚焦且空白时使用外部扫描仪。</string>
   <string name="msg_help_external_scanner_settings">此应用支持外部扫描仪设备，可作为键盘，可以通过USB或蓝牙连接。必须在外部扫描仪中配置以下选项：\n\n Prefix: None \n Suffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">此列表中的第一个项目将由“首先打开，然后先到期，然后先进先出 ”的默认规则。</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">这仅用于统计目的。</string>
+  <string name="msg_help_quick_mode">你可以长时间点击上面的标题栏来激活快速模式。在这种模式下，如果已经输入或扫描了产品，并且所有字段都可以自动填充(根据产品和/或条码默认值)，事务将立即执行。</string>
   <string name="msg_help_loading_circle_settings">在必须从服务器加载的每个页面上，应用程序首先用微小的请求检查服务器数据库是否自上次更改并仅更新过时的数据。即使对于此小型请求，请启用下面的选项以显示加载圆圈。</string>
   <string name="msg_help_start">初学者模式是活动的：如果可用，则默认情况下显示帮助文本。点按以更改。</string>
   <string name="msg_help_purchased_date_settings">如果启用了以下选项，则购买和库存页面将显示购买日期的字段。否则购买的日期默认为今天。</string>
@@ -194,7 +258,9 @@
   <string name="error_empty_stock_sub">去购买一些产品</string>
   <string name="error_empty_shopping_list">空的购物清单</string>
   <string name="error_empty_shopping_list_sub">添加您需要的一些产品</string>
+  <string name="error_empty_barcodes_sub">使用下面的按钮添加条形码</string>
   <string name="error_empty_master_data_sub">使用下面的按钮创建</string>
+  <string name="error_empty_product_barcodes">没有产品条形码</string>
   <string name="error_empty_locations">没有位置</string>
   <string name="error_empty_product_groups">没有产品组</string>
   <string name="error_empty_products">没有产品</string>
@@ -214,6 +280,8 @@
   <string name="error_invalid_factor">无效因素</string>
   <string name="error_api_qr_code">不是具有Grocy API凭据的QR码</string>
   <string name="error_loading_qus">无法从产品加载数量单位</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">不能等于%1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">介于%1$s和%2$s之间</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -224,6 +292,7 @@
   <string name="error_bounds_higher">必须高于%1$s</string>
   <string name="error_offline">离线</string>
   <string name="error_offline_subtitle">检查您的连接，然后重试</string>
+  <string name="error_no_done_items">没有标明已完成的项目</string>
   <string name="error_name_exists">名称已存在</string>
   <string name="error_network">网络错误</string>
   <string name="error_network_subtitle">无法完全加载所需的数据</string>
@@ -247,6 +316,8 @@
   <string name="title_stock_overview">库存总览</string>
   <string name="title_purchase">采购</string>
   <string name="title_consume">消耗</string>
+  <string name="title_transfer">转移</string>
+  <string name="title_inventory">存货</string>
   <string name="title_barcode_input">条形码输入</string>
   <string name="title_product_overview">产品总览</string>
   <string name="title_product">产品</string>
@@ -277,6 +348,10 @@
   <string name="title_specific">具体库存项目</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">消耗确切金额</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">从位置</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">到位置</string>
   <string name="title_recipe">食谱</string>
   <string name="title_total_price">总价</string>
   <string name="title_unit_price">单价</string>
@@ -337,6 +412,11 @@
   <string name="subtitle_supported">支持</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">未支持</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">数量:%1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">数量单位:%1$d</string>
+
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
@@ -350,6 +430,30 @@
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
     <item quantity="other">您有%1$d产品在库存。</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="other">%1$d产品将在%2$d天内到期。</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="other">%1$d产品过期</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="other">%1$d产品过期了</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="other">%1$d产品低于定义的最小库存数量。</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="other">其中%1$d个在你的购物清单上。</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="other">其中%1$d个在你的购物清单上。</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
@@ -380,12 +484,20 @@
   <string name="property_status">状态</string>
   <string name="property_amount">数量</string>
   <string name="property_seconds">秒</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="other">%1$d秒</item>
+  </plurals>
   <string name="property_amount_min_stock">最小库存量</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">量单位%1$s</string>
   <string name="property_price">价格</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">每%1$s价格</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">价格单位%1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">每%1$s价格在%2$s</string>
   <string name="property_quantity_unit">数量单位</string>
   <string name="property_quantity_units">数量单位</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -462,6 +574,9 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">累计子产品最小库存量 </string>
   <string name="property_picture">图片</string>
+  <string name="property_note_singleline">单行的注释</string>
+  <string name="property_note_multiline">多行注释</string>
+
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
@@ -570,11 +685,15 @@
   <string name="setting_default_amount_consume">默认消费量</string>
   <string name="setting_purchased_date">要求购买日期</string>
   <string name="setting_purchased_date_description">在购买和库存页面上</string>
+  <string name="setting_use_quick_consume_amount">使用本产品的“快速消耗量”</string>
   <string name="setting_empty_value">空</string>
   <string name="setting_sync_off">同步关闭</string>
+  <string name="setting_loading">负荷值</string>
   <string name="setting_not_loaded">无法加载</string>
   <string name="setting_debug">启用日志记录</string>
   <string name="setting_debug_description">在日志中显示错误</string>
+  <string name="setting_log_level">日志级别</string>
+  <string name="setting_error_logs">只显示错误日志</string>
   <string name="setting_info_logs">显示信息日志</string>
   <string name="setting_logs_description">显示此过程的日志</string>
   <string name="setting_timeout">加载超时</string>
@@ -584,8 +703,11 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">展开底板</string>
   <string name="setting_expand_bottom_sheets_description">在横向模式中</string>
+  <string name="setting_speed_up_start">减少应用程序启动时间</string>
+  <string name="setting_speed_up_start_description">只对快速设备有影响</string>
   <string name="setting_loading_circle">显示所有请求的加载</string>
   <string name="setting_loading_circle_description">有助于慢速网络</string>
+  <string name="setting_synchronized">下面的选项与服务器同步。</string>
   <string name="settings_synchronized">这些设置与您的服务器同步。</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
