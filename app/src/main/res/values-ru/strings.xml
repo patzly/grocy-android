@@ -114,12 +114,47 @@
     <item quantity="many">%1$d скоро испортятся</item>
     <item quantity="other">%1$d скоро испортится</item>
   </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d испортилось</item>
+    <item quantity="few">%1$d испортилось</item>
+    <item quantity="many">%1$d испортилось</item>
+    <item quantity="other">%1$d испортилось</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d истекает</item>
+    <item quantity="few">%1$d истекает</item>
+    <item quantity="many">%1$d истекает</item>
+    <item quantity="other">%1$d истекает</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d меньше минимального запаса</item>
+    <item quantity="few">%1$d меньше минимального запаса</item>
+    <item quantity="many">%1$d меньше минимального запаса</item>
+    <item quantity="other">%1$d меньше минимального запаса</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d в запасах</item>
+    <item quantity="few">%1$d в запасах</item>
+    <item quantity="many">%1$d в запасах</item>
+    <item quantity="other">%1$d в запасах</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Испортилось %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">Вскрыть %1$s %2$s %3$s </string>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d не куплено</item>
+    <item quantity="few">%1$d не куплено</item>
+    <item quantity="many">%1$d не куплено</item>
+    <item quantity="other">%1$d не куплено</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -167,6 +202,8 @@
   <string name="msg_transfer_tare_weight">Продукты с включенным учетом веса тары в данный момент недоступны для переноса.</string>
   <string name="msg_item_marked_as_done">Пункт выполнен</string>
   <string name="msg_item_marked_as_undone">Пункт не выполнен</string>
+  <string name="option_synced_success">Опция успешно синхронизирована</string>
+  <string name="option_synced_error">Опция не была синхронизирована</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Операция, которая будет выполнена:\n\nДобавить %1$s %2$s %3$s в запасы\nСрок годности: %4$s\nЦена: %5$s\nМагазин:%6$s\nМесто: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -304,7 +341,7 @@
   <string name="title_purchase">Купить</string>
   <string name="title_consume">Использовать</string>
   <string name="title_transfer">Переместить</string>
-  <string name="title_inventory">Инвентаризировать</string>
+  <string name="title_inventory">Ревизия</string>
   <string name="title_barcode_input">Ввод штрих-кода</string>
   <string name="title_product_overview">Обзор продуктов</string>
   <string name="title_product">Продукт</string>
@@ -504,6 +541,13 @@
   <string name="property_status">Статус</string>
   <string name="property_amount">Количество</string>
   <string name="property_seconds">Секунды</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d сек.</item>
+    <item quantity="few">%1$d сек.</item>
+    <item quantity="many">%1$d сек.</item>
+    <item quantity="other">%1$d сек.</item>
+  </plurals>
   <string name="property_amount_min_stock">Мин. количество в запасе</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Одна %1$s содержит</string>
@@ -731,6 +775,7 @@
   <string name="setting_use_quick_consume_amount">Применить \"Кол-во быстрого использования\" продукта</string>
   <string name="setting_empty_value">Пусто</string>
   <string name="setting_sync_off">Синхронизация выключена</string>
+  <string name="setting_loading">Загрузка значения</string>
   <string name="setting_not_loaded">Не может быть загружено</string>
   <string name="setting_debug">Включить журналирование</string>
   <string name="setting_debug_description">Показывать ошибки в журнале</string>
