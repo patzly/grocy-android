@@ -550,7 +550,7 @@
   </plurals>
   <string name="property_amount_min_stock">Мин. количество в запасе</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_in">Одна %1$s содержит</string>
+  <string name="property_amount_in">Количество в %1$s</string>
   <string name="property_price">Цена</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Цена за %1$s</string>
