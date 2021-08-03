@@ -1,5 +1,6 @@
 2.0.0-beta03
 - Fixed: Clipped text in changelog
+- Improved: Updated translations
 
 2.0.0-beta02
 - New: Almost all stock settings are now available (#395)

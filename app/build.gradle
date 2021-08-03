@@ -31,8 +31,8 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
-        dataBinding = true
+        viewBinding true
+        dataBinding true
     }
 
     lintOptions {
@@ -76,7 +76,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.3.0'
@@ -88,7 +88,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.3.0'
     annotationProcessor 'androidx.room:room-compiler:2.3.0'
 
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
 
     implementation 'com.android.volley:volley:1.2.0'
 
