@@ -14,6 +14,8 @@ Grocy Android uses grocy's official API to provide you a beautiful interface on 
 It is a **companion** app, therefore it **cannot run standalone** or manage products itself.  
 You can try it using the demo option available on the login screen.
 
+iOS client for grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftUI)
+
 ## Downloads
 
 **On Google Play you need to join our public beta channel to receive the prereleases.**
