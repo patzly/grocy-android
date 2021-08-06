@@ -186,6 +186,8 @@
   <string name="msg_transfer_tare_weight">I prodotti con il peso della tara abilitato attualmente non sono supportati per lo spostamento.</string>
   <string name="msg_item_marked_as_done">Segna come fatto</string>
   <string name="msg_item_marked_as_undone">Segna da fare</string>
+  <string name="option_synced_success">Impostazioni sincronizzate correttamente</string>
+  <string name="option_synced_error">Impossibile sincronizzare impostazioni</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">La transazione sarà eseguita:\n\nAggiunta di %1$s %2$s di %3$s alla dispensa\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -712,11 +714,15 @@
   <string name="setting_default_amount_consume">Quantità predefinità per consuma</string>
   <string name="setting_purchased_date">Chiedi la data di acquisto</string>
   <string name="setting_purchased_date_description">Sulle pagine acquista e inventario</string>
+  <string name="setting_use_quick_consume_amount">Utilizza la funzione del prodotto \"Consumo rapido\"</string>
   <string name="setting_empty_value">Vuoto</string>
   <string name="setting_sync_off">Sincronizzazione spenta</string>
+  <string name="setting_loading">Caricando il valore</string>
   <string name="setting_not_loaded">Caricamento fallito</string>
   <string name="setting_debug">Attiva logging</string>
   <string name="setting_debug_description">Mostra errori nei log</string>
+  <string name="setting_log_level">Aggiungi livello</string>
+  <string name="setting_error_logs">Mostra solo errori</string>
   <string name="setting_info_logs">Mostra log di informazione</string>
   <string name="setting_logs_description">Mostra logcat di questo processo</string>
   <string name="setting_timeout">Tempo scaduto per il caricamento</string>
@@ -730,6 +736,7 @@
   <string name="setting_speed_up_start_description">Ha effetto solo su dispositivi veloci</string>
   <string name="setting_loading_circle">Mostra cerchio di caricamento per tutte le richieste</string>
   <string name="setting_loading_circle_description">D\'aiuto per connessioni lente</string>
+  <string name="setting_synchronized">L\'impostazione sottostante è stata sincronizzata con il server</string>
   <string name="settings_synchronized">Queste impostazioni sono sincronizzate sul tuo server.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
