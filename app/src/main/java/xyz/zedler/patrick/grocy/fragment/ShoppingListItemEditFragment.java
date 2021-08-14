@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
@@ -37,6 +38,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
@@ -182,6 +184,12 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
+    new Handler().postDelayed(() -> {
+      Result result = new Result("12345", null, null, null, 1);
+      BarcodeResult barcodeResult = new BarcodeResult(result, null);
+      onBarcodeResult(barcodeResult);
+    }, 5000);
+
     binding.barcodeScan.setTorchOff();
     binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
       @Override
@@ -259,6 +267,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
       resumeScan();
       return;
     }
+    clearInputFocus();
     viewModel.getFormData().toggleScannerVisibility();
     viewModel.onBarcodeRecognized(result.getText());
   }
@@ -285,6 +294,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
 
   public void clearInputFocus() {
     activity.hideKeyboard();
+    binding.dummyFocusView.requestFocus();
     binding.textInputProduct.clearFocus();
     binding.textInputAmount.clearFocus();
     binding.textInputNote.clearFocus();
