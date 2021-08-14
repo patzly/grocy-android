@@ -635,15 +635,10 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void setFabIcon(Drawable icon) {
-    binding.fabMain.setImageDrawable(icon);
-  }
-
   public void setNavBarColor(@ColorRes int color) {
     int nightModeFlags = getResources().getConfiguration().uiMode
         & Configuration.UI_MODE_NIGHT_MASK;
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP
-        && Build.VERSION.SDK_INT <= VERSION_CODES.N_MR1
+    if (Build.VERSION.SDK_INT <= VERSION_CODES.O
         && nightModeFlags != Configuration.UI_MODE_NIGHT_YES
     ) {
       color = R.color.black;
