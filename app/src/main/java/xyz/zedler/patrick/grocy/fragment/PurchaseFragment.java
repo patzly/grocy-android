@@ -299,6 +299,7 @@ public class PurchaseFragment extends BaseFragment implements
       resumeScan();
       return;
     }
+    clearInputFocus();
     if (!viewModel.isQuickModeEnabled()) {
       viewModel.getFormData().toggleScannerVisibility();
     }
@@ -374,6 +375,7 @@ public class PurchaseFragment extends BaseFragment implements
 
   public void clearInputFocus() {
     activity.hideKeyboard();
+    binding.dummyFocusView.requestFocus();
     binding.autoCompletePurchaseProduct.clearFocus();
     binding.quantityUnitContainer.clearFocus();
     binding.textInputAmount.clearFocus();

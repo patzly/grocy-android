@@ -260,9 +260,10 @@ public class TransferFragment extends BaseFragment implements
       resumeScan();
       return;
     }
-      if (!viewModel.isQuickModeEnabled()) {
-          viewModel.getFormData().toggleScannerVisibility();
-      }
+    clearInputFocus();
+    if (!viewModel.isQuickModeEnabled()) {
+        viewModel.getFormData().toggleScannerVisibility();
+    }
     viewModel.onBarcodeRecognized(result.getText());
   }
 
@@ -337,6 +338,7 @@ public class TransferFragment extends BaseFragment implements
 
   public void clearInputFocus() {
     activity.hideKeyboard();
+    binding.dummyFocusView.requestFocus();
     binding.autoCompleteConsumeProduct.clearFocus();
     binding.quantityUnitContainer.clearFocus();
     binding.textInputAmount.clearFocus();
