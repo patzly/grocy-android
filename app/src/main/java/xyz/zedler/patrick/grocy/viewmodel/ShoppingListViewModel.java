@@ -218,6 +218,7 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public void resetSearch() {
     searchInput = null;
+    setIsSearchVisible(false);
   }
 
   public MutableLiveData<ArrayList<GroupedListItem>> getFilteredGroupedListItemsLive() {

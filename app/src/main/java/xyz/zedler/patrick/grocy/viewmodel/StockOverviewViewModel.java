@@ -673,6 +673,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public void resetSearch() {
     searchInput = null;
+    setIsSearchVisible(false);
   }
 
   public MutableLiveData<ArrayList<StockItem>> getFilteredStockItemsLive() {
