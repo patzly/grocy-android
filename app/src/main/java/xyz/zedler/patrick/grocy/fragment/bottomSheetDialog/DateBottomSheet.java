@@ -22,15 +22,22 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,8 +87,9 @@ public class DateBottomSheet extends BaseBottomSheet {
     dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     datePicker = view.findViewById(R.id.date_picker_bbd);
-    neverExpires = view.findViewById(R.id.checkbox_bbd_never_expires);
+    setDatePickerTextColor(datePicker);
 
+    neverExpires = view.findViewById(R.id.checkbox_bbd_never_expires);
     neverExpires.setOnCheckedChangeListener(
         (v, isChecked) -> datePicker.animate()
             .alpha(isChecked ? 0.5f : 1)
@@ -192,6 +200,38 @@ public class DateBottomSheet extends BaseBottomSheet {
       currentFragment.selectPurchasedDate(date);
     }
     currentFragment.onBottomSheetDismissed();
+  }
+
+  private void setDatePickerTextColor(DatePicker datePicker) {
+    View linearLayout = datePicker.getChildAt(0);
+    if (!(linearLayout instanceof LinearLayout)
+        || ((LinearLayout) linearLayout).getChildCount() == 0) return;
+    View linearLayoutPickersView = ((LinearLayout) linearLayout)
+        .getChildAt(0);
+    if (!(linearLayoutPickersView instanceof LinearLayout)) return;
+
+    @ColorInt int color = ContextCompat.getColor(requireContext(), R.color.on_background);
+
+    LinearLayout linearLayoutPickers = (LinearLayout) linearLayoutPickersView;
+    for (int i=0; i < linearLayoutPickers.getChildCount(); i++) {
+      NumberPicker numberPicker = (NumberPicker) linearLayoutPickers.getChildAt(i);
+      try {
+        @SuppressLint("PrivateApi")
+        Field selectorWheelPaintField = numberPicker.getClass()
+            .getDeclaredField("mSelectorWheelPaint");
+        selectorWheelPaintField.setAccessible(true);
+        Paint paint = (Paint) selectorWheelPaintField.get(numberPicker);
+        assert paint != null;
+        paint.setColor(color);
+      }
+      catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException ignored) {}
+
+      for(int j = 0; j < numberPicker.getChildCount(); j++){
+        View child = numberPicker.getChildAt(j);
+        if(child instanceof EditText) ((EditText) child).setTextColor(color);
+      }
+      numberPicker.invalidate();
+    }
   }
 
   @NonNull

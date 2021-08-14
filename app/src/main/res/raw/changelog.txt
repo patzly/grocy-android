@@ -1,6 +1,8 @@
 2.0.0-beta03
+- New: Support for grocy server v3.1.0
 - Improved: Updated translations
 - Fixed: Search field didn't appear after going back to stock or shopping list (#421)
+- Fixed: Invisible date picker in light theme (#422)
 - Fixed: Clipped text in changelog
 
 2.0.0-beta02
