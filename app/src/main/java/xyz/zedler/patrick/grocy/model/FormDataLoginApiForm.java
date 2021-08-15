@@ -19,12 +19,18 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.webkit.URLUtil;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import com.google.android.material.textfield.TextInputEditText;
+import java.net.URI;
+import java.net.URISyntaxException;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -36,6 +42,8 @@ public class FormDataLoginApiForm {
   private final MutableLiveData<Boolean> httpsRadioButtonCheckedLive;
   private final MutableLiveData<String> serverUrlLive;
   private final MutableLiveData<Integer> serverUrlErrorLive;
+  private final LiveData<Boolean> serverUrlValidLive;
+  private final LiveData<String> serverUrlPortInfoLive;
   private final MutableLiveData<String> longLivedAccessTokenLive;
   private final MutableLiveData<Integer> longLivedAccessTokenErrorLive;
   private final MutableLiveData<String> ingressProxyIdLive;
@@ -44,13 +52,51 @@ public class FormDataLoginApiForm {
   private final MutableLiveData<Integer> apiKeyErrorLive;
   private final MutableLiveData<Boolean> usingGrocyHassAddOnLive;
 
-  public FormDataLoginApiForm(SharedPreferences sharedPrefsPrivate, LoginApiFormFragmentArgs args) {
+  public FormDataLoginApiForm(Application application, LoginApiFormFragmentArgs args) {
+    SharedPreferences sharedPrefsPrivate = application.getSharedPreferences(
+        Constants.PREF.CREDENTIALS,
+        Context.MODE_PRIVATE
+    );
     showHelpTexts = new MutableLiveData<>(false);
     usingGrocyHassAddOnLive = new MutableLiveData<>(args.getGrocyIngressProxyId() != null);
     httpRadioButtonCheckedLive = new MutableLiveData<>(false);
     httpsRadioButtonCheckedLive = new MutableLiveData<>(false);
     serverUrlLive = new MutableLiveData<>();
     serverUrlErrorLive = new MutableLiveData<>();
+    serverUrlValidLive = Transformations.map(
+        serverUrlLive,
+        serverUrl -> isServerUrlValid()
+    );
+    serverUrlPortInfoLive = Transformations.map(
+        serverUrlLive,
+        serverUrl -> {
+          int port;
+          boolean hasPortInUrl = false;
+          try {
+            URI uri = new URI(serverUrl);
+            port = uri.getPort();
+            if (port != -1) hasPortInUrl = true;
+          } catch (URISyntaxException e) {
+            port = -1;
+          }
+          if (port == -1 && URLUtil.isHttpUrl(serverUrl)) {
+            port = 80;
+          } else if (port == -1 && URLUtil.isHttpsUrl(serverUrl)) {
+            port = 443;
+          }
+          if (hasPortInUrl) {
+            return application.getString(
+                R.string.msg_port_connection_info_with_port,
+                String.valueOf(port)
+            );
+          } else {
+            return application.getString(
+                R.string.msg_port_connection_info_without_port,
+                String.valueOf(port)
+            );
+          }
+        }
+    );
     longLivedAccessTokenLive = new MutableLiveData<>();
     longLivedAccessTokenErrorLive = new MutableLiveData<>();
     ingressProxyIdLive = new MutableLiveData<>(args.getGrocyIngressProxyId());
@@ -114,6 +160,14 @@ public class FormDataLoginApiForm {
 
   public MutableLiveData<Integer> getServerUrlErrorLive() {
     return serverUrlErrorLive;
+  }
+
+  public LiveData<Boolean> getServerUrlValidLive() {
+    return serverUrlValidLive;
+  }
+
+  public LiveData<String> getServerUrlPortInfoLive() {
+    return serverUrlPortInfoLive;
   }
 
   public void clearServerUrlErrorAndUpdateRadioButtons() {
@@ -218,7 +272,7 @@ public class FormDataLoginApiForm {
     if (serverUrl.isEmpty()) {
       serverUrlErrorLive.setValue(R.string.error_empty);
       return false;
-    } else if (!URLUtil.isValidUrl(serverUrl)) {
+    } else if (!URLUtil.isHttpUrl(serverUrl) && !URLUtil.isHttpsUrl(serverUrl)) {
       serverUrlErrorLive.setValue(R.string.error_invalid_url);
       return false;
     }

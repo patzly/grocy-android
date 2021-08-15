@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -28,7 +27,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.model.FormDataLoginApiForm;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class LoginApiFormViewModel extends BaseViewModel {
@@ -36,7 +34,6 @@ public class LoginApiFormViewModel extends BaseViewModel {
   private static final String TAG = LoginApiFormViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
-  private final SharedPreferences sharedPrefsPrivate;
   private final FormDataLoginApiForm formData;
 
   private final boolean debug;
@@ -45,13 +42,8 @@ public class LoginApiFormViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    sharedPrefsPrivate = getApplication().getSharedPreferences(
-        Constants.PREF.CREDENTIALS,
-        Context.MODE_PRIVATE
-    );
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-
-    formData = new FormDataLoginApiForm(sharedPrefsPrivate, args);
+    formData = new FormDataLoginApiForm(application, args);
   }
 
   public FormDataLoginApiForm getFormData() {

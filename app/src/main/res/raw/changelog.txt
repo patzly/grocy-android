@@ -1,6 +1,8 @@
 2.0.0-beta03
 - New: Support for grocy server v3.1.0
 - Improved: Cursor behavior on login form
+- Improved: Don't assume port 8123 during Home Assistant setup (#413)
+- Improved: Add new card to login form which contains info about port (#413)
 - Improved: Updated translations
 - Fixed: Search field didn't appear after going back to stock or shopping list (#421)
 - Fixed: Invisible date picker in light theme (#422)

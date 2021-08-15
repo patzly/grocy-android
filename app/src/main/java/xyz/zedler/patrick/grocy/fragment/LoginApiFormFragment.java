@@ -88,12 +88,6 @@ public class LoginApiFormFragment extends BaseFragment {
     String hassServerUrl = viewModel.getFormData().getServerUrlTrimmed();
     String grocyServerUrl = viewModel.getFormData().getServerUrlTrimmed();
     if (ingressProxyId != null) {
-      if (grocyServerUrl.replaceAll(":[0-9]+$", "").equals(grocyServerUrl)
-          && !grocyServerUrl.contains("ui.nabu.casa")
-      ) {
-        hassServerUrl += ":8123";
-        grocyServerUrl += ":8123";
-      }
       grocyServerUrl += "/api/hassio_ingress/" + ingressProxyId;
     }
     navigate(LoginApiFormFragmentDirections.actionLoginApiFormFragmentToLoginRequestFragment(
@@ -113,11 +107,6 @@ public class LoginApiFormFragment extends BaseFragment {
     }
     Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
     String url = viewModel.getFormData().getServerUrlTrimmed();
-    if (url.replaceAll(":[0-9]+$", "").equals(url)
-        && !url.contains("ui.nabu.casa")
-    ) {
-      url += ":8123";
-    }
     url += "/profile";
     Uri uri = Uri.parse(url);
     browserManageKeys.setData(uri);
@@ -130,13 +119,7 @@ public class LoginApiFormFragment extends BaseFragment {
     }
     Intent browserManageKeys = new Intent(Intent.ACTION_VIEW);
     String url = viewModel.getFormData().getServerUrlTrimmed();
-    if (viewModel.getFormData().getUsingGrocyHassAddOn()) {
-      if (url.replaceAll(":[0-9]+$", "").equals(url)
-          && !url.contains("ui.nabu.casa")
-      ) {
-        url += ":8123";
-      }
-    } else {
+    if (!viewModel.getFormData().getUsingGrocyHassAddOn()) {
       url += "/manageapikeys";
     }
     Uri uri = Uri.parse(url);
