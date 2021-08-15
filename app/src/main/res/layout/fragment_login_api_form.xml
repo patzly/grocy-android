@@ -130,21 +130,23 @@
           android:orientation="horizontal">
 
           <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/radio_button_https"
             style="@style/Widget.Grocy.RadioButton.BottomSheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/title_https"
             android:checked="@{formData.httpsRadioButtonCheckedLive}"
-            android:onClick="@{() -> formData.onCheckedHttpsButton()}" />
+            android:onClick="@{() -> formData.onCheckedHttpsButton(serverUrl)}" />
 
           <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/radio_button_http"
             style="@style/Widget.Grocy.RadioButton.BottomSheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_http"
             android:checked="@{formData.httpRadioButtonCheckedLive}"
-            android:onClick="@{() -> formData.onCheckedHttpButton()}" />
+            android:onClick="@{() -> formData.onCheckedHttpButton(serverUrl)}" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView

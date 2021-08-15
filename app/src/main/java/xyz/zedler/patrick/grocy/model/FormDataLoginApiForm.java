@@ -24,6 +24,7 @@ import android.webkit.URLUtil;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import com.google.android.material.textfield.TextInputEditText;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -120,24 +121,35 @@ public class FormDataLoginApiForm {
     updateRadioButtons();
   }
 
-  public void onCheckedHttpsButton() {
+  public void onCheckedHttpsButton(TextInputEditText editTextServer) {
     String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
     if (!serverUrl.contains("https://") && !serverUrl.contains("http://")) {
       serverUrlLive.setValue("https://" + serverUrl);
+      cursorJumpToEnd(editTextServer);
     } else if (serverUrl.contains("http://")) {
       serverUrlLive.setValue(serverUrl.replace("http://", "https://"));
+      cursorJumpToEnd(editTextServer);
     }
     updateRadioButtons();
   }
 
-  public void onCheckedHttpButton() {
+  public void onCheckedHttpButton(TextInputEditText editTextServer) {
     String serverUrl = serverUrlLive.getValue() != null ? serverUrlLive.getValue() : "";
     if (!serverUrl.contains("https://") && !serverUrl.contains("http://")) {
       serverUrlLive.setValue("http://" + serverUrl);
+      cursorJumpToEnd(editTextServer);
     } else if (serverUrl.contains("https://")) {
       serverUrlLive.setValue(serverUrl.replace("https://", "http://"));
+      cursorJumpToEnd(editTextServer);
     }
     updateRadioButtons();
+  }
+
+  private void cursorJumpToEnd(TextInputEditText editTextServer) {
+    editTextServer.post(() -> {
+      if (editTextServer.getText() == null || !editTextServer.hasFocus()) return;
+      editTextServer.setSelection(editTextServer.getText().length());
+    });
   }
 
   public void updateRadioButtons() {
