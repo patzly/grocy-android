@@ -22,7 +22,6 @@
   <string-array name="compatible_grocy_versions" translatable="false">
     <item>3.0.0</item>
     <item>3.0.1</item>
-    <item>3.1.0</item>
   </string-array>
 
 </resources>
