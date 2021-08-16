@@ -55,6 +55,9 @@
       android:theme="@style/Theme.Grocy.BottomAppBar"
       android:windowSoftInputMode="adjustPan" />
 
+    <activity android:name=".barcode.CameraXLivePreviewActivity" />
+    <activity android:name=".barcode.SettingsActivity" />
+
   </application>
 
 </manifest>
