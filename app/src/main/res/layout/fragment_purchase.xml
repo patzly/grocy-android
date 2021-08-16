@@ -222,14 +222,32 @@
 
             </LinearLayout>
 
-            <com.journeyapps.barcodescanner.DecoratedBarcodeView
-              android:id="@+id/barcode_scan"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
               android:layout_width="350dp"
               android:layout_height="160dp"
               android:layout_gravity="center_horizontal"
               android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.toggleTorch()}"
-              app:zxing_scanner_layout="@layout/partial_scanner_embedded" />
+              android:onClick="@{() -> fragment.toggleTorch()}">
+
+              <xyz.zedler.patrick.grocy.barcode.GraphicOverlay
+                android:id="@+id/graphic_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="4dp" />
+
+              <com.google.android.material.card.MaterialCardView
+                android:layout_width="350dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/transparent"
+                app:strokeWidth="4dp"
+                app:strokeColor="@color/grey800" />
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <com.google.android.material.card.MaterialCardView
               android:layout_width="match_parent"

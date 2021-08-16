@@ -19,8 +19,15 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.util.Size;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,16 +35,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Toast;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.camera.core.Camera;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.TorchState;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
+import com.google.mlkit.common.MlKitException;
+import com.google.mlkit.vision.barcode.Barcode;
+import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
+import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
+import xyz.zedler.patrick.grocy.barcode.BarcodeScannerProcessor;
+import xyz.zedler.patrick.grocy.barcode.CameraXViewModel;
+import xyz.zedler.patrick.grocy.barcode.GraphicOverlay;
+import xyz.zedler.patrick.grocy.barcode.PreferenceUtils;
+import xyz.zedler.patrick.grocy.barcode.VisionImageProcessor;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
@@ -58,7 +84,7 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment implements
-    ScanInputCaptureManager.BarcodeListener {
+    ScanInputCaptureManager.BarcodeListener, OnRequestPermissionsResultCallback {
 
   private final static String TAG = PurchaseFragment.class.getSimpleName();
 
@@ -67,8 +93,22 @@ public class PurchaseFragment extends BaseFragment implements
   private FragmentPurchaseBinding binding;
   private PurchaseViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
-  private ScanInputCaptureManager capture;
   private PluralUtil pluralUtil;
+
+  private static final int PERMISSION_REQUESTS = 1;
+
+  private GraphicOverlay graphicOverlay;
+
+  private LiveData<ProcessCameraProvider> processCameraProvider;
+
+  @Nullable private ProcessCameraProvider cameraProvider;
+  @Nullable private ImageAnalysis analysisUseCase;
+  @Nullable private VisionImageProcessor imageProcessor;
+  private boolean needUpdateGraphicOverlayImageSourceInfo;
+
+  private int lensFacing = CameraSelector.LENS_FACING_BACK;
+  private CameraSelector cameraSelector;
+  private Camera camera;
 
   @Override
   public View onCreateView(
@@ -87,9 +127,24 @@ public class PurchaseFragment extends BaseFragment implements
       infoFullscreenHelper.destroyInstance();
       infoFullscreenHelper = null;
     }
-    binding.barcodeScan.setTorchOff();
+    if (camera != null && camera.getCameraInfo().hasFlashUnit()) {
+      camera.getCameraControl().enableTorch(false);
+    }
     lockOrUnlockRotation(false);
     binding = null;
+  }
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    registerForActivityResult(
+        new ActivityResultContracts.RequestPermission(),
+        result -> {
+          if(result && viewModel != null && viewModel.getFormData().isScannerVisible()
+              && allPermissionsGranted()) {
+            startCamera();
+          }
+        });
   }
 
   @Override
@@ -144,8 +199,7 @@ public class PurchaseFragment extends BaseFragment implements
           viewModel.getFormData().clearForm();
           focusProductInputIfNecessary();
           if (viewModel.getFormData().isScannerVisible()) {
-            capture.onResume();
-            capture.decode();
+            startCamera();
           }
         }
       } else if (event.getType() == Event.BOTTOM_SHEET) {
@@ -189,12 +243,20 @@ public class PurchaseFragment extends BaseFragment implements
       );
     });
 
+    processCameraProvider = new ViewModelProvider(this, AndroidViewModelFactory.getInstance(activity.getApplication()))
+        .get(CameraXViewModel.class)
+        .getProcessCameraProvider();
+
     viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
       if (visible) {
-        capture.onResume();
-        capture.decode();
+        processCameraProvider.observe(
+            getViewLifecycleOwner(),
+            provider -> {
+              cameraProvider = provider;
+              startCamera();
+            });
       } else {
-        capture.onPause();
+        stopCamera();
       }
       lockOrUnlockRotation(visible);
     });
@@ -210,7 +272,8 @@ public class PurchaseFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    binding.barcodeScan.setTorchOff();
+
+    /*binding.barcodeScan.setTorchOff();
     binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
       @Override
       public void onTorchOn() {
@@ -225,7 +288,17 @@ public class PurchaseFragment extends BaseFragment implements
     CameraSettings cameraSettings = new CameraSettings();
     cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
     binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
-    capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
+    capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);*/
+
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+    String prefKey = requireContext().getString(R.string.pref_key_camera_live_viewport);
+    sharedPreferences.edit().putBoolean(prefKey, false).apply();
+
+    cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
+    graphicOverlay = binding.graphicOverlay;
+
+
+
 
     focusProductInputIfNecessary();
 
@@ -265,33 +338,188 @@ public class PurchaseFragment extends BaseFragment implements
   public void onResume() {
     super.onResume();
     if (viewModel.getFormData().isScannerVisible()) {
-      capture.onResume();
+      //capture.onResume();
+      startCamera();
     }
   }
 
   @Override
   public void onPause() {
     if (viewModel.getFormData().isScannerVisible()) {
-      capture.onPause();
+      //capture.onPause();
     }
+    stopCamera();
     super.onPause();
   }
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (viewModel.getFormData().isScannerVisible()) {
-      return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+      //return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
     return super.onKeyDown(keyCode, event);
   }
 
   @Override
   public void onDestroy() {
-    if (capture != null) {
+    /*if (capture != null) {
       capture.onDestroy();
-    }
+    }*/
+    stopCamera();
     super.onDestroy();
   }
+
+
+
+
+
+  private void stopCamera() {
+    if (imageProcessor != null) {
+      imageProcessor.stop();
+    }
+    if (cameraProvider != null) {
+      cameraProvider.unbindAll();
+    }
+  }
+
+  private void startCamera() {
+    if (cameraProvider == null || !viewModel.getFormData().isScannerVisible()) return;
+    if (!allPermissionsGranted()) {
+      getRuntimePermissions();
+      return;
+    }
+    // As required by CameraX API, unbinds all use cases before trying to re-bind any of them.
+    cameraProvider.unbindAll();
+    bindAnalysisUseCase();
+  }
+
+  private void bindAnalysisUseCase() {
+    if (cameraProvider == null) {
+      return;
+    }
+    if (analysisUseCase != null) {
+      cameraProvider.unbind(analysisUseCase);
+    }
+    if (imageProcessor != null) {
+      imageProcessor.stop();
+    }
+
+    try {
+      imageProcessor = new BarcodeScannerProcessor(requireContext()) {
+        @Override
+        protected void onSuccess(@NonNull List<Barcode> barcodes,
+            @NonNull GraphicOverlay graphicOverlay) {
+          if (barcodes.isEmpty()) {
+            return;
+          }
+          stopCamera();
+          Result result = new Result(barcodes.get(0).getRawValue(), null, null, null, 1);
+          BarcodeResult barcodeResult = new BarcodeResult(result, null);
+          onBarcodeResult(barcodeResult);
+        }
+      };
+    } catch (Exception e) {
+      Log.e(TAG, "Can not create image processor. ", e);
+      Toast.makeText(
+          activity.getApplicationContext(),
+          "Can not create image processor: " + e.getLocalizedMessage(),
+          Toast.LENGTH_LONG)
+          .show();
+      return;
+    }
+
+    ImageAnalysis.Builder builder = new ImageAnalysis.Builder();
+    Size targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing);
+    if (targetResolution != null) {
+      builder.setTargetResolution(targetResolution);
+    }
+    analysisUseCase = builder.build();
+
+    needUpdateGraphicOverlayImageSourceInfo = true;
+    analysisUseCase.setAnalyzer(
+        // imageProcessor.processImageProxy will use another thread to run the detection underneath,
+        // thus we can just runs the analyzer itself on main thread.
+        ContextCompat.getMainExecutor(requireContext()),
+        imageProxy -> {
+          if (needUpdateGraphicOverlayImageSourceInfo) {
+            boolean isImageFlipped = lensFacing == CameraSelector.LENS_FACING_FRONT;
+            int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
+            if (rotationDegrees == 0 || rotationDegrees == 180) {
+              graphicOverlay.setImageSourceInfo(
+                  imageProxy.getWidth(), imageProxy.getHeight(), isImageFlipped);
+            } else {
+              graphicOverlay.setImageSourceInfo(
+                  imageProxy.getHeight(), imageProxy.getWidth(), isImageFlipped);
+            }
+            needUpdateGraphicOverlayImageSourceInfo = false;
+          }
+          try {
+            imageProcessor.processImageProxy(imageProxy, graphicOverlay);
+          } catch (MlKitException e) {
+            Log.e(TAG, "Failed to process image. Error: " + e.getLocalizedMessage());
+            Toast.makeText(activity.getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT)
+                .show();
+          }
+        });
+
+    camera = cameraProvider.bindToLifecycle(this, cameraSelector, analysisUseCase);
+  }
+
+  private String[] getRequiredPermissions() {
+    try {
+      PackageInfo info =
+          requireActivity().getPackageManager()
+              .getPackageInfo(requireActivity().getPackageName(), PackageManager.GET_PERMISSIONS);
+      String[] ps = info.requestedPermissions;
+      if (ps != null && ps.length > 0) {
+        return ps;
+      } else {
+        return new String[0];
+      }
+    } catch (Exception e) {
+      return new String[0];
+    }
+  }
+
+  private boolean allPermissionsGranted() {
+    for (String permission : getRequiredPermissions()) {
+      if (isPermissionNotGranted(requireContext(), permission)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private void getRuntimePermissions() {
+    List<String> allNeededPermissions = new ArrayList<>();
+    for (String permission : getRequiredPermissions()) {
+      if (isPermissionNotGranted(requireContext(), permission)) {
+        allNeededPermissions.add(permission);
+      }
+    }
+
+    if (!allNeededPermissions.isEmpty()) {
+      ActivityCompat.requestPermissions(
+          requireActivity(), allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
+    }
+  }
+
+
+  private static boolean isPermissionNotGranted(Context context, String permission) {
+    if (ContextCompat.checkSelfPermission(context, permission)
+        == PackageManager.PERMISSION_GRANTED) {
+      Log.i(TAG, "Permission granted: " + permission);
+      return false;
+    }
+    Log.i(TAG, "Permission NOT granted: " + permission);
+    return true;
+  }
+
+
+
+
+
+
 
   @Override
   public void onBarcodeResult(BarcodeResult result) {
@@ -308,10 +536,14 @@ public class PurchaseFragment extends BaseFragment implements
 
   public void toggleTorch() {
     if (viewModel.getFormData().isTorchOn()) {
-      binding.barcodeScan.setTorchOff();
+      //binding.barcodeScan.setTorchOff();
     } else {
-      binding.barcodeScan.setTorchOn();
+      //binding.barcodeScan.setTorchOn();
     }
+    if (camera == null || !camera.getCameraInfo().hasFlashUnit()) return;
+    assert camera.getCameraInfo().getTorchState().getValue() != null;
+    int state = camera.getCameraInfo().getTorchState().getValue();
+    camera.getCameraControl().enableTorch(state == TorchState.OFF);
   }
 
   @Override
@@ -490,8 +722,8 @@ public class PurchaseFragment extends BaseFragment implements
       clearInputFocus();
       viewModel.getFormData().clearForm();
       if (viewModel.getFormData().isScannerVisible()) {
-        capture.onResume();
-        capture.decode();
+        /*capture.onResume();
+        capture.decode();*/
       }
       return true;
     } else if (item.getItemId() == R.id.action_skip) {
