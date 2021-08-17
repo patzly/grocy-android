@@ -75,7 +75,7 @@ public class PurchaseFragment extends BaseFragment implements
       Bundle savedInstanceState
   ) {
     binding = FragmentPurchaseBinding.inflate(inflater, container, false);
-    embeddedFragmentScanner = new EmbeddedFragmentScannerMLKit(this, binding.graphicOverlay, binding.previewView, this);
+    embeddedFragmentScanner = new EmbeddedFragmentScannerMLKit(this, binding.containerScanner, this);
     return binding.getRoot();
   }
 

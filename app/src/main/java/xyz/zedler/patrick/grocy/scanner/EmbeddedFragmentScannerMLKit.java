@@ -29,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Size;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ import androidx.camera.core.TorchState;
 import androidx.camera.core.UseCaseGroup;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -49,14 +52,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
+import com.google.android.material.card.MaterialCardView;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.Barcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -79,13 +85,38 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final Activity activity;
   private final BarcodeListener barcodeListener;
 
-  public EmbeddedFragmentScannerMLKit(Fragment fragment, GraphicOverlay graphicOverlay, PreviewView previewView, BarcodeListener barcodeListener) {
+  public EmbeddedFragmentScannerMLKit(
+      Fragment fragment,
+      CoordinatorLayout containerScanner,
+      BarcodeListener barcodeListener
+  ) {
     super(fragment.requireActivity());
     this.fragment = fragment;
     this.activity = fragment.requireActivity();
-    this.graphicOverlay = graphicOverlay;
-    this.previewView = previewView;
     this.barcodeListener = barcodeListener;
+
+    // fill container wuth necessary views
+    int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
+    LayoutParams layoutParamsPreview = new LayoutParams(matchParent, matchParent);
+    int length4dp = UnitUtil.getDp(fragment.requireContext(), 4);
+    layoutParamsPreview.setMargins(length4dp, length4dp, length4dp, length4dp);
+    previewView = new PreviewView(fragment.requireContext());
+    previewView.setLayoutParams(layoutParamsPreview);
+    containerScanner.addView(previewView);
+    graphicOverlay = new GraphicOverlay(fragment.requireContext());
+    graphicOverlay.setLayoutParams(layoutParamsPreview);
+    containerScanner.addView(graphicOverlay);
+    LayoutParams layoutParamsCard = new LayoutParams(matchParent, matchParent);
+    MaterialCardView cardView = new MaterialCardView(fragment.requireContext());
+    cardView.setLayoutParams(layoutParamsCard);
+    cardView.setCardElevation(0);
+    int backgroundColor = ContextCompat.getColor(fragment.requireContext(), R.color.transparent);
+    cardView.setCardBackgroundColor(backgroundColor);
+    cardView.setStrokeWidth(UnitUtil.getDp(fragment.requireContext(), 4));
+    int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.retro_yellow);
+    cardView.setStrokeColor(strokeColor);
+    cardView.setRadius(UnitUtil.getDp(fragment.requireContext(), 10));
+    containerScanner.addView(cardView);
 
     fragment.registerForActivityResult(
         new ActivityResultContracts.RequestPermission(),

@@ -226,36 +226,10 @@
               android:id="@+id/container_scanner"
               android:layout_width="350dp"
               android:layout_height="160dp"
-              android:layout_gravity="center_horizontal"
+              android:layout_gravity="center"
               android:layout_margin="12dp"
               android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.toggleTorch()}">
-
-              <androidx.camera.view.PreviewView
-                android:id="@+id/preview_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"/>
-
-              <xyz.zedler.patrick.grocy.scanner.GraphicOverlay
-                android:id="@+id/graphic_overlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_margin="4dp" />
-
-              <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/transparent"
-                app:strokeWidth="4dp"
-                app:strokeColor="@color/retro_yellow" />
-
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+              android:onClick="@{() -> fragment.toggleTorch()}"/>
 
             <com.google.android.material.card.MaterialCardView
               android:layout_width="match_parent"
