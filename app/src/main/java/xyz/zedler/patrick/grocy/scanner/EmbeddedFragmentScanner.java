@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.barcode;
+package xyz.zedler.patrick.grocy.scanner;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;

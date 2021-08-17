@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.zedler.patrick.grocy.barcode;
+package xyz.zedler.patrick.grocy.scanner;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

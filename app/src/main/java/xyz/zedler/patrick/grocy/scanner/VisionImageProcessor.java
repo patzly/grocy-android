@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.zedler.patrick.grocy.barcode;
+package xyz.zedler.patrick.grocy.scanner;
 
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.RequiresApi;

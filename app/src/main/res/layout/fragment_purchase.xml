@@ -238,7 +238,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="4dp"/>
 
-              <xyz.zedler.patrick.grocy.barcode.GraphicOverlay
+              <xyz.zedler.patrick.grocy.scanner.GraphicOverlay
                 android:id="@+id/graphic_overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

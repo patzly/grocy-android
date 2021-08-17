@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.barcode;
+package xyz.zedler.patrick.grocy.scanner;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -265,7 +265,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
           }
         });
 
-    //camera = cameraProvider.bindToLifecycle(fragment, cameraSelector, analysisUseCase);
     useCaseGroupBuilder.addUseCase(analysisUseCase);
   }
 
