@@ -226,6 +226,8 @@
   <string name="msg_welcome_to_grocy">Ласкаво просимо на Grocy Android!\n\nЩоб продуктивно використовувати Grocy, вам потрібен власний сервер або add-on Grocy для Home Assistant.\nЯкщо ви просто хочете випробувати цю програму, ви можете скористатися демо-сервером від Бернда Берселя, творця grocy.</string>
   <string name="msg_choose_option_below">Виберіть один із варіантів нижче</string>
   <string name="msg_qr_code_scan">На іншому пристрої відвідайте вебсайт Grocy та перейдіть на сторінку \'Ключі API\'. Натисніть \'Додати\', потім клацніть на маленький символ QR-коду та відскануйте QR-код.</string>
+  <string name="msg_port_connection_info_without_port">Додаток під\'єднується до порту %1$s.\nЯкщо ви хочете, щоб він під\'єднався до іншого порту, ви можете додати його до URL - адреси.\nНаприклад: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">Додаток під\'єднується до порту %1$s.</string>
   <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
   <string name="stock_disabled">Ви вимкнули функцію запасів у своїй конфігурації grocy, можливо, тому, що вона вам не потрібна. Але на даний момент ця програма може займатися лише управлінням запасами, тому вона може вам не принести великої користі.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
