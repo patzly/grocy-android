@@ -210,6 +210,8 @@
   <string name="msg_welcome_to_grocy">Benvenuto su Grocy Android!\n\nPer usare Grocy hai bisogno del tuo server, oppure l\'add-on Grocy per Home Assistant.\nPuoi provare questa app utilizzando la demo da Bernd Bestel, il creatore di Grocy.</string>
   <string name="msg_choose_option_below">Per favore scegli una delle opzioni qui sotto.</string>
   <string name="msg_qr_code_scan">Da un altro dispositivo, visita il tuo sito web Grocy e vai alla pagina \'Chiavi API\'. Clicca \'Aggiungi\', quindi clicca sul piccolo simbolo QR code e scannerizza il QR code.</string>
+  <string name="msg_port_connection_info_without_port">L\'app si connetterà alla porta %1$s.\nSe vuoi connetterti a un\'altra porta, puoi aggiungerla alla fine dell\'URL.\nEsempio: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">L\'app si connetterà alla porta %1$s.</string>
   <string name="msg_not_implemented_yet">Questo sarà implementato presto. Per favore usa l\'interfaccia server per il momento.</string>
   <string name="stock_disabled">Hai disabilitato la funzionalità di dispensa nella tua configurazione di grocy, probabilmente perché non ti serve. Ma questa app può solo gestire la dispensa al momento, per cui non ti sarà molto utile.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
