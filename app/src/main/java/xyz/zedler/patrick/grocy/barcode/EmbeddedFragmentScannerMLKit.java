@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.barcode;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -43,15 +44,17 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
-import com.google.mlkit.common.MlKitException;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.Barcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import xyz.zedler.patrick.grocy.R;
+import java.util.concurrent.ExecutionException;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
@@ -63,7 +66,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
   @Nullable
   private ProcessCameraProvider cameraProvider;
-  @Nullable private VisionImageProcessor imageProcessor;
+  @Nullable private BarcodeScannerProcessor imageProcessor;
   private final GraphicOverlay graphicOverlay;
   private final PreviewView previewView;
   private boolean needUpdateGraphicOverlayImageSourceInfo;
@@ -75,7 +78,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final Fragment fragment;
   private final Activity activity;
   private final BarcodeListener barcodeListener;
-  private UseCaseGroup.Builder useCaseGroupBuilder;
 
   public EmbeddedFragmentScannerMLKit(Fragment fragment, GraphicOverlay graphicOverlay, PreviewView previewView, BarcodeListener barcodeListener) {
     super(fragment.requireActivity());
@@ -103,8 +105,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     lensFacing = sharedPreferences.getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM)
         ? CameraSelector.LENS_FACING_FRONT
         : CameraSelector.LENS_FACING_BACK;
-    String prefKey = fragment.getString(R.string.pref_key_camera_live_viewport);
-    sharedPreferences.edit().putBoolean(prefKey, false).apply();
 
     cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
   }
@@ -165,29 +165,28 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
       return;
     }
     // As required by CameraX API, unbinds all use cases before trying to re-bind any of them.
-    cameraProvider.unbindAll();
 
-    useCaseGroupBuilder = new UseCaseGroup.Builder();
+    previewView.postDelayed(() -> {
+      cameraProvider.unbindAll();
 
-    bindPreviewUseCase();
-    bindAnalysisUseCase();
-
-    camera = cameraProvider.bindToLifecycle(fragment, cameraSelector, useCaseGroupBuilder.build());
+      UseCaseGroup.Builder useCaseGroupBuilder = new UseCaseGroup.Builder();
+      bindPreviewUseCase(useCaseGroupBuilder);
+      bindAnalysisUseCase(useCaseGroupBuilder);
+      camera = cameraProvider.bindToLifecycle(fragment, cameraSelector, useCaseGroupBuilder.build());
+    }, 100);  // wait until animation is finished and previewView has height and width != 0
 
     keepScreenOn(true);
   }
 
   @SuppressLint("UnsafeOptInUsageError")
-  private void bindPreviewUseCase() {
+  private void bindPreviewUseCase(UseCaseGroup.Builder useCaseGroupBuilder) {
     if (cameraProvider == null) {
       return;
     }
 
     Preview.Builder builder = new Preview.Builder();
-    Size targetResolution = PreferenceUtils.getCameraXTargetResolution(fragment.requireContext(), lensFacing);
-    if (targetResolution != null) {
-      builder.setTargetResolution(targetResolution);
-    }
+    Size targetResolution = new Size(1280, 720);
+    builder.setTargetResolution(targetResolution);
     Preview previewUseCase = builder.build();
     previewUseCase.setSurfaceProvider(previewView.getSurfaceProvider());
 
@@ -199,7 +198,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   }
 
   @SuppressLint("UnsafeOptInUsageError")
-  private void bindAnalysisUseCase() {
+  private void bindAnalysisUseCase(UseCaseGroup.Builder useCaseGroupBuilder) {
     if (cameraProvider == null) {
       return;
     }
@@ -216,7 +215,8 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
               || Objects.equals(barcodes.get(0).getRawValue(), "")) {
             return;
           }
-          //super.onSuccess(barcodes, graphicOverlay);
+          //Log.i(TAG, "onSuccess: " + barcodes.get(0).getBoundingBox().toString());
+          super.onSuccess(barcodes, graphicOverlay);
           stopScanner();
           if (barcodeListener != null) {
             barcodeListener.onBarcodeRecognized(barcodes.get(0).getRawValue());
@@ -234,10 +234,8 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
 
     ImageAnalysis.Builder builder = new ImageAnalysis.Builder();
-    Size targetResolution = PreferenceUtils.getCameraXTargetResolution(fragment.requireContext(), lensFacing);
-    if (targetResolution != null) {
-      builder.setTargetResolution(targetResolution);
-    }
+    Size targetResolution = new Size(1280, 720);
+    builder.setTargetResolution(targetResolution);
     ImageAnalysis analysisUseCase = builder.build();
 
     needUpdateGraphicOverlayImageSourceInfo = true;
@@ -260,7 +258,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
           }
           try {
             imageProcessor.processImageProxy(imageProxy, graphicOverlay);
-          } catch (MlKitException e) {
+          } catch (Exception e) {
             Log.e(TAG, "Failed to process image. Error: " + e.getLocalizedMessage());
             Toast.makeText(activity.getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT)
                 .show();
@@ -316,7 +314,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
   }
 
-
   private static boolean isPermissionNotGranted(Context context, String permission) {
     if (ContextCompat.checkSelfPermission(context, permission)
         == PackageManager.PERMISSION_GRANTED) {
@@ -325,5 +322,39 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
     Log.i(TAG, "Permission NOT granted: " + permission);
     return true;
+  }
+
+  public static final class CameraXViewModel extends AndroidViewModel {
+
+    private static final String TAG = "CameraXViewModel";
+    private MutableLiveData<ProcessCameraProvider> cameraProviderLiveData;
+
+    /**
+     * Create an instance which interacts with the camera service via the given application context.
+     */
+    public CameraXViewModel(@NonNull Application application) {
+      super(application);
+    }
+
+    public LiveData<ProcessCameraProvider> getProcessCameraProvider() {
+      if (cameraProviderLiveData == null) {
+        cameraProviderLiveData = new MutableLiveData<>();
+
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
+            ProcessCameraProvider.getInstance(getApplication());
+        cameraProviderFuture.addListener(
+            () -> {
+              try {
+                cameraProviderLiveData.setValue(cameraProviderFuture.get());
+              } catch (ExecutionException | InterruptedException e) {
+                // Handle any errors (including cancellation) here.
+                Log.e(TAG, "Unhandled exception", e);
+              }
+            },
+            ContextCompat.getMainExecutor(getApplication()));
+      }
+
+      return cameraProviderLiveData;
+    }
   }
 }

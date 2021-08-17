@@ -76,7 +76,6 @@ import javax.net.ssl.SSLEngine;
 import org.conscrypt.Conscrypt;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.barcode.CameraXLivePreviewActivity;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
@@ -236,9 +235,7 @@ public class MainActivity extends AppCompatActivity {
     // BOTTOM APP BAR
 
     binding.bottomAppBar.setNavigationOnClickListener(v -> {
-      Intent intent = new Intent(this, CameraXLivePreviewActivity.class);
-      startActivity(intent);
-      if (clickUtil.isDisabled() || true) {
+      if (clickUtil.isDisabled()) {
         return;
       }
       IconUtil.start(binding.bottomAppBar.getNavigationIcon());

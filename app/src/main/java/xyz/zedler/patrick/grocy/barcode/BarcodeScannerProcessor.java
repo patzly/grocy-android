@@ -16,8 +16,14 @@
 
 package xyz.zedler.patrick.grocy.barcode;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 import android.content.Context;
-import android.graphics.Point;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.Task;
@@ -40,7 +46,7 @@ public class BarcodeScannerProcessor extends VisionProcessorBase<List<Barcode>> 
     // faster to specify the supported barcode formats one by one, e.g.
     // new BarcodeScannerOptions.Builder()
     //     .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-    //     .build();
+    //     .build(); TODO
     barcodeScanner = BarcodeScanning.getClient();
   }
 
@@ -61,36 +67,77 @@ public class BarcodeScannerProcessor extends VisionProcessorBase<List<Barcode>> 
     for (int i = 0; i < barcodes.size(); ++i) {
       Barcode barcode = barcodes.get(i);
       graphicOverlay.add(new BarcodeGraphic(graphicOverlay, barcode));
-      //logExtrasForTesting(barcode);
-    }
-  }
-
-  private static void logExtrasForTesting(Barcode barcode) {
-    if (barcode != null) {
-      if (barcode.getBoundingBox() != null) {
-        Log.v(
-            MANUAL_TESTING_LOG,
-            String.format(
-                "Detected barcode's bounding box: %s", barcode.getBoundingBox().flattenToString()));
-      }
-      if (barcode.getCornerPoints() != null) {
-        Log.v(
-            MANUAL_TESTING_LOG,
-            String.format(
-                "Expected corner point size is 4, get %d", barcode.getCornerPoints().length));
-      }
-      for (Point point : barcode.getCornerPoints()) {
-        Log.v(
-            MANUAL_TESTING_LOG,
-            String.format("Corner point is located at: x = %d, y = %d", point.x, point.y));
-      }
-      Log.v(MANUAL_TESTING_LOG, "barcode display value: " + barcode.getDisplayValue());
-      Log.v(MANUAL_TESTING_LOG, "barcode raw value: " + barcode.getRawValue());
     }
   }
 
   @Override
   protected void onFailure(@NonNull Exception e) {
     Log.e(TAG, "Barcode detection failed " + e);
+  }
+
+  /** Graphic instance for rendering Barcode position and content information in an overlay view. */
+  public static class BarcodeGraphic extends GraphicOverlay.Graphic {
+
+    private static final int TEXT_COLOR = Color.BLACK;
+    private static final int MARKER_COLOR = Color.WHITE;
+    private static final float TEXT_SIZE = 54.0f;
+    private static final float STROKE_WIDTH = 4.0f;
+
+    private final Paint rectPaint;
+    private final Paint barcodePaint;
+    private final Barcode barcode;
+    private final Paint labelPaint;
+
+    BarcodeGraphic(GraphicOverlay overlay, Barcode barcode) {
+      super(overlay);
+
+      this.barcode = barcode;
+
+      rectPaint = new Paint();
+      rectPaint.setColor(MARKER_COLOR);
+      rectPaint.setStyle(Paint.Style.STROKE);
+      rectPaint.setStrokeWidth(STROKE_WIDTH);
+
+      barcodePaint = new Paint();
+      barcodePaint.setColor(TEXT_COLOR);
+      barcodePaint.setTextSize(TEXT_SIZE);
+
+      labelPaint = new Paint();
+      labelPaint.setColor(MARKER_COLOR);
+      labelPaint.setStyle(Paint.Style.FILL);
+    }
+
+    /**
+     * Draws the barcode block annotations for position, size, and raw value on the supplied canvas.
+     */
+    @Override
+    public void draw(Canvas canvas) {
+      if (barcode == null) {
+        throw new IllegalStateException("Attempting to draw a null barcode.");
+      }
+
+      // Draws the bounding box around the BarcodeBlock.
+      RectF rect = new RectF(barcode.getBoundingBox());
+      // If the image is flipped, the left will be translated to right, and the right to left.
+      float x0 = translateX(rect.left);
+      float x1 = translateX(rect.right);
+      rect.left = min(x0, x1);
+      rect.right = max(x0, x1);
+      rect.top = translateY(rect.top);
+      rect.bottom = translateY(rect.bottom);
+      canvas.drawRect(rect, rectPaint);
+
+      // Draws other object info.
+      float lineHeight = TEXT_SIZE + (2 * STROKE_WIDTH);
+      float textWidth = barcodePaint.measureText(barcode.getDisplayValue());
+      canvas.drawRect(
+          rect.left - STROKE_WIDTH,
+          rect.top - lineHeight,
+          rect.left + textWidth + (2 * STROKE_WIDTH),
+          rect.top,
+          labelPaint);
+      // Renders the barcode at the bottom of the box.
+      canvas.drawText(barcode.getDisplayValue(), rect.left, rect.top - STROKE_WIDTH, barcodePaint);
+    }
   }
 }
