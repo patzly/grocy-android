@@ -58,13 +58,10 @@ public class BarcodeScannerProcessor extends VisionProcessorBase<List<Barcode>> 
   @Override
   protected void onSuccess(
       @NonNull List<Barcode> barcodes, @NonNull GraphicOverlay graphicOverlay) {
-    if (barcodes.isEmpty()) {
-      Log.v(MANUAL_TESTING_LOG, "No barcode has been detected");
-    }
     for (int i = 0; i < barcodes.size(); ++i) {
       Barcode barcode = barcodes.get(i);
       graphicOverlay.add(new BarcodeGraphic(graphicOverlay, barcode));
-      logExtrasForTesting(barcode);
+      //logExtrasForTesting(barcode);
     }
   }
 
@@ -89,23 +86,6 @@ public class BarcodeScannerProcessor extends VisionProcessorBase<List<Barcode>> 
       }
       Log.v(MANUAL_TESTING_LOG, "barcode display value: " + barcode.getDisplayValue());
       Log.v(MANUAL_TESTING_LOG, "barcode raw value: " + barcode.getRawValue());
-      Barcode.DriverLicense dl = barcode.getDriverLicense();
-      if (dl != null) {
-        Log.v(MANUAL_TESTING_LOG, "driver license city: " + dl.getAddressCity());
-        Log.v(MANUAL_TESTING_LOG, "driver license state: " + dl.getAddressState());
-        Log.v(MANUAL_TESTING_LOG, "driver license street: " + dl.getAddressStreet());
-        Log.v(MANUAL_TESTING_LOG, "driver license zip code: " + dl.getAddressZip());
-        Log.v(MANUAL_TESTING_LOG, "driver license birthday: " + dl.getBirthDate());
-        Log.v(MANUAL_TESTING_LOG, "driver license document type: " + dl.getDocumentType());
-        Log.v(MANUAL_TESTING_LOG, "driver license expiry date: " + dl.getExpiryDate());
-        Log.v(MANUAL_TESTING_LOG, "driver license first name: " + dl.getFirstName());
-        Log.v(MANUAL_TESTING_LOG, "driver license middle name: " + dl.getMiddleName());
-        Log.v(MANUAL_TESTING_LOG, "driver license last name: " + dl.getLastName());
-        Log.v(MANUAL_TESTING_LOG, "driver license gender: " + dl.getGender());
-        Log.v(MANUAL_TESTING_LOG, "driver license issue date: " + dl.getIssueDate());
-        Log.v(MANUAL_TESTING_LOG, "driver license issue country: " + dl.getIssuingCountry());
-        Log.v(MANUAL_TESTING_LOG, "driver license number: " + dl.getLicenseNumber());
-      }
     }
   }
 

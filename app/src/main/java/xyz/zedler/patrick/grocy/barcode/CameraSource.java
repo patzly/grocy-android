@@ -680,14 +680,14 @@ public class CameraSource {
 
         try {
           synchronized (processorLock) {
-            frameProcessor.processByteBuffer(
+            /*frameProcessor.processByteBuffer(
                 data,
                 new FrameMetadata.Builder()
                     .setWidth(previewSize.getWidth())
                     .setHeight(previewSize.getHeight())
                     .setRotation(rotationDegrees)
                     .build(),
-                graphicOverlay);
+                graphicOverlay);*/
           }
         } catch (Exception t) {
           Log.e(TAG, "Exception thrown from receiver.", t);
