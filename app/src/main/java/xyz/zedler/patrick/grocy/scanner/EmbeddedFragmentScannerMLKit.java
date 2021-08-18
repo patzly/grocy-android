@@ -95,11 +95,11 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     this.activity = fragment.requireActivity();
     this.barcodeListener = barcodeListener;
 
-    // fill container wuth necessary views
+    // fill container with necessary views
     int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
     LayoutParams layoutParamsPreview = new LayoutParams(matchParent, matchParent);
-    int length4dp = UnitUtil.getDp(fragment.requireContext(), 4);
-    layoutParamsPreview.setMargins(length4dp, length4dp, length4dp, length4dp);
+    int size16dp = UnitUtil.getDp(fragment.requireContext(), 16);
+    layoutParamsPreview.setMargins(size16dp, size16dp, size16dp, size16dp);
     previewView = new PreviewView(fragment.requireContext());
     previewView.setLayoutParams(layoutParamsPreview);
     containerScanner.addView(previewView);
@@ -107,6 +107,8 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     graphicOverlay.setLayoutParams(layoutParamsPreview);
     containerScanner.addView(graphicOverlay);
     LayoutParams layoutParamsCard = new LayoutParams(matchParent, matchParent);
+    int size12dp = UnitUtil.getDp(fragment.requireContext(), 12);
+    layoutParamsCard.setMargins(size12dp, size12dp, size12dp, size12dp);
     MaterialCardView cardView = new MaterialCardView(fragment.requireContext());
     cardView.setLayoutParams(layoutParamsCard);
     cardView.setCardElevation(0);
@@ -121,7 +123,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     fragment.registerForActivityResult(
         new ActivityResultContracts.RequestPermission(),
         result -> {
-          if(result && isScannerVisible && allPermissionsGranted()) {
+          if(result) {
             startScannerIfVisible();
           }
         });
@@ -161,9 +163,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   }
 
   public void onResume() {
-    if (isScannerVisible) {
-      startScannerIfVisible();
-    }
+    startScannerIfVisible();
   }
 
   public void onPause() {

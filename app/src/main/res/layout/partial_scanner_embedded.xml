@@ -57,9 +57,4 @@
     app:strokeWidth="4dp"
     app:strokeColor="@color/grey800" />
 
-  <xyz.zedler.patrick.grocy.view.BarcodeRipple
-    android:id="@+id/ripple_scan"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
