@@ -20,36 +20,31 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
+import androidx.lifecycle.MutableLiveData;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginApiQrCodeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
-import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
-public class LoginApiQrCodeFragment extends BaseFragment implements
-    ScanInputCaptureManager.BarcodeListener {
+public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListener {
 
   private FragmentLoginApiQrCodeBinding binding;
   private MainActivity activity;
-  private SharedPreferences sharedPrefs;
-  private ScanInputCaptureManager capture;
+  private EmbeddedFragmentScanner embeddedFragmentScanner;
 
   @Override
   public View onCreateView(
@@ -58,6 +53,14 @@ public class LoginApiQrCodeFragment extends BaseFragment implements
       Bundle savedInstanceState
   ) {
     binding = FragmentLoginApiQrCodeBinding.inflate(inflater, container, false);
+    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
+        this,
+        binding.containerScanner,
+        this,
+        R.color.background,
+        true,
+        false
+    );
     return binding.getRoot();
   }
 
@@ -72,45 +75,33 @@ public class LoginApiQrCodeFragment extends BaseFragment implements
     activity = (MainActivity) requireActivity();
     binding.setFragment(this);
     binding.setClickUtil(new ClickUtil());
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-    DecoratedBarcodeView barcodeScannerView = binding.barcodeScanInput;
-    barcodeScannerView.setTorchOff();
-    CameraSettings cameraSettings = new CameraSettings();
-    cameraSettings.setRequestedCameraId(
-        sharedPrefs.getBoolean(
-            Constants.SETTINGS.SCANNER.FRONT_CAM,
-            Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-        ) ? 1 : 0
-    );
-    barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
-
-    capture = new ScanInputCaptureManager(activity, barcodeScannerView, this);
-    capture.decode();
+    embeddedFragmentScanner.setScannerVisibilityLive(new MutableLiveData<>(true));
   }
 
   @Override
   public void onResume() {
     super.onResume();
-    capture.onResume();
+    embeddedFragmentScanner.onResume();
   }
 
   @Override
   public void onPause() {
-    capture.onPause();
+    embeddedFragmentScanner.onPause();
     super.onPause();
   }
 
   @Override
-  public void onBarcodeResult(BarcodeResult result) {
-    if (result.getText().isEmpty()) {
-      resumeScanningAndDecoding();
-      return;
-    }
-    String[] resultSplit = result.getText().split("\\|");
+  public void onDestroy() {
+    embeddedFragmentScanner.onDestroy();
+    super.onDestroy();
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue) {
+    String[] resultSplit = rawValue.split("\\|");
     if (resultSplit.length != 2) {
       activity.showMessage(R.string.error_api_qr_code);
-      resumeScanningAndDecoding();
+      embeddedFragmentScanner.startScannerIfVisible();
       return;
     }
     String apiURL = resultSplit[0];
@@ -131,9 +122,8 @@ public class LoginApiQrCodeFragment extends BaseFragment implements
     }
   }
 
-  private void resumeScanningAndDecoding() {
-    capture.onResume();
-    new Handler().postDelayed(() -> capture.decode(), 1000);
+  public void toggleTorch() {
+    embeddedFragmentScanner.toggleTorch();
   }
 
   public void enterDataManually() {

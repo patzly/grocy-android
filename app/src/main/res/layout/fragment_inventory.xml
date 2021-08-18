@@ -178,14 +178,13 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.journeyapps.barcodescanner.DecoratedBarcodeView
-              android:id="@+id/barcode_scan"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+              android:id="@+id/container_scanner"
               android:layout_width="350dp"
               android:layout_height="160dp"
-              android:layout_gravity="center_horizontal"
+              android:layout_gravity="center"
               android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.toggleTorch()}"
-              app:zxing_scanner_layout="@layout/partial_scanner_embedded" />
+              android:onClick="@{() -> fragment.toggleTorch()}"/>
 
             <LinearLayout
               android:id="@+id/linear_purchase_batch_mode_section"

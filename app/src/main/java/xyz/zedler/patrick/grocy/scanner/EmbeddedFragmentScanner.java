@@ -54,6 +54,7 @@ public abstract class EmbeddedFragmentScanner {
     }
   }
 
+  // for MLKit scanner class
   void keepScreenOn(boolean keepOn) {
     if (keepOn) {
       activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

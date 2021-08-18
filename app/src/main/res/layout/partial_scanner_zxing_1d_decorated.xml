@@ -24,4 +24,4 @@
   android:id="@+id/decorated_barcode_view"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  app:zxing_scanner_layout="@layout/partial_scanner_embedded" />
+  app:zxing_scanner_layout="@layout/partial_scanner_zxing_1d" />

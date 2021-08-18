@@ -81,12 +81,11 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
-          android:id="@+id/barcode_scan_input"
-          android:layout_width="257dp"
-          android:layout_height="257dp"
-          app:zxing_scanner_layout="@layout/partial_scanner_qr"
-          android:layout_marginBottom="16dp" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+          android:id="@+id/container_scanner"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> fragment.toggleTorch()}"/>
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/enter_manually"

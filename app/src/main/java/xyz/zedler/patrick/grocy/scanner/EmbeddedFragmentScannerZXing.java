@@ -19,14 +19,17 @@
 
 package xyz.zedler.patrick.grocy.scanner;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import androidx.annotation.ColorRes;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -34,10 +37,10 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView.TorchListener;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
-import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager.BarcodeListener;
+import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implements
     BarcodeListener {
@@ -47,20 +50,45 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   private boolean isScannerVisible;
   private boolean isTorchOn;
   private final Fragment fragment;
-  private final Activity activity;
   private final BarcodeListener barcodeListener;
   private final DecoratedBarcodeView barcodeView;
-  private final ScanInputCaptureManager capture;
+  private final ZXingScanCaptureManager capture;
 
   public EmbeddedFragmentScannerZXing(
       Fragment fragment,
       CoordinatorLayout containerScanner,
-      BarcodeListener barcodeListener
+      BarcodeListener barcodeListener,
+      @ColorRes int viewfinderMaskColor,
+      boolean qrCodeFormat,
+      boolean takeSmallQrCodeFormat
   ) {
     super(fragment.requireActivity());
     this.fragment = fragment;
-    this.activity = fragment.requireActivity();
     this.barcodeListener = barcodeListener;
+
+    // set container size
+    int width;
+    int height;
+    if (qrCodeFormat && !takeSmallQrCodeFormat) {
+      width = UnitUtil.getDp(fragment.requireContext(), 250);
+      height = UnitUtil.getDp(fragment.requireContext(), 250);
+    } else if (qrCodeFormat) {
+      width = UnitUtil.getDp(fragment.requireContext(), 180);
+      height = UnitUtil.getDp(fragment.requireContext(), 180);
+    } else {
+      width = UnitUtil.getDp(fragment.requireContext(), 350);
+      height = UnitUtil.getDp(fragment.requireContext(), 160);
+    }
+    if (containerScanner.getParent() instanceof LinearLayout) {
+      LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
+      layoutParamsContainer.gravity = Gravity.CENTER;
+      containerScanner.setLayoutParams(layoutParamsContainer);
+    } else if (containerScanner.getParent() instanceof RelativeLayout) {
+      RelativeLayout.LayoutParams layoutParamsContainer = new RelativeLayout.LayoutParams(width, height);
+      layoutParamsContainer.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+      containerScanner.setLayoutParams(layoutParamsContainer);
+      ((RelativeLayout) containerScanner.getParent()).setGravity(Gravity.CENTER_HORIZONTAL);
+    }
 
     // fill container with necessary views
     ViewStub viewStub = new ViewStub(fragment.requireContext());
@@ -68,9 +96,18 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     LayoutParams layoutParamsScanner = new LayoutParams(matchParent, matchParent);
     viewStub.setLayoutParams(layoutParamsScanner);
     viewStub.setInflatedId(R.id.decorated_barcode_view);
-    viewStub.setLayoutResource(R.layout.partial_scanner_barcode_view);
+    if (qrCodeFormat && !takeSmallQrCodeFormat) {
+      viewStub.setLayoutResource(R.layout.partial_scanner_zxing_2d_decorated);
+    } else if (qrCodeFormat) {
+      viewStub.setLayoutResource(R.layout.partial_scanner_zxing_2d_small_decorated);
+    } else {
+      viewStub.setLayoutResource(R.layout.partial_scanner_zxing_1d_decorated);
+    }
     containerScanner.addView(viewStub);
     barcodeView = (DecoratedBarcodeView) viewStub.inflate();
+    barcodeView.getViewFinder().setMaskColor(
+        ContextCompat.getColor(fragment.requireContext(), viewfinderMaskColor)
+    );
 
     barcodeView.setTorchListener(new TorchListener() {
       @Override
@@ -90,7 +127,11 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     CameraSettings cameraSettings = new CameraSettings();
     cameraSettings.setRequestedCameraId(useFrontCam ? 1 : 0);
     barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
-    capture = new ScanInputCaptureManager(activity, barcodeView, this);
+    capture = new ZXingScanCaptureManager(
+        fragment.requireActivity(),
+        barcodeView,
+        this
+    );
   }
 
   public void setScannerVisibilityLive(LiveData<Boolean> scannerVisibilityLive) {
@@ -129,10 +170,8 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     capture.onDestroy();
   }
 
-  @SuppressLint("UnsafeOptInUsageError")
   public void startScannerIfVisible() {
     if (!isScannerVisible) return;
-
     capture.onResume();
     capture.decode();
   }

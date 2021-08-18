@@ -80,12 +80,6 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public void pauseScan() {
-  }
-
-  public void resumeScan() {
-  }
-
   public void addBarcode(String barcode) {
   }
 

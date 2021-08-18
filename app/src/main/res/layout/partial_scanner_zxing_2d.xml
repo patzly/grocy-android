@@ -26,7 +26,9 @@
   <com.journeyapps.barcodescanner.BarcodeView
     android:id="@+id/zxing_barcode_surface"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    app:zxing_framing_rect_width="220dp"
+    app:zxing_framing_rect_height="220dp"/>
 
   <com.journeyapps.barcodescanner.ViewfinderView
     android:id="@+id/zxing_viewfinder_view"
@@ -35,31 +37,17 @@
     app:zxing_possible_result_points="@color/transparent"
     app:zxing_result_view="@color/transparent"
     app:zxing_viewfinder_mask="@color/background"
-    app:zxing_viewfinder_laser_visibility="false" />
-
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="3dp"
-    android:background="@color/retro_red_bg_white"
-    android:alpha="0.7"
-    android:layout_gravity="center"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp" />
+    app:zxing_viewfinder_laser_visibility="false"/>
 
   <com.google.android.material.card.MaterialCardView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:layout_margin="12dp"
+    android:layout_margin="10dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/transparent"
     app:strokeWidth="4dp"
     app:strokeColor="@color/grey800" />
-
-  <xyz.zedler.patrick.grocy.view.BarcodeRipple
-    android:id="@+id/ripple_scan"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

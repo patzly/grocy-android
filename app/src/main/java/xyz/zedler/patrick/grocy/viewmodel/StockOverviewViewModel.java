@@ -104,7 +104,6 @@ public class StockOverviewViewModel extends BaseViewModel {
   private int itemsMissingCount;
   private int itemsInStockCount;
   private boolean sortAscending;
-  private boolean torchOn = false;
   private final boolean debug;
 
   public StockOverviewViewModel(@NonNull Application application) {
@@ -776,14 +775,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
-  }
-
-  public boolean isTorchOn() {
-    return torchOn;
-  }
-
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
   }
 
   @NonNull

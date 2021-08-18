@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.scan;
+package xyz.zedler.patrick.grocy.scanner;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -40,9 +40,9 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.VibratorUtil;
 
-public class ScanBatchCaptureManager {
+public class ZXingScanCaptureManager {
 
-  private static final String TAG = ScanBatchCaptureManager.class.getSimpleName();
+  private static final String TAG = ZXingScanCaptureManager.class.getSimpleName();
 
   private static int cameraPermissionReqCode = 250;
 
@@ -77,7 +77,7 @@ public class ScanBatchCaptureManager {
     void onBarcodeResult(BarcodeResult result);
   }
 
-  public ScanBatchCaptureManager(
+  public ZXingScanCaptureManager(
       Activity activity,
       DecoratedBarcodeView barcodeView,
       BarcodeListener barcodeListener
@@ -142,7 +142,6 @@ public class ScanBatchCaptureManager {
     }
     activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     inactivityTimer.start();
-    decode();
   }
 
   private boolean askedPermission = false;
@@ -246,7 +245,7 @@ public class ScanBatchCaptureManager {
   }
 
   public static void setCameraPermissionReqCode(int cameraPermissionReqCode) {
-    ScanBatchCaptureManager.cameraPermissionReqCode = cameraPermissionReqCode;
+    ZXingScanCaptureManager.cameraPermissionReqCode = cameraPermissionReqCode;
   }
 
   /**

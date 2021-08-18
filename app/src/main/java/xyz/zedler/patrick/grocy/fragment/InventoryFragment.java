@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,9 +29,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentInventoryBinding;
@@ -48,7 +43,9 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.IconUtil;
@@ -56,8 +53,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel.InventoryViewModelFactory;
 
-public class InventoryFragment extends BaseFragment implements
-    ScanInputCaptureManager.BarcodeListener {
+public class InventoryFragment extends BaseFragment implements BarcodeListener {
 
   private final static String TAG = InventoryFragment.class.getSimpleName();
 
@@ -66,7 +62,7 @@ public class InventoryFragment extends BaseFragment implements
   private FragmentInventoryBinding binding;
   private InventoryViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
-  private ScanInputCaptureManager capture;
+  private EmbeddedFragmentScanner embeddedFragmentScanner;
 
   @Override
   public View onCreateView(
@@ -75,6 +71,11 @@ public class InventoryFragment extends BaseFragment implements
       Bundle savedInstanceState
   ) {
     binding = FragmentInventoryBinding.inflate(inflater, container, false);
+    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
+        this,
+        binding.containerScanner,
+        this
+    );
     return binding.getRoot();
   }
 
@@ -85,8 +86,6 @@ public class InventoryFragment extends BaseFragment implements
       infoFullscreenHelper.destroyInstance();
       infoFullscreenHelper = null;
     }
-    binding.barcodeScan.setTorchOff();
-    lockOrUnlockRotation(false);
     binding = null;
   }
 
@@ -129,10 +128,7 @@ public class InventoryFragment extends BaseFragment implements
         } else {
           viewModel.getFormData().clearForm();
           focusProductInputIfNecessary();
-          if (viewModel.getFormData().isScannerVisible()) {
-            capture.onResume();
-            capture.decode();
-          }
+          embeddedFragmentScanner.startScannerIfVisible();
         }
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -157,15 +153,10 @@ public class InventoryFragment extends BaseFragment implements
       viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId));
     }
 
-    viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
-      if (visible) {
-        capture.onResume();
-        capture.decode();
-      } else {
-        capture.onPause();
-      }
-      lockOrUnlockRotation(visible);
-    });
+    embeddedFragmentScanner.setScannerVisibilityLive(
+        viewModel.getFormData().getScannerVisibilityLive()
+    );
+
     // following lines are necessary because no observers are set in Views
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
@@ -175,23 +166,6 @@ public class InventoryFragment extends BaseFragment implements
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
-
-    binding.barcodeScan.setTorchOff();
-    binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
-      @Override
-      public void onTorchOn() {
-        viewModel.getFormData().setTorchOn(true);
-      }
-
-      @Override
-      public void onTorchOff() {
-        viewModel.getFormData().setTorchOn(false);
-      }
-    });
-    CameraSettings cameraSettings = new CameraSettings();
-    cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
-    binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
-    capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
 
     focusProductInputIfNecessary();
 
@@ -228,54 +202,32 @@ public class InventoryFragment extends BaseFragment implements
   @Override
   public void onResume() {
     super.onResume();
-    if (viewModel.getFormData().isScannerVisible()) {
-      capture.onResume();
-    }
+    embeddedFragmentScanner.onResume();
   }
 
   @Override
   public void onPause() {
-    if (viewModel.getFormData().isScannerVisible()) {
-      capture.onPause();
-    }
+    embeddedFragmentScanner.onPause();
     super.onPause();
   }
 
   @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (viewModel.getFormData().isScannerVisible()) {
-      return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    }
-    return super.onKeyDown(keyCode, event);
-  }
-
-  @Override
   public void onDestroy() {
-    if (capture != null) {
-      capture.onDestroy();
-    }
+    embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 
   @Override
-  public void onBarcodeResult(BarcodeResult result) {
-    if (result.getText().isEmpty()) {
-      resumeScan();
-      return;
-    }
+  public void onBarcodeRecognized(String rawValue) {
     clearInputFocus();
     if (!viewModel.isQuickModeEnabled()) {
       viewModel.getFormData().toggleScannerVisibility();
     }
-    viewModel.onBarcodeRecognized(result.getText());
+    viewModel.onBarcodeRecognized(rawValue);
   }
 
   public void toggleTorch() {
-    if (viewModel.getFormData().isTorchOn()) {
-      binding.barcodeScan.setTorchOff();
-    } else {
-      binding.barcodeScan.setTorchOn();
-    }
+    embeddedFragmentScanner.toggleTorch();
   }
 
   @Override
@@ -405,14 +357,6 @@ public class InventoryFragment extends BaseFragment implements
     }
   }
 
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-    }
-  }
-
   @Override
   public void startTransaction() {
     viewModel.inventoryProduct();
@@ -449,13 +393,9 @@ public class InventoryFragment extends BaseFragment implements
       );
       return true;
     } else if (item.getItemId() == R.id.action_clear_form) {
-      IconUtil.start(item);
       clearInputFocus();
       viewModel.getFormData().clearForm();
-      if (viewModel.getFormData().isScannerVisible()) {
-        capture.onResume();
-        capture.decode();
-      }
+      embeddedFragmentScanner.startScannerIfVisible();
       return true;
     }
     return false;
