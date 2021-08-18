@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerMLKit;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerZXing;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -75,7 +75,7 @@ public class PurchaseFragment extends BaseFragment implements
       Bundle savedInstanceState
   ) {
     binding = FragmentPurchaseBinding.inflate(inflater, container, false);
-    embeddedFragmentScanner = new EmbeddedFragmentScannerMLKit(this, binding.containerScanner, this);
+    embeddedFragmentScanner = new EmbeddedFragmentScannerZXing(this, binding.containerScanner, this);
     return binding.getRoot();
   }
 
@@ -201,10 +201,6 @@ public class PurchaseFragment extends BaseFragment implements
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
-
-
-
-
 
     focusProductInputIfNecessary();
 
