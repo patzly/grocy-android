@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -54,6 +54,7 @@ public abstract class EmbeddedFragmentScanner {
     }
   }
 
+  // for MLKit scanner class
   void keepScreenOn(boolean keepOn) {
     if (keepOn) {
       activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

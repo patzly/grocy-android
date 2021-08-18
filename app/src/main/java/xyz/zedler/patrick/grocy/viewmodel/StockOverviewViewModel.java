@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -104,7 +104,6 @@ public class StockOverviewViewModel extends BaseViewModel {
   private int itemsMissingCount;
   private int itemsInStockCount;
   private boolean sortAscending;
-  private boolean torchOn = false;
   private final boolean debug;
 
   public StockOverviewViewModel(@NonNull Application application) {
@@ -776,14 +775,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
-  }
-
-  public boolean isTorchOn() {
-    return torchOn;
-  }
-
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
   }
 
   @NonNull

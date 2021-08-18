@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -28,7 +28,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
@@ -48,15 +47,14 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerZXing;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
-public class PurchaseFragment extends BaseFragment implements
-    BarcodeListener, OnRequestPermissionsResultCallback {
+public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
   private final static String TAG = PurchaseFragment.class.getSimpleName();
 
@@ -75,7 +73,11 @@ public class PurchaseFragment extends BaseFragment implements
       Bundle savedInstanceState
   ) {
     binding = FragmentPurchaseBinding.inflate(inflater, container, false);
-    embeddedFragmentScanner = new EmbeddedFragmentScannerZXing(this, binding.containerScanner, this);
+    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
+        this,
+        binding.containerScanner,
+        this
+    );
     return binding.getRoot();
   }
 
@@ -188,7 +190,9 @@ public class PurchaseFragment extends BaseFragment implements
       );
     });
 
-    embeddedFragmentScanner.setScannerVisibilityLive(viewModel.getFormData().getScannerVisibilityLive());
+    embeddedFragmentScanner.setScannerVisibilityLive(
+        viewModel.getFormData().getScannerVisibilityLive()
+    );
 
     // following lines are necessary because no observers are set in Views
     viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {
@@ -431,7 +435,6 @@ public class PurchaseFragment extends BaseFragment implements
       );
       return true;
     } else if (item.getItemId() == R.id.action_clear_form) {
-      IconUtil.start(item);
       clearInputFocus();
       viewModel.getFormData().clearForm();
       embeddedFragmentScanner.startScannerIfVisible();

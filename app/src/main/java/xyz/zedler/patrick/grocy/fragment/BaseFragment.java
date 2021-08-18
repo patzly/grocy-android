@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -78,12 +78,6 @@ public class BaseFragment extends Fragment {
 
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     return false;
-  }
-
-  public void pauseScan() {
-  }
-
-  public void resumeScan() {
   }
 
   public void addBarcode(String barcode) {

@@ -8,11 +8,11 @@
   ~
   ~ Grocy Android is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
@@ -56,19 +56,18 @@
         android:layout_marginStart="@dimen/main_side_margin"
         android:layout_marginEnd="@dimen/main_side_margin">
 
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
-          android:id="@+id/barcode_scan_input"
-          android:layout_width="257dp"
-          android:layout_height="257dp"
-          android:layout_centerInParent="true"
-          app:zxing_scanner_layout="@layout/partial_scanner_qr" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+          android:id="@+id/container_scanner"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> fragment.toggleTorch()}"/>
 
         <com.google.android.material.card.MaterialCardView
           android:id="@+id/hint_card"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
-          android:layout_toStartOf="@+id/barcode_scan_input"
+          android:layout_toStartOf="@+id/container_scanner"
           android:layout_alignParentStart="true"
           android:layout_centerVertical="true"
           app:cardBackgroundColor="@color/on_background_variant"
@@ -89,7 +88,7 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_alignParentEnd="true"
-          android:layout_toEndOf="@+id/barcode_scan_input"
+          android:layout_toEndOf="@+id/container_scanner"
           android:layout_centerVertical="true"
           android:layout_marginStart="16dp"
           android:gravity="center_vertical"

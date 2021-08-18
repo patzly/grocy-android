@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -24,7 +24,6 @@ import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.FocusFinder;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,9 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.camera.CameraSettings;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
@@ -53,14 +49,15 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.scan.ScanInputCaptureManager;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
 
-public class ShoppingListItemEditFragment extends BaseFragment implements
-    ScanInputCaptureManager.BarcodeListener {
+public class ShoppingListItemEditFragment extends BaseFragment implements BarcodeListener {
 
   private final static String TAG = ShoppingListItemEditFragment.class.getSimpleName();
 
@@ -68,11 +65,16 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
   private FragmentShoppingListItemEditBinding binding;
   private ShoppingListItemEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
-  private ScanInputCaptureManager capture;
+  private EmbeddedFragmentScanner embeddedFragmentScanner;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
     binding = FragmentShoppingListItemEditBinding.inflate(inflater, group, false);
+    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
+        this,
+        binding.containerScanner,
+        this
+    );
     return binding.getRoot();
   }
 
@@ -143,15 +145,9 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    viewModel.getFormData().getScannerVisibilityLive().observe(getViewLifecycleOwner(), visible -> {
-      if (visible) {
-        capture.onResume();
-        capture.decode();
-      } else {
-        capture.onPause();
-      }
-      lockOrUnlockRotation(visible);
-    });
+    embeddedFragmentScanner.setScannerVisibilityLive(
+        viewModel.getFormData().getScannerVisibilityLive()
+    );
 
     viewModel.getFormData().getUseMultilineNoteLive().observe(getViewLifecycleOwner(), multi -> {
       if(multi) {
@@ -182,23 +178,6 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    binding.barcodeScan.setTorchOff();
-    binding.barcodeScan.setTorchListener(new DecoratedBarcodeView.TorchListener() {
-      @Override
-      public void onTorchOn() {
-        viewModel.getFormData().setTorchOn(true);
-      }
-
-      @Override
-      public void onTorchOff() {
-        viewModel.getFormData().setTorchOn(false);
-      }
-    });
-    CameraSettings cameraSettings = new CameraSettings();
-    cameraSettings.setRequestedCameraId(viewModel.getUseFrontCam() ? 1 : 0);
-    binding.barcodeScan.getBarcodeView().setCameraSettings(cameraSettings);
-    capture = new ScanInputCaptureManager(activity, binding.barcodeScan, this);
-
     updateUI(args.getAnimateStart() && savedInstanceState == null);
   }
 
@@ -224,52 +203,30 @@ public class ShoppingListItemEditFragment extends BaseFragment implements
   @Override
   public void onResume() {
     super.onResume();
-    if (viewModel.getFormData().isScannerVisible()) {
-      capture.onResume();
-    }
+    embeddedFragmentScanner.onResume();
   }
 
   @Override
   public void onPause() {
-    if (viewModel.getFormData().isScannerVisible()) {
-      capture.onPause();
-    }
+    embeddedFragmentScanner.onPause();
     super.onPause();
   }
 
   @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (viewModel.getFormData().isScannerVisible()) {
-      return binding.barcodeScan.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    }
-    return super.onKeyDown(keyCode, event);
-  }
-
-  @Override
   public void onDestroy() {
-    if (capture != null) {
-      capture.onDestroy();
-    }
+    embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 
   @Override
-  public void onBarcodeResult(BarcodeResult result) {
-    if (result.getText().isEmpty()) {
-      resumeScan();
-      return;
-    }
+  public void onBarcodeRecognized(String rawValue) {
     clearInputFocus();
     viewModel.getFormData().toggleScannerVisibility();
-    viewModel.onBarcodeRecognized(result.getText());
+    viewModel.onBarcodeRecognized(rawValue);
   }
 
   public void toggleTorch() {
-    if (viewModel.getFormData().isTorchOn()) {
-      binding.barcodeScan.setTorchOff();
-    } else {
-      binding.barcodeScan.setTorchOn();
-    }
+    embeddedFragmentScanner.toggleTorch();
   }
 
   public void toggleScannerVisibility() {

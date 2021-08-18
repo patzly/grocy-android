@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -46,6 +46,7 @@ import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
@@ -270,6 +271,17 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setFrontCamEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.FRONT_CAM, enabled).apply();
+  }
+
+  public boolean getScannerFormat2dEnabled() {
+    return sharedPrefs.getBoolean(
+        SCANNER.SCANNER_FORMAT_2D,
+        Constants.SETTINGS_DEFAULT.SCANNER.SCANNER_FORMAT_2D
+    );
+  }
+
+  public void setScannerFormat2dEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.SCANNER_FORMAT_2D, enabled).apply();
   }
 
   public boolean getExternalScannerEnabled() {

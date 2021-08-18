@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
  */
@@ -108,6 +108,7 @@ public final class Constants {
     public final static class SCANNER {
 
       public final static String FRONT_CAM = "front_cam";
+      public final static String SCANNER_FORMAT_2D = "scanner_format_2d";
       public final static String EXTERNAL_SCANNER = "external_scanner";
     }
 
@@ -162,6 +163,7 @@ public final class Constants {
     public final static class SCANNER {
 
       public final static boolean FRONT_CAM = false;
+      public final static boolean SCANNER_FORMAT_2D = false;
       public final static boolean EXTERNAL_SCANNER = false;
     }
 

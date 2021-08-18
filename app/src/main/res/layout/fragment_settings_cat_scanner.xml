@@ -8,11 +8,11 @@
   ~
   ~ Grocy Android is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
@@ -143,6 +143,36 @@
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageFrontCam, true)}"
             android:checked="@={viewModel.frontCamEnabled}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchScannerFormat.setChecked(!switchScannerFormat.isChecked())}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_round_category" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_use_2d_scanner_format" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_use_2d_scanner_format_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_scanner_format"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.scannerFormat2dEnabled}" />
 
         </LinearLayout>
 
