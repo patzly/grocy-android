@@ -25,7 +25,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
@@ -50,19 +49,15 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.UnlockUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
   private static final String TAG = SettingsViewModel.class.getSimpleName();
   private final SharedPreferences sharedPrefs;
-  private final boolean debug;
 
   private final DownloadHelper dlHelper;
-  private final NetUtil netUtil;
-  private final Gson gson;
   private final GrocyApi grocyApi;
 
   private MutableLiveData<Boolean> isLoadingLive;
@@ -77,20 +72,18 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> dueSoonDaysTextLive;
   private final MutableLiveData<String> defaultPurchaseAmountTextLive;
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
+  private final MutableLiveData<Boolean> showBarcodeScannerZXingInfo;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     dlHelper = new DownloadHelper(
         getApplication(),
         TAG,
         isLoading -> isLoadingLive.setValue(isLoading)
     );
-    netUtil = new NetUtil(getApplication());
-    gson = new Gson();
     grocyApi = new GrocyApi(getApplication());
 
     isLoadingLive = new MutableLiveData<>(false);
@@ -102,6 +95,7 @@ public class SettingsViewModel extends BaseViewModel {
     dueSoonDaysTextLive = new MutableLiveData<>(getDueSoonDaysText());
     defaultPurchaseAmountTextLive = new MutableLiveData<>(getDefaultPurchaseAmountText());
     defaultConsumeAmountTextLive = new MutableLiveData<>(getDefaultConsumeAmountText());
+    showBarcodeScannerZXingInfo = new MutableLiveData<>(true);
   }
 
   public boolean isDemo() {
@@ -260,6 +254,35 @@ public class SettingsViewModel extends BaseViewModel {
   public void setSpeedUpStartEnabled(boolean enabled) {
     sharedPrefs.edit()
         .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
+  }
+
+  public MutableLiveData<Boolean> getShowBarcodeScannerZXingInfo() {
+    return showBarcodeScannerZXingInfo;
+  }
+
+  public boolean isAppUnlocked() {
+    return UnlockUtil.isKeyInstalled(getApplication());
+  }
+
+  public boolean getUseMlKitScanner() {
+    return sharedPrefs.getBoolean(
+        SCANNER.USE_ML_KIT,
+        SETTINGS_DEFAULT.SCANNER.USE_ML_KIT
+    );
+  }
+
+  public void setUseMlKitScanner(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.USE_ML_KIT, enabled).apply();
+    assert showBarcodeScannerZXingInfo.getValue() != null;
+    showBarcodeScannerZXingInfo.setValue(!showBarcodeScannerZXingInfo.getValue());
+  }
+
+  public String getUseScannerToolString(boolean isMlKitButton) {
+    if (isMlKitButton) {
+      return getApplication().getString(R.string.title_use_scanner_tool, "ML Kit");
+    } else {
+      return getApplication().getString(R.string.title_use_scanner_tool, "ZXing");
+    }
   }
 
   public boolean getFrontCamEnabled() {

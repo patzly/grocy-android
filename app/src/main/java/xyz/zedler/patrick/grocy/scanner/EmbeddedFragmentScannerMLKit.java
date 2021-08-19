@@ -29,9 +29,13 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Size;
+import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
@@ -88,12 +92,39 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   public EmbeddedFragmentScannerMLKit(
       Fragment fragment,
       CoordinatorLayout containerScanner,
-      BarcodeListener barcodeListener
+      BarcodeListener barcodeListener,
+      @ColorRes int viewfinderMaskColorZXing,
+      boolean qrCodeFormat,
+      boolean takeSmallQrCodeFormat
   ) {
     super(fragment.requireActivity());
     this.fragment = fragment;
     this.activity = fragment.requireActivity();
     this.barcodeListener = barcodeListener;
+
+    // set container size
+    int width;
+    int height;
+    if (qrCodeFormat && !takeSmallQrCodeFormat) {
+      width = UnitUtil.getDp(fragment.requireContext(), 250);
+      height = UnitUtil.getDp(fragment.requireContext(), 250);
+    } else if (qrCodeFormat) {
+      width = UnitUtil.getDp(fragment.requireContext(), 180);
+      height = UnitUtil.getDp(fragment.requireContext(), 180);
+    } else {
+      width = UnitUtil.getDp(fragment.requireContext(), 350);
+      height = UnitUtil.getDp(fragment.requireContext(), 160);
+    }
+    if (containerScanner.getParent() instanceof LinearLayout) {
+      LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
+      layoutParamsContainer.gravity = Gravity.CENTER;
+      containerScanner.setLayoutParams(layoutParamsContainer);
+    } else if (containerScanner.getParent() instanceof RelativeLayout) {
+      RelativeLayout.LayoutParams layoutParamsContainer = new RelativeLayout.LayoutParams(width, height);
+      layoutParamsContainer.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+      containerScanner.setLayoutParams(layoutParamsContainer);
+      ((RelativeLayout) containerScanner.getParent()).setGravity(Gravity.CENTER_HORIZONTAL);
+    }
 
     // fill container with necessary views
     int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -246,8 +277,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
               || Objects.equals(barcodes.get(0).getRawValue(), "")) {
             return;
           }
-          //Log.i(TAG, "onSuccess: " + barcodes.get(0).getBoundingBox().toString());
-          super.onSuccess(barcodes, graphicOverlay);
+          //super.onSuccess(barcodes, graphicOverlay);
           stopScanner();
           if (barcodeListener != null) {
             barcodeListener.onBarcodeRecognized(barcodes.get(0).getRawValue());

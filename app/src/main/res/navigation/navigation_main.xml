@@ -571,6 +571,13 @@
       <deepLink
         android:id="@+id/deepLink11"
         app:uri="@string/deep_link_settingsCatScannerFragment" />
+      <action
+        android:id="@+id/action_settingsCatScannerFragment_to_settingsCatScannerToolFragment"
+        app:destination="@id/settingsCatScannerToolFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
     <fragment
       android:id="@+id/settingsCatStockFragment"
@@ -600,6 +607,11 @@
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
     </fragment>
+    <fragment
+      android:id="@+id/settingsCatScannerToolFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerToolFragment"
+      android:label="SettingsCatScannerToolFragment"
+      tools:layout="@layout/fragment_settings_cat_scanner_choose"/>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"

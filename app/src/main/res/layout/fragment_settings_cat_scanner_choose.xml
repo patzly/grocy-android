@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="android.view.View" />
+    <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <variable
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerToolFragment" />
+    <variable
+      name="sharedPrefs"
+      type="android.content.SharedPreferences" />
+    <variable
+      name="clickUtil"
+      type="xyz.zedler.patrick.grocy.util.ClickUtil" />
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="?android:actionBarSize">
+
+      <LinearLayout
+        android:id="@+id/linear_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@color/primary">
+
+        <FrameLayout
+          android:id="@+id/frame_back"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="20dp"
+          android:background="?attr/actionBarItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:contentDescription="@string/action_back"
+          android:tooltipText="@string/action_back"
+          android:focusable="true"
+          tools:targetApi="o"
+          android:onClick="@{v -> activity.navigateUp()}">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_arrow_back" />
+
+        </FrameLayout>
+
+        <TextView
+          android:id="@+id/app_bar_title"
+          style="@style/Widget.Grocy.TextView.Toolbar"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="16dp"
+          android:text="@string/title_barcode_scanner" />
+
+      </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:visibility="@{viewModel.appUnlocked ? View.GONE : View.VISIBLE}"
+      android:background="@color/background"
+      android:layout_marginTop="?android:actionBarSize"
+      android:paddingBottom="?android:actionBarSize">
+
+      <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="0dp"
+        app:contentPadding="0dp"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/on_background_variant">
+
+        <androidx.core.widget.NestedScrollView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:scrollbars="vertical">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/msg_help_barcode_scanner_intro" />
+
+        </androidx.core.widget.NestedScrollView>
+
+      </com.google.android.material.card.MaterialCardView>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_logout_cancel"
+          style="@style/Widget.Grocy.Button.TextButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/on_background_secondary"
+          android:text="@string/action_github"
+          app:rippleColor="@color/highlight" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_logout_logout"
+          style="@style/Widget.Grocy.Button.UnelevatedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:text="@string/action_play_store"
+          app:backgroundTint="@color/retro_green_bg_white" />
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
+      android:background="@color/background"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?android:actionBarSize"
+      android:overScrollMode="never"
+      android:fillViewport="true"
+      android:visibility="@{viewModel.appUnlocked ? View.VISIBLE : View.GONE}">
+
+      <LinearLayout
+        android:id="@+id/linear_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="80dp"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        app:transitionTypeChanging="@{true}">
+
+        <com.google.android.material.card.MaterialCardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="0dp"
+          app:contentPadding="16dp"
+          app:cardElevation="0dp"
+          app:cardCornerRadius="12dp"
+          app:cardBackgroundColor="@color/on_background_variant">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@string/msg_help_barcode_scanner_choose}" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+          android:id="@+id/radio_button_use_zxing"
+          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="0dp"
+          android:text="@{viewModel.getUseScannerToolString(false)}"
+          android:checked="@{!viewModel.useMlKitScanner}"
+          android:onClick="@{() -> radioButtonUseMlkit.setChecked(!radioButtonUseZxing.isChecked())}"/>
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+          android:id="@+id/radio_button_use_mlkit"
+          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="0dp"
+          android:text="@{viewModel.getUseScannerToolString(true)}"
+          android:checked="@={viewModel.useMlKitScanner}"
+          android:onClick="@{() -> radioButtonUseZxing.setChecked(!radioButtonUseMlkit.isChecked())}"/>
+
+        <com.google.android.material.card.MaterialCardView
+          android:id="@+id/card_info_mlkit"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="0dp"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="0dp"
+          app:contentPadding="16dp"
+          app:cardElevation="0dp"
+          app:cardCornerRadius="12dp"
+          app:cardBackgroundColor="@color/on_background_variant">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.showBarcodeScannerZXingInfo ? @string/msg_help_barcode_scanner_info_zxing : @string/msg_help_barcode_scanner_info_mlkit}" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

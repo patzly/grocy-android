@@ -109,6 +109,8 @@
   <string name="action_own_server">Own server</string>
   <string name="action_enter_data_manually">Enter data manually</string>
   <string name="action_perform">Perform action</string>
+  <string name="action_play_store" translatable="false">Play Store</string>
+  <string name="action_github" translatable="false">GitHub</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -246,6 +248,17 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
   <string name="msg_help_inventory_fields">The following fields apply to newly added products.</string>
+  <string name="msg_help_barcode_scanner_intro" translatable="false">In addition to the barcode scanner ZXing (\"zebra crossing\"), we have also included ML Kit as another barcode scanner in the app variant in the Play Store and on GitHub. The variant in the F-Droid Store does not have this scanner because its code is not open source.\n
+    \nAdvantages of ML Kit over ZXing:\n- Uses machine learning\n- Latest technologies\n- Almost no false results\n- Orientation of the barcode does not matter\n- Works even with fuzzy or low contrast barcodes\n
+    \nBoth barcode scanners work completely offline.\n
+    \nTo use ML Kit, you need to install the app \"Grocy Android: Unlock Key\" on your device. This requires either a one-time purchase from the Play Store or downloading the APK from GitHub. Here follows an explanation for it:\n
+    \nYou can enjoy this app completely ad-free. This means that we have not received anything for our work so far.\nHowever, because the development takes a lot of time, work and motivation, we would be happy if you buy the unlock app.\nThe price is 8€ without taxes (these are added depending on the country). Google keeps 15% of that.\nThe money earned does not reflect the effort, but we are motivated to improve the app!\n
+    \nThere would also be donations, that\'s true. Unfortunately, Google prohibits any form of payment if there is no service in return. That\'s why we have now included this unlock feature.\n
+    \nIf you don\'t have Google Play Services on your device or don\'t want to support us, you can also download the unlock app APK for free on GitHub. No one is forcing you to make a purchase. Grocy Android and the unlock app are open source and will remain so.\n
+    \nLet\'s go, thanks in advance!</string>
+  <string name="msg_help_barcode_scanner_choose">You can choose a barcode scanner for camera barcode scanning.</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") uses the contrast data from the camera stream to detect a barcode. It then calculates the relative width of all lines.\n- Sometimes incorrect results\n- Barcode must always be horizontally aligned\n- Contrast and sharpness must be good\n- Is performed completely on the device\n- Framework is open source</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit uses machine learning with the latest technologies for barcode scanning.\n- Almost no incorrect results\n- Orientation doesn\'t matter\n- Even works for fuzzy or low contrast barcodes\n- Is performed completely on the device\n- Framework is not open source</string>
   <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
   <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -342,6 +355,7 @@
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
+  <string name="title_barcode_scanner">Barcode scanner</string>
   <!-- Context: About this app -->
   <string name="title_about">About</string>
   <string name="title_info">Information</string>
@@ -397,6 +411,8 @@
   <string name="title_product_cat_qu_conversions">QU conversions</string>
   <string name="title_unknown_input">Unknown input</string>
   <string name="title_presets_new_products">Presets for new products</string>
+  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button -->
+  <string name="title_use_scanner_tool">Use %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -702,6 +718,8 @@
   <string name="setting_language_not_available">Not available</string>
   <string name="setting_open_food_facts">Use Open Food Facts</string>
   <string name="setting_open_food_facts_description">Get info from barcodes</string>
+  <string name="setting_choose_barcode_scanner">Choose barcode scanner</string>
+  <string name="setting_choose_barcode_scanner_description">For camera barcode scanning</string>
   <string name="setting_use_front_cam">Use front camera</string>
   <string name="setting_use_front_cam_description">For barcode scanning</string>
   <string name="setting_use_2d_scanner_format">Use 2D barcode scanner format</string>

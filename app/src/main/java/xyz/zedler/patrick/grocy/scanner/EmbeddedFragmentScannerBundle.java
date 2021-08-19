@@ -43,14 +43,25 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
       boolean takeSmallQrCodeFormat
   ) {
     super(fragment.requireActivity());
-    embeddedFragmentScanner = new EmbeddedFragmentScannerZXing(
-        fragment,
-        containerScanner,
-        barcodeListener,
-        viewfinderMaskColorZXing,
-        qrCodeFormat,
-        takeSmallQrCodeFormat
-    );
+    if (useMlKitScanner(fragment)) {
+      embeddedFragmentScanner = new EmbeddedFragmentScannerMLKit(
+          fragment,
+          containerScanner,
+          barcodeListener,
+          viewfinderMaskColorZXing,
+          qrCodeFormat,
+          takeSmallQrCodeFormat
+      );
+    } else {
+      embeddedFragmentScanner = new EmbeddedFragmentScannerZXing(
+          fragment,
+          containerScanner,
+          barcodeListener,
+          viewfinderMaskColorZXing,
+          qrCodeFormat,
+          takeSmallQrCodeFormat
+      );
+    }
   }
 
   public EmbeddedFragmentScannerBundle(
@@ -90,6 +101,15 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
     return sharedPreferences.getBoolean(
         SCANNER.SCANNER_FORMAT_2D,
         SETTINGS_DEFAULT.SCANNER.SCANNER_FORMAT_2D
+    );
+  }
+
+  private static boolean useMlKitScanner(Fragment fragment) {
+    SharedPreferences sharedPreferences = PreferenceManager
+        .getDefaultSharedPreferences(fragment.requireContext());
+    return sharedPreferences.getBoolean(
+        SCANNER.USE_ML_KIT,
+        SETTINGS_DEFAULT.SCANNER.USE_ML_KIT
     );
   }
 

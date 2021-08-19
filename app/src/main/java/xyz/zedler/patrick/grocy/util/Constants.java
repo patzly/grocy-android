@@ -107,6 +107,7 @@ public final class Constants {
 
     public final static class SCANNER {
 
+      public final static String USE_ML_KIT = "use_ml_kit";
       public final static String FRONT_CAM = "front_cam";
       public final static String SCANNER_FORMAT_2D = "scanner_format_2d";
       public final static String EXTERNAL_SCANNER = "external_scanner";
@@ -162,6 +163,7 @@ public final class Constants {
 
     public final static class SCANNER {
 
+      public final static boolean USE_ML_KIT = false;
       public final static boolean FRONT_CAM = false;
       public final static boolean SCANNER_FORMAT_2D = false;
       public final static boolean EXTERNAL_SCANNER = false;
