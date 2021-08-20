@@ -31,6 +31,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 public class ShoppingModeItemAdapter extends
     RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
 
+  private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
@@ -59,6 +62,7 @@ public class ShoppingModeItemAdapter extends
 
   public ShoppingModeItemAdapter(
       Context context,
+      LinearLayoutManager linearLayoutManager,
       ArrayList<GroupedListItem> groupedListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
@@ -66,6 +70,7 @@ public class ShoppingModeItemAdapter extends
       ArrayList<Integer> missingProductIds,
       ShoppingModeItemClickListener listener
   ) {
+    this.linearLayoutManager = linearLayoutManager;
     this.groupedListItems = new ArrayList<>(groupedListItems);
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -333,7 +338,7 @@ public class ShoppingModeItemAdapter extends
     this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
-    diffResult.dispatchUpdatesTo(this);
+    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -464,5 +469,60 @@ public class ShoppingModeItemAdapter extends
   public interface ShoppingModeItemClickListener {
 
     void onItemRowClicked(GroupedListItem groupedListItem);
+  }
+
+  /**
+   * Custom ListUpdateCallback that prevents RecyclerView from scrolling down if top item is moved.
+   */
+  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
+
+    @NonNull
+    private final ShoppingModeItemAdapter mAdapter;
+    private final LinearLayoutManager linearLayoutManager;
+
+    public AdapterListUpdateCallback(
+        @NonNull ShoppingModeItemAdapter adapter,
+        LinearLayoutManager linearLayoutManager
+    ) {
+      this.mAdapter = adapter;
+      this.linearLayoutManager = linearLayoutManager;
+    }
+
+    @Override
+    public void onInserted(int position, int count) {
+      mAdapter.notifyItemRangeInserted(position, count);
+    }
+
+    @Override
+    public void onRemoved(int position, int count) {
+      mAdapter.notifyItemRangeRemoved(position, count);
+    }
+
+    @Override
+    public void onMoved(int fromPosition, int toPosition) {
+      // workaround for https://github.com/patzly/grocy-android/issues/439
+      // figure out the position of the first visible item
+      int firstPos = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+      int offsetTop = 0;
+      if(firstPos >= 0) {
+        View firstView = linearLayoutManager.findViewByPosition(firstPos);
+        if (firstView != null) {
+          offsetTop = linearLayoutManager.getDecoratedTop(firstView)
+              - linearLayoutManager.getTopDecorationHeight(firstView);
+        }
+      }
+
+      mAdapter.notifyItemMoved(fromPosition, toPosition);
+
+      // reapply the saved position
+      if(firstPos >= 0) {
+        linearLayoutManager.scrollToPositionWithOffset(firstPos, offsetTop);
+      }
+    }
+
+    @Override
+    public void onChanged(int position, int count, Object payload) {
+      mAdapter.notifyItemRangeChanged(position, count, payload);
+    }
   }
 }

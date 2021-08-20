@@ -164,6 +164,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         binding.recycler.setAdapter(
             new ShoppingModeItemAdapter(
                 activity,
+                (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
                 viewModel.getProductHashMap(),
                 viewModel.getQuantityUnitHashMap(),

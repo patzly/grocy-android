@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -36,12 +35,6 @@ public class VibratorUtil {
   public VibratorUtil(Context context) {
     if (context != null) {
       vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    }
-  }
-
-  public VibratorUtil(Activity activity) {
-    if (activity != null) {
-      vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
     }
   }
 
