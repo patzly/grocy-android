@@ -67,6 +67,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.VibratorUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -277,6 +278,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
               || Objects.equals(barcodes.get(0).getRawValue(), "")) {
             return;
           }
+          new VibratorUtil(fragment.requireContext()).tick();
           //super.onSuccess(barcodes, graphicOverlay);
           stopScanner();
           if (barcodeListener != null) {
