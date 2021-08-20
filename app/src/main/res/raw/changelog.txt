@@ -3,6 +3,7 @@
 - New: Option to use 2D barcode format for scanner everywhere (#265)
 - Improved: Don't assume port 8123 during Home Assistant setup (#413)
 - Improved: Add new card to login form which contains info about port (#413)
+- Improved: Set focus mode to continuous in ZXing barcode scanner (works better)
 - Improved: Tap to toggle torch on login page with QR code scanner
 - Improved: Cursor behavior on login form
 - Improved: Updated translations
