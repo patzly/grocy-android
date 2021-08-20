@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.scanner;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -173,7 +174,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   public void startScannerIfVisible() {
     if (!isScannerVisible) return;
     capture.onResume();
-    capture.decode();
+    new Handler().postDelayed(capture::decode, 500);
   }
 
   public void toggleTorch() {
