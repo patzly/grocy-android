@@ -10,6 +10,7 @@
 - Fixed: Invisible date picker in light theme (#422)
 - Fixed: Product dropdown appears again after scanning barcode (#404)
 - Fixed: White icons on white navigation bar with SDK 26 (#366)
+- Fixed: Shopping mode list scrolled to bottom after top category was done (#439)
 - Fixed: Clipped text in changelog
 
 2.0.0-beta02
