@@ -43,7 +43,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:layout_margin="10dp"
+    android:layout_margin="11dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/transparent"
