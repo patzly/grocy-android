@@ -106,7 +106,6 @@
   <string name="action_own_server">Eigener Server</string>
   <string name="action_enter_data_manually">Daten manuell eingeben</string>
   <string name="action_perform">Aktion ausführen</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d bald fällig</item>
@@ -210,6 +209,8 @@
   <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
   <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
+  <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
   <string name="stock_disabled">Sie haben in Ihrer grocy-Konfiguration das Bestandsfeature deaktiviert, wahrscheinlich weil Sie es nicht brauchen. Diese App kann aber im Moment nur Bestandsverwaltung, also kann es sein, dass sie Ihnen nicht viel nützt.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -240,6 +241,12 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Dies wird als Standardeinstellung verwendet, wenn dieses Produkt als Rezeptzutat hinzugefügt wird.</string>
   <string name="msg_help_inventory_fields">Die folgenden Felder gelten für neu hinzugefügte Einträge.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Sie können einen Barcode-Scanner für das Barcode-Scannen mit der Kamera wählen.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n- Manchmal falsche Ergebnisse\n- Barcodes müssen immer horizontal ausgerichtet sein\n- Kontrast und Schärfe müssen gut sein\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit benutzt maschinelles Lernen mit den neuesten Technologien für das Barcode-Scannen.\n- Fast nie falschen Ergebnisse\n- Ausrichtung der Barcodes spielt keine Rolle\n- Funktioniert sogar mit unscharfen Barcodes oder mit wenig Kontrast\n- Ausführung komplett auf dem Gerät\n- Framework ist nicht open source</string>
   <string name="msg_help_external_scanner_ready">Sie können einen externen Scanner für das Feld unten verwenden, während es fokussiert und leer ist.</string>
   <string name="msg_help_external_scanner_settings">Diese App unterstützt externe Scanner-Geräte, welche wie eine Tastatur Eingaben senden und über USB oder Bluetooth verbunden werden können. Die folgenden Optionen müssen in Ihrem externen Scanner eingestellt sein:\n\nPräfix: Keines\nSuffix: TAB oder ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -318,6 +325,8 @@
   <string name="error_barcode_not_linked">Barcode ist nicht mit einem Produkt verknüpft</string>
   <string name="error_no_product_details">Produktdetails konnten nicht geladen werden</string>
   <string name="error_failed_barcode_upload">Barcode konnte nicht hochgeladen werden</string>
+  <string name="error_wrong_grocycode_type">grocycode enthält falschen Typ</string>
+  <string name="error_stock_entry_grocycode">Bestandseintrag vom grocycode nicht gefunden</string>
   <string name="error_undefined">Ein Fehler ist aufgetreten</string>
 
   <string name="title_overview">Übersicht</string>
@@ -336,6 +345,8 @@
   <string name="title_shopping_list">Einkaufszettel</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Einstellungen</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Barcode-Scanner</string>
   <!-- Context: About this app -->
   <string name="title_about">Über</string>
   <string name="title_info">Information</string>
@@ -385,6 +396,9 @@
   <string name="title_product_cat_qu_conversions">ME-Umrechnungen</string>
   <string name="title_unknown_input">Unbekannte Eingabe</string>
   <string name="title_presets_new_products">Vorgaben für neue Produkte</string>
+  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
+   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <string name="title_use_scanner_tool">%1$s benutzen</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -681,6 +695,13 @@
   <string name="hint_server">Server-URL</string>
   <string name="hint_key">Gültiger API-Schlüssel</string>
 
+  <string name="setting_theme">Thema</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_follow_system">System folgen</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Dunkel</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Hell</string>
   <string name="setting_language">Sprache</string>
   <string name="setting_language_description">Sprache auswählen</string>
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
@@ -688,8 +709,12 @@
   <string name="setting_language_not_available">Nicht verfügbar</string>
   <string name="setting_open_food_facts">Open Food Facts benutzen</string>
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
+  <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
+  <string name="setting_choose_barcode_scanner_description">Für Barcode-Scannen mit der Kamera</string>
   <string name="setting_use_front_cam">Selfie-Kamera nutzen</string>
   <string name="setting_use_front_cam_description">Für Barcode-Scanning</string>
+  <string name="setting_use_2d_scanner_format">2D-Barcode Scanner-Format benutzen</string>
+  <string name="setting_use_2d_scanner_format_description">Quadratische Form für QR-Codes</string>
   <string name="setting_external_support">Unterstützung für externe Scanner</string>
   <string name="setting_external_support_description">Per USB oder Bluetooth</string>
   <string name="setting_reload_config">Konfiguration neu laden</string>
