@@ -20,19 +20,43 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class UnlockUtil {
 
+  private final static String PACKAGE = "xyz.zedler.patrick.grocy.unlock";
+  private final static int PURCHASED = 1;
+
   public static boolean isKeyInstalled(Context context) {
     try {
-      context.getPackageManager().getPackageInfo(
-          "xyz.zedler.patrick.grocy.unlock", PackageManager.GET_ACTIVITIES
-      );
+      context.getPackageManager().getPackageInfo(PACKAGE, PackageManager.GET_ACTIVITIES);
       return true;
-    } catch (NameNotFoundException ignored) {
+    } catch (Exception ignored) {
     }
     return false;
+  }
+
+  public static void checkIfPurchased(AppCompatActivity activity, SharedPreferences sharedPrefs) {
+    ActivityResultLauncher<Intent> launcher;
+    launcher = activity.registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        result -> sharedPrefs.edit()
+            .putBoolean(PREF.PURCHASED, result.getResultCode() == PURCHASED)
+            .apply()
+    );
+    try {
+      Intent intent = activity.getPackageManager().getLaunchIntentForPackage(PACKAGE);
+      if (intent != null) {
+        intent.setFlags(0);
+        launcher.launch(intent);
+      }
+    } catch (Exception ignored) {
+    }
   }
 }
