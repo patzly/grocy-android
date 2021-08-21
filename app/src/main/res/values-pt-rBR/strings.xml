@@ -360,8 +360,6 @@
   <string name="hint_server">URL do Servidor</string>
   <string name="hint_key">Chave API válida</string>
 
-  <string name="setting_dark_mode">Forçar modo noturno</string>
-  <string name="setting_dark_mode_description">Desligado por manutenção do sistema</string>
   <string name="setting_open_food_facts">Usar Open Food Facts</string>
   <string name="setting_open_food_facts_description">Obter info dos códigos de barras</string>
   <string name="setting_use_front_cam">Usar câmera frontal</string>

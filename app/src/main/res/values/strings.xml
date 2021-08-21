@@ -719,8 +719,13 @@
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Valid API key</string>
 
-  <string name="setting_dark_mode">Force dark mode</string>
-  <string name="setting_dark_mode_description">Off for system dependency</string>
+  <string name="setting_theme">Theme</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_follow_system">Follow system</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Dark</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Light</string>
   <string name="setting_language">Language</string>
   <string name="setting_language_description">Select language</string>
   <string name="setting_language_info">Many thanks to all the volunteer translators at Transifex!\nPlease visit us on GitHub to learn how you can help make Grocy Android available for your language.</string>

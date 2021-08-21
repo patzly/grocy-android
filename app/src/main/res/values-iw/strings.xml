@@ -610,8 +610,6 @@
   <string name="hint_server">כתובת שרת</string>
   <string name="hint_key">מפתח API תקני</string>
 
-  <string name="setting_dark_mode">אילוץ מצב חשוך</string>
-  <string name="setting_dark_mode_description">כבוי עקב תלות מערכת</string>
   <string name="setting_language">שפה</string>
   <string name="setting_language_description">בחירת שפה</string>
   <string name="setting_language_info">תודתנו נתונה לכל המתרגמים בהתנדבות ב־Transifex!\nנא לבקר ב־GitHub שלנו כדי ללמוד כיצד ניתן לקדם את Grocy ל־Android לדבר בשפה שלך.</string>

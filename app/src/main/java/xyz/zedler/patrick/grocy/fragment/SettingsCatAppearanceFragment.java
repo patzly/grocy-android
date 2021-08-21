@@ -19,6 +19,10 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.app.UiModeManager;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -28,7 +32,7 @@ import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.lifecycle.MutableLiveData;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
@@ -49,7 +53,6 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
   private FragmentSettingsCatAppearanceBinding binding;
   private MainActivity activity;
   private SettingsViewModel viewModel;
-  private MutableLiveData<Boolean> darkModeLive;
 
   @Override
   public View onCreateView(
@@ -77,7 +80,23 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    darkModeLive = new MutableLiveData<>(viewModel.getDarkMode());
+    int theme = viewModel.getTheme();
+    boolean currentlyDark = isSystemThemeDark();
+    Drawable imageLightToDark = ContextCompat.getDrawable(
+        requireContext(),
+        R.drawable.ic_round_light_to_dark_anim
+    );
+    Drawable imageDarkToLight = ContextCompat.getDrawable(
+        requireContext(),
+        R.drawable.ic_round_dark_to_light_anim
+    );
+    if (theme == SettingsViewModel.THEME_SYSTEM) {
+      binding.imageTheme.setImageDrawable(currentlyDark ? imageDarkToLight : imageLightToDark);
+    } else if (theme == SettingsViewModel.THEME_LIGHT) {
+      binding.imageTheme.setImageDrawable(imageLightToDark);
+    } else {  // dark
+      binding.imageTheme.setImageDrawable(imageDarkToLight);
+    }
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(binding.scroll);
@@ -95,17 +114,28 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
-  public MutableLiveData<Boolean> getDarkModeLive() {
-    return darkModeLive;
-  }
+  public void setTheme(int theme) {
+    binding.radioButtonFollowSystem.setChecked(theme == SettingsViewModel.THEME_SYSTEM);
+    binding.radioButtonLight.setChecked(theme == SettingsViewModel.THEME_LIGHT);
+    binding.radioButtonDark.setChecked(theme == SettingsViewModel.THEME_DARK);
 
-  public void setDarkMode(boolean dark) {
-    IconUtil.start(binding.imageDark);
+    int currentTheme = viewModel.getTheme();
+
+    boolean currentlyDark = isSystemThemeDark();
+    if (currentTheme == SettingsViewModel.THEME_LIGHT && theme == SettingsViewModel.THEME_DARK
+        || currentTheme == SettingsViewModel.THEME_DARK && theme == SettingsViewModel.THEME_LIGHT
+        || currentTheme == SettingsViewModel.THEME_LIGHT && theme == SettingsViewModel.THEME_SYSTEM && currentlyDark
+        || currentTheme == SettingsViewModel.THEME_DARK && theme == SettingsViewModel.THEME_SYSTEM && !currentlyDark
+        || currentTheme == SettingsViewModel.THEME_SYSTEM && theme == SettingsViewModel.THEME_LIGHT && currentlyDark
+        || currentTheme == SettingsViewModel.THEME_SYSTEM && theme == SettingsViewModel.THEME_DARK && !currentlyDark
+    ) {
+      IconUtil.start(binding.imageTheme);
+    }
+    viewModel.setTheme(theme);
     new Handler().postDelayed(() -> {
-      darkModeLive.setValue(dark);
-      updateTheme(dark);
+      AppCompatDelegate.setDefaultNightMode(theme);
+      activity.executeOnStart();
     }, 300);
-    viewModel.setDarkMode(dark);
   }
 
   @Override
@@ -135,12 +165,17 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     activity.showBottomSheet(new LanguagesBottomSheet());
   }
 
-  private void updateTheme(boolean forceDarkMode) {
-    AppCompatDelegate.setDefaultNightMode(forceDarkMode
-        ? AppCompatDelegate.MODE_NIGHT_YES
-        : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-    );
-    activity.executeOnStart();
+  private boolean isSystemThemeDark() {
+    boolean currentlyDark;
+    Object uiModeService = requireContext().getSystemService(Context.UI_MODE_SERVICE);
+    if (uiModeService != null) {
+      currentlyDark = ((UiModeManager) uiModeService).getNightMode()
+          == UiModeManager.MODE_NIGHT_YES;
+    } else {
+      currentlyDark = (getResources().getConfiguration().uiMode
+          & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    }
+    return currentlyDark;
   }
 
   @Override

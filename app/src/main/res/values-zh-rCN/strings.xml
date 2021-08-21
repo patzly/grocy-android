@@ -652,8 +652,6 @@
   <string name="hint_server">服务器URL</string>
   <string name="hint_key">有效的API密钥</string>
 
-  <string name="setting_dark_mode">强制暗模式</string>
-  <string name="setting_dark_mode_description">关闭系统的依赖</string>
   <string name="setting_language">语言</string>
   <string name="setting_language_description">选择语言</string>
   <string name="setting_language_info">非常感谢Transifex的所有志愿者翻译！\n 请访问GitHub上的我们，了解如何帮助为您的语言制作Grocy Android。</string>

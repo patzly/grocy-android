@@ -23,9 +23,9 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
@@ -45,24 +45,24 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
+  public static final int THEME_SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+  public static final int THEME_LIGHT = AppCompatDelegate.MODE_NIGHT_NO;
+  public static final int THEME_DARK = AppCompatDelegate.MODE_NIGHT_YES;
+
   private static final String TAG = SettingsViewModel.class.getSimpleName();
   private final SharedPreferences sharedPrefs;
-  private final boolean debug;
 
   private final DownloadHelper dlHelper;
-  private final NetUtil netUtil;
-  private final Gson gson;
   private final GrocyApi grocyApi;
 
   private MutableLiveData<Boolean> isLoadingLive;
@@ -82,15 +82,12 @@ public class SettingsViewModel extends BaseViewModel {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
     dlHelper = new DownloadHelper(
         getApplication(),
         TAG,
         isLoading -> isLoadingLive.setValue(isLoading)
     );
-    netUtil = new NetUtil(getApplication());
-    gson = new Gson();
     grocyApi = new GrocyApi(getApplication());
 
     isLoadingLive = new MutableLiveData<>(false);
@@ -166,15 +163,16 @@ public class SettingsViewModel extends BaseViewModel {
     return sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
   }
 
-  public boolean getDarkMode() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.APPEARANCE.DARK_MODE,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
-    );
+  public int getTheme() {
+    return sharedPrefs.getInt(APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME);
   }
 
-  public void setDarkMode(boolean dark) {
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.APPEARANCE.DARK_MODE, dark).apply();
+  public boolean isThemeActive(int theme) {
+    return getTheme() == theme;
+  }
+
+  public void setTheme(int theme) {
+    sharedPrefs.edit().putInt(APPEARANCE.THEME, theme).apply();
   }
 
   public String getLanguage() {

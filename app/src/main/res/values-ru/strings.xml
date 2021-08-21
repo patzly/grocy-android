@@ -739,8 +739,6 @@
   <string name="hint_server">Адрес сервера</string>
   <string name="hint_key">Действительный ключ доступа к API</string>
 
-  <string name="setting_dark_mode">Принудительный темный режим</string>
-  <string name="setting_dark_mode_description">Выключить для использования системных настроек</string>
   <string name="setting_language">Язык</string>
   <string name="setting_language_description">Выбрать язык</string>
   <string name="setting_language_info">Большое спасибо всем переводчикам-добровольцам Transifex!\nПосетите нас на GitHub, чтобы узнать, как вы можете помочь сделать Grocy Android доступным для вашего языка.</string>

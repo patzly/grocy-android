@@ -454,8 +454,6 @@
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Gyldig API-nøkkel</string>
 
-  <string name="setting_dark_mode">Tving mørk modus</string>
-  <string name="setting_dark_mode_description">Av for systemavhengig</string>
   <string name="setting_language">Språk</string>
   <string name="setting_language_description">Velg språk</string>
   <string name="setting_language_not_available">Ikke tilgjengelig</string>
