@@ -29,14 +29,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
 public class SplashActivity extends AppCompatActivity {
 
   public void onCreate(Bundle bundle) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    int theme = sharedPrefs.getInt(APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME);
+    AppCompatDelegate.setDefaultNightMode(theme);
+
     super.onCreate(bundle);
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -50,7 +57,6 @@ public class SplashActivity extends AppCompatActivity {
 
     getWindow().setBackgroundDrawable(splashContent);
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     boolean speedUpStart = sharedPrefs.getBoolean(
         Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
@@ -73,6 +79,11 @@ public class SplashActivity extends AppCompatActivity {
     } catch (Exception e) {
       startMainActivity();
     }
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
   }
 
   private void startMainActivity() {
