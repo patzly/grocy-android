@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -353,19 +354,16 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     if (hasDetails()) {
       quantityUnit = productDetails.getQuantityUnitStock();
     }
-    // aggregated amount
-    int isAggregatedAmount = stockItem.getIsAggregatedAmountInt();
-    // best before
-    String bestBefore = stockItem.getBestBeforeDate();
-    if (bestBefore == null) {
-      bestBefore = ""; // for "never" from dateUtil
-    }
 
     // AMOUNT
+    StringBuilder amountNormal = new StringBuilder();
+    StringBuilder amountAggregated = new StringBuilder();
+    AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem, quantityUnit);
+    AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem, quantityUnit);
     itemAmount.setText(
         activity.getString(R.string.property_amount),
-        getAmountText(),
-        isAggregatedAmount == 1 ? getAggregatedAmount() : null
+        amountNormal.toString(),
+        amountAggregated.toString().isEmpty() ? null : amountAggregated.toString().trim()
     );
     itemAmount.setSingleLine(false);
 
@@ -385,6 +383,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     // BEST BEFORE
     if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+      String bestBefore = stockItem.getBestBeforeDate();
+      if (bestBefore == null) {
+        bestBefore = ""; // for "never" from dateUtil
+      }
       itemBestBefore.setText(
           activity.getString(R.string.property_due_date_next),
           !bestBefore.equals(Constants.DATE.NEVER_OVERDUE)
@@ -577,49 +579,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
   private boolean hasDetails() {
     return productDetails != null;
-  }
-
-  private String getAmountText() {
-    double amount = stockItem.getAmountDouble();
-    double opened = stockItem.getAmountOpenedDouble();
-    StringBuilder stringBuilderAmount = new StringBuilder(
-        activity.getString(
-            R.string.subtitle_amount,
-            NumUtil.trim(amount),
-            pluralUtil.getQuantityUnitPlural(quantityUnit, amount)
-        )
-    );
-    if (opened > 0) {
-      stringBuilderAmount.append(" ");
-      stringBuilderAmount.append(
-          activity.getString(
-              R.string.subtitle_amount_opened,
-              NumUtil.trim(opened)
-          )
-      );
-    }
-    return stringBuilderAmount.toString();
-  }
-
-  private String getAggregatedAmount() {
-    double amountAggregated = stockItem.getAmountAggregatedDouble();
-    StringBuilder amountStr = new StringBuilder();
-    amountStr.append("∑ ");
-    amountStr.append(activity.getString(
-        R.string.subtitle_amount,
-        NumUtil.trim(amountAggregated),
-        pluralUtil.getQuantityUnitPlural(quantityUnit, amountAggregated)
-    ));
-    if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
-      amountStr.append(" ");
-      amountStr.append(
-          activity.getString(
-              R.string.subtitle_amount_opened,
-              NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
-          )
-      );
-    }
-    return amountStr.toString();
   }
 
   private boolean isFeatureEnabled(String pref) {

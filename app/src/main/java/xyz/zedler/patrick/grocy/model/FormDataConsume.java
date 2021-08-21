@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
+import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -53,6 +54,7 @@ public class FormDataConsume {
   private final MutableLiveData<ProductDetails> productDetailsLive;
   private final LiveData<Boolean> isTareWeightEnabledLive;
   private final MutableLiveData<String> productNameLive;
+  private final LiveData<String> productNameInfoStockLive;
   private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<Boolean> consumeExactAmountLive;
   private final MutableLiveData<String> barcodeLive;
@@ -95,6 +97,7 @@ public class FormDataConsume {
         .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
+    pluralUtil = new PluralUtil(application);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
     isTareWeightEnabledLive = Transformations.map(
@@ -104,6 +107,13 @@ public class FormDataConsume {
     );
     productDetailsLive.setValue(null);
     productNameLive = new MutableLiveData<>();
+    productNameInfoStockLive = Transformations.map(
+        productDetailsLive,
+        productDetails -> {
+          String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails);
+          return info != null ? application.getString(R.string.property_in_stock, info) : " ";
+        }
+    );
     productNameErrorLive = new MutableLiveData<>();
     consumeExactAmountLive = new MutableLiveData<>(false);
     barcodeLive = new MutableLiveData<>();
@@ -149,7 +159,6 @@ public class FormDataConsume {
     spoiledLive = new MutableLiveData<>(false);
     useSpecificLive = new MutableLiveData<>(false);
     specificStockEntryLive = new MutableLiveData<>();
-    pluralUtil = new PluralUtil(application);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -196,6 +205,10 @@ public class FormDataConsume {
 
   public MutableLiveData<String> getProductNameLive() {
     return productNameLive;
+  }
+
+  public LiveData<String> getProductNameInfoStockLive() {
+    return productNameInfoStockLive;
   }
 
   public MutableLiveData<Integer> getProductNameErrorLive() {
