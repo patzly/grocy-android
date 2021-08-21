@@ -106,7 +106,6 @@
   <string name="action_own_server">שרת עצמאי</string>
   <string name="action_enter_data_manually">מילוי המידע ידנית</string>
   <string name="action_perform">ביצוע פעולה</string>
-
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d במלאי</item>
@@ -152,7 +151,6 @@
   <string name="msg_master_delete_usage">%1$s זה עדיין בשימוש</string>
   <string name="msg_item_marked_as_done">פריט סומן כמושלם</string>
   <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
-  <string name="msg_compatibility">גרסת יישומון זו אינה תואמת לגרסת ה־grocy שבשרת.\n\nגגרסת השרת הנוכחי: %1$s\n\nנדרשת:\nגרסת שרת מזערית: %2$s\nגרסת שרת מרבית: %3$s\n\nהתעלמות מהאזהרה הזאת עשויה להוביל לאובדן מידע (פחות סביר) וקריסות (יותר סביר).\זאת אזהרה רשמית!</string>
   <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
   <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
   <string name="msg_logout_demo_short">שרת להדגמה ציבורית. יש לגעת לקבלת פרטים.</string>
@@ -166,7 +164,10 @@
   <string name="msg_welcome_to_grocy">ברוך בואך ל־Grocy עבור Android!\n\nכדי להשתמש ב־grocy ביעילות רצוי שיהיה לך שרת משלך או את התוסף של grocy ל־Home Assistant.\nאם מעניין אותך רק להתנסות ביישומון הזה אפשר להשתמש בשרת ההדגמה שיצר ברנד בסטל, היוצר של grocy.</string>
   <string name="msg_choose_option_below">נא לבחור אפשרות אחת מלמטה.</string>
   <string name="msg_qr_code_scan">במכשיר אחר, עליך לבקר באתר של grocy ולגשת לעמוד ‚מפתחות API’. יש ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
+  <string name="msg_port_connection_info_without_port">היישום יתחבר לפתחה %1$s.\nאם צריך להתחבר לפתחה אחרת, ניתן להוסיף אותה לכתובת.\nלדוגמה: http://domain.com:81/‎</string>
+  <string name="msg_port_connection_info_with_port">היישומון יתחבר לפתחה %1$s.</string>
   <string name="msg_not_implemented_yet">זה יוטמע בקרוב. נא להשתמש במנשק השרת שלך לבינתיים.</string>
+  <string name="stock_disabled">השבתת את יכולת המלאי בהגדרות ה־grocy שלך, כנראה כיוון שאין לך צורך בה. היישום הזה יכול לעשות ניהול מלאי בלבד כרגע, לכן יכול להיות שלא יביא לך תועלת.</string>
   <string name="msg_help_due_date_type">בהתאם לסוג תאריך התפוגה הנבחר, תשתנה ההדגשה בעמוד סקירת המלאי. „תאריך תוקף עד” משמעו שיתכן המוצר עדיין בטוח לצריכה לאחר תאריך התפוגה שלו. „תאריך תפוגה” משמעו שהמוצר אינו בטוח לצריכה לאחר שתאריך התפוגה שלו פג.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">לרכישות תתווסף כמות הימים הזו ליום הנוכחי להצעת תאריך התפוגה (המשמעות של ‎-1 היא שהמוצר הזה לא יפוג לעולם).</string>
@@ -205,7 +206,9 @@
   <string name="error_empty_stock_sub">כדאי ללכת לרכוש כמה מוצרים</string>
   <string name="error_empty_shopping_list">לרוקן את רשימת הקניות</string>
   <string name="error_empty_shopping_list_sub">להוסיף כמה מוצרים שדרושים לך</string>
+  <string name="error_empty_barcodes_sub">ניתן להוסיף ברקוד עם הכפתור שלהלן</string>
   <string name="error_empty_master_data_sub">ניתן ליצור כמה בעזרת הכפתור שלהלן</string>
+  <string name="error_empty_product_barcodes">אין ברקודים של מוצרים</string>
   <string name="error_empty_locations">אין מיקומים</string>
   <string name="error_empty_product_groups">אין קבוצות מוצרים</string>
   <string name="error_empty_products">אין מוצרים</string>
@@ -225,6 +228,8 @@
   <string name="error_invalid_factor">מקדם שגוי</string>
   <string name="error_api_qr_code">זה אינו קוד QR עם פרטי גישה ל־API של grocy</string>
   <string name="error_loading_qus">טעינת יחידות הכמות מהמוצר נכשלה</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">לא יכול להיות שווה ל־%1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">בין %1$s לבין %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -319,7 +324,6 @@
   <string name="title_product_cat_qu_conversions">המרת יחידות כמות</string>
   <string name="title_unknown_input">קלט בלתי ידוע</string>
   <string name="title_presets_new_products">ערכות למוצרים חדשים</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -508,6 +512,8 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">כמות לצריכה מהירה ב%1$s</string>
   <string name="property_picture">תמונה</string>
+  <string name="property_note_singleline">הערה בשורה אחת</string>
+  <string name="property_note_multiline">הערה במספר שורות</string>
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->
@@ -619,6 +625,8 @@
   <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
   <string name="setting_use_front_cam">להשתמש במצלמה הקדמית</string>
   <string name="setting_use_front_cam_description">לסריקת ברקודים</string>
+  <string name="setting_use_2d_scanner_format">להשתמש בתצורת סריקה דו־ממדית של סורק הברקודים</string>
+  <string name="setting_use_2d_scanner_format_description">צורה ריבועית לקודים מסוג QR</string>
   <string name="setting_external_support">תמיכה בסורק חיצוני</string>
   <string name="setting_external_support_description">דרך USB או בלוטות׳</string>
   <string name="setting_reload_config">לרענן את ההגדרות</string>
@@ -641,11 +649,14 @@
   <string name="setting_default_amount_consume">כמות בררת מחדל לצריכה</string>
   <string name="setting_purchased_date">לבקש את תאריך הרכישה</string>
   <string name="setting_purchased_date_description">בעמודי הרכישה והמאגר</string>
+  <string name="setting_use_quick_consume_amount">להשתמש ב„כמות לצריכה מהירה” של המוצר</string>
   <string name="setting_empty_value">ריק</string>
   <string name="setting_sync_off">סנכרון כבוי</string>
   <string name="setting_not_loaded">אין אפשרות לטעון</string>
   <string name="setting_debug">הפעלת יומן</string>
   <string name="setting_debug_description">הצגת שגיאות ביומן</string>
+  <string name="setting_log_level">רמת תיעוד</string>
+  <string name="setting_error_logs">להציג יומני שגיאה בלבד</string>
   <string name="setting_info_logs">הצגת יומני מידע</string>
   <string name="setting_logs_description">הצגת logcat (יומן מעקב) לתהליך הזה</string>
   <string name="setting_timeout">זמן שמוקצב לטעינה</string>
@@ -655,8 +666,11 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">הרחבת הגיליונות התחתונים</string>
   <string name="setting_expand_bottom_sheets_description">במצב אופקי</string>
+  <string name="setting_speed_up_start">צמצום זמן הפעלת היישום</string>
+  <string name="setting_speed_up_start_description">יש השפעה על מכשירים מהירים בלבד</string>
   <string name="setting_loading_circle">להציג גלגל טעינה לכל הבקשות</string>
   <string name="setting_loading_circle_description">חיוני לרשתות אטיות</string>
+  <string name="setting_synchronized">האפשרות שלהלן מסונכרנת עם השרת שלך.</string>
   <string name="settings_synchronized">הגדרות אלו מסונכרנות מול השרת שלך.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
