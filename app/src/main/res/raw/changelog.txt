@@ -1,4 +1,5 @@
 2.0.0-beta03
+- New: Support server version 3.1.1 (v3.1.0 is not supported)
 - New: (not F-Droid) Add ML Kit as better camera barcode scanner
 - New: Option to use 2D barcode format for scanner everywhere (#265)
 - New: Support for grocycodes (all product fields with scanner) (#438)
