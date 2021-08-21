@@ -8,8 +8,6 @@
 - Improved: Tap to toggle torch on login page with QR code scanner
 - Improved: Theme can be set to light/dark only or follow system (#423)
 - Improved: Consume page shows info about current stock amount (#440)
-- Improved: Cursor behavior on login form
-- Improved: Updated translations
 - Fixed: Barcode scanner didn't start again after error in quick mode
 - Fixed: Search field didn't appear after going back to stock or shopping list (#421)
 - Fixed: Invisible date picker in light theme (#422)
@@ -17,14 +15,12 @@
 - Fixed: White icons on white navigation bar with SDK 26 (#366)
 - Fixed: Shopping mode list scrolled to bottom after top category was done (#439)
 - Fixed: Activity started twice if theme was different than system theme
-- Fixed: Clipped text in changelog
 
 2.0.0-beta02
 - New: Almost all stock settings are now available (#395)
 - Improved: Cleaner debugging settings page
 - Improved: On consume page stock amount is used if barcode amount is bigger than stock (#357)
 - Improved: Backup by Android system now is supported
-- Improved: Updated translations
 - Improved: All open-source licenses listed in about section
 - Fixed: Crash on startup with some servers (#407)
 - Fixed: Pressing 'done' on keyboard in amount field always started quick mode (#410)
@@ -45,7 +41,6 @@
 - Improved: Hide quantity unit field on shopping list item page if there is only one
 - Improved: Add toggle in settings to reduce app startup time (disables logo animation)
 - Improved: Stock overview and shopping list layout on tablets in portrait mode
-- Improved: Updated translations
 - Fixed: Menus were not displayed after first app start (#365)
 - Fixed: Inactive products now cannot be added to shopping list (#398)
 - Fixed: Swipe items wasn't possible after going back to shopping list or stock
@@ -67,7 +62,6 @@
 - Improved: Focus product field after unknown barcode was scanned
 - Improved: Amount field in forms has a clear button which also opens keyboard
 - Improved: Menu in product overview bottom sheet has a new submenu
-- Improved: Updated translations
 - Fixed: Swipe buttons in stock overview didn't work for last two items
 - Fixed: Menu items on bottom were not clickable sometimes (#383)
 - Fixed: Parent product field is locked if product is already parent product (#349)
@@ -85,7 +79,6 @@
 - Improved: Camera scanner frame now has a fixed width (#334)
 - Improved: Stock overview page shortcut is now available
 - Improved: Swipe behavior is now much better
-- Improved: Updated translations
 - Fixed: Filter didn't work on master data products page (#370)
 - Fixed: Don't show inactive products on consume & purchase page (#382)
 - Fixed: 'Add' button was gone in shopping lists bottom sheet
@@ -97,7 +90,6 @@
 2.0.0-alpha05
 - Improved: Language selection and behavior
 - Improved: Display exact error message if there was an AuthFailureError at login (#249)
-- Improved: Updated translations
 - Fixed: Wrong factor for unit multiplies on shopping list item edit page (#356)
 - Fixed: Wrong language selected if code contains specific region (#372)
 - Fixed: Language change does not effect shortcuts (#373)
@@ -106,7 +98,6 @@
 - New: Animated splash screen and logo
 - Improved: Keyboard does't hide save/clear buttons on text input sheet anymore (#261)
 - Improved: Added help texts to login form (shown with Home Assistant add-on)
-- Improved: Updated translations
 - Fixed: RuntimeExceptions in log if Home Assistant grocy add-on is not used (#273)
 - Fixed: Mixed languages if activity is restarted (#260)
 - Fixed: Language variants not working (#264)
@@ -122,7 +113,6 @@
 - Improved: Update certificate compatibility information
 - Improved: Demo server changes when the language is changed (#346)
 - Improved: Price and store lines on purchase page confirmation bottom sheet
-- Improved: Updated translations
 - Fixed: Crash when open store selection on purchase page (#347)
 - Fixed: Crash on purchase page when price was empty & scan mode active
 - Fixed: Behavior on purchase & consume pages when quantity units of product were missing
@@ -131,7 +121,6 @@
 
 2.0.0-alpha02
 - New: Language option in appearance settings (#322)
-- Improved: Updated translations
 - Fixed: Old update info wrongly shown (#322)
 - Fixed: Crash on quantity units list refresh (#331)
 - Fixed: Wrong product name after adding new product with "&" in its name (#333)
@@ -150,7 +139,6 @@
 - Improved: Server requests are now more secure with API key in header
 - Improved: Many internal code changes & better techniques
 - Improved: Font usage and styling system
-- Improved: Updated translations
 - Fixed: Onboarding page layout
 - Fixed: Filter chip layout for rtl languages
 
@@ -166,7 +154,6 @@
 - Fixed crash after rotation in product edit view (#214)
 - Fixed crash in shopping list with empty locationId (#226)
 - Fixed Purchase & Consume of product with space on start/end (#219)
-- Updated translations
 
 1.9.0
 - Polish translation (thanks Marcin!)
@@ -177,7 +164,6 @@
 - Fixed amount color of missing items in stock
 - Fixed wrong filtering of missing items
 - Plural strings for better translation support
-- Updated translations
 
 1.8.7
 - Hebrew translation (thanks Yaron!)
@@ -188,7 +174,6 @@
 
 1.8.5
 - Fixed Norwegian translation
-- Updated translations
 
 1.8.4:
 - Norwegian translation (thanks Tor!)
@@ -199,7 +184,6 @@
 
 1.8.2:
 - Moved in-app help to project page on Github
-- Updated translations
 - Bug fixes and improvements
 
 1.8.1:
@@ -216,7 +200,6 @@
 - Fixed expiring items filter in stock overview
 - Fixed animation of product overview bottom sheet
 - Fixed height of bottom sheets in landscape mode
-- Updated translations
 - Bug fixes and improvements
 
 1.7.0:
@@ -229,7 +212,6 @@
 1.6.0:
 - Purchase all items in shopping list
 - Fixed sync bug in shopping list
-- Updated translations
 - Bug fixes and improvements
 
 1.5.0:
