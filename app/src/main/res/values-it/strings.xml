@@ -683,8 +683,6 @@
   <string name="hint_server">URL server</string>
   <string name="hint_key">Chiave API valida</string>
 
-  <string name="setting_dark_mode">Attiva modalità scura</string>
-  <string name="setting_dark_mode_description">Spento per dipendenze di sistema</string>
   <string name="setting_language">Lingua</string>
   <string name="setting_language_description">Seleziona lingua</string>
   <string name="setting_language_info">Grazie mille a tutti i traduttori volontari su Transifex!\nPer favore vieni a trovarci su GitHub per sapere come puoi rendere disponibile Grocy Android nella tua lingua.</string>

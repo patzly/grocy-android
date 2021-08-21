@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
+
 public final class Constants {
 
   public final static class PREF {
@@ -85,7 +87,7 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
-      public final static String DARK_MODE = "dark_mode";
+      public final static String THEME = "theme";
       public final static String LANGUAGE = "language";
     }
 
@@ -143,7 +145,7 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
-      public final static boolean DARK_MODE = false;
+      public final static int THEME = SettingsViewModel.THEME_SYSTEM;
       public final static String LANGUAGE = null;
     }
 

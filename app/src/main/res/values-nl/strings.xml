@@ -513,8 +513,6 @@
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Geldige API sleutel</string>
 
-  <string name="setting_dark_mode">Forceer darkmode</string>
-  <string name="setting_dark_mode_description">Uit voor systeemafhankelijkheid</string>
   <string name="setting_language">Taal</string>
   <string name="setting_language_description">Selecteer taal</string>
   <string name="setting_language_not_available">Niet beschikbaar</string>

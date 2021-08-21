@@ -360,8 +360,6 @@
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Giltig API-nyckel</string>
 
-  <string name="setting_dark_mode">Tvinga mörkt läge</string>
-  <string name="setting_dark_mode_description">Av för att använda systemets inställning</string>
   <string name="setting_open_food_facts">Använd Open Food Facts</string>
   <string name="setting_open_food_facts_description">Hämta information från streckkoder</string>
   <string name="setting_use_front_cam">Använd främre kamera</string>

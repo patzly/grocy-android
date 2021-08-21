@@ -87,6 +87,8 @@ import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
@@ -135,12 +137,8 @@ public class MainActivity extends AppCompatActivity {
 
     // this has to be placed before super.onCreate(savedInstanceState);
     // https://stackoverflow.com/a/53356918
-    AppCompatDelegate.setDefaultNightMode(
-        sharedPrefs.getBoolean(
-            Constants.SETTINGS.APPEARANCE.DARK_MODE,
-            Constants.SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
-        ) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-    );
+    int theme = sharedPrefs.getInt(APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME);
+    AppCompatDelegate.setDefaultNightMode(theme);
 
     // LANGUAGE
 

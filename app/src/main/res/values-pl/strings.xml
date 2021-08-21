@@ -682,8 +682,6 @@
   <string name="hint_server">Adres URL serwera</string>
   <string name="hint_key">Poprawny klucz API</string>
 
-  <string name="setting_dark_mode">Wymuś tryb ciemny</string>
-  <string name="setting_dark_mode_description">Wyłącz dla zależności systemowych</string>
   <string name="setting_language">Język</string>
   <string name="setting_language_description">Wybierz język</string>
   <string name="setting_language_info">Duże podziękowania dla wszystkich wolontariuszy tłumaczących na Transifex!\nOdwiedź nas na GitHub aby dowiedzieć się jak możesz pomóc w udostępnieniu Grocy Android w twoim języku.</string>
