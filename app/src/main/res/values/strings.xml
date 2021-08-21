@@ -204,10 +204,7 @@
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transaction which will be executed:\n\nSet stock amount of %1$s to %2$s %3$s\nApply for added items:\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <string name="msg_quantity_unit_plurals" translatable="false">The plural rules of the current language are not implemented, so maybe a field is missing here where you can enter additional plural forms. You can help translating this app into your language on Transifex (link on our GitHub page) and as soon as your language reaches 80% we will add its plural rules.</string>
-  <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n
-    \nCurrent server version: %1$s\n
-    \nSupported server versions:\n%2$s
-    \nIf you ignore this warning, data loss (unlikely) or crashes (likely) may occur.\nYou have been warned!</string>
+  <string name="msg_compatibility">This app version is not compatible with the grocy version on the server.\n\nCurrent server version: %1$s\n\nSupported server versions:\n%2$s\nIf you ignore this warning, data loss (unlikely) or crashes (likely) may occur.\nYou have been warned!</string>
   <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
   <string name="msg_logout_demo">You\'re using the public demo server <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
   <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
