@@ -137,18 +137,24 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
         focusProductInputIfNecessary();
       } else if (event.getType() == Event.QUICK_MODE_DISABLED) {
         clearInputFocus();
+      } else if (event.getType() == Event.CONTINUE_SCANNING) {
+        embeddedFragmentScanner.startScannerIfVisible();
       }
     });
 
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate, null));
+      viewModel.setQueueEmptyAction(
+          () -> viewModel.setProduct(productIdSavedSate, null, null)
+      );
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new ConsumeFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
+      viewModel.setQueueEmptyAction(
+          () -> viewModel.setProduct(productId, null, null)
+      );
     }
 
     embeddedFragmentScanner.setScannerVisibilityLive(
@@ -310,7 +316,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       if (product == null) {
           return;
       }
-    viewModel.setProduct(product.getId(), null);
+    viewModel.setProduct(product.getId(), null, null);
   }
 
   public void clearFocusAndCheckProductInput() {

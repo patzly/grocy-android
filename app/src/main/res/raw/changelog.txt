@@ -1,11 +1,14 @@
 2.0.0-beta03
 - New: (not F-Droid) Add ML Kit as better camera barcode scanner
 - New: Option to use 2D barcode format for scanner everywhere (#265)
+- New: Support for grocycodes (all product fields with scanner) (#438)
 - Improved: Don't assume port 8123 during Home Assistant setup (#413)
 - Improved: Add new card to login form which contains info about port (#413)
+- Improved: Set focus mode to continuous in ZXing barcode scanner (works better)
 - Improved: Tap to toggle torch on login page with QR code scanner
 - Improved: Cursor behavior on login form
 - Improved: Updated translations
+- Fixed: Barcode scanner didn't start again after error in quick mode
 - Fixed: Search field didn't appear after going back to stock or shopping list (#421)
 - Fixed: Invisible date picker in light theme (#422)
 - Fixed: Product dropdown appears again after scanning barcode (#404)

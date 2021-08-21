@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,6 +63,8 @@ import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -128,8 +131,6 @@ public class PurchaseViewModel extends BaseViewModel {
       quickModeStart = false;
     }
     quickModeEnabled = new MutableLiveData<>(quickModeStart);
-
-    barcodes = new ArrayList<>();
   }
 
   public FormDataPurchase getFormData() {
@@ -270,8 +271,7 @@ public class PurchaseViewModel extends BaseViewModel {
         }
         initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, forcedQuId);
       } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        formData.clearForm();
+        showMessageAndContinueScanning(e.getMessage());
         return;
       }
 
@@ -367,10 +367,11 @@ public class PurchaseViewModel extends BaseViewModel {
       formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
       return;
     }
-    dlHelper.getProductDetails(productId, listener, error -> {
-      showMessage(getString(R.string.error_no_product_details));
-      formData.clearForm();
-    }).perform(dlHelper.getUuid());
+    dlHelper.getProductDetails(
+        productId,
+        listener,
+        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
+    ).perform(dlHelper.getUuid());
   }
 
   private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
@@ -419,12 +420,25 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
-    ProductBarcode productBarcode = null;
     Product product = null;
-    for (ProductBarcode code : barcodes) {
-      if (code.getBarcode().equals(barcode)) {
-        productBarcode = code;
-        product = productHashMap.get(code.getProductId());
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
+    if (grocycode != null && grocycode.isProduct()) {
+      product = productHashMap.get(grocycode.getObjectId());
+      if (product == null) {
+        showMessageAndContinueScanning(R.string.msg_not_found);
+        return;
+      }
+    } else if (grocycode != null) {
+      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+      return;
+    }
+    ProductBarcode productBarcode = null;
+    if (product == null) {
+      for (ProductBarcode code : barcodes) {
+        if (code.getBarcode().equals(barcode)) {
+          productBarcode = code;
+          product = productHashMap.get(code.getProductId());
+        }
       }
     }
     if (product != null) {
@@ -442,7 +456,7 @@ public class PurchaseViewModel extends BaseViewModel {
     if (input == null || input.isEmpty()) {
       return;
     }
-    Product product = getProductFromName(input);
+    Product product = Product.getProductFromName(products, input);
 
     if (product == null) {
       ProductBarcode productBarcode = null;
@@ -637,19 +651,6 @@ public class PurchaseViewModel extends BaseViewModel {
     );
   }
 
-  @Nullable
-  public Product getProductFromName(@Nullable String name) {
-    if (name == null) {
-      return null;
-    }
-    for (Product product : products) {
-      if (product.getName().equals(name)) {
-        return product;
-      }
-    }
-    return null;
-  }
-
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
   }
@@ -787,6 +788,16 @@ public class PurchaseViewModel extends BaseViewModel {
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
+  private void showMessageAndContinueScanning(String msg) {
+    formData.clearForm();
+    showMessage(msg);
+    sendEvent(Event.CONTINUE_SCANNING);
+  }
+
+  private void showMessageAndContinueScanning(@StringRes int msg) {
+    showMessageAndContinueScanning(getString(msg));
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
@@ -819,20 +830,6 @@ public class PurchaseViewModel extends BaseViewModel {
         .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_PURCHASE, isQuickModeEnabled())
         .apply();
     return true;
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
-  }
-
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
   }
 
   @Override

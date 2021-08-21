@@ -158,6 +158,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         focusProductInputIfNecessary();
       } else if (event.getType() == Event.QUICK_MODE_DISABLED) {
         clearInputFocus();
+      } else if (event.getType() == Event.CONTINUE_SCANNING) {
+        embeddedFragmentScanner.startScannerIfVisible();
       }
     });
 

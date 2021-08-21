@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -59,6 +60,8 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.TransferRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -123,7 +126,7 @@ public class TransferViewModel extends BaseViewModel {
       this.locations = locations;
       this.quantityUnits = qUs;
       this.unitConversions = conversions;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -144,7 +147,7 @@ public class TransferViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         }), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateLocations(
@@ -207,13 +210,11 @@ public class TransferViewModel extends BaseViewModel {
 
       if (productDetails.getStockAmountAggregated() == 0) {
         String name = product.getName();
-        showMessage(getApplication().getString(R.string.msg_not_in_stock, name));
-        formData.clearForm();
+        showMessageAndContinueScanning(getApplication().getString(R.string.msg_not_in_stock, name));
         return;
       }
       if (productDetails.getProduct().getEnableTareWeightHandlingBoolean()) {
-        showMessage(getApplication().getString(R.string.msg_transfer_tare_weight));
-        formData.clearForm();
+        showMessageAndContinueScanning(getApplication().getString(R.string.msg_transfer_tare_weight));
         return;
       }
 
@@ -235,8 +236,7 @@ public class TransferViewModel extends BaseViewModel {
       try {
         setProductQuantityUnitsAndFactors(product, barcode);
       } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        formData.clearForm();
+        showMessageAndContinueScanning(e.getMessage());
         return;
       }
 
@@ -272,10 +272,10 @@ public class TransferViewModel extends BaseViewModel {
       }
     };
 
-    dlHelper.newQueue(onQueueEmptyListener, error -> {
-      showMessage(getString(R.string.error_no_product_details));
-      formData.clearForm();
-    }).append(
+    dlHelper.newQueue(
+        onQueueEmptyListener,
+        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
+    ).append(
         dlHelper.getProductDetails(
             productId,
             productDetails -> formData.getProductDetailsLive().setValue(productDetails)
@@ -331,12 +331,23 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
-    ProductBarcode productBarcode = null;
     Product product = null;
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
+    if (grocycode != null && grocycode.isProduct()) {
+      product = Product.getProductFromId(products, grocycode.getObjectId());
+      if (product == null) {
+        showMessageAndContinueScanning(R.string.msg_not_found);
+        return;
+      }
+    } else if (grocycode != null) {
+      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+      return;
+    }
+    ProductBarcode productBarcode = null;
     for (ProductBarcode code : barcodes) {
       if (code.getBarcode().equals(barcode)) {
         productBarcode = code;
-        product = getProduct(code.getProductId());
+        product = Product.getProductFromId(products, code.getProductId());
       }
     }
     if (product != null) {
@@ -354,14 +365,14 @@ public class TransferViewModel extends BaseViewModel {
     if (input == null || input.isEmpty()) {
       return;
     }
-    Product product = getProductFromName(input);
+    Product product = Product.getProductFromName(products, input);
 
     if (product == null) {
       ProductBarcode productBarcode = null;
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = getProduct(code.getProductId());
+          product = Product.getProductFromId(products, code.getProductId());
         }
       }
       if (product != null) {
@@ -475,38 +486,6 @@ public class TransferViewModel extends BaseViewModel {
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
   }
 
-  @Nullable
-  public Product getProductFromName(@Nullable String name) {
-    if (name == null) {
-      return null;
-    }
-    for (Product product : products) {
-      if (product.getName().equals(name)) {
-        return product;
-      }
-    }
-    return null;
-  }
-
-  public Product getProduct(int id) {
-    for (Product product : products) {
-      if (product.getId() == id) {
-        return product;
-      }
-    }
-    return null;
-  }
-
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-      if (product.isActive()) {
-        activeProductsOnly.add(product);
-      }
-    }
-    return activeProductsOnly;
-  }
-
   private QuantityUnit getQuantityUnit(int id) {
     for (QuantityUnit quantityUnit : quantityUnits) {
       if (quantityUnit.getId() == id) {
@@ -608,6 +587,16 @@ public class TransferViewModel extends BaseViewModel {
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
+  private void showMessageAndContinueScanning(String msg) {
+    formData.clearForm();
+    showMessage(msg);
+    sendEvent(Event.CONTINUE_SCANNING);
+  }
+
+  private void showMessageAndContinueScanning(@StringRes int msg) {
+    showMessageAndContinueScanning(getString(msg));
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
@@ -640,13 +629,6 @@ public class TransferViewModel extends BaseViewModel {
         .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_TRANSFER, isQuickModeEnabled())
         .apply();
     return true;
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
   }
 
   public boolean isFeatureEnabled(String pref) {

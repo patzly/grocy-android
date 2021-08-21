@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -58,6 +59,8 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -126,7 +129,7 @@ public class InventoryViewModel extends BaseViewModel {
       this.unitConversions = conversions;
       this.stores = stores;
       this.locations = locations;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         if (downloadAfterLoading) {
             downloadData();
         }
@@ -134,10 +137,10 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-        /*if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }*/
+    /*if(isOffline()) { // skip downloading
+        isLoadingLive.setValue(false);
+        return;
+    }*/
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
@@ -147,7 +150,7 @@ public class InventoryViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateProductBarcodes(
@@ -215,8 +218,7 @@ public class InventoryViewModel extends BaseViewModel {
       try {
         setProductQuantityUnitsAndFactors(updatedProduct);
       } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        formData.clearForm();
+        showMessageAndContinueScanning(e.getMessage());
         return;
       }
 
@@ -264,10 +266,11 @@ public class InventoryViewModel extends BaseViewModel {
         }
     };
 
-    dlHelper.getProductDetails(productId, listener, error -> {
-      showMessage(getString(R.string.error_no_product_details));
-      formData.clearForm();
-    }).perform(dlHelper.getUuid());
+    dlHelper.getProductDetails(
+        productId,
+        listener,
+        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
+    ).perform(dlHelper.getUuid());
   }
 
   private void setProductQuantityUnitsAndFactors(Product product) {
@@ -301,9 +304,22 @@ public class InventoryViewModel extends BaseViewModel {
 
   public void onBarcodeRecognized(String barcode) {
     Product product = null;
-    for (ProductBarcode code : barcodes) {
-      if (code.getBarcode().equals(barcode)) {
-        product = getProduct(code.getProductId());
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
+    if (grocycode != null && grocycode.isProduct()) {
+      product = Product.getProductFromId(products, grocycode.getObjectId());
+      if (product == null) {
+        showMessageAndContinueScanning(R.string.msg_not_found);
+        return;
+      }
+    } else if (grocycode != null) {
+      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+      return;
+    }
+    if (product == null) {
+      for (ProductBarcode code : barcodes) {
+        if (code.getBarcode().equals(barcode)) {
+          product = Product.getProductFromId(products, code.getProductId());
+        }
       }
     }
     if (product != null) {
@@ -321,12 +337,12 @@ public class InventoryViewModel extends BaseViewModel {
       if (input == null || input.isEmpty()) {
           return;
       }
-    Product product = getProductFromName(input);
+    Product product = Product.getProductFromName(products, input);
 
     if (product == null) {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
-          product = getProduct(code.getProductId());
+          product = Product.getProductFromId(products, code.getProductId());
         }
       }
       if (product != null) {
@@ -432,38 +448,6 @@ public class InventoryViewModel extends BaseViewModel {
             onSuccess.run();
         }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
-  }
-
-  @Nullable
-  public Product getProductFromName(@Nullable String name) {
-      if (name == null) {
-          return null;
-      }
-    for (Product product : products) {
-        if (product.getName().equals(name)) {
-            return product;
-        }
-    }
-    return null;
-  }
-
-  public Product getProduct(int id) {
-    for (Product product : products) {
-        if (product.getId() == id) {
-            return product;
-        }
-    }
-    return null;
-  }
-
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-        if (product.isActive()) {
-            activeProductsOnly.add(product);
-        }
-    }
-    return activeProductsOnly;
   }
 
   private QuantityUnit getQuantityUnit(int id) {
@@ -575,6 +559,16 @@ public class InventoryViewModel extends BaseViewModel {
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
+  private void showMessageAndContinueScanning(String msg) {
+    formData.clearForm();
+    showMessage(msg);
+    sendEvent(Event.CONTINUE_SCANNING);
+  }
+
+  private void showMessageAndContinueScanning(@StringRes int msg) {
+    showMessageAndContinueScanning(getString(msg));
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
@@ -607,13 +601,6 @@ public class InventoryViewModel extends BaseViewModel {
         .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_INVENTORY, isQuickModeEnabled())
         .apply();
     return true;
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
   }
 
   public boolean isFeatureEnabled(String pref) {

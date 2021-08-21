@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.scanner;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView.TorchListener;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
+import com.journeyapps.barcodescanner.camera.CameraSettings.FocusMode;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
@@ -126,6 +128,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
         .getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM);
     CameraSettings cameraSettings = new CameraSettings();
     cameraSettings.setRequestedCameraId(useFrontCam ? 1 : 0);
+    cameraSettings.setFocusMode(FocusMode.CONTINUOUS);
     barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
     capture = new ZXingScanCaptureManager(
         fragment.requireActivity(),
@@ -173,7 +176,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   public void startScannerIfVisible() {
     if (!isScannerVisible) return;
     capture.onResume();
-    capture.decode();
+    new Handler().postDelayed(capture::decode, 500);
   }
 
   public void toggleTorch() {

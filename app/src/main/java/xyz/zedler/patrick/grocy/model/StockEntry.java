@@ -23,6 +23,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 
 public class StockEntry implements Parcelable {
 
@@ -152,6 +153,15 @@ public class StockEntry implements Parcelable {
 
   public int getLocationId() {
     return locationId;
+  }
+
+  public static StockEntry getStockEntryFromId(ArrayList<StockEntry> stockEntries, String id) {
+    for (StockEntry stockEntry : stockEntries) {
+      if (stockEntry.getStockId().equals(id)) {
+        return stockEntry;
+      }
+    }
+    return null;
   }
 
   @Override

@@ -20,27 +20,57 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class BaseViewModel extends AndroidViewModel {
 
   private final EventHandler eventHandler;
+  private final SharedPreferences sharedPrefs;
   private boolean isSearchVisible;
+  private boolean debug;
 
   public BaseViewModel(@NonNull Application application) {
     super(application);
     eventHandler = new EventHandler();
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     isSearchVisible = false;
+  }
+
+  SharedPreferences getSharedPrefs() {
+    return sharedPrefs;
+  }
+
+  public boolean isFeatureEnabled(String pref) {
+    if (pref == null) {
+      return true;
+    }
+    return sharedPrefs.getBoolean(pref, true);
+  }
+
+  boolean getBeginnerModeEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+    );
+  }
+
+  boolean isDebuggingEnabled() {
+    return debug;
   }
 
   void showErrorMessage() {
@@ -68,6 +98,15 @@ public class BaseViewModel extends AndroidViewModel {
 
   void showBottomSheet(@NonNull BaseBottomSheet bottomSheet) {
     eventHandler.setValue(new BottomSheetEvent(bottomSheet));
+  }
+
+  void navigateUp() {
+    eventHandler.setValue(new Event() {
+      @Override
+      public int getType() {
+        return Event.NAVIGATE_UP;
+      }
+    });
   }
 
   void sendEvent(int type) {
