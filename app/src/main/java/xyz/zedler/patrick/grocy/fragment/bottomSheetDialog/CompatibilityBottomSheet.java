@@ -89,6 +89,7 @@ public class CompatibilityBottomSheet extends BaseBottomSheet {
     });
 
     setCancelable(false);
+    setSkipCollapsedInPortrait();
 
     return view;
   }

@@ -13,7 +13,7 @@
 - Fixed: Barcode scanner didn't start again after error in quick mode
 - Fixed: Search field didn't appear after going back to stock or shopping list (#421)
 - Fixed: Invisible date picker in light theme (#422)
-- Fixed: Product dropdown appears again after scanning barcode (#404)
+- Fixed: Product dropdown appeared again after scanning barcode (#404)
 - Fixed: White icons on white navigation bar with SDK 26 (#366)
 - Fixed: Shopping mode list scrolled to bottom after top category was done (#439)
 - Fixed: Activity started twice if theme was different than system theme
