@@ -609,7 +609,7 @@
     </fragment>
     <fragment
       android:id="@+id/settingsCatScannerToolFragment"
-      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerToolFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerChooseFragment"
       android:label="SettingsCatScannerToolFragment"
       tools:layout="@layout/fragment_settings_cat_scanner_choose"/>
   </navigation>

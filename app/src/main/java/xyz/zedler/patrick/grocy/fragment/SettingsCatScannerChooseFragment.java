@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,9 +40,9 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
-public class SettingsCatScannerToolFragment extends BaseFragment {
+public class SettingsCatScannerChooseFragment extends BaseFragment {
 
-  private final static String TAG = SettingsCatScannerToolFragment.class.getSimpleName();
+  private final static String TAG = SettingsCatScannerChooseFragment.class.getSimpleName();
 
   private FragmentSettingsCatScannerChooseBinding binding;
   private MainActivity activity;
@@ -98,6 +100,28 @@ public class SettingsCatScannerToolFragment extends BaseFragment {
     }
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
+
+  public void openPlayStore() {
+    String appPackageName = "xyz.zedler.patrick.grocy.unlock";
+    try {
+      startActivity(new Intent(
+          Intent.ACTION_VIEW,
+          Uri.parse("market://details?id=" + appPackageName)
+      ));
+    } catch (android.content.ActivityNotFoundException e) {
+      startActivity(new Intent(
+          Intent.ACTION_VIEW,
+          Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)
+      ));
+    }
+  }
+
+  public void openGitHub() {
+    startActivity(new Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://github.com/patzly/grocy-android-unlock/releases/")
+    ));
   }
 
   @Override

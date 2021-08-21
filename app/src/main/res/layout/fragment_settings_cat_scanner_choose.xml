@@ -34,7 +34,7 @@
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
     <variable
       name="fragment"
-      type="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerToolFragment" />
+      type="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerChooseFragment" />
     <variable
       name="sharedPrefs"
       type="android.content.SharedPreferences" />
@@ -142,22 +142,24 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-          android:id="@+id/button_logout_cancel"
           style="@style/Widget.Grocy.Button.TextButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="@color/on_background_secondary"
           android:text="@string/action_github"
-          app:rippleColor="@color/highlight" />
+          android:onClick="@{() -> fragment.openGitHub()}"
+          app:rippleColor="@color/highlight"
+          clickUtil="@{clickUtil}"/>
 
         <com.google.android.material.button.MaterialButton
-          android:id="@+id/button_logout_logout"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
           android:text="@string/action_play_store"
-          app:backgroundTint="@color/retro_green_bg_white" />
+          android:onClick="@{() -> fragment.openPlayStore()}"
+          app:backgroundTint="@color/retro_green_bg_white"
+          clickUtil="@{clickUtil}"/>
 
       </LinearLayout>
 
