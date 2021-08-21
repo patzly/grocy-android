@@ -106,7 +106,6 @@
   <string name="action_own_server">Server personale</string>
   <string name="action_enter_data_manually">Inserisci dati manualmente</string>
   <string name="action_perform">Esegui azione</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d presto in ritardo</item>
@@ -196,7 +195,6 @@
   <string name="msg_quick_mode_confirm_transfer">La transazione sarà eseguita:\n\nSpostamento %1$s %2$sdi %3$s\nDalla posizione: %4$s\nAlla posizione: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">La transazione verrà eseguita:\n\nImposta la quantità di %1$s a %2$s %3$s\nApplica per gli elementi aggiunti:\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
-  <string name="msg_compatibility">Questa versione dell\'applicazione non è compatibile con la versione di grocy sul server.\n\n Versione del server corrente: %1$s\n\n Richiesta:\nVersione minima del server: %2$s\nVersione massima del server:%3$s\n\nSe ignori questo avertimento, si potrebbe verificare perdita di dati (improbabile) e crashes (probabile).\n Sei stato avvertito!</string>
   <string name="msg_logout">Nulla sul tuo server sarà cambiato. Sarai reindirizzato alla pagina di accesso.</string>
   <string name="msg_logout_demo">Stai utilizzando l\'istanza di prova di grocy su <u>https://grocy.info</u>.\n\n<b>Nessun cambiamento verrà salvato!\n Questi rimangono pubblichi finché il server non li sovrascrive automaticamente.</b>\n\nNella schermata di accesso puoi inserire l\'indirizzo del tuo server.</string>
   <string name="msg_logout_demo_short">Server demo pubblico. Premi per dettagli.</string>
@@ -387,7 +385,6 @@
   <string name="title_product_cat_qu_conversions">Conversione UM</string>
   <string name="title_unknown_input">Input sconosciuto</string>
   <string name="title_presets_new_products">Impostazioni predefinite per nuovi prodotti</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -598,7 +595,6 @@
   <string name="property_picture">Immagine</string>
   <string name="property_note_singleline">Nota rapida</string>
   <string name="property_note_multiline">Nota multi-riga</string>
-
   <string name="date_today">Oggi</string>
   <string name="date_unknown">Sconosciuto</string>
   <!-- This means the 'time' context -->

@@ -105,7 +105,6 @@
   <string name="action_own_server">Własny serwer</string>
   <string name="action_enter_data_manually">Wpisz dane ręcznie</string>
   <string name="action_perform">Wykonaj akcję</string>
-
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Spożyto %1$s %2$s z %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -167,7 +166,6 @@
   <string name="msg_quick_mode_confirm_transfer">Transakcja która zostanie wykonana:\n\nPrzenieś %1$s %2$s z %3$s\nZ lokacji: %4$s\nDo lokacji: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Transakcja która zostanie wykonana:\n\nUstaw ilość stanu z %1$s na %2$s%3$s\nWykonaj dla dodanych produktów:\nDo daty: %4$s\nCena: %5$s\nSklep: %6$s\nLokacja: %7$s</string>
-  <string name="msg_compatibility">Ta wersja aplikacji nie jest kompatybilna z wersją grocy na serwerze.\n\nAktualna wersja na serwerze: %1$s\n\nWymagana:\nMinimalna wersja na serwerze: %2$s\nMaksymalna wersja na serwerze: %3$s\n\nJeżeli zignorujesz tą wiadomość, może wystąpić utrata danych (mało prawdopodobne), bądź błędy (prawdopodobne).\nZostałeś ostrzeżony!</string>
   <string name="msg_logout">Nic na serwerze nie ulegnie zmianie. Zostaniesz przekierowany do strony logowania.</string>
   <string name="msg_logout_demo">Masz uruchomioną wersję demo grocy z <u>https://grocy.info</u>.\n\n<b>Żadne zmiany które wprowadzisz nie są zapisywane!\nWszystkie dane są publicznie dostępne dopóki nie zostaną nadpisane przez serwer.</b>\n\nNa stronie logowania możesz wpisać swój własny adres serwera.</string>
   <string name="msg_logout_demo_short">Publiczny serwer demonstracyjny. Stuknij aby uzyskać więcej informacji.</string>
@@ -354,7 +352,6 @@
   <string name="title_product_cat_qu_conversions">Konwersja jednostek ilości</string>
   <string name="title_unknown_input">Nieznane dane wejściowe</string>
   <string name="title_presets_new_products">Ustawienia wstępne dla nowych produktów</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->

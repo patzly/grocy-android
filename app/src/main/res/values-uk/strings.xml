@@ -106,7 +106,6 @@
   <string name="action_own_server">Власний сервер</string>
   <string name="action_enter_data_manually">Введіть дані вручну</string>
   <string name="action_perform">Виконати дію</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d скоро спливає термін</item>
@@ -212,7 +211,6 @@
   <string name="msg_quick_mode_confirm_transfer">Транзакція, яка буде виконана:\n\nПереміщення %1$s %2$s %3$s\nЗ: %4$s\nДо:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Транзакція, яка буде виконана:\n\nВстановити кількість запасу %1$s в %2$s%3$s\nЗастосувати до доданих елементів:\nТермін: %4$s\nЦіна: %5$s\nМагазин: %6$s\nМісце розташування: %7$s</string>
-  <string name="msg_compatibility">Ця версія програми не сумісна з версією  Grocy на сервері.\n\nПоточна версія сервера: %1$s\n\nНеобхідна:\nмінімальна версія сервера: %2$s\nмаксимальна версія сервера: %3$s\n\nЯкщо проігнорувати це попередження, може статися втрата даних (малоймовірна) та збої (ймовірно).\nВас попередили!</string>
   <string name="msg_logout">Нічого на вашому сервері не буде змінено. Ви будете перенаправлені на сторінку входу.</string>
   <string name="msg_logout_demo">Ви використовуєте демонстраційний сервер <u>https: //grocy.info</u>.\n\n<b>Жодні з ваших змін тут не будуть збережені! \nВони залишаються загальнодоступними, поки сервер не перезапише їх автоматично.</b> \n\nНа екрані входу ви можете ввести власну адресу сервера.</string>
   <string name="msg_logout_demo_short">Публічний демонстраційний сервер. Торкніться для деталей.</string>
@@ -403,7 +401,6 @@
   <string name="title_product_cat_qu_conversions">Перетворення ОВ</string>
   <string name="title_unknown_input">Невідоме введення</string>
   <string name="title_presets_new_products">Шаблон для нових продуктів</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -638,7 +635,6 @@
   <string name="property_picture">Зображення</string>
   <string name="property_note_singleline">Однорядкова примітка</string>
   <string name="property_note_multiline">Багаторядна примітка</string>
-
   <string name="date_today">Сьогодні</string>
   <string name="date_unknown">Невідомо</string>
   <!-- This means the 'time' context -->

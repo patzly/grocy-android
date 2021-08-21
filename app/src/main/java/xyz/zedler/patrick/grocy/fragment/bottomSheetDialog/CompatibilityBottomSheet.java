@@ -68,12 +68,16 @@ public class CompatibilityBottomSheet extends BaseBottomSheet {
     assert supportedVersions != null;
     String currentVersion = requireArguments().getString(Constants.ARGUMENT.VERSION);
 
+    StringBuilder supportedVersionsSingle = new StringBuilder();
+    for (String version : supportedVersions) {
+      supportedVersionsSingle.append("- ").append(version).append("\n");
+    }
+
     TextView textViewMsg = view.findViewById(R.id.text_compatibility_msg);
     textViewMsg.setText(activity.getString(
         R.string.msg_compatibility,
         currentVersion,
-        supportedVersions.get(0),
-        supportedVersions.get(supportedVersions.size() - 1)
+        supportedVersionsSingle
     ));
 
     view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {

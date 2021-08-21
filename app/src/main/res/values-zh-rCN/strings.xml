@@ -106,7 +106,6 @@
   <string name="action_own_server">自己的服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
   <string name="action_perform">执行动作</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d即将到期</item>
@@ -188,7 +187,6 @@
   <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">将被执行的事务: \n\n 设置%1$s的库存数量为%2$s%3$s \n 申请新增项目:\n 到期日:%4$s \n价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
-  <string name="msg_compatibility">此应用版本与服务器上的常规版本不兼容。\n \n当前服务器版本：%1$s\n\n必填：\nMin。伺服器版本：%2$s\nMax。服务器版本：%3$s\n\n如果忽略此警告，可能会导致数据丢失（不太可能）和崩溃（可能）。\n已警告您！</string>
   <string name="msg_logout">您的服务器上的任何内容都不会更改。您将被重定向到登录页面。</string>
   <string name="msg_logout_demo">您正在运行<u>https://grocy.info</u>的常规演示实例。\n\n<b>此处未保存任何更改！\n它们将保持公开状态，直到服务器自动覆盖它们。</b>\n\n在登录屏幕上，您可以输入您的自己的服务器地址。</string>
   <string name="msg_logout_demo_short">公共演示服务器。点按详细信息。</string>
@@ -377,7 +375,6 @@
   <string name="title_product_cat_qu_conversions">QU换算</string>
   <string name="title_unknown_input">未知的输入</string>
   <string name="title_presets_new_products">预设新产品</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -576,7 +573,6 @@
   <string name="property_picture">图片</string>
   <string name="property_note_singleline">单行的注释</string>
   <string name="property_note_multiline">多行注释</string>
-
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
