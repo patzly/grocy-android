@@ -21,42 +21,32 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatOptional;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 
-public class MasterProductCatOptionalViewModel extends AndroidViewModel {
+public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
   private static final String TAG = MasterProductCatOptionalViewModel.class.getSimpleName();
 
-  private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final GrocyApi grocyApi;
-  private final EventHandler eventHandler;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatOptional formData;
   private final MasterProductFragmentArgs args;
@@ -67,9 +57,9 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
 
   private ArrayList<Product> products;
   private ArrayList<ProductGroup> productGroups;
+  private ArrayList<ProductBarcode> barcodes;
 
   private DownloadHelper.Queue currentQueueLoading;
-  private final boolean debug;
   private final boolean isActionEdit;
 
   public MasterProductCatOptionalViewModel(
@@ -78,13 +68,8 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
   ) {
     super(application);
 
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    grocyApi = new GrocyApi(getApplication());
-    eventHandler = new EventHandler();
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatOptional(application, getBeginnerModeEnabled());
     args = startupArgs;
@@ -107,9 +92,10 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, productGroups) -> {
+    repository.loadFromDatabase((products, productGroups, barcodes) -> {
       this.products = products;
       this.productGroups = productGroups;
+      this.barcodes = barcodes;
       formData.getProductsLive().setValue(products);
       formData.getProductGroupsLive().setValue(productGroups);
       formData.fillWithProductIfNecessary(args.getProduct());
@@ -141,7 +127,7 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
         }), dlHelper.updateProductGroups(dbChangedTime, productGroups -> {
           this.productGroups = productGroups;
           formData.getProductGroupsLive().setValue(productGroups);
-        })
+        }), dlHelper.updateProductBarcodes(dbChangedTime, barcodes -> this.barcodes = barcodes)
     );
     if (queue.isEmpty()) {
       return;
@@ -156,7 +142,7 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
   }
 
   public void downloadDataForceUpdate() {
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+    SharedPreferences.Editor editPrefs = getSharedPrefs().edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.apply();
@@ -168,12 +154,12 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct());
-    repository.updateDatabase(products, productGroups, () -> {
+    repository.updateDatabase(products, productGroups, barcodes, () -> {
     });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
-    if (debug) {
+    if (isDebuggingEnabled()) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
     showMessage(getString(R.string.msg_no_connection));
@@ -183,28 +169,25 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
-    dlHelper.getSingleFilteredProductBarcode(barcode, productBarcode -> {
-          if (productBarcode != null) {
-            Product product = getProduct(productBarcode.getProductId());
-            if (product != null) {
-              formData.getParentProductLive().setValue(product);
-            } else {
-              showMessage(getString(R.string.error_barcode_not_linked));
-            }
-          } else {
-            showMessage(getString(R.string.error_barcode_not_linked));
-          }
-        }, error -> showMessage(getString(R.string.error_network))
-    ).perform(dlHelper.getUuid());
-  }
-
-  public Product getProduct(int id) {
-    for (Product product : products) {
-      if (product.getId() == id) {
-        return product;
+    Product product;
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
+    if (grocycode != null && grocycode.isProduct()) {
+      product = Product.getProductFromId(products, grocycode.getObjectId());
+      if (product == null) {
+        showMessage(R.string.msg_not_found);
+      } else {
+        formData.getParentProductLive().setValue(product);
+      }
+    } else if (grocycode != null) {
+      showMessage(R.string.error_wrong_grocycode_type);
+    } else {
+      product = Product.getProductFromBarcode(products, barcodes, barcode);
+      if (product != null) {
+        formData.getParentProductLive().setValue(product);
+      } else {
+        showMessage(getString(R.string.error_barcode_not_linked));
       }
     }
-    return null;
   }
 
   @NonNull
@@ -232,61 +215,6 @@ public class MasterProductCatOptionalViewModel extends AndroidViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
-  }
-
-  private void showErrorMessage() {
-    showMessage(getString(R.string.error_undefined));
-  }
-
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-  }
-
-  private void navigateUp() {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return Event.NAVIGATE_UP;
-      }
-    });
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
-  }
-
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
-  }
-
-  public boolean getBeginnerModeEnabled() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
-        Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
-    );
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
   }
 
   @Override

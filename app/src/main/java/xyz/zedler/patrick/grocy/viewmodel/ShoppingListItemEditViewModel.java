@@ -25,8 +25,6 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,13 +36,10 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -53,20 +48,20 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class ShoppingListItemEditViewModel extends AndroidViewModel {
+public class ShoppingListItemEditViewModel extends BaseViewModel {
 
   private static final String TAG = ShoppingListItemEditViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final EventHandler eventHandler;
   private final ShoppingListItemEditRepository repository;
   private final FormDataShoppingListItemEdit formData;
   private final ShoppingListItemEditFragmentArgs args;
@@ -98,7 +93,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    eventHandler = new EventHandler();
     repository = new ShoppingListItemEditRepository(application);
     formData = new FormDataShoppingListItemEdit(application);
     args = startupArgs;
@@ -359,7 +353,23 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
-    Product product = getProductFromBarcode(barcode);
+    Product product = null;
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
+    if (grocycode != null && grocycode.isProduct()) {
+      product = Product.getProductFromId(products, grocycode.getObjectId());
+      if (product == null) {
+        formData.clearForm();
+        showMessage(R.string.msg_not_found);
+        return;
+      }
+    } else if (grocycode != null) {
+      formData.clearForm();
+      showMessage(R.string.error_wrong_grocycode_type);
+      return;
+    }
+    if (product == null) {
+      product = Product.getProductFromBarcode(products, barcodes, barcode);
+    }
     if (product != null) {
       setProduct(product);
     } else {
@@ -471,15 +481,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     return null;
   }
 
-  private Product getProductFromBarcode(String barcode) {
-    for (ProductBarcode code : barcodes) {
-      if (code.getBarcode().equals(barcode)) {
-        return getProduct(code.getProductId());
-      }
-    }
-    return null;
-  }
-
   public boolean isActionEdit() {
     return isActionEdit;
   }
@@ -521,13 +522,6 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     currentQueueLoading = queueLoading;
   }
 
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
-  }
-
   public boolean getExternalScannerEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
@@ -535,45 +529,11 @@ public class ShoppingListItemEditViewModel extends AndroidViewModel {
     );
   }
 
-  private void showErrorMessage() {
-    showMessage(getString(R.string.error_undefined));
-  }
-
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-  }
-
-  private void navigateUp() {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return Event.NAVIGATE_UP;
-      }
-    });
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
-  }
-
   public boolean isFeatureEnabled(String pref) {
     if (pref == null) {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
   }
 
   @Override

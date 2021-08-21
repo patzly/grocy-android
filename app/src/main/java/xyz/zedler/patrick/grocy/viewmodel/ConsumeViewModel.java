@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,8 +56,11 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -72,6 +76,7 @@ public class ConsumeViewModel extends BaseViewModel {
   private final FormDataConsume formData;
 
   private ArrayList<Product> products;
+  private HashMap<Integer, Product> productHashMap;
   private ArrayList<QuantityUnit> quantityUnits;
   private ArrayList<QuantityUnitConversion> unitConversions;
   private ArrayList<ProductBarcode> barcodes;
@@ -118,6 +123,7 @@ public class ConsumeViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase((products, barcodes, qUs, conversions) -> {
       this.products = products;
+      productHashMap = ArrayUtil.getProductsHashMap(products);
       this.barcodes = barcodes;
       this.quantityUnits = qUs;
       this.unitConversions = conversions;
@@ -142,6 +148,7 @@ public class ConsumeViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
+          productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
@@ -194,7 +201,7 @@ public class ConsumeViewModel extends BaseViewModel {
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  public void setProduct(int productId, ProductBarcode barcode) {
+  public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
     DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
       ProductDetails productDetails = formData.getProductDetailsLive().getValue();
       assert productDetails != null;
@@ -202,8 +209,7 @@ public class ConsumeViewModel extends BaseViewModel {
 
       if (productDetails.getStockAmountAggregated() == 0) {
         String name = product.getName();
-        showMessage(getApplication().getString(R.string.msg_not_in_stock, name));
-        formData.clearForm();
+        showMessageAndContinueScanning(getApplication().getString(R.string.msg_not_in_stock, name));
         return;
       }
 
@@ -215,8 +221,7 @@ public class ConsumeViewModel extends BaseViewModel {
       try {
         setProductQuantityUnitsAndFactors(product, barcode);
       } catch (IllegalArgumentException e) {
-        showMessage(e.getMessage());
-        formData.clearForm();
+        showMessageAndContinueScanning(e.getMessage());
         return;
       }
 
@@ -259,8 +264,20 @@ public class ConsumeViewModel extends BaseViewModel {
       formData.getStockLocationLive().setValue(stockLocation);
 
       // stock entry
-      formData.getUseSpecificLive().setValue(false);
-      formData.getSpecificStockEntryLive().setValue(null);
+      StockEntry stockEntry = null;
+      if (stockEntryId != null) {
+        stockEntry = StockEntry.getStockEntryFromId(formData.getStockEntries(), stockEntryId);
+      }
+      if (stockEntryId != null && stockEntry == null) {
+        showMessage(R.string.error_stock_entry_grocycode);
+      }
+      if (stockEntry != null) {
+        formData.getUseSpecificLive().setValue(true);
+        formData.getSpecificStockEntryLive().setValue(stockEntry);
+      } else {
+        formData.getUseSpecificLive().setValue(false);
+        formData.getSpecificStockEntryLive().setValue(null);
+      }
 
       formData.isFormValid();
       if (isQuickModeEnabled()) {
@@ -268,10 +285,10 @@ public class ConsumeViewModel extends BaseViewModel {
       }
     };
 
-    dlHelper.newQueue(onQueueEmptyListener, error -> {
-      showMessage(getString(R.string.error_no_product_details));
-      formData.clearForm();
-    }).append(
+    dlHelper.newQueue(
+        onQueueEmptyListener,
+        error -> showMessageAndContinueScanning(getString(R.string.error_no_product_details))
+    ).append(
         dlHelper.getProductDetails(
             productId,
             productDetails -> formData.getProductDetailsLive().setValue(productDetails)
@@ -327,16 +344,31 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
-    ProductBarcode productBarcode = null;
     Product product = null;
-    for (ProductBarcode code : barcodes) {
-      if (code.getBarcode().equals(barcode)) {
-        productBarcode = code;
-        product = getProduct(code.getProductId());
+    String stockEntryId = null;
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
+    if (grocycode != null && grocycode.isProduct()) {
+      product = productHashMap.get(grocycode.getObjectId());
+      if (product == null) {
+        showMessageAndContinueScanning(R.string.msg_not_found);
+        return;
+      }
+      stockEntryId = grocycode.getProductStockEntryId();
+    } else if (grocycode != null) {
+      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+      return;
+    }
+    ProductBarcode productBarcode = null;
+    if (product == null) {
+      for (ProductBarcode code : barcodes) {
+        if (code.getBarcode().equals(barcode)) {
+          productBarcode = code;
+          product = productHashMap.get(code.getProductId());
+        }
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode);
+      setProduct(product.getId(), productBarcode, stockEntryId);
     } else {
       formData.getBarcodeLive().setValue(barcode);
       formData.isFormValid();
@@ -357,11 +389,11 @@ public class ConsumeViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = getProduct(code.getProductId());
+          product = productHashMap.get(code.getProductId());
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode);
+        setProduct(product.getId(), productBarcode, null);
         return;
       }
     }
@@ -374,7 +406,7 @@ public class ConsumeViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product.getId(), null);
+      setProduct(product.getId(), null, null);
     } else {
       showInputProductBottomSheet(input);
     }
@@ -480,15 +512,6 @@ public class ConsumeViewModel extends BaseViewModel {
     return null;
   }
 
-  public Product getProduct(int id) {
-    for (Product product : products) {
-      if (product.getId() == id) {
-        return product;
-      }
-    }
-    return null;
-  }
-
   private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
     ArrayList<Product> activeProductsOnly = new ArrayList<>();
     for (Product product : allProducts) {
@@ -585,6 +608,16 @@ public class ConsumeViewModel extends BaseViewModel {
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
+  private void showMessageAndContinueScanning(String msg) {
+    formData.clearForm();
+    showMessage(msg);
+    sendEvent(Event.CONTINUE_SCANNING);
+  }
+
+  private void showMessageAndContinueScanning(@StringRes int msg) {
+    showMessageAndContinueScanning(getString(msg));
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
@@ -617,13 +650,6 @@ public class ConsumeViewModel extends BaseViewModel {
         .putBoolean(Constants.PREF.QUICK_MODE_ACTIVE_CONSUME, isQuickModeEnabled())
         .apply();
     return true;
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
   }
 
   public boolean isFeatureEnabled(String pref) {

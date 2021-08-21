@@ -43,7 +43,8 @@ public class MasterProductRepository {
 
     void actionFinished(
         ArrayList<Product> products,
-        ArrayList<ProductGroup> productGroups
+        ArrayList<ProductGroup> productGroups,
+        ArrayList<ProductBarcode> barcodes
     );
   }
 
@@ -84,6 +85,7 @@ public class MasterProductRepository {
 
     private ArrayList<Product> products;
     private ArrayList<ProductGroup> productGroups;
+    private ArrayList<ProductBarcode> barcodes;
 
     loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
       this.appDatabase = appDatabase;
@@ -94,13 +96,14 @@ public class MasterProductRepository {
     protected final Void doInBackground(Void... params) {
       products = new ArrayList<>(appDatabase.productDao().getAll());
       productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
+      barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
-        listener.actionFinished(products, productGroups);
+        listener.actionFinished(products, productGroups, barcodes);
       }
     }
   }
@@ -108,12 +111,14 @@ public class MasterProductRepository {
   public void updateDatabase(
       ArrayList<Product> products,
       ArrayList<ProductGroup> productGroups,
+      ArrayList<ProductBarcode> barcodes,
       DataUpdatedListener listener
   ) {
     new updateAsyncTask(
         appDatabase,
         products,
         productGroups,
+        barcodes,
         listener
     ).execute();
   }
@@ -125,17 +130,20 @@ public class MasterProductRepository {
 
     private final ArrayList<Product> products;
     private final ArrayList<ProductGroup> productGroups;
+    private final ArrayList<ProductBarcode> barcodes;
 
     updateAsyncTask(
         AppDatabase appDatabase,
         ArrayList<Product> products,
         ArrayList<ProductGroup> productGroups,
+        ArrayList<ProductBarcode> barcodes,
         DataUpdatedListener listener
     ) {
       this.appDatabase = appDatabase;
       this.listener = listener;
       this.products = products;
       this.productGroups = productGroups;
+      this.barcodes = barcodes;
     }
 
     @Override
@@ -144,6 +152,8 @@ public class MasterProductRepository {
       appDatabase.productDao().insertAll(products);
       appDatabase.productGroupDao().deleteAll();
       appDatabase.productGroupDao().insertAll(productGroups);
+      appDatabase.productBarcodeDao().deleteAll();
+      appDatabase.productBarcodeDao().insertAll(barcodes);
       return null;
     }
 

@@ -343,6 +343,8 @@
   <string name="error_barcode_not_linked">Barcode is not linked to a product</string>
   <string name="error_no_product_details">Could not get product details</string>
   <string name="error_failed_barcode_upload">Could not upload barcode</string>
+  <string name="error_wrong_grocycode_type">grocycode contains wrong entity type</string>
+  <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
   <string name="error_undefined">An error occurred</string>
 
   <string name="title_overview">Overview</string>
