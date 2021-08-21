@@ -33,7 +33,7 @@
     android:text="Update warning" />
 
   <View
-    style="@style/Theme.Grocy.Divider"
+    style="@style/Widget.Grocy.Divider"
     android:layout_marginTop="0dp"
     android:layout_marginBottom="0dp" />
 

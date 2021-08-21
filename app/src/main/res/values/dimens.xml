@@ -22,4 +22,6 @@
   <dimen name="login_margin">32dp</dimen>
   <dimen name="main_side_margin">16dp</dimen>
 
+  <dimen name="mtrl_snackbar_background_corner_radius">10dp</dimen>
+
 </resources>

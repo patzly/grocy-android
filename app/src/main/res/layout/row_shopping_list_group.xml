@@ -29,7 +29,7 @@
 
   <View
     android:id="@+id/divider"
-    style="@style/Theme.Grocy.Divider"
+    style="@style/Widget.Grocy.Divider"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="0dp" />
 
