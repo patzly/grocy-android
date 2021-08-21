@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatScannerChooseFragment extends BaseFragment {
@@ -103,16 +104,15 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
   }
 
   public void openPlayStore() {
-    String appPackageName = "xyz.zedler.patrick.grocy.unlock";
     try {
       startActivity(new Intent(
           Intent.ACTION_VIEW,
-          Uri.parse("market://details?id=" + appPackageName)
+          Uri.parse("market://details?id=" + UnlockUtil.PACKAGE)
       ));
     } catch (android.content.ActivityNotFoundException e) {
       startActivity(new Intent(
           Intent.ACTION_VIEW,
-          Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)
+          Uri.parse("https://play.google.com/store/apps/details?id=" + UnlockUtil.PACKAGE)
       ));
     }
   }
