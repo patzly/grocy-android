@@ -106,7 +106,6 @@
   <string name="action_own_server">Votre serveur</string>
   <string name="action_enter_data_manually">Entrez les données manuellement</string>
   <string name="action_perform">Effectuer l\'action</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d bientôt périmé</item>
@@ -196,7 +195,6 @@
   <string name="msg_quick_mode_confirm_transfer">Opération qui sera exécutée :\n\nTransférer %1$s %2$s de %3$s\nDe l\'emplacement : %4$s\nÀ l\'emplacement : %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Opération qui sera exécutée :\n\nDéfinir le stock de %1$s à %2$s %3$s\nAppliqué aux articles ajoutés :\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
-  <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion du serveur actuel: %1$s\n\nRequired: \n. version du serveur: %2$s\nMax. version du serveur: %3$sn\nSi vous ignorez cet avertissement, des pertes de données (peu probables) et des plantages (probables) peuvent se produire.\nVous avez été averti!</string>
   <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
   <string name="msg_logout_demo">Vous utilisez le serveur de démonstration grocy publique <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer l\'adresse de votre propre serveur.</string>
   <string name="msg_logout_demo_short">Serveur publique de démonstration. Tapez pour les détails.</string>
@@ -385,7 +383,6 @@
   <string name="title_product_cat_qu_conversions">Conversions de formats</string>
   <string name="title_unknown_input">Entrée inconnue</string>
   <string name="title_presets_new_products">Préréglages pour de nouveaux produits</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -596,7 +593,6 @@
   <string name="property_picture">Image</string>
   <string name="property_note_singleline">Note sur une ligne</string>
   <string name="property_note_multiline">Note multi-lignes</string>
-
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
   <!-- This means the 'time' context -->
