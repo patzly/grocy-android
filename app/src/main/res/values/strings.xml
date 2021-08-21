@@ -634,6 +634,8 @@
   <string name="property_picture">Picture</string>
   <string name="property_note_singleline">Single-line note</string>
   <string name="property_note_multiline">Multi-line note</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">In stock: %1$s</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

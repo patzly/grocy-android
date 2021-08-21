@@ -232,7 +232,7 @@
                 app:endIconContentDescription="Scan barcode"
                 android:hint="@string/property_product"
                 app:helperTextEnabled="true"
-                app:helperText=" "
+                app:helperText="@{formData.productNameInfoStockLive}"
                 app:errorIconDrawable="@{null}"
                 app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
                 app:errorText="@{formData.productNameErrorLive}">

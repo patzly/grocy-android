@@ -41,9 +41,9 @@ import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.view.FilterChip;
 import xyz.zedler.patrick.grocy.view.InputChip;
@@ -403,52 +403,9 @@ public class StockOverviewItemAdapter extends
     // AMOUNT
 
     QuantityUnit quantityUnit = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
-
-    String unit = "";
-    if (quantityUnit != null) {
-      unit = pluralUtil.getQuantityUnitPlural(quantityUnit, stockItem.getAmountDouble());
-    }
-    StringBuilder stringBuilderAmount = new StringBuilder(
-        context.getString(
-            R.string.subtitle_amount,
-            NumUtil.trim(stockItem.getAmountDouble()),
-            unit
-        )
+    holder.binding.textAmount.setText(
+        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnit)
     );
-    if (stockItem.getAmountOpenedDouble() > 0) {
-      stringBuilderAmount.append(" ");
-      stringBuilderAmount.append(
-          context.getString(
-              R.string.subtitle_amount_opened,
-              NumUtil.trim(stockItem.getAmountOpenedDouble())
-          )
-      );
-    }
-    // aggregated amount
-    if (stockItem.getIsAggregatedAmountInt() == 1) {
-      String unitAggregated = "";
-      if (quantityUnit != null) {
-        unitAggregated = pluralUtil.getQuantityUnitPlural(quantityUnit, stockItem.getAmountAggregatedDouble());
-      }
-      stringBuilderAmount.append("  ∑ ");
-      stringBuilderAmount.append(
-          context.getString(
-              R.string.subtitle_amount,
-              NumUtil.trim(stockItem.getAmountAggregatedDouble()),
-              unitAggregated
-          )
-      );
-      if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
-        stringBuilderAmount.append(" ");
-        stringBuilderAmount.append(
-            context.getString(
-                R.string.subtitle_amount_opened,
-                NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
-            )
-        );
-      }
-    }
-    holder.binding.textAmount.setText(stringBuilderAmount);
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)

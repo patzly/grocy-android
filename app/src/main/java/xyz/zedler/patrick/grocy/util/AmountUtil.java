@@ -19,12 +19,18 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 
 public class AmountUtil {
 
@@ -78,5 +84,97 @@ public class AmountUtil {
     } else {
       return null;
     }
+  }
+
+  public static void addStockAmountNormalInfo(
+      @NonNull Context context,
+      @NonNull PluralUtil pluralUtil,
+      @NonNull StringBuilder stringBuilder,
+      @Nullable StockItem stockItem,
+      @Nullable QuantityUnit quantityUnit
+  ) {
+    if (stockItem == null) return;
+    String unitStr = "";
+    if (quantityUnit != null) {
+      unitStr = pluralUtil.getQuantityUnitPlural(quantityUnit, stockItem.getAmountDouble());
+    }
+    stringBuilder.append(
+        context.getString(
+            R.string.subtitle_amount,
+            NumUtil.trim(stockItem.getAmountDouble()),
+            unitStr
+        )
+    );
+    if (stockItem.getAmountOpenedDouble() > 0) {
+      stringBuilder.append(" ");
+      stringBuilder.append(
+          context.getString(
+              R.string.subtitle_amount_opened,
+              NumUtil.trim(stockItem.getAmountOpenedDouble())
+          )
+      );
+    }
+  }
+
+  public static void addStockAmountAggregatedInfo(
+      @NonNull Context context,
+      @NonNull PluralUtil pluralUtil,
+      @NonNull StringBuilder stringBuilder,
+      @Nullable StockItem stockItem,
+      @Nullable QuantityUnit quantityUnit
+  ) {
+    if (stockItem == null) return;
+    if (stockItem.getIsAggregatedAmountInt() == 0) return;
+    String unitAggregated = "";
+    if (quantityUnit != null) {
+      unitAggregated = pluralUtil.getQuantityUnitPlural(
+          quantityUnit,
+          stockItem.getAmountAggregatedDouble()
+      );
+    }
+    stringBuilder.append("  ∑ ");
+    stringBuilder.append(
+        context.getString(
+            R.string.subtitle_amount,
+            NumUtil.trim(stockItem.getAmountAggregatedDouble()),
+            unitAggregated
+        )
+    );
+    if (stockItem.getAmountOpenedAggregatedDouble() > 0) {
+      stringBuilder.append(" ");
+      stringBuilder.append(
+          context.getString(
+              R.string.subtitle_amount_opened,
+              NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
+          )
+      );
+    }
+  }
+
+  public static String getStockAmountInfo(
+      @NonNull Context context,
+      @NonNull PluralUtil pluralUtil,
+      @Nullable StockItem stockItem,
+      @Nullable QuantityUnit quantityUnit
+  ) {
+    if (stockItem == null) return null;
+    StringBuilder stringBuilder = new StringBuilder();
+    addStockAmountNormalInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit);
+    addStockAmountAggregatedInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit);
+    return stringBuilder.toString();
+  }
+
+  public static String getStockAmountInfo(
+      @NonNull Context context,
+      @NonNull PluralUtil pluralUtil,
+      @Nullable ProductDetails productDetails
+  ) {
+    if (productDetails == null) return null;
+    return getStockAmountInfo(
+        context,
+        pluralUtil,
+        new StockItem(productDetails),
+        productDetails.getQuantityUnitStock()
+    );
   }
 }
