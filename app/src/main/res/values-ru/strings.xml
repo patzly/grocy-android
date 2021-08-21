@@ -106,7 +106,6 @@
   <string name="action_own_server">Собственный сервер</string>
   <string name="action_enter_data_manually">Ввести данные вручную</string>
   <string name="action_perform">Выполнить действие</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d скоро испортится</item>
@@ -212,7 +211,6 @@
   <string name="msg_quick_mode_confirm_transfer">Операция, которая будет выполнена:\n\nПереместить %1$s %2$s %3$s\nИз места: %4$s\nВ место: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Операция, которая будет выполнена:\n\nУстановить количество %1$s в запасах равное %2$s %3$s\nПримерить для добавленных элементов:\nСрок годности: %4$s\nЦена: %5$s\nМагазин: %6$s\nМесто: %7$s</string>
-  <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере,\n\nТекущая версия сервера %1$s\n\nТребуется:\nминимальная версия: %2$s\nмаксимальная версия: %3$s\n\nЕсли вы проигнорируете это предупреждение, могут возникнуть потери данных (маловероятно) и сбои (весьма вероятно).\nВас предупредили!</string>
   <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
   <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
   <string name="msg_logout_demo_short">Публичный демо сервер. Нажмите для деталей.</string>
@@ -401,7 +399,6 @@
   <string name="title_product_cat_qu_conversions">Преобразование ЕИ</string>
   <string name="title_unknown_input">Неизвестный ввод</string>
   <string name="title_presets_new_products">Шаблоны для новых продуктов</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -636,7 +633,6 @@
   <string name="property_picture">Изображение</string>
   <string name="property_note_singleline">Однострочная заметка</string>
   <string name="property_note_multiline">Многострочная заметка</string>
-
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->
