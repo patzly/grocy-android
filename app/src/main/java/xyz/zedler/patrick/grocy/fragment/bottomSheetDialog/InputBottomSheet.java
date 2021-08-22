@@ -31,18 +31,18 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputNumberBinding;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputBinding;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class InputNumberBottomSheet extends BaseBottomSheet {
+public class InputBottomSheet extends BaseBottomSheet {
 
-  private final static String TAG = InputNumberBottomSheet.class.getSimpleName();
+  private final static String TAG = InputBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
-  private FragmentBottomsheetInputNumberBinding binding;
+  private FragmentBottomsheetInputBinding binding;
 
-  private MutableLiveData<String> numberInputLive;
+  private MutableLiveData<String> inputLive;
 
   @NonNull
   @Override
@@ -56,7 +56,7 @@ public class InputNumberBottomSheet extends BaseBottomSheet {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetInputNumberBinding.inflate(
+    binding = FragmentBottomsheetInputBinding.inflate(
         inflater, container, false
     );
     return binding.getRoot();
@@ -69,59 +69,67 @@ public class InputNumberBottomSheet extends BaseBottomSheet {
     binding.setBottomsheet(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    numberInputLive = new MutableLiveData<>();
-    Object number = requireArguments().get(Constants.ARGUMENT.NUMBER);
+    inputLive = new MutableLiveData<>();
+    int inputType;
+    boolean showMoreLess;
+    Object number = requireArguments().get(ARGUMENT.NUMBER);
+    Object text = requireArguments().get(ARGUMENT.TEXT);
     if (number instanceof Double) {
-      numberInputLive.setValue(NumUtil.trim((Double) number));
+      inputLive.setValue(NumUtil.trim((Double) number));
+      inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
+      showMoreLess = true;
     } else if (number instanceof Integer) {
-      numberInputLive.setValue(NumUtil.trim((Integer) number));
+      inputLive.setValue(NumUtil.trim((Integer) number));
+      inputType = InputType.TYPE_CLASS_NUMBER;
+      showMoreLess = true;
+    } else {
+      inputLive.setValue(text != null ? (String) text : "");
+      inputType = InputType.TYPE_CLASS_TEXT;
+      showMoreLess = false;
     }
 
-    binding.editText.setInputType(
-        number instanceof Double
-            ? InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-            : InputType.TYPE_CLASS_NUMBER
-    );
-
-    if (requireArguments().containsKey(Constants.ARGUMENT.HINT)) {
-      binding.textInput.setHint(requireArguments().getString(Constants.ARGUMENT.HINT));
-    } else {
-      binding.textInput.setHint(getString(R.string.property_number));
+    binding.editText.setInputType(inputType);
+    if (!showMoreLess) {
+      binding.more.setVisibility(View.GONE);
+      binding.less.setVisibility(View.GONE);
+    }
+    if (requireArguments().containsKey(ARGUMENT.HINT)) {
+      binding.textInput.setHint(requireArguments().getString(ARGUMENT.HINT));
     }
   }
 
-  public MutableLiveData<String> getNumberInputLive() {
-    return numberInputLive;
+  public MutableLiveData<String> getInputLive() {
+    return inputLive;
   }
 
   public void more() {
-    String currentInput = numberInputLive.getValue();
+    String currentInput = inputLive.getValue();
     String nextInput;
     if (!NumUtil.isStringNum(currentInput)) {
       nextInput = String.valueOf(1);
     } else {
       nextInput = NumUtil.trim(Double.parseDouble(currentInput) + 1);
     }
-    numberInputLive.setValue(nextInput);
+    inputLive.setValue(nextInput);
   }
 
   public void less() {
-    String currentInput = numberInputLive.getValue();
+    String currentInput = inputLive.getValue();
     if (!NumUtil.isStringNum(currentInput)) {
       return;
     }
     String nextInput = NumUtil.trim(Double.parseDouble(currentInput) - 1);
-    numberInputLive.setValue(nextInput);
+    inputLive.setValue(nextInput);
   }
 
   public void save() {
-    String text = numberInputLive.getValue();
+    String text = inputLive.getValue();
     if (text != null) {
       text = text.trim();
     } else {
       text = "";
     }
-    activity.getCurrentFragment().saveNumber(text, requireArguments());
+    activity.getCurrentFragment().saveInput(text, requireArguments());
     dismiss();
   }
 

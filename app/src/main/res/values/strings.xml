@@ -208,7 +208,7 @@
   <string name="msg_logout">Nothing on your server will be changed. You will be redirected to the login page.</string>
   <string name="msg_logout_demo">You\'re using the public demo server <u>https://grocy.info</u>.\n\n<b>None of your changes here are saved forever!\nThey remain public until the server automatically overwrites them once a day.</b>\n\nOn the login screen you can enter your own server address.</string>
   <string name="msg_logout_demo_short">Public demo server. Tap for details.</string>
-  <string name="msg_restart">An app restart is required to apply the current Grocy configuration properly.</string>
+  <string name="msg_restart">The app must be restarted to apply the current configuration. Do you want to restart it now?</string>
   <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
   <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
   <string name="msg_features">Start intro again in \"About\"</string>
@@ -376,7 +376,8 @@
   <string name="title_logout_demo">Logout from demo mode?</string>
   <string name="title_manage_master_data">Manage master data</string>
   <string name="title_edit_description">Edit description</string>
-  <string name="title_input_number">Number input</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
+  <string name="title_input">Input</string>
   <string name="title_external_barcode_input">External scanner</string>
   <string name="title_confirmation">Confirmation</string>
 
@@ -715,6 +716,7 @@
   <string name="category_scanner">Scanner</string>
   <string name="category_appearance">Appearance</string>
   <string name="category_network">Network</string>
+  <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Behavior</string>
   <string name="category_debugging">Debugging</string>
 
@@ -785,6 +787,14 @@
   <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
+  <string name="setting_tor">Use Tor</string>
+  <string name="setting_tor_description">Requires Orbot</string>
+  <string name="setting_proxy">Enable HTTP proxy</string>
+  <string name="setting_proxy_description">Configure HTTP proxy for all network requests</string>
+  <string name="setting_proxy_host">Proxy host</string>
+  <string name="setting_proxy_host_description">Your proxy\'s hostname</string>
+  <string name="setting_proxy_port">Proxy port</string>
+  <string name="setting_proxy_port_description">Your proxy\'s port number</string>
   <string name="setting_synchronized">The option below is synchronized with your server.</string>
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
 

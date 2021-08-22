@@ -263,7 +263,7 @@
   <string name="title_logout_demo">Demomodus uitloggen?</string>
   <string name="title_manage_master_data">Masterdaata beheren</string>
   <string name="title_edit_description">Omschrijving aanpassen</string>
-  <string name="title_input_number">Getal invoer</string>
+  <string name="title_input">Getal invoer</string>
   <string name="title_external_barcode_input">Externe scanner</string>
   <string name="title_confirmation">Bevestiging</string>
 

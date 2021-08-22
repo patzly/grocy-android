@@ -347,7 +347,7 @@
   <string name="title_logout_demo">Uscire dalla modalità demo?</string>
   <string name="title_manage_master_data">Gestisci dati</string>
   <string name="title_edit_description">Modifica descrizione</string>
-  <string name="title_input_number">Numero input</string>
+  <string name="title_input">Numero input</string>
   <string name="title_external_barcode_input">Scanner esterno</string>
   <string name="title_confirmation">Conferma</string>
 

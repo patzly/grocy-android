@@ -127,7 +127,7 @@ public class DownloadHelper {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     gson = new Gson();
     dateUtil = new DateUtil(application);
-    RequestQueueSingleton.getInstance(application).newRequestQueue(serverUrl);
+    RequestQueueSingleton.getInstance(application).newRequestQueue();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application, serverUrl);
     this.apiKey = apiKey;

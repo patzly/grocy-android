@@ -3,6 +3,7 @@
 - New: (not F-Droid) Add ML Kit as better camera barcode scanner
 - New: Option to use 2D barcode format for scanner everywhere (#265)
 - New: Support for grocycodes (all product fields with scanner) (#438)
+- New: HTTP proxy and Tor (Orbox) support (#130)
 - Improved: Don't assume port 8123 during Home Assistant setup (#413)
 - Improved: Add new card to login form which contains info about port (#413)
 - Improved: Set focus mode to continuous in ZXing barcode scanner (works better)

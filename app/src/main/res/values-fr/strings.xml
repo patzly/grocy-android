@@ -345,7 +345,7 @@
   <string name="title_logout_demo">Se déconnecter du mode démo?</string>
   <string name="title_manage_master_data">Gérer les données de base</string>
   <string name="title_edit_description">Modifier description</string>
-  <string name="title_input_number">Entrée numérique</string>
+  <string name="title_input">Entrée numérique</string>
   <string name="title_external_barcode_input">Scanner externe</string>
   <string name="title_confirmation">Confirmation</string>
 

@@ -93,10 +93,12 @@ public final class Constants {
 
     public final static class NETWORK {
 
-      public final static String ORBOT = "orbot";
-      public final static String SOCKS_PROXY = "socks_proxy";
       public final static String LOADING_CIRCLE = "loading_circle";
       public final static String LOADING_TIMEOUT = "loading_timeout";
+      public final static String TOR = "tor";
+      public final static String PROXY = "proxy";
+      public final static String PROXY_HOST = "proxy_host";
+      public final static String PROXY_PORT = "proxy_port";
     }
 
     public final static class BEHAVIOR {
@@ -152,6 +154,10 @@ public final class Constants {
 
       public final static int LOADING_TIMEOUT = 30;
       public final static boolean LOADING_CIRCLE = false;
+      public final static boolean TOR = false;
+      public final static boolean PROXY = false;
+      public final static String PROXY_HOST = "127.0.0.1";
+      public final static int PROXY_PORT = 8118;
     }
 
     public final static class BEHAVIOR {

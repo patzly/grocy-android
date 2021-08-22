@@ -345,7 +345,7 @@
   <string name="title_logout_demo">Sair o modo de demonstração?</string>
   <string name="title_manage_master_data">Gerir dados mestre</string>
   <string name="title_edit_description">Editar descrição</string>
-  <string name="title_input_number">Introduzir número</string>
+  <string name="title_input">Introduzir número</string>
   <string name="title_external_barcode_input">Scanner externo</string>
   <string name="title_confirmation">Confirmação</string>
 

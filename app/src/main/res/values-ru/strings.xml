@@ -361,7 +361,7 @@
   <string name="title_logout_demo">Выйти из демо режима?</string>
   <string name="title_manage_master_data">Управление основными данными</string>
   <string name="title_edit_description">Изменить описание</string>
-  <string name="title_input_number">Ввод числа</string>
+  <string name="title_input">Ввод числа</string>
   <string name="title_external_barcode_input">Внешний сканер</string>
   <string name="title_confirmation">Подтверждение</string>
 

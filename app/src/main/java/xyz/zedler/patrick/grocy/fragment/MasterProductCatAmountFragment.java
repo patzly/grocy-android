@@ -30,7 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatAmountBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -158,7 +158,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
     Bundle bundle = new Bundle();
     bundle.putInt(FormDataMasterProductCatAmount.AMOUNT_ARG, type);
     bundle.putDouble(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getAmount(type));
-    activity.showBottomSheet(new InputNumberBottomSheet(), bundle);
+    activity.showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public void showInputNumberBottomSheet(int type, View imageView) {
@@ -169,7 +169,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
   }
 
   @Override
-  public void saveNumber(String text, Bundle argsBundle) {
+  public void saveInput(String text, Bundle argsBundle) {
     viewModel.getFormData().setAmount(text, argsBundle);
   }
 

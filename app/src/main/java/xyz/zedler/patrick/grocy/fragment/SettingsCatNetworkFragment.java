@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
@@ -36,8 +37,13 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
+import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class SettingsCatNetworkFragment extends BaseFragment {
 
@@ -46,6 +52,8 @@ public class SettingsCatNetworkFragment extends BaseFragment {
   private FragmentSettingsCatNetworkBinding binding;
   private MainActivity activity;
   private SettingsViewModel viewModel;
+  private MutableLiveData<String> proxyHostLive;
+  private MutableLiveData<String> proxyPortLive;
 
   @Override
   public View onCreateView(
@@ -59,6 +67,7 @@ public class SettingsCatNetworkFragment extends BaseFragment {
 
   @Override
   public void onDestroyView() {
+    RequestQueueSingleton.getInstance(activity.getApplication()).newRequestQueue();
     super.onDestroyView();
     binding = null;
   }
@@ -86,6 +95,24 @@ public class SettingsCatNetworkFragment extends BaseFragment {
       }
     });
 
+    viewModel.getTorEnabledLive().observe(getViewLifecycleOwner(), enabled -> {
+      viewModel.setTorEnabled(enabled);
+      assert viewModel.getProxyEnabledLive().getValue() != null;
+      if (enabled && viewModel.getProxyEnabledLive().getValue()){
+        viewModel.getProxyEnabledLive().setValue(false);
+      }
+    });
+    viewModel.getProxyEnabledLive().observe(getViewLifecycleOwner(), enabled -> {
+      viewModel.setProxyEnabled(enabled);
+      assert viewModel.getTorEnabledLive().getValue() != null;
+      if (enabled && viewModel.getTorEnabledLive().getValue()) {
+        viewModel.getTorEnabledLive().setValue(false);
+      }
+    });
+
+    proxyHostLive = new MutableLiveData<>(viewModel.getProxyHost());
+    proxyPortLive = new MutableLiveData<>(String.valueOf(viewModel.getProxyPort()));
+
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(binding.scroll);
       activity.getScrollBehavior().setHideOnScroll(true);
@@ -104,6 +131,14 @@ public class SettingsCatNetworkFragment extends BaseFragment {
     updateTimeoutValue();
   }
 
+  public MutableLiveData<String> getProxyHostLive() {
+    return proxyHostLive;
+  }
+
+  public MutableLiveData<String> getProxyPortLive() {
+    return proxyPortLive;
+  }
+
   private void updateTimeoutValue() {
     binding.timeoutSeconds.setText(getResources().getQuantityString(
         R.plurals.property_seconds_num,
@@ -113,11 +148,37 @@ public class SettingsCatNetworkFragment extends BaseFragment {
   }
 
   @Override
-  public void saveNumber(String text, Bundle argsBundle) {
-    int timeout = NumUtil.isStringInt(text) && Integer.parseInt(text) > 0
-        ? Integer.parseInt(text) : Constants.SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT;
-    viewModel.setLoadingTimeout(timeout);
-    updateTimeoutValue();
+  public void saveInput(String text, Bundle argsBundle) {
+    String type = argsBundle.getString(ARGUMENT.TYPE);
+    if (type == null) return;
+    switch (type) {
+      case NETWORK.LOADING_TIMEOUT:
+        int timeout = NumUtil.isStringInt(text) && Integer.parseInt(text) > 0
+            ? Integer.parseInt(text) : SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT;
+        viewModel.setLoadingTimeout(timeout);
+        updateTimeoutValue();
+        break;
+      case NETWORK.PROXY_HOST:
+        viewModel.setProxyHost(text.isEmpty() ? SETTINGS_DEFAULT.NETWORK.PROXY_HOST : text);
+        proxyHostLive.setValue(text.isEmpty() ? SETTINGS_DEFAULT.NETWORK.PROXY_HOST : text);
+        break;
+      case NETWORK.PROXY_PORT:
+        viewModel.setProxyPort(
+            NumUtil.isStringInt(text)
+                ? Integer.parseInt(text)
+                : SETTINGS_DEFAULT.NETWORK.PROXY_PORT
+        );
+        proxyPortLive.setValue(
+            NumUtil.isStringInt(text)
+                ? text
+                : String.valueOf(SETTINGS_DEFAULT.NETWORK.PROXY_PORT)
+        );
+        break;
+    }
+  }
+
+  public void restartApp() {
+    RestartUtil.restartApp(requireContext());
   }
 
   @Override

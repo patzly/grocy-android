@@ -24,7 +24,7 @@
   <data>
     <variable
       name="bottomsheet"
-      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet" />
+      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet" />
   </data>
 
   <LinearLayout
@@ -37,7 +37,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:padding="16dp"
-      android:text="@string/title_input_number" />
+      android:text="@string/title_input" />
 
     <View
       style="@style/Theme.Grocy.Divider"
@@ -64,7 +64,8 @@
           android:gravity="center_vertical"
           android:paddingStart="16dp"
           android:paddingEnd="0dp"
-          android:layout_marginBottom="12dp">
+          android:layout_marginBottom="12dp"
+          android:layout_marginEnd="16dp">
 
           <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input"
@@ -80,7 +81,7 @@
               android:textColor="@color/on_background"
               android:imeOptions="actionDone"
               android:maxLength="10"
-              android:text="@={bottomsheet.numberInputLive}"
+              android:text="@={bottomsheet.inputLive}"
               app:onDoneClickInSoftKeyboard="@{() -> bottomsheet.save()}" />
 
           </com.google.android.material.textfield.TextInputLayout>
@@ -97,7 +98,6 @@
             android:id="@+id/less"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             app:icon="@drawable/ic_round_expand_more"
             app:tint="@color/icon"
             android:onClick="@{() -> bottomsheet.less()}" />

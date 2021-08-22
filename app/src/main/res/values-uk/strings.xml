@@ -363,7 +363,7 @@
   <string name="title_logout_demo">Вийти з демо-режиму?</string>
   <string name="title_manage_master_data">Керування основними даними</string>
   <string name="title_edit_description">Редагувати опис</string>
-  <string name="title_input_number">Введення числа</string>
+  <string name="title_input">Введення числа</string>
   <string name="title_external_barcode_input">Зовнішній сканер</string>
   <string name="title_confirmation">Підтвердження</string>
 
