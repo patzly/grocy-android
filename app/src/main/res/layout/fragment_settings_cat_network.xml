@@ -101,7 +101,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?android:actionBarSize"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      android:fillViewport="true">
 
       <LinearLayout
         android:id="@+id/linear_body"
@@ -109,7 +110,9 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="80dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        transitionTypeChanging="@{true}">
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
@@ -190,6 +193,165 @@
             android:id="@+id/switch_loading_circle"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.loadingCircleEnabled}" />
+
+        </LinearLayout>
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.Category"
+          android:text="@string/category_network_proxy" />
+
+        <com.google.android.material.card.MaterialCardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:visibility="@{viewModel.needsRestartLive ? View.VISIBLE : View.GONE}"
+          app:contentPadding="16dp"
+          app:cardElevation="0dp"
+          app:cardCornerRadius="12dp"
+          app:cardBackgroundColor="@color/on_background_variant">
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/msg_restart"
+              android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.UnelevatedButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="end"
+              android:layout_marginBottom="-6dp"
+              android:text="@string/action_restart"
+              android:onClick="@{() -> fragment.restartApp()}"
+              clickUtil="@{clickUtil}"/>
+
+          </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchTor.setChecked(!switchTor.isChecked())}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_tor" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_tor_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_tor"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.torEnabledLive}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchProxy.setChecked(!switchProxy.isChecked())}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_proxy" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_proxy_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_proxy"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.proxyEnabledLive}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="@{viewModel.proxyEnabledLive ? View.VISIBLE : View.GONE}"
+          android:onClick="@{() -> viewModel.showProxyHostBottomSheet()}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/setting_proxy_host" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{fragment.proxyHostLive}" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_proxy_host_description" />
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="@{viewModel.proxyEnabledLive ? View.VISIBLE : View.GONE}"
+          android:onClick="@{() -> viewModel.showProxyPortBottomSheet()}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/setting_proxy_port" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{fragment.proxyPortLive}" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_proxy_port_description" />
+
+          </LinearLayout>
 
         </LinearLayout>
 

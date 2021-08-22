@@ -104,7 +104,7 @@ public class SettingsCatShoppingModeFragment extends BaseFragment {
   }
 
   @Override
-  public void saveNumber(String text, Bundle argsBundle) {
+  public void saveInput(String text, Bundle argsBundle) {
     String type = argsBundle.getString(ARGUMENT.TYPE);
     if (type != null && type.equals(SHOPPING_MODE.UPDATE_INTERVAL)) {
       viewModel.setShoppingModeUpdateInterval(text);

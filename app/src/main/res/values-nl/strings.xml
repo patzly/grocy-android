@@ -105,14 +105,49 @@
   <string name="action_demo_server">Test server</string>
   <string name="action_own_server">Eigen server</string>
   <string name="action_enter_data_manually">Gegevens handmatig invoeren</string>
+  <string name="action_perform">Actie uitvoeren</string>
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$d vervalt binnenkort</item>
+    <item quantity="other">%1$d vervallen binnenkort</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d verlopen</item>
+    <item quantity="other">%1$d verlopen</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d verlopen</item>
+    <item quantity="other">%1$d verlopen</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d minder dan minimale voorraad</item>
+    <item quantity="other">%1$d minder dan minimale voorraad</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d in voorraad</item>
+    <item quantity="other">%1$d in voorraad</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Geconsumeerd %1$s %2$s van %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">Geconsumeerd %1$s %2$s van %3$s als verspild</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">%1$s %2$s van %3$s gemarkeerd als geopend</string>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d nog niet gedaan</item>
+    <item quantity="other">%1$d nog niet gedaan</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s van %3$s aan voorraad toegevoegd</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">%1$s %2$s van %3$s verplaatst</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Voorraad van %1$s is nu %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s niet in voorraad gevonden</string>
   <string name="msg_no_connection">Geen verbinding</string>
@@ -137,20 +172,51 @@
   <string name="msg_master_delete_product">Weet je zeker dat het product \"%1$s\" wil verwijderen?\n\nDit verwijdert ook alle voorraad, het dagboek en andere referenties naar dit product. Als je dit wil behouden dan is het mogelijk beter om het product te deactiveren.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">%1$s is nog in gebruik</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s zal aan de voorraad toegevoegd worden.</item>
+    <item quantity="other">%1$s %2$s zullen aan de voorraad toegevoegd worden.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s zal verwijderd worden uit de voorraad.</item>
+    <item quantity="other">%1$s %2$s zullen verwijderd worden uit de voorraad.</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Producten waarvoor het tarragewicht is ingeschakeld, worden momenteel niet ondersteund voor verplaatsing.</string>
   <string name="msg_item_marked_as_done">Item gemarkeerd als voltooid</string>
   <string name="msg_item_marked_as_undone">Item als ongedaan gemarkeerd</string>
+  <string name="option_synced_success">Optie is succesvol gesynchroniseerd</string>
+  <string name="option_synced_error">Optie kon niet gesynchroniseerd worden</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">De volgende transactie wordt uitgevoerd:\n\nVoeg %1$s %2$s %3$s toe aan de voorraad\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">De volgende transactie wordt uitgevoerd:\n\nVerwijder %1$s %2$s %3$s uit de voorraad\nLocatie: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">De volgende transactie wordt uitgevoerd:\n\nVerplaats %1$s %2$s %3$s\nVan Locatie: %4$s\nNaar Locatie: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">De volgende transactie wordt uitgevoerd:\n\nZet de voorraad %1$s op %2$s %3$s\nBevestig voor toegevoegde items:\nVervaldatum: %4$s\nPrijs: %5$s\nWinkel: %6$s\nLocatie: %7$s</string>
+  <string name="msg_compatibility">Deze app-versie is niet compatibel met de grocy-versie op de server.\n\nHuidige serverversie: %1$s\n\nOndersteunde serverversies:\n%2$sAls u deze waarschuwing negeert, kan gegevensverlies (onwaarschijnlijk) en crashes (waarschijnlijk) optreden. Je bent gewaarschuwd!</string>
   <string name="msg_logout">Niets op uw server wordt gewijzigd. U wordt doorgestuurd naar de inlogpagina.</string>
   <string name="msg_logout_demo">Je maakt gebruik van de openbare demo server <u>https://grocy.info</u>.\n\n<b>Wijzigingen worden daar niet definitief opgeslagen!\nZe blijven openbaar totdat de server ze automatisch overschrijft.</b> \n\nOp het login-scherm kun je je eigen serveradres invoeren.</string>
   <string name="msg_logout_demo_short">Openbare demo server. Tik voor details.</string>
   <string name="msg_restart">Herstart de app om de nieuwe Grocy configuratie in te laden.</string>
   <string name="msg_shortcuts">Je kan tot 4 snelkoppelingen activeren:</string>
   <string name="msg_shortcuts_not_supported">Snelkoppelingen worden niet ondersteunt door deze Android versie.</string>
+  <string name="msg_features">Start de intro opnieuw in \"Over\"</string>
   <string name="msg_feedback">Heb je wensen, vragen of fouten gevonden? Neem contact met ons op, wij helpen je graag. Anders zouden we het heel fijn vinden als je een leuke recensie achter laat in de Play Store.</string>
   <string name="msg_point_at_barcode">Richt de camera op de streepjescode</string>
   <string name="msg_press_hold_confirm">Druk en houd ingedrukt op te bevestigen</string>
+  <string name="msg_welcome_to_grocy">Welkom bij Grocy Android!\n\nOm deze app te kunnen gebruiken heb je een eigen server nodig of de grocy add-on voor Home Assistant.\nAls je alleen deze app wil testen dan kan je de test server van Bernd Bestel, de bedenker van grocy, gebruiken.</string>
   <string name="msg_choose_option_below">Kies een van de onderstaande opties.</string>
   <string name="msg_qr_code_scan">Bezoek op een ander apparaat jouw grocy en ga naar de \'API sleutels\' pagina. Klik op \'Toevoegen\', klik daarna op het kleine QR-code symbooltje en scan de QR-code.</string>
+  <string name="msg_port_connection_info_without_port">De app zal connecteren op poort %1$s.\nAls je wil connecteren op een andere poort, kan je deze aan de URL toevoegen.\nVoorbeeld: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">De app zal connecteren op poort %1$s.</string>
   <string name="msg_not_implemented_yet">Dit komt binnenkort beschikbaar. Gebruik voor nu de server weergave.</string>
+  <string name="stock_disabled">Je hebt de voorraadfunctie in je grocy configuratie uitgeschakeld, waarschijnlijk omdat je deze niet nodig hebt. Maar deze app kan op dit moment alleen voorraadbeheer doen, dus het kan zijn dat je er niet veel aan hebt.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">Op de voorraad overzichtspagina staan alle producten die momenteel op voorraad zijn of onder hun minimum aantal zijn. Schakel dit in om dit product daar altijd te verbergen.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Dit product kan geen ouderproduct hebben omdat het al als ouderproduct in een ander product wordt gebruikt.</string>
   <string name="msg_help_due_date_type">De markeringen op de voorraadoverzicht pagina zijn, gebaseerd op het geselecteerde vervaldatum type, verschillend. \"Tenminste houdbaar tot\" betekent dat het product mogelijk nog steeds veilig om te consumeren is nadat de vervaldatum bereikt is. \"Houdbaarheidsdatum\" betekent dat het product niet meer veilig is om te eten na de vervaldatum.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Bij aankopen wordt dit aantal dagen toegevoegd aan vandaag voor de vervaldatum suggestie (-1 betekent dat dit product nooit verloopt).</string>
@@ -174,17 +240,31 @@
   <string name="msg_help_tare_weight_purchase">Tare weight handling ingeschakeld - weeg de hele container af, het te boeken aantal wordt automatisch berekend.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Dit wordt gebruikt als de standaardinstelling bij het toevoegen van dit product als recept ingrediënt.</string>
+  <string name="msg_help_inventory_fields">De volgende velden zijn van toepassing op nieuw toegevoegde producten.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">U kunt een barcodescanner kiezen voor het scannen van barcodes met je camera.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebrapad\") gebruikt de contrastgegevens van de camerastream om een streepjescode te detecteren. Het berekent vervolgens de relatieve breedte van alle lijnen.\n- Soms onjuiste resultaten\n- Barcode moet altijd horizontaal uitgelijnd zijn\n- Contrast en scherpte moeten goed zijn\n- Wordt volledig op het apparaat uitgevoerd\n- Framework is open source</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit maakt gebruik van machine learning met de nieuwste technologieën voor het scannen van streepjescodes.\n- Bijna geen onjuiste resultaten\n- Oriëntatie maakt niet uit\n- Werkt zelfs voor vage streepjescodes of streepjescodes met laag contrast\n- Wordt volledig op het apparaat uitgevoerd\n- Framework is niet open source</string>
   <string name="msg_help_external_scanner_ready">Je kan een externe scanner gebruiken voor het veld hieronder als het geselecteerd is en leeg.</string>
   <string name="msg_help_external_scanner_settings">Deze app ondersteunt externe scanner apparaten die zich voordoen als toetsenbord en verbonden kunnen worden via USB of Bluetooth. De volgende opties moeten worden ingesteld in de externe scanner:\n\nVoorvoegsel: Geen\nAchtervoegsel: TAB of ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">Het eerste item in deze lijst wordt gekozen met de standaardregel: \"Als eerste geopend, daarna als eerste over datum, daarna eerste in eerste uit\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Dit is alleen voor de statistiek</string>
+  <string name="msg_help_quick_mode">U kunt lang op de titelbalk hierboven tikken om de snelle modus te activeren. In deze modus wordt een transactie onmiddellijk uitgevoerd als een product is ingevoerd of gescand en alle velden automatisch ingevuld kunnen worden (per product en/of barcode standaarden).</string>
   <string name="msg_help_loading_circle_settings">Op elke pagina waar gegevens van de server geladen moeten worden controleert de app eerst met een klein verzoek of de gegevens op de server veranderd zijn en wisselt alleen de nieuwe gegevens uit. Activeer de optie hieronder om ook een laadcirkel weer te geven voor dit kleine verzoek.</string>
   <string name="msg_help_start">Beginnersmode is actief: Help tekst wordt standaard weergegeven op alle pagina\'s. Tik om dit te veranderen.</string>
   <string name="msg_help_purchased_date_settings">Als deze optie is ingeschakeld wordt een veld voor de aankoopdatum weergegeven op de aankoop en voorraad pagina. Indien uitgeschakeld wordt vandaag gebruikt als aankoopdatum.</string>
+  <string name="msg_help_normal_login">Tik op deze kaart als je Home Assistant gebruikt met de grocy add-on.</string>
+  <string name="msg_help_home_assistant_login">Je gebruikt de Home Assistant-add-on. Daarom zijn er nog enkele details nodig. Tik op deze kaart om over te schakelen naar normaal inloggen.</string>
   <string name="msg_help_home_assistant_login_help_show">Klik hier om hulpteksten weer te geven.</string>
   <string name="msg_help_home_assistant_login_help_hide">Klik hier om hulpteksten te verbergen.</string>
+  <string name="msg_help_home_assistant_login_server">In het onderstaande veld kunt u ook uw Nabu Casa-cloud-URL invoeren als u die service gebruikt. Tik op deze kaart om de website van Nabu Casa te bezoeken.</string>
+  <string name="msg_help_home_assistant_login_token">U kunt een toegangstoken met een lange levensduur maken in uw Home Assistant-profielinstellingen (laatste gedeelte). Tik hier om de URL van hierboven te openen.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Navigeer terug of tik op deze kaart om een QR-code te scannen die de onderstaande velden vult.</string>
+
   <string name="error_api_not_working">API sleutel werkt niet</string>
   <string name="error_orbot_not_installed">Orbot is niet geïnstalleerd</string>
   <string name="error_select_product">Selecteer een product</string>
@@ -193,7 +273,9 @@
   <string name="error_empty_stock_sub">Koop een aantal producten</string>
   <string name="error_empty_shopping_list">Je boodschappenlijst is leeg</string>
   <string name="error_empty_shopping_list_sub">Voeg een aantal producten toe die je nodig hebt</string>
+  <string name="error_empty_barcodes_sub">Voeg een barcode toe met de onderstaande knop</string>
   <string name="error_empty_master_data_sub">Maak een aantal aan via de onderstaande knop</string>
+  <string name="error_empty_product_barcodes">Geen productbarcodes</string>
   <string name="error_empty_locations">Geen locaties</string>
   <string name="error_empty_product_groups">Geen productgroepen</string>
   <string name="error_empty_products">Geen producten</string>
@@ -213,6 +295,8 @@
   <string name="error_invalid_factor">Ongeldige factor</string>
   <string name="error_api_qr_code">Geen QR code met grocy API inloggegevens</string>
   <string name="error_loading_qus">Kan geen eenheden laden van dit product</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Kan niet gelijk zijn aan %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Moet tussen %1$s en %2$s zijn</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -223,6 +307,7 @@
   <string name="error_bounds_higher">Moet hoger dan %1$s zijn</string>
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Deze pagina werk alleen met internet toegang. Controleer je verbinding.</string>
+  <string name="error_no_done_items">Er zijn geen items gemarkeerd als voltooid</string>
   <string name="error_name_exists">Naam bestaat al</string>
   <string name="error_network">Netwerk fout</string>
   <string name="error_network_subtitle">De benodigde gegevens kunnen niet volledig geladen worden.</string>
@@ -233,17 +318,24 @@
   <string name="error_failed_to_connect_to">Verbinding met de server is mislukt</string>
   <string name="error_missing_information">Niet alle benodigde velden zijn ingevuld</string>
   <string name="error_handshake">Ongeldig certificaat</string>
+  <string name="error_handshake_description">Deze server vereist een certificaat dat niet bekend of vertrouwd is bij Android.
+Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsinstantie (bijv. letsencrypt.org) of zijn opgeslagen in het Android-gebruikerscertificaatarchief van dit apparaat.</string>
+  <string name="error_unexpected_response_code">Onverwachte reactie met code</string>
   <string name="error_unexpected_response">Onverwachte reactie van server</string>
   <string name="error_no_browser">Installeer een webbrowser om de help website weer te geven</string>
   <string name="error_barcode_not_linked">Barcode is niet gekoppeld aan een product</string>
   <string name="error_no_product_details">Geen product details gekregen</string>
   <string name="error_failed_barcode_upload">Kan geen barcode uploaden</string>
+  <string name="error_wrong_grocycode_type">grocycode bevat verkeerd entiteitstype</string>
+  <string name="error_stock_entry_grocycode">Geen voorraadartikel voor grocycode gevonden</string>
   <string name="error_undefined">Er is een fout opgetreden</string>
 
   <string name="title_overview">Overzicht</string>
   <string name="title_stock_overview">Voorraad</string>
   <string name="title_purchase">Koop</string>
   <string name="title_consume">Consumeer</string>
+  <string name="title_transfer">Verplaats</string>
+  <string name="title_inventory">Voorraad</string>
   <string name="title_barcode_input">Streepjescode invoer</string>
   <string name="title_product_overview">Productoverzicht</string>
   <string name="title_product">Product</string>
@@ -254,6 +346,10 @@
   <string name="title_shopping_list">Boodschappenlijst</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Instellingen</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Streepjescode scanner</string>
+  <!-- Context: About this app -->
+  <string name="title_about">Over</string>
   <string name="title_info">Informatie</string>
   <string name="title_help">Help</string>
   <string name="title_logs">Logs</string>
@@ -263,7 +359,7 @@
   <string name="title_logout_demo">Demomodus uitloggen?</string>
   <string name="title_manage_master_data">Masterdaata beheren</string>
   <string name="title_edit_description">Omschrijving aanpassen</string>
-  <string name="title_input_number">Getal invoer</string>
+  <string name="title_input">Getal invoer</string>
   <string name="title_external_barcode_input">Externe scanner</string>
   <string name="title_confirmation">Bevestiging</string>
 
@@ -272,6 +368,10 @@
   <string name="title_specific">Specifiek voorraadartikel</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Consumeer specifieke hoeveelheid</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Van locatie</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Naar locatie</string>
   <string name="title_recipe">Recept</string>
   <string name="title_total_price">Totaalprijs</string>
   <string name="title_unit_price">Stukprijs</string>
@@ -297,6 +397,10 @@
   <string name="title_product_cat_qu_conversions">Hoeveelheidseenheidsconversies</string>
   <string name="title_unknown_input">Onbekende invoer</string>
   <string name="title_presets_new_products">Voorinstellingen voor nieuwe producten</string>
+  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
+   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <string name="title_use_scanner_tool">Gebruik %1$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -331,6 +435,11 @@
   <string name="subtitle_supported">Ondersteund</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
   <string name="subtitle_not_supported">Niet ondersteund</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Aantal: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Hoeveelheid eenheid: %1$d</string>
+
   <string name="description_input_product_part1">Product veld bevat:</string>
   <string name="description_input_product_part2">Kies hoe je door wil gaan:</string>
   <string name="description_input_product_option1">Maak een nieuw product aan en gebruik de invoer als naam</string>
@@ -340,6 +449,62 @@
   <string name="description_clear_shopping_list_option1">Alleen voltooide items verwijderen</string>
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option2">Verwijder alle items</string>
+
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock">
+    <item quantity="one">Je hebt %1$d product in voorraad</item>
+    <item quantity="other">Je hebt %1$d producten in voorraad</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d product vervalt binnen de %2$d dagen.</item>
+    <item quantity="other">%1$d producten vervallen binnen de %2$d dagen.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d product is vervallen.</item>
+    <item quantity="other">%1$d producten zijn vervallen.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d product is verlopen.</item>
+    <item quantity="other">%1$d producten zijn verlopen.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d product is onder de gedefinieerde minimale voorraad.</item>
+    <item quantity="other">%1$d producten zijn onder de gedefinieerde minimale voorraad.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d ervan staat op je boodschappenlijst.</item>
+    <item quantity="other">%1$d ervan staan op je boodschappenlijst.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d ervan staan op je boodschappenlijsten.</item>
+    <item quantity="other">%1$d ervan staan op je boodschappenlijsten.</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+  <plurals name="description_overview_stock_value">
+    <item quantity="one">Je hebt %1$d product in voorraad met een waarde van %2$s%3$s.</item>
+    <item quantity="other">Je hebt %1$d producten in voorraad met een waarde van %2$s %3$s.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list_multi">
+    <item quantity="one">%1$d item staat op je boodschappenlijsten.</item>
+    <item quantity="other">%1$d items staan op je boodschappenlijsten.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d item staat op je boodschappenlijst.</item>
+    <item quantity="other">%1$d items staan op je boodschappenlijst.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_master_data">
+    <item quantity="one">Je database bevat %1$d product.</item>
+    <item quantity="other">Je database bevat %1$d producten.</item>
+  </plurals>
 
   <string name="property_name">Naam</string>
   <string name="property_name_singular">Naam (Enkelvoud)</string>
@@ -353,12 +518,21 @@
   <string name="property_status">Status</string>
   <string name="property_amount">Aantal</string>
   <string name="property_seconds">Seconden</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d seconde</item>
+    <item quantity="other">%1$d seconden</item>
+  </plurals>
   <string name="property_amount_min_stock">Min. aantal in voorraad</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Aantal in %1$s</string>
   <string name="property_price">Prijs</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Prijs per %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Prijs in %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Prijs per %1$s in %2$s</string>
   <string name="property_quantity_unit">Hoeveelheid eenheid</string>
   <string name="property_quantity_units">Aantal eenheden</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -435,6 +609,11 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Verzamel minimale voorraad sub producten</string>
   <string name="property_picture">Afbeelding</string>
+  <string name="property_note_singleline">Notitie met één regel</string>
+  <string name="property_note_multiline">Notitie met meerdere regels</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">In voorraad: %1$s</string>
+
   <string name="date_today">Vandaag</string>
   <string name="date_unknown">Onbekend</string>
   <!-- This means the 'time' context -->
@@ -519,13 +698,27 @@
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Geldige API sleutel</string>
 
+  <string name="setting_theme">Thema</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_follow_system">Volg systeem</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Donker</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Licht</string>
   <string name="setting_language">Taal</string>
   <string name="setting_language_description">Selecteer taal</string>
+  <string name="setting_language_info">Veel dank aan alle vrijwillige vertalers bij Transifex!
+Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te maken voor uw taal.</string>
+  <string name="setting_language_system">Systeem standaard: %1$s</string>
   <string name="setting_language_not_available">Niet beschikbaar</string>
   <string name="setting_open_food_facts">Open Food Facts gebruiken</string>
   <string name="setting_open_food_facts_description">Info van streepjescode gebruiken</string>
+  <string name="setting_choose_barcode_scanner">Kies barcodescanner</string>
+  <string name="setting_choose_barcode_scanner_description">Voor het scannen van camera barcodes</string>
   <string name="setting_use_front_cam">Gebruik selfie-camera</string>
   <string name="setting_use_front_cam_description">Voor streepjescode te scannen</string>
+  <string name="setting_use_2d_scanner_format">Gebruik het 2D-barcodescannerformaat</string>
+  <string name="setting_use_2d_scanner_format_description">Vierkante vorm voor QR-codes</string>
   <string name="setting_external_support">Ondersteuning voor externe scanners</string>
   <string name="setting_external_support_description">Via USB of Bluetooth</string>
   <string name="setting_reload_config">Configuratie opnieuw inladen</string>
@@ -548,11 +741,15 @@
   <string name="setting_default_amount_consume">Standaard aantal bij consumeren</string>
   <string name="setting_purchased_date">Vraag naar aanschafdatum</string>
   <string name="setting_purchased_date_description">Op aankoop en voorraad pagina</string>
+  <string name="setting_use_quick_consume_amount">Gebruik de \"Snel gebruik hoeveelheid\" van het product</string>
   <string name="setting_empty_value">Leeg</string>
   <string name="setting_sync_off">Synchonisatie uit</string>
+  <string name="setting_loading">Waarde aan het laden</string>
   <string name="setting_not_loaded">Kon niet worden geladen</string>
   <string name="setting_debug">Logging aangezet</string>
   <string name="setting_debug_description">Toon errors in de logbestanden</string>
+  <string name="setting_log_level">Log niveau</string>
+  <string name="setting_error_logs">Alleen fout-logs weergeven</string>
   <string name="setting_info_logs">Info-Logs bekijken</string>
   <string name="setting_logs_description">Logcat van dit proces bekijken</string>
   <string name="setting_timeout">Laad timeout</string>
@@ -562,8 +759,11 @@
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Bottom sheets volledig weergeven</string>
   <string name="setting_expand_bottom_sheets_description">In landschapsmode</string>
+  <string name="setting_speed_up_start">Verkort de opstarttijd van de app</string>
+  <string name="setting_speed_up_start_description">Heeft alleen effect op snelle apparaten</string>
   <string name="setting_loading_circle">Laat een laad cirkel zien voor alle verzoeken</string>
   <string name="setting_loading_circle_description">Handig voor langzame netwerken</string>
+  <string name="setting_synchronized">De onderstaande optie is gesynchroniseerd met je server.</string>
   <string name="settings_synchronized">Deze instellingen worden gesynchroniseerd met je server.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.

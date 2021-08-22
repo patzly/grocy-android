@@ -88,22 +88,6 @@ public class TextEditBottomSheet extends BaseBottomSheet {
     }
 
     view.findViewById(R.id.button_text_edit_save).setOnClickListener(v -> {
-            /*Fragment current = activity.getCurrentFragment();
-            if(current.getClass() == MasterProductSimpleFragment.class) {
-                ((MasterProductSimpleFragment) current).editDescription(
-                        Html.toHtml(editText.getText()),
-                        editText.getText().toString()
-                );
-            } else if(current.getClass() == ShoppingListFragment.class) {
-                ((ShoppingListFragment) current).saveNotes(
-                        (Spanned) TextUtil.trimCharSequence(editText.getText())
-                );
-            } else if(current.getClass() == ShoppingModeFragment.class) {
-                ((ShoppingModeFragment) current).saveNotes(
-                        (Spanned) TextUtil.trimCharSequence(editText.getText())
-                );
-            }*/
-
       Spanned spanned = (Spanned) TextUtil.trimCharSequence(editText.getText());
       activity.getCurrentFragment().saveText(spanned);
       dismiss();
@@ -118,11 +102,7 @@ public class TextEditBottomSheet extends BaseBottomSheet {
 
   private void dismissWithMessage(String msg) {
     activity.showSnackbar(
-        Snackbar.make(
-            activity.findViewById(R.id.frame_main_container),
-            msg,
-            Snackbar.LENGTH_SHORT
-        )
+        Snackbar.make(activity.findViewById(R.id.frame_main_container), msg, Snackbar.LENGTH_SHORT)
     );
     dismiss();
   }

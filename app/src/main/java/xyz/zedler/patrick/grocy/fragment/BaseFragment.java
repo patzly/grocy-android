@@ -80,9 +80,6 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public void addBarcode(String barcode) {
-  }
-
   public void clearFields() {
   }
 
@@ -170,7 +167,7 @@ public class BaseFragment extends Fragment {
   public void saveText(Spanned spanned) {
   }
 
-  public void saveNumber(String text, Bundle argsBundle) {
+  public void saveInput(String text, Bundle argsBundle) {
   }
 
   public void performAction(String action, StockItem stockItem) {

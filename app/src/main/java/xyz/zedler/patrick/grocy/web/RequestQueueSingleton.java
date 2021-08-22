@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
@@ -35,7 +36,8 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
 public class RequestQueueSingleton {
 
@@ -57,30 +59,31 @@ public class RequestQueueSingleton {
 
   public RequestQueue getRequestQueue() {
     if (requestQueue == null) {
-      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-      String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-      newRequestQueue(serverUrl);
+      newRequestQueue();
     }
     return requestQueue;
   }
 
-  public void newRequestQueue(String serverUrl) {
+  public void newRequestQueue() {
     //requestQueue = Volley.newRequestQueue(ctx);
 
     Cache cache = new DiskBasedCache(ctx.getCacheDir(), 1024 * 1024);
 
-    BasicNetwork network;
-    if (serverUrl != null && serverUrl.contains(".onion")) {
-      network = new BasicNetwork(new ProxyHurlStack());
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    boolean useTor = sharedPrefs.getBoolean(NETWORK.TOR, SETTINGS_DEFAULT.NETWORK.TOR);
+    boolean useProxy = sharedPrefs.getBoolean(NETWORK.PROXY, SETTINGS_DEFAULT.NETWORK.PROXY);
+
+    HurlStack stack;
+    if (useTor || useProxy) {
+      stack = new ProxyHurlStack(sharedPrefs, useTor);
     } else {
-      HurlStack stack;
       try {
         stack = new HurlStack(null, new TLSSocketFactory());
       } catch (NoSuchAlgorithmException | KeyManagementException e) {
         stack = new HurlStack();
       }
-      network = new BasicNetwork(stack);
     }
+    Network network = new BasicNetwork(stack);
     requestQueue = new RequestQueue(cache, network, 6);
     requestQueue.start();
   }

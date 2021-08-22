@@ -19,21 +19,53 @@
 
 package xyz.zedler.patrick.grocy.web;
 
+import android.content.SharedPreferences;
 import com.android.volley.toolbox.HurlStack;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.net.URL;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
 public class ProxyHurlStack extends HurlStack {
 
+  private final Proxy proxy;
+
+  public ProxyHurlStack(SharedPreferences sharedPrefs, boolean useTor) {
+    super();
+
+    if (useTor) {
+      this.proxy = new Proxy(
+          Proxy.Type.SOCKS,
+          InetSocketAddress.createUnresolved("127.0.0.1", 9050)
+      );
+    } else {
+      String host = sharedPrefs.getString(NETWORK.PROXY_HOST, SETTINGS_DEFAULT.NETWORK.PROXY_HOST);
+      int port = sharedPrefs.getInt(NETWORK.PROXY_PORT, SETTINGS_DEFAULT.NETWORK.PROXY_PORT);
+      this.proxy = new Proxy(Type.HTTP, InetSocketAddress.createUnresolved(host, port));
+    }
+  }
+
   @Override
   protected HttpURLConnection createConnection(URL url) throws IOException {
-    Proxy proxy = new Proxy(
-        Proxy.Type.SOCKS,
-        InetSocketAddress.createUnresolved("127.0.0.1", 9050)
-    );
-    return (HttpURLConnection) url.openConnection(proxy);
+      // source: https://gitlab.com/guardianproject/NetCipher/-/blob/master/netcipher-volley/src/info/guardianproject/netcipher/client/StrongHurlStack.java
+
+      HttpURLConnection result;
+      if (proxy == null) {
+        result = (HttpURLConnection) url.openConnection();
+      } else {
+        result = (HttpURLConnection) url.openConnection(proxy);
+      }
+
+      // following from original HurlStack
+      // Workaround for the M release HttpURLConnection not observing the
+      // HttpURLConnection.setFollowRedirects() property.
+      // https://code.google.com/p/android/issues/detail?id=194495
+      result.setInstanceFollowRedirects(HttpURLConnection.getFollowRedirects());
+
+      return(result);
   }
 }

@@ -358,7 +358,7 @@
   <string name="title_logout_demo">Vom Demo-Modus abmelden?</string>
   <string name="title_manage_master_data">Stammdaten verwalten</string>
   <string name="title_edit_description">Beschreibung bearbeiten</string>
-  <string name="title_input_number">Nummer-Eingabe</string>
+  <string name="title_input">Nummer-Eingabe</string>
   <string name="title_external_barcode_input">Externer Scanner</string>
   <string name="title_confirmation">Bestätigung</string>
 

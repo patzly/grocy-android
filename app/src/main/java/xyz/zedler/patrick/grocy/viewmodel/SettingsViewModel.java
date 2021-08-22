@@ -31,7 +31,7 @@ import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputNumberBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
@@ -68,6 +69,9 @@ public class SettingsViewModel extends BaseViewModel {
 
   private MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> getExternalScannerEnabledLive;
+  private final MutableLiveData<Boolean> needsRestartLive;
+  private final MutableLiveData<Boolean> torEnabledLive;
+  private final MutableLiveData<Boolean> proxyEnabledLive;
   private final MutableLiveData<String> shoppingModeUpdateIntervalTextLive;
   private ArrayList<Location> locations;
   private final MutableLiveData<String> presetLocationTextLive;
@@ -94,6 +98,9 @@ public class SettingsViewModel extends BaseViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     getExternalScannerEnabledLive = new MutableLiveData<>(getExternalScannerEnabled());
+    needsRestartLive = new MutableLiveData<>(false);
+    torEnabledLive = new MutableLiveData<>(getTorEnabled());
+    proxyEnabledLive = new MutableLiveData<>(getProxyEnabled());
     shoppingModeUpdateIntervalTextLive = new MutableLiveData<>(getShoppingModeUpdateIntervalText());
     presetLocationTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
     presetProductGroupTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
@@ -189,7 +196,8 @@ public class SettingsViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());
     bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
-    showBottomSheet(new InputNumberBottomSheet(), bundle);
+    bundle.putString(ARGUMENT.TYPE, NETWORK.LOADING_TIMEOUT);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public int getLoadingTimeout() {
@@ -338,7 +346,7 @@ public class SettingsViewModel extends BaseViewModel {
     ));
     bundle.putString(ARGUMENT.TYPE, SHOPPING_MODE.UPDATE_INTERVAL);
     bundle.putString(ARGUMENT.HINT, getString(R.string.property_seconds));
-    showBottomSheet(new InputNumberBottomSheet(), bundle);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public String getShoppingModeUpdateIntervalText() {
@@ -535,7 +543,7 @@ public class SettingsViewModel extends BaseViewModel {
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DUE_SOON_DAYS);
     bundle.putString(ARGUMENT.HINT, getString(R.string.property_days));
-    showBottomSheet(new InputNumberBottomSheet(), bundle);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public String getDueSoonDaysText() {
@@ -584,7 +592,7 @@ public class SettingsViewModel extends BaseViewModel {
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_PURCHASE_AMOUNT);
     bundle.putString(ARGUMENT.HINT, getString(R.string.property_amount));
-    showBottomSheet(new InputNumberBottomSheet(), bundle);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public String getDefaultPurchaseAmountText() {
@@ -647,7 +655,7 @@ public class SettingsViewModel extends BaseViewModel {
     }
     bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_CONSUME_AMOUNT);
     bundle.putString(ARGUMENT.HINT, getString(R.string.property_amount));
-    showBottomSheet(new InputNumberBottomSheet(), bundle);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public String getDefaultConsumeAmountText() {
@@ -702,8 +710,71 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setLoadingCircleEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NETWORK.LOADING_CIRCLE, enabled)
-        .apply();
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NETWORK.LOADING_CIRCLE, enabled).apply();
+  }
+
+  public MutableLiveData<Boolean> getNeedsRestartLive() {
+    return needsRestartLive;
+  }
+
+  public MutableLiveData<Boolean> getTorEnabledLive() {
+    return torEnabledLive;
+  }
+
+  public boolean getTorEnabled() {
+    return sharedPrefs.getBoolean(NETWORK.TOR, SETTINGS_DEFAULT.NETWORK.TOR);
+  }
+
+  public void setTorEnabled(boolean enabled) {
+    if (enabled != getTorEnabled()) needsRestartLive.setValue(true);
+    sharedPrefs.edit().putBoolean(NETWORK.TOR, enabled).apply();
+  }
+
+  public MutableLiveData<Boolean> getProxyEnabledLive() {
+    return proxyEnabledLive;
+  }
+
+  public boolean getProxyEnabled() {
+    return sharedPrefs.getBoolean(NETWORK.PROXY, SETTINGS_DEFAULT.NETWORK.PROXY);
+  }
+
+  public void setProxyEnabled(boolean enabled) {
+    if (enabled != getProxyEnabled()) needsRestartLive.setValue(true);
+    sharedPrefs.edit().putBoolean(NETWORK.PROXY, enabled).apply();
+  }
+
+  public String getProxyHost() {
+    return sharedPrefs.getString(NETWORK.PROXY_HOST, SETTINGS_DEFAULT.NETWORK.PROXY_HOST);
+  }
+
+  public void setProxyHost(String host) {
+    sharedPrefs.edit().putString(NETWORK.PROXY_HOST, host).apply();
+    needsRestartLive.setValue(true);
+  }
+
+  public void showProxyHostBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putString(ARGUMENT.TEXT, getProxyHost());
+    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.setting_proxy_host));
+    bundle.putString(ARGUMENT.TYPE, NETWORK.PROXY_HOST);
+    showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  public int getProxyPort() {
+    return sharedPrefs.getInt(NETWORK.PROXY_PORT, SETTINGS_DEFAULT.NETWORK.PROXY_PORT);
+  }
+
+  public void setProxyPort(int port) {
+    sharedPrefs.edit().putInt(NETWORK.PROXY_PORT, port).apply();
+    needsRestartLive.setValue(true);
+  }
+
+  public void showProxyPortBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(Constants.ARGUMENT.NUMBER, getProxyPort());
+    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.setting_proxy_port));
+    bundle.putString(ARGUMENT.TYPE, NETWORK.PROXY_PORT);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public ArrayList<String> getSupportedVersions() {
