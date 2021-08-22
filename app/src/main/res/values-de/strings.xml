@@ -359,7 +359,7 @@
   <string name="title_manage_master_data">Stammdaten verwalten</string>
   <string name="title_edit_description">Beschreibung bearbeiten</string>
   <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
-  <string name="title_input">Nummer-Eingabe</string>
+  <string name="title_input">Eingabe</string>
   <string name="title_external_barcode_input">Externer Scanner</string>
   <string name="title_confirmation">Bestätigung</string>
 
