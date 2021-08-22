@@ -200,15 +200,8 @@ public class MainActivity extends AppCompatActivity {
     );
 
     boolean useTor = sharedPrefs.getBoolean(NETWORK.TOR, SETTINGS_DEFAULT.NETWORK.TOR);
-    if (useTor) {
-      OrbotHelper orbotHelper = OrbotHelper.get(this);
-      netUtil.orbotListenForEnabled(
-          orbotHelper,
-          () -> getCurrentFragment().updateConnectivity(true)
-      );
-      if (!OrbotHelper.get(this).init()) {
-        orbotHelper.installOrbot(this);
-      }
+    if (useTor && !OrbotHelper.get(this).init()) {
+      OrbotHelper.get(this).installOrbot(this);
     }
 
     // API
