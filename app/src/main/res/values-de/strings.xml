@@ -199,7 +199,7 @@
   <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
   <string name="msg_logout_demo">Sie verwenden den öffentlichen Demo-Server <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (einmal täglich).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
   <string name="msg_logout_demo_short">Öffentlicher Demo-Server. Für Details tippen.</string>
-  <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration des Servers anzuwenden.</string>
+  <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration anzuwenden.</string>
   <string name="msg_shortcuts">Sie können bis zu 4 Verknüpfungen aktivieren:</string>
   <string name="msg_shortcuts_not_supported">Verknüpfungen werden auf dieser Android-Version nicht unterstützt.</string>
   <string name="msg_features">Intro erneut starten in \"Über\"</string>
