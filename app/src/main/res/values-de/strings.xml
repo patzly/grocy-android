@@ -358,6 +358,7 @@
   <string name="title_logout_demo">Vom Demo-Modus abmelden?</string>
   <string name="title_manage_master_data">Stammdaten verwalten</string>
   <string name="title_edit_description">Beschreibung bearbeiten</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">Nummer-Eingabe</string>
   <string name="title_external_barcode_input">Externer Scanner</string>
   <string name="title_confirmation">Bestätigung</string>
@@ -691,6 +692,7 @@
   <string name="category_scanner">Scanner</string>
   <string name="category_appearance">Erscheinungsbild</string>
   <string name="category_network">Netzwerk</string>
+  <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Verhalten</string>
   <string name="category_debugging">Debugging</string>
 
@@ -761,6 +763,14 @@
   <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
+  <string name="setting_tor">Tor verwenden</string>
+  <string name="setting_tor_description">Orbot wird benötigt</string>
+  <string name="setting_proxy">HTTP-Proxy aktivieren</string>
+  <string name="setting_proxy_description">HTTP-Proxy für alle Netzwerkanfragen konfigurieren</string>
+  <string name="setting_proxy_host">Proxy-Rechner</string>
+  <string name="setting_proxy_host_description">Ihr Proxy-Rechnername</string>
+  <string name="setting_proxy_port">Proxy-Port</string>
+  <string name="setting_proxy_port_description">Ihre Proxy-Portnummer</string>
   <string name="setting_synchronized">Die folgende Einstellung wird mit Ihrem Server synchronisiert.</string>
   <string name="settings_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
 
