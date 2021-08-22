@@ -64,6 +64,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
@@ -196,6 +198,18 @@ public class MainActivity extends AppCompatActivity {
         networkReceiver,
         new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
     );
+
+    boolean useTor = sharedPrefs.getBoolean(NETWORK.TOR, SETTINGS_DEFAULT.NETWORK.TOR);
+    if (useTor) {
+      OrbotHelper orbotHelper = OrbotHelper.get(this);
+      netUtil.orbotListenForEnabled(
+          orbotHelper,
+          () -> getCurrentFragment().updateConnectivity(true)
+      );
+      if (!OrbotHelper.get(this).init()) {
+        orbotHelper.installOrbot(this);
+      }
+    }
 
     // API
 

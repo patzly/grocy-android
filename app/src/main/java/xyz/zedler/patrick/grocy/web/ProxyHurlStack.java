@@ -51,6 +51,21 @@ public class ProxyHurlStack extends HurlStack {
 
   @Override
   protected HttpURLConnection createConnection(URL url) throws IOException {
-    return (HttpURLConnection) url.openConnection(proxy);
+      // source: https://gitlab.com/guardianproject/NetCipher/-/blob/master/netcipher-volley/src/info/guardianproject/netcipher/client/StrongHurlStack.java
+
+      HttpURLConnection result;
+      if (proxy == null) {
+        result = (HttpURLConnection) url.openConnection();
+      } else {
+        result = (HttpURLConnection) url.openConnection(proxy);
+      }
+
+      // following from original HurlStack
+      // Workaround for the M release HttpURLConnection not observing the
+      // HttpURLConnection.setFollowRedirects() property.
+      // https://code.google.com/p/android/issues/detail?id=194495
+      result.setInstanceFollowRedirects(HttpURLConnection.getFollowRedirects());
+
+      return(result);
   }
 }

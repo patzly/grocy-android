@@ -23,15 +23,19 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import androidx.browser.customtabs.CustomTabsIntent;
+import info.guardianproject.netcipher.proxy.OrbotHelper;
+import info.guardianproject.netcipher.proxy.StatusCallback;
 import xyz.zedler.patrick.grocy.R;
 
 public class NetUtil {
 
   private ConnectivityManager cm;
+  private boolean isOrbotReadyNow;
 
   public NetUtil(Activity activity) {
     if (activity == null) {
@@ -65,6 +69,47 @@ public class NetUtil {
       return true;
     } catch (ActivityNotFoundException ex) {
       return false;
+    }
+  }
+
+  public void orbotListenForEnabled(OrbotHelper orbotHelper, Runnable onEnabled) {
+    isOrbotReadyNow = false;
+    StatusCallback statusCallbackStep1 = new StatusCallback() {
+      @Override
+      public void onEnabled(Intent statusIntent) {
+        isOrbotReadyNow = true;
+        if (onEnabled != null) onEnabled.run();
+      }
+      @Override
+      public void onStarting() { }
+      @Override
+      public void onStopping() { }
+      @Override
+      public void onDisabled() { }
+      @Override
+      public void onStatusTimeout() { }
+      @Override
+      public void onNotYetInstalled() { }
+    };
+    orbotHelper.addStatusCallback(statusCallbackStep1);
+    orbotHelper.removeStatusCallback(statusCallbackStep1);
+    if (!isOrbotReadyNow) {
+      orbotHelper.addStatusCallback(new StatusCallback() {
+        @Override
+        public void onEnabled(Intent statusIntent) {
+          if (onEnabled != null) onEnabled.run();
+        }
+        @Override
+        public void onStarting() { }
+        @Override
+        public void onStopping() { }
+        @Override
+        public void onDisabled() { }
+        @Override
+        public void onStatusTimeout() { }
+        @Override
+        public void onNotYetInstalled() { }
+      });
     }
   }
 }

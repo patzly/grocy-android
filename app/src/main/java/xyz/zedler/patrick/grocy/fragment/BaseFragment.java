@@ -80,9 +80,6 @@ public class BaseFragment extends Fragment {
     return false;
   }
 
-  public void addBarcode(String barcode) {
-  }
-
   public void clearFields() {
   }
 
