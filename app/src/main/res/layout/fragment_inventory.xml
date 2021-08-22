@@ -223,7 +223,7 @@
 
               <View
                 android:id="@+id/divider_drawer_shopping_list"
-                style="@style/Theme.Grocy.Divider" />
+                style="@style/Widget.Grocy.Divider" />
 
             </LinearLayout>
 
