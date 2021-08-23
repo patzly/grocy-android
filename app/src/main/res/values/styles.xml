@@ -28,7 +28,7 @@
     parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
     <item name="android:fontFamily">@font/jost_bold</item>
     <item name="android:textSize">14.5sp</item>
-    <item name="cornerRadius">6dp</item>
+    <item name="cornerRadius">8dp</item>
   </style>
 
   <!-- TOOLBAR MENU BUTTON -->
