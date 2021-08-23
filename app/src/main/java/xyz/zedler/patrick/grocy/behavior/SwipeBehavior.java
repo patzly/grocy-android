@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.BitmapUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
@@ -113,7 +113,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     super(0, ItemTouchHelper.RIGHT);
     this.context = context;
     this.buttons = new ArrayList<>();
-    buttonWidth = UnitUtil.getDp(context, 66);
+    buttonWidth = UnitUtil.dpToPx(context, 66);
     GestureDetector.SimpleOnGestureListener gestureListener
         = new GestureDetector.SimpleOnGestureListener() {
       @Override
@@ -297,9 +297,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     Paint paint = new Paint();
     paint.setColor(ContextCompat.getColor(context, R.color.retro_green_bg_white));
-    if (dX < UnitUtil.getDp(context, 24)) {
+    if (dX < UnitUtil.dpToPx(context, 24)) {
       if (dX > 0) {
-        float friction = dX / UnitUtil.getDp(context, 24);
+        float friction = dX / UnitUtil.dpToPx(context, 24);
         paint.setAlpha((int) (255 * friction));
       } else {
         paint.setAlpha(0);
@@ -386,7 +386,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     ) {
       // push actions towards each other if there are two
       float offsetX = count == 2
-          ? nr == 0 ? UnitUtil.getDp(context, 4) : -UnitUtil.getDp(context, 4)
+          ? nr == 0 ? UnitUtil.dpToPx(context, 4) : -UnitUtil.dpToPx(context, 4)
           : 0;
 
       // DRAW ROUND BACKGROUND
@@ -397,7 +397,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       canvas.drawCircle(
           rect.centerX() + offsetX,
           rect.centerY(),
-          UnitUtil.getDp(
+          UnitUtil.dpToPx(
               context,
               context.getResources().getInteger(R.integer.swipe_action_bg_radius)
           ),
@@ -413,7 +413,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
               PorterDuff.Mode.SRC_IN
           )
       );
-      Bitmap icon = BitmapUtil.getFromDrawable(context, resId);
+      Bitmap icon = ResUtil.getBitmapFromDrawable(context, resId);
       if (icon != null) {
         canvas.drawBitmap(
             icon,

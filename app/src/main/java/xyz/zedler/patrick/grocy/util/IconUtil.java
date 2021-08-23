@@ -30,6 +30,10 @@ import android.view.View;
 import android.widget.ImageView;
 import androidx.annotation.IdRes;
 
+/**
+ * Use ViewUtil.startIcon() instead
+ */
+@Deprecated
 public class IconUtil {
 
   private final static String TAG = IconUtil.class.getSimpleName();

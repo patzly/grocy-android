@@ -24,7 +24,7 @@ import android.util.TypedValue;
 
 public class UnitUtil {
 
-  public static int getDp(Context context, float dp) {
+  public static int dpToPx(Context context, float dp) {
     return (int) TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         dp,
@@ -32,7 +32,7 @@ public class UnitUtil {
     );
   }
 
-  public static int getSp(Context context, float sp) {
+  public static int spToPx(Context context, float sp) {
     return (int) TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         sp,

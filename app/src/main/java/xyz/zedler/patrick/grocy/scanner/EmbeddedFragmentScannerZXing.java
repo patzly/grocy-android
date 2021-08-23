@@ -72,14 +72,14 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     int width;
     int height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UnitUtil.getDp(fragment.requireContext(), 250);
-      height = UnitUtil.getDp(fragment.requireContext(), 250);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 250);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 250);
     } else if (qrCodeFormat) {
-      width = UnitUtil.getDp(fragment.requireContext(), 180);
-      height = UnitUtil.getDp(fragment.requireContext(), 180);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 180);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UnitUtil.getDp(fragment.requireContext(), 350);
-      height = UnitUtil.getDp(fragment.requireContext(), 160);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 350);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 160);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
       LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);

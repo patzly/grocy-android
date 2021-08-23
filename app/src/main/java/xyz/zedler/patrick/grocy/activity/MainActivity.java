@@ -116,18 +116,6 @@ public class MainActivity extends AppCompatActivity {
   private boolean debug;
 
   @Override
-  protected void attachBaseContext(Context base) {
-    Locale userLocale = LocaleUtil.getUserLocale(base);
-    Locale.setDefault(userLocale);
-    Resources resources = base.getResources();
-    Configuration configuration = resources.getConfiguration();
-    configuration.setLocale(userLocale);
-    resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-
-    super.attachBaseContext(base.createConfigurationContext(configuration));
-  }
-
-  @Override
   protected void onCreate(Bundle savedInstanceState) {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -288,6 +276,26 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  @Override
+  protected void onDestroy() {
+    if (networkReceiver != null) {
+      unregisterReceiver(networkReceiver);
+    }
+    super.onDestroy();
+  }
+
+  @Override
+  protected void attachBaseContext(Context base) {
+    Locale userLocale = LocaleUtil.getUserLocale(base);
+    Locale.setDefault(userLocale);
+    Resources resources = base.getResources();
+    Configuration configuration = resources.getConfiguration();
+    configuration.setLocale(userLocale);
+    resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+
+    super.attachBaseContext(base.createConfigurationContext(configuration));
+  }
+
   public void updateStartDestination() {
     NavInflater navInflater = navController.getNavInflater();
     NavGraph graph = navInflater.inflate(R.navigation.navigation_main);
@@ -300,14 +308,6 @@ public class MainActivity extends AppCompatActivity {
       graph.setStartDestination(R.id.overviewStartFragment);
     }
     navController.setGraph(graph);
-  }
-
-  @Override
-  protected void onDestroy() {
-    if (networkReceiver != null) {
-      unregisterReceiver(networkReceiver);
-    }
-    super.onDestroy();
   }
 
   public BottomAppBarRefreshScrollBehavior getScrollBehavior() {
