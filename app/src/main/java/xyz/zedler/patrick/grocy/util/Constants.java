@@ -177,8 +177,18 @@ public final class Constants {
       public final static boolean FRONT_CAM = false;
       public final static boolean SCANNER_FORMAT_2D = false;
       public final static Set<String> BARCODE_FORMATS = new HashSet<>(Arrays.asList(
+          BarcodeFormats.BARCODE_FORMAT_CODE128,
+          BarcodeFormats.BARCODE_FORMAT_CODE39,
+          BarcodeFormats.BARCODE_FORMAT_CODE93,
+          BarcodeFormats.BARCODE_FORMAT_CODABAR,
           BarcodeFormats.BARCODE_FORMAT_EAN13,
-          BarcodeFormats.BARCODE_FORMAT_EAN8
+          BarcodeFormats.BARCODE_FORMAT_EAN8,
+          BarcodeFormats.BARCODE_FORMAT_QR,
+          BarcodeFormats.BARCODE_FORMAT_PDF417,
+          BarcodeFormats.BARCODE_FORMAT_AZTEC,
+          BarcodeFormats.BARCODE_FORMAT_MATRIX,
+          BarcodeFormats.BARCODE_FORMAT_RSS14,
+          BarcodeFormats.BARCODE_FORMAT_RSSE
       ));
       public final static boolean EXTERNAL_SCANNER = false;
     }
