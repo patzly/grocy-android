@@ -199,7 +199,7 @@
   <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
   <string name="msg_logout_demo">Sie verwenden den öffentlichen Demo-Server <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (einmal täglich).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
   <string name="msg_logout_demo_short">Öffentlicher Demo-Server. Für Details tippen.</string>
-  <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration des Servers anzuwenden.</string>
+  <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration anzuwenden.</string>
   <string name="msg_shortcuts">Sie können bis zu 4 Verknüpfungen aktivieren:</string>
   <string name="msg_shortcuts_not_supported">Verknüpfungen werden auf dieser Android-Version nicht unterstützt.</string>
   <string name="msg_features">Intro erneut starten in \"Über\"</string>
@@ -244,7 +244,7 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Sie können einen Barcode-Scanner für das Barcode-Scannen mit der Kamera wählen.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n- Manchmal falsche Ergebnisse\n- Barcodes müssen immer horizontal ausgerichtet sein\n- Kontrast und Schärfe müssen gut sein\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n- Manchmal falsche Ergebnisse\n- Barcodes müssen horizontal ausgerichtet sein\n- Benötigt guten Kontrast und gute Schärfe\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_info_mlkit">ML Kit benutzt maschinelles Lernen mit den neuesten Technologien für das Barcode-Scannen.\n- Fast nie falschen Ergebnisse\n- Ausrichtung der Barcodes spielt keine Rolle\n- Funktioniert sogar mit unscharfen Barcodes oder mit wenig Kontrast\n- Ausführung komplett auf dem Gerät\n- Framework ist nicht open source</string>
   <string name="msg_help_external_scanner_ready">Sie können einen externen Scanner für das Feld unten verwenden, während es fokussiert und leer ist.</string>
@@ -358,7 +358,8 @@
   <string name="title_logout_demo">Vom Demo-Modus abmelden?</string>
   <string name="title_manage_master_data">Stammdaten verwalten</string>
   <string name="title_edit_description">Beschreibung bearbeiten</string>
-  <string name="title_input">Nummer-Eingabe</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
+  <string name="title_input">Eingabe</string>
   <string name="title_external_barcode_input">Externer Scanner</string>
   <string name="title_confirmation">Bestätigung</string>
 
@@ -691,6 +692,7 @@
   <string name="category_scanner">Scanner</string>
   <string name="category_appearance">Erscheinungsbild</string>
   <string name="category_network">Netzwerk</string>
+  <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Verhalten</string>
   <string name="category_debugging">Debugging</string>
 
@@ -761,6 +763,14 @@
   <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
+  <string name="setting_tor">Tor verwenden</string>
+  <string name="setting_tor_description">Orbot wird benötigt</string>
+  <string name="setting_proxy">HTTP-Proxy aktivieren</string>
+  <string name="setting_proxy_description">HTTP-Proxy für alle Netzwerkanfragen konfigurieren</string>
+  <string name="setting_proxy_host">Proxy-Rechner</string>
+  <string name="setting_proxy_host_description">Ihr Proxy-Rechnername</string>
+  <string name="setting_proxy_port">Proxy-Port</string>
+  <string name="setting_proxy_port_description">Ihre Proxy-Portnummer</string>
   <string name="setting_synchronized">Die folgende Einstellung wird mit Ihrem Server synchronisiert.</string>
   <string name="settings_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
 
