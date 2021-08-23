@@ -113,6 +113,8 @@
   <string name="action_play_store" translatable="false">Play Store</string>
   <!-- Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="action_github" translatable="false">GitHub</string>
+  <string name="action_share">Share</string>
+  <string name="action_share_description">Tell your friends about Grocy Android</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -293,6 +295,7 @@
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
   <string name="msg_help_home_assistant_login_token">You can create an long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
+  <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API key not working</string>
   <string name="error_orbot_not_installed">Orbot is not installed</string>

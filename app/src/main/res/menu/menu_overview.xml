@@ -27,6 +27,11 @@
     app:showAsAction="never" />
 
   <item
+    android:id="@+id/action_feedback"
+    android:title="@string/action_feedback"
+    app:showAsAction="never" />
+
+  <item
     android:id="@+id/action_changelog"
     android:title="@string/info_changelog"
     app:showAsAction="never" />

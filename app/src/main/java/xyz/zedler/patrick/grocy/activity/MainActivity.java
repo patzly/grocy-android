@@ -96,6 +96,7 @@ import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
       if (clickUtil.isDisabled()) {
         return;
       }
-      IconUtil.start(binding.bottomAppBar.getNavigationIcon());
+      ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
       navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
     });
 
@@ -431,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
     binding.fabMain.setOnClickListener(v -> {
       Drawable drawable = binding.fabMain.getDrawable();
       if (drawable instanceof AnimationDrawable) {
-        IconUtil.start(drawable);
+        ViewUtil.startIcon(drawable);
       }
       onClick.run();
     });
@@ -441,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
       }
       Drawable drawable = binding.fabMain.getDrawable();
       if (drawable instanceof AnimationDrawable) {
-        IconUtil.start(drawable);
+        ViewUtil.startIcon(drawable);
       }
       onLongClick.run();
       return true;

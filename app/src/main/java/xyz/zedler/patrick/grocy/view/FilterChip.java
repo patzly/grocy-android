@@ -40,7 +40,7 @@ import androidx.core.content.ContextCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.google.android.material.card.MaterialCardView;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FilterChip extends LinearLayout {
 
@@ -149,7 +149,7 @@ public class FilterChip extends LinearLayout {
     frameLayoutIcon.setLayoutParams(new LayoutParams(dp(isActive ? 24 : 0), dp(24)));
     if (active) {
       imageViewIcon.setImageResource(R.drawable.ic_round_filter_list_out_anim);
-      IconUtil.reset(imageViewIcon.getDrawable());
+      ViewUtil.resetAnimatedIcon(imageViewIcon);
     }
   }
 

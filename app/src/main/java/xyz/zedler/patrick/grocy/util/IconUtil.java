@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,19 +86,6 @@ public class IconUtil {
     }
     try {
       ((Animatable) drawable).start();
-    } catch (ClassCastException cla) {
-      Log.e(TAG, "start() requires AnimVectorDrawable");
-    }
-  }
-
-  public static void reset(Drawable drawable) {
-    if (drawable == null) {
-      return;
-    }
-    try {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        ((AnimatedVectorDrawable) drawable).reset();
-      }
     } catch (ClassCastException cla) {
       Log.e(TAG, "start() requires AnimVectorDrawable");
     }
