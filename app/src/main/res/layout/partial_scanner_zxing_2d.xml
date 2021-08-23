@@ -47,7 +47,7 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/transparent"
-    app:strokeWidth="4dp"
+    app:strokeWidth="5dp"
     app:strokeColor="@color/grey800" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
