@@ -213,6 +213,7 @@
   <string name="msg_restart">The app must be restarted to apply the current configuration. Do you want to restart it now?</string>
   <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
   <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
+  <string name="msg_barcode_formats">You can improve the speed of the barcode detector by configuring it to only detect those formats which you expect to read.</string>
   <string name="msg_features">Start intro again in \"About\"</string>
   <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
@@ -708,6 +709,8 @@
   <string name="category_stock">Stock</string>
   <string name="category_server">Server</string>
   <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_camera">Camera scanner</string>
+  <string name="category_scanner_external">External scanner</string>
   <string name="category_appearance">Appearance</string>
   <string name="category_network">Network</string>
   <string name="category_network_proxy">Proxy</string>
@@ -737,6 +740,10 @@
   <string name="setting_use_front_cam_description">For barcode scanning</string>
   <string name="setting_use_2d_scanner_format">Use 2D barcode scanner format</string>
   <string name="setting_use_2d_scanner_format_description">Square shape for QR codes</string>
+  <string name="setting_barcode_formats">Barcode formats</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Limit to: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Not restricted</string>
   <string name="setting_external_support">External scanner support</string>
   <string name="setting_external_support_description">Via USB or Bluetooth</string>
   <string name="setting_reload_config">Reload configuration</string>
@@ -791,6 +798,22 @@
   <string name="setting_proxy_port_description">Your proxy\'s port number</string>
   <string name="setting_synchronized">The option below is synchronized with your server.</string>
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
+
+  <string name="barcode_format_code128">Code 128</string>
+  <string name="barcode_format_code39">Code 39</string>
+  <string name="barcode_format_code93">Code 93</string>
+  <string name="barcode_format_codabar">Codabar</string>
+  <string name="barcode_format_ean13">EAN-13</string>
+  <string name="barcode_format_ean8">EAN-8</string>
+  <string name="barcode_format_itf">ITF</string>
+  <string name="barcode_format_upca">UPC-A</string>
+  <string name="barcode_format_upce">UPC-E</string>
+  <string name="barcode_format_qr">QR Code</string>
+  <string name="barcode_format_pdf417">PDF417</string>
+  <string name="barcode_format_aztec">Aztec</string>
+  <string name="barcode_format_matrix">Data Matrix</string>
+  <string name="barcode_format_rss14">RSS-14</string>
+  <string name="barcode_format_rsse">RSS Expanded</string>
 
   <string name="license_conscrypt" translatable="false">Conscrypt</string>
   <string name="license_author_google" translatable="false">Google</string>
