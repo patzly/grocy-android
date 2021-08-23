@@ -48,7 +48,6 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
           fragment,
           containerScanner,
           barcodeListener,
-          viewfinderMaskColorZXing,
           qrCodeFormat,
           takeSmallQrCodeFormat
       );

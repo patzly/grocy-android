@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
@@ -59,6 +58,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
 import com.google.android.material.card.MaterialCardView;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.Barcode;
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,8 +66,8 @@ import java.util.concurrent.ExecutionException;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -81,6 +81,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final GraphicOverlay graphicOverlay;
   private final PreviewView previewView;
   private boolean needUpdateGraphicOverlayImageSourceInfo;
+  private final BarcodeScannerOptions barcodeScannerOptions;
   private final LiveData<ProcessCameraProvider> processCameraProvider;
   private boolean isScannerVisible;
   private final int lensFacing;
@@ -94,7 +95,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
       Fragment fragment,
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
-      @ColorRes int viewfinderMaskColorZXing,
       boolean qrCodeFormat,
       boolean takeSmallQrCodeFormat
   ) {
@@ -151,6 +151,10 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     cardView.setStrokeColor(strokeColor);
     cardView.setRadius(UnitUtil.dpToPx(fragment.requireContext(), 10));
     containerScanner.addView(cardView);
+
+    barcodeScannerOptions = new BarcodeScannerOptions.Builder()
+        .setBarcodeFormats(Barcode.FORMAT_PDF417)
+        .build();
 
     fragment.registerForActivityResult(
         new ActivityResultContracts.RequestPermission(),
@@ -384,6 +388,10 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
     Log.i(TAG, "Permission NOT granted: " + permission);
     return true;
+  }
+
+  private int[] getEnabledBarcodeFormats() {
+    return new int[]{};
   }
 
   public static final class CameraXViewModel extends AndroidViewModel {
