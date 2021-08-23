@@ -255,7 +255,6 @@
   <string name="msg_help_home_assistant_login_server">No campo abaixo também pode introduzir o URL da sua instância Nabu Casa se estiver a usar esse serviço. Toque neste cartão para visitar o website da Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Pode criar um token the longa duração no seu perfil de utilizador do Home Assistant (última secção). Seleccione aqui para abrir o URL acima.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Volte atrás ou toque nesta carta para ler um código de barras que preencha os campos abaixo.</string>
-
   <string name="error_api_not_working">API key não está a funcionar</string>
   <string name="error_orbot_not_installed">Orbot não está instalado</string>
   <string name="error_select_product">Seleccione um produto</string>
@@ -345,6 +344,7 @@
   <string name="title_logout_demo">Sair o modo de demonstração?</string>
   <string name="title_manage_master_data">Gerir dados mestre</string>
   <string name="title_edit_description">Editar descrição</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">Introduzir número</string>
   <string name="title_external_barcode_input">Scanner externo</string>
   <string name="title_confirmation">Confirmação</string>
