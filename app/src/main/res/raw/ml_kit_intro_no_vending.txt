@@ -13,8 +13,7 @@ Both barcode scanners work completely offline.
 
 To use ML Kit, you need to install the app "Grocy Android: Unlock Key" on your device. This requires either a one-time purchase in the Google Play Store or downloading the APK from GitHub. Why have we decided to do this?
 
-You can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far.
-However, because the development takes a lot of time, work and motivation, we now have included this unlock feature. Google keeps 15% of the price after the VAT have been subtracted.
+You can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far. However, because the development takes a lot of time, work and motivation, we now have included this unlock feature.
 Surely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!
 
 There would also be donations, that's true. Unfortunately, Google prohibits any form of payment if there is no service in return.
