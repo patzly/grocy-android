@@ -2,6 +2,7 @@
 - New: Support for server version 3.1.1 (v3.1.0 is not supported)
 - New: (not F-Droid) Add ML Kit as better camera barcode scanner
 - New: Option to use 2D barcode format for scanner everywhere (#265)
+- New: Option to restrict formats for faster barcode detection (default: only EAN)
 - New: Support for grocycodes (all product fields with scanner) (#438)
 - New: HTTP proxy and Tor (Orbox) support (#130)
 - Improved: Don't assume port 8123 during Home Assistant setup (#413)
