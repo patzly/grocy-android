@@ -254,10 +254,20 @@
   <string name="msg_help_barcode_scanner_intro" translatable="false">In addition to the barcode scanner ZXing (\"zebra crossing\"), we also have included ML Kit as another barcode scanner in the app variant available on Google Play and on GitHub. The variant on F-Droid does not have this scanner because its code is not open source.\n
     \n<b>Advantages of ML Kit over ZXing:</b>\n- Uses machine learning\n- Super-fast scanning\n- Latest technologies\n- Almost no false results\n- Orientation of barcodes does not matter\n- Even works with fuzzy or low contrast barcodes\n
     \nBoth barcode scanners work completely offline.\n
-    \nTo use ML Kit, you need to install the app \"Grocy Android: Unlock Key\" on your device. This requires either a one-time purchase in the Play Store or downloading the APK from GitHub. Why we have made this decision?\n
-    \nYou can enjoy this app completely ad-free. This means that we have not received anything for our work so far.\nHowever, because the development takes a lot of time, work and motivation, we would be very happy if you buy the unlock app.\nThe price is 8.05€ without taxes (these are added depending on your region). Google keeps 15% of that.\nSurely the earned money does not reflect the effort, but we are motivated to further improve the app!\n
+    \nTo use ML Kit, you need to install the app \"Grocy Android: Unlock Key\" on your device. This requires either a one-time purchase in the Play Store or downloading the APK from GitHub. Why have we decided to do this?\n
+    \nYou can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far.\nHowever, because the development takes a lot of time, work and motivation, we would be very happy if you buy the unlock app if Grocy Android is worth the money to you.\nGoogle keeps 15% of the price after the VAT have been subtracted.\nSurely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!\n
     \nThere would also be donations, that\'s true. Unfortunately, Google prohibits any form of payment if there is no service in return. That\'s why we have now included this unlock feature.\n
-    \nIf you don\'t have Google Play Services on your device or if you don\'t want to support us, you can also download the unlock app APK for free on GitHub. Grocy Android and the unlock app are open source and will remain so forever.\n
+    \nIf you don\'t have Google Play Services on your device or if you don\'t want to support us, you can download the unlock app for free on GitHub. Grocy Android and the unlock app are open source and will remain so forever.\n
+    \nLet\'s go, thanks in advance!\nDominic &amp; Patrick Zedler
+  </string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_intro_no_vending" translatable="false">In addition to the barcode scanner ZXing (\"zebra crossing\"), we also have included ML Kit as another barcode scanner in the app variant available on Google Play and on GitHub. The variant on F-Droid does not have this scanner because its code is not open source.\n
+    \n<b>Advantages of ML Kit over ZXing:</b>\n- Uses machine learning\n- Super-fast scanning\n- Latest technologies\n- Almost no false results\n- Orientation of barcodes does not matter\n- Even works with fuzzy or low contrast barcodes\n
+    \nBoth barcode scanners work completely offline.\n
+    \nTo use ML Kit, you need to install the app \"Grocy Android: Unlock Key\" on your device. This requires either a one-time purchase in the Google Play Store or downloading the APK from GitHub. Why have we decided to do this?\n
+    \nYou can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far.\nHowever, because the development takes a lot of time, work and motivation, we now have included this unlock feature.\nGoogle keeps 15% of the price after the VAT have been subtracted.\nSurely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!\n
+    \nThere would also be donations, that\'s true. Unfortunately, Google prohibits any form of payment if there is no service in return.\n
+    \nBecause you don\'t have Google Play Services on your device, you can download the unlock app for free on GitHub. Grocy Android and the unlock app are open source and will remain so forever.\n
     \nLet\'s go, thanks in advance!\nDominic &amp; Patrick Zedler
   </string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
