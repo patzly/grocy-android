@@ -76,14 +76,22 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    boolean isPlayStoreInstalled = UnlockUtil.isPlayStoreInstalled(activity);
     binding.textMlKitIntro.setText(
         ResUtil.getBulletList(
             activity,
             "- ",
-            ResUtil.getRawText(activity, R.raw.ml_kit_intro),
+            ResUtil.getRawText(
+                activity,
+                isPlayStoreInstalled ? R.raw.ml_kit_intro : R.raw.ml_kit_intro_no_vending
+            ),
             ""
         )
     );
+
+    binding.buttonVending.setVisibility(isPlayStoreInstalled ? View.VISIBLE : View.GONE);
+    binding.buttonGithub.setVisibility(isPlayStoreInstalled ? View.VISIBLE : View.GONE);
+    binding.buttonGithubNoVending.setVisibility(isPlayStoreInstalled ? View.GONE : View.VISIBLE);
 
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {

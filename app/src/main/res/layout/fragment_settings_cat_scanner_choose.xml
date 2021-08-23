@@ -146,6 +146,7 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_github"
           style="@style/Widget.Grocy.Button.TextButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -156,6 +157,17 @@
           clickUtil="@{clickUtil}"/>
 
         <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_github_no_vending"
+          style="@style/Widget.Grocy.Button.UnelevatedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/action_github"
+          android:onClick="@{() -> fragment.openGitHub()}"
+          app:backgroundTint="@color/retro_green_bg_white"
+          clickUtil="@{clickUtil}"/>
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_vending"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

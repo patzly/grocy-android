@@ -42,6 +42,15 @@ public class UnlockUtil {
     return false;
   }
 
+  public static boolean isPlayStoreInstalled(Context context){
+    try {
+      context.getPackageManager().getPackageInfo("com.android.vending", 0);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
   public static void checkIfPurchased(AppCompatActivity activity, SharedPreferences sharedPrefs) {
     ActivityResultLauncher<Intent> launcher;
     launcher = activity.registerForActivityResult(
