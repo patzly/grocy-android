@@ -271,7 +271,6 @@
   <string name="msg_help_home_assistant_login_server">В поле ниже вы также можете ввести URL-адрес вашего облака Nabu Casa, если вы используете эту службу. Нажмите на эту карточку, чтобы перейти на сайт Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Вы можете создать долгосрочный токен доступа в настройках профиля Home Assistant (последний раздел). Нажмите здесь, чтобы открыть URL-адрес сверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Вернитесь назад или нажмите на эту карточку, чтобы отсканировать QR-код, который заполняет поля ниже.</string>
-
   <string name="error_api_not_working">Ключ API  не работает</string>
   <string name="error_orbot_not_installed">Orbot не установлен</string>
   <string name="error_select_product">Выберите продукт</string>
@@ -361,6 +360,7 @@
   <string name="title_logout_demo">Выйти из демо режима?</string>
   <string name="title_manage_master_data">Управление основными данными</string>
   <string name="title_edit_description">Изменить описание</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">Ввод числа</string>
   <string name="title_external_barcode_input">Внешний сканер</string>
   <string name="title_confirmation">Подтверждение</string>
