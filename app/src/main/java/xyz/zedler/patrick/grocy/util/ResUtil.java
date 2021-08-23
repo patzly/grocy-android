@@ -124,44 +124,6 @@ public class ResUtil {
     return builder;
   }
 
-  public static CharSequence getBulletList(Context context, String prefixToReplace, String text) {
-    if (context == null || text == null) {
-      return null;
-    }
-
-    // BulletSpan doesn't support RTL, use original text instead
-    int direction = context.getResources().getConfiguration().getLayoutDirection();
-    if (direction == View.LAYOUT_DIRECTION_RTL) {
-      return Html.fromHtml(text);
-    }
-
-    int color = ContextCompat.getColor(context, R.color.on_background);
-    int margin = UnitUtil.spToPx(context, 6);
-
-    String[] lines = text.split("\n");
-    SpannableStringBuilder builder = new SpannableStringBuilder();
-    for (int i = 0; i < lines.length; i++) {
-      String line = lines[i] + (i < lines.length - 1 ? "\n" : "");
-      if (!line.startsWith(prefixToReplace)) {
-        builder.append(line);
-        continue;
-      }
-      line = line.substring(prefixToReplace.length());
-
-      BulletSpan bulletSpan;
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        bulletSpan = new BulletSpan(margin, color, UnitUtil.spToPx(context, 2));
-      } else {
-        bulletSpan = new BulletSpan(margin, color);
-      }
-
-      Spannable spannable = new SpannableString(Html.fromHtml(line));
-      spannable.setSpan(bulletSpan, 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-      builder.append(spannable);
-    }
-    return builder;
-  }
-
   public static Bitmap getBitmapFromDrawable(Context context, @DrawableRes int resId) {
     Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
     if (drawable != null) {
