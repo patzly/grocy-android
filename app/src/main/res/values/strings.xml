@@ -799,21 +799,21 @@
   <string name="setting_synchronized">The option below is synchronized with your server.</string>
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
 
-  <string name="barcode_format_code128">Code 128</string>
-  <string name="barcode_format_code39">Code 39</string>
-  <string name="barcode_format_code93">Code 93</string>
-  <string name="barcode_format_codabar">Codabar</string>
-  <string name="barcode_format_ean13">EAN-13</string>
-  <string name="barcode_format_ean8">EAN-8</string>
-  <string name="barcode_format_itf">ITF</string>
-  <string name="barcode_format_upca">UPC-A</string>
-  <string name="barcode_format_upce">UPC-E</string>
-  <string name="barcode_format_qr">QR Code</string>
-  <string name="barcode_format_pdf417">PDF417</string>
-  <string name="barcode_format_aztec">Aztec</string>
-  <string name="barcode_format_matrix">Data Matrix</string>
-  <string name="barcode_format_rss14">RSS-14</string>
-  <string name="barcode_format_rsse">RSS Expanded</string>
+  <string name="barcode_format_code128" translatable="false">Code 128</string>
+  <string name="barcode_format_code39" translatable="false">Code 39</string>
+  <string name="barcode_format_code93" translatable="false">Code 93</string>
+  <string name="barcode_format_codabar" translatable="false">Codabar</string>
+  <string name="barcode_format_ean13" translatable="false">EAN-13</string>
+  <string name="barcode_format_ean8" translatable="false">EAN-8</string>
+  <string name="barcode_format_itf" translatable="false">ITF</string>
+  <string name="barcode_format_upca" translatable="false">UPC-A</string>
+  <string name="barcode_format_upce" translatable="false">UPC-E</string>
+  <string name="barcode_format_qr" translatable="false">QR Code</string>
+  <string name="barcode_format_pdf417" translatable="false">PDF417</string>
+  <string name="barcode_format_aztec" translatable="false">Aztec</string>
+  <string name="barcode_format_matrix" translatable="false">Data Matrix</string>
+  <string name="barcode_format_rss14" translatable="false">RSS-14</string>
+  <string name="barcode_format_rsse" translatable="false">RSS Expanded</string>
 
   <string name="license_conscrypt" translatable="false">Conscrypt</string>
   <string name="license_author_google" translatable="false">Google</string>
