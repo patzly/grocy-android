@@ -22,21 +22,15 @@ package xyz.zedler.patrick.grocy.util;
 import android.os.SystemClock;
 import android.view.View;
 
-/**
- * Use ViewUtil.isClickEnabled() instead
- */
-@Deprecated
 public class ClickUtil {
 
   private long idle = 500;
   private long lastClick;
 
-  @Deprecated
   public ClickUtil() {
     lastClick = 0;
   }
 
-  @Deprecated
   public ClickUtil(long idle) {
     lastClick = 0;
     this.idle = idle;
@@ -46,7 +40,6 @@ public class ClickUtil {
     lastClick = SystemClock.elapsedRealtime();
   }
 
-  @Deprecated
   public boolean isDisabled() {
     if (SystemClock.elapsedRealtime() - lastClick < idle) {
       return true;
@@ -55,7 +48,6 @@ public class ClickUtil {
     return false;
   }
 
-  @Deprecated
   public static void setOnClickListeners(View.OnClickListener listener, View... views) {
     for (View view : views) {
       view.setOnClickListener(listener);
