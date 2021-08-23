@@ -100,7 +100,7 @@ public class ResUtil {
     for (int i = 0; i < lines.length; i++) {
       String line = lines[i] + (i < lines.length - 1 ? "\n" : "");
       if (!line.startsWith(prefixToReplace)) {
-        builder.append(line);
+        builder.append(Html.fromHtml(line.replaceAll("\n", "<br/>")));
         continue;
       }
       line = line.substring(prefixToReplace.length());

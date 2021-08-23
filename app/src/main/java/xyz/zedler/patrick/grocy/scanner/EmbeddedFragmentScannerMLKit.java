@@ -67,7 +67,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
-import xyz.zedler.patrick.grocy.util.VibratorUtil;
+import xyz.zedler.patrick.grocy.util.HapticUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -107,14 +107,14 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     int width;
     int height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UnitUtil.getDp(fragment.requireContext(), 250);
-      height = UnitUtil.getDp(fragment.requireContext(), 250);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 250);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 250);
     } else if (qrCodeFormat) {
-      width = UnitUtil.getDp(fragment.requireContext(), 180);
-      height = UnitUtil.getDp(fragment.requireContext(), 180);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 180);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UnitUtil.getDp(fragment.requireContext(), 350);
-      height = UnitUtil.getDp(fragment.requireContext(), 160);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 350);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 160);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
       LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
@@ -130,7 +130,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     // fill container with necessary views
     int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
     LayoutParams layoutParamsPreview = new LayoutParams(matchParent, matchParent);
-    int size16dp = UnitUtil.getDp(fragment.requireContext(), 16);
+    int size16dp = UnitUtil.dpToPx(fragment.requireContext(), 16);
     layoutParamsPreview.setMargins(size16dp, size16dp, size16dp, size16dp);
     previewView = new PreviewView(fragment.requireContext());
     previewView.setLayoutParams(layoutParamsPreview);
@@ -139,17 +139,17 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     graphicOverlay.setLayoutParams(layoutParamsPreview);
     containerScanner.addView(graphicOverlay);
     LayoutParams layoutParamsCard = new LayoutParams(matchParent, matchParent);
-    int size12dp = UnitUtil.getDp(fragment.requireContext(), 12);
+    int size12dp = UnitUtil.dpToPx(fragment.requireContext(), 12);
     layoutParamsCard.setMargins(size12dp, size12dp, size12dp, size12dp);
     MaterialCardView cardView = new MaterialCardView(fragment.requireContext());
     cardView.setLayoutParams(layoutParamsCard);
     cardView.setCardElevation(0);
     int backgroundColor = ContextCompat.getColor(fragment.requireContext(), R.color.transparent);
     cardView.setCardBackgroundColor(backgroundColor);
-    cardView.setStrokeWidth(UnitUtil.getDp(fragment.requireContext(), 5));
+    cardView.setStrokeWidth(UnitUtil.dpToPx(fragment.requireContext(), 5));
     int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.stroke_secondary);
     cardView.setStrokeColor(strokeColor);
-    cardView.setRadius(UnitUtil.getDp(fragment.requireContext(), 10));
+    cardView.setRadius(UnitUtil.dpToPx(fragment.requireContext(), 10));
     containerScanner.addView(cardView);
 
     fragment.registerForActivityResult(
@@ -278,7 +278,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
               || Objects.equals(barcodes.get(0).getRawValue(), "")) {
             return;
           }
-          new VibratorUtil(fragment.requireContext()).tick();
+          new HapticUtil(fragment.requireContext()).tick();
           //super.onSuccess(barcodes, graphicOverlay);
           stopScanner();
           if (barcodeListener != null) {

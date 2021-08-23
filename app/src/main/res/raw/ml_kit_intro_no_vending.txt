@@ -1,0 +1,25 @@
+In addition to the barcode scanner ZXing ("zebra crossing"), we also have included ML Kit as another barcode scanner in the app variant available on Google Play and on GitHub.
+The variant on F-Droid does not have this scanner because its code is not open source.
+
+<b>Advantages of ML Kit over ZXing:</b>
+- Uses machine learning
+- Super-fast scanning
+- Latest technologies
+- Almost no false results
+- Orientation of barcodes does not matter
+- Even works with fuzzy or low contrast barcodes
+
+Both barcode scanners work completely offline.
+
+To use ML Kit, you need to install the app "Grocy Android: Unlock Key" on your device. This requires either a one-time purchase in the Google Play Store or downloading the APK from GitHub. Why have we decided to do this?
+
+You can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far.
+However, because the development takes a lot of time, work and motivation, we now have included this unlock feature. Google keeps 15% of the price after the VAT have been subtracted.
+Surely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!
+
+There would also be donations, that's true. Unfortunately, Google prohibits any form of payment if there is no service in return.
+
+Because you don't have Google Play Services on your device and therefore you can't purchase the unlock app, you can download it for free on GitHub. Grocy Android and the unlock app are open source and will remain so forever.
+
+Best regards
+Dominic & Patrick Zedler

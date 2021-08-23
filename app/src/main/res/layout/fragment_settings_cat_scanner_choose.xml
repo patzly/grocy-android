@@ -125,11 +125,11 @@
           android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
 
           <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph"
+            android:id="@+id/text_ml_kit_intro"
+            style="@style/Widget.Grocy.TextView.Paragraph.Fix"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/msg_help_barcode_scanner_intro" />
+            android:layout_margin="16dp" />
 
         </androidx.core.widget.NestedScrollView>
 

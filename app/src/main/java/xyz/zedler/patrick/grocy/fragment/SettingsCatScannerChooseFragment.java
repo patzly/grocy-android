@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
@@ -74,6 +75,15 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    binding.textMlKitIntro.setText(
+        ResUtil.getBulletList(
+            activity,
+            "- ",
+            ResUtil.getRawText(activity, R.raw.ml_kit_intro),
+            ""
+        )
+    );
 
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
