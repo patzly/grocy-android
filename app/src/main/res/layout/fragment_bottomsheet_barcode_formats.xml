@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout>
+
+  <data>
+    <import type="android.view.View" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
+      name="sheet"
+      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet" />
+  </data>
+
+  <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/text_logout_title"
+      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp"
+      android:text="@string/setting_barcode_formats" />
+
+    <View
+      style="@style/Widget.Grocy.Divider"
+      android:layout_marginTop="0dp"
+      android:layout_marginBottom="0dp" />
+
+    <androidx.core.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="none"
+      android:overScrollMode="ifContentScrolls">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+          android:id="@+id/text"
+          style="@style/Widget.Grocy.TextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="12dp"
+          android:text="@string/msg_barcode_formats" />
+
+        <LinearLayout
+          android:id="@+id/checkbox_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_code128"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_code128" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_code39"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_code39" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_code93"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_code93" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_codabar"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_codabar" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_ean13"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_ean13" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_ean8"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_ean8" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_itf"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_itf" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_upca"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_upca" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_upce"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_upce" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_qr"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_qr" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_pdf417"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_pdf417" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_aztec"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_aztec" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_matrix"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_matrix" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_rss14"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_rss14" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_rsse"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_rsse" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:gravity="end">
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel"
+            style="@style/Widget.Grocy.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/on_background_secondary"
+            android:text="@string/action_cancel"
+            android:onClick="@{() -> sheet.dismiss()}"
+            app:rippleColor="@color/highlight" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/save"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/action_save"
+            android:onClick="@{() -> sheet.saveShortcuts()}"
+            app:backgroundTint="@color/retro_green_bg_white" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+  </LinearLayout>
+
+</layout>

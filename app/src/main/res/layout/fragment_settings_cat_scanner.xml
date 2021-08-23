@@ -115,6 +115,10 @@
         android:orientation="vertical"
         android:animateLayoutChanges="true">
 
+        <TextView
+          style="@style/Widget.Grocy.TextView.Category"
+          android:text="@string/category_scanner_camera" />
+
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:layout_width="match_parent"
@@ -210,6 +214,36 @@
             android:checked="@={viewModel.scannerFormat2dEnabled}" />
 
         </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> viewModel.showBarcodeFormatsBottomSheet()}"
+          clickUtil="@{clickUtil}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_barcode_formats" />
+
+            <TextView
+              android:id="@+id/enabled_barcode_formats"
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:maxLines="5"/>
+
+          </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.Category"
+          android:text="@string/category_scanner_external" />
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"

@@ -213,6 +213,7 @@
   <string name="msg_restart">The app must be restarted to apply the current configuration. Do you want to restart it now?</string>
   <string name="msg_shortcuts">You can enable up to 4 shortcuts:</string>
   <string name="msg_shortcuts_not_supported">Shortcuts are not supported on this Android version.</string>
+  <string name="msg_barcode_formats">You can improve the speed of the barcode detector by configuring it to only detect those formats which you expect to read.</string>
   <string name="msg_features">Start intro again in \"About\"</string>
   <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
@@ -252,26 +253,6 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">This will be used as the default setting when adding this product as a recipe ingredient.</string>
   <string name="msg_help_inventory_fields">The following fields apply to newly added products.</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_intro" translatable="false">In addition to the barcode scanner ZXing (\"zebra crossing\"), we also have included ML Kit as another barcode scanner in the app variant available on Google Play and on GitHub. The variant on F-Droid does not have this scanner because its code is not open source.\n
-    \n<b>Advantages of ML Kit over ZXing:</b>\n- Uses machine learning\n- Super-fast scanning\n- Latest technologies\n- Almost no false results\n- Orientation of barcodes does not matter\n- Even works with fuzzy or low contrast barcodes\n
-    \nBoth barcode scanners work completely offline.\n
-    \nTo use ML Kit, you need to install the app \"Grocy Android: Unlock Key\" on your device. This requires either a one-time purchase in the Play Store or downloading the APK from GitHub. Why have we decided to do this?\n
-    \nYou can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far.\nHowever, because the development takes a lot of time, work and motivation, we would be very happy if you buy the unlock app if Grocy Android is worth the money to you.\nGoogle keeps 15% of the price after the VAT have been subtracted.\nSurely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!\n
-    \nThere would also be donations, that\'s true. Unfortunately, Google prohibits any form of payment if there is no service in return. That\'s why we have now included this unlock feature.\n
-    \nIf you don\'t have Google Play Services on your device or if you don\'t want to support us, you can download the unlock app for free on GitHub. Grocy Android and the unlock app are open source and will remain so forever.\n
-    \nLet\'s go, thanks in advance!\nDominic &amp; Patrick Zedler
-  </string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_intro_no_vending" translatable="false">In addition to the barcode scanner ZXing (\"zebra crossing\"), we also have included ML Kit as another barcode scanner in the app variant available on Google Play and on GitHub. The variant on F-Droid does not have this scanner because its code is not open source.\n
-    \n<b>Advantages of ML Kit over ZXing:</b>\n- Uses machine learning\n- Super-fast scanning\n- Latest technologies\n- Almost no false results\n- Orientation of barcodes does not matter\n- Even works with fuzzy or low contrast barcodes\n
-    \nBoth barcode scanners work completely offline.\n
-    \nTo use ML Kit, you need to install the app \"Grocy Android: Unlock Key\" on your device. This requires either a one-time purchase in the Google Play Store or downloading the APK from GitHub. Why have we decided to do this?\n
-    \nYou can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far.\nHowever, because the development takes a lot of time, work and motivation, we now have included this unlock feature.\nGoogle keeps 15% of the price after the VAT have been subtracted.\nSurely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!\n
-    \nThere would also be donations, that\'s true. Unfortunately, Google prohibits any form of payment if there is no service in return.\n
-    \nBecause you don\'t have Google Play Services on your device, you can download the unlock app for free on GitHub. Grocy Android and the unlock app are open source and will remain so forever.\n
-    \nLet\'s go, thanks in advance!\nDominic &amp; Patrick Zedler
-  </string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">You can choose a barcode scanner for camera barcode scanning.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
@@ -728,6 +709,8 @@
   <string name="category_stock">Stock</string>
   <string name="category_server">Server</string>
   <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_camera">Camera scanner</string>
+  <string name="category_scanner_external">External scanner</string>
   <string name="category_appearance">Appearance</string>
   <string name="category_network">Network</string>
   <string name="category_network_proxy">Proxy</string>
@@ -757,6 +740,10 @@
   <string name="setting_use_front_cam_description">For barcode scanning</string>
   <string name="setting_use_2d_scanner_format">Use 2D barcode scanner format</string>
   <string name="setting_use_2d_scanner_format_description">Square shape for QR codes</string>
+  <string name="setting_barcode_formats">Barcode formats</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Limit to: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Not restricted</string>
   <string name="setting_external_support">External scanner support</string>
   <string name="setting_external_support_description">Via USB or Bluetooth</string>
   <string name="setting_reload_config">Reload configuration</string>
@@ -811,6 +798,22 @@
   <string name="setting_proxy_port_description">Your proxy\'s port number</string>
   <string name="setting_synchronized">The option below is synchronized with your server.</string>
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
+
+  <string name="barcode_format_code128">Code 128</string>
+  <string name="barcode_format_code39">Code 39</string>
+  <string name="barcode_format_code93">Code 93</string>
+  <string name="barcode_format_codabar">Codabar</string>
+  <string name="barcode_format_ean13">EAN-13</string>
+  <string name="barcode_format_ean8">EAN-8</string>
+  <string name="barcode_format_itf">ITF</string>
+  <string name="barcode_format_upca">UPC-A</string>
+  <string name="barcode_format_upce">UPC-E</string>
+  <string name="barcode_format_qr">QR Code</string>
+  <string name="barcode_format_pdf417">PDF417</string>
+  <string name="barcode_format_aztec">Aztec</string>
+  <string name="barcode_format_matrix">Data Matrix</string>
+  <string name="barcode_format_rss14">RSS-14</string>
+  <string name="barcode_format_rsse">RSS Expanded</string>
 
   <string name="license_conscrypt" translatable="false">Conscrypt</string>
   <string name="license_author_google" translatable="false">Google</string>

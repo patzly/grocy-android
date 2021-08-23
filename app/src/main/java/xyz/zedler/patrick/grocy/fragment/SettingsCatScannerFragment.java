@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatScannerBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -84,6 +85,7 @@ public class SettingsCatScannerFragment extends BaseFragment {
       }
     });
 
+    updateBarcodeFormats();
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(binding.scroll);
       activity.getScrollBehavior().setHideOnScroll(true);
@@ -98,6 +100,12 @@ public class SettingsCatScannerFragment extends BaseFragment {
     }
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
+
+  @Override
+  public void updateBarcodeFormats() {
+    binding.enabledBarcodeFormats.setText(BarcodeFormatsBottomSheet
+        .getEnabledBarcodeFormats(requireContext()));
   }
 
   @Override
