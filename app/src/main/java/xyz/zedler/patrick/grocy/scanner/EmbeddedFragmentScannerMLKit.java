@@ -149,7 +149,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     int backgroundColor = ContextCompat.getColor(fragment.requireContext(), R.color.transparent);
     cardView.setCardBackgroundColor(backgroundColor);
     cardView.setStrokeWidth(UnitUtil.dpToPx(fragment.requireContext(), 5));
-    int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.stroke_secondary);
+    int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.grey800);
     cardView.setStrokeColor(strokeColor);
     cardView.setRadius(UnitUtil.dpToPx(fragment.requireContext(), 10));
     containerScanner.addView(cardView);
