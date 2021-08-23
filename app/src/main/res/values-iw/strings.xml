@@ -286,6 +286,7 @@
   <string name="title_logout_demo">לצאת ממצב ההדגמה?</string>
   <string name="title_manage_master_data">ניהול נתוני העל</string>
   <string name="title_edit_description">עריכת תיאור</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">קלט מספר</string>
   <string name="title_external_barcode_input">סורק חיצוני</string>
   <string name="title_confirmation">אישור</string>
