@@ -11,7 +11,8 @@ The variant on F-Droid does not have this scanner because its code is not open s
 
 Both barcode scanners work completely offline.
 
-To use ML Kit, you need to install the app "Grocy Android: Unlock Key" on your device. This requires either a one-time purchase in the Google Play Store or downloading the APK from GitHub. Why have we decided to do this?
+To use ML Kit, you need to install the app "Grocy Android: Unlock Key" on your device. This requires either a one-time purchase in the Google Play Store or downloading the APK from GitHub. It's a tiny app (~1MB) which has to remain installed on your device.
+Why have we decided to do this?
 
 You can enjoy this app completely ad-free. This means that we have not received anything for our hard work so far. However, because the development takes a lot of time, work and motivation, we now have included this unlock feature.
 Surely the earned money does not reflect the effort, but it helps keep us motivated to keep improving the app!
