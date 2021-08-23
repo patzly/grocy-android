@@ -247,7 +247,6 @@
   <string name="msg_help_home_assistant_login_server">如果您使用该服务，您还可以输入您的Nabu Casa Cloud URL。点击此卡以访问Nabu Casa网站。</string>
   <string name="msg_help_home_assistant_login_token">您可以在Home Assistant Profile设置（最后一节）中创建访问令牌。点击此处以从上面打开URL。</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
-
   <string name="error_api_not_working">API密钥不起作用</string>
   <string name="error_orbot_not_installed">未安装Orbot</string>
   <string name="error_select_product">选择产品</string>
@@ -337,6 +336,7 @@
   <string name="title_logout_demo">从演示模式退出？</string>
   <string name="title_manage_master_data">管理主数据</string>
   <string name="title_edit_description">编辑描述</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">数字输入</string>
   <string name="title_external_barcode_input">外部扫描仪</string>
   <string name="title_confirmation">确认</string>

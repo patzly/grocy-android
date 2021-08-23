@@ -264,7 +264,6 @@
   <string name="msg_help_home_assistant_login_server">In het onderstaande veld kunt u ook uw Nabu Casa-cloud-URL invoeren als u die service gebruikt. Tik op deze kaart om de website van Nabu Casa te bezoeken.</string>
   <string name="msg_help_home_assistant_login_token">U kunt een toegangstoken met een lange levensduur maken in uw Home Assistant-profielinstellingen (laatste gedeelte). Tik hier om de URL van hierboven te openen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigeer terug of tik op deze kaart om een QR-code te scannen die de onderstaande velden vult.</string>
-
   <string name="error_api_not_working">API sleutel werkt niet</string>
   <string name="error_orbot_not_installed">Orbot is niet geïnstalleerd</string>
   <string name="error_select_product">Selecteer een product</string>
@@ -359,6 +358,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_logout_demo">Demomodus uitloggen?</string>
   <string name="title_manage_master_data">Masterdaata beheren</string>
   <string name="title_edit_description">Omschrijving aanpassen</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">Getal invoer</string>
   <string name="title_external_barcode_input">Externe scanner</string>
   <string name="title_confirmation">Bevestiging</string>
