@@ -133,6 +133,7 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
           Uri.parse("https://play.google.com/store/apps/details?id=" + UnlockUtil.PACKAGE)
       ));
     }
+    activity.navigateUp();
   }
 
   public void openGitHub() {
@@ -140,6 +141,7 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
         Intent.ACTION_VIEW,
         Uri.parse("https://github.com/patzly/grocy-android-unlock/releases/")
     ));
+    activity.navigateUp();
   }
 
   @Override

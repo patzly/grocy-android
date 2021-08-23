@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.util;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,11 +34,11 @@ public class UnlockUtil {
 
   public static boolean isKeyInstalled(Context context) {
     try {
-      context.getPackageManager().getPackageInfo(PACKAGE, PackageManager.GET_ACTIVITIES);
+      context.getPackageManager().getPackageInfo(PACKAGE, 0);
       return true;
     } catch (Exception ignored) {
+      return false;
     }
-    return false;
   }
 
   public static boolean isPlayStoreInstalled(Context context){

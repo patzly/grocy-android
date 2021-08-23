@@ -65,11 +65,17 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PurchasePromptBottomSheet;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UnlockUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -84,13 +90,14 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final PreviewView previewView;
   private boolean needUpdateGraphicOverlayImageSourceInfo;
   private final BarcodeScannerOptions barcodeScannerOptions;
+  private final SharedPreferences sharedPrefs;
   private final LiveData<ProcessCameraProvider> processCameraProvider;
   private boolean isScannerVisible;
   private final int lensFacing;
   private final CameraSelector cameraSelector;
   private Camera camera;
   private final Fragment fragment;
-  private final Activity activity;
+  private final MainActivity activity;
   private final BarcodeListener barcodeListener;
 
   public EmbeddedFragmentScannerMLKit(
@@ -102,8 +109,10 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   ) {
     super(fragment.requireActivity());
     this.fragment = fragment;
-    this.activity = fragment.requireActivity();
+    this.activity = (MainActivity) fragment.requireActivity();
     this.barcodeListener = barcodeListener;
+
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
 
     // set container size
     int width;
@@ -177,9 +186,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
         .get(CameraXViewModel.class)
         .getProcessCameraProvider();
 
-    SharedPreferences sharedPreferences = PreferenceManager
-        .getDefaultSharedPreferences(fragment.requireContext());
-    lensFacing = sharedPreferences.getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM)
+    lensFacing = sharedPrefs.getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM)
         ? CameraSelector.LENS_FACING_FRONT
         : CameraSelector.LENS_FACING_BACK;
 
@@ -290,16 +297,32 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
           new HapticUtil(fragment.requireContext()).tick();
           //super.onSuccess(barcodes, graphicOverlay);
           stopScanner();
+
+          int promptCount = sharedPrefs.getInt(PREF.PURCHASE_PROMPT, 1);
+          if (UnlockUtil.isKeyInstalled(activity) && UnlockUtil.isPlayStoreInstalled(activity)) {
+            if (!sharedPrefs.getBoolean(PREF.PURCHASED, false) && promptCount > 0) {
+              if (promptCount < 50) {
+                sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, promptCount + 1).apply();
+              } else {
+                activity.showBottomSheet(new PurchasePromptBottomSheet());
+              }
+            } else if (promptCount > 1) {
+              sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
+            }
+          } else if (promptCount > 1) {
+            sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
+          }
+
           if (barcodeListener != null) {
             barcodeListener.onBarcodeRecognized(barcodes.get(0).getRawValue());
           }
         }
       };
     } catch (Exception e) {
-      Log.e(TAG, "Can not create image processor. ", e);
+      Log.e(TAG, "Cannot create image processor. ", e);
       Toast.makeText(
           activity.getApplicationContext(),
-          "Can not create image processor: " + e.getLocalizedMessage(),
+          "Cannot create image processor: " + e.getLocalizedMessage(),
           Toast.LENGTH_LONG)
           .show();
       return;
@@ -397,8 +420,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
   private ArrayList<Integer> getEnabledBarcodeFormats() {
     ArrayList<Integer> enabledBarcodeFormats = new ArrayList<>();
-    SharedPreferences sharedPrefs = PreferenceManager
-        .getDefaultSharedPreferences(fragment.requireContext());
     Set<String> enabledBarcodeFormatsSet = sharedPrefs.getStringSet(
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS

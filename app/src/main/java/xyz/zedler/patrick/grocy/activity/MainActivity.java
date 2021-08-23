@@ -88,6 +88,7 @@ import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
@@ -96,6 +97,7 @@ import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
+import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -274,6 +276,12 @@ public class MainActivity extends AppCompatActivity {
           onSuccessConfigLoad,
           null
       );
+    }
+
+    if (UnlockUtil.isKeyInstalled(this)) {
+      UnlockUtil.checkIfPurchased(this, sharedPrefs);
+    } else {
+      sharedPrefs.edit().putBoolean(PREF.PURCHASED, false).apply();
     }
   }
 
