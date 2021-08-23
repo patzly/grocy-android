@@ -62,7 +62,7 @@ public class LocaleUtil {
 
   public static List<Language> getLanguages(Context context) {
     List<Language> languages = new ArrayList<>();
-    String localesRaw = TextUtil.getRawText(context, R.raw.locales);
+    String localesRaw = ResUtil.getRawText(context, R.raw.locales);
     if (localesRaw.trim().isEmpty()) {
       return languages;
     }

@@ -24,11 +24,7 @@
   android:orientation="vertical">
 
   <TextView
-    style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textAlignment="center"
+    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet.Center"
     android:text="@string/info_changelog"/>
 
   <View

@@ -19,14 +19,6 @@
 
 package xyz.zedler.patrick.grocy.util;
 
-import android.content.Context;
-import android.util.Log;
-import androidx.annotation.NonNull;
-import androidx.annotation.RawRes;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 public class TextUtil {
 
   private final static String TAG = TextUtil.class.getSimpleName();
@@ -48,22 +40,5 @@ public class TextUtil {
     } catch (StringIndexOutOfBoundsException e) {
       return null;
     }
-  }
-
-  @NonNull
-  public static String getRawText(Context context, @RawRes int resId) {
-    InputStream inputStream = context.getResources().openRawResource(resId);
-    BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
-    StringBuilder text = new StringBuilder();
-    try {
-      for (String line; (line = bufferedReader.readLine()) != null; ) {
-        text.append(line).append('\n');
-      }
-      text.deleteCharAt(text.length() - 1);
-      inputStream.close();
-    } catch (Exception e) {
-      Log.e(TAG, "getRawText: ", e);
-    }
-    return text.toString();
   }
 }

@@ -164,10 +164,10 @@ public class InputChip extends LinearLayout {
   @Override
   public void setPadding(int left, int top, int right, int bottom) {
     frameLayoutContainer.setPadding(
-        UnitUtil.getDp(context, left),
-        UnitUtil.getDp(context, top),
-        UnitUtil.getDp(context, right),
-        UnitUtil.getDp(context, bottom)
+        UnitUtil.dpToPx(context, left),
+        UnitUtil.dpToPx(context, top),
+        UnitUtil.dpToPx(context, right),
+        UnitUtil.dpToPx(context, bottom)
     );
   }
 

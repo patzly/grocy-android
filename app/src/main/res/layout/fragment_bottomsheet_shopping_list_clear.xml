@@ -33,10 +33,7 @@
     android:orientation="vertical">
 
     <TextView
-      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="16dp"
+      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
       android:text="@string/action_clear_shopping_list" />
 
     <View

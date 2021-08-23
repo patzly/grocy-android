@@ -31,11 +31,9 @@
     android:gravity="center_vertical">
 
     <TextView
-      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:layout_margin="16dp"
       android:text="@string/property_location" />
 
     <com.google.android.material.appbar.MaterialToolbar

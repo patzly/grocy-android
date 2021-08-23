@@ -99,12 +99,12 @@ public class BezierCurveChart extends View {
 
     this.context = context;
 
-    cornerRadius = UnitUtil.getDp(context, 6);
-    dotRadius = UnitUtil.getDp(context, 3);
+    cornerRadius = UnitUtil.dpToPx(context, 6);
+    dotRadius = UnitUtil.dpToPx(context, 3);
 
     paintCurve.setStyle(Paint.Style.STROKE);
     paintCurve.setStrokeCap(Paint.Cap.ROUND);
-    paintCurve.setStrokeWidth(UnitUtil.getDp(context, CURVE_LINE_WIDTH));
+    paintCurve.setStrokeWidth(UnitUtil.dpToPx(context, CURVE_LINE_WIDTH));
     paintCurve.setAntiAlias(true);
 
     curveColors.add(getColor(R.color.retro_blue_bg));
@@ -135,11 +135,11 @@ public class BezierCurveChart extends View {
 
     paintBadgeText.setColor(Color.BLACK);
     paintBadgeText.setAntiAlias(true);
-    paintBadgeText.setTextSize(UnitUtil.getSp(context, 14));
+    paintBadgeText.setTextSize(UnitUtil.spToPx(context, 14));
     paintBadgeText.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
 
     paintLabel.setColor(getColor(R.color.on_background_secondary));
-    paintLabel.setTextSize(UnitUtil.getSp(context, 13));
+    paintLabel.setTextSize(UnitUtil.spToPx(context, 13));
     paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.jost_book));
     paintLabel.setAntiAlias(true);
   }

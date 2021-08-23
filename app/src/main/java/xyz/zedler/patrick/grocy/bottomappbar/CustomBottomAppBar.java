@@ -91,7 +91,7 @@ public class CustomBottomAppBar extends BottomAppBar {
    */
   public void hide() {
     MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-    int addOffset = /*Build.VERSION.SDK_INT == 27 ? 0 :*/ UnitUtil.getDp(getContext(), 10);
+    int addOffset = /*Build.VERSION.SDK_INT == 27 ? 0 :*/ UnitUtil.dpToPx(getContext(), 10);
     isOrWillBeShown = false;
     animateTo(
         getMeasuredHeight()

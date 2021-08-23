@@ -25,10 +25,7 @@
   android:orientation="vertical">
 
   <TextView
-    style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
+    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet.Center"
     android:text="@string/title_feedback" />
 
   <View
@@ -62,7 +59,6 @@
         android:background="@drawable/bg_list_item_surface">
 
         <ImageView
-          android:id="@+id/image_feedback_issue"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:src="@drawable/ic_round_github"
           tools:ignore="ContentDescription" />
@@ -101,6 +97,31 @@
           <TextView
             style="@style/Widget.Grocy.TextView.ListItem.Description"
             android:text="@string/action_rate_description" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/linear_feedback_share"
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+        android:background="@drawable/bg_list_item_surface">
+
+        <ImageView
+          android:id="@+id/image_feedback_share"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+          android:src="@drawable/ic_round_share"
+          tools:ignore="ContentDescription" />
+
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
+            android:text="@string/action_share" />
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Description"
+            android:text="@string/action_share_description" />
 
         </LinearLayout>
 

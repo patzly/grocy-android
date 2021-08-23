@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,17 +27,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetChangelogBinding;
-import xyz.zedler.patrick.grocy.util.BulletUtil;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 
 public class ChangelogBottomSheet extends BaseBottomSheet {
 
   private final static String TAG = ChangelogBottomSheet.class.getSimpleName();
-  private boolean debug;
 
   private FragmentBottomsheetChangelogBinding binding;
 
@@ -49,26 +44,17 @@ public class ChangelogBottomSheet extends BaseBottomSheet {
   }
 
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
-
-    binding = FragmentBottomsheetChangelogBinding.inflate(
-        inflater, container, false
-    );
-
-    Context context = requireContext();
-
-    debug = PrefsUtil.isDebuggingEnabled(requireActivity());
+  public View onCreateView(
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
+  ) {
+    binding = FragmentBottomsheetChangelogBinding.inflate(inflater, container, false);
 
     binding.textChangelog.setText(
-        BulletUtil.makeBulletList(
-            context,
-            6,
-            2,
+        ResUtil.getBulletList(
+            requireContext(),
             "- ",
-            TextUtil.getRawText(context, R.raw.changelog),
-            Arrays.asList("New:", "Improved:", "Fixed:")
+            ResUtil.getRawText(requireContext(), R.raw.changelog),
+            "New:", "Improved:", "Fixed:"
         ),
         TextView.BufferType.SPANNABLE
     );

@@ -71,8 +71,8 @@ public class BottomAppBarRefreshScrollBehavior {
       Log.e(TAG, "constructor: activity is null!");
       return;
     }
-    topScrollLimit = UnitUtil.getDp(activity, 100);
-    scrollLimitY = UnitUtil.getDp(activity, 24);
+    topScrollLimit = UnitUtil.dpToPx(activity, 100);
+    scrollLimitY = UnitUtil.dpToPx(activity, 24);
   }
 
   /**

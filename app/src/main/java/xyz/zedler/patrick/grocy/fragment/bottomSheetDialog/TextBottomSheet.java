@@ -28,17 +28,14 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
-import xyz.zedler.patrick.grocy.util.BulletUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
 
@@ -85,23 +82,7 @@ public class TextBottomSheet extends BaseBottomSheet {
     }
 
     int file = bundle.getInt(Constants.ARGUMENT.FILE);
-    String content = TextUtil.getRawText(context, file);
-    if (file == R.raw.changelog) {
-      binding.textText.setText(
-          BulletUtil.makeBulletList(
-              context,
-              6,
-              2,
-              "- ",
-              content,
-              Arrays.asList("New:", "Improved:", "Fixed:")
-          ),
-          TextView.BufferType.SPANNABLE
-      );
-      binding.textText.setTextSize(15.5f);
-    } else {
-      binding.textText.setText(content);
-    }
+    binding.textText.setText(ResUtil.getRawText(context, file));
 
     return binding.getRoot();
   }
