@@ -62,8 +62,10 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
@@ -152,9 +154,15 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     cardView.setRadius(UnitUtil.dpToPx(fragment.requireContext(), 10));
     containerScanner.addView(cardView);
 
-    barcodeScannerOptions = new BarcodeScannerOptions.Builder()
-        .setBarcodeFormats(Barcode.FORMAT_PDF417)
-        .build();
+    ArrayList<Integer> enabledBarcodeFormats = getEnabledBarcodeFormats();
+    BarcodeScannerOptions.Builder optionsBuilder = new BarcodeScannerOptions.Builder();
+    if (enabledBarcodeFormats.size() == 1) {
+      optionsBuilder.setBarcodeFormats(enabledBarcodeFormats.get(0));
+    } else if (enabledBarcodeFormats.size() > 1) {
+      List<Integer> afterFirst = enabledBarcodeFormats.subList(1, enabledBarcodeFormats.size()-1);
+      optionsBuilder.setBarcodeFormats(enabledBarcodeFormats.get(0), convertIntegers(afterFirst));
+    }
+    barcodeScannerOptions = optionsBuilder.build();
 
     fragment.registerForActivityResult(
         new ActivityResultContracts.RequestPermission(),
@@ -257,9 +265,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     Preview previewUseCase = builder.build();
     previewUseCase.setSurfaceProvider(previewView.getSurfaceProvider());
 
-    if (previewView.getViewPort() == null) {
-      Log.i(TAG, "bindPreviewUseCase: ViewPort is null");
-    }
     useCaseGroupBuilder.setViewPort(previewView.getViewPort());
     useCaseGroupBuilder.addUseCase(previewUseCase);
   }
@@ -274,7 +279,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
 
     try {
-      imageProcessor = new BarcodeScannerProcessor(fragment.requireContext()) {
+      imageProcessor = new BarcodeScannerProcessor(fragment.getContext(), barcodeScannerOptions) {
         @Override
         protected void onSuccess(@NonNull List<Barcode> barcodes,
             @NonNull GraphicOverlay graphicOverlay) {
@@ -390,8 +395,68 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     return true;
   }
 
-  private int[] getEnabledBarcodeFormats() {
-    return new int[]{};
+  private ArrayList<Integer> getEnabledBarcodeFormats() {
+    ArrayList<Integer> enabledBarcodeFormats = new ArrayList<>();
+    SharedPreferences sharedPrefs = PreferenceManager
+        .getDefaultSharedPreferences(fragment.requireContext());
+    Set<String> enabledBarcodeFormatsSet = sharedPrefs.getStringSet(
+        SCANNER.BARCODE_FORMATS,
+        SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
+    );
+    if (enabledBarcodeFormatsSet != null && !enabledBarcodeFormatsSet.isEmpty()) {
+      for (String barcodeFormat : enabledBarcodeFormatsSet) {
+        switch (barcodeFormat) {
+          case BarcodeFormats.BARCODE_FORMAT_CODE128:
+            enabledBarcodeFormats.add(Barcode.FORMAT_CODE_128);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_CODE39:
+            enabledBarcodeFormats.add(Barcode.FORMAT_CODE_39);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_CODE93:
+            enabledBarcodeFormats.add(Barcode.FORMAT_CODE_93);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_EAN13:
+            enabledBarcodeFormats.add(Barcode.FORMAT_EAN_13);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_EAN8:
+            enabledBarcodeFormats.add(Barcode.FORMAT_EAN_8);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_ITF:
+            enabledBarcodeFormats.add(Barcode.FORMAT_ITF);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_UPCA:
+            enabledBarcodeFormats.add(Barcode.FORMAT_UPC_A);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_UPCE:
+            enabledBarcodeFormats.add(Barcode.FORMAT_UPC_E);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_QR:
+            enabledBarcodeFormats.add(Barcode.FORMAT_QR_CODE);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_PDF417:
+            enabledBarcodeFormats.add(Barcode.FORMAT_PDF417);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_MATRIX:
+            enabledBarcodeFormats.add(Barcode.FORMAT_DATA_MATRIX);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_CODABAR:
+            enabledBarcodeFormats.add(Barcode.FORMAT_CODABAR);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_AZTEC:
+            enabledBarcodeFormats.add(Barcode.FORMAT_AZTEC);
+            break;
+        }
+      }
+    }
+    return enabledBarcodeFormats;
+  }
+
+  public static int[] convertIntegers(List<Integer> integers) {
+    int[] ret = new int[integers.size()];
+    for (int i=0; i < ret.length; i++) {
+      ret[i] = integers.get(i);
+    }
+    return ret;
   }
 
   public static final class CameraXViewModel extends AndroidViewModel {
