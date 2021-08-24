@@ -51,7 +51,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterObjectListBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMultiProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -371,8 +371,8 @@ public class MasterObjectListFragment extends BaseFragment
               return false;
             }
             viewModel.getHorizontalFilterBarMulti().addFilter(
-                HorizontalFilterBarMulti.PRODUCT_GROUP,
-                new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
+                HorizontalFilterBarMultiProduct.PRODUCT_GROUP,
+                new HorizontalFilterBarMultiProduct.Filter(pg.getName(), pg.getId())
             );
             binding.recycler.getAdapter().notifyItemChanged(0);
             return true;

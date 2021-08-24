@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMultiProduct;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
 import xyz.zedler.patrick.grocy.view.InputChip;
 
@@ -48,20 +48,20 @@ public class MasterObjectListAdapter extends
   private final ArrayList<Object> objects;
   private final MasterObjectListAdapterListener listener;
   private final String entity;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+  private final HorizontalFilterBarMultiProduct horizontalFilterBarMultiProduct;
 
   public MasterObjectListAdapter(
       Context context,
       String entity,
       ArrayList<Object> objects,
       MasterObjectListAdapterListener listener,
-      HorizontalFilterBarMulti horizontalFilterBarMulti
+      HorizontalFilterBarMultiProduct horizontalFilterBarMultiProduct
   ) {
     this.context = context;
     this.objects = new ArrayList<>(objects);
     this.listener = listener;
     this.entity = entity;
-    this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+    this.horizontalFilterBarMultiProduct = horizontalFilterBarMultiProduct;
   }
 
   @Override
@@ -95,22 +95,22 @@ public class MasterObjectListAdapter extends
     private final WeakReference<Context> weakContext;
     private final RowFilterChipsBinding binding;
     private InputChip chipProductGroup;
-    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+    private final HorizontalFilterBarMultiProduct horizontalFilterBarMultiProduct;
 
     public FilterRowViewHolder(
         RowFilterChipsBinding binding,
         Context context,
-        HorizontalFilterBarMulti horizontalFilterBarMulti
+        HorizontalFilterBarMultiProduct horizontalFilterBarMultiProduct
     ) {
       super(binding.getRoot());
       this.binding = binding;
-      this.horizontalFilterBarMulti = horizontalFilterBarMulti;
+      this.horizontalFilterBarMultiProduct = horizontalFilterBarMultiProduct;
       weakContext = new WeakReference<>(context);
     }
 
     public void bind() {
-      HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+      HorizontalFilterBarMultiProduct.Filter filter = horizontalFilterBarMultiProduct
+          .getFilter(HorizontalFilterBarMultiProduct.PRODUCT_GROUP);
       if (filter != null && chipProductGroup == null) {
         chipProductGroup = new InputChip(
             weakContext.get(),
@@ -118,7 +118,7 @@ public class MasterObjectListAdapter extends
             R.drawable.ic_round_category,
             true,
             () -> {
-              horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+              horizontalFilterBarMultiProduct.removeFilter(HorizontalFilterBarMultiProduct.PRODUCT_GROUP);
               chipProductGroup = null;
             }
         );
@@ -149,7 +149,7 @@ public class MasterObjectListAdapter extends
       return new FilterRowViewHolder(
           binding,
           context,
-          horizontalFilterBarMulti
+          horizontalFilterBarMultiProduct
       );
     } else {
       return new ItemViewHolder(

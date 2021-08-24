@@ -21,10 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import java.util.HashMap;
 
-public class HorizontalFilterBarMulti {
-
-  public final static String PRODUCT_GROUP = "product_group";
-  public final static String LOCATION = "location";
+public abstract class HorizontalFilterBarMulti {
 
   private final HashMap<String, Filter> filtersActive;
   private final FilterChangedListener filterChangedListener;

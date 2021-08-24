@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBot
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMultiProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -74,7 +74,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private ArrayList<Location> locations;
 
   private DownloadHelper.Queue currentQueueLoading;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+  private final HorizontalFilterBarMultiProduct horizontalFilterBarMultiProduct;
   private boolean sortAscending;
   private String search;
   private final boolean debug;
@@ -98,7 +98,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     objects = new ArrayList<>();
 
-    horizontalFilterBarMulti = new HorizontalFilterBarMulti(this::displayItems);
+    horizontalFilterBarMultiProduct = new HorizontalFilterBarMultiProduct(this::displayItems);
     sortAscending = true;
   }
 
@@ -268,10 +268,10 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     // filter items
     ArrayList<Object> filteredItems;
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && horizontalFilterBarMulti.areFiltersActive()) {
+    if (entity.equals(GrocyApi.ENTITY.PRODUCTS) && horizontalFilterBarMultiProduct.areFiltersActive()) {
       filteredItems = new ArrayList<>();
-      HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
+      HorizontalFilterBarMultiProduct.Filter filter = horizontalFilterBarMultiProduct
+          .getFilter(HorizontalFilterBarMultiProduct.PRODUCT_GROUP);
       for (Object object : searchedItems) {
         int productGroupId = (int) NumUtil.toDouble(((Product) object).getProductGroupId());
         if (productGroupId != -1 && productGroupId == filter.getObjectId()) {
@@ -458,8 +458,8 @@ public class MasterObjectListViewModel extends BaseViewModel {
     offlineLive.setValue(isOffline);
   }
 
-  public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
-    return horizontalFilterBarMulti;
+  public HorizontalFilterBarMultiProduct getHorizontalFilterBarMulti() {
+    return horizontalFilterBarMultiProduct;
   }
 
   @NonNull

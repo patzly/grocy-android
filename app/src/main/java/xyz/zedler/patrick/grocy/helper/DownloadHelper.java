@@ -55,6 +55,8 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -429,6 +431,12 @@ public class DownloadHelper {
                 type = new TypeToken<List<ProductGroup>>() {
                 }.getType();
               } else if (grocyEntity.equals(GrocyApi.ENTITY.STORES)) {
+                type = new TypeToken<List<Store>>() {
+                }.getType();
+              } else if (grocyEntity.equals(GrocyApi.ENTITY.TASKS)) {
+                type = new TypeToken<List<Store>>() {
+                }.getType();
+              } else if (grocyEntity.equals(GrocyApi.ENTITY.TASK_CATEGORY)) {
                 type = new TypeToken<List<Store>>() {
                 }.getType();
               } else {
@@ -1658,6 +1666,104 @@ public class DownloadHelper {
     }
   }
 
+
+  public QueueItem getTasks(
+      OnTasksResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getObjects(GrocyApi.ENTITY.TASKS),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<Task>>() {
+              }.getType();
+              ArrayList<Task> tasks = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "download Tasks: " + tasks);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(tasks);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public QueueItem getTasks(OnTasksResponseListener onResponseListener) {
+    return getTasks(onResponseListener, null);
+  }
+
+  public QueueItem updateTasks(
+      String dbChangedTime,
+      OnTasksResponseListener onResponseListener
+  ) {
+    OnTasksResponseListener newOnResponseListener = tasks -> {
+      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+      editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASKS, dbChangedTime);
+      editPrefs.apply();
+      onResponseListener.onResponse(tasks);
+    };
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_TASKS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return getTasks(newOnResponseListener, null);
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Tasks download");
+      }
+      return null;
+    }
+  }
+
+
+
+  public QueueItem getTaskCategories(OnTaskCategoriesResponseListener onResponseListener) {
+    return getTaskCategories(onResponseListener, null);
+  }
+
+  public QueueItem updateTaskCategories(
+      String dbChangedTime,
+      OnTaskCategoriesResponseListener onResponseListener
+  ) {
+    OnTaskCategoriesResponseListener newOnResponseListener = taskCategories -> {
+      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+      editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime);
+      editPrefs.apply();
+      onResponseListener.onResponse(taskCategories);
+    };
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return getTaskCategories(newOnResponseListener, null);
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped TaskCategories download");
+      }
+      return null;
+    }
+  }
+
   public void deleteProduct(
       int productId,
       OnStringResponseListener onResponseListener,
@@ -2259,6 +2365,16 @@ public class DownloadHelper {
   public interface OnStoresResponseListener {
 
     void onResponse(ArrayList<Store> stores);
+  }
+
+  public interface OnTasksResponseListener {
+
+    void onResponse(ArrayList<Task> tasks);
+  }
+
+  public interface OnTaskCategoriesResponseListener {
+
+    void onResponse(ArrayList<TaskCategory> taskCategories);
   }
 
   public interface OnStringResponseListener {

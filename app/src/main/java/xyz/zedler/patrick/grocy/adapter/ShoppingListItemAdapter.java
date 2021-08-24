@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingleProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -64,7 +64,7 @@ public class ShoppingListItemAdapter extends
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
+  private final HorizontalFilterBarSingleProduct horizontalFilterBarSingleProduct;
   private final PluralUtil pluralUtil;
 
 
@@ -76,7 +76,7 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       ShoppingListItemAdapterListener listener,
-      HorizontalFilterBarSingle horizontalFilterBarSingle
+      HorizontalFilterBarSingleProduct horizontalFilterBarSingleProduct
   ) {
     this.context = context;
     this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -85,7 +85,7 @@ public class ShoppingListItemAdapter extends
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
-    this.horizontalFilterBarSingle = horizontalFilterBarSingle;
+    this.horizontalFilterBarSingleProduct = horizontalFilterBarSingleProduct;
     pluralUtil = new PluralUtil(context);
   }
 
@@ -137,16 +137,16 @@ public class ShoppingListItemAdapter extends
     private final WeakReference<Context> weakContext;
     private final FilterChip chipMissing;
     private FilterChip chipUndone;
-    private final HorizontalFilterBarSingle horizontalFilterBarSingle;
+    private final HorizontalFilterBarSingleProduct horizontalFilterBarSingleProduct;
 
     public FilterRowViewHolder(
         RowFilterChipsBinding binding,
         Context context,
-        HorizontalFilterBarSingle horizontalFilterBarSingle
+        HorizontalFilterBarSingleProduct horizontalFilterBarSingleProduct
     ) {
       super(binding.getRoot());
 
-      this.horizontalFilterBarSingle = horizontalFilterBarSingle;
+      this.horizontalFilterBarSingleProduct = horizontalFilterBarSingleProduct;
       weakContext = new WeakReference<>(context);
       chipMissing = new FilterChip(
           context,
@@ -156,9 +156,9 @@ public class ShoppingListItemAdapter extends
             if (chipUndone.isActive()) {
               chipUndone.changeState(false);
             }
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.MISSING);
+            horizontalFilterBarSingleProduct.setSingleFilterActive(HorizontalFilterBarSingleProduct.MISSING);
           },
-          horizontalFilterBarSingle::resetAllFilters
+          horizontalFilterBarSingleProduct::resetAllFilters
       );
       chipUndone = new FilterChip(
           context,
@@ -168,30 +168,30 @@ public class ShoppingListItemAdapter extends
             if (chipMissing.isActive()) {
               chipMissing.changeState(false);
             }
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.UNDONE);
+            horizontalFilterBarSingleProduct.setSingleFilterActive(HorizontalFilterBarSingleProduct.UNDONE);
           },
-          horizontalFilterBarSingle::resetAllFilters
+          horizontalFilterBarSingleProduct::resetAllFilters
       );
       binding.container.addView(chipMissing);
       binding.container.addView(chipUndone);
     }
 
     public void bind() {
-      if (horizontalFilterBarSingle.isNoFilterActive()) {
+      if (horizontalFilterBarSingleProduct.isNoFilterActive()) {
         if (chipMissing.isActive()) {
           chipMissing.changeState(false);
         }
         if (chipUndone.isActive()) {
           chipUndone.changeState(false);
         }
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)) {
+      } else if (horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.MISSING)) {
         if (!chipMissing.isActive()) {
           chipMissing.changeState(true);
         }
         if (chipUndone.isActive()) {
           chipUndone.changeState(false);
         }
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.UNDONE)) {
+      } else if (horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.UNDONE)) {
         if (chipMissing.isActive()) {
           chipMissing.changeState(false);
         }
@@ -201,13 +201,13 @@ public class ShoppingListItemAdapter extends
       }
       chipMissing.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_missing_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
+          horizontalFilterBarSingleProduct.getItemsCount(HorizontalFilterBarSingleProduct.MISSING),
+          horizontalFilterBarSingleProduct.getItemsCount(HorizontalFilterBarSingleProduct.MISSING)
       ));
       chipUndone.setText(weakContext.get().getResources().getQuantityString(
           R.plurals.msg_undone_items,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE)
+          horizontalFilterBarSingleProduct.getItemsCount(HorizontalFilterBarSingleProduct.UNDONE),
+          horizontalFilterBarSingleProduct.getItemsCount(HorizontalFilterBarSingleProduct.UNDONE)
       ));
     }
   }
@@ -232,7 +232,7 @@ public class ShoppingListItemAdapter extends
       return new FilterRowViewHolder(
           binding,
           context,
-          horizontalFilterBarSingle
+          horizontalFilterBarSingleProduct
       );
     } else if (viewType == GroupedListItem.TYPE_HEADER) {
       return new ShoppingListGroupViewHolder(
@@ -566,12 +566,12 @@ public class ShoppingListItemAdapter extends
       int itemsMissingCount,
       int itemsUndoneCount
   ) {
-    if (horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
+    if (horizontalFilterBarSingleProduct.getItemsCount(HorizontalFilterBarSingleProduct.MISSING)
         != itemsMissingCount
-        || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE)
+        || horizontalFilterBarSingleProduct.getItemsCount(HorizontalFilterBarSingleProduct.UNDONE)
         != itemsUndoneCount) {
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.MISSING, itemsMissingCount);
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.UNDONE, itemsUndoneCount);
+      horizontalFilterBarSingleProduct.setItemsCount(HorizontalFilterBarSingleProduct.MISSING, itemsMissingCount);
+      horizontalFilterBarSingleProduct.setItemsCount(HorizontalFilterBarSingleProduct.UNDONE, itemsUndoneCount);
       notifyItemChanged(0); // update viewHolder with filter row
     }
 

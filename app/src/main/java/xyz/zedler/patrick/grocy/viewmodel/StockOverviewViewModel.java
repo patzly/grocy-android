@@ -35,8 +35,8 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMultiProduct;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingleProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -57,7 +57,7 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
-  private final static String TAG = ShoppingListViewModel.class.getSimpleName();
+  private final static String TAG = StockOverviewViewModel.class.getSimpleName();
   public final static String SORT_NAME = "sort_name";
   public final static String SORT_DUE_DATE = "sort_due_date";
 
@@ -96,8 +96,8 @@ public class StockOverviewViewModel extends BaseViewModel {
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private String sortMode;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
+  private final HorizontalFilterBarSingleProduct horizontalFilterBarSingleProduct;
+  private final HorizontalFilterBarMultiProduct horizontalFilterBarMultiProduct;
   private int itemsDueCount;
   private int itemsOverdueCount;
   private int itemsExpiredCount;
@@ -125,20 +125,20 @@ public class StockOverviewViewModel extends BaseViewModel {
     locationsLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
 
-    horizontalFilterBarSingle = new HorizontalFilterBarSingle(
+    horizontalFilterBarSingleProduct = new HorizontalFilterBarSingleProduct(
         this::updateFilteredStockItems,
-        HorizontalFilterBarSingle.DUE_NEXT,
-        HorizontalFilterBarSingle.OVERDUE,
-        HorizontalFilterBarSingle.EXPIRED,
-        HorizontalFilterBarSingle.MISSING,
-        HorizontalFilterBarSingle.IN_STOCK
+        HorizontalFilterBarSingleProduct.DUE_NEXT,
+        HorizontalFilterBarSingleProduct.OVERDUE,
+        HorizontalFilterBarSingleProduct.EXPIRED,
+        HorizontalFilterBarSingleProduct.MISSING,
+        HorizontalFilterBarSingleProduct.IN_STOCK
     );
     itemsDueCount = 0;
     itemsOverdueCount = 0;
     itemsExpiredCount = 0;
     itemsMissingCount = 0;
     itemsInStockCount = 0;
-    horizontalFilterBarMulti = new HorizontalFilterBarMulti(
+    horizontalFilterBarMultiProduct = new HorizontalFilterBarMultiProduct(
         this::updateFilteredStockItems
     );
     sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
@@ -444,11 +444,11 @@ public class StockOverviewViewModel extends BaseViewModel {
         continue;
       }
 
-      if (horizontalFilterBarMulti.areFiltersActive()) {
-        HorizontalFilterBarMulti.Filter productGroup = horizontalFilterBarMulti
-            .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-        HorizontalFilterBarMulti.Filter location = horizontalFilterBarMulti
-            .getFilter(HorizontalFilterBarMulti.LOCATION);
+      if (horizontalFilterBarMultiProduct.areFiltersActive()) {
+        HorizontalFilterBarMultiProduct.Filter productGroup = horizontalFilterBarMultiProduct
+            .getFilter(HorizontalFilterBarMultiProduct.PRODUCT_GROUP);
+        HorizontalFilterBarMultiProduct.Filter location = horizontalFilterBarMultiProduct
+            .getFilter(HorizontalFilterBarMultiProduct.LOCATION);
         if (productGroup != null && NumUtil.isStringInt(item.getProduct().getProductGroupId())
             && productGroup.getObjectId() != Integer
             .parseInt(item.getProduct().getProductGroupId())) {
@@ -465,16 +465,16 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
       }
 
-      if (horizontalFilterBarSingle.isNoFilterActive()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.DUE_NEXT)
+      if (horizontalFilterBarSingleProduct.isNoFilterActive()
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.DUE_NEXT)
           && item.isItemDue()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.OVERDUE)
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.OVERDUE)
           && item.isItemOverdue()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.EXPIRED)
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.EXPIRED)
           && item.isItemExpired()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.MISSING)
           && productIdsMissingStockItems.containsKey(item.getProductId())
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.IN_STOCK)
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.IN_STOCK)
           && (!productIdsMissingStockItems.containsKey(item.getProductId())
           || productIdsMissingStockItems.get(item.getProductId()).isItemMissingAndPartlyInStock())
       ) {
@@ -712,12 +712,12 @@ public class StockOverviewViewModel extends BaseViewModel {
     return shoppingListItemsProductIds;
   }
 
-  public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
-    return horizontalFilterBarSingle;
+  public HorizontalFilterBarSingleProduct getHorizontalFilterBarSingle() {
+    return horizontalFilterBarSingleProduct;
   }
 
-  public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
-    return horizontalFilterBarMulti;
+  public HorizontalFilterBarMultiProduct getHorizontalFilterBarMulti() {
+    return horizontalFilterBarMultiProduct;
   }
 
   public String getSortMode() {

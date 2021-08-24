@@ -21,14 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import java.util.HashMap;
 
-public class HorizontalFilterBarSingle {
-
-  public final static String MISSING = "missing";
-  public final static String UNDONE = "undone";
-  public final static String DUE_NEXT = "due_next";
-  public final static String OVERDUE = "overdue";
-  public final static String EXPIRED = "expired";
-  public final static String IN_STOCK = "in_stock";
+public abstract class HorizontalFilterBarSingle {
 
   private final HashMap<String, Integer> itemsFilteredCounts;
   private final HashMap<String, Boolean> filterStates;

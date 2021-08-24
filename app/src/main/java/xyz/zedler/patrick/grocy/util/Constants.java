@@ -62,6 +62,8 @@ public final class Constants {
     public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
     public final static String DB_LAST_TIME_VOLATILE = "db_last_time_volatile";
     public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
+    public final static String DB_LAST_TIME_TASKS = "db_last_time_tasks";
+    public final static String DB_LAST_TIME_TASK_CATEGORIES = "db_last_time_task_categories";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -223,6 +225,8 @@ public final class Constants {
     public final static String EDIT = "action_edit";
     public final static String SAVE = "action_save";
     public final static String DELETE = "action_delete";
+    public final static String COMPLETE = "action_complete";
+    public final static String UNDO = "action_undo";
   }
 
   public final static class ARGUMENT {

@@ -633,6 +633,36 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card"
+                android:layout_marginStart="@dimen/main_side_margin"
+                android:layout_marginEnd="@dimen/main_side_margin"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_tasksOverviewFragment)}"
+                app:clickUtil="@{clickUtil}">
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+
+                <TextView
+                    style="@style/Widget.Grocy.TextView.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_tasks_list" />
+
+                <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.tasksListDescriptionTextLive}" />
+
+              </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
           </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

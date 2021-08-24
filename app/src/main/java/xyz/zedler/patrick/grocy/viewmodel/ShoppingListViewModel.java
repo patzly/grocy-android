@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
+import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingleProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -84,7 +84,7 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
+  private final HorizontalFilterBarSingleProduct horizontalFilterBarSingleProduct;
   private int itemsMissingCount;
   private int itemsUndoneCount;
   private final boolean debug;
@@ -105,10 +105,10 @@ public class ShoppingListViewModel extends BaseViewModel {
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredGroupedListItemsLive = new MutableLiveData<>();
 
-    horizontalFilterBarSingle = new HorizontalFilterBarSingle(
+    horizontalFilterBarSingleProduct = new HorizontalFilterBarSingleProduct(
         this::updateFilteredShoppingListItems,
-        HorizontalFilterBarSingle.MISSING,
-        HorizontalFilterBarSingle.UNDONE
+        HorizontalFilterBarSingleProduct.MISSING,
+        HorizontalFilterBarSingleProduct.UNDONE
     );
     itemsMissingCount = 0;
     itemsUndoneCount = 0;
@@ -200,10 +200,10 @@ public class ShoppingListViewModel extends BaseViewModel {
         continue;
       }
 
-      if (horizontalFilterBarSingle.isNoFilterActive()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
+      if (horizontalFilterBarSingleProduct.isNoFilterActive()
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.MISSING)
           && item.hasProduct() && missingProductIds.contains(item.getProductIdInt())
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.UNDONE)
+          || horizontalFilterBarSingleProduct.isFilterActive(HorizontalFilterBarSingleProduct.UNDONE)
           && item.isUndone()
       ) {
         filteredShoppingListItems.add(item);
@@ -729,8 +729,8 @@ public class ShoppingListViewModel extends BaseViewModel {
     return missingProductIds;
   }
 
-  public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
-    return horizontalFilterBarSingle;
+  public HorizontalFilterBarSingleProduct getHorizontalFilterBarSingle() {
+    return horizontalFilterBarSingleProduct;
   }
 
   public HashMap<Integer, Product> getProductHashMap() {

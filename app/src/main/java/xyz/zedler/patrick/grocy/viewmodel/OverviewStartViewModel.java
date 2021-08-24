@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
@@ -29,9 +30,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
+
 import com.android.volley.VolleyError;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -39,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
@@ -62,6 +67,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<StockItem>> stockItemsLive;
   private final MutableLiveData<ArrayList<ShoppingListItem>> shoppingListItemsLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
+  private final MutableLiveData<ArrayList<Task>> tasksLive;
   private final MutableLiveData<Integer> itemsDueNextCountLive;
   private final MutableLiveData<Integer> itemsOverdueCountLive;
   private final MutableLiveData<Integer> itemsExpiredCountLive;
@@ -75,6 +81,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final LiveData<String> stockDescriptionMissingShoppingListTextLive;
   private final LiveData<String> shoppingListDescriptionTextLive;
   private final LiveData<String> masterDataDescriptionTextLive;
+  private final LiveData<String> tasksListDescriptionTextLive;
   private ArrayList<StockItem> stockItemsTemp;
   private ArrayList<StockItem> dueItemsTemp;
   private ArrayList<StockItem> overdueItemsTemp;
@@ -104,6 +111,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     itemsMissingShoppingListCountLive = new MutableLiveData<>();
     shoppingListItemsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
+    tasksLive = new MutableLiveData<>();
 
     stockDescriptionTextLive = Transformations.map(
         stockItemsLive,
@@ -238,14 +246,28 @@ public class OverviewStartViewModel extends BaseViewModel {
           );
         }
     );
+
+    tasksListDescriptionTextLive = Transformations.map(
+        tasksLive,
+        tasks -> {
+          if (tasks == null) {
+            return null;
+          }
+          int size = tasks.size();
+          return getResources().getQuantityString(
+              R.plurals.description_overview_task_data, size, size
+          );
+        }
+    );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(
-        (stockItems, shoppingListItems, products) -> {
+        (stockItems, shoppingListItems, products, tasks) -> {
           this.stockItemsLive.setValue(stockItems);
           this.shoppingListItemsLive.setValue(shoppingListItems);
           this.productsLive.setValue(products);
+          this.tasksLive.setValue(tasks);
 
           ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
           for (ShoppingListItem item : shoppingListItems) {
@@ -383,6 +405,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         dlHelper.updateStockItems(dbChangedTime, stockItems -> stockItemsTemp = stockItems),
         dlHelper.updateShoppingListItems(dbChangedTime, this.shoppingListItemsLive::setValue),
         dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue),
+        dlHelper.updateTasks(dbChangedTime, this.tasksLive::setValue),
         dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
           this.dueItemsTemp = due;
           itemsDueNextCountLive.setValue(due.size());
@@ -408,9 +431,9 @@ public class OverviewStartViewModel extends BaseViewModel {
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASKS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -424,6 +447,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         stockItemsTemp,
         this.shoppingListItemsLive.getValue(),
         this.productsLive.getValue(),
+        this.tasksLive.getValue(),
         () -> this.stockItemsLive.setValue(stockItemsTemp)
     );
   }
@@ -494,6 +518,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public LiveData<String> getMasterDataDescriptionTextLive() {
     return masterDataDescriptionTextLive;
+  }
+
+  public LiveData<String> getTasksListDescriptionTextLive(){
+    return tasksListDescriptionTextLive;
   }
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
