@@ -26,14 +26,7 @@
 
   <TextView
     android:id="@+id/text_master_delete_question"
-    style="@style/Widget.Grocy.TextView.Title.BottomSheet"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="16dp"
-    android:textAlignment="viewStart"
-    android:textSize="16sp" />
+    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet" />
 
   <LinearLayout
     android:layout_width="match_parent"

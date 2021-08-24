@@ -8,11 +8,11 @@
   ~
   ~ Grocy Android is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~ along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
   ~
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
@@ -26,7 +26,7 @@
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
     <variable
       name="sheet"
-      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet" />
+      type="xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet" />
   </data>
 
   <LinearLayout
@@ -39,7 +39,10 @@
     <TextView
       android:id="@+id/text_logout_title"
       style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/setting_manage_shortcuts" />
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp"
+      android:text="@string/setting_barcode_formats" />
 
     <View
       style="@style/Widget.Grocy.Divider"
@@ -64,7 +67,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginBottom="12dp"
-          android:text="@string/msg_shortcuts" />
+          android:text="@string/msg_barcode_formats" />
 
         <LinearLayout
           android:id="@+id/checkbox_container"
@@ -73,68 +76,109 @@
           android:orientation="vertical">
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/stock_overview"
+            android:id="@+id/barcode_format_code128"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_stock_overview"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_code128" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/shopping_list"
+            android:id="@+id/barcode_format_code39"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_shopping_list"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_code39" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/add_to_shopping_list"
+            android:id="@+id/barcode_format_code93"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_shopping_list_add"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_code93" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/shopping_mode"
+            android:id="@+id/barcode_format_codabar"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_shopping_mode"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_codabar" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/consume"
+            android:id="@+id/barcode_format_ean13"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_consume"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_ean13" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/purchase"
+            android:id="@+id/barcode_format_ean8"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_purchase"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_ean8" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/transfer"
+            android:id="@+id/barcode_format_itf"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_transfer"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_itf" />
 
           <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/inventory"
+            android:id="@+id/barcode_format_upca"
             style="@style/Widget.Grocy.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_inventory"
-            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+            android:text="@string/barcode_format_upca" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_upce"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_upce" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_qr"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_qr" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_pdf417"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_pdf417" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_aztec"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_aztec" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_matrix"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_matrix" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_rss14"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_rss14" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/barcode_format_rsse"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/barcode_format_rsse" />
 
         </LinearLayout>
 

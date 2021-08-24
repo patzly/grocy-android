@@ -65,11 +65,11 @@ public class ExpandableCard extends LinearLayout {
         new ViewTreeObserver.OnGlobalLayoutListener() {
           @Override
           public void onGlobalLayout() {
-            heightCollapsed = textViewCollapsed.getHeight() + UnitUtil.getDp(
+            heightCollapsed = textViewCollapsed.getHeight() + UnitUtil.dpToPx(
                 context,
                 32
             );
-            heightExpanded = textViewExpanded.getHeight() + UnitUtil.getDp(
+            heightExpanded = textViewExpanded.getHeight() + UnitUtil.dpToPx(
                 context,
                 32
             );

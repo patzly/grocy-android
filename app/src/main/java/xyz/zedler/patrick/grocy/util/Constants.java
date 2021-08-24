@@ -19,6 +19,9 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public final class Constants {
@@ -115,6 +118,7 @@ public final class Constants {
 
       public final static String FRONT_CAM = "front_cam";
       public final static String SCANNER_FORMAT_2D = "scanner_format_2d";
+      public final static String BARCODE_FORMATS = "barcode_formats";
       public final static String EXTERNAL_SCANNER = "external_scanner";
     }
 
@@ -174,6 +178,23 @@ public final class Constants {
 
       public final static boolean FRONT_CAM = false;
       public final static boolean SCANNER_FORMAT_2D = false;
+      public final static Set<String> BARCODE_FORMATS = new HashSet<>(Arrays.asList(
+          BarcodeFormats.BARCODE_FORMAT_CODE128,
+          BarcodeFormats.BARCODE_FORMAT_CODE39,
+          BarcodeFormats.BARCODE_FORMAT_CODE93,
+          BarcodeFormats.BARCODE_FORMAT_CODABAR,
+          BarcodeFormats.BARCODE_FORMAT_EAN13,
+          BarcodeFormats.BARCODE_FORMAT_EAN8,
+          BarcodeFormats.BARCODE_FORMAT_ITF,
+          BarcodeFormats.BARCODE_FORMAT_UPCA,
+          BarcodeFormats.BARCODE_FORMAT_UPCE,
+          BarcodeFormats.BARCODE_FORMAT_QR,
+          BarcodeFormats.BARCODE_FORMAT_PDF417,
+          BarcodeFormats.BARCODE_FORMAT_AZTEC,
+          BarcodeFormats.BARCODE_FORMAT_MATRIX,
+          BarcodeFormats.BARCODE_FORMAT_RSS14,
+          BarcodeFormats.BARCODE_FORMAT_RSSE
+      ));
       public final static boolean EXTERNAL_SCANNER = false;
     }
 
@@ -201,6 +222,24 @@ public final class Constants {
 
       public final static boolean ENABLE_DEBUGGING = false;
     }
+  }
+
+  public final static class BarcodeFormats {
+    public final static String BARCODE_FORMAT_CODE128 = "barcode_format_code128";
+    public final static String BARCODE_FORMAT_CODE39 = "barcode_format_code39";
+    public final static String BARCODE_FORMAT_CODE93 = "barcode_format_code93";
+    public final static String BARCODE_FORMAT_CODABAR = "barcode_format_codabar";  // only ML Kit
+    public final static String BARCODE_FORMAT_EAN13 = "barcode_format_ean13";
+    public final static String BARCODE_FORMAT_EAN8 = "barcode_format_ean8";
+    public final static String BARCODE_FORMAT_ITF = "barcode_format_itf";
+    public final static String BARCODE_FORMAT_UPCA = "barcode_format_upca";
+    public final static String BARCODE_FORMAT_UPCE = "barcode_format_upce";
+    public final static String BARCODE_FORMAT_QR = "barcode_format_qr";
+    public final static String BARCODE_FORMAT_PDF417 = "barcode_format_pdf417";
+    public final static String BARCODE_FORMAT_AZTEC = "barcode_format_aztec";  // only ML Kit
+    public final static String BARCODE_FORMAT_MATRIX = "barcode_format_matrix";
+    public final static String BARCODE_FORMAT_RSS14 = "barcode_format_rss14";  // only ZXing
+    public final static String BARCODE_FORMAT_RSSE = "barcode_format_rsse";  // only ZXing
   }
 
   public final static class URL {

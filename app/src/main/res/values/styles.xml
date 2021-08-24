@@ -431,6 +431,23 @@
     <item name="android:singleLine">true</item>
   </style>
 
+  <style name="Widget.Grocy.TextView.Toolbar.BottomSheet" parent="Widget.Grocy.TextView.Toolbar">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">?android:actionBarSize</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
+    <item name="android:gravity">center_vertical</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.TextView.Toolbar.BottomSheet.Center"
+    parent="Widget.Grocy.TextView.Toolbar.BottomSheet">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textAlignment">center</item>
+    <item name="android:layout_gravity">center</item>
+  </style>
+
   <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textSize">14sp</item>
     <item name="android:textColor">@color/black</item>
@@ -448,11 +465,6 @@
   <style name="Widget.Grocy.TextView.Title" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textSize">18sp</item>
     <item name="singleLine">true</item>
-  </style>
-
-  <style name="Widget.Grocy.TextView.Title.BottomSheet" parent="Widget.Grocy.TextView">
-    <item name="android:textSize">19sp</item>
-    <item name="android:fontFamily">@font/jost_bold</item>
   </style>
 
   <style name="Widget.Grocy.TextView.Category" parent="Widget.Grocy.TextView">

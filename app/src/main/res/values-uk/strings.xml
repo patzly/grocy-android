@@ -273,7 +273,6 @@
   <string name="msg_help_home_assistant_login_server">У поле нижче ви також можете ввести URL-адресу хмари Nabu Casa, якщо ви використовуєте цю послугу. Торкніться цієї картки, щоб відвідати вебсайт Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Ви можете створити довготривалий маркер доступу в налаштуваннях профілю Home Assistant (останній розділ). Натисніть тут, щоб відкрити URL-адресу зверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Перейдіть назад або торкніться цієї картки, щоб відсканувати QR-код, який заповнює поля нижче.</string>
-
   <string name="error_api_not_working">Ключ API не працює</string>
   <string name="error_orbot_not_installed">Orbot не встановлено</string>
   <string name="error_select_product">Оберіть продукт</string>
@@ -363,6 +362,7 @@
   <string name="title_logout_demo">Вийти з демо-режиму?</string>
   <string name="title_manage_master_data">Керування основними даними</string>
   <string name="title_edit_description">Редагувати опис</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
   <string name="title_input">Введення числа</string>
   <string name="title_external_barcode_input">Зовнішній сканер</string>
   <string name="title_confirmation">Підтвердження</string>

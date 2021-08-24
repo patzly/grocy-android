@@ -30,7 +30,7 @@
     android:padding="16dp">
 
     <TextView
-      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="@string/property_locations" />

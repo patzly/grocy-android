@@ -176,6 +176,9 @@ public class BaseFragment extends Fragment {
   public void updateShortcuts() {
   }
 
+  public void updateBarcodeFormats() {
+  }
+
   public void startTransaction() {
   }
 

@@ -106,6 +106,9 @@
   <string name="action_own_server">Eigener Server</string>
   <string name="action_enter_data_manually">Daten manuell eingeben</string>
   <string name="action_perform">Aktion ausführen</string>
+  <string name="action_share">Teilen</string>
+  <string name="action_share_description">Erzählen Sie Ihren Freunden von Grocy Android</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d bald fällig</item>
@@ -202,6 +205,7 @@
   <string name="msg_restart">Ein Neustart der App ist erforderlich, um die aktuelle Konfiguration anzuwenden.</string>
   <string name="msg_shortcuts">Sie können bis zu 4 Verknüpfungen aktivieren:</string>
   <string name="msg_shortcuts_not_supported">Verknüpfungen werden auf dieser Android-Version nicht unterstützt.</string>
+  <string name="msg_barcode_formats">Sie können die Geschwindigkeit des Barcode-Scanners verbessern, indem Sie nur die Formate auswählen, die erkannt werden sollen.</string>
   <string name="msg_features">Intro erneut starten in \"Über\"</string>
   <string name="msg_feedback">Haben Sie Wünsche, Fragen oder einen Fehler gefunden? Kontaktieren Sie uns und wir helfen Ihnen gerne.\nAnsonsten wären wir sehr glücklich über eine gute Bewertung im Play Store.</string>
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
@@ -264,6 +268,7 @@
   <string name="msg_help_home_assistant_login_server">In dem nächsten Feld können Sie auch Ihre Nabu Casa Cloud-URL eingeben, falls Sie diesen Service benutzen. Auf diese Karte tippen, um die Nabu Casa Website zu besuchen.</string>
   <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
+  <string name="msg_share">Schau Dir mal diesen Android-Klient für das großartige grocy-Projekt an: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
   <string name="error_orbot_not_installed">Orbot ist nicht installiert</string>
@@ -690,6 +695,8 @@
   <string name="category_stock">Bestand</string>
   <string name="category_server">Server</string>
   <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_camera">Kamera-Scanner</string>
+  <string name="category_scanner_external">Externer Scanner</string>
   <string name="category_appearance">Erscheinungsbild</string>
   <string name="category_network">Netzwerk</string>
   <string name="category_network_proxy">Proxy</string>
@@ -719,6 +726,10 @@
   <string name="setting_use_front_cam_description">Für Barcode-Scanning</string>
   <string name="setting_use_2d_scanner_format">2D-Barcode Scanner-Format benutzen</string>
   <string name="setting_use_2d_scanner_format_description">Quadratische Form für QR-Codes</string>
+  <string name="setting_barcode_formats">Barcode-Formate</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Beschränken auf: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Nicht beschränkt</string>
   <string name="setting_external_support">Unterstützung für externe Scanner</string>
   <string name="setting_external_support_description">Per USB oder Bluetooth</string>
   <string name="setting_reload_config">Konfiguration neu laden</string>

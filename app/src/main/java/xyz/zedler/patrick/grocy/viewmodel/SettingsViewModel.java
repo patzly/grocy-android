@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
@@ -288,6 +289,10 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setScannerFormat2dEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.SCANNER_FORMAT_2D, enabled).apply();
+  }
+
+  public void showBarcodeFormatsBottomSheet() {
+    showBottomSheet(new BarcodeFormatsBottomSheet());
   }
 
   public boolean getExternalScannerEnabled() {

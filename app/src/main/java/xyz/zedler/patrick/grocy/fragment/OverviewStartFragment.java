@@ -32,6 +32,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -113,6 +114,8 @@ public class OverviewStartFragment extends BaseFragment {
       int id = item.getItemId();
       if (id == R.id.action_about) {
         navigateDeepLink(getString(R.string.deep_link_aboutFragment));
+      } else if (id == R.id.action_feedback) {
+        activity.showBottomSheet(new FeedbackBottomSheet());
       } else if (id == R.id.action_changelog) {
         activity.showBottomSheet(new ChangelogBottomSheet());
       }

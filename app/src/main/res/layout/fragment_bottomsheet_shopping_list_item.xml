@@ -31,12 +31,10 @@
     android:gravity="center_vertical">
 
     <TextView
-      style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:text="@string/title_list_entry"
-      android:layout_margin="16dp" />
+      android:text="@string/title_list_entry" />
 
     <com.google.android.material.appbar.MaterialToolbar
       android:id="@+id/toolbar_shopping_list_item"

@@ -33,13 +33,17 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView.TorchListener;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSettings.FocusMode;
+import java.util.ArrayList;
+import java.util.Set;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
+import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
@@ -72,14 +76,14 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     int width;
     int height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UnitUtil.getDp(fragment.requireContext(), 250);
-      height = UnitUtil.getDp(fragment.requireContext(), 250);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 250);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 250);
     } else if (qrCodeFormat) {
-      width = UnitUtil.getDp(fragment.requireContext(), 180);
-      height = UnitUtil.getDp(fragment.requireContext(), 180);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 180);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UnitUtil.getDp(fragment.requireContext(), 350);
-      height = UnitUtil.getDp(fragment.requireContext(), 160);
+      width = UnitUtil.dpToPx(fragment.requireContext(), 350);
+      height = UnitUtil.dpToPx(fragment.requireContext(), 160);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
       LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
@@ -129,6 +133,11 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     CameraSettings cameraSettings = new CameraSettings();
     cameraSettings.setRequestedCameraId(useFrontCam ? 1 : 0);
     cameraSettings.setFocusMode(FocusMode.CONTINUOUS);
+
+    IntentIntegrator integrator = new IntentIntegrator(fragment.requireActivity());
+    integrator.setDesiredBarcodeFormats(getEnabledBarcodeFormats());
+    barcodeView.initializeFromIntent(integrator.createScanIntent());
+
     barcodeView.getBarcodeView().setCameraSettings(cameraSettings);
     capture = new ZXingScanCaptureManager(
         fragment.requireActivity(),
@@ -194,5 +203,62 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
       return;
     }
     barcodeListener.onBarcodeRecognized(result.getText());
+  }
+
+  private String[] getEnabledBarcodeFormats() {
+    ArrayList<String> enabledBarcodeFormats = new ArrayList<>();
+    SharedPreferences sharedPrefs = PreferenceManager
+        .getDefaultSharedPreferences(fragment.requireContext());
+    Set<String> enabledBarcodeFormatsSet = sharedPrefs.getStringSet(
+        SCANNER.BARCODE_FORMATS,
+        SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
+    );
+    if (enabledBarcodeFormatsSet != null && !enabledBarcodeFormatsSet.isEmpty()) {
+      for (String barcodeFormat : enabledBarcodeFormatsSet) {
+        switch (barcodeFormat) {
+          case BarcodeFormats.BARCODE_FORMAT_CODE128:
+            enabledBarcodeFormats.add(IntentIntegrator.CODE_128);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_CODE39:
+            enabledBarcodeFormats.add(IntentIntegrator.CODE_39);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_CODE93:
+            enabledBarcodeFormats.add(IntentIntegrator.CODE_93);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_EAN13:
+            enabledBarcodeFormats.add(IntentIntegrator.EAN_13);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_EAN8:
+            enabledBarcodeFormats.add(IntentIntegrator.EAN_8);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_ITF:
+            enabledBarcodeFormats.add(IntentIntegrator.ITF);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_UPCA:
+            enabledBarcodeFormats.add(IntentIntegrator.UPC_A);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_UPCE:
+            enabledBarcodeFormats.add(IntentIntegrator.UPC_E);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_QR:
+            enabledBarcodeFormats.add(IntentIntegrator.QR_CODE);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_PDF417:
+            enabledBarcodeFormats.add(IntentIntegrator.PDF_417);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_MATRIX:
+            enabledBarcodeFormats.add(IntentIntegrator.DATA_MATRIX);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_RSS14:
+            enabledBarcodeFormats.add(IntentIntegrator.RSS_14);
+            break;
+          case BarcodeFormats.BARCODE_FORMAT_RSSE:
+            enabledBarcodeFormats.add(IntentIntegrator.RSS_EXPANDED);
+            break;
+        }
+      }
+    }
+    String[] mStringArray = new String[enabledBarcodeFormats.size()];
+    return enabledBarcodeFormats.toArray(mStringArray);
   }
 }
