@@ -117,6 +117,7 @@ public final class Constants {
     public final static class SCANNER {
 
       public final static String USE_ML_KIT = "use_ml_kit";
+      public final static String CROP_CAMERA_STREAM = "crop_camera_stream";
       public final static String FRONT_CAM = "front_cam";
       public final static String SCANNER_FORMAT_2D = "scanner_format_2d";
       public final static String BARCODE_FORMATS = "barcode_formats";
@@ -178,6 +179,7 @@ public final class Constants {
     public final static class SCANNER {
 
       public final static boolean USE_ML_KIT = false;
+      public final static boolean CROP_CAMERA_STREAM = false;
       public final static boolean FRONT_CAM = false;
       public final static boolean SCANNER_FORMAT_2D = false;
       public final static Set<String> BARCODE_FORMATS = new HashSet<>(Arrays.asList(

@@ -52,6 +52,7 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
   private final Timer fpsTimer = new Timer();
   private final ScopedExecutor executor;
 
+  private boolean cropImageToPreviewRect;
   // Whether this processor is already shut down
   private boolean isShutdown;
 
@@ -69,9 +70,10 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
   private int framesPerSecond = 0;
 
 
-  protected VisionProcessorBase(Context context) {
+  protected VisionProcessorBase(Context context, boolean cropImageToPreviewRect) {
     activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     executor = new ScopedExecutor(TaskExecutors.MAIN_THREAD);
+    this.cropImageToPreviewRect = cropImageToPreviewRect;
     /*fpsTimer.scheduleAtFixedRate(
         new TimerTask() {
           @Override
@@ -89,20 +91,32 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
   @RequiresApi(VERSION_CODES.KITKAT)
   @ExperimentalGetImage
   public void processImageProxy(ImageProxy image, GraphicOverlay graphicOverlay) {
+    if (image == null) return;
+
     long frameStartMs = SystemClock.elapsedRealtime();
     if (isShutdown) {
       image.close();
       return;
     }
 
+    InputImage inputImage;
+    if (cropImageToPreviewRect) {
+      inputImage = InputImage.fromByteArray(
+          croppedNV21(image.getImage(), image.getCropRect()),
+          image.getCropRect().width(),
+          image.getCropRect().height(),
+          image.getImageInfo().getRotationDegrees(),
+          InputImage.IMAGE_FORMAT_NV21
+      );
+    } else {
+      inputImage = InputImage.fromMediaImage(
+          image.getImage(),
+          image.getImageInfo().getRotationDegrees()
+      );
+    }
+
     requestDetectInImage(
-            InputImage.fromByteArray(
-                croppedNV21(image.getImage(), image.getCropRect()),
-                image.getCropRect().width(),
-                image.getCropRect().height(),
-                image.getImageInfo().getRotationDegrees(),
-                InputImage.IMAGE_FORMAT_NV21
-            ),
+            inputImage,
             graphicOverlay,
             /* shouldShowFps= */ false,
             frameStartMs)

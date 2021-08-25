@@ -84,6 +84,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> defaultPurchaseAmountTextLive;
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
   private final MutableLiveData<Boolean> showBarcodeScannerZXingInfo;
+  private final MutableLiveData<Boolean> showMLKitCropStreamLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -110,6 +111,7 @@ public class SettingsViewModel extends BaseViewModel {
     defaultPurchaseAmountTextLive = new MutableLiveData<>(getDefaultPurchaseAmountText());
     defaultConsumeAmountTextLive = new MutableLiveData<>(getDefaultConsumeAmountText());
     showBarcodeScannerZXingInfo = new MutableLiveData<>(true);
+    showMLKitCropStreamLive = new MutableLiveData<>(getUseMlKitScanner());
   }
 
   public boolean isDemo() {
@@ -290,7 +292,8 @@ public class SettingsViewModel extends BaseViewModel {
   public void setUseMlKitScanner(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.USE_ML_KIT, enabled).apply();
     assert showBarcodeScannerZXingInfo.getValue() != null;
-    showBarcodeScannerZXingInfo.setValue(!showBarcodeScannerZXingInfo.getValue());
+    showBarcodeScannerZXingInfo.setValue(!enabled);
+    showMLKitCropStreamLive.setValue(enabled);
   }
 
   public String getUseScannerToolString(boolean isMlKitButton) {
@@ -299,6 +302,21 @@ public class SettingsViewModel extends BaseViewModel {
     } else {
       return getApplication().getString(R.string.title_use_scanner_tool, "ZXing");
     }
+  }
+
+  public boolean getCropCameraStream() {
+    return sharedPrefs.getBoolean(
+        SCANNER.CROP_CAMERA_STREAM,
+        SETTINGS_DEFAULT.SCANNER.CROP_CAMERA_STREAM
+    );
+  }
+
+  public void setCropCameraStream(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.CROP_CAMERA_STREAM, enabled).apply();
+  }
+
+  public MutableLiveData<Boolean> getShowMLKitCropStreamLive() {
+    return showMLKitCropStreamLive;
   }
 
   public boolean getFrontCamEnabled() {

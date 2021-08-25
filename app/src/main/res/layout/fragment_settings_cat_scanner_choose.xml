@@ -268,6 +268,40 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+          android:id="@+id/linear_crop_stream"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchCropStream.setChecked(!switchCropStream.isChecked())}"
+          android:visibility="@{viewModel.showMLKitCropStreamLive ? View.VISIBLE : View.GONE}">
+
+          <ImageView
+            android:id="@+id/image_front_cam"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_round_barcode_scan" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_crop_stream" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_crop_stream_description"
+              android:maxLines="6"/>
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_crop_stream"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.CropCameraStream}" />
+
+        </LinearLayout>
+
       </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

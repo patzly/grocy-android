@@ -41,8 +41,12 @@ public class BarcodeScannerProcessor extends VisionProcessorBase<List<Barcode>> 
 
   private final BarcodeScanner barcodeScanner;
 
-  public BarcodeScannerProcessor(Context context, BarcodeScannerOptions options) {
-    super(context);
+  public BarcodeScannerProcessor(
+      Context context,
+      BarcodeScannerOptions options,
+      boolean cropImageToPreviewRect
+  ) {
+    super(context, cropImageToPreviewRect);
     barcodeScanner = BarcodeScanning.getClient(options);
   }
 

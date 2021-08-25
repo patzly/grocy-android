@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.scanner;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -67,7 +66,6 @@ import java.util.concurrent.ExecutionException;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PurchasePromptBottomSheet;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
@@ -75,7 +73,6 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -99,6 +96,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final Fragment fragment;
   private final MainActivity activity;
   private final BarcodeListener barcodeListener;
+  private final boolean cropImageToPreviewRect;
 
   public EmbeddedFragmentScannerMLKit(
       Fragment fragment,
@@ -113,6 +111,10 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     this.barcodeListener = barcodeListener;
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
+    cropImageToPreviewRect = sharedPrefs.getBoolean(
+        SCANNER.CROP_CAMERA_STREAM,
+        SETTINGS_DEFAULT.SCANNER.CROP_CAMERA_STREAM
+    );
 
     // set container size
     int width;
@@ -168,7 +170,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     if (enabledBarcodeFormats.size() == 1) {
       optionsBuilder.setBarcodeFormats(enabledBarcodeFormats.get(0));
     } else if (enabledBarcodeFormats.size() > 1) {
-      List<Integer> afterFirst = enabledBarcodeFormats.subList(1, enabledBarcodeFormats.size()-1);
+      List<Integer> afterFirst = enabledBarcodeFormats.subList(1, enabledBarcodeFormats.size());
       optionsBuilder.setBarcodeFormats(enabledBarcodeFormats.get(0), convertIntegers(afterFirst));
     }
     barcodeScannerOptions = optionsBuilder.build();
@@ -286,7 +288,11 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
 
     try {
-      imageProcessor = new BarcodeScannerProcessor(fragment.getContext(), barcodeScannerOptions) {
+      imageProcessor = new BarcodeScannerProcessor(
+          fragment.getContext(),
+          barcodeScannerOptions,
+          cropImageToPreviewRect
+      ) {
         @Override
         protected void onSuccess(@NonNull List<Barcode> barcodes,
             @NonNull GraphicOverlay graphicOverlay) {
