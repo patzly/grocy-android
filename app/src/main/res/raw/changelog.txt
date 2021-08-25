@@ -1,3 +1,6 @@
+2.0.0-beta4
+- Improved: (not F-Droid) No cropping of camera stream in ML Kit, add option for it
+
 2.0.0-beta03
 - New: Support for server version 3.1.1 (v3.1.0 is not supported)
 - New: (not F-Droid) Add ML Kit as better camera barcode scanner
