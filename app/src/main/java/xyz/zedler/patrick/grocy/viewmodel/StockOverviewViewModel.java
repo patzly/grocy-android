@@ -35,8 +35,8 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -74,6 +74,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
   private final MutableLiveData<ArrayList<Location>> locationsLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
+  private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
 
   private ArrayList<StockItem> stockItems;
   private ArrayList<Product> products;
@@ -96,13 +97,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private String sortMode;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-  private int itemsDueCount;
-  private int itemsOverdueCount;
-  private int itemsExpiredCount;
-  private int itemsMissingCount;
-  private int itemsInStockCount;
   private boolean sortAscending;
   private final boolean debug;
 
@@ -125,22 +120,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     locationsLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
 
-    horizontalFilterBarSingle = new HorizontalFilterBarSingle(
-        this::updateFilteredStockItems,
-        HorizontalFilterBarSingle.DUE_NEXT,
-        HorizontalFilterBarSingle.OVERDUE,
-        HorizontalFilterBarSingle.EXPIRED,
-        HorizontalFilterBarSingle.MISSING,
-        HorizontalFilterBarSingle.IN_STOCK
-    );
-    itemsDueCount = 0;
-    itemsOverdueCount = 0;
-    itemsExpiredCount = 0;
-    itemsMissingCount = 0;
-    itemsInStockCount = 0;
-    horizontalFilterBarMulti = new HorizontalFilterBarMulti(
-        this::updateFilteredStockItems
-    );
+    filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(getApplication(), this::updateFilteredStockItems);
+    horizontalFilterBarMulti = new HorizontalFilterBarMulti(this::updateFilteredStockItems);
     sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
     sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
   }
@@ -164,11 +145,11 @@ public class StockOverviewViewModel extends BaseViewModel {
           for (ProductBarcode barcode : barcodes) {
             productBarcodeHashMap.put(barcode.getBarcode(), barcode);
           }
-          itemsDueCount = 0;
-          itemsOverdueCount = 0;
-          itemsExpiredCount = 0;
-          itemsMissingCount = 0;
-          itemsInStockCount = 0;
+          int itemsDueCount = 0;
+          int itemsOverdueCount = 0;
+          int itemsExpiredCount = 0;
+          int itemsMissingCount = 0;
+          int itemsInStockCount = 0;
           productIdsMissingStockItems = new HashMap<>();
           this.stockItems = stockItems;
           for (StockItem stockItem : stockItems) {
@@ -216,6 +197,13 @@ public class StockOverviewViewModel extends BaseViewModel {
             locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
           }
 
+          filterChipLiveDataStatus
+              .setDueSoonCount(itemsDueCount)
+              .setOverdueCount(itemsOverdueCount)
+              .setExpiredCount(itemsExpiredCount)
+              .setBelowStockCount(itemsMissingCount)
+              .setInStockCount(itemsInStockCount)
+              .emitCounts();
           updateFilteredStockItems();
           if (downloadAfterLoading) {
             downloadData();
@@ -317,7 +305,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         }), dlHelper.updateProductGroups(dbChangedTime, this.productGroupsLive::setValue),
         dlHelper.updateStockItems(dbChangedTime, stockItems -> {
           this.stockItems = stockItems;
-          itemsInStockCount = stockItems.size();
+          filterChipLiveDataStatus.setInStockCount(stockItems.size()).emitCounts();
         }), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = new HashMap<>();
@@ -332,13 +320,15 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         }), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
           this.dueItemsTemp = due;
-          itemsDueCount = due.size();
           this.overdueItemsTemp = overdue;
-          itemsOverdueCount = overdue.size();
           this.expiredItemsTemp = expired;
-          itemsExpiredCount = expired.size();
           this.missingItemsTemp = missing;
-          itemsMissingCount = missing.size();
+          filterChipLiveDataStatus
+              .setDueSoonCount(due.size())
+              .setOverdueCount(overdue.size())
+              .setExpiredCount(expired.size())
+              .setBelowStockCount(missing.size())
+              .emitCounts();
         }), dlHelper.updateShoppingListItems(dbChangedTime, shoppingListItems -> {
           this.shoppingListItems = shoppingListItems;
           shoppingListItemsProductIds = new ArrayList<>();
@@ -465,16 +455,16 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
       }
 
-      if (horizontalFilterBarSingle.isNoFilterActive()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.DUE_NEXT)
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
           && item.isItemDue()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.OVERDUE)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
           && item.isItemOverdue()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.EXPIRED)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
           && item.isItemExpired()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
           && productIdsMissingStockItems.containsKey(item.getProductId())
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.IN_STOCK)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
           && (!productIdsMissingStockItems.containsKey(item.getProductId())
           || productIdsMissingStockItems.get(item.getProductId()).isItemMissingAndPartlyInStock())
       ) {
@@ -679,26 +669,6 @@ public class StockOverviewViewModel extends BaseViewModel {
     return filteredStockItemsLive;
   }
 
-  public int getItemsDueCount() {
-    return itemsDueCount;
-  }
-
-  public int getItemsOverdueCount() {
-    return itemsOverdueCount;
-  }
-
-  public int getItemsExpiredCount() {
-    return itemsExpiredCount;
-  }
-
-  public int getItemsMissingCount() {
-    return itemsMissingCount;
-  }
-
-  public int getItemsInStockCount() {
-    return itemsInStockCount;
-  }
-
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
     updateFilteredStockItems();
@@ -710,10 +680,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public ArrayList<String> getShoppingListItemsProductIds() {
     return shoppingListItemsProductIds;
-  }
-
-  public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
-    return horizontalFilterBarSingle;
   }
 
   public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
@@ -764,6 +730,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     return quantityUnitHashMap.get(id);
   }
 
+  public FilterChipLiveDataStockStatus getFilterChipLiveDataStatus() {
+    return filterChipLiveDataStatus;
+  }
+
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
     return scannerVisibilityLive;
   }
@@ -809,13 +779,6 @@ public class StockOverviewViewModel extends BaseViewModel {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
   }
 
   @Override

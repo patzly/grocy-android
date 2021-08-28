@@ -198,6 +198,22 @@
 
       </FrameLayout>
 
+      <HorizontalScrollView
+        android:id="@+id/container_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <xyz.zedler.patrick.grocy.view.FilterChipNew
+          android:id="@+id/filter_status"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+      </HorizontalScrollView>
+
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

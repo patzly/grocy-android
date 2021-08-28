@@ -32,6 +32,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -157,7 +160,8 @@ public class StockOverviewFragment extends BaseFragment implements
         InfoFullscreen info;
         if (viewModel.isSearchActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-        } else if (!viewModel.getHorizontalFilterBarSingle().isNoFilterActive()) {
+        } else if (viewModel.getFilterChipLiveDataStatus().getStatus()
+            != FilterChipLiveDataStockStatus.STATUS_ALL) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
         } else if (viewModel.getHorizontalFilterBarMulti().areFiltersActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
@@ -174,11 +178,6 @@ public class StockOverviewFragment extends BaseFragment implements
             viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
             viewModel.getProductIdsMissingStockItems(),
-            viewModel.getItemsDueCount(),
-            viewModel.getItemsOverdueCount(),
-            viewModel.getItemsExpiredCount(),
-            viewModel.getItemsMissingCount(),
-            viewModel.getItemsInStockCount(),
             viewModel.getSortMode()
         );
       } else {
@@ -190,13 +189,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
-                viewModel.getHorizontalFilterBarSingle(),
                 viewModel.getHorizontalFilterBarMulti(),
-                viewModel.getItemsDueCount(),
-                viewModel.getItemsOverdueCount(),
-                viewModel.getItemsExpiredCount(),
-                viewModel.getItemsMissingCount(),
-                viewModel.getItemsInStockCount(),
                 true,
                 5,
                 viewModel.getSortMode()
@@ -206,6 +199,15 @@ public class StockOverviewFragment extends BaseFragment implements
     });
 
     embeddedFragmentScanner.setScannerVisibilityLive(viewModel.getScannerVisibilityLive());
+
+    binding.filterStatus.setData(viewModel.getFilterChipLiveDataStatus());
+    viewModel.getFilterChipLiveDataStatus().observe(
+        getViewLifecycleOwner(),
+        data -> {
+          TransitionManager.beginDelayedTransition(binding.containerFilters, new AutoTransition());
+          binding.filterStatus.setData(data);
+        }
+    );
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
