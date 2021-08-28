@@ -36,7 +36,7 @@
     app:strokeWidth="0.5dp"
     app:strokeColor="@color/grey400"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/on_background_secondary">
+    app:cardBackgroundColor="@color/grey100">
 
     <LinearLayout
       android:layout_width="wrap_content"

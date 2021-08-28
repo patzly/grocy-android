@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.view;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.ViewFilterChipNewBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemData;
@@ -49,10 +52,18 @@ public class FilterChipNew extends LinearLayout {
   }
 
   public void setData(FilterChipLiveData data) {
-    binding.text.setText(data.getText());
-    binding.card.setCardBackgroundColor(
-        ContextCompat.getColor(getContext(), data.getColorBackground())
+    int colorFrom = binding.card.getCardBackgroundColor().getColorForState(
+        EMPTY_STATE_SET,
+        ContextCompat.getColor(getContext(), R.color.on_background_secondary)
     );
+    int colorTo = ContextCompat.getColor(getContext(), data.getColorBackground());
+    ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+    colorAnimation.setDuration(250);
+    colorAnimation.addUpdateListener(
+        animation -> binding.card.setCardBackgroundColor((int) animation.getAnimatedValue())
+    );
+    colorAnimation.start();
+    binding.text.setText(data.getText());
     binding.card.setStrokeColor(ContextCompat.getColor(getContext(), data.getColorStroke()));
     if (data.getDrawable() == -1) {
       binding.frameIcon.setVisibility(GONE);
