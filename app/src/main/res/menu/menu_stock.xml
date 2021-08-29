@@ -30,34 +30,6 @@
     tools:ignore="AlwaysShowAction" />
 
   <item
-    android:id="@+id/action_filter"
-    android:icon="@drawable/ic_round_filter_list_out_anim"
-    android:title="@string/action_filter"
-    app:showAsAction="never">
-
-    <menu>
-
-      <item
-        android:id="@+id/action_filter_location"
-        android:title="@string/property_location">
-
-        <menu />
-
-      </item>
-
-      <item
-        android:id="@+id/action_filter_product_group"
-        android:title="@string/property_product_group">
-
-        <menu />
-
-      </item>
-
-    </menu>
-
-  </item>
-
-  <item
     android:id="@+id/action_sort"
     android:icon="@drawable/ic_round_filter_list_out_anim"
     android:title="@string/action_sort"

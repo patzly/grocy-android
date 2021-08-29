@@ -35,8 +35,10 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -71,18 +73,21 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
-  private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
-  private final MutableLiveData<ArrayList<Location>> locationsLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
+  private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
+  private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
+  private final FilterChipLiveDataLocation filterChipLiveDataLocation;
 
   private ArrayList<StockItem> stockItems;
   private ArrayList<Product> products;
+  private ArrayList<ProductGroup> productGroups;
   private ArrayList<ProductBarcode> productBarcodesTemp;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private ArrayList<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
   private ArrayList<QuantityUnit> quantityUnits;
+  private ArrayList<Location> locations;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private ArrayList<StockItem> dueItemsTemp;
   private ArrayList<StockItem> overdueItemsTemp;
@@ -96,13 +101,6 @@ public class StockOverviewViewModel extends BaseViewModel {
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private String sortMode;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-  private int itemsDueCount;
-  private int itemsOverdueCount;
-  private int itemsExpiredCount;
-  private int itemsMissingCount;
-  private int itemsInStockCount;
   private boolean sortAscending;
   private final boolean debug;
 
@@ -121,24 +119,18 @@ public class StockOverviewViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     filteredStockItemsLive = new MutableLiveData<>();
-    productGroupsLive = new MutableLiveData<>();
-    locationsLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
 
-    horizontalFilterBarSingle = new HorizontalFilterBarSingle(
-        this::updateFilteredStockItems,
-        HorizontalFilterBarSingle.DUE_NEXT,
-        HorizontalFilterBarSingle.OVERDUE,
-        HorizontalFilterBarSingle.EXPIRED,
-        HorizontalFilterBarSingle.MISSING,
-        HorizontalFilterBarSingle.IN_STOCK
+    filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
+        getApplication(),
+        this::updateFilteredStockItems
     );
-    itemsDueCount = 0;
-    itemsOverdueCount = 0;
-    itemsExpiredCount = 0;
-    itemsMissingCount = 0;
-    itemsInStockCount = 0;
-    horizontalFilterBarMulti = new HorizontalFilterBarMulti(
+    filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
+        getApplication(),
+        this::updateFilteredStockItems
+    );
+    filterChipLiveDataLocation = new FilterChipLiveDataLocation(
+        getApplication(),
         this::updateFilteredStockItems
     );
     sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
@@ -153,7 +145,8 @@ public class StockOverviewViewModel extends BaseViewModel {
           for (QuantityUnit quantityUnit : quantityUnits) {
             quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
           }
-          this.productGroupsLive.setValue(productGroups);
+          this.productGroups = productGroups;
+          filterChipLiveDataProductGroup.setProductGroups(productGroups);
           this.products = products;
           productHashMap = new HashMap<>();
           for (Product product : products) {
@@ -164,11 +157,11 @@ public class StockOverviewViewModel extends BaseViewModel {
           for (ProductBarcode barcode : barcodes) {
             productBarcodeHashMap.put(barcode.getBarcode(), barcode);
           }
-          itemsDueCount = 0;
-          itemsOverdueCount = 0;
-          itemsExpiredCount = 0;
-          itemsMissingCount = 0;
-          itemsInStockCount = 0;
+          int itemsDueCount = 0;
+          int itemsOverdueCount = 0;
+          int itemsExpiredCount = 0;
+          int itemsMissingCount = 0;
+          int itemsInStockCount = 0;
           productIdsMissingStockItems = new HashMap<>();
           this.stockItems = stockItems;
           for (StockItem stockItem : stockItems) {
@@ -198,7 +191,8 @@ public class StockOverviewViewModel extends BaseViewModel {
               shoppingListItemsProductIds.add(item.getProductId());
             }
           }
-          this.locationsLive.setValue(locations);
+          this.locations = locations;
+          filterChipLiveDataLocation.setLocations(locations);
           locationHashMap = new HashMap<>();
           for (Location location : locations) {
             locationHashMap.put(location.getId(), location);
@@ -216,6 +210,13 @@ public class StockOverviewViewModel extends BaseViewModel {
             locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
           }
 
+          filterChipLiveDataStatus
+              .setDueSoonCount(itemsDueCount)
+              .setOverdueCount(itemsOverdueCount)
+              .setExpiredCount(itemsExpiredCount)
+              .setBelowStockCount(itemsMissingCount)
+              .setInStockCount(itemsInStockCount)
+              .emitCounts();
           updateFilteredStockItems();
           if (downloadAfterLoading) {
             downloadData();
@@ -314,10 +315,14 @@ public class StockOverviewViewModel extends BaseViewModel {
           for (QuantityUnit quantityUnit : quantityUnits) {
             quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
           }
-        }), dlHelper.updateProductGroups(dbChangedTime, this.productGroupsLive::setValue),
+        }),
+        dlHelper.updateProductGroups(dbChangedTime, groups -> {
+          this.productGroups = groups;
+          filterChipLiveDataProductGroup.setProductGroups(groups);
+        }),
         dlHelper.updateStockItems(dbChangedTime, stockItems -> {
           this.stockItems = stockItems;
-          itemsInStockCount = stockItems.size();
+          filterChipLiveDataStatus.setInStockCount(stockItems.size()).emitCounts();
         }), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = new HashMap<>();
@@ -332,13 +337,15 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         }), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
           this.dueItemsTemp = due;
-          itemsDueCount = due.size();
           this.overdueItemsTemp = overdue;
-          itemsOverdueCount = overdue.size();
           this.expiredItemsTemp = expired;
-          itemsExpiredCount = expired.size();
           this.missingItemsTemp = missing;
-          itemsMissingCount = missing.size();
+          filterChipLiveDataStatus
+              .setDueSoonCount(due.size())
+              .setOverdueCount(overdue.size())
+              .setExpiredCount(expired.size())
+              .setBelowStockCount(missing.size())
+              .emitCounts();
         }), dlHelper.updateShoppingListItems(dbChangedTime, shoppingListItems -> {
           this.shoppingListItems = shoppingListItems;
           shoppingListItemsProductIds = new ArrayList<>();
@@ -348,7 +355,8 @@ public class StockOverviewViewModel extends BaseViewModel {
             }
           }
         }), dlHelper.updateLocations(dbChangedTime, locations -> {
-          this.locationsLive.setValue(locations);
+          this.locations = locations;
+          filterChipLiveDataLocation.setLocations(locations);
           locationHashMap = new HashMap<>();
           for (Location location : locations) {
             locationHashMap.put(location.getId(), location);
@@ -401,12 +409,12 @@ public class StockOverviewViewModel extends BaseViewModel {
   private void onQueueEmpty() {
     repository.updateDatabase(
         this.quantityUnits,
-        this.productGroupsLive.getValue(),
+        this.productGroups,
         this.stockItems,
         this.products,
         this.productBarcodesTemp,
         this.shoppingListItems,
-        this.locationsLive.getValue(),
+        this.locations,
         this.stockCurrentLocationsTemp,
         this::updateFilteredStockItems
     );
@@ -444,37 +452,34 @@ public class StockOverviewViewModel extends BaseViewModel {
         continue;
       }
 
-      if (horizontalFilterBarMulti.areFiltersActive()) {
-        HorizontalFilterBarMulti.Filter productGroup = horizontalFilterBarMulti
-            .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-        HorizontalFilterBarMulti.Filter location = horizontalFilterBarMulti
-            .getFilter(HorizontalFilterBarMulti.LOCATION);
-        if (productGroup != null && NumUtil.isStringInt(item.getProduct().getProductGroupId())
-            && productGroup.getObjectId() != Integer
-            .parseInt(item.getProduct().getProductGroupId())) {
+      int productGroupFilterId = filterChipLiveDataProductGroup.getSelectedId();
+      if (productGroupFilterId != FilterChipLiveDataProductGroup.NO_FILTER
+          && NumUtil.isStringInt(item.getProduct().getProductGroupId())
+          && productGroupFilterId != Integer.parseInt(item.getProduct().getProductGroupId())
+      ) {
+        continue;
+      }
+      int locationFilterId = filterChipLiveDataLocation.getSelectedId();
+      if (locationFilterId != FilterChipLiveDataLocation.NO_FILTER) {
+        HashMap<Integer, StockLocation> stockLocationsForProductId
+            = stockLocationsHashMap.get(item.getProductId());
+        if (stockLocationsForProductId == null
+            || !stockLocationsForProductId.containsKey(locationFilterId)
+        ) {
           continue;
-        }
-        if (location != null) {
-          HashMap<Integer, StockLocation> stockLocationsForProductId
-              = stockLocationsHashMap.get(item.getProductId());
-          if (stockLocationsForProductId == null
-              || !stockLocationsForProductId.containsKey(location.getObjectId())
-          ) {
-            continue;
-          }
         }
       }
 
-      if (horizontalFilterBarSingle.isNoFilterActive()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.DUE_NEXT)
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
           && item.isItemDue()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.OVERDUE)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
           && item.isItemOverdue()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.EXPIRED)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
           && item.isItemExpired()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
           && productIdsMissingStockItems.containsKey(item.getProductId())
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.IN_STOCK)
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
           && (!productIdsMissingStockItems.containsKey(item.getProductId())
           || productIdsMissingStockItems.get(item.getProductId()).isItemMissingAndPartlyInStock())
       ) {
@@ -679,26 +684,6 @@ public class StockOverviewViewModel extends BaseViewModel {
     return filteredStockItemsLive;
   }
 
-  public int getItemsDueCount() {
-    return itemsDueCount;
-  }
-
-  public int getItemsOverdueCount() {
-    return itemsOverdueCount;
-  }
-
-  public int getItemsExpiredCount() {
-    return itemsExpiredCount;
-  }
-
-  public int getItemsMissingCount() {
-    return itemsMissingCount;
-  }
-
-  public int getItemsInStockCount() {
-    return itemsInStockCount;
-  }
-
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
     updateFilteredStockItems();
@@ -710,14 +695,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public ArrayList<String> getShoppingListItemsProductIds() {
     return shoppingListItemsProductIds;
-  }
-
-  public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
-    return horizontalFilterBarSingle;
-  }
-
-  public HorizontalFilterBarMulti getHorizontalFilterBarMulti() {
-    return horizontalFilterBarMulti;
   }
 
   public String getSortMode() {
@@ -740,20 +717,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     updateFilteredStockItems();
   }
 
-  public MutableLiveData<ArrayList<ProductGroup>> getProductGroupsLive() {
-    return productGroupsLive;
-  }
-
-  public MutableLiveData<ArrayList<Location>> getLocationsLive() {
-    return locationsLive;
-  }
-
   public Location getLocationFromId(int id) {
     return locationHashMap.get(id);
-  }
-
-  public HashMap<Integer, Product> getProductHashMap() {
-    return productHashMap;
   }
 
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
@@ -762,6 +727,30 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public QuantityUnit getQuantityUnitFromId(int id) {
     return quantityUnitHashMap.get(id);
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {
+    return () -> filterChipLiveDataStatus;
+  }
+
+  public FilterChipLiveDataStockStatus getFilterChipLiveDataStatusLive() {
+    return filterChipLiveDataStatus;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataProductGroup() {
+    return () -> filterChipLiveDataProductGroup;
+  }
+
+  public FilterChipLiveDataProductGroup getFilterChipLiveDataProductGroupLive() {
+    return filterChipLiveDataProductGroup;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataLocation() {
+    return () -> filterChipLiveDataLocation;
+  }
+
+  public FilterChipLiveDataLocation getFilterChipLiveDataLocationLive() {
+    return filterChipLiveDataLocation;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -809,13 +798,6 @@ public class StockOverviewViewModel extends BaseViewModel {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  public boolean getUseFrontCam() {
-    return sharedPrefs.getBoolean(
-        Constants.SETTINGS.SCANNER.FRONT_CAM,
-        Constants.SETTINGS_DEFAULT.SCANNER.FRONT_CAM
-    );
   }
 
   @Override

@@ -29,31 +29,23 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
-import xyz.zedler.patrick.grocy.view.FilterChip;
-import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewItemAdapter extends
     RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
 
   private final static String TAG = StockOverviewItemAdapter.class.getSimpleName();
-  private final static boolean DEBUG = false;
 
   private Context context;
   private final ArrayList<StockItem> stockItems;
@@ -62,8 +54,6 @@ public class StockOverviewItemAdapter extends
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
   private final boolean showDateTracking;
   private final int daysExpiringSoon;
   private String sortMode;
@@ -75,13 +65,6 @@ public class StockOverviewItemAdapter extends
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       ArrayList<Integer> missingItemsProductIds,
       StockOverviewItemAdapterListener listener,
-      HorizontalFilterBarSingle horizontalFilterBarSingle,
-      HorizontalFilterBarMulti horizontalFilterBarMulti,
-      int itemsDueCountInitial,
-      int itemsOverdueCountInitial,
-      int itemsExpiredCountInitial,
-      int itemsMissingCountInitial,
-      int itemsInStockCountInitial,
       boolean showDateTracking,
       int daysExpiringSoon,
       String sortMode
@@ -93,18 +76,6 @@ public class StockOverviewItemAdapter extends
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
-    this.horizontalFilterBarSingle = horizontalFilterBarSingle;
-    this.horizontalFilterBarMulti = horizontalFilterBarMulti;
-    this.horizontalFilterBarSingle
-        .setItemsCount(HorizontalFilterBarSingle.DUE_NEXT, itemsDueCountInitial);
-    this.horizontalFilterBarSingle
-        .setItemsCount(HorizontalFilterBarSingle.OVERDUE, itemsOverdueCountInitial);
-    this.horizontalFilterBarSingle
-        .setItemsCount(HorizontalFilterBarSingle.EXPIRED, itemsExpiredCountInitial);
-    this.horizontalFilterBarSingle
-        .setItemsCount(HorizontalFilterBarSingle.MISSING, itemsMissingCountInitial);
-    this.horizontalFilterBarSingle
-        .setItemsCount(HorizontalFilterBarSingle.IN_STOCK, itemsInStockCountInitial);
     this.showDateTracking = showDateTracking;
     this.daysExpiringSoon = daysExpiringSoon;
     this.sortMode = sortMode;
@@ -133,259 +104,20 @@ public class StockOverviewItemAdapter extends
     }
   }
 
-  public static class FilterSingleRowViewHolder extends ViewHolder {
-
-    private final WeakReference<Context> weakContext;
-    private final FilterChip chipDueNext;
-    private FilterChip chipOverdue;
-    private FilterChip chipExpired;
-    private FilterChip chipMissing;
-    private FilterChip chipInStock;
-    private final HorizontalFilterBarSingle horizontalFilterBarSingle;
-
-    public FilterSingleRowViewHolder(
-        RowFilterChipsBinding binding,
-        Context context,
-        HorizontalFilterBarSingle horizontalFilterBarSingle
-    ) {
-      super(binding.getRoot());
-
-      this.horizontalFilterBarSingle = horizontalFilterBarSingle;
-      weakContext = new WeakReference<>(context);
-      chipDueNext = new FilterChip(
-          context,
-          R.color.retro_yellow_bg,
-          context.getResources().getQuantityString(R.plurals.msg_due_products,
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT),
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)),
-          () -> {
-            FilterChip.changeStateToInactive(chipOverdue, chipExpired, chipMissing, chipInStock);
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.DUE_NEXT);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      chipOverdue = new FilterChip(
-          context,
-          R.color.retro_dirt,
-          context.getResources().getQuantityString(R.plurals.msg_overdue_products,
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE),
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)),
-          () -> {
-            FilterChip.changeStateToInactive(chipDueNext, chipExpired, chipMissing, chipInStock);
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.OVERDUE);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      chipExpired = new FilterChip(
-          context,
-          R.color.retro_red_bg_black,
-          context.getResources().getQuantityString(R.plurals.msg_expired_products,
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED),
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)),
-          () -> {
-            FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipMissing, chipInStock);
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.EXPIRED);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      chipMissing = new FilterChip(
-          context,
-          R.color.retro_blue_bg,
-          context.getResources().getQuantityString(R.plurals.msg_missing_products,
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)),
-          () -> {
-            FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipInStock);
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.MISSING);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      chipInStock = new FilterChip(
-          context,
-          R.color.retro_green_bg_black,
-          context.getResources().getQuantityString(R.plurals.msg_in_stock_products,
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK),
-              horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)),
-          () -> {
-            FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing);
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.IN_STOCK);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      binding.container.addView(chipDueNext);
-      binding.container.addView(chipOverdue);
-      binding.container.addView(chipExpired);
-      binding.container.addView(chipMissing);
-      binding.container.addView(chipInStock);
-    }
-
-    public void bind() {
-      if (horizontalFilterBarSingle.isNoFilterActive()) {
-        FilterChip
-            .changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing, chipInStock);
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.DUE_NEXT)) {
-        FilterChip.changeStateToInactive(chipOverdue, chipExpired, chipMissing, chipInStock);
-        FilterChip.changeStateToActive(chipDueNext);
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.OVERDUE)) {
-        FilterChip.changeStateToInactive(chipDueNext, chipExpired, chipMissing, chipInStock);
-        FilterChip.changeStateToActive(chipOverdue);
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.EXPIRED)) {
-        FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipMissing, chipInStock);
-        FilterChip.changeStateToActive(chipExpired);
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)) {
-        FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipInStock);
-        FilterChip.changeStateToActive(chipMissing);
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.IN_STOCK)) {
-        FilterChip.changeStateToInactive(chipDueNext, chipOverdue, chipExpired, chipMissing);
-        FilterChip.changeStateToActive(chipInStock);
-      }
-      chipDueNext.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_due_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT)
-      ));
-      chipOverdue.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_overdue_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)
-      ));
-      chipExpired.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_expired_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)
-      ));
-      chipMissing.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_missing_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
-      ));
-      chipInStock.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_in_stock_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)
-      ));
-    }
-  }
-
-  public static class FilterMultiRowViewHolder extends ViewHolder {
-
-    private final WeakReference<Context> weakContext;
-    private final RowFilterChipsBinding binding;
-    private InputChip chipProductGroup;
-    private InputChip chipLocation;
-    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-
-    public FilterMultiRowViewHolder(
-        RowFilterChipsBinding binding,
-        Context context,
-        HorizontalFilterBarMulti horizontalFilterBarMulti
-    ) {
-      super(binding.getRoot());
-      this.binding = binding;
-      this.horizontalFilterBarMulti = horizontalFilterBarMulti;
-      weakContext = new WeakReference<>(context);
-    }
-
-    public void bind() {
-      HorizontalFilterBarMulti.Filter filterPg = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-      if (filterPg != null && chipProductGroup == null) {
-        chipProductGroup = new InputChip(
-            weakContext.get(),
-            filterPg.getObjectName(),
-            R.drawable.ic_round_category,
-            true,
-            () -> {
-              horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-              chipProductGroup = null;
-            }
-        );
-        binding.container.addView(chipProductGroup);
-      } else if (filterPg != null) {
-        chipProductGroup.setText(filterPg.getObjectName());
-      }
-
-      HorizontalFilterBarMulti.Filter filterLoc = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.LOCATION);
-      if (filterLoc != null && chipLocation == null) {
-        chipLocation = new InputChip(
-            weakContext.get(),
-            filterLoc.getObjectName(),
-            R.drawable.ic_round_place,
-            true,
-            () -> {
-              horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.LOCATION);
-              chipLocation = null;
-            }
-        );
-        binding.container.addView(chipLocation);
-      } else if (filterLoc != null) {
-        chipLocation.setText(filterLoc.getObjectName());
-      }
-    }
-  }
-
-  @Override
-  public int getItemViewType(int position) {
-    if (position == 0) {
-      return -2; // filter single row
-    }
-    if (position == 1) {
-      return -1; // filter multi row
-    }
-    return 0;
-  }
-
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (viewType == -2) { // filter single row
-      RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      );
-      return new FilterSingleRowViewHolder(
-          binding,
-          context,
-          horizontalFilterBarSingle
-      );
-    } else if (viewType == -1) { // filter multi row
-      RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      );
-      return new FilterMultiRowViewHolder(
-          binding,
-          context,
-          horizontalFilterBarMulti
-      );
-    } else {
-      return new StockItemViewHolder(RowStockItemBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      ));
-    }
+    return new StockItemViewHolder(RowStockItemBinding.inflate(
+        LayoutInflater.from(parent.getContext()),
+        parent,
+        false
+    ));
   }
 
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
-
-    int position = viewHolder.getAdapterPosition();
-    int movedPosition = position - 2;
-
-    if (viewHolder.getItemViewType() == -2) { // Filter single row
-      ((FilterSingleRowViewHolder) viewHolder).bind();
-      return;
-    } else if (viewHolder.getItemViewType() == -1) { // Filter multi row
-      ((FilterMultiRowViewHolder) viewHolder).bind();
-      return;
-    }
-
-    StockItem stockItem = stockItems.get(movedPosition);
+    StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
     StockItemViewHolder holder = (StockItemViewHolder) viewHolder;
 
     // NAME
@@ -478,7 +210,7 @@ public class StockOverviewItemAdapter extends
 
   @Override
   public int getItemCount() {
-    return stockItems.size() + 2;
+    return stockItems.size();
   }
 
   public interface StockOverviewItemAdapterListener {
@@ -491,31 +223,8 @@ public class StockOverviewItemAdapter extends
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       ArrayList<Integer> missingItemsProductIds,
-      int itemsDueCount,
-      int itemsOverdueCount,
-      int itemsExpiredCount,
-      int itemsMissingCount,
-      int itemsInStockCount,
       String sortMode
   ) {
-    if (horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.DUE_NEXT) != itemsDueCount
-        || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.OVERDUE)
-        != itemsOverdueCount
-        || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.EXPIRED)
-        != itemsExpiredCount
-        || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
-        != itemsMissingCount
-        || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.IN_STOCK)
-        != itemsInStockCount) {
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.DUE_NEXT, itemsDueCount);
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.OVERDUE, itemsOverdueCount);
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.EXPIRED, itemsExpiredCount);
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.MISSING, itemsMissingCount);
-      horizontalFilterBarSingle
-          .setItemsCount(HorizontalFilterBarSingle.IN_STOCK, itemsInStockCount);
-      notifyItemChanged(0); // update viewHolder with filter row
-    }
-
     StockOverviewItemAdapter.DiffCallback diffCallback = new StockOverviewItemAdapter.DiffCallback(
         this.stockItems,
         newList,
@@ -538,7 +247,7 @@ public class StockOverviewItemAdapter extends
     this.missingItemsProductIds.clear();
     this.missingItemsProductIds.addAll(missingItemsProductIds);
     this.sortMode = sortMode;
-    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
+    diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -636,40 +345,6 @@ public class StockOverviewItemAdapter extends
       }
 
       return newItem.equals(oldItem);
-    }
-  }
-
-  /**
-   * Custom ListUpdateCallback that dispatches update events to the given adapter with offset of 1,
-   * because the first item is the filter row.
-   */
-  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
-
-    @NonNull
-    private final StockOverviewItemAdapter mAdapter;
-
-    public AdapterListUpdateCallback(@NonNull StockOverviewItemAdapter adapter) {
-      mAdapter = adapter;
-    }
-
-    @Override
-    public void onInserted(int position, int count) {
-      mAdapter.notifyItemRangeInserted(position + 2, count);
-    }
-
-    @Override
-    public void onRemoved(int position, int count) {
-      mAdapter.notifyItemRangeRemoved(position + 2, count);
-    }
-
-    @Override
-    public void onMoved(int fromPosition, int toPosition) {
-      mAdapter.notifyItemMoved(fromPosition + 2, toPosition + 2);
-    }
-
-    @Override
-    public void onChanged(int position, int count, Object payload) {
-      mAdapter.notifyItemRangeChanged(position + 2, count, payload);
     }
   }
 }

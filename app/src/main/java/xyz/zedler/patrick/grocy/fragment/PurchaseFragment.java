@@ -99,7 +99,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-
     args = PurchaseFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new PurchaseViewModel
@@ -231,7 +230,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         Constants.FAB.TAG.PURCHASE,
         animated,
         () -> {
-          if (viewModel.isQuickModeEnabled()) {
+          if (viewModel.isQuickModeEnabled()
+              && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
             focusNextInvalidView();
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
@@ -393,7 +393,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void clearInputFocusOrFocusNextInvalidView() {
-    if (viewModel.isQuickModeEnabled()) {
+    if (viewModel.isQuickModeEnabled()
+        && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
       focusNextInvalidView();
     } else {
       clearInputFocus();
@@ -403,6 +404,11 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void startTransaction() {
     viewModel.purchaseProduct();
+  }
+
+  @Override
+  public void interruptCurrentProductFlow() {
+    viewModel.getFormData().setCurrentProductFlowInterrupted(true);
   }
 
   @Override
