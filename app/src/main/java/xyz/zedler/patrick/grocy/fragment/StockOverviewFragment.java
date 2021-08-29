@@ -32,8 +32,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +44,10 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -60,7 +57,6 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.IconUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewFragment extends BaseFragment implements
@@ -160,10 +156,14 @@ public class StockOverviewFragment extends BaseFragment implements
         InfoFullscreen info;
         if (viewModel.isSearchActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-        } else if (viewModel.getFilterChipLiveDataStatus().getStatus()
+        } else if (viewModel.getFilterChipLiveDataStatusLive().getStatus()
             != FilterChipLiveDataStockStatus.STATUS_ALL) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-        } else if (viewModel.getHorizontalFilterBarMulti().areFiltersActive()) {
+        } else if (viewModel.getFilterChipLiveDataProductGroupLive().getSelectedId()
+            != FilterChipLiveDataProductGroup.NO_FILTER
+            || viewModel.getFilterChipLiveDataLocationLive().getSelectedId()
+            != FilterChipLiveDataProductGroup.NO_FILTER
+        ) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
         } else {
           info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
@@ -189,7 +189,6 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
-                viewModel.getHorizontalFilterBarMulti(),
                 true,
                 5,
                 viewModel.getSortMode()
@@ -199,15 +198,6 @@ public class StockOverviewFragment extends BaseFragment implements
     });
 
     embeddedFragmentScanner.setScannerVisibilityLive(viewModel.getScannerVisibilityLive());
-
-    binding.filterStatus.setData(viewModel.getFilterChipLiveDataStatus());
-    viewModel.getFilterChipLiveDataStatus().observe(
-        getViewLifecycleOwner(),
-        data -> {
-          TransitionManager.beginDelayedTransition(binding.containerFilters, new AutoTransition());
-          binding.filterStatus.setData(data);
-        }
-    );
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -289,7 +279,7 @@ public class StockOverviewFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
+    updateUI(StockOverviewFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
         && savedInstanceState == null);
   }
 
@@ -353,14 +343,6 @@ public class StockOverviewFragment extends BaseFragment implements
     viewModel.performAction(action, stockItem);
   }
 
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
-      return true;
-    }
-    return false;
-  }
-
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_search) {
       IconUtil.start(item);
@@ -399,48 +381,6 @@ public class StockOverviewFragment extends BaseFragment implements
       item.setChecked(!item.isChecked());
       viewModel.setSortAscending(item.isChecked());
       return true;
-    } else if (item.getItemId() == R.id.action_filter_product_group) {
-      SubMenu menuProductGroups = item.getSubMenu();
-      menuProductGroups.clear();
-      ArrayList<ProductGroup> productGroups = viewModel.getProductGroupsLive().getValue();
-      if (productGroups == null) {
-        return true;
-      }
-      SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
-      for (ProductGroup pg : productGroups) {
-        menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(pgItem -> {
-          if (binding.recycler.getAdapter() == null) {
-            return false;
-          }
-          viewModel.getHorizontalFilterBarMulti().addFilter(
-              HorizontalFilterBarMulti.PRODUCT_GROUP,
-              new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
-          );
-          binding.recycler.getAdapter().notifyItemChanged(1);
-          return true;
-        });
-      }
-    } else if (item.getItemId() == R.id.action_filter_location) {
-      SubMenu menuLocations = item.getSubMenu();
-      menuLocations.clear();
-      ArrayList<Location> locations = viewModel.getLocationsLive().getValue();
-      if (locations == null) {
-        return true;
-      }
-      SortUtil.sortLocationsByName(requireContext(), locations, true);
-      for (Location loc : locations) {
-        menuLocations.add(loc.getName()).setOnMenuItemClickListener(locItem -> {
-          if (binding.recycler.getAdapter() == null) {
-            return false;
-          }
-          viewModel.getHorizontalFilterBarMulti().addFilter(
-              HorizontalFilterBarMulti.LOCATION,
-              new HorizontalFilterBarMulti.Filter(loc.getName(), loc.getId())
-          );
-          binding.recycler.getAdapter().notifyItemChanged(1);
-          return true;
-        });
-      }
     }
     return false;
   }

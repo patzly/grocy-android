@@ -43,7 +43,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
 
   public FilterChipLiveDataStockStatus(Application application, Runnable clickListener) {
     this.application = application;
-    setStatus(STATUS_ALL);
+    setStatus(STATUS_ALL, null);
     if (clickListener != null) {
       setMenuItemClickListener(item -> {
         setStatus(item.getItemId(), item.getTitle().toString());
@@ -59,37 +59,29 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   }
 
   public FilterChipLiveDataStockStatus setStatus(int status, @Nullable String text) {
-    if (status == STATUS_ALL) {
-      setColorBackground(R.color.grey100);
-      setColorStroke(R.color.grey400);
-      setText(text != null ? text : "All");
-    } else if (status == STATUS_DUE_SOON) {
+    if (status == STATUS_DUE_SOON) {
       setColorBackground(R.color.retro_yellow_bg);
-      setColorStrokeToBackground();
-      setText(text != null ? text : "0 due soon");
     } else if (status == STATUS_OVERDUE) {
       setColorBackground(R.color.retro_dirt);
-      setColorStrokeToBackground();
-      setText(text != null ? text : "0 due soon");
     } else if (status == STATUS_EXPIRED) {
       setColorBackground(R.color.retro_red_bg_black);
-      setColorStrokeToBackground();
-      setText(text != null ? text : "0 due soon");
     } else if (status == STATUS_BELOW_MIN) {
       setColorBackground(R.color.retro_blue_bg);
-      setColorStrokeToBackground();
-      setText(text != null ? text : "0 due soon");
     } else if (status == STATUS_IN_STOCK) {
       setColorBackground(R.color.retro_green_bg_black);
+    } else {
+      setColorBackground(R.color.grey100);
+    }
+    if (status == STATUS_ALL) {
+      setColorStroke(R.color.grey400);
+      setText(application.getString(R.string.property_status));
+    } else {
       setColorStrokeToBackground();
-      setText(text != null ? text : "0 due soon");
+      assert text != null;
+      setText(text);
     }
     setItemIdChecked(status);
     return this;
-  }
-
-  public FilterChipLiveDataStockStatus setStatus(int status) {
-    return setStatus(status, null);
   }
 
   public FilterChipLiveDataStockStatus setDueSoonCount(int dueSoonCount) {
@@ -119,7 +111,10 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
 
   public void emitCounts() {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
-    menuItemDataList.add(new MenuItemData(STATUS_ALL, "All"));
+    menuItemDataList.add(new MenuItemData(
+        STATUS_ALL,
+        application.getString(R.string.action_no_filter)
+    ));
     menuItemDataList.add(new MenuItemData(
         STATUS_DUE_SOON,
         getQuString(R.plurals.msg_due_products, dueSoonCount)

@@ -115,6 +115,7 @@
   <string name="action_github" translatable="false">GitHub</string>
   <string name="action_share">Share</string>
   <string name="action_share_description">Tell your friends about Grocy Android</string>
+  <string name="action_no_filter">No filter</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
