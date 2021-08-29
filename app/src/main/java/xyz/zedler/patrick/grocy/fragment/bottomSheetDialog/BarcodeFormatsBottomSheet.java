@@ -140,7 +140,9 @@ public class BarcodeFormatsBottomSheet extends BaseBottomSheet {
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (enabledBarcodeFormats == null || enabledBarcodeFormats.isEmpty()) {
+    if (enabledBarcodeFormats == null || enabledBarcodeFormats.isEmpty()
+        || enabledBarcodeFormats.size() == 15
+    ) {
       return context.getString(R.string.setting_barcode_formats_description_all);
     }
     StringBuilder enabledBarcodeFormatsBuilder = new StringBuilder();
