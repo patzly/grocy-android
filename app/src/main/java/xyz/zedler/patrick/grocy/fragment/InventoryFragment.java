@@ -124,9 +124,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         if (InventoryFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
           activity.navigateUp();
         } else {
-          viewModel.getFormData().clearForm();
-          focusProductInputIfNecessary();
-          embeddedFragmentScanner.startScannerIfVisible();
+          clearFormAndFocusProductInput();
         }
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -357,6 +355,12 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     } else {
       clearInputFocus();
     }
+  }
+
+  public void clearFormAndFocusProductInput() {
+    viewModel.getFormData().clearForm();
+    focusProductInputIfNecessary();
+    embeddedFragmentScanner.startScannerIfVisible();
   }
 
   @Override
