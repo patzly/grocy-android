@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -58,7 +57,6 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   private final static String TAG = ConsumeFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private ConsumeFragmentArgs args;
   private FragmentConsumeBinding binding;
   private ConsumeViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
@@ -92,8 +90,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-
-    args = ConsumeFragmentArgs.fromBundle(requireArguments());
+    ConsumeFragmentArgs args = ConsumeFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this, new ConsumeViewModel
         .ConsumeViewModelFactory(activity.getApplication(), args)
@@ -202,7 +199,8 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
         Constants.FAB.TAG.CONSUME,
         animated,
         () -> {
-          if (viewModel.isQuickModeEnabled()) {
+          if (viewModel.isQuickModeEnabled()
+              && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
             focusNextInvalidView();
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
@@ -357,24 +355,22 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void clearInputFocusOrFocusNextInvalidView() {
-    if (viewModel.isQuickModeEnabled()) {
+    if (viewModel.isQuickModeEnabled()
+        && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
       focusNextInvalidView();
     } else {
       clearInputFocus();
     }
   }
 
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-    }
-  }
-
   @Override
   public void startTransaction() {
     viewModel.consumeProduct(false);
+  }
+
+  @Override
+  public void interruptCurrentProductFlow() {
+    viewModel.getFormData().setCurrentProductFlowInterrupted(true);
   }
 
   @Override
