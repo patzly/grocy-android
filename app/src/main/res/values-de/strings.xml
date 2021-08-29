@@ -108,6 +108,7 @@
   <string name="action_perform">Aktion ausführen</string>
   <string name="action_share">Teilen</string>
   <string name="action_share_description">Erzählen Sie Ihren Freunden von Grocy Android</string>
+  <string name="action_no_filter">Nicht filtern</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -722,6 +723,10 @@
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
   <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
   <string name="setting_choose_barcode_scanner_description">Für Barcode-Scannen mit der Kamera</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream">Kamera-Stream auf Vorschau-Format zuschneiden</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream_description">Verhindert, dass der Scanner Barcodes außerhalb der Vorschau erkennt; Funktioniert möglicherweise nicht auf Ihrem Gerät!</string>
   <string name="setting_use_front_cam">Selfie-Kamera nutzen</string>
   <string name="setting_use_front_cam_description">Für Barcode-Scanning</string>
   <string name="setting_use_2d_scanner_format">2D-Barcode Scanner-Format benutzen</string>
