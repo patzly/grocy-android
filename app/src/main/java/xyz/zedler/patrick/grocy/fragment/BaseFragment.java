@@ -182,6 +182,9 @@ public class BaseFragment extends Fragment {
   public void startTransaction() {
   }
 
+  public void interruptCurrentProductFlow() {
+  }
+
   public void enableLoginButtons() {
   }
 

@@ -124,4 +124,8 @@ public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
       return text;
     }
   }
+
+  public interface Listener {
+    FilterChipLiveData getData();
+  }
 }

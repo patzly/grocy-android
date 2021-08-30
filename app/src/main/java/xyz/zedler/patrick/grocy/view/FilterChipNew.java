@@ -27,10 +27,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.BindingAdapter;
+import androidx.lifecycle.Observer;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.ViewFilterChipNewBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
@@ -41,6 +46,9 @@ public class FilterChipNew extends LinearLayout {
   private final static String TAG = FilterChipNew.class.getSimpleName();
 
   private final ViewFilterChipNewBinding binding;
+  private FilterChipLiveData liveData;
+  private final Observer<FilterChipLiveData> liveDataObserver;
+  private boolean firstTimePassed = false;  // necessary to prevent weird animation on fragment init
 
   public FilterChipNew(@NonNull Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
@@ -49,9 +57,20 @@ public class FilterChipNew extends LinearLayout {
         this,
         true
     );
+    liveDataObserver = data -> {
+      if (firstTimePassed) {
+        TransitionManager.beginDelayedTransition((ViewGroup) getRootView(), new AutoTransition());
+      }
+      setData(data);
+      firstTimePassed = true;
+    };
   }
 
   public void setData(FilterChipLiveData data) {
+    liveData = data;
+    if (isAttachedToWindow() && !liveData.hasObservers()) {
+      liveData.observeForever(liveDataObserver);
+    }
     int colorFrom = binding.card.getCardBackgroundColor().getColorForState(
         EMPTY_STATE_SET,
         ContextCompat.getColor(getContext(), R.color.on_background_secondary)
@@ -85,5 +104,30 @@ public class FilterChipNew extends LinearLayout {
       menu.setGroupCheckable(0, true, true);
       binding.card.setOnClickListener(v -> popupMenu.show());
     }
+  }
+
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    if (liveData != null && !liveData.hasObservers()) {
+      liveData.observeForever(liveDataObserver);
+    }
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    if (liveData != null) {
+      liveData.removeObserver(liveDataObserver);
+    }
+  }
+
+  @BindingAdapter("app:data")
+  public static void observeData(FilterChipNew view, FilterChipLiveData.Listener dataListener) {
+    // This is a workaround. The static binding adapter method overrides auto method selection
+    // for app:data and takes a FilterChipLiveData.Listener object where it can extract the
+    // LiveData. It is necessary because Data Binding throws error when method takes LiveData as
+    // parameter AND actual parameter is also LiveData.
+    view.setData(dataListener.getData());
   }
 }

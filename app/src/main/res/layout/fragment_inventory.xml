@@ -276,7 +276,7 @@
                 app:endIconTint="@color/icon"
                 app:endIconContentDescription="Scan barcode"
                 app:helperTextEnabled="true"
-                app:helperText=" "
+                app:helperText="@{formData.productNameInfoStockLive}"
                 app:errorIconDrawable="@{null}"
                 app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
                 app:errorText="@{formData.productNameErrorLive}">
@@ -442,6 +442,18 @@
                 app:dense="true" />
 
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.UnelevatedButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="72dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginTop="16dp"
+              android:text="@string/action_clear_form"
+              android:onClick="@{() -> fragment.clearFormAndFocusProductInput()}"
+              android:visibility="@{viewModel.quickModeEnabled &amp;&amp; formData.amountErrorLive != null ? View.VISIBLE : View.GONE}"
+              app:backgroundTint="@color/retro_green_bg_white" />
 
             <com.google.android.material.card.MaterialCardView
               android:layout_width="match_parent"

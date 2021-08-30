@@ -67,7 +67,10 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheet {
 
     view.findViewById(R.id.header).setOnClickListener(v -> hideAndStopProgress());
     view.findViewById(R.id.container).setOnClickListener(v -> hideAndStopProgress());
-    view.findViewById(R.id.button_cancel).setOnClickListener(v -> dismiss());
+    view.findViewById(R.id.button_cancel).setOnClickListener(v -> {
+      activity.getCurrentFragment().interruptCurrentProductFlow();
+      dismiss();
+    });
     view.findViewById(R.id.button_proceed).setOnClickListener(v -> {
       activity.getCurrentFragment().startTransaction();
       dismiss();
@@ -105,7 +108,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheet {
       confirmProgressAnimator = null;
     }
     confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressTimeout.getMax());
-    confirmProgressAnimator.setDuration(CONFIRMATION_DURATION
+    confirmProgressAnimator.setDuration((long) CONFIRMATION_DURATION
         * (progressTimeout.getMax() - startValue) / progressTimeout.getMax());
     confirmProgressAnimator.addUpdateListener(
         animation -> progressTimeout.setProgress((Integer) animation.getAnimatedValue())

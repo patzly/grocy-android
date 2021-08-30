@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -61,7 +60,6 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
   private final static String TAG = TransferFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private TransferFragmentArgs args;
   private FragmentTransferBinding binding;
   private TransferViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
@@ -95,10 +93,10 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    TransferFragmentArgs args = TransferFragmentArgs.fromBundle(requireArguments());
 
-    args = TransferFragmentArgs.fromBundle(requireArguments());
-
-    viewModel = new ViewModelProvider(this, new TransferViewModelFactory(activity.getApplication(), args)
+    viewModel = new ViewModelProvider(this, new TransferViewModelFactory(activity.getApplication(),
+        args)
     ).get(TransferViewModel.class);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
@@ -188,7 +186,8 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
         FAB.TAG.TRANSFER,
         animated,
         () -> {
-          if (viewModel.isQuickModeEnabled()) {
+          if (viewModel.isQuickModeEnabled()
+              && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
             focusNextInvalidView();
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
@@ -349,24 +348,22 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void clearInputFocusOrFocusNextInvalidView() {
-    if (viewModel.isQuickModeEnabled()) {
+    if (viewModel.isQuickModeEnabled()
+        && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
       focusNextInvalidView();
     } else {
       clearInputFocus();
     }
   }
 
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-    }
-  }
-
   @Override
   public void startTransaction() {
     viewModel.transferProduct();
+  }
+
+  @Override
+  public void interruptCurrentProductFlow() {
+    viewModel.getFormData().setCurrentProductFlowInterrupted(true);
   }
 
   @Override

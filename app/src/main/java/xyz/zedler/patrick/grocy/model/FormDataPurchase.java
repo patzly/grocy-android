@@ -90,7 +90,7 @@ public class FormDataPurchase {
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
   private final PluralUtil pluralUtil;
-  private boolean torchOn = false;
+  private boolean currentProductFlowInterrupted = false;
 
   public FormDataPurchase(
       Application application,
@@ -606,12 +606,12 @@ public class FormDataPurchase {
     return locationNameLive;
   }
 
-  public boolean isTorchOn() {
-    return torchOn;
+  public boolean isCurrentProductFlowNotInterrupted() {
+    return !currentProductFlowInterrupted;
   }
 
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
+  public void setCurrentProductFlowInterrupted(boolean currentProductFlowInterrupted) {
+    this.currentProductFlowInterrupted = currentProductFlowInterrupted;
   }
 
   public boolean isProductNameValid() {
@@ -807,6 +807,7 @@ public class FormDataPurchase {
   }
 
   public void clearForm() {
+    currentProductFlowInterrupted = false;
     barcodeLive.setValue(null);
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);

@@ -29,29 +29,23 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
-import xyz.zedler.patrick.grocy.view.InputChip;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewItemAdapter extends
     RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
 
   private final static String TAG = StockOverviewItemAdapter.class.getSimpleName();
-  private final static boolean DEBUG = false;
 
   private Context context;
   private final ArrayList<StockItem> stockItems;
@@ -60,7 +54,6 @@ public class StockOverviewItemAdapter extends
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
-  private final HorizontalFilterBarMulti horizontalFilterBarMulti;
   private final boolean showDateTracking;
   private final int daysExpiringSoon;
   private String sortMode;
@@ -72,7 +65,6 @@ public class StockOverviewItemAdapter extends
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       ArrayList<Integer> missingItemsProductIds,
       StockOverviewItemAdapterListener listener,
-      HorizontalFilterBarMulti horizontalFilterBarMulti,
       boolean showDateTracking,
       int daysExpiringSoon,
       String sortMode
@@ -84,7 +76,6 @@ public class StockOverviewItemAdapter extends
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
-    this.horizontalFilterBarMulti = horizontalFilterBarMulti;
     this.showDateTracking = showDateTracking;
     this.daysExpiringSoon = daysExpiringSoon;
     this.sortMode = sortMode;
@@ -113,108 +104,20 @@ public class StockOverviewItemAdapter extends
     }
   }
 
-  public static class FilterMultiRowViewHolder extends ViewHolder {
-
-    private final WeakReference<Context> weakContext;
-    private final RowFilterChipsBinding binding;
-    private InputChip chipProductGroup;
-    private InputChip chipLocation;
-    private final HorizontalFilterBarMulti horizontalFilterBarMulti;
-
-    public FilterMultiRowViewHolder(
-        RowFilterChipsBinding binding,
-        Context context,
-        HorizontalFilterBarMulti horizontalFilterBarMulti
-    ) {
-      super(binding.getRoot());
-      this.binding = binding;
-      this.horizontalFilterBarMulti = horizontalFilterBarMulti;
-      weakContext = new WeakReference<>(context);
-    }
-
-    public void bind() {
-      HorizontalFilterBarMulti.Filter filterPg = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-      if (filterPg != null && chipProductGroup == null) {
-        chipProductGroup = new InputChip(
-            weakContext.get(),
-            filterPg.getObjectName(),
-            R.drawable.ic_round_category,
-            true,
-            () -> {
-              horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
-              chipProductGroup = null;
-            }
-        );
-        binding.container.addView(chipProductGroup);
-      } else if (filterPg != null) {
-        chipProductGroup.setText(filterPg.getObjectName());
-      }
-
-      HorizontalFilterBarMulti.Filter filterLoc = horizontalFilterBarMulti
-          .getFilter(HorizontalFilterBarMulti.LOCATION);
-      if (filterLoc != null && chipLocation == null) {
-        chipLocation = new InputChip(
-            weakContext.get(),
-            filterLoc.getObjectName(),
-            R.drawable.ic_round_place,
-            true,
-            () -> {
-              horizontalFilterBarMulti.removeFilter(HorizontalFilterBarMulti.LOCATION);
-              chipLocation = null;
-            }
-        );
-        binding.container.addView(chipLocation);
-      } else if (filterLoc != null) {
-        chipLocation.setText(filterLoc.getObjectName());
-      }
-    }
-  }
-
-  @Override
-  public int getItemViewType(int position) {
-    if (position == 0) {
-      return -1; // filter multi row
-    }
-    return 0;
-  }
-
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (viewType == -1) { // filter multi row
-      RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      );
-      return new FilterMultiRowViewHolder(
-          binding,
-          context,
-          horizontalFilterBarMulti
-      );
-    } else {
-      return new StockItemViewHolder(RowStockItemBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      ));
-    }
+    return new StockItemViewHolder(RowStockItemBinding.inflate(
+        LayoutInflater.from(parent.getContext()),
+        parent,
+        false
+    ));
   }
 
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
-
-    int position = viewHolder.getAdapterPosition();
-    int movedPosition = position - 1;
-
-    if (viewHolder.getItemViewType() == -1) { // Filter multi row
-      ((FilterMultiRowViewHolder) viewHolder).bind();
-      return;
-    }
-
-    StockItem stockItem = stockItems.get(movedPosition);
+    StockItem stockItem = stockItems.get(viewHolder.getAdapterPosition());
     StockItemViewHolder holder = (StockItemViewHolder) viewHolder;
 
     // NAME
@@ -307,7 +210,7 @@ public class StockOverviewItemAdapter extends
 
   @Override
   public int getItemCount() {
-    return stockItems.size() + 1;
+    return stockItems.size();
   }
 
   public interface StockOverviewItemAdapterListener {
@@ -344,7 +247,7 @@ public class StockOverviewItemAdapter extends
     this.missingItemsProductIds.clear();
     this.missingItemsProductIds.addAll(missingItemsProductIds);
     this.sortMode = sortMode;
-    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
+    diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -442,40 +345,6 @@ public class StockOverviewItemAdapter extends
       }
 
       return newItem.equals(oldItem);
-    }
-  }
-
-  /**
-   * Custom ListUpdateCallback that dispatches update events to the given adapter with offset of 1,
-   * because the first item is the filter row.
-   */
-  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
-
-    @NonNull
-    private final StockOverviewItemAdapter mAdapter;
-
-    public AdapterListUpdateCallback(@NonNull StockOverviewItemAdapter adapter) {
-      mAdapter = adapter;
-    }
-
-    @Override
-    public void onInserted(int position, int count) {
-      mAdapter.notifyItemRangeInserted(position + 1, count);
-    }
-
-    @Override
-    public void onRemoved(int position, int count) {
-      mAdapter.notifyItemRangeRemoved(position + 1, count);
-    }
-
-    @Override
-    public void onMoved(int fromPosition, int toPosition) {
-      mAdapter.notifyItemMoved(fromPosition + 1, toPosition + 1);
-    }
-
-    @Override
-    public void onChanged(int position, int count, Object payload) {
-      mAdapter.notifyItemRangeChanged(position + 1, count, payload);
     }
   }
 }
