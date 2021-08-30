@@ -58,7 +58,6 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   private final static String TAG = InventoryFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private InventoryFragmentArgs args;
   private FragmentInventoryBinding binding;
   private InventoryViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
@@ -92,8 +91,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-
-    args = InventoryFragmentArgs.fromBundle(requireArguments());
+    InventoryFragmentArgs args = InventoryFragmentArgs.fromBundle(requireArguments());
 
     viewModel = new ViewModelProvider(this,
         new InventoryViewModelFactory(activity.getApplication(), args)
@@ -126,9 +124,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         if (InventoryFragmentArgs.fromBundle(getArguments()).getCloseWhenFinished()) {
           activity.navigateUp();
         } else {
-          viewModel.getFormData().clearForm();
-          focusProductInputIfNecessary();
-          embeddedFragmentScanner.startScannerIfVisible();
+          clearFormAndFocusProductInput();
         }
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -190,7 +186,8 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         FAB.TAG.INVENTORY,
         animated,
         () -> {
-          if (viewModel.isQuickModeEnabled()) {
+          if (viewModel.isQuickModeEnabled()
+              && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
             focusNextInvalidView();
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
@@ -352,16 +349,28 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void clearInputFocusOrFocusNextInvalidView() {
-    if (viewModel.isQuickModeEnabled()) {
+    if (viewModel.isQuickModeEnabled()
+        && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
       focusNextInvalidView();
     } else {
       clearInputFocus();
     }
   }
 
+  public void clearFormAndFocusProductInput() {
+    viewModel.getFormData().clearForm();
+    focusProductInputIfNecessary();
+    embeddedFragmentScanner.startScannerIfVisible();
+  }
+
   @Override
   public void startTransaction() {
     viewModel.inventoryProduct();
+  }
+
+  @Override
+  public void interruptCurrentProductFlow() {
+    viewModel.getFormData().setCurrentProductFlowInterrupted(true);
   }
 
   @Override

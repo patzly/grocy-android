@@ -75,7 +75,7 @@ public class FormDataTransfer {
   private ArrayList<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
   private final PluralUtil pluralUtil;
-  private boolean torchOn = false;
+  private boolean currentProductFlowInterrupted = false;
 
   public FormDataTransfer(
       Application application,
@@ -369,12 +369,12 @@ public class FormDataTransfer {
     return toLocationErrorLive;
   }
 
-  public boolean isTorchOn() {
-    return torchOn;
+  public boolean isCurrentProductFlowNotInterrupted() {
+    return !currentProductFlowInterrupted;
   }
 
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
+  public void setCurrentProductFlowInterrupted(boolean currentProductFlowInterrupted) {
+    this.currentProductFlowInterrupted = currentProductFlowInterrupted;
   }
 
   public boolean isProductNameValid() {
@@ -552,6 +552,7 @@ public class FormDataTransfer {
   }
 
   public void clearForm() {
+    currentProductFlowInterrupted = false;
     barcodeLive.setValue(null);
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);

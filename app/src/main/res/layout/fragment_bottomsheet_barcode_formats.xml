@@ -36,13 +36,33 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/text_logout_title"
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:padding="16dp"
-      android:text="@string/setting_barcode_formats" />
+      android:orientation="horizontal"
+      android:gravity="center_vertical">
+
+      <TextView
+        android:id="@+id/text_logout_title"
+        style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:text="@string/setting_barcode_formats" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/save"
+        style="@style/Widget.Grocy.Button.UnelevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/action_save"
+        android:onClick="@{() -> sheet.saveShortcuts()}"
+        app:backgroundTint="@color/retro_green_bg_white" />
+
+    </LinearLayout>
 
     <View
       style="@style/Widget.Grocy.Divider"
@@ -197,16 +217,6 @@
             android:text="@string/action_cancel"
             android:onClick="@{() -> sheet.dismiss()}"
             app:rippleColor="@color/highlight" />
-
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/save"
-            style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/action_save"
-            android:onClick="@{() -> sheet.saveShortcuts()}"
-            app:backgroundTint="@color/retro_green_bg_white" />
 
         </LinearLayout>
 

@@ -115,6 +115,7 @@
   <string name="action_github" translatable="false">GitHub</string>
   <string name="action_share">Share</string>
   <string name="action_share_description">Tell your friends about Grocy Android</string>
+  <string name="action_no_filter">No filter</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -736,6 +737,10 @@
   <string name="setting_open_food_facts_description">Get info from barcodes</string>
   <string name="setting_choose_barcode_scanner">Choose barcode scanner</string>
   <string name="setting_choose_barcode_scanner_description">For camera barcode scanning</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream">Crop camera stream to preview format</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream_description">Prevents scanner from detecting barcodes outside of preview; Might not work on your device!</string>
   <string name="setting_use_front_cam">Use front camera</string>
   <string name="setting_use_front_cam_description">For barcode scanning</string>
   <string name="setting_use_2d_scanner_format">Use 2D barcode scanner format</string>

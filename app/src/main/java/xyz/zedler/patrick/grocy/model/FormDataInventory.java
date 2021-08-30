@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.InventoryFragmentArgs;
+import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -57,6 +58,7 @@ public class FormDataInventory {
   private final MutableLiveData<ProductDetails> productDetailsLive;
   private final LiveData<Boolean> isTareWeightEnabledLive;
   private final MutableLiveData<String> productNameLive;
+  private final LiveData<String> productNameInfoStockLive;
   private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
@@ -87,7 +89,7 @@ public class FormDataInventory {
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
   private final PluralUtil pluralUtil;
-  private boolean torchOn = false;
+  private boolean currentProductFlowInterrupted = false;
 
   public FormDataInventory(
       Application application,
@@ -110,6 +112,7 @@ public class FormDataInventory {
         .getCloseWhenFinished()) {
       scannerVisibilityLive.setValue(true);
     }
+    pluralUtil = new PluralUtil(application);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
     isTareWeightEnabledLive = Transformations.map(
@@ -119,6 +122,13 @@ public class FormDataInventory {
     );
     productDetailsLive.setValue(null);
     productNameLive = new MutableLiveData<>();
+    productNameInfoStockLive = Transformations.map(
+        productDetailsLive,
+        productDetails -> {
+          String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails);
+          return info != null ? application.getString(R.string.property_in_stock, info) : " ";
+        }
+    );
     productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
@@ -240,7 +250,6 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
-    pluralUtil = new PluralUtil(application);
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -287,6 +296,10 @@ public class FormDataInventory {
 
   public MutableLiveData<String> getProductNameLive() {
     return productNameLive;
+  }
+
+  public LiveData<String> getProductNameInfoStockLive() {
+    return productNameInfoStockLive;
   }
 
   public MutableLiveData<Integer> getProductNameErrorLive() {
@@ -562,12 +575,12 @@ public class FormDataInventory {
     return locationNameLive;
   }
 
-  public boolean isTorchOn() {
-    return torchOn;
+  public boolean isCurrentProductFlowNotInterrupted() {
+    return !currentProductFlowInterrupted;
   }
 
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
+  public void setCurrentProductFlowInterrupted(boolean currentProductFlowInterrupted) {
+    this.currentProductFlowInterrupted = currentProductFlowInterrupted;
   }
 
   public boolean isProductNameValid() {
@@ -782,6 +795,7 @@ public class FormDataInventory {
   }
 
   public void clearForm() {
+    currentProductFlowInterrupted = false;
     barcodeLive.setValue(null);
     amountLive.setValue(null);
     quantityUnitLive.setValue(null);
