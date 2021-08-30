@@ -29,23 +29,29 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
+import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.ProductBarcodeAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatBarcodesBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
+import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatBarcodesViewModel;
 
 public class MasterProductCatBarcodesFragment extends BaseFragment implements
-    ProductBarcodeAdapter.ProductBarcodeAdapterListener {
+    ProductBarcodeAdapter.ProductBarcodeAdapterListener, EmbeddedFragmentScanner.BarcodeListener {
 
   private final static String TAG = MasterProductCatBarcodesFragment.class.getSimpleName();
 
@@ -54,6 +60,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
   private FragmentMasterProductCatBarcodesBinding binding;
   private MasterProductCatBarcodesViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private EmbeddedFragmentScanner embeddedFragmentScanner;
 
   @Override
   public View onCreateView(
@@ -63,6 +70,11 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
   ) {
     binding = FragmentMasterProductCatBarcodesBinding.inflate(
         inflater, container, false
+    );
+    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
+            this,
+            binding.containerScanner,
+            this
     );
     return binding.getRoot();
   }
@@ -152,6 +164,12 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
+    embeddedFragmentScanner.setScannerVisibilityLive(
+            viewModel.getScannerVisibilityLive()
+    );
+
+    embeddedFragmentScanner.startScannerIfVisible();
+
     updateUI(savedInstanceState == null);
   }
 
@@ -165,30 +183,38 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
           if (menuItem.getItemId() != R.id.action_delete) {
             return false;
           }
-          setForDestination(
+          activity.showMessage(R.string.msg_not_implemented_yet);
+          //TODO Make the button delete barcodes, instead of entire product.
+          /*setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
               Constants.ACTION.DELETE
           );
-          activity.onBackPressed();
+          activity.onBackPressed();*/
           return true;
         }
     );
-    activity.updateFab(
-        R.drawable.ic_round_backup,
-        R.string.action_save,
-        Constants.FAB.TAG.SAVE,
-        animated,
-        () -> {
-          setForDestination(
-              R.id.masterProductFragment,
-              Constants.ARGUMENT.ACTION,
-              Constants.ACTION.SAVE
-          );
-          activity.onBackPressed();
-        }
-    );
+    makeFabAdd(animated);
   }
+  private void makeFabAdd(boolean animated){
+    activity.updateFab(R.drawable.ic_round_add_anim,
+            R.string.action_add,
+            Constants.FAB.TAG.ADD,
+            animated,
+            () -> {
+              makeFabSave(animated);
+              addBarcode();
+            });
+  }
+  private void makeFabSave(boolean animated){
+    activity.updateFab(R.drawable.ic_round_done,
+            R.string.action_save,
+            Constants.FAB.TAG.SAVE,
+            animated,
+            this::tryUploadingBarcode);
+  }
+
+
 
   @Override
   public void onItemRowClicked(ProductBarcode productBarcode) {
@@ -199,10 +225,23 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
 
   public void clearInputFocus() {
     activity.hideKeyboard();
+    binding.dummyFocusView.requestFocus();
+    binding.editTextProductBarcode.clearFocus();
   }
 
   @Override
   public boolean onBackPressed() {
+    // Override back press to hide barcode addition layouts
+    if(viewModel.getAmountInputVisibilityLive().getValue()
+            || viewModel.getScannerVisibilityLive().getValue()
+            || viewModel.getBarcodeInputVisibilityLive().getValue()){
+      viewModel.getScannerVisibilityLive().setValue(false);
+      viewModel.getBarcodeInputVisibilityLive().setValue(false);
+      viewModel.getAmountInputVisibilityLive().setValue(false);
+      makeFabAdd(true);
+      clearInputFocus();
+      return true;
+    }
     setForDestination(
         R.id.masterProductFragment,
         Constants.ARGUMENT.PRODUCT,
@@ -226,5 +265,97 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
   @Override
   public String toString() {
     return TAG;
+  }
+
+  public void toggleTorch() {
+    embeddedFragmentScanner.toggleTorch();
+  }
+  @Override
+  public void onResume() {
+    super.onResume();
+    embeddedFragmentScanner.onResume();
+  }
+
+  @Override
+  public void onPause() {
+    embeddedFragmentScanner.onPause();
+    super.onPause();
+  }
+
+  @Override
+  public void onDestroy() {
+    embeddedFragmentScanner.onDestroy();
+    super.onDestroy();
+  }
+
+  public boolean isScannerVisible() {
+    assert viewModel.getScannerVisibilityLive().getValue() != null;
+    return viewModel.getScannerVisibilityLive().getValue();
+  }
+
+  public void toggleScannerVisibility() {
+    viewModel.getScannerVisibilityLive().setValue(!isScannerVisible());
+  }
+
+  public void addBarcode() {
+    viewModel.getBarcodeInputVisibilityLive().setValue(true);
+    viewModel.getAmountInputVisibilityLive().setValue(true);
+  }
+
+  @Override
+  public void onBarcodeRecognized(String rawValue) {
+    viewModel.barcodeLive.setValue(rawValue);
+    viewModel.getScannerVisibilityLive().setValue(false);
+  }
+
+  public void showInputNumberBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(FormDataMasterProductCatAmount.AMOUNT_ARG, 0);
+    bundle.putDouble(Constants.ARGUMENT.NUMBER, 1);
+    activity.showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  @Override
+  public void saveInput(String input, Bundle argsBundle) {
+    String number = NumUtil.isStringDouble(input) ? input : String.valueOf(1);
+    if (Double.parseDouble(number) < 1) {
+      viewModel.amountLive.setValue(String.valueOf(1));
+    } else {
+      viewModel.amountLive.setValue(number);
+    }
+  }
+
+  private void tryUploadingBarcode(){
+    // Verify valid barcode input and amount, otherwise show Error
+    if (viewModel.amountLive.getValue() == null || viewModel.barcodeLive.getValue() == null){
+      //TODO Extract String
+      binding.textInputProductBarcode.setError("Please enter/scan the barcode");
+      return;
+    }else{
+      binding.textInputProductBarcode.setError(null);
+    }
+
+    // Create new product barcode
+    ProductBarcode productBarcode = new ProductBarcode();
+    productBarcode.setProductId(viewModel.getFilledProduct().getId());
+    productBarcode.setQuId(viewModel.getFilledProduct().getQuIdStock());
+    productBarcode.setBarcode(viewModel.barcodeLive.getValue());
+    productBarcode.setAmount(viewModel.amountLive.getValue());
+    //Update list and adapter
+    ArrayList<ProductBarcode> barcodes = viewModel.getProductBarcodesLive().getValue();
+    if (barcodes == null)
+      barcodes = new ArrayList<>();
+    barcodes.add(productBarcode);
+    viewModel.getProductBarcodesLive().setValue(barcodes);
+    // Upload new barcode to server
+    viewModel.uploadBarcode(productBarcode);
+
+    // Reset UI
+    viewModel.getScannerVisibilityLive().setValue(false);
+    viewModel.getBarcodeInputVisibilityLive().setValue(false);
+    viewModel.getAmountInputVisibilityLive().setValue(false);
+    viewModel.barcodeLive.setValue(null);
+    viewModel.amountLive.setValue(String.valueOf(1));
+    makeFabAdd(true);
   }
 }

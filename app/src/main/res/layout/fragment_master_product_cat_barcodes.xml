@@ -88,11 +88,104 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:actionBarSize"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
+      <View
+          android:id="@+id/dummy_focus_view"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:focusable="true"
+          android:focusableInTouchMode="true"/>
+    <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+          android:paddingTop="8dp"
+          android:visibility="@{viewModel.barcodeInputVisibilityLive ? View.VISIBLE : View.GONE}"
+          android:paddingBottom="0dp">
+
+        <ImageView
+            android:id="@+id/image_product"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_widgets"
+            android:layout_marginBottom="4dp"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_product_barcode"
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:hint="@string/title_barcode_input"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_round_barcode_scan"
+            app:endIconTint="@color/icon"
+            app:endIconContentDescription="Scan barcode"
+            app:helperTextEnabled="true"
+            app:helperText=" "
+            app:errorIconDrawable="@{null}"
+            app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
+            app:errorEnabled="true">
+
+          <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/edit_text_product_barcode"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/on_background"
+              android:inputType="number"
+              android:imeOptions="actionDone"
+              android:text="@={viewModel.barcodeLive}"
+              app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+      </LinearLayout>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/container_scanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="@{viewModel.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
+        android:onClick="@{() -> fragment.toggleTorch()}"/>
+      <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:visibility="@{viewModel.amountInputVisibilityLive ? View.VISIBLE : View.GONE}"
+          android:onClick="@{() -> fragment.showInputNumberBottomSheet()}">
+
+        <ImageView
+            android:id="@+id/image_min_amount"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_scatter_plot_anim"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+          <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:singleLine="false"
+              android:text="@string/property_amount" />
+
+          <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.amountLive}" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <View
+          android:layout_width="150dp"
+          android:layout_height="1dp"
+          android:background="@color/stroke_secondary"
+          android:layout_gravity="center_horizontal"
+          android:visibility="@{viewModel.amountInputVisibilityLive ? View.VISIBLE : View.GONE}"
+          android:layout_marginBottom="16dp" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?android:actionBarSize"
       android:overScrollMode="never"
       app:progressBackgroundColor="@{@color/surface}"
       app:progressForegroundColor="@{@color/secondary}"
@@ -116,7 +209,7 @@
       </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+    </LinearLayout>
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
