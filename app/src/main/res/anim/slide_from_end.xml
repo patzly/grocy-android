@@ -17,11 +17,17 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<set
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:android="http://schemas.android.com/apk/res/android">
   <translate
-    android:fromXDelta="100%p"
-    android:toXDelta="0"
-    android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-    android:duration="300" />
+    android:duration="300"
+    android:startOffset="100"
+    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:fromXDelta="7.5%p"
+    android:toXDelta="0" />
+  <alpha
+    android:duration="200"
+    android:startOffset="200"
+    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:fromAlpha="0"
+    android:toAlpha="1" />
 </set>
