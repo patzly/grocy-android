@@ -185,6 +185,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
           pluralUtil
       );
     });
+    viewModel.getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), b -> {});
 
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive()

@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -65,6 +66,7 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class DownloadHelper {
 
+  private final Application application;
   private final GrocyApi grocyApi;
   private final RequestQueue requestQueue;
   private final Gson gson;
@@ -87,6 +89,7 @@ public class DownloadHelper {
       String tag,
       OnLoadingListener onLoadingListener
   ) {
+    this.application = application;
     this.tag = tag;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
@@ -122,6 +125,7 @@ public class DownloadHelper {
       String tag,
       OnLoadingListener onLoadingListener
   ) {
+    this.application = application;
     this.tag = tag;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
@@ -1845,6 +1849,42 @@ public class DownloadHelper {
         jsonObject,
         response -> listener.onFinished(R.string.option_synced_success),
         volleyError -> listener.onFinished(R.string.option_synced_error)
+    );
+  }
+
+  public void getOpenFoodFactsProductName(
+      String barcode,
+      OnStringResponseListener successListener,
+      OnErrorListener errorListener
+  ) {
+    get(
+        OpenFoodFactsApi.getProduct(barcode),
+        response -> {
+          String language = application.getResources().getConfiguration().locale.getLanguage();
+          String country = application.getResources().getConfiguration().locale.getCountry();
+          String both = language + "_" + country;
+          if(debug) Log.i(tag, "getOpenFoodFactsProductName: locale = " + both);
+          try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject product = jsonObject.getJSONObject("product");
+            String name = product.optString("product_name_" + both);
+            if(name.isEmpty()) {
+              name = product.optString("product_name_" + language);
+            }
+            if(name.isEmpty()) {
+              name = product.optString("product_name");
+            }
+            successListener.onResponse(name);
+            if(debug) Log.i(tag, "getOpenFoodFactsProductName: OpenFoodFacts = " + name);
+          } catch (JSONException e) {
+            if(debug) Log.e(tag, "getOpenFoodFactsProductName: " + e);
+          }
+        },
+        error -> {
+          if(debug) Log.e(tag, "getOpenFoodFactsProductName: can't get OpenFoodFacts product");
+          errorListener.onError(error);
+        },
+        OpenFoodFactsApi.getUserAgent(application)
     );
   }
 

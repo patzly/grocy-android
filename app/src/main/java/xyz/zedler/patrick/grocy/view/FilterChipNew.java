@@ -122,7 +122,7 @@ public class FilterChipNew extends LinearLayout {
     }
   }
 
-  @BindingAdapter("app:data")
+  @BindingAdapter("data")
   public static void observeData(FilterChipNew view, FilterChipLiveData.Listener dataListener) {
     // This is a workaround. The static binding adapter method overrides auto method selection
     // for app:data and takes a FilterChipLiveData.Listener object where it can extract the

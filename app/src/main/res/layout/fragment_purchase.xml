@@ -60,7 +60,9 @@
           android:layout_height="match_parent"
           android:gravity="center_vertical"
           android:orientation="horizontal"
-          android:onLongClick="@{() -> viewModel.toggleQuickModeEnabled()}">
+          android:onLongClick="@{() -> viewModel.toggleQuickModeEnabled()}"
+          android:animateLayoutChanges="true"
+          transitionTypeChanging="@{true}">
 
           <FrameLayout
             android:id="@+id/frame_purchase_back"
@@ -94,6 +96,30 @@
             android:text="@string/title_purchase"
             android:layout_marginEnd="16dp"
             android:textColor="@{viewModel.quickModeEnabled ? @color/retro_blue : @color/on_primary}" />
+
+          <FrameLayout
+            android:id="@+id/frame_purchase_later"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:contentDescription="Pending products"
+            android:tooltipText="Pending products"
+            android:focusable="true"
+            android:visibility="@{viewModel.quickModeEnabled ? View.VISIBLE : View.GONE}"
+            tools:targetApi="o">
+
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_gravity="center"
+              android:importantForAccessibility="no"
+              app:shoppingCardDrawable="@{viewModel.pendingProductsLive}" />
+
+          </FrameLayout>
 
           <FrameLayout
             android:id="@+id/frame_help"
@@ -247,6 +273,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/msg_help_external_scanner_ready" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="8dp"
+              android:visibility="gone"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You can choose an existing product from the list or write a new product name and press enter. If the name doesn\'t exist, the purchase will be saved for later." />
 
             </com.google.android.material.card.MaterialCardView>
 

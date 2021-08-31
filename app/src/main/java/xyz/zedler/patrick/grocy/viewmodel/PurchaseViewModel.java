@@ -26,6 +26,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,10 +34,12 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
@@ -50,6 +53,8 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -93,6 +98,8 @@ public class PurchaseViewModel extends BaseViewModel {
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
 
+  private final LiveData<List<PendingProduct>> pendingProductsLive;
+  private final LiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> quickModeEnabled;
@@ -110,6 +117,9 @@ public class PurchaseViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
+    AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
+    pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
+    pendingProductBarcodesLive = appDatabase.pendingProductBarcodeDao().getAllLive();
 
     if (args.getShoppingListItems() != null) {
       batchShoppingListItemIds = new ArrayList<>(args.getShoppingListItems().length);
@@ -444,6 +454,42 @@ public class PurchaseViewModel extends BaseViewModel {
     if (product != null) {
       setProduct(product.getId(), productBarcode, null);
     } else {
+      if (isQuickModeEnabled()) {
+        PendingProduct pendingProduct = PendingProduct
+            .getFromBarcode(pendingProductsLive, pendingProductBarcodesLive, barcode);
+        if (pendingProduct != null) {
+          pendingProduct.addAmount(1);
+          repository.insertPendingProduct(pendingProduct);
+          sendEvent(Event.TRANSACTION_SUCCESS);
+          showMessage("Amount + 1 for " + pendingProduct.getProductName());
+          return;
+        } else if(isOpenFoodFactsEnabled()) {
+          dlHelper.getOpenFoodFactsProductName(barcode, productName -> {
+            PendingProduct pendingProduct1 = PendingProduct
+                .getFromName(pendingProductsLive, productName);
+            if (pendingProduct1 == null) {
+              repository.insertPendingProduct(
+                  new PendingProduct(productName, true),
+                  id -> {
+                    repository.insertPendingProductBarcode(new PendingProductBarcode(id, barcode));
+                    showMessageMainThread("New pending product: " + productName);
+                  }, () -> showMessageMainThread("Error, could not store pending product: " + productName)
+              );
+            } else {
+              repository.insertPendingProductBarcode(
+                  new PendingProductBarcode(pendingProduct1.getId(), barcode)
+              );
+              showMessage("Store new barcode for " + productName);
+            }
+            sendEvent(Event.TRANSACTION_SUCCESS);
+          }, error-> {
+            formData.getBarcodeLive().setValue(barcode);
+            formData.isFormValid();
+            sendEvent(Event.FOCUS_INVALID_VIEWS);
+          });
+          return;
+        }
+      }
       formData.getBarcodeLive().setValue(barcode);
       formData.isFormValid();
       sendEvent(Event.FOCUS_INVALID_VIEWS);
@@ -796,6 +842,14 @@ public class PurchaseViewModel extends BaseViewModel {
 
   private void showMessageAndContinueScanning(@StringRes int msg) {
     showMessageAndContinueScanning(getString(msg));
+  }
+
+  public LiveData<List<PendingProduct>> getPendingProductsLive() {
+    return pendingProductsLive;
+  }
+
+  public LiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
+    return pendingProductBarcodesLive;
   }
 
   @NonNull

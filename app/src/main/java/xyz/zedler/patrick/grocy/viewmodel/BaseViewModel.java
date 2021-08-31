@@ -23,6 +23,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -34,6 +36,8 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class BaseViewModel extends AndroidViewModel {
@@ -73,6 +77,13 @@ public class BaseViewModel extends AndroidViewModel {
     return debug;
   }
 
+  boolean isOpenFoodFactsEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.FOOD_FACTS,
+        SETTINGS_DEFAULT.BEHAVIOR.FOOD_FACTS
+    );
+  }
+
   void showErrorMessage() {
     showMessage(getString(R.string.error_undefined));
   }
@@ -86,6 +97,14 @@ public class BaseViewModel extends AndroidViewModel {
 
   public void showMessage(@StringRes int message) {
     showSnackbar(new SnackbarMessage(getString(message)));
+  }
+
+  public void showMessageMainThread(@Nullable String message) {
+    new Handler(Looper.getMainLooper()).post(() -> showMessage(message));
+  }
+
+  public void showMessageMainThread(@StringRes int message) {
+    new Handler(Looper.getMainLooper()).post(() -> showMessage(message));
   }
 
   void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {

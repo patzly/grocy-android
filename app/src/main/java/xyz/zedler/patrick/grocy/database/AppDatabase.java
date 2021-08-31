@@ -25,6 +25,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
+import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
+import xyz.zedler.patrick.grocy.dao.PendingProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.ProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
@@ -37,6 +39,8 @@ import xyz.zedler.patrick.grocy.dao.StockLocationDao;
 import xyz.zedler.patrick.grocy.dao.StoreDao;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -61,9 +65,11 @@ import xyz.zedler.patrick.grocy.model.Store;
         QuantityUnitConversion.class,
         ProductBarcode.class,
         StockItem.class,
-        StockLocation.class
+        StockLocation.class,
+        PendingProduct.class,
+        PendingProductBarcode.class
     },
-    version = 18
+    version = 19
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -92,6 +98,10 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract StockItemDao stockItemDao();
 
   public abstract StockLocationDao stockLocationDao();
+
+  public abstract PendingProductDao pendingProductDao();
+
+  public abstract PendingProductBarcodeDao pendingProductBarcodeDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {
