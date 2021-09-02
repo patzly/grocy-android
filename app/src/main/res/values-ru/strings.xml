@@ -436,7 +436,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Количество: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Единица измерения: %1$d</string>
+  <string name="subtitle_barcode_unit">Единица измерения: %1$s</string>
 
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>

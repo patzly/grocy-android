@@ -444,7 +444,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Menge: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Mengeneinheit: %1$d</string>
+  <string name="subtitle_barcode_unit">Mengeneinheit: %1$s</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>

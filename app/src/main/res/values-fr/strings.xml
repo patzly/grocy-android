@@ -420,7 +420,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Quantité : %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Format : %1$d</string>
+  <string name="subtitle_barcode_unit">Format : %1$s</string>
 
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>

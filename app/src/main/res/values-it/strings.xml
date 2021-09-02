@@ -422,7 +422,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Importo: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Unità di misura: %1$d</string>
+  <string name="subtitle_barcode_unit">Unità di misura: %1$s</string>
 
   <string name="description_input_product_part1">Il campo prodotto contiene:</string>
   <string name="description_input_product_part2">Per favore scegli come procedere:</string>

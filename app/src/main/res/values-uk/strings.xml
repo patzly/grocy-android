@@ -438,7 +438,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Кількість: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Одиниця виміру: %1$d</string>
+  <string name="subtitle_barcode_unit">Одиниця виміру: %1$s</string>
 
   <string name="description_input_product_part1">Поле продукту містить:</string>
   <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
