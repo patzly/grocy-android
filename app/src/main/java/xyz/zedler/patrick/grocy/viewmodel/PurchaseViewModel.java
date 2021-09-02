@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PendingProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -97,6 +98,7 @@ public class PurchaseViewModel extends BaseViewModel {
   private ArrayList<ShoppingListItem> shoppingListItems;
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
+  private ArrayList<Integer> batchPendingProductIds;
 
   private final LiveData<List<PendingProduct>> pendingProductsLive;
   private final LiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
@@ -560,6 +562,23 @@ public class PurchaseViewModel extends BaseViewModel {
     setProduct(null, null, currentItem);
   }
 
+  public void showPendingProductsBottomSheet() {
+    showBottomSheet(new PendingProductsBottomSheet());
+  }
+
+  public void fillWithPendingProduct() {
+    if (pendingProductsLive.getValue() == null) {
+      return;
+    }
+    PendingProduct pendingProduct = pendingProductsLive.getValue().get(0);
+    if (pendingProduct == null) {
+      return;
+    }
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getProductName());
+    formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.getAmount()));
+  }
+
   public boolean batchModeNextItem() {  // also returns whether there was a next item
     if (batchShoppingListItemIds == null) {
       return false;
@@ -850,6 +869,10 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public LiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
     return pendingProductBarcodesLive;
+  }
+
+  public void setBatchPendingProductIds(ArrayList<Integer> batchPendingProductIds) {
+    this.batchPendingProductIds = batchPendingProductIds;
   }
 
   @NonNull

@@ -110,6 +110,7 @@
             android:tooltipText="Pending products"
             android:focusable="true"
             android:visibility="@{viewModel.quickModeEnabled ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> viewModel.showPendingProductsBottomSheet()}"
             tools:targetApi="o">
 
             <ImageView
@@ -209,20 +210,20 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:visibility="gone">
+              android:visibility="visible">
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
 
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@drawable/ic_round_shopping_list"
+                  android:src="@drawable/ic_round_batch"
                   tools:ignore="ContentDescription" />
 
                 <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                    android:text="@string/title_batch_mode_shopping_list" />
+                    android:text="Batch mode purchase/shopping list" />
 
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
@@ -233,7 +234,7 @@
               </LinearLayout>
 
               <include
-                android:id="@+id/linear_purchase_shopping_list_item"
+                android:id="@+id/linear_purchase_batch_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 layout="@layout/row_shopping_list_item" />
