@@ -204,6 +204,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 viewModel.getHorizontalFilterBarSingle()
             )
         );
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 

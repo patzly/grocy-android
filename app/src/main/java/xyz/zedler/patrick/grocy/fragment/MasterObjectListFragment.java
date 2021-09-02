@@ -201,6 +201,7 @@ public class MasterObjectListFragment extends BaseFragment
             this,
             viewModel.getHorizontalFilterBarMulti()
         ));
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 

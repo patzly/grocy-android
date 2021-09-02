@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.FragmentNavigator;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -85,51 +84,31 @@ public class MasterDataOverviewFragment extends BaseFragment {
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCTS
-            ).setTransitionName(getString(R.string.transition_overview_products)),
-        (new FragmentNavigator.Extras.Builder()).addSharedElement(
-            binding.titleProducts,
-            getString(R.string.transition_overview_products)
-        ).build())
+            ))
     );
     binding.linearQuantityUnits.setOnClickListener(v -> navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.QUANTITY_UNITS
-            ).setTransitionName(getString(R.string.transition_overview_qus)),
-        (new FragmentNavigator.Extras.Builder()).addSharedElement(
-            binding.titleQuantityUnits,
-            getString(R.string.transition_overview_qus)
-        ).build())
+            ))
     );
     binding.linearLocations.setOnClickListener(v -> navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.LOCATIONS
-            ).setTransitionName(getString(R.string.transition_overview_locations)),
-        (new FragmentNavigator.Extras.Builder()).addSharedElement(
-            binding.titleLocations,
-            getString(R.string.transition_overview_locations)
-        ).build())
+            ))
     );
     binding.linearProductGroups.setOnClickListener(v -> navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCT_GROUPS
-            ).setTransitionName(getString(R.string.transition_overview_product_groups)),
-        (new FragmentNavigator.Extras.Builder()).addSharedElement(
-            binding.titleProductGroups,
-            getString(R.string.transition_overview_product_groups)
-        ).build())
+            ))
     );
     binding.linearStores.setOnClickListener(v -> navigate(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.STORES
-            ).setTransitionName(getString(R.string.transition_overview_stores)),
-        (new FragmentNavigator.Extras.Builder()).addSharedElement(
-            binding.titleStores,
-            getString(R.string.transition_overview_stores)
-        ).build())
+            ))
     );
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {

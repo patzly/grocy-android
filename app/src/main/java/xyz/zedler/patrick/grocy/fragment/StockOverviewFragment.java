@@ -194,6 +194,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getSortMode()
             )
         );
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 

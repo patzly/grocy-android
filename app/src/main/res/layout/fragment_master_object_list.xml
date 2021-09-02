@@ -171,7 +171,8 @@
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="100dp"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        android:layoutAnimation="@anim/recycler_layout" />
 
     </FrameLayout>
 
