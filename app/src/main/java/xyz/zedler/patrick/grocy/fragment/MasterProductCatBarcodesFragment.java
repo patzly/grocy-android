@@ -155,7 +155,9 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
       } else {
         binding.recycler.setAdapter(new ProductBarcodeAdapter(
             barcodes,
-            this
+            this,
+            viewModel.getQuantityUnits(),
+            viewModel.getStores()
         ));
       }
     });

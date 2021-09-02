@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,16 +36,13 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -255,6 +251,14 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
   public MutableLiveData<ArrayList<ProductBarcode>> getProductBarcodesLive() {
     return productBarcodesLive;
+  }
+
+  public ArrayList<QuantityUnit> getQuantityUnits() {
+    return quantityUnits;
+  }
+
+  public ArrayList<Store> getStores() {
+    return stores;
   }
 
   @NonNull
