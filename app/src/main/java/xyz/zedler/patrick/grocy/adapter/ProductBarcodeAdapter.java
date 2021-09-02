@@ -46,7 +46,9 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
 
   public ProductBarcodeAdapter(
       ArrayList<ProductBarcode> productBarcodes,
+      ProductBarcodeAdapterListener listener,
       ArrayList<QuantityUnit> quantityUnits,
+      ArrayList<Store> stores
   ) {
     this.productBarcodes = new ArrayList<>(productBarcodes);
     this.listener = listener;
