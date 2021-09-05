@@ -31,8 +31,7 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:baselineAligned="false">
+      android:orientation="horizontal">
 
       <LinearLayout
         android:layout_width="0dp"
@@ -43,7 +42,7 @@
 
         <TextView
           android:id="@+id/text_list_selection_title"
-          style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
+          style="@style/Widget.Grocy.TextView.Title.BottomSheet"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:singleLine="true" />
@@ -53,6 +52,7 @@
           style="@style/Widget.Grocy.TextView.ListItem.Description"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:paddingTop="4dp"
           android:visibility="gone"
           android:maxLines="30" />
 
