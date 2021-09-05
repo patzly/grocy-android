@@ -213,17 +213,17 @@
           android:layout_marginTop="6dp"
           android:layout_marginBottom="8dp">
 
-          <xyz.zedler.patrick.grocy.view.FilterChipNew
+          <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataStatus}"/>
 
-          <xyz.zedler.patrick.grocy.view.FilterChipNew
+          <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataProductGroup}"/>
 
-          <xyz.zedler.patrick.grocy.view.FilterChipNew
+          <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataLocation}"/>
@@ -236,7 +236,7 @@
             android:layout_gravity="center_vertical"
             android:background="@color/filter_chip_stroke_inactive"/>
 
-          <xyz.zedler.patrick.grocy.view.FilterChipNew
+          <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataSort}"/>
