@@ -59,6 +59,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.TransferRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
@@ -563,6 +564,7 @@ public class TransferViewModel extends BaseViewModel {
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
     bundle.putParcelable(Constants.ARGUMENT.PRODUCT_DETAILS, productDetails);
     bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, quantityUnitStock);
+    bundle.putString(ARGUMENT.TITLE, getString(R.string.title_location_from));
     showBottomSheet(new StockLocationsBottomSheet(), bundle);
   }
 
@@ -578,6 +580,7 @@ public class TransferViewModel extends BaseViewModel {
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
+    bundle.putString(ARGUMENT.TITLE, getString(R.string.title_location_to));
     showBottomSheet(new LocationsBottomSheet(), bundle);
   }
 

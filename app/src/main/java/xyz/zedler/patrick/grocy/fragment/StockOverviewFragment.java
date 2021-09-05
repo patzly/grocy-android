@@ -23,7 +23,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -44,9 +43,6 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -56,7 +52,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewFragment extends BaseFragment implements
@@ -149,29 +145,7 @@ public class StockOverviewFragment extends BaseFragment implements
     );
 
     viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
-      if (items == null) {
-        return;
-      }
-      if (items.isEmpty()) {
-        InfoFullscreen info;
-        if (viewModel.isSearchActive()) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-        } else if (viewModel.getFilterChipLiveDataStatusLive().getStatus()
-            != FilterChipLiveDataStockStatus.STATUS_ALL) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-        } else if (viewModel.getFilterChipLiveDataProductGroupLive().getSelectedId()
-            != FilterChipLiveDataProductGroup.NO_FILTER
-            || viewModel.getFilterChipLiveDataLocationLive().getSelectedId()
-            != FilterChipLiveDataProductGroup.NO_FILTER
-        ) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-        } else {
-          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
-        }
-        viewModel.getInfoFullscreenLive().setValue(info);
-      } else {
-        viewModel.getInfoFullscreenLive().setValue(null);
-      }
+      if (items == null) return;
       if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
         ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
             items,
@@ -194,6 +168,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getSortMode()
             )
         );
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 
@@ -345,41 +320,8 @@ public class StockOverviewFragment extends BaseFragment implements
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_search) {
-      IconUtil.start(item);
+      ViewUtil.start(item);
       setUpSearch();
-      return true;
-    } else if (item.getItemId() == R.id.action_sort) {
-      SubMenu menuSort = item.getSubMenu();
-      MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
-      MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
-      MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
-      switch (viewModel.getSortMode()) {
-        case StockOverviewViewModel.SORT_NAME:
-          sortName.setChecked(true);
-          break;
-        case StockOverviewViewModel.SORT_DUE_DATE:
-          sortBBD.setChecked(true);
-          break;
-      }
-      sortAscending.setChecked(viewModel.isSortAscending());
-      return true;
-    } else if (item.getItemId() == R.id.action_sort_name) {
-      if (!item.isChecked()) {
-        item.setChecked(true);
-        viewModel.setSortMode(StockOverviewViewModel.SORT_NAME);
-        viewModel.updateFilteredStockItems();
-      }
-      return true;
-    } else if (item.getItemId() == R.id.action_sort_bbd) {
-      if (!item.isChecked()) {
-        item.setChecked(true);
-        viewModel.setSortMode(StockOverviewViewModel.SORT_DUE_DATE);
-        viewModel.updateFilteredStockItems();
-      }
-      return true;
-    } else if (item.getItemId() == R.id.action_sort_ascending) {
-      item.setChecked(!item.isChecked());
-      viewModel.setSortAscending(item.isChecked());
       return true;
     }
     return false;

@@ -153,6 +153,11 @@
     <item quantity="one">%1$d undone</item>
     <item quantity="other">%1$d undone</item>
   </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d done</item>
+    <item quantity="other">%1$d done</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -633,6 +638,8 @@
   <string name="property_note_multiline">Multi-line note</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">In stock: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Sort: %1$s</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

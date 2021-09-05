@@ -29,19 +29,15 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.databinding.RowFilterChipsBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -49,13 +45,11 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
-import xyz.zedler.patrick.grocy.view.FilterChip;
 
 public class ShoppingListItemAdapter extends
     RecyclerView.Adapter<ShoppingListItemAdapter.ViewHolder> {
 
   private final static String TAG = ShoppingListItemAdapter.class.getSimpleName();
-  private final static boolean DEBUG = false;
 
   private Context context;
   private final ArrayList<GroupedListItem> groupedListItems;
@@ -64,7 +58,6 @@ public class ShoppingListItemAdapter extends
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
   private final PluralUtil pluralUtil;
 
 
@@ -75,8 +68,7 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
-      ShoppingListItemAdapterListener listener,
-      HorizontalFilterBarSingle horizontalFilterBarSingle
+      ShoppingListItemAdapterListener listener
   ) {
     this.context = context;
     this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -85,7 +77,6 @@ public class ShoppingListItemAdapter extends
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
-    this.horizontalFilterBarSingle = horizontalFilterBarSingle;
     pluralUtil = new PluralUtil(context);
   }
 
@@ -132,109 +123,15 @@ public class ShoppingListItemAdapter extends
     }
   }
 
-  public static class FilterRowViewHolder extends ViewHolder {
-
-    private final WeakReference<Context> weakContext;
-    private final FilterChip chipMissing;
-    private FilterChip chipUndone;
-    private final HorizontalFilterBarSingle horizontalFilterBarSingle;
-
-    public FilterRowViewHolder(
-        RowFilterChipsBinding binding,
-        Context context,
-        HorizontalFilterBarSingle horizontalFilterBarSingle
-    ) {
-      super(binding.getRoot());
-
-      this.horizontalFilterBarSingle = horizontalFilterBarSingle;
-      weakContext = new WeakReference<>(context);
-      chipMissing = new FilterChip(
-          context,
-          R.color.retro_blue_bg,
-          context.getResources().getQuantityString(R.plurals.msg_missing_products, 0, 0),
-          () -> {
-            if (chipUndone.isActive()) {
-              chipUndone.changeState(false);
-            }
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.MISSING);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      chipUndone = new FilterChip(
-          context,
-          R.color.retro_yellow_bg,
-          context.getResources().getQuantityString(R.plurals.msg_undone_items, 0, 0),
-          () -> {
-            if (chipMissing.isActive()) {
-              chipMissing.changeState(false);
-            }
-            horizontalFilterBarSingle.setSingleFilterActive(HorizontalFilterBarSingle.UNDONE);
-          },
-          horizontalFilterBarSingle::resetAllFilters
-      );
-      binding.container.addView(chipMissing);
-      binding.container.addView(chipUndone);
-    }
-
-    public void bind() {
-      if (horizontalFilterBarSingle.isNoFilterActive()) {
-        if (chipMissing.isActive()) {
-          chipMissing.changeState(false);
-        }
-        if (chipUndone.isActive()) {
-          chipUndone.changeState(false);
-        }
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)) {
-        if (!chipMissing.isActive()) {
-          chipMissing.changeState(true);
-        }
-        if (chipUndone.isActive()) {
-          chipUndone.changeState(false);
-        }
-      } else if (horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.UNDONE)) {
-        if (chipMissing.isActive()) {
-          chipMissing.changeState(false);
-        }
-        if (!chipUndone.isActive()) {
-          chipUndone.changeState(true);
-        }
-      }
-      chipMissing.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_missing_products,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
-      ));
-      chipUndone.setText(weakContext.get().getResources().getQuantityString(
-          R.plurals.msg_undone_items,
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE),
-          horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE)
-      ));
-    }
-  }
-
   @Override
   public int getItemViewType(int position) {
-    if (position == 0) {
-      return -1; // filter row
-    }
-    return groupedListItems.get(position - 1).getType();
+    return groupedListItems.get(position).getType();
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (viewType == -1) { // filter row
-      RowFilterChipsBinding binding = RowFilterChipsBinding.inflate(
-          LayoutInflater.from(parent.getContext()),
-          parent,
-          false
-      );
-      return new FilterRowViewHolder(
-          binding,
-          context,
-          horizontalFilterBarSingle
-      );
-    } else if (viewType == GroupedListItem.TYPE_HEADER) {
+    if (viewType == GroupedListItem.TYPE_HEADER) {
       return new ShoppingListGroupViewHolder(
           RowShoppingListGroupBinding.inflate(
               LayoutInflater.from(parent.getContext()),
@@ -265,17 +162,9 @@ public class ShoppingListItemAdapter extends
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
 
-    int position = viewHolder.getAdapterPosition();
-    int movedPosition = position - 1;
+    GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
 
-    if (position == 0) { // Filter row
-      ((FilterRowViewHolder) viewHolder).bind();
-      return;
-    }
-
-    GroupedListItem groupedListItem = groupedListItems.get(movedPosition);
-
-    int type = getItemViewType(position);
+    int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
       ShoppingListGroupViewHolder holder = (ShoppingListGroupViewHolder) viewHolder;
       if (((ProductGroup) groupedListItem).getDisplayDivider() == 1) {
@@ -427,7 +316,7 @@ public class ShoppingListItemAdapter extends
 
   @Override
   public int getItemCount() {
-    return groupedListItems.size() + 1;
+    return groupedListItems.size();
   }
 
   public interface ShoppingListItemAdapterListener {
@@ -562,19 +451,8 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      ArrayList<Integer> missingProductIds,
-      int itemsMissingCount,
-      int itemsUndoneCount
+      ArrayList<Integer> missingProductIds
   ) {
-    if (horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.MISSING)
-        != itemsMissingCount
-        || horizontalFilterBarSingle.getItemsCount(HorizontalFilterBarSingle.UNDONE)
-        != itemsUndoneCount) {
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.MISSING, itemsMissingCount);
-      horizontalFilterBarSingle.setItemsCount(HorizontalFilterBarSingle.UNDONE, itemsUndoneCount);
-      notifyItemChanged(0); // update viewHolder with filter row
-    }
-
     ShoppingListItemAdapter.DiffCallback diffCallback = new ShoppingListItemAdapter.DiffCallback(
         newList,
         this.groupedListItems,
@@ -598,7 +476,7 @@ public class ShoppingListItemAdapter extends
     this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
-    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this));
+    diffResult.dispatchUpdatesTo(this);
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -718,40 +596,6 @@ public class ShoppingListItemAdapter extends
         ShoppingListBottomNotes oldNotes = (ShoppingListBottomNotes) oldItems.get(oldItemPos);
         return newNotes.equals(oldNotes);
       }
-    }
-  }
-
-  /**
-   * Custom ListUpdateCallback that dispatches update events to the given adapter with offset of 1,
-   * because the first item is the filter row.
-   */
-  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
-
-    @NonNull
-    private final ShoppingListItemAdapter mAdapter;
-
-    public AdapterListUpdateCallback(@NonNull ShoppingListItemAdapter adapter) {
-      mAdapter = adapter;
-    }
-
-    @Override
-    public void onInserted(int position, int count) {
-      mAdapter.notifyItemRangeInserted(position + 1, count);
-    }
-
-    @Override
-    public void onRemoved(int position, int count) {
-      mAdapter.notifyItemRangeRemoved(position + 1, count);
-    }
-
-    @Override
-    public void onMoved(int fromPosition, int toPosition) {
-      mAdapter.notifyItemMoved(fromPosition + 1, toPosition + 1);
-    }
-
-    @Override
-    public void onChanged(int position, int count, Object payload) {
-      mAdapter.notifyItemRangeChanged(position + 1, count, payload);
     }
   }
 }

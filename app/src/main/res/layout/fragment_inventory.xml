@@ -276,7 +276,7 @@
                 app:endIconTint="@color/icon"
                 app:endIconContentDescription="Scan barcode"
                 app:helperTextEnabled="true"
-                app:helperText=" "
+                app:helperText="@{formData.productNameInfoStockLive}"
                 app:errorIconDrawable="@{null}"
                 app:endIconOnClickListener="@{v -> fragment.toggleScannerVisibility()}"
                 app:errorText="@{formData.productNameErrorLive}">

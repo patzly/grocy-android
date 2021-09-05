@@ -52,7 +52,6 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -61,10 +60,10 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class ShoppingListFragment extends BaseFragment implements
@@ -165,31 +164,14 @@ public class ShoppingListFragment extends BaseFragment implements
     );
 
     viewModel.getFilteredGroupedListItemsLive().observe(getViewLifecycleOwner(), items -> {
-      if (items == null) {
-        return;
-      }
-      if (items.isEmpty()) {
-        InfoFullscreen info;
-        if (viewModel.isSearchActive()) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-        } else if (!viewModel.getHorizontalFilterBarSingle().isNoFilterActive()) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-        } else {
-          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
-        }
-        viewModel.getInfoFullscreenLive().setValue(info);
-      } else {
-        viewModel.getInfoFullscreenLive().setValue(null);
-      }
+      if (items == null) return;
       if (binding.recycler.getAdapter() instanceof ShoppingListItemAdapter) {
         ((ShoppingListItemAdapter) binding.recycler.getAdapter()).updateData(
             items,
             viewModel.getProductHashMap(),
             viewModel.getQuantityUnitHashMap(),
             viewModel.getShoppingListItemAmountsHashMap(),
-            viewModel.getMissingProductIds(),
-            viewModel.getItemsMissingCount(),
-            viewModel.getItemsUndoneCount()
+            viewModel.getMissingProductIds()
         );
       } else {
         binding.recycler.setAdapter(
@@ -200,10 +182,10 @@ public class ShoppingListFragment extends BaseFragment implements
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getShoppingListItemAmountsHashMap(),
                 viewModel.getMissingProductIds(),
-                this,
-                viewModel.getHorizontalFilterBarSingle()
+                this
             )
         );
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 
@@ -385,7 +367,7 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
     if (search != null) {
       search.setOnMenuItemClickListener(item -> {
-        IconUtil.start(item);
+        ViewUtil.start(item);
         setUpSearch();
         return true;
       });
@@ -403,7 +385,7 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem addMissing = activity.getBottomMenu().findItem(R.id.action_add_missing);
     if (addMissing != null) {
       addMissing.setOnMenuItemClickListener(item -> {
-        IconUtil.start(item);
+        ViewUtil.start(item);
         viewModel.addMissingItems();
         return true;
       });
@@ -494,7 +476,7 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
     if (clear != null) {
       clear.setOnMenuItemClickListener(item -> {
-        IconUtil.start(item);
+        ViewUtil.start(item);
         ShoppingList shoppingList = viewModel.getSelectedShoppingList();
         if (shoppingList == null) {
           showMessage(activity.getString(R.string.error_undefined));

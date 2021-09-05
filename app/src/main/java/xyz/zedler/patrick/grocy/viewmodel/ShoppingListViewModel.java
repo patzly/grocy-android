@@ -37,8 +37,9 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListStatus;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.HorizontalFilterBarSingle;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -68,6 +69,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<GroupedListItem>> filteredGroupedListItemsLive;
+  private final FilterChipLiveDataShoppingListStatus filterChipLiveDataStatus;
 
   private ArrayList<ShoppingListItem> shoppingListItems;
   private ArrayList<ShoppingList> shoppingLists;
@@ -84,9 +86,6 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private final HorizontalFilterBarSingle horizontalFilterBarSingle;
-  private int itemsMissingCount;
-  private int itemsUndoneCount;
   private final boolean debug;
 
   public ShoppingListViewModel(@NonNull Application application) {
@@ -104,14 +103,10 @@ public class ShoppingListViewModel extends BaseViewModel {
     offlineLive = new MutableLiveData<>(false);
     selectedShoppingListIdLive = new MutableLiveData<>(1);
     filteredGroupedListItemsLive = new MutableLiveData<>();
-
-    horizontalFilterBarSingle = new HorizontalFilterBarSingle(
-        this::updateFilteredShoppingListItems,
-        HorizontalFilterBarSingle.MISSING,
-        HorizontalFilterBarSingle.UNDONE
+    filterChipLiveDataStatus = new FilterChipLiveDataShoppingListStatus(
+        getApplication(),
+        this::updateFilteredShoppingListItems
     );
-    itemsMissingCount = 0;
-    itemsUndoneCount = 0;
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
     if (lastId != DEFAULT_SHOPPING_LIST_ID
@@ -148,18 +143,31 @@ public class ShoppingListViewModel extends BaseViewModel {
   }
 
   public void updateFilteredShoppingListItems() {
-    filteredGroupedListItemsLive.setValue(
-        ShoppingListHelper.groupItems(
-            getApplication(),
-            getFilteredShoppingListItems(),
-            this.productHashMap,
-            getProductNamesHashMap(),
-            this.productGroups,
-            this.shoppingLists,
-            getSelectedShoppingListId(),
-            true
-        )
+    ArrayList<GroupedListItem> groupedListItems = ShoppingListHelper.groupItems(
+        getApplication(),
+        getFilteredShoppingListItems(),
+        this.productHashMap,
+        getProductNamesHashMap(),
+        this.productGroups,
+        this.shoppingLists,
+        getSelectedShoppingListId(),
+        true
     );
+    if (groupedListItems.isEmpty()) {
+      InfoFullscreen info;
+      if (searchInput != null && !searchInput.isEmpty()) {
+        info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
+      } else if (filterChipLiveDataStatus.getStatus()
+          != FilterChipLiveDataShoppingListStatus.STATUS_ALL) {
+        info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
+      } else {
+        info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST);
+      }
+      infoFullscreenLive.setValue(info);
+    } else {
+      infoFullscreenLive.setValue(null);
+    }
+    filteredGroupedListItemsLive.setValue(groupedListItems);
     selectedShoppingListIdLive.setValue(selectedShoppingListIdLive.getValue());
   }
 
@@ -170,18 +178,21 @@ public class ShoppingListViewModel extends BaseViewModel {
     }
 
     ArrayList<ShoppingListItem> filteredShoppingListItems = new ArrayList<>();
-    itemsMissingCount = 0;
-    itemsUndoneCount = 0;
+    int itemsMissingCount = 0;
+    int itemsUndoneCount = 0;
+    int itemsDoneCount = 0;
 
     for (ShoppingListItem item : this.shoppingListItems) {
       if (item.getShoppingListIdInt() != getSelectedShoppingListId()) {
         continue;
       }
       if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-        itemsMissingCount += 1;
+        itemsMissingCount++;
       }
       if (item.isUndone()) {
-        itemsUndoneCount += 1;
+        itemsUndoneCount++;
+      } else {
+        itemsDoneCount++;
       }
 
       boolean searchContainsItem = true;
@@ -200,20 +211,24 @@ public class ShoppingListViewModel extends BaseViewModel {
         continue;
       }
 
-      if (horizontalFilterBarSingle.isNoFilterActive()
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.MISSING)
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataShoppingListStatus.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus()
+          == FilterChipLiveDataShoppingListStatus.STATUS_BELOW_MIN
           && item.hasProduct() && missingProductIds.contains(item.getProductIdInt())
-          || horizontalFilterBarSingle.isFilterActive(HorizontalFilterBarSingle.UNDONE)
-          && item.isUndone()
+          || filterChipLiveDataStatus.getStatus()
+          == FilterChipLiveDataShoppingListStatus.STATUS_UNDONE && item.isUndone()
+          || filterChipLiveDataStatus.getStatus()
+          == FilterChipLiveDataShoppingListStatus.STATUS_DONE && !item.isUndone()
       ) {
         filteredShoppingListItems.add(item);
       }
     }
+    filterChipLiveDataStatus
+        .setBelowStockCount(itemsMissingCount)
+        .setUndoneCount(itemsUndoneCount)
+        .setDoneCount(itemsDoneCount)
+        .emitCounts();
     return filteredShoppingListItems;
-  }
-
-  public boolean isSearchActive() {
-    return searchInput != null && !searchInput.isEmpty();
   }
 
   public void resetSearch() {
@@ -223,14 +238,6 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public MutableLiveData<ArrayList<GroupedListItem>> getFilteredGroupedListItemsLive() {
     return filteredGroupedListItemsLive;
-  }
-
-  public int getItemsMissingCount() {
-    return itemsMissingCount;
-  }
-
-  public int getItemsUndoneCount() {
-    return itemsUndoneCount;
   }
 
   public void updateSearchInput(String input) {
@@ -729,10 +736,6 @@ public class ShoppingListViewModel extends BaseViewModel {
     return missingProductIds;
   }
 
-  public HorizontalFilterBarSingle getHorizontalFilterBarSingle() {
-    return horizontalFilterBarSingle;
-  }
-
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
   }
@@ -741,8 +744,8 @@ public class ShoppingListViewModel extends BaseViewModel {
     return quantityUnitHashMap;
   }
 
-  public QuantityUnit getQuantityUnitFromId(int id) {
-    return quantityUnitHashMap.get(id);
+  public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {
+    return () -> filterChipLiveDataStatus;
   }
 
   private void fillShoppingListItemAmountsHashMap() {

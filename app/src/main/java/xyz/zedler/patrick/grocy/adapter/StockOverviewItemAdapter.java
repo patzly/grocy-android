@@ -34,13 +34,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
-import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewItemAdapter extends
     RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
@@ -165,7 +165,7 @@ public class StockOverviewItemAdapter extends
 
     if (!showDateTracking) {
       holder.binding.linearDays.setVisibility(View.GONE);
-    } else if (days != null && (sortMode.equals(StockOverviewViewModel.SORT_DUE_DATE)
+    } else if (days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
         || Integer.parseInt(days) <= daysExpiringSoon
         && !date.equals(Constants.DATE.NEVER_OVERDUE))
     ) {
