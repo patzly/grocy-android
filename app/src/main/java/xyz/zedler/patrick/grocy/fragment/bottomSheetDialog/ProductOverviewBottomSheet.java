@@ -32,12 +32,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.gson.Gson;
@@ -48,6 +47,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetProductOverviewBinding;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -64,36 +64,22 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.BezierCurveChart;
-import xyz.zedler.patrick.grocy.view.ExpandableCard;
-import xyz.zedler.patrick.grocy.view.ListItem;
 
 public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
   private final static String TAG = ProductOverviewBottomSheet.class.getSimpleName();
 
   private SharedPreferences sharedPrefs;
-
   private MainActivity activity;
+  private FragmentBottomsheetProductOverviewBinding binding;
   private StockItem stockItem;
   private ProductDetails productDetails;
   private Product product;
   private QuantityUnit quantityUnit;
   private PluralUtil pluralUtil;
   private Location location;
-  private ActionButton actionButtonConsume, actionButtonOpen;
-  private BezierCurveChart priceHistory;
   private DownloadHelper dlHelper;
-  private ListItem
-      itemAmount,
-      itemLocation,
-      itemBestBefore,
-      itemLastPurchased,
-      itemLastUsed,
-      itemLastPrice,
-      itemShelfLife,
-      itemSpoilRate;
 
   @NonNull
   @Override
@@ -103,15 +89,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
   @Override
   public View onCreateView(
-      LayoutInflater inflater,
+      @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_product_overview,
-        container,
-        false
-    );
+    binding = FragmentBottomsheetProductOverviewBinding
+        .inflate(inflater, container, false);
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
     activity = (MainActivity) requireActivity();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -141,33 +130,20 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     // VIEWS
 
-    actionButtonConsume = view.findViewById(R.id.button_product_overview_consume);
-    actionButtonOpen = view.findViewById(R.id.button_product_overview_open);
-    itemAmount = view.findViewById(R.id.item_product_overview_amount);
-    itemLocation = view.findViewById(R.id.item_product_overview_location);
-    itemBestBefore = view.findViewById(R.id.item_product_overview_bbd);
-    itemLastPurchased = view.findViewById(R.id.item_product_overview_last_purchased);
-    itemLastUsed = view.findViewById(R.id.item_product_overview_last_used);
-    itemLastPrice = view.findViewById(R.id.item_product_overview_last_price);
-    itemShelfLife = view.findViewById(R.id.item_product_overview_shelf_life);
-    itemSpoilRate = view.findViewById(R.id.item_product_overview_spoil_rate);
-    priceHistory = view.findViewById(R.id.item_product_overview_price_history);
-
     refreshItems();
 
-    ((TextView) view.findViewById(R.id.text_product_overview_name)).setText(product.getName());
+    binding.textName.setText(product.getName());
 
     // TOOLBAR
 
-    MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
     boolean isInStock = stockItem.getAmountDouble() > 0;
-    MenuCompat.setGroupDividerEnabled(toolbar.getMenu(), true);
+    MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
-    toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
-    toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
+    binding.toolbar.getMenu().findItem(R.id.action_consume_all).setEnabled(isInStock);
+    binding.toolbar.getMenu().findItem(R.id.action_consume_spoiled).setEnabled(
         isInStock && product.getEnableTareWeightHandlingInt() == 0
     );
-    toolbar.setOnMenuItemClickListener(item -> {
+    binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
 				navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
 						new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
@@ -252,52 +228,47 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     // DESCRIPTION
 
-    ExpandableCard cardDescription = view.findViewById(
-        R.id.card_product_overview_description
-    );
     Spanned description = product.getDescription() != null
         ? Html.fromHtml(product.getDescription())
         : null;
     description = (Spanned) TextUtil.trimCharSequence(description);
     if (description != null && !description.toString().isEmpty()) {
-      cardDescription.setText(description.toString());
+      binding.cardDescription.setText(description.toString());
     } else {
-      cardDescription.setVisibility(View.GONE);
+      binding.cardDescription.setVisibility(View.GONE);
     }
 
     // ACTIONS
 
     if (!showActions) {
       // hide actions when set up with productDetails
-      view.findViewById(R.id.linear_product_overview_action_container).setVisibility(
-          View.GONE
-      );
+      binding.linearActionContainer.setVisibility(View.GONE);
       // set info menu
-      toolbar.getMenu().clear();
-      toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
+      binding.toolbar.getMenu().clear();
+      binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
     }
 
     refreshButtonStates(false);
-    actionButtonConsume.setOnClickListener(v -> {
+    binding.buttonConsume.setOnClickListener(v -> {
       disableActions();
       activity.getCurrentFragment().performAction(Constants.ACTION.CONSUME, stockItem);
       dismiss();
     });
-    actionButtonOpen.setOnClickListener(v -> {
+    binding.buttonOpen.setOnClickListener(v -> {
       disableActions();
       activity.getCurrentFragment().performAction(Constants.ACTION.OPEN, stockItem);
       dismiss();
     });
     // tooltips
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      actionButtonConsume.setTooltipText(
+      binding.buttonConsume.setTooltipText(
           activity.getString(
               R.string.action_consume_one,
               quantityUnit.getName(),
               product.getName()
           )
       );
-      actionButtonOpen.setTooltipText(
+      binding.buttonOpen.setTooltipText(
           activity.getString(
               R.string.action_open_one,
               quantityUnit.getName(),
@@ -312,39 +283,31 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
           ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
       );
       layoutParams.setMargins(0, 0, 0, 0);
-      view.findViewById(R.id.linear_product_overview_amount).setLayoutParams(layoutParams);
+      binding.linearAmount.setLayoutParams(layoutParams);
     }
 
     // LOAD DETAILS
 
     if (activity.isOnline() && !hasDetails()) {
-      dlHelper.get(
-          activity.getGrocyApi().getStockProductDetails(product.getId()),
-          response -> {
-            Type listType = new TypeToken<ProductDetails>() {
-            }.getType();
-            productDetails = new Gson().fromJson(response, listType);
-            stockItem = new StockItem(productDetails);
-            refreshButtonStates(true);
-            refreshItems();
-            loadPriceHistory(view);
-          },
-          error -> {
-          }
-      );
+      dlHelper.getProductDetails(product.getId(), details -> {
+        productDetails = details;
+        stockItem = new StockItem(productDetails);
+        refreshButtonStates(true);
+        refreshItems();
+        loadPriceHistory();
+      }).perform(dlHelper.getUuid());
     } else if (activity.isOnline() && hasDetails()) {
-      loadPriceHistory(view);
+      loadPriceHistory();
     }
 
-    hideDisabledFeatures(view);
-
-    return view;
+    hideDisabledFeatures();
   }
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
     dlHelper.destroy();
+    binding = null;
   }
 
   private void refreshItems() {
@@ -360,25 +323,25 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     StringBuilder amountAggregated = new StringBuilder();
     AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem, quantityUnit);
     AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem, quantityUnit);
-    itemAmount.setText(
+    binding.itemAmount.setText(
         activity.getString(R.string.property_amount),
         amountNormal.toString(),
         amountAggregated.toString().isEmpty() ? null : amountAggregated.toString().trim()
     );
-    itemAmount.setSingleLine(false);
+    binding.itemAmount.setSingleLine(false);
 
     // LOCATION
     if (hasDetails()) {
       location = productDetails.getLocation(); // refresh
     }
     if (location != null && isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-      itemLocation.setText(
+      binding.itemLocation.setText(
           activity.getString(R.string.property_location_default),
           location.getName(),
           null
       );
     } else {
-      itemLocation.setVisibility(View.GONE);
+      binding.itemLocation.setVisibility(View.GONE);
     }
 
     // BEST BEFORE
@@ -387,7 +350,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       if (bestBefore == null) {
         bestBefore = ""; // for "never" from dateUtil
       }
-      itemBestBefore.setText(
+      binding.itemDueDate.setText(
           activity.getString(R.string.property_due_date_next),
           !bestBefore.equals(Constants.DATE.NEVER_OVERDUE)
               ? dateUtil.getLocalizedDate(bestBefore)
@@ -401,7 +364,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     if (hasDetails()) {
       // LAST PURCHASED
       String lastPurchased = productDetails.getLastPurchased();
-      itemLastPurchased.setText(
+      binding.itemLastPurchased.setText(
           activity.getString(R.string.property_last_purchased),
           lastPurchased != null
               ? dateUtil.getLocalizedDate(lastPurchased)
@@ -413,7 +376,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
       // LAST USED
       String lastUsed = productDetails.getLastUsed();
-      itemLastUsed.setText(
+      binding.itemLastUsed.setText(
           activity.getString(R.string.property_last_used),
           lastUsed != null
               ? dateUtil.getLocalizedDate(lastUsed)
@@ -427,7 +390,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       String lastPrice = productDetails.getLastPrice();
       if (NumUtil.isStringDouble(lastPrice) && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-        itemLastPrice.setText(
+        binding.itemLastPrice.setText(
             activity.getString(R.string.property_last_price),
             NumUtil.trimPrice(Double.parseDouble(lastPrice))
                 + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
@@ -440,7 +403,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       if (shelfLife != 0 && shelfLife != -1 && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_BBD_TRACKING
       )) {
-        itemShelfLife.setText(
+        binding.itemShelfLife.setText(
             activity.getString(R.string.property_average_shelf_life),
             dateUtil.getHumanDuration(shelfLife),
             null
@@ -448,7 +411,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       }
 
       // SPOIL RATE
-      itemSpoilRate.setText(
+      binding.itemSpoilRate.setText(
           activity.getString(R.string.property_spoil_rate),
           NumUtil.trim(productDetails.getSpoilRatePercent()) + "%",
           null
@@ -456,7 +419,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     }
   }
 
-  private void loadPriceHistory(View view) {
+  private void loadPriceHistory() {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       return;
     }
@@ -502,18 +465,16 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
                 (float) priceHistoryEntry.getPrice()
             ));
           }
-          priceHistory.init(curveLists, dates);
-          animateLinearPriceHistory(view);
+          binding.itemPriceHistory.init(curveLists, dates);
+          animateLinearPriceHistory();
         },
         error -> {
         }
     );
   }
 
-  private void animateLinearPriceHistory(View view) {
-    LinearLayout linearPriceHistory = view.findViewById(
-        R.id.linear_product_overview_price_history
-    );
+  private void animateLinearPriceHistory() {
+    LinearLayout linearPriceHistory = binding.linearPriceHistory;
     linearPriceHistory.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
     int height = linearPriceHistory.getMeasuredHeight();
     linearPriceHistory.getLayoutParams().height = 0;
@@ -551,29 +512,28 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     boolean open = stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
         && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0;
     if (animated) {
-      actionButtonConsume.refreshState(consume);
-      actionButtonOpen.refreshState(open);
+      binding.buttonConsume.refreshState(consume);
+      binding.buttonOpen.refreshState(open);
     } else {
-      actionButtonConsume.setState(consume);
-      actionButtonOpen.setState(open);
+      binding.buttonConsume.setState(consume);
+      binding.buttonOpen.setState(open);
     }
   }
 
   private void disableActions() {
-    actionButtonConsume.refreshState(false);
-    actionButtonOpen.refreshState(false);
+    binding.buttonConsume.refreshState(false);
+    binding.buttonOpen.refreshState(false);
   }
 
-  private void hideDisabledFeatures(View view) {
+  private void hideDisabledFeatures() {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
-      MaterialToolbar toolbar = view.findViewById(R.id.toolbar_product_overview);
-      toolbar.getMenu().findItem(R.id.action_add_to_shopping_list).setVisible(false);
+      binding.toolbar.getMenu().findItem(R.id.action_add_to_shopping_list).setVisible(false);
     }
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-      itemBestBefore.setVisibility(View.GONE);
+      binding.itemDueDate.setVisibility(View.GONE);
     }
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)) {
-      actionButtonOpen.setVisibility(View.GONE);
+      binding.buttonOpen.setVisibility(View.GONE);
     }
   }
 
