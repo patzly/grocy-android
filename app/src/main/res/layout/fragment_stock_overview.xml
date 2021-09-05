@@ -201,35 +201,45 @@
       <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:paddingBottom="8dp"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:overScrollMode="never">
 
         <LinearLayout
-          android:id="@+id/container_filters"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:orientation="horizontal"
           android:paddingStart="12dp"
-          android:paddingEnd="12dp">
+          android:paddingEnd="12dp"
+          android:layout_marginTop="6dp"
+          android:layout_marginBottom="8dp">
 
           <xyz.zedler.patrick.grocy.view.FilterChipNew
-            android:id="@+id/filter_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataStatus}"/>
 
           <xyz.zedler.patrick.grocy.view.FilterChipNew
-            android:id="@+id/filter_product_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataProductGroup}"/>
 
           <xyz.zedler.patrick.grocy.view.FilterChipNew
-            android:id="@+id/filter_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataLocation}"/>
+
+          <View
+            android:layout_width="1dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/filter_chip_stroke_inactive"/>
+
+          <xyz.zedler.patrick.grocy.view.FilterChipNew
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:data="@{viewModel.filterChipLiveDataSort}"/>
 
         </LinearLayout>
 

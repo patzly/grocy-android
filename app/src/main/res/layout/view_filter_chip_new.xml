@@ -36,7 +36,7 @@
     app:strokeWidth="0.5dp"
     app:strokeColor="@color/grey400"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/grey100">
+    app:cardBackgroundColor="@color/filter_chip_background_inactive">
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -68,9 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="0dp"
-        android:textColor="@color/black"
+        android:textColor="@color/filter_chip_text_inactive"
         android:textSize="15sp"
-        android:fontFamily="@font/jost_medium" />
+        android:fontFamily="@font/jost_book" />
 
       <FrameLayout
         android:layout_width="24dp"
@@ -82,8 +82,6 @@
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:layout_gravity="center"
-          android:src="@drawable/ic_round_expand_more"
-          app:tint="@color/grey800"
           tools:ignore="ContentDescription" />
 
       </FrameLayout>

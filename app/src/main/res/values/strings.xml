@@ -633,6 +633,8 @@
   <string name="property_note_multiline">Multi-line note</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">In stock: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Sort: %1$s</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

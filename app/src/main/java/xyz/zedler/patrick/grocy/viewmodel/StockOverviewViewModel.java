@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -77,6 +78,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
+  private final FilterChipLiveDataStockSort filterChipLiveDataSort;
 
   private ArrayList<StockItem> stockItems;
   private ArrayList<Product> products;
@@ -100,8 +102,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private String sortMode;
-  private boolean sortAscending;
   private final boolean debug;
 
   public StockOverviewViewModel(@NonNull Application application) {
@@ -133,8 +133,10 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockItems
     );
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
+    filterChipLiveDataSort = new FilterChipLiveDataStockSort(
+        getApplication(),
+        this::updateFilteredStockItems
+    );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -487,13 +489,14 @@ public class StockOverviewViewModel extends BaseViewModel {
       }
     }
 
-    switch (sortMode) {
-      case SORT_NAME:
-        SortUtil.sortStockItemsByName(getApplication(), filteredStockItems, sortAscending);
-        break;
-      case SORT_DUE_DATE:
-        SortUtil.sortStockItemsByBBD(filteredStockItems, sortAscending);
-        break;
+    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
+      SortUtil.sortStockItemsByBBD(filteredStockItems, filterChipLiveDataSort.isSortAscending());
+    } else {
+      SortUtil.sortStockItemsByName(
+          getApplication(),
+          filteredStockItems,
+          filterChipLiveDataSort.isSortAscending()
+      );
     }
 
     filteredStockItemsLive.setValue(filteredStockItems);
@@ -698,23 +701,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   }
 
   public String getSortMode() {
-    return sortMode;
-  }
-
-  public void setSortMode(String sortMode) {
-    this.sortMode = sortMode;
-    sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
-    updateFilteredStockItems();
-  }
-
-  public boolean isSortAscending() {
-    return sortAscending;
-  }
-
-  public void setSortAscending(boolean sortAscending) {
-    this.sortAscending = sortAscending;
-    sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
-    updateFilteredStockItems();
+    return filterChipLiveDataSort.getSortMode();
   }
 
   public Location getLocationFromId(int id) {
@@ -751,6 +738,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public FilterChipLiveDataLocation getFilterChipLiveDataLocationLive() {
     return filterChipLiveDataLocation;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
+    return () -> filterChipLiveDataSort;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {

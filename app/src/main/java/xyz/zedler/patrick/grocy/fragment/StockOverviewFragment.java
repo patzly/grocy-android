@@ -23,7 +23,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -56,7 +55,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewFragment extends BaseFragment implements
@@ -346,41 +345,8 @@ public class StockOverviewFragment extends BaseFragment implements
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_search) {
-      IconUtil.start(item);
+      ViewUtil.start(item);
       setUpSearch();
-      return true;
-    } else if (item.getItemId() == R.id.action_sort) {
-      SubMenu menuSort = item.getSubMenu();
-      MenuItem sortName = menuSort.findItem(R.id.action_sort_name);
-      MenuItem sortBBD = menuSort.findItem(R.id.action_sort_bbd);
-      MenuItem sortAscending = menuSort.findItem(R.id.action_sort_ascending);
-      switch (viewModel.getSortMode()) {
-        case StockOverviewViewModel.SORT_NAME:
-          sortName.setChecked(true);
-          break;
-        case StockOverviewViewModel.SORT_DUE_DATE:
-          sortBBD.setChecked(true);
-          break;
-      }
-      sortAscending.setChecked(viewModel.isSortAscending());
-      return true;
-    } else if (item.getItemId() == R.id.action_sort_name) {
-      if (!item.isChecked()) {
-        item.setChecked(true);
-        viewModel.setSortMode(StockOverviewViewModel.SORT_NAME);
-        viewModel.updateFilteredStockItems();
-      }
-      return true;
-    } else if (item.getItemId() == R.id.action_sort_bbd) {
-      if (!item.isChecked()) {
-        item.setChecked(true);
-        viewModel.setSortMode(StockOverviewViewModel.SORT_DUE_DATE);
-        viewModel.updateFilteredStockItems();
-      }
-      return true;
-    } else if (item.getItemId() == R.id.action_sort_ascending) {
-      item.setChecked(!item.isChecked());
-      viewModel.setSortAscending(item.isChecked());
       return true;
     }
     return false;

@@ -59,24 +59,11 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   }
 
   public FilterChipLiveDataStockStatus setStatus(int status, @Nullable String text) {
-    if (status == STATUS_DUE_SOON) {
-      setColorBackground(R.color.retro_yellow_bg);
-    } else if (status == STATUS_OVERDUE) {
-      setColorBackground(R.color.retro_dirt);
-    } else if (status == STATUS_EXPIRED) {
-      setColorBackground(R.color.retro_red_bg_black);
-    } else if (status == STATUS_BELOW_MIN) {
-      setColorBackground(R.color.retro_blue_bg);
-    } else if (status == STATUS_IN_STOCK) {
-      setColorBackground(R.color.retro_green_bg_black);
-    } else {
-      setColorBackground(R.color.grey100);
-    }
     if (status == STATUS_ALL) {
-      setColorStroke(R.color.grey400);
+      setActive(false);
       setText(application.getString(R.string.property_status));
     } else {
-      setColorStrokeToBackground();
+      setActive(true);
       assert text != null;
       setText(text);
     }
@@ -113,29 +100,36 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
         STATUS_ALL,
+        0,
         application.getString(R.string.action_no_filter)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_DUE_SOON,
+        0,
         getQuString(R.plurals.msg_due_products, dueSoonCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_OVERDUE,
+        0,
         getQuString(R.plurals.msg_overdue_products, overdueCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_EXPIRED,
+        0,
         getQuString(R.plurals.msg_expired_products, expiredCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_BELOW_MIN,
+        0,
         getQuString(R.plurals.msg_missing_products, belowStockCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_IN_STOCK,
+        0,
         getQuString(R.plurals.msg_in_stock_products, inStockCount)
     ));
     setMenuItemDataList(menuItemDataList);
+    setMenuItemGroups(new MenuItemGroup(0, true, true));
     emitValue();
   }
 

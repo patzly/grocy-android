@@ -20,24 +20,30 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.view.MenuItem.OnMenuItemClickListener;
-import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.lifecycle.MutableLiveData;
 import java.util.ArrayList;
-import xyz.zedler.patrick.grocy.R;
 
 public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
 
+  private boolean active = false;
   private String text;
-  @ColorRes private int colorBackground = R.color.grey100;
-  @ColorRes private int colorStroke = R.color.grey400;
   @DrawableRes private int drawable = -1;
   private int itemIdChecked = -1;
   private ArrayList<MenuItemData> menuItemDataList;
+  private MenuItemGroup[] menuItemGroupArray;
   private OnMenuItemClickListener menuItemClickListener;
 
   public void emitValue() {
     setValue(this);  // update view (because this sends new value to observer)
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
   public FilterChipLiveData setText(String text) {
@@ -47,26 +53,6 @@ public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
 
   public String getText() {
     return text;
-  }
-
-  @ColorRes public int getColorBackground() {
-    return colorBackground;
-  }
-
-  public void setColorBackground(@ColorRes int colorBackground) {
-    this.colorBackground = colorBackground;
-  }
-
-  public int getColorStroke() {
-    return colorStroke;
-  }
-
-  public void setColorStroke(int colorStroke) {
-    this.colorStroke = colorStroke;
-  }
-
-  public void setColorStrokeToBackground() {
-    colorStroke = colorBackground;
   }
 
   @DrawableRes public int getDrawable() {
@@ -99,6 +85,14 @@ public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
     this.menuItemClickListener = menuItemClickListener;
   }
 
+  public MenuItemGroup[] getMenuItemGroupArray() {
+    return menuItemGroupArray;
+  }
+
+  public void setMenuItemGroups(MenuItemGroup... menuItemGroupArray) {
+    this.menuItemGroupArray = menuItemGroupArray;
+  }
+
   public int getItemIdChecked() {
     return itemIdChecked;
   }
@@ -109,19 +103,59 @@ public class FilterChipLiveData extends MutableLiveData<FilterChipLiveData> {
 
   public static class MenuItemData {
     private final int itemId;
+    private final int groupId;
     private final String text;
+    private boolean checked = false;
 
-    public MenuItemData(int itemId, String text) {
+    public MenuItemData(int itemId, int groupId, String text) {
       this.itemId = itemId;
+      this.groupId = groupId;
       this.text = text;
+    }
+
+    public MenuItemData(int itemId, int groupId, String text, boolean checked) {
+      this(itemId, groupId, text);
+      this.checked = checked;
     }
 
     public int getItemId() {
       return itemId;
     }
 
+    public int getGroupId() {
+      return groupId;
+    }
+
     public String getText() {
       return text;
+    }
+
+    public boolean isChecked() {
+      return checked;
+    }
+  }
+
+  public static class MenuItemGroup {
+    private final int groupId;
+    private final boolean checkable;
+    private final boolean exclusive;
+
+    public MenuItemGroup(int groupId, boolean checkable, boolean exclusive) {
+      this.groupId = groupId;
+      this.checkable = checkable;
+      this.exclusive = exclusive;
+    }
+
+    public int getGroupId() {
+      return groupId;
+    }
+
+    public boolean isCheckable() {
+      return checkable;
+    }
+
+    public boolean isExclusive() {
+      return exclusive;
     }
   }
 

@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.view;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +33,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.Observer;
 import androidx.transition.AutoTransition;
@@ -40,6 +43,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.ViewFilterChipNewBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemGroup;
 
 public class FilterChipNew extends LinearLayout {
 
@@ -71,19 +75,48 @@ public class FilterChipNew extends LinearLayout {
     if (isAttachedToWindow() && !liveData.hasObservers()) {
       liveData.observeForever(liveDataObserver);
     }
-    int colorFrom = binding.card.getCardBackgroundColor().getColorForState(
+
+    // background color
+    int bgColorFrom = binding.card.getCardBackgroundColor().getColorForState(
         EMPTY_STATE_SET,
-        ContextCompat.getColor(getContext(), R.color.on_background_secondary)
+        ContextCompat.getColor(getContext(), R.color.filter_chip_background_inactive)
     );
-    int colorTo = ContextCompat.getColor(getContext(), data.getColorBackground());
-    ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+    int bgColorTo = ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_background_active
+        : R.color.filter_chip_background_inactive
+    );
+    ValueAnimator colorAnimation = ValueAnimator
+        .ofObject(new ArgbEvaluator(), bgColorFrom, bgColorTo);
     colorAnimation.setDuration(250);
     colorAnimation.addUpdateListener(
         animation -> binding.card.setCardBackgroundColor((int) animation.getAnimatedValue())
     );
     colorAnimation.start();
+
+    // text
     binding.text.setText(data.getText());
-    binding.card.setStrokeColor(ContextCompat.getColor(getContext(), data.getColorStroke()));
+
+    // text color
+    binding.text.setTextColor(ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_text_active
+        : R.color.filter_chip_text_inactive
+    ));
+
+    // expand icon color
+    Drawable expandDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_round_expand_more);
+    assert expandDrawable != null;
+    DrawableCompat.setTint(expandDrawable, ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_expand_active
+        : R.color.filter_chip_expand_inactive
+    ));
+    binding.imageIconExpand.setImageDrawable(expandDrawable);
+
+    // stroke color
+    binding.card.setStrokeColor(ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_stroke_active
+        : R.color.filter_chip_stroke_inactive
+    ));
+
     if (data.getDrawable() == -1) {
       binding.frameIcon.setVisibility(GONE);
     } else {
@@ -95,13 +128,29 @@ public class FilterChipNew extends LinearLayout {
       PopupMenu popupMenu = new PopupMenu(getContext(), this);
       Menu menu = popupMenu.getMenu();
       for (MenuItemData menuItemData : data.getMenuItemDataList()) {
-        MenuItem menuItem = menu
-            .add(0, menuItemData.getItemId(), Menu.NONE, menuItemData.getText());
+        MenuItem menuItem = menu.add(
+            menuItemData.getGroupId(),
+            menuItemData.getItemId(),
+            Menu.NONE,
+            menuItemData.getText()
+        );
         menuItem.setCheckable(true);
-        menuItem.setChecked(menuItemData.getItemId() == data.getItemIdChecked());
+        menuItem.setChecked(menuItemData.getItemId() == data.getItemIdChecked()
+            || menuItemData.isChecked());
         menuItem.setOnMenuItemClickListener(data.getMenuItemClickListener());
       }
-      menu.setGroupCheckable(0, true, true);
+      if (data.getMenuItemGroupArray() != null) {
+        for (MenuItemGroup menuItemGroup : data.getMenuItemGroupArray()) {
+          menu.setGroupCheckable(
+              menuItemGroup.getGroupId(),
+              menuItemGroup.isCheckable(),
+              menuItemGroup.isExclusive()
+          );
+        }
+        if (data.getMenuItemGroupArray().length > 1) {
+          MenuCompat.setGroupDividerEnabled(menu, true);
+        }
+      }
       binding.card.setOnClickListener(v -> popupMenu.show());
     }
   }
@@ -122,7 +171,7 @@ public class FilterChipNew extends LinearLayout {
     }
   }
 
-  @BindingAdapter("app:data")
+  @BindingAdapter("data")
   public static void observeData(FilterChipNew view, FilterChipLiveData.Listener dataListener) {
     // This is a workaround. The static binding adapter method overrides auto method selection
     // for app:data and takes a FilterChipLiveData.Listener object where it can extract the
