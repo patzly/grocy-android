@@ -481,8 +481,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
           && missingStockItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
-          && missingStockItem == null
-          || missingStockItem != null && missingStockItem.isItemMissingAndPartlyInStock()
+          && (missingStockItem == null || missingStockItem.isItemMissingAndPartlyInStock())
       ) {
         filteredStockItems.add(item);
       }

@@ -25,23 +25,19 @@ import androidx.annotation.PluralsRes;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 
-public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
+public class FilterChipLiveDataShoppingListStatus extends FilterChipLiveData {
 
   public final static int STATUS_ALL = 0;
-  public final static int STATUS_DUE_SOON = 1;
-  public final static int STATUS_OVERDUE = 2;
-  public final static int STATUS_EXPIRED = 3;
-  public final static int STATUS_BELOW_MIN = 4;
-  public final static int STATUS_IN_STOCK = 5;
+  public final static int STATUS_BELOW_MIN = 1;
+  public final static int STATUS_UNDONE = 2;
+  public final static int STATUS_DONE = 3;
 
   private final Application application;
-  private int dueSoonCount = 0;
-  private int overdueCount = 0;
-  private int expiredCount = 0;
   private int belowStockCount = 0;
-  private int inStockCount = 0;
+  private int undoneCount = 0;
+  private int doneCount = 0;
 
-  public FilterChipLiveDataStockStatus(Application application, Runnable clickListener) {
+  public FilterChipLiveDataShoppingListStatus(Application application, Runnable clickListener) {
     this.application = application;
     setStatus(STATUS_ALL, null);
     if (clickListener != null) {
@@ -58,7 +54,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     return getItemIdChecked();
   }
 
-  public FilterChipLiveDataStockStatus setStatus(int status, @Nullable String text) {
+  public FilterChipLiveDataShoppingListStatus setStatus(int status, @Nullable String text) {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
@@ -71,28 +67,18 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setDueSoonCount(int dueSoonCount) {
-    this.dueSoonCount = dueSoonCount;
-    return this;
-  }
-
-  public FilterChipLiveDataStockStatus setOverdueCount(int overdueCount) {
-    this.overdueCount = overdueCount;
-    return this;
-  }
-
-  public FilterChipLiveDataStockStatus setExpiredCount(int expiredCount) {
-    this.expiredCount = expiredCount;
-    return this;
-  }
-
-  public FilterChipLiveDataStockStatus setBelowStockCount(int belowStockCount) {
+  public FilterChipLiveDataShoppingListStatus setBelowStockCount(int belowStockCount) {
     this.belowStockCount = belowStockCount;
     return this;
   }
 
-  public FilterChipLiveDataStockStatus setInStockCount(int inStockCount) {
-    this.inStockCount = inStockCount;
+  public FilterChipLiveDataShoppingListStatus setUndoneCount(int undoneCount) {
+    this.undoneCount = undoneCount;
+    return this;
+  }
+
+  public FilterChipLiveDataShoppingListStatus setDoneCount(int doneCount) {
+    this.doneCount = doneCount;
     return this;
   }
 
@@ -104,29 +90,19 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
         application.getString(R.string.action_no_filter)
     ));
     menuItemDataList.add(new MenuItemData(
-        STATUS_DUE_SOON,
-        0,
-        getQuString(R.plurals.msg_due_products, dueSoonCount)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        STATUS_OVERDUE,
-        0,
-        getQuString(R.plurals.msg_overdue_products, overdueCount)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        STATUS_EXPIRED,
-        0,
-        getQuString(R.plurals.msg_expired_products, expiredCount)
-    ));
-    menuItemDataList.add(new MenuItemData(
         STATUS_BELOW_MIN,
         0,
         getQuString(R.plurals.msg_missing_products, belowStockCount)
     ));
     menuItemDataList.add(new MenuItemData(
-        STATUS_IN_STOCK,
+        STATUS_UNDONE,
         0,
-        getQuString(R.plurals.msg_in_stock_products, inStockCount)
+        getQuString(R.plurals.msg_undone_items, undoneCount)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        STATUS_DONE,
+        0,
+        getQuString(R.plurals.msg_done_items, doneCount)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));
