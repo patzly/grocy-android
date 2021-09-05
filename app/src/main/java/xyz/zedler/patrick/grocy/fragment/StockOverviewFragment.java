@@ -43,9 +43,6 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -148,29 +145,7 @@ public class StockOverviewFragment extends BaseFragment implements
     );
 
     viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
-      if (items == null) {
-        return;
-      }
-      if (items.isEmpty()) {
-        InfoFullscreen info;
-        if (viewModel.isSearchActive()) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-        } else if (viewModel.getFilterChipLiveDataStatusLive().getStatus()
-            != FilterChipLiveDataStockStatus.STATUS_ALL) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-        } else if (viewModel.getFilterChipLiveDataProductGroupLive().getSelectedId()
-            != FilterChipLiveDataProductGroup.NO_FILTER
-            || viewModel.getFilterChipLiveDataLocationLive().getSelectedId()
-            != FilterChipLiveDataProductGroup.NO_FILTER
-        ) {
-          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
-        } else {
-          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
-        }
-        viewModel.getInfoFullscreenLive().setValue(info);
-      } else {
-        viewModel.getInfoFullscreenLive().setValue(null);
-      }
+      if (items == null) return;
       if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
         ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
             items,

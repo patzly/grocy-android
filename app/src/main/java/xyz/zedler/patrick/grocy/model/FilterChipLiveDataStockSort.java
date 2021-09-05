@@ -77,10 +77,6 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
     ));
   }
 
-  public int getSelectedId() {
-    return getItemIdChecked();
-  }
-
   public void setValues(int id) {
     if (id == ID_SORT_NAME) {
       sortMode = SORT_NAME;

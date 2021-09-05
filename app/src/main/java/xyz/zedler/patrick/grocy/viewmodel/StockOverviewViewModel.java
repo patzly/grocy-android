@@ -61,8 +61,6 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class StockOverviewViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
-  public final static String SORT_NAME = "sort_name";
-  public final static String SORT_DUE_DATE = "sort_due_date";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -472,6 +470,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
       }
 
+      StockItem missingStockItem = productIdsMissingStockItems.get(item.getProductId());
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
           && item.isItemDue()
@@ -480,10 +479,10 @@ public class StockOverviewViewModel extends BaseViewModel {
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
           && item.isItemExpired()
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
-          && productIdsMissingStockItems.containsKey(item.getProductId())
+          && missingStockItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
-          && (!productIdsMissingStockItems.containsKey(item.getProductId())
-          || productIdsMissingStockItems.get(item.getProductId()).isItemMissingAndPartlyInStock())
+          && missingStockItem == null
+          || missingStockItem != null && missingStockItem.isItemMissingAndPartlyInStock()
       ) {
         filteredStockItems.add(item);
       }
@@ -497,6 +496,26 @@ public class StockOverviewViewModel extends BaseViewModel {
           filteredStockItems,
           filterChipLiveDataSort.isSortAscending()
       );
+    }
+
+    if (filteredStockItems.isEmpty()) {
+      InfoFullscreen info;
+      if (searchInput != null && !searchInput.isEmpty()) {
+        info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
+      } else if (filterChipLiveDataStatus.getStatus()
+          != FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataProductGroup.getSelectedId()
+          != FilterChipLiveDataProductGroup.NO_FILTER
+          || filterChipLiveDataLocation.getSelectedId()
+          != FilterChipLiveDataProductGroup.NO_FILTER
+      ) {
+        info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
+      } else {
+        info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
+      }
+      infoFullscreenLive.setValue(info);
+    } else {
+      infoFullscreenLive.setValue(null);
     }
 
     filteredStockItemsLive.setValue(filteredStockItems);
@@ -674,10 +693,6 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
   }
 
-  public boolean isSearchActive() {
-    return searchInput != null && !searchInput.isEmpty();
-  }
-
   public void resetSearch() {
     searchInput = null;
     setIsSearchVisible(false);
@@ -720,24 +735,12 @@ public class StockOverviewViewModel extends BaseViewModel {
     return () -> filterChipLiveDataStatus;
   }
 
-  public FilterChipLiveDataStockStatus getFilterChipLiveDataStatusLive() {
-    return filterChipLiveDataStatus;
-  }
-
   public FilterChipLiveData.Listener getFilterChipLiveDataProductGroup() {
     return () -> filterChipLiveDataProductGroup;
   }
 
-  public FilterChipLiveDataProductGroup getFilterChipLiveDataProductGroupLive() {
-    return filterChipLiveDataProductGroup;
-  }
-
   public FilterChipLiveData.Listener getFilterChipLiveDataLocation() {
     return () -> filterChipLiveDataLocation;
-  }
-
-  public FilterChipLiveDataLocation getFilterChipLiveDataLocationLive() {
-    return filterChipLiveDataLocation;
   }
 
   public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
