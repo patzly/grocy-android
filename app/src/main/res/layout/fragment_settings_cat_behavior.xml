@@ -265,7 +265,27 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            android:onClick="@{() -> viewModel.showMessageDurationBottomSheet()}"
+            clickUtil="@{clickUtil}">
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+            <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/setting_message_duration" />
+
+            <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.messageDuration}"/>
+
+          </LinearLayout>
+
+        </LinearLayout>
+
       </LinearLayout>
+
 
     </androidx.core.widget.NestedScrollView>
 

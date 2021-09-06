@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import java.util.List;
@@ -47,6 +48,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
 
   private FragmentSettingsCatBehaviorBinding binding;
   private MainActivity activity;
+  private MutableLiveData<String> messageDurationLive;
 
   @Override
   public View onCreateView(
@@ -103,6 +105,10 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
     updateShortcuts();
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
+
+  public MutableLiveData<String> getmessageDuration() {
+    return messageDurationLive;
   }
 
   @Override
