@@ -742,6 +742,14 @@ public class SettingsViewModel extends BaseViewModel {
     needsRestartLive.setValue(true);
   }
 
+  public void setMessageDuration(int duration) {
+    sharedPrefs.edit().putInt(BEHAVIOR.MESSAGE_DURATION, duration).apply();
+  }
+
+  public int getMessageDuration() {
+    return sharedPrefs.getInt(BEHAVIOR.MESSAGE_DURATION, SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION);
+  }
+
   public void showProxyPortBottomSheet() {
     Bundle bundle = new Bundle();
     bundle.putInt(Constants.ARGUMENT.NUMBER, getProxyPort());
