@@ -810,7 +810,8 @@
   <string name="setting_proxy_port_description">Your proxy\'s port number</string>
   <string name="setting_synchronized">The option below is synchronized with your server.</string>
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
-  <string name="setting_message_duration">Displaytime for messages</string>
+  <string name="setting_message_duration">Display time for messages</string>
+  <string name="setting_message_duration_description">Only concerns transaction messages</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

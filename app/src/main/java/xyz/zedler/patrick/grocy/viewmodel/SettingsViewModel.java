@@ -192,14 +192,6 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void showLoadingTimeoutBottomSheet() {
     Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.NUMBER, getMessageDuration());
-    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
-    bundle.putString(ARGUMENT.TYPE, BEHAVIOR.MESSAGE_DURATION);
-    showBottomSheet(new InputBottomSheet(), bundle);
-  }
-
-  public void showMessageDurationBottomSheet() {
-    Bundle bundle = new Bundle();
     bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());
     bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
     bundle.putString(ARGUMENT.TYPE, NETWORK.LOADING_TIMEOUT);
@@ -748,6 +740,14 @@ public class SettingsViewModel extends BaseViewModel {
   public void setProxyPort(int port) {
     sharedPrefs.edit().putInt(NETWORK.PROXY_PORT, port).apply();
     needsRestartLive.setValue(true);
+  }
+
+  public void showMessageDurationBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(Constants.ARGUMENT.NUMBER, getMessageDuration());
+    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_seconds));
+    bundle.putString(ARGUMENT.TYPE, BEHAVIOR.MESSAGE_DURATION);
+    showBottomSheet(new InputBottomSheet(), bundle);
   }
 
   public void setMessageDuration(int duration) {
