@@ -448,7 +448,9 @@ public class TransferViewModel extends BaseViewModel {
                 getString(R.string.action_undo),
                 v -> undoTransaction(transId)
             );
-            snackbarMessage.setDurationSecs(20);
+            snackbarMessage.setDurationSecs(sharedPrefs.getInt(
+                    Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
+                    Constants.SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION));
           }
           showSnackbar(snackbarMessage);
           sendEvent(Event.CONSUME_SUCCESS);
