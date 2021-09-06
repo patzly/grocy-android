@@ -39,6 +39,9 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatBehaviorFragment extends BaseFragment {
@@ -112,6 +115,16 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
         viewModel.getMessageDuration(),
         viewModel.getMessageDuration()
     );
+  }
+
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    String type = argsBundle.getString(ARGUMENT.TYPE);
+    if (type == null) return;
+    if (type.equals(BEHAVIOR.MESSAGE_DURATION) && NumUtil.isStringInt(text)) {
+      viewModel.setMessageDuration(Integer.parseInt(text));
+      binding.textMessageDuration.setText(getMessageDuration());
+    }
   }
 
   @Override

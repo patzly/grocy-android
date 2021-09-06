@@ -282,6 +282,7 @@
 
             <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:id="@+id/text_message_duration"
                 android:text="@{fragment.messageDuration}"/>
 
             <TextView
