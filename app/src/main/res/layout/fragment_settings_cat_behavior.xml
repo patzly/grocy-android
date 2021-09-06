@@ -267,6 +267,31 @@
 
       </LinearLayout>
 
+      <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:onClick="@{() -> viewModel.showMessageDurationBottomSheet()}"
+          clickUtil="@{clickUtil}">
+
+        <ImageView
+            android:id="@+id/image_default_amount_purchase"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_scatter_plot_anim"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+          <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/setting_default_amount_purchase" />
+
+          <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.messageDuration}"/>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
