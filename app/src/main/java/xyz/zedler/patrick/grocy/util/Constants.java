@@ -171,7 +171,7 @@ public final class Constants {
       public final static boolean FOOD_FACTS = false;
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
-      public final static int MESSAGE_DURATION = 20;
+      public final static int MESSAGE_DURATION = 10;
     }
 
     public final static class SCANNER {
