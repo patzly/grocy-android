@@ -24,19 +24,19 @@
   android:orientation="vertical"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:minHeight="48dp"
   android:gravity="center">
 
   <com.google.android.material.card.MaterialCardView
-    android:id="@+id/card_filter_chip"
+    android:id="@+id/card"
     android:layout_width="wrap_content"
-    android:layout_height="32dp"
+    android:layout_height="28dp"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
     app:cardCornerRadius="16dp"
-    app:strokeWidth="0dp"
+    app:strokeWidth="0.5dp"
+    app:strokeColor="@color/grey400"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/on_background_secondary">
+    app:cardBackgroundColor="@color/filter_chip_background_inactive">
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -47,19 +47,13 @@
       android:gravity="center_vertical">
 
       <FrameLayout
-        android:id="@+id/frame_filter_chip_icon"
+        android:id="@+id/frame_icon"
         android:layout_width="24dp"
-        android:layout_height="24dp">
+        android:layout_height="24dp"
+        android:visibility="gone">
 
         <ImageView
-          android:id="@+id/image_filter_chip_icon_bg"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:src="@drawable/bg_chip_icon"
-          tools:ignore="ContentDescription" />
-
-        <ImageView
-          android:id="@+id/image_filter_chip_icon"
+          android:id="@+id/image_icon"
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:layout_gravity="bottom|center_horizontal"
@@ -69,14 +63,28 @@
       </FrameLayout>
 
       <TextView
-        android:id="@+id/text_filter_chip"
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="12dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:fontFamily="@font/jost_medium" />
+        android:layout_marginEnd="0dp"
+        android:textColor="@color/filter_chip_text_inactive"
+        android:textSize="15sp"
+        android:fontFamily="@font/jost_book" />
+
+      <FrameLayout
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="4dp">
+
+        <ImageView
+          android:id="@+id/image_icon_expand"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_gravity="center"
+          tools:ignore="ContentDescription" />
+
+      </FrameLayout>
 
     </LinearLayout>
 

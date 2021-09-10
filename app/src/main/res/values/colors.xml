@@ -96,6 +96,17 @@
   <color name="tooltip_background">@color/grey700</color>
   <color name="tooltip_text">@color/white</color>
 
+  <!-- FILTER CHIPS -->
+
+  <color name="filter_chip_background_inactive">@color/grey100</color>
+  <color name="filter_chip_background_active">#4D5A97AA</color>
+  <color name="filter_chip_stroke_inactive">@color/grey400</color>
+  <color name="filter_chip_stroke_active">#83487787</color>
+  <color name="filter_chip_text_inactive">@color/black</color>
+  <color name="filter_chip_text_active">#355965</color>
+  <color name="filter_chip_expand_inactive">@color/grey600</color>
+  <color name="filter_chip_expand_active">#487787</color>
+
   <!-- HIGHLIGHT -->
 
   <color name="highlight">#11000000</color>

@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -60,8 +61,6 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 public class StockOverviewViewModel extends BaseViewModel {
 
   private final static String TAG = ShoppingListViewModel.class.getSimpleName();
-  public final static String SORT_NAME = "sort_name";
-  public final static String SORT_DUE_DATE = "sort_due_date";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -77,6 +76,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
+  private final FilterChipLiveDataStockSort filterChipLiveDataSort;
 
   private ArrayList<StockItem> stockItems;
   private ArrayList<Product> products;
@@ -100,8 +100,6 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private String sortMode;
-  private boolean sortAscending;
   private final boolean debug;
 
   public StockOverviewViewModel(@NonNull Application application) {
@@ -133,8 +131,10 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockItems
     );
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
+    filterChipLiveDataSort = new FilterChipLiveDataStockSort(
+        getApplication(),
+        this::updateFilteredStockItems
+    );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -470,6 +470,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
       }
 
+      StockItem missingStockItem = productIdsMissingStockItems.get(item.getProductId());
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
           && item.isItemDue()
@@ -478,22 +479,42 @@ public class StockOverviewViewModel extends BaseViewModel {
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
           && item.isItemExpired()
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
-          && productIdsMissingStockItems.containsKey(item.getProductId())
+          && missingStockItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
-          && (!productIdsMissingStockItems.containsKey(item.getProductId())
-          || productIdsMissingStockItems.get(item.getProductId()).isItemMissingAndPartlyInStock())
+          && (missingStockItem == null || missingStockItem.isItemMissingAndPartlyInStock())
       ) {
         filteredStockItems.add(item);
       }
     }
 
-    switch (sortMode) {
-      case SORT_NAME:
-        SortUtil.sortStockItemsByName(getApplication(), filteredStockItems, sortAscending);
-        break;
-      case SORT_DUE_DATE:
-        SortUtil.sortStockItemsByBBD(filteredStockItems, sortAscending);
-        break;
+    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
+      SortUtil.sortStockItemsByBBD(filteredStockItems, filterChipLiveDataSort.isSortAscending());
+    } else {
+      SortUtil.sortStockItemsByName(
+          getApplication(),
+          filteredStockItems,
+          filterChipLiveDataSort.isSortAscending()
+      );
+    }
+
+    if (filteredStockItems.isEmpty()) {
+      InfoFullscreen info;
+      if (searchInput != null && !searchInput.isEmpty()) {
+        info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
+      } else if (filterChipLiveDataStatus.getStatus()
+          != FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataProductGroup.getSelectedId()
+          != FilterChipLiveDataProductGroup.NO_FILTER
+          || filterChipLiveDataLocation.getSelectedId()
+          != FilterChipLiveDataProductGroup.NO_FILTER
+      ) {
+        info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
+      } else {
+        info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
+      }
+      infoFullscreenLive.setValue(info);
+    } else {
+      infoFullscreenLive.setValue(null);
     }
 
     filteredStockItemsLive.setValue(filteredStockItems);
@@ -671,10 +692,6 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
   }
 
-  public boolean isSearchActive() {
-    return searchInput != null && !searchInput.isEmpty();
-  }
-
   public void resetSearch() {
     searchInput = null;
     setIsSearchVisible(false);
@@ -698,23 +715,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   }
 
   public String getSortMode() {
-    return sortMode;
-  }
-
-  public void setSortMode(String sortMode) {
-    this.sortMode = sortMode;
-    sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
-    updateFilteredStockItems();
-  }
-
-  public boolean isSortAscending() {
-    return sortAscending;
-  }
-
-  public void setSortAscending(boolean sortAscending) {
-    this.sortAscending = sortAscending;
-    sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
-    updateFilteredStockItems();
+    return filterChipLiveDataSort.getSortMode();
   }
 
   public Location getLocationFromId(int id) {
@@ -733,24 +734,16 @@ public class StockOverviewViewModel extends BaseViewModel {
     return () -> filterChipLiveDataStatus;
   }
 
-  public FilterChipLiveDataStockStatus getFilterChipLiveDataStatusLive() {
-    return filterChipLiveDataStatus;
-  }
-
   public FilterChipLiveData.Listener getFilterChipLiveDataProductGroup() {
     return () -> filterChipLiveDataProductGroup;
-  }
-
-  public FilterChipLiveDataProductGroup getFilterChipLiveDataProductGroupLive() {
-    return filterChipLiveDataProductGroup;
   }
 
   public FilterChipLiveData.Listener getFilterChipLiveDataLocation() {
     return () -> filterChipLiveDataLocation;
   }
 
-  public FilterChipLiveDataLocation getFilterChipLiveDataLocationLive() {
-    return filterChipLiveDataLocation;
+  public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
+    return () -> filterChipLiveDataSort;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {

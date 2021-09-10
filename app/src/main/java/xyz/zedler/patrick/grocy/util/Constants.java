@@ -110,6 +110,7 @@ public final class Constants {
       public final static String FOOD_FACTS = "food_facts";
       public final static String EXPAND_BOTTOM_SHEETS = "expand_bottom_sheets";
       public final static String SPEED_UP_START = "speed_up_start";
+      public final static String MESSAGE_DURATION = "message_duration";
     }
 
     public final static class SCANNER {
@@ -170,6 +171,7 @@ public final class Constants {
       public final static boolean FOOD_FACTS = false;
       public final static boolean EXPAND_BOTTOM_SHEETS = false;
       public final static boolean SPEED_UP_START = false;
+      public final static int MESSAGE_DURATION = 10;
     }
 
     public final static class SCANNER {

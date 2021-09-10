@@ -50,8 +50,10 @@ public class FilterChipLiveDataLocation extends FilterChipLiveData {
 
   public void setSelectedId(int id, @Nullable String text) {
     if (id == NO_FILTER) {
+      setActive(false);
       setText(application.getString(R.string.property_location));
     } else {
+      setActive(true);
       assert text != null;
       setText(text);
     }
@@ -63,12 +65,14 @@ public class FilterChipLiveDataLocation extends FilterChipLiveData {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
         NO_FILTER,
+        0,
         application.getString(R.string.action_no_filter)
     ));
     for (Location location : locations) {
-      menuItemDataList.add(new MenuItemData(location.getId(), location.getName()));
+      menuItemDataList.add(new MenuItemData(location.getId(), 0, location.getName()));
     }
     setMenuItemDataList(menuItemDataList);
+    setMenuItemGroups(new MenuItemGroup(0, true, true));
     emitValue();
   }
 }

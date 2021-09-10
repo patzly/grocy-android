@@ -173,6 +173,7 @@ public class ShoppingModeFragment extends BaseFragment implements
                 this
             )
         );
+        binding.recycler.scheduleLayoutAnimation();
       }
     });
 

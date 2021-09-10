@@ -31,13 +31,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 
 public class LocationsBottomSheet extends BaseBottomSheet
     implements LocationAdapter.LocationAdapterListener {
@@ -68,10 +68,9 @@ public class LocationsBottomSheet extends BaseBottomSheet
     locations = requireArguments().getParcelableArrayList(Constants.ARGUMENT.LOCATIONS);
     int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
+    String title = requireArguments().getString(ARGUMENT.TITLE);
     TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
-    textViewTitle.setText(activity.getString(R.string.property_locations));
-
-    MaterialButton button = view.findViewById(R.id.button_list_selection_discard);
+    textViewTitle.setText(title != null ? title : activity.getString(R.string.property_locations));
 
     RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
     recyclerView.setLayoutManager(

@@ -106,6 +106,10 @@
   <string name="action_own_server">Собственный сервер</string>
   <string name="action_enter_data_manually">Ввести данные вручную</string>
   <string name="action_perform">Выполнить действие</string>
+  <string name="action_share">Поделиться</string>
+  <string name="action_share_description">Расскажите своим друзьям о Grocy Android</string>
+  <string name="action_no_filter">Без фильтра</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d скоро испортится</item>
@@ -211,12 +215,14 @@
   <string name="msg_quick_mode_confirm_transfer">Операция, которая будет выполнена:\n\nПереместить %1$s %2$s %3$s\nИз места: %4$s\nВ место: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Операция, которая будет выполнена:\n\nУстановить количество %1$s в запасах равное %2$s %3$s\nПримерить для добавленных элементов:\nСрок годности: %4$s\nЦена: %5$s\nМагазин: %6$s\nМесто: %7$s</string>
+  <string name="msg_compatibility">Эта версия приложения несовместима с версией Grocy на сервере.\n\nТекущая версия сервера: %1$s\n\nПоддерживаемые версии сервера:\n%2$s\nИспользование неподдерживаемых версий может привести к потере данных (маловероятно) или к сбоям приложения (более вероятно).\nВас предупредили!</string>
   <string name="msg_logout">Ничего на вашем сервере не будет изменено. вас перенаправит на страницу входа.</string>
   <string name="msg_logout_demo">Вы используете демо версию  <u>https://grocy.info</u>.\n\n<b>Никакие изменения здесь не сохраняются!\nОни видны пока сервер их автоматически не перезапишет. </b>\n\nНа странице входа вы можете ввести адрес своего сервера.</string>
   <string name="msg_logout_demo_short">Публичный демо сервер. Нажмите для деталей.</string>
   <string name="msg_restart">Требуется перезапуск приложения для корректного применения настроек Grocy</string>
   <string name="msg_shortcuts">Вы можете включить до 4 ярлыков:</string>
   <string name="msg_shortcuts_not_supported">Ярлыки не поддерживаются в этой версии Android.</string>
+  <string name="msg_barcode_formats">Вы можете повысить скорость детектора штрихкода, настроив его так, чтобы он обнаруживал только те форматы, которые вы используете для сканирования.</string>
   <string name="msg_features">Запустить введение еще раз можно в разделе \"О программе\"</string>
   <string name="msg_feedback">У вас есть пожелания, вопросы или ошибки? Свяжитесь с нами и мы поможем!\nесли нет. мы будем рады положительному отзыву в Play Store</string>
   <string name="msg_point_at_barcode">Направьте камеру на штрихкод</string>
@@ -224,6 +230,8 @@
   <string name="msg_welcome_to_grocy">Добро пожаловать в Grocy Android! \n\nДля продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
   <string name="msg_choose_option_below">Пожалуйста, выберите один вариант снизу</string>
   <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
+  <string name="msg_port_connection_info_without_port">Приложение подключится к порту %1$s.\тЕсли вы хотите подключить его к другому порту, вы можете добавить порт к адресу.\nПример: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">Приложение подключится к порту %1$s.</string>
   <string name="msg_not_implemented_yet">Скоро это будет реализовано. До тех пор используйте, пожалуйста, веб-интерфейс.</string>
   <string name="stock_disabled">Вы отключили функцию управления запасами в своей конфигурации Grocy, вероятно, потому что она вам не нужна. Но в данный момент это приложение может только управлять запасами, поэтому оно может не принести вам особой пользы.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -254,6 +262,12 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Это будет использоваться в качестве настройки по умолчанию при добавлении данного продукта в рецепт как ингредиента.</string>
   <string name="msg_help_inventory_fields">Следующие поля относятся к недавно добавленным продуктам.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Вы можете выбрать сканер штрихкода для сканирования штрихкода камерой смартфона.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") использует данные контрастности из потока камеры для обнаружения штрихкода. Затем он вычисляет относительную ширину всех линий.\n - Иногда неправильные результаты\n - Штрихкод должен быть выровнен по горизонтали\n - Требуется хорошая контрастность и резкость\n - Выполняется полностью автономно на вашем устройстве\n - Фреймворк с открытым исходным кодом</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit использует машинное обучение с использованием новейших технологий для сканирования штрихкодов.\n - Почти нет неправильных результатов\n - Ориентация не имеет значения\n - Работает даже для нечетких или низкоконтрастных штрихкодов\n - Выполняется полностью автономно на вашем устройстве\n - Фреймворк не является открытым исходным кодом</string>
   <string name="msg_help_external_scanner_ready">Вы можете использовать внешний сканер для поля ниже, пока оно активно и не заполнено.</string>
   <string name="msg_help_external_scanner_settings">Это приложение поддерживает внешние сканеры, которые действуют как клавиатура и могут быть подключены через USB или Bluetooth. Во внешнем сканере должны быть настроены следующие параметры:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -271,6 +285,8 @@
   <string name="msg_help_home_assistant_login_server">В поле ниже вы также можете ввести URL-адрес вашего облака Nabu Casa, если вы используете эту службу. Нажмите на эту карточку, чтобы перейти на сайт Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Вы можете создать долгосрочный токен доступа в настройках профиля Home Assistant (последний раздел). Нажмите здесь, чтобы открыть URL-адрес сверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Вернитесь назад или нажмите на эту карточку, чтобы отсканировать QR-код, который заполняет поля ниже.</string>
+  <string name="msg_share">Привет! Я использую Grocy Android для эффективного управления домашним хозяйством. Присоединяйся!\nhttps://github.com/patzly/grocy-android</string>
+
   <string name="error_api_not_working">Ключ API  не работает</string>
   <string name="error_orbot_not_installed">Orbot не установлен</string>
   <string name="error_select_product">Выберите продукт</string>
@@ -328,9 +344,11 @@
   <string name="error_unexpected_response_code">Неожиданный код ответа</string>
   <string name="error_unexpected_response">Неожиданный ответ сервера</string>
   <string name="error_no_browser">Установите веб браузер для отображения справочной страницы</string>
-  <string name="error_barcode_not_linked">Штрих-код не связан с продуктом</string>
+  <string name="error_barcode_not_linked">Штрихкод не связан с продуктом</string>
   <string name="error_no_product_details">Не удалось получить подробную информацию о продукте</string>
-  <string name="error_failed_barcode_upload">Не удалось загрузить штрих-код</string>
+  <string name="error_failed_barcode_upload">Не удалось загрузить штрихкод</string>
+  <string name="error_wrong_grocycode_type">Grocycode содержит неправильный тип объекта</string>
+  <string name="error_stock_entry_grocycode">Запись о запасе по Grocycode не найдена</string>
   <string name="error_undefined">Возникла ошибка</string>
 
   <string name="title_overview">Обзор</string>
@@ -339,7 +357,7 @@
   <string name="title_consume">Использовать</string>
   <string name="title_transfer">Переместить</string>
   <string name="title_inventory">Ревизия</string>
-  <string name="title_barcode_input">Ввод штрих-кода</string>
+  <string name="title_barcode_input">Ввод штрихкода</string>
   <string name="title_product_overview">Обзор продуктов</string>
   <string name="title_product">Продукт</string>
   <string name="title_product_create">Создать продукт</string>
@@ -349,6 +367,8 @@
   <string name="title_shopping_list">Список покупок</string>
   <string name="title_feedback">Обратная связь</string>
   <string name="title_settings">Настройки</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Сканер штрихкодов</string>
   <!-- Context: About this app -->
   <string name="title_about">О приложении</string>
   <string name="title_info">Информация</string>
@@ -394,11 +414,15 @@
   <string name="title_product_cat_due_date">Срок годности</string>
   <string name="title_product_cat_amount">Количество</string>
   <string name="title_product_cat_quantity_unit">Единица количества</string>
-  <string name="title_product_cat_barcodes">Штрих-коды</string>
+  <string name="title_product_cat_barcodes">Штрихкоды</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">Преобразование ЕИ</string>
   <string name="title_unknown_input">Неизвестный ввод</string>
   <string name="title_presets_new_products">Шаблоны для новых продуктов</string>
+  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
+   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <string name="title_use_scanner_tool">Используется %1$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -441,8 +465,8 @@
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
-  <string name="description_input_product_option2">Создать новый продукт и использовать ввод в качестве штрих-кода</string>
-  <string name="description_input_product_option3">Добавить как штрих-код к существующему продукту</string>
+  <string name="description_input_product_option2">Создать новый продукт и использовать ввод в качестве штрихкода</string>
+  <string name="description_input_product_option3">Добавить как штрихкод к существующему продукту</string>
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option1">Удалить только купленные продукты</string>
   <!-- Context: Clear shopping list -->
@@ -633,6 +657,9 @@
   <string name="property_picture">Изображение</string>
   <string name="property_note_singleline">Однострочная заметка</string>
   <string name="property_note_multiline">Многострочная заметка</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">В запасах: %1$s</string>
+
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->
@@ -727,14 +754,24 @@
   <string name="category_stock">Запасы</string>
   <string name="category_server">Сервер</string>
   <string name="category_scanner">Сканер</string>
-  <string name="category_appearance">Появление</string>
+  <string name="category_scanner_camera">Сканер камерой</string>
+  <string name="category_scanner_external">Внешний сканер</string>
+  <string name="category_appearance">Внешний вид</string>
   <string name="category_network">Сеть</string>
+  <string name="category_network_proxy">Прокси</string>
   <string name="category_behavior">Поведение</string>
   <string name="category_debugging">Отладка</string>
 
   <string name="hint_server">Адрес сервера</string>
   <string name="hint_key">Действительный ключ доступа к API</string>
 
+  <string name="setting_theme">Тема</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_follow_system">Системная</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Тёмная</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Светлая</string>
   <string name="setting_language">Язык</string>
   <string name="setting_language_description">Выбрать язык</string>
   <string name="setting_language_info">Большое спасибо всем переводчикам-добровольцам Transifex!\nПосетите нас на GitHub, чтобы узнать, как вы можете помочь сделать Grocy Android доступным для вашего языка.</string>
@@ -742,8 +779,20 @@
   <string name="setting_language_not_available">Не доступно</string>
   <string name="setting_open_food_facts">Использовать Open Food Facts</string>
   <string name="setting_open_food_facts_description">Получать данные со штрихкодов</string>
+  <string name="setting_choose_barcode_scanner">Выберите сканер штрихкода</string>
+  <string name="setting_choose_barcode_scanner_description">Для сканирования штрихкода камерой</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream">Обрезать видеопоток камеры в формат предварительного просмотра</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream_description">Запрещает сканеру обнаруживать штрихкоды за пределами предварительного просмотра; Может не работать на вашем устройстве!</string>
   <string name="setting_use_front_cam">Использовать фронтальную камеру</string>
   <string name="setting_use_front_cam_description">Для сканирования штрихкодов</string>
+  <string name="setting_use_2d_scanner_format">Использовать 2D формат сканера штрихкодов</string>
+  <string name="setting_use_2d_scanner_format_description">Квадратная форма для QR-кодов</string>
+  <string name="setting_barcode_formats">Форматы штрихкодов</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Обнаруживаются: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Обнаруживаются любые</string>
   <string name="setting_external_support">Поддержка внешнего сканера</string>
   <string name="setting_external_support_description">Через USB или Bluetooth</string>
   <string name="setting_reload_config">Перезагрузить конфигурацию</string>
@@ -788,6 +837,14 @@
   <string name="setting_speed_up_start_description">Применимо только для производительных устройств</string>
   <string name="setting_loading_circle">Показывать анимацию загрузки для всех запросов</string>
   <string name="setting_loading_circle_description">Полезно для медленных соединений</string>
+  <string name="setting_tor">Использовать Tor</string>
+  <string name="setting_tor_description">Требуется Orbot</string>
+  <string name="setting_proxy">Активировать HTTP прокси</string>
+  <string name="setting_proxy_description">Сконфигурировать HTTP прокси для всех сетевых запросов</string>
+  <string name="setting_proxy_host">Хост прокси</string>
+  <string name="setting_proxy_host_description">Адрес вашего прокси</string>
+  <string name="setting_proxy_port">Порт прокси</string>
+  <string name="setting_proxy_port_description">Порт вашего прокси</string>
   <string name="setting_synchronized">Опция ниже синхронизируются с вашим сервером.</string>
   <string name="settings_synchronized">Эти настройки синхронизируются с вашим сервером.</string>
 

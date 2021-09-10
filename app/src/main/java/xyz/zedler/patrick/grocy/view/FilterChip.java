@@ -19,198 +19,164 @@
 
 package xyz.zedler.patrick.grocy.view;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Animatable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Parcelable;
-import android.util.Log;
-import android.util.TypedValue;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import com.google.android.material.card.MaterialCardView;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuCompat;
+import androidx.databinding.BindingAdapter;
+import androidx.lifecycle.Observer;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.databinding.ViewFilterChipBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemGroup;
 
 public class FilterChip extends LinearLayout {
 
   private final static String TAG = FilterChip.class.getSimpleName();
 
-  private final Context context;
-  private ImageView imageViewIcon, imageViewIconBg;
-  private FrameLayout frameLayoutIcon;
-  private TextView textView;
-  private MaterialCardView cardView;
-  private boolean isActive = false;
+  private final ViewFilterChipBinding binding;
+  private FilterChipLiveData liveData;
+  private final Observer<FilterChipLiveData> liveDataObserver;
+  private boolean firstTimePassed = false;  // necessary to prevent weird animation on fragment init
 
-  public FilterChip(@NonNull Context context) {
-    super(context);
-
-    this.context = context;
-    init(R.color.on_background_secondary, null, null, null);
-  }
-
-  public FilterChip(
-      Context context,
-      @ColorRes int colorId,
-      String text,
-      Runnable onClick,
-      Runnable onClickAgain
-  ) {
-    super(context);
-
-    this.context = context;
-    init(colorId, text, onClick, onClickAgain);
-  }
-
-  @Nullable
-  @Override
-  protected Parcelable onSaveInstanceState() {
-    Bundle bundle = new Bundle();
-    bundle.putParcelable("superState", super.onSaveInstanceState());
-    bundle.putBoolean("isActive", isActive);
-    return bundle;
-  }
-
-  @Override
-  protected void onRestoreInstanceState(Parcelable state) {
-    if (state instanceof Bundle) {
-      Bundle bundle = (Bundle) state;
-      setActive(bundle.getBoolean("isActive"));
-      state = bundle.getParcelable("superState");
-    }
-    super.onRestoreInstanceState(state);
-  }
-
-  private void init(@ColorRes int colorId, String text, Runnable onClick, Runnable onClickAgain) {
-    inflate(context, R.layout.view_filter_chip, this);
-
-    cardView = findViewById(R.id.card_filter_chip);
-    imageViewIcon = findViewById(R.id.image_filter_chip_icon);
-    imageViewIconBg = findViewById(R.id.image_filter_chip_icon_bg);
-    frameLayoutIcon = findViewById(R.id.frame_filter_chip_icon);
-    textView = findViewById(R.id.text_filter_chip);
-
-    setText(text);
-    setIconTint(ContextCompat.getColor(context, R.color.black));
-    setBackgroundColor(ContextCompat.getColor(context, colorId));
-
-    setOnClickListener(v -> {
-      invertState();
-      if (onClick != null && isActive) {
-        onClick.run();
-      }
-      if (onClickAgain != null && !isActive) {
-        onClickAgain.run();
-      }
-    });
-
-    setActive(isActive);
-  }
-
-  public void setIcon(@DrawableRes int iconRes) {
-    imageViewIcon.setImageResource(iconRes);
-  }
-
-  public void setText(String text) {
-    textView.setText(text);
-  }
-
-  public void setIconTint(int color) {
-    imageViewIcon.setImageTintList(new ColorStateList(new int[][]{
-        new int[]{android.R.attr.state_enabled},
-        new int[]{-android.R.attr.state_enabled}
-    }, new int[]{
-        color, color
-    }));
-  }
-
-  public void setBackgroundColor(int color) {
-    cardView.setCardBackgroundColor(color);
-  }
-
-  public boolean isActive() {
-    return isActive;
-  }
-
-  public void setActive(boolean active) {
-    isActive = active;
-
-    frameLayoutIcon.setLayoutParams(new LayoutParams(dp(isActive ? 24 : 0), dp(24)));
-    if (active) {
-      imageViewIcon.setImageResource(R.drawable.ic_round_filter_list_out_anim);
-      ViewUtil.resetAnimatedIcon(imageViewIcon);
-    }
-  }
-
-  public void invertState() {
-    changeState(!isActive);
-  }
-
-  public static void changeStateToInactive(FilterChip... filterChips) {
-    for (FilterChip filterChip : filterChips) {
-      filterChip.changeState(false);
-    }
-  }
-
-  public static void changeStateToActive(FilterChip... filterChips) {
-    for (FilterChip filterChip : filterChips) {
-      filterChip.changeState(true);
-    }
-  }
-
-  public void changeState(boolean active) {
-    if (active == isActive) {
-      return;
-    }
-    isActive = active;
-
-    ValueAnimator valueAnimator = ValueAnimator.ofInt(
-        frameLayoutIcon.getWidth(),
-        dp(isActive ? 24 : 0)
+  public FilterChip(@NonNull Context context, AttributeSet attributeSet) {
+    super(context, attributeSet);
+    binding = ViewFilterChipBinding.inflate(
+        LayoutInflater.from(context),
+        this,
+        true
     );
-    valueAnimator.addUpdateListener(
-        animation -> {
-          frameLayoutIcon.setLayoutParams(
-              new LayoutParams((int) animation.getAnimatedValue(), dp(24))
+    liveDataObserver = data -> {
+      if (firstTimePassed) {
+        TransitionManager.beginDelayedTransition((ViewGroup) getRootView(), new AutoTransition());
+      }
+      setData(data);
+      firstTimePassed = true;
+    };
+  }
+
+  public void setData(FilterChipLiveData data) {
+    liveData = data;
+    if (isAttachedToWindow() && !liveData.hasObservers()) {
+      liveData.observeForever(liveDataObserver);
+    }
+
+    // background color
+    int bgColorFrom = binding.card.getCardBackgroundColor().getColorForState(
+        EMPTY_STATE_SET,
+        ContextCompat.getColor(getContext(), R.color.filter_chip_background_inactive)
+    );
+    int bgColorTo = ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_background_active
+        : R.color.filter_chip_background_inactive
+    );
+    ValueAnimator colorAnimation = ValueAnimator
+        .ofObject(new ArgbEvaluator(), bgColorFrom, bgColorTo);
+    colorAnimation.setDuration(250);
+    colorAnimation.addUpdateListener(
+        animation -> binding.card.setCardBackgroundColor((int) animation.getAnimatedValue())
+    );
+    colorAnimation.start();
+
+    // text
+    binding.text.setText(data.getText());
+
+    // text color
+    binding.text.setTextColor(ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_text_active
+        : R.color.filter_chip_text_inactive
+    ));
+
+    // expand icon color
+    Drawable expandDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_round_expand_more);
+    assert expandDrawable != null;
+    DrawableCompat.setTint(expandDrawable, ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_expand_active
+        : R.color.filter_chip_expand_inactive
+    ));
+    binding.imageIconExpand.setImageDrawable(expandDrawable);
+
+    // stroke color
+    binding.card.setStrokeColor(ContextCompat.getColor(getContext(), data.isActive()
+        ? R.color.filter_chip_stroke_active
+        : R.color.filter_chip_stroke_inactive
+    ));
+
+    if (data.getDrawable() == -1) {
+      binding.frameIcon.setVisibility(GONE);
+    } else {
+      binding.imageIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), data.getDrawable()));
+      binding.frameIcon.setVisibility(View.VISIBLE);
+    }
+
+    if (data.hasPopupMenu()) {
+      PopupMenu popupMenu = new PopupMenu(getContext(), this);
+      Menu menu = popupMenu.getMenu();
+      for (MenuItemData menuItemData : data.getMenuItemDataList()) {
+        MenuItem menuItem = menu.add(
+            menuItemData.getGroupId(),
+            menuItemData.getItemId(),
+            Menu.NONE,
+            menuItemData.getText()
+        );
+        menuItem.setCheckable(true);
+        menuItem.setChecked(menuItemData.getItemId() == data.getItemIdChecked()
+            || menuItemData.isChecked());
+        menuItem.setOnMenuItemClickListener(data.getMenuItemClickListener());
+      }
+      if (data.getMenuItemGroupArray() != null) {
+        for (MenuItemGroup menuItemGroup : data.getMenuItemGroupArray()) {
+          menu.setGroupCheckable(
+              menuItemGroup.getGroupId(),
+              menuItemGroup.isCheckable(),
+              menuItemGroup.isExclusive()
           );
-          frameLayoutIcon.invalidate();
         }
-    );
-    valueAnimator.setInterpolator(new FastOutSlowInInterpolator());
-    valueAnimator.setDuration(150).start();
-
-    imageViewIconBg.animate().alpha(active ? 1 : 0).setDuration(active ? 150 : 100).start();
-
-    imageViewIcon.setImageResource(
-        active
-            ? R.drawable.ic_round_filter_list_in_anim
-            : R.drawable.ic_round_filter_list_out_anim
-    );
-    new Handler().postDelayed(() -> {
-      try {
-        ((Animatable) imageViewIcon.getDrawable()).start();
-      } catch (ClassCastException cla) {
-        Log.e(TAG, "startIconAnimation() requires AVD!");
+        if (data.getMenuItemGroupArray().length > 1) {
+          MenuCompat.setGroupDividerEnabled(menu, true);
+        }
       }
-    }, active ? 100 : 0);
+      binding.card.setOnClickListener(v -> popupMenu.show());
+    }
   }
 
-  private int dp(int dp) {
-    return (int) TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dp,
-        context.getResources().getDisplayMetrics()
-    );
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    if (liveData != null && !liveData.hasObservers()) {
+      liveData.observeForever(liveDataObserver);
+    }
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    if (liveData != null) {
+      liveData.removeObserver(liveDataObserver);
+    }
+  }
+
+  @BindingAdapter("data")
+  public static void observeData(FilterChip view, FilterChipLiveData.Listener dataListener) {
+    // This is a workaround. The static binding adapter method overrides auto method selection
+    // for app:data and takes a FilterChipLiveData.Listener object where it can extract the
+    // LiveData. It is necessary because Data Binding throws error when method takes LiveData as
+    // parameter AND actual parameter is also LiveData.
+    view.setData(dataListener.getData());
   }
 }

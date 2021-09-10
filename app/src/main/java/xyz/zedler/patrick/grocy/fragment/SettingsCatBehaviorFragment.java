@@ -39,6 +39,9 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatBehaviorFragment extends BaseFragment {
@@ -47,6 +50,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
 
   private FragmentSettingsCatBehaviorBinding binding;
   private MainActivity activity;
+  private SettingsViewModel viewModel;
 
   @Override
   public View onCreateView(
@@ -67,7 +71,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setViewModel(viewModel);
@@ -103,6 +107,24 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
     updateShortcuts();
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
+  }
+
+  public String getMessageDuration() {
+    return getResources().getQuantityString(
+        R.plurals.property_seconds_num,
+        viewModel.getMessageDuration(),
+        viewModel.getMessageDuration()
+    );
+  }
+
+  @Override
+  public void saveInput(String text, Bundle argsBundle) {
+    String type = argsBundle.getString(ARGUMENT.TYPE);
+    if (type == null) return;
+    if (type.equals(BEHAVIOR.MESSAGE_DURATION) && NumUtil.isStringInt(text)) {
+      viewModel.setMessageDuration(Integer.parseInt(text));
+      binding.textMessageDuration.setText(getMessageDuration());
+    }
   }
 
   @Override

@@ -467,6 +467,11 @@
     <item name="singleLine">true</item>
   </style>
 
+  <style name="Widget.Grocy.TextView.Title.BottomSheet" parent="Widget.Grocy.TextView">
+    <item name="android:textSize" tools:ignore="SpUsage">21.5dp</item>
+    <item name="android:fontFamily">@font/jost_bold</item>
+  </style>
+
   <style name="Widget.Grocy.TextView.Category" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>

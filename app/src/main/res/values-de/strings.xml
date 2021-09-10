@@ -146,6 +146,11 @@
     <item quantity="one">%1$d unerledigt</item>
     <item quantity="other">%1$d unerledigt</item>
   </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d erledigt</item>
+    <item quantity="other">%1$d erledigt</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -619,6 +624,8 @@
   <string name="property_note_multiline">Mehrzeilige Notiz</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">Im Bestand: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Sortierung: %1$s</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>
@@ -789,6 +796,7 @@
   <string name="setting_proxy_port_description">Ihre Proxy-Portnummer</string>
   <string name="setting_synchronized">Die folgende Einstellung wird mit Ihrem Server synchronisiert.</string>
   <string name="settings_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
+  <string name="setting_message_duration">Anzeigedauer von Nachrichten</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
