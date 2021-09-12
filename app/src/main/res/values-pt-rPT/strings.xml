@@ -732,7 +732,6 @@
   <string name="setting_loading_circle_description">Útil em ligações lentas</string>
   <string name="setting_synchronized">A opção a baixo está sincronizada com o seu servidor.</string>
   <string name="settings_synchronized">Estas definições são sincronizadas com o seu servidor.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://pt-pt.demo.grocy.info</string>
