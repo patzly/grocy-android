@@ -203,7 +203,7 @@ public class TransferViewModel extends BaseViewModel {
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  public void setProduct(int productId, ProductBarcode barcode) {
+  public void setProduct(int productId, ProductBarcode barcode, String stockEntryId) {
     DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
       ProductDetails productDetails = formData.getProductDetailsLive().getValue();
       assert productDetails != null;
@@ -264,8 +264,20 @@ public class TransferViewModel extends BaseViewModel {
       }
 
       // stock entry
-      formData.getUseSpecificLive().setValue(false);
-      formData.getSpecificStockEntryLive().setValue(null);
+      StockEntry stockEntry = null;
+      if (stockEntryId != null) {
+        stockEntry = StockEntry.getStockEntryFromId(formData.getStockEntries(), stockEntryId);
+      }
+      if (stockEntryId != null && stockEntry == null) {
+        showMessage(R.string.error_stock_entry_grocycode);
+      }
+      if (stockEntry != null) {
+        formData.getUseSpecificLive().setValue(true);
+        formData.getSpecificStockEntryLive().setValue(stockEntry);
+      } else {
+        formData.getUseSpecificLive().setValue(false);
+        formData.getSpecificStockEntryLive().setValue(null);
+      }
 
       formData.isFormValid();
       if (isQuickModeEnabled()) {
@@ -333,6 +345,7 @@ public class TransferViewModel extends BaseViewModel {
 
   public void onBarcodeRecognized(String barcode) {
     Product product = null;
+    String stockEntryId = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
       product = Product.getProductFromId(products, grocycode.getObjectId());
@@ -340,6 +353,7 @@ public class TransferViewModel extends BaseViewModel {
         showMessageAndContinueScanning(R.string.msg_not_found);
         return;
       }
+      stockEntryId = grocycode.getProductStockEntryId();
     } else if (grocycode != null) {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
@@ -352,7 +366,7 @@ public class TransferViewModel extends BaseViewModel {
       }
     }
     if (product != null) {
-      setProduct(product.getId(), productBarcode);
+      setProduct(product.getId(), productBarcode, stockEntryId);
     } else {
       formData.getBarcodeLive().setValue(barcode);
       formData.isFormValid();
@@ -377,7 +391,7 @@ public class TransferViewModel extends BaseViewModel {
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode);
+        setProduct(product.getId(), productBarcode, null);
         return;
       }
     }
@@ -390,7 +404,7 @@ public class TransferViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product.getId(), null);
+      setProduct(product.getId(), null, null);
     } else {
       showInputProductBottomSheet(input);
     }
