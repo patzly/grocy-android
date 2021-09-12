@@ -792,7 +792,6 @@
   <string name="setting_loading_circle_description">Корисно для повільних мереж</string>
   <string name="setting_synchronized">Наведений нижче параметр синхронізується із сервером.</string>
   <string name="settings_synchronized">Ці параметри синхронізуються із сервером.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://en.demo.grocy.info</string>
