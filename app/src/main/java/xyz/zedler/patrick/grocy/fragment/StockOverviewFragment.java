@@ -193,7 +193,7 @@ public class StockOverviewFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
-          int position = viewHolder.getAdapterPosition() - 2;
+          int position = viewHolder.getAdapterPosition();
           ArrayList<StockItem> displayedItems = viewModel.getFilteredStockItemsLive()
               .getValue();
           if (displayedItems == null || position < 0

@@ -208,7 +208,7 @@ public class ShoppingListFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
-          int position = viewHolder.getAdapterPosition() - 1;
+          int position = viewHolder.getAdapterPosition();
           ArrayList<GroupedListItem> groupedListItems = viewModel
               .getFilteredGroupedListItemsLive().getValue();
           if (groupedListItems == null || position < 0

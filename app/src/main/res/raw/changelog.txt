@@ -6,6 +6,7 @@
 - Improved: Hide Open Food Facts option for now, because not implemented yet
 - Improved: Lists now have fade-in animations
 - Improved: Transaction message duration is lower and now adjustable (thanks @firesoft-de)
+- Improved: Grocycode with stock entry now also possible on transfer page
 - Fixed: Some bottom sheet headers had wrong padding
 
 2.0.0-beta03
