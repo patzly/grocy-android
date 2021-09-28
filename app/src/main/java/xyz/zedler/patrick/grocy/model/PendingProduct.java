@@ -120,6 +120,14 @@ public class PendingProduct {
     return null;
   }
 
+  public static PendingProduct getFromId(LiveData<List<PendingProduct>> pendingProducts, int id) {
+    if (pendingProducts.getValue() == null) return null;
+    for (PendingProduct product : pendingProducts.getValue()) {
+      if (product.getId() == id) return product;
+    }
+    return null;
+  }
+
   @NonNull
   @Override
   public String toString() {

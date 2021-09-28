@@ -570,7 +570,15 @@ public class PurchaseViewModel extends BaseViewModel {
     if (pendingProductsLive.getValue() == null) {
       return;
     }
-    PendingProduct pendingProduct = pendingProductsLive.getValue().get(0);
+    if (formData.getBatchModeItemIndexLive().getValue() == null) {
+      return;
+    }
+    int index = formData.getBatchModeItemIndexLive().getValue();
+    if (index >= batchPendingProductIds.size()) {
+      return;
+    }
+    int currentItemId = batchPendingProductIds.get(index);
+    PendingProduct pendingProduct = PendingProduct.getFromId(pendingProductsLive, currentItemId);
     if (pendingProduct == null) {
       return;
     }
@@ -874,7 +882,12 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void setBatchPendingProductIds(ArrayList<Integer> batchPendingProductIds) {
-    this.batchPendingProductIds = batchPendingProductIds;
+    ArrayList<Integer> ids = new ArrayList<>();
+    if (getPendingProductsLive().getValue() == null) return;
+    for (PendingProduct pendingProduct : getPendingProductsLive().getValue()) {
+      ids.add(pendingProduct.getId());
+    }
+    this.batchPendingProductIds = ids;
   }
 
   @NonNull

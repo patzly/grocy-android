@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetPendingProductsBinding;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 
 public class PendingProductsBottomSheet extends BaseBottomSheet {
 
@@ -58,8 +59,14 @@ public class PendingProductsBottomSheet extends BaseBottomSheet {
     activity = (MainActivity) requireActivity();
     binding = FragmentBottomsheetPendingProductsBinding
         .inflate(inflater, container, false);
-
+    binding.setBottomSheet(this);
+    binding.setClickUtil(new ClickUtil());
     return binding.getRoot();
+  }
+
+  public void startWorkflow() {
+    activity.getCurrentFragment().addPendingProducts();
+    dismiss();
   }
 
   @Override

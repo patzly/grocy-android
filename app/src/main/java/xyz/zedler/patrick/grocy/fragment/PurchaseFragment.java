@@ -111,7 +111,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     if (args.getShoppingListItems() != null) {
       binding.containerBatchMode.setVisibility(View.VISIBLE);
-      binding.linearPurchaseBatchItem.containerRow.setBackground(
+      binding.linearBatchItem.containerRow.setBackground(
           ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
       );
     }
@@ -178,7 +178,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       ShoppingListItemAdapter.fillShoppingListItem(
           requireContext(),
           item,
-          binding.linearPurchaseBatchItem,
+          binding.linearBatchItem,
           viewModel.getProductHashMap(),
           viewModel.getQuantityUnitHashMap(),
           viewModel.getShoppingListItemAmountsHashMap(),
@@ -187,8 +187,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     });
     viewModel.getFormData().getPendingProductLive().observe(getViewLifecycleOwner(), product -> {
       if(product == null) return;
-      binding.linearPurchaseBatchItem.name.setText(product.getProductName());
-      binding.linearPurchaseBatchItem.amount.setText(NumUtil.trim(product.getAmount()));
+      binding.linearBatchItem.name.setText(product.getProductName());
+      binding.linearBatchItem.amount.setText(NumUtil.trim(product.getAmount()));
     });
     viewModel.getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), b -> {});
 
@@ -221,7 +221,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
         args.getShoppingListItems() != null
-            ? R.menu.menu_purchase_shopping_list
+            ? R.menu.menu_purchase_batch
             : R.menu.menu_purchase,
         this::onMenuItemClick
     );
@@ -326,6 +326,13 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     if (viewModel.getFormData().isScannerVisible()) {
       clearInputFocus();
     }
+  }
+
+  @Override
+  public void addPendingProducts() {
+    viewModel.setBatchPendingProductIds(null);
+    viewModel.getFormData().getBatchModeItemIndexLive().setValue(0);
+    viewModel.fillWithPendingProduct();
   }
 
   public void clearAmountFieldAndFocusIt() {

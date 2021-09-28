@@ -234,7 +234,7 @@
               </LinearLayout>
 
               <include
-                android:id="@+id/linear_purchase_batch_item"
+                android:id="@+id/linear_batch_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 layout="@layout/row_shopping_list_item" />
