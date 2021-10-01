@@ -207,13 +207,13 @@ public class StockOverviewFragment extends BaseFragment implements
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_consume_product,
                 pos -> {
-                  if (pos - 2 >= displayedItems.size()) {
+                  if (pos >= displayedItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.CONSUME,
-                      displayedItems.get(pos - 2)
+                      displayedItems.get(pos)
                   );
                 }
             ));
@@ -226,13 +226,13 @@ public class StockOverviewFragment extends BaseFragment implements
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_open,
                 pos -> {
-                  if (pos - 2 >= displayedItems.size()) {
+                  if (pos >= displayedItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.OPEN,
-                      displayedItems.get(pos - 2)
+                      displayedItems.get(pos)
                   );
                 }
             ));
