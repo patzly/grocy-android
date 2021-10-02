@@ -6,7 +6,7 @@
 - Improved: Inventory page now has stock info like on consume page
 - Improved: Hide Open Food Facts option for now, because not implemented yet
 - Improved: Lists now have fade-in animations
-- Improved: Transaction message duration is lower and now adjustable (thanks @firesoft-de)
+- Improved: Transaction message duration is shorter and now adjustable (thanks @firesoft-de)
 - Improved: Grocycode with stock entry now also possible on transfer page
 - Fixed: Some bottom sheet headers had wrong padding
 
