@@ -158,6 +158,13 @@
     <item quantity="many">%1$d не куплено</item>
     <item quantity="other">%1$d не куплено</item>
   </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d выполнено</item>
+    <item quantity="few">%1$d выполнено</item>
+    <item quantity="many">%1$d выполнено</item>
+    <item quantity="other">%1$d выполнено</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -659,6 +666,8 @@
   <string name="property_note_multiline">Многострочная заметка</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">В запасах: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Сортировка: %1$s</string>
 
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
@@ -847,7 +856,6 @@
   <string name="setting_proxy_port_description">Порт вашего прокси</string>
   <string name="setting_synchronized">Опция ниже синхронизируются с вашим сервером.</string>
   <string name="settings_synchronized">Эти настройки синхронизируются с вашим сервером.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://ru.demo.grocy.info</string>

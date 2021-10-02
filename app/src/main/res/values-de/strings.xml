@@ -796,6 +796,8 @@
   <string name="setting_proxy_port_description">Ihre Proxy-Portnummer</string>
   <string name="setting_synchronized">Die folgende Einstellung wird mit Ihrem Server synchronisiert.</string>
   <string name="settings_synchronized">Diese Einstellungen werden mit Ihrem Server synchronisiert.</string>
+  <string name="setting_message_duration">Anzeigedauer von Nachrichten</string>
+  <string name="setting_message_duration_description">Betrifft nur Transaktionsnachrichten</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

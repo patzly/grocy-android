@@ -646,7 +646,6 @@
   <string name="setting_loading_circle">Zobrazit načítací kolečko u všech požadavků načítání</string>
   <string name="setting_loading_circle_description">Dobré zapnout při pomalém připojení</string>
   <string name="settings_synchronized">Tyto nastavení jsou synchronizována s vaším serverem.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://cs.demo.grocy.info</string>

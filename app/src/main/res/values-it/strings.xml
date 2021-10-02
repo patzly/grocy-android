@@ -734,7 +734,6 @@
   <string name="setting_loading_circle_description">D\'aiuto per connessioni lente</string>
   <string name="setting_synchronized">L\'impostazione sottostante è stata sincronizzata con il server</string>
   <string name="settings_synchronized">Queste impostazioni sono sincronizzate sul tuo server.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://it.demo.grocy.info</string>

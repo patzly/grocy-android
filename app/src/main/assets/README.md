@@ -39,3 +39,30 @@ Replace color on_primary with on_background and delete on_primary (it's always t
 - `type`: e.g. `image` for ImageView, `text_input` for TextInputLayout, `text` for TextView
 - `layout`: e.g. `consume` for `fragment_consume`, list_item
 - `name`: action or other identification, e.g. `amount` for TextInputLayout of amount input
+
+## Transifex config
+
+filters:
+  - filter_type: file
+    file_format: ANDROID
+    source_language: en
+    source_file: app/src/main/res/values/strings.xml
+    translation_files_expression: 'app/src/main/res/values-<lang>/strings.xml'
+settings:
+  language_mapping:
+    ca_ES: ca-rES
+    el_GR: el-rGR
+    en_BE: en-rBE
+    es_DO: es-rDO
+    he: iw
+    it_IT: it-rIT
+    ko_KR: ko-rKR
+    nl_BE: nl-rBE
+    nl_NL: nl-rNL
+    pl_PL: pl-rPL
+    pt_BR: pt-rBR
+    pt_PT: pt-rPT
+    ru_RU: ru-rRU
+    ru_UA: ru-rUA
+    zh_CN: zh-rCN
+    zh_TW: zh-rTW

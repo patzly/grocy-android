@@ -613,7 +613,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_note_multiline">Notitie met meerdere regels</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">In voorraad: %1$s</string>
-
   <string name="date_today">Vandaag</string>
   <string name="date_unknown">Onbekend</string>
   <!-- This means the 'time' context -->
@@ -765,7 +764,6 @@ Bezoek ons op GitHub om te leren hoe u kunt helpen Grocy Android beschikbaar te 
   <string name="setting_loading_circle_description">Handig voor langzame netwerken</string>
   <string name="setting_synchronized">De onderstaande optie is gesynchroniseerd met je server.</string>
   <string name="settings_synchronized">Deze instellingen worden gesynchroniseerd met je server.</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://nl.demo.grocy.info</string>
