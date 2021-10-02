@@ -292,6 +292,9 @@ public class OnboardingFragment extends BaseFragment {
           new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+              if (binding == null) {
+                return;
+              }
               updateLayout(true);
               binding.frameOnboardingContainer.getViewTreeObserver()
                   .removeOnGlobalLayoutListener(this);
