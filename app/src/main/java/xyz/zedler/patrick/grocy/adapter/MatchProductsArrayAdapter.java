@@ -39,7 +39,6 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
   final Context context;
   final int resource;
   final List<Product> items;
-  final List<Product> suggestions;
   final HashMap<String, Product> tempItems;
 
   public MatchProductsArrayAdapter(Context context, int resource, List<Product> items) {
@@ -47,7 +46,6 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
     this.context = context;
     this.resource = resource;
     this.items = items;
-    suggestions = new ArrayList<>();
     tempItems = new HashMap<>(); // this makes the difference.
     for (Product product : items) {
       tempItems.put(product.getName().toLowerCase(), product);
@@ -91,7 +89,8 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
       if (constraint != null) {
-        suggestions.clear();
+        // Initialize suggestion list with max. capacity; growing is expensive.
+        ArrayList<Product> suggestions = new ArrayList<>(tempItems.keySet().size());
         List<ExtractedResult> results = FuzzySearch.extractSorted(
             constraint.toString().toLowerCase(),
             tempItems.keySet(),
