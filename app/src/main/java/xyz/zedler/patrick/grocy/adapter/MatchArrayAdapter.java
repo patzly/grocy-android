@@ -76,22 +76,22 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
 
       @Override
       protected FilterResults performFiltering(CharSequence constraint) {
-        if (constraint != null) {
-          // Initialize list with max. capacity to avoid growing.
-          List<String> suggestions = new ArrayList<>(itemsAll.size());
-          for (String item : itemsAll) {
-            String match = constraint.toString().toLowerCase();
-            if (item.toLowerCase().contains(match)) {
-              suggestions.add(item);
-            }
-          }
-          FilterResults filterResults = new FilterResults();
-          filterResults.values = suggestions;
-          filterResults.count = suggestions.size();
-          return filterResults;
-        } else {
+        if (constraint == null) {
           return new FilterResults();
         }
+
+        // Initialize list with max. capacity to avoid growing.
+        List<String> suggestions = new ArrayList<>(itemsAll.size());
+        for (String item : itemsAll) {
+          String match = constraint.toString().toLowerCase();
+          if (item.toLowerCase().contains(match)) {
+            suggestions.add(item);
+          }
+        }
+        FilterResults filterResults = new FilterResults();
+        filterResults.values = suggestions;
+        filterResults.count = suggestions.size();
+        return filterResults;
       }
 
       @Override

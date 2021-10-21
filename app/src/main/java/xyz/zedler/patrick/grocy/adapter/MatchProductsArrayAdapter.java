@@ -88,32 +88,32 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
 
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
-      if (constraint != null) {
-        // Initialize suggestion list with max. capacity; growing is expensive.
-        ArrayList<Product> suggestions = new ArrayList<>(tempItems.keySet().size());
-        List<ExtractedResult> results = FuzzySearch.extractSorted(
-            constraint.toString().toLowerCase(),
-            tempItems.keySet(),
-            50
-        );
-        for (ExtractedResult result : results) {
-          suggestions.add(tempItems.get(result.getString()));
-        }
+      if (constraint == null) {
+        return new FilterResults();
+      }
 
-        //alternative without fuzzy
+      // Initialize suggestion list with max. capacity; growing is expensive.
+      ArrayList<Product> suggestions = new ArrayList<>(tempItems.keySet().size());
+      List<ExtractedResult> results = FuzzySearch.extractSorted(
+          constraint.toString().toLowerCase(),
+          tempItems.keySet(),
+          50
+      );
+      for (ExtractedResult result : results) {
+        suggestions.add(tempItems.get(result.getString()));
+      }
+
+      //alternative without fuzzy
                 /*for (Product product : tempItems) {
                     if (product.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(product);
                     }
                 }*/
 
-        FilterResults filterResults = new FilterResults();
-        filterResults.values = suggestions;
-        filterResults.count = suggestions.size();
-        return filterResults;
-      } else {
-        return new FilterResults();
-      }
+      FilterResults filterResults = new FilterResults();
+      filterResults.values = suggestions;
+      filterResults.count = suggestions.size();
+      return filterResults;
     }
 
     @Override
