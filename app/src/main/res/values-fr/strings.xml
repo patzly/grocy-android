@@ -72,7 +72,7 @@
   <string name="action_filter">Filtrer</string>
   <string name="action_sort">Trier</string>
   <string name="action_undo">Annuler</string>
-  <string name="action_retry">Recommencez</string>
+  <string name="action_retry">Recommencer</string>
   <string name="action_edit">Editer</string>
   <string name="action_copy">Copier</string>
   <string name="action_proceed">Continuer</string>
@@ -82,7 +82,7 @@
   <string name="action_restart">Redémarrer</string>
   <string name="action_create">Créer</string>
   <string name="action_link">Lien</string>
-  <string name="action_try_again">Réessayez</string>
+  <string name="action_try_again">Réessayer</string>
   <string name="action_open_scanner">Ouvrir le scanner</string>
   <string name="action_discard">Jeter</string>
   <string name="action_clear_form">Effacer le formulaire</string>
@@ -90,7 +90,7 @@
   <string name="action_edit_notes">Modifier les notes</string>
   <string name="action_add_missing">Ajouter des produits manquants</string>
   <string name="action_purchase_done_items">Acheter les articles cochés</string>
-  <string name="action_purchase_all_items">Achetez tous les articles</string>
+  <string name="action_purchase_all_items">Acheter tous les articles</string>
   <string name="action_skip_entry">Passer l\'article</string>
   <string name="action_toggle_flash">Activer/désactiver le flash</string>
   <string name="action_delete_shopping_list">Supprimer la liste d\'achats</string>
@@ -104,8 +104,12 @@
   <string name="action_display_help">Afficher les textes d\'aide</string>
   <string name="action_demo_server">Serveur de démo</string>
   <string name="action_own_server">Votre serveur</string>
-  <string name="action_enter_data_manually">Entrez les données manuellement</string>
+  <string name="action_enter_data_manually">Entrer les données manuellement</string>
   <string name="action_perform">Effectuer l\'action</string>
+  <string name="action_share">Partager</string>
+  <string name="action_share_description">Parlez à vos amis de Grocy Android</string>
+  <string name="action_no_filter">Pas de filtre</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d bientôt périmé</item>
@@ -142,6 +146,11 @@
     <item quantity="one">%1$d décoché</item>
     <item quantity="other">%1$d décochés</item>
   </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d terminé</item>
+    <item quantity="other">%1$d terminés</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -150,7 +159,7 @@
   <string name="msg_inventoried">Le stock de %1$s est maintenant de %2$s %3$s (%4$s)</string>
   <!-- %1$s is a product name -->
   <string name="msg_not_in_stock">%1$s n\'est pas en stock</string>
-  <string name="msg_no_connection">Pas de connection</string>
+  <string name="msg_no_connection">Pas de connexion</string>
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_locations">Aucun emplacement de stock pour %1$s</string>
   <!-- %1$s is a product name -->
@@ -195,19 +204,23 @@
   <string name="msg_quick_mode_confirm_transfer">Opération qui sera exécutée :\n\nTransférer %1$s %2$s de %3$s\nDe l\'emplacement : %4$s\nÀ l\'emplacement : %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Opération qui sera exécutée :\n\nDéfinir le stock de %1$s à %2$s %3$s\nAppliqué aux articles ajoutés :\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
+  <string name="msg_compatibility">Cette version de l\'application n\'est pas compatible avec la version de grocy sur le serveur.\n\nVersion actuelle du serveur : %1$s\n\nVersions du serveur prises en charge :\n%2$s\nSi vous ignorez cet avertissement, une perte de données (peu probable) ou des plantages (probable) peuvent se produire. \nVous êtes prévenu !</string>
   <string name="msg_logout">Rien sur votre serveur ne sera modifié. Vous serez redirigé vers la page de connexion.</string>
   <string name="msg_logout_demo">Vous utilisez le serveur de démonstration grocy publique <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer l\'adresse de votre propre serveur.</string>
-  <string name="msg_logout_demo_short">Serveur publique de démonstration. Tapez pour les détails.</string>
+  <string name="msg_logout_demo_short">Serveur public de démonstration. Tapez pour les détails.</string>
   <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle de Grocy.</string>
   <string name="msg_shortcuts">Vous pouvez activer jusqu\'à 4 raccourcis :</string>
   <string name="msg_shortcuts_not_supported">Les raccourcis ne sont pas supportés sur cette version d\'Android.</string>
+  <string name="msg_barcode_formats">Vous pouvez améliorer la vitesse du détecteur de codes-barres en le configurant pour détecter uniquement les formats que vous avez l\'habitude de lire.</string>
   <string name="msg_features">Recommencer l\'intro à \"À propos\"</string>
-  <string name="msg_feedback">Avez-vous des souhaits, des questions ou des erreurs? Contactez-nous et laissez-nous vous aider!\nSinon, nous serions très heureux de recevoir une bonne critique dans le Play Store.</string>
+  <string name="msg_feedback">Avez-vous des souhaits, des questions ou des erreurs ? Contactez-nous et laissez-nous vous aider!\nSinon, nous serions très heureux de recevoir une bonne critique sur le Play Store.</string>
   <string name="msg_point_at_barcode">Dirigez votre appareil photo vers un code-barres</string>
   <string name="msg_press_hold_confirm">Laissez appuyé pour confirmer.</string>
   <string name="msg_welcome_to_grocy">Bienvenue sur Gorcy Android !\n\nPour utiliser grocy de manière productive vous avez besoin de votre propre serveur ou de l\'add-on pour Home Assistant.\nSi vous voulez seulement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Merci de choisir une des options ci-dessous.</string>
   <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site web grocy et aller sur la page \"Clefs API\". Cliquer sur \"Ajouter\", puis cliquez sur la petite icône de code QR et scannez le code QR.</string>
+  <string name="msg_port_connection_info_without_port">L\'application se connectera au port %1$s.\nSi vous souhaitez qu\'elle se connecte à un autre port, vous pouvez en ajouter un à l\'URL.\nExemple : http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">L\'application se connectera au port %1$s.</string>
   <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
   <string name="stock_disabled">Vous avez désactivé la fonctionnalité de suivi de stock dans la configuration de votre serveur Grocy, probablement parce que vous n\'en avez pas besoin. Cependant, cette application ne sert qu\'au suivi de stock pour le moment, elle ne vous sera donc pas d\'une grande utilité.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -238,6 +251,12 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Ceci sera utilisé comme option par défaut lorsque ce produit sera ajouté comme ingrédient dans une recette.</string>
   <string name="msg_help_inventory_fields">Les champs suivants s\'appliquent aux produits nouvellement ajoutés.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Vous pouvez choisir un scanner de codes-barres pour la numérisation de codes-barres avec l\'appareil photo.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") utilise les données de contraste du flux de la caméra pour détecter un code-barres. Il calcule ensuite la largeur relative de toutes les lignes.\n- Parfois les résultats sont incorrects\n- Le code-barre doit être aligné horizontalement\n- Nécessite un bon contraste et une bonne netteté\n- Est exécuté complètement hors ligne sur votre appareil\n- Le framework est open source</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit utilise le machine learning avec les dernières technologies pour la lecture de codes-barres.\n- Presque aucun résultat incorrect\n- L\'orientation n\'a pas d\'importance\n- Fonctionne même avec les codes-barres flous ou avec un faible contraste\n- Est effectué complètement hors ligne sur votre appareil\ n- Le framework n\'est pas open source</string>
   <string name="msg_help_external_scanner_ready">Vous pouvez utiliser un scanner externe pour le champ ci-dessous tant qu\'il est sélectionné et vide.</string>
   <string name="msg_help_external_scanner_settings">Cette application supporte les scanner externes qui agissent comme des claviers et peuvent être connectés via USB ou Bluetooth. Les options suivantes doivent être configurées dans votre scanner externe:\n\nPréfix : Aucun\nSuffix : TAB ou ENTRÉE</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -255,6 +274,8 @@
   <string name="msg_help_home_assistant_login_server">Le champ ci-dessous, vous pouvez saisir l\'URL de votre instance Nabu Casa, si vous utilisez ce service. Appuyer ici pour consulter le site de Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès longue durée dans votre profil Home Assistant (bas de page). Appuyer ici pour ouvrir l\'URL ci-dessus.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
+  <string name="msg_share">Découvrez ce client Android pour grocy-project : \nhttps://github.com/patzly/grocy-android</string>
+
   <string name="error_api_not_working">La clé API ne fonctionne pas</string>
   <string name="error_orbot_not_installed">Orbot n\'est pas installé</string>
   <string name="error_select_product">Sélectionnez un produit</string>
@@ -315,6 +336,8 @@
   <string name="error_barcode_not_linked">Le code barre n\'est pas lié à un produit</string>
   <string name="error_no_product_details">Impossible de récupérer les détails du produit</string>
   <string name="error_failed_barcode_upload">Impossible d\'envoyer le code barre</string>
+  <string name="error_wrong_grocycode_type">grocycode contient un type d\'entité incorrect</string>
+  <string name="error_stock_entry_grocycode">Entrée de stock de grocycode introuvable</string>
   <string name="error_undefined">Une erreur est survenue</string>
 
   <string name="title_overview">Aperçu</string>
@@ -333,6 +356,8 @@
   <string name="title_shopping_list">Liste de courses</string>
   <string name="title_feedback">Retour d\'information</string>
   <string name="title_settings">Paramètres</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Lecteur de code-barres</string>
   <!-- Context: About this app -->
   <string name="title_about">À propos</string>
   <string name="title_info">Information</string>
@@ -383,6 +408,10 @@
   <string name="title_product_cat_qu_conversions">Conversions de formats</string>
   <string name="title_unknown_input">Entrée inconnue</string>
   <string name="title_presets_new_products">Préréglages pour de nouveaux produits</string>
+  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
+   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <string name="title_use_scanner_tool">Utiliser %1$s</string>
+
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- %1$s is a number like 1, 2, 3 -->
@@ -593,6 +622,11 @@
   <string name="property_picture">Image</string>
   <string name="property_note_singleline">Note sur une ligne</string>
   <string name="property_note_multiline">Note multi-lignes</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">En stock : %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Trier : %1$s</string>
+
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
   <!-- This means the 'time' context -->
@@ -669,14 +703,24 @@
   <string name="category_stock">Stock</string>
   <string name="category_server">Serveur</string>
   <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_camera">Scanner appareil photo</string>
+  <string name="category_scanner_external">Scanner externe</string>
   <string name="category_appearance">Apparence</string>
   <string name="category_network">Réseau</string>
+  <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportement</string>
   <string name="category_debugging">Débogage</string>
 
   <string name="hint_server">URL du serveur</string>
   <string name="hint_key">Clé API valide</string>
 
+  <string name="setting_theme">Thème</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_follow_system">Suivre le système</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Sombre</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Clair</string>
   <string name="setting_language">Langue</string>
   <string name="setting_language_description">Choisir une langue</string>
   <string name="setting_language_info">Remerciement à tous les traducteurs volontaires de Transifex !\nVisitez le projet sur GitHub pour rendre Grocy Android disponible dans votre langue.</string>
@@ -684,8 +728,20 @@
   <string name="setting_language_not_available">Non disponible</string>
   <string name="setting_open_food_facts">Utilisez Open Food Facts</string>
   <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
+  <string name="setting_choose_barcode_scanner">Choisissez un lecteur de codes-barres</string>
+  <string name="setting_choose_barcode_scanner_description">Pour scanner les codes-barres avec l\'appareil photo</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream">Rogner le flux de l\'appareil photo au format de la prévisualisation</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream_description">Empêche le scanner de détecter les codes-barres en dehors de l\'aperçu. Ne fonctionne pas sur tous les appareils.</string>
   <string name="setting_use_front_cam">Utiliser la caméra frontale</string>
   <string name="setting_use_front_cam_description">Pour scanner un code barre</string>
+  <string name="setting_use_2d_scanner_format">Utiliser le format de lecteur de codes-barres 2D</string>
+  <string name="setting_use_2d_scanner_format_description">Forme carrée pour les QR codes</string>
+  <string name="setting_barcode_formats">Formats de codes-barres</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Limite à : %1$s</string>
+  <string name="setting_barcode_formats_description_all">Non limité</string>
   <string name="setting_external_support">Support de scanner externe</string>
   <string name="setting_external_support_description">Via USB ou Bluetooth</string>
   <string name="setting_reload_config">Recharger la configuration</string>
@@ -730,8 +786,19 @@
   <string name="setting_speed_up_start_description">N\'a un effet que sur les appareils performants</string>
   <string name="setting_loading_circle">Afficher une animation de chargement pour toutes les requêtes</string>
   <string name="setting_loading_circle_description">Utile pour les connexions lentes</string>
+  <string name="setting_tor">Utiliser Tor</string>
+  <string name="setting_tor_description">Nécessite Orbot</string>
+  <string name="setting_proxy">Activer le proxy HTTP</string>
+  <string name="setting_proxy_description">Configurer le proxy HTTP pour toutes les requêtes réseau</string>
+  <string name="setting_proxy_host">Hôte proxy</string>
+  <string name="setting_proxy_host_description">Nom d\'hôte de votre proxy</string>
+  <string name="setting_proxy_port">Port proxy</string>
+  <string name="setting_proxy_port_description">Numéro de port de votre proxy</string>
   <string name="setting_synchronized">L\'option ci-dessous est synchronisée avec votre serveur.</string>
   <string name="settings_synchronized">Ces paramètres sont synchronisés avec votre serveur.</string>
+  <string name="setting_message_duration">Temps d\'affichage des messages</string>
+  <string name="setting_message_duration_description">Concerne seulement les messages de transaction</string>
+
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
