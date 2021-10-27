@@ -548,6 +548,9 @@
   <string name="property_note_multiline">הערה במספר שורות</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">במלאי: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">מיון: %1$s</string>
+
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->
