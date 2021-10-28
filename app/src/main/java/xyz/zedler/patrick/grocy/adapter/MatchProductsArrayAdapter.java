@@ -39,7 +39,6 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
   final Context context;
   final int resource;
   final List<Product> items;
-  final List<Product> suggestions;
   final HashMap<String, Product> tempItems;
 
   public MatchProductsArrayAdapter(Context context, int resource, List<Product> items) {
@@ -47,7 +46,6 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
     this.context = context;
     this.resource = resource;
     this.items = items;
-    suggestions = new ArrayList<>();
     tempItems = new HashMap<>(); // this makes the difference.
     for (Product product : items) {
       tempItems.put(product.getName().toLowerCase(), product);
@@ -90,31 +88,32 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
 
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
-      if (constraint != null) {
-        suggestions.clear();
-        List<ExtractedResult> results = FuzzySearch.extractSorted(
-            constraint.toString().toLowerCase(),
-            tempItems.keySet(),
-            50
-        );
-        for (ExtractedResult result : results) {
-          suggestions.add(tempItems.get(result.getString()));
-        }
+      if (constraint == null) {
+        return new FilterResults();
+      }
 
-        //alternative without fuzzy
+      // Initialize suggestion list with max. capacity; growing is expensive.
+      ArrayList<Product> suggestions = new ArrayList<>(tempItems.keySet().size());
+      List<ExtractedResult> results = FuzzySearch.extractSorted(
+          constraint.toString().toLowerCase(),
+          tempItems.keySet(),
+          50
+      );
+      for (ExtractedResult result : results) {
+        suggestions.add(tempItems.get(result.getString()));
+      }
+
+      //alternative without fuzzy
                 /*for (Product product : tempItems) {
                     if (product.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(product);
                     }
                 }*/
 
-        FilterResults filterResults = new FilterResults();
-        filterResults.values = suggestions;
-        filterResults.count = suggestions.size();
-        return filterResults;
-      } else {
-        return new FilterResults();
-      }
+      FilterResults filterResults = new FilterResults();
+      filterResults.values = suggestions;
+      filterResults.count = suggestions.size();
+      return filterResults;
     }
 
     @Override
