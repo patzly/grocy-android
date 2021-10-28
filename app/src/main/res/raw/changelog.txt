@@ -1,3 +1,6 @@
+2.0.0
+- Fixed: Crash when showing autocompletion results with large lists (#451)
+
 2.0.0-beta4
 - New: Support for server version 3.1.2
 - New: Redesigned filter bars
