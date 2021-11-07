@@ -310,7 +310,6 @@
   <string name="title_input">Inndata</string>
   <string name="title_external_barcode_input">Ekstern skanner</string>
   <string name="title_confirmation">Bekreftelse</string>
-
   <string name="title_spoiled">Ødelagt</string>
   <string name="title_use_specific">Bruk spesifikk lagervare</string>
   <string name="title_specific">Spesifikt element på lager</string>
@@ -610,7 +609,6 @@
   <string name="category_network_proxy">Mellomtjener</string>
   <string name="category_behavior">Oppførsel</string>
   <string name="category_debugging">Feilsøking</string>
-
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Gyldig API-nøkkel</string>
 
