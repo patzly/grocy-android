@@ -391,7 +391,6 @@
   <string name="title_input">Ввод числа</string>
   <string name="title_external_barcode_input">Внешний сканер</string>
   <string name="title_confirmation">Подтверждение</string>
-
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
   <string name="title_specific">Конкретный товар в запасах</string>
@@ -770,7 +769,6 @@
   <string name="category_network_proxy">Прокси</string>
   <string name="category_behavior">Поведение</string>
   <string name="category_debugging">Отладка</string>
-
   <string name="hint_server">Адрес сервера</string>
   <string name="hint_key">Действительный ключ доступа к API</string>
 
