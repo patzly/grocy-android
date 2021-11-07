@@ -362,7 +362,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="title_input">Getal invoer</string>
   <string name="title_external_barcode_input">Externe scanner</string>
   <string name="title_confirmation">Bevestiging</string>
-
   <string name="title_spoiled">Bedorven</string>
   <string name="title_use_specific">Gebruik specifiek voorraadartikel</string>
   <string name="title_specific">Specifiek voorraadartikel</string>
@@ -693,7 +692,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="category_network">Netwerk</string>
   <string name="category_behavior">Gedrag</string>
   <string name="category_debugging">Debugging</string>
-
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Geldige API sleutel</string>
 
