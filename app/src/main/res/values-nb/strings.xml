@@ -386,7 +386,6 @@
   <string name="subtitle_barcode_amount">Mengde: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Kvantitetsenhet %1$d</string>
-
   <string name="description_input_product_part1">Produktfelt inneholder:</string>
   <string name="description_input_product_part2">Vennligst velg hvordan du vil fortsette:</string>
   <string name="description_input_product_option1">Lag nytt produkt og bruk inndata som navn</string>
