@@ -373,7 +373,6 @@
   <string name="title_input">Entrée numérique</string>
   <string name="title_external_barcode_input">Scanner externe</string>
   <string name="title_confirmation">Confirmation</string>
-
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
   <string name="title_specific">Article spécifique du stock</string>
@@ -710,7 +709,6 @@
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportement</string>
   <string name="category_debugging">Débogage</string>
-
   <string name="hint_server">URL du serveur</string>
   <string name="hint_key">Clé API valide</string>
 
