@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
@@ -444,6 +445,12 @@ public class PurchaseViewModel extends BaseViewModel {
     if (product != null) {
       setProduct(product.getId(), productBarcode, null);
     } else {
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
+
+      if (true) return;
+
       formData.getBarcodeLive().setValue(barcode);
       formData.isFormValid();
       sendEvent(Event.FOCUS_INVALID_VIEWS);

@@ -1,4 +1,5 @@
 2.0.0
+- Improved: Open Food Facts look up is back, together with page for new barcodes (#353)
 - Fixed: Crash when showing autocompletion results with large lists (#451)
 
 2.0.0-beta4

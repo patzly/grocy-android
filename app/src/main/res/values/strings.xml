@@ -203,6 +203,12 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_choose_product">The barcode you\'ve scanned is not linked to a product yet. You can link it to an existing one or create a new product for it.</string>
+  <string name="msg_product_name_off">Product name for barcode is from Open Food Facts.</string>
+  <string name="msg_product_name_not_off">Barcode could not be looked up on Open Food Facts.</string>
+  <string name="msg_off_option_deactivated">For automatic suggestion of a product name you can activate Open Food Facts look up in the settings.</string>
+  <string name="msg_create_new_product_filled">Create new product \"%1$s\"</string>
+  <string name="msg_create_new_product">Create new product</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Transaction which will be executed:\n\nAdd %1$s %2$s of %3$s to stock\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -381,6 +387,7 @@
   <string name="title_input">Input</string>
   <string name="title_external_barcode_input">External scanner</string>
   <string name="title_confirmation">Confirmation</string>
+  <string name="title_choose_product">Choose product</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -724,6 +731,9 @@
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Behavior</string>
   <string name="category_debugging">Debugging</string>
+  <string name="category_new_product">New product</string>
+  <string name="category_existing_products">Existing products</string>
+  <string name="category_existing_products_similar">Similar existing products</string>
 
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Valid API key</string>
