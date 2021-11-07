@@ -393,7 +393,6 @@
   <string name="subtitle_barcode_amount">כמות: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">יחידת כמות: %1$d</string>
-
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
