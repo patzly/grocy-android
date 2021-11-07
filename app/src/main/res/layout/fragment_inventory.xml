@@ -25,6 +25,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="formData"
       type="xyz.zedler.patrick.grocy.model.FormDataInventory" />
@@ -575,6 +576,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) ? View.VISIBLE : View.GONE}"
                 android:animateLayoutChanges="true"
                 transitionTypeChanging="@{true}">
 

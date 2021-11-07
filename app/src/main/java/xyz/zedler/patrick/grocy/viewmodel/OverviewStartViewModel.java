@@ -196,7 +196,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     stockDescriptionMissingShoppingListTextLive = Transformations.map(
         itemsMissingShoppingListCountLive,
         count -> {
-          if (count == null) {
+          if (count == null || !isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST)) {
             return null;
           }
           @PluralsRes int string;

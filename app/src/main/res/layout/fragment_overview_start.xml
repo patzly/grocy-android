@@ -24,6 +24,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel" />
@@ -422,6 +423,7 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
               android:onLongClickVoid="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
               app:clickUtil="@{clickUtil}">
@@ -537,6 +539,7 @@
                 android:layout_width="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> fragment.navigate(R.id.transferFragment)}"
                 app:clickUtil="@{clickUtil}">
 

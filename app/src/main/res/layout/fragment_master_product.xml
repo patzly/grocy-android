@@ -25,6 +25,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="formData"
       type="xyz.zedler.patrick.grocy.model.FormDataMasterProduct" />
@@ -223,6 +224,7 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
               android:animateLayoutChanges="true"
               app:transitionTypeChanging="@{true}">
 

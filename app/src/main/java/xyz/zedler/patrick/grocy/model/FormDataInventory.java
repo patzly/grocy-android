@@ -680,6 +680,9 @@ public class FormDataInventory {
   }
 
   public boolean isPriceValid() {
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      return true;
+    }
     assert productWillBeAddedLive.getValue() != null;
     if (!productWillBeAddedLive.getValue()) {
       priceErrorLive.setValue(null);
@@ -714,16 +717,19 @@ public class FormDataInventory {
     }
     QuantityUnit qU = quantityUnitLive.getValue();
     ProductDetails details = productDetailsLive.getValue();
-    String price = priceLive.getValue();
-    assert qU != null && details != null;
-    if (NumUtil.isStringDouble(price)) {
-      price = NumUtil.trimPrice(Double.parseDouble(price));
-      if (currency != null && !currency.isEmpty()) {
-        price += " " + currency;
+    String price = getString(R.string.subtitle_feature_disabled);
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      price = priceLive.getValue();
+      if (NumUtil.isStringDouble(price)) {
+        price = NumUtil.trimPrice(Double.parseDouble(price));
+        if (currency != null && !currency.isEmpty()) {
+          price += " " + currency;
+        }
+      } else {
+        price = getString(R.string.subtitle_empty);
       }
-    } else {
-      price = getString(R.string.subtitle_empty);
     }
+    assert qU != null && details != null;
     String store = storeNameLive.getValue();
     if (store == null) {
       store = getString(R.string.subtitle_none_selected);
@@ -744,7 +750,10 @@ public class FormDataInventory {
   public JSONObject getFilledJSONObject() {
     String amount = getAmountStock();
     assert amount != null && productWillBeAddedLive.getValue() != null;
-    String price = priceLive.getValue();
+    String price = null;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      price = priceLive.getValue();
+    }
     Store store = storeLive.getValue();
     String storeId = store != null ? String.valueOf(store.getId()) : null;
     Location location = locationLive.getValue();

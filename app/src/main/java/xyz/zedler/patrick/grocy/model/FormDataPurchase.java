@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -695,6 +696,9 @@ public class FormDataPurchase {
   }
 
   public boolean isPriceValid() {
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      return true;
+    }
     if (priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
       priceErrorLive.setValue(null);
       return true;
@@ -725,16 +729,19 @@ public class FormDataPurchase {
     }
     QuantityUnit qU = quantityUnitLive.getValue();
     ProductDetails details = productDetailsLive.getValue();
-    String price = priceLive.getValue();
-    assert qU != null && details != null;
-    if (NumUtil.isStringDouble(price)) {
-      price = NumUtil.trimPrice(Double.parseDouble(price));
-      if (currency != null && !currency.isEmpty()) {
-        price += " " + currency;
+    String price = getString(R.string.subtitle_feature_disabled);
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      price = priceLive.getValue();
+      if (NumUtil.isStringDouble(price)) {
+        price = NumUtil.trimPrice(Double.parseDouble(price));
+        if (currency != null && !currency.isEmpty()) {
+          price += " " + currency;
+        }
+      } else {
+        price = getString(R.string.subtitle_empty);
       }
-    } else {
-      price = getString(R.string.subtitle_empty);
     }
+    assert qU != null && details != null;
     String store = storeNameLive.getValue();
     if (store == null) {
       store = getString(R.string.subtitle_none_selected);
@@ -755,7 +762,10 @@ public class FormDataPurchase {
   public JSONObject getFilledJSONObject() {
     String amount = getAmountStock();
     assert amount != null;
-    String price = priceStockLive.getValue();
+    String price = null;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      price = priceStockLive.getValue();
+    }
     Store store = storeLive.getValue();
     String storeId = store != null ? String.valueOf(store.getId()) : null;
     Location location = locationLive.getValue();

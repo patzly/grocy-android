@@ -21,6 +21,7 @@
 
   <data>
     <import type="android.view.View" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel" />
@@ -226,6 +227,7 @@
           <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
             app:data="@{viewModel.filterChipLiveDataLocation}"/>
 
           <View
