@@ -354,7 +354,6 @@
   <string name="subtitle_barcode_amount">Množství: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Jednotka množství: %1$d</string>
-
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Prosím zvolte jak pokračovat:</string>
   <string name="description_input_product_option1">Vytvořit produkt a použít zadanou hodnotu jako jméno</string>
