@@ -107,7 +107,7 @@
   <string name="action_enter_data_manually">Ange data manuellt</string>
   <string name="action_perform">Gör</string>
   <string name="action_share">Dela</string>
-  <string name="action_share_description">Snacka om Grocy Android med dina vänner</string>
+  <string name="action_share_description">Berätta om Grocy Android för dina vänner</string>
   <string name="action_no_filter">Inget filter</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
@@ -178,7 +178,7 @@
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
   <string name="msg_master_delete">Radera %1$s \"%2$s\"?</string>
   <!-- %1$s is a product name -->
-  <string name="msg_master_delete_product">Vill du ta bort produkt \"%1$s\"\n\nDå försvinner alla referenser, lager, journal för denna produkt - överväg att stänga av den istället om du vill behålla allt data men inte visa produkten.</string>
+  <string name="msg_master_delete_product">Vill du ta bort produkt \"%1$s\"\n\nDå försvinner alla referenser, lager, journal för denna produkt - överväg att gömma den istället om du vill behålla allt data men inte visa produkten.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">Den här %1$s används fortfarande</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
@@ -220,6 +220,10 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Denna vara kan inte ha en överordnad vara eftersom den är en överordnad vara i en tredje vara.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">När denna vara markeras som att vara öppen\(bruten förpackning\) så kommer utgångsdatumet förändras till \\"dagens datum + detta nummer\\"´\( 0 stänger av denna funktion\).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">När du flyttar denna vara från \"Frys\"-plats\(dvs. tinar den\), kommer utgångsdatumet förändras till \\"dagens datum + så här många dagar\\".</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">Detta är förvalda mängd enheten, när du lägger till vara in Inköpslistan</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Egenvikt är användbart vid tillexempel mjöl i hårdplast förpackning - i Köp/Konsumering/Lager använder du totalvikten för varan, medans lagerviktsstatus blir automatiskt omräknad till att inte ta med förpackningens vikt.</string>
@@ -230,9 +234,16 @@
   <string name="msg_help_inventory_fields">Följande fält används vid ny tillagda varor.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Du kan välja en streckkodsläsartyp för användning av kamerascanning.</string>
+  <string name="msg_help_external_scanner_ready">Du kan använda en extern scanner for fältet nedan, förutsatt att det är tomt och i focus.</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_specific_item">Första varan i denna lista väljs ut baserat på standard regeln: \\"Först öppnad, Sämsta BästFöreDatum, Först in = Först ut\\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Detta är för statistiska ändamål bara.</string>
-  <string name="msg_help_normal_login">Tryck på det här kortet om du använder Home Assistant med grocy add-on</string>
+  <string name="msg_help_loading_circle_settings">Vid varje sidvisning, där det krävs kontakt med servern, så kollar alltid Appen kontakten med servern, med en liten server förfrågan om databasen har ändrats sedan sist och uppdaterar bara föråldrad data. Aktivera funktionen nedanför för att även visa aktivitets ikonen även då för dessa anslutningar.</string>
+  <string name="msg_help_start">Nybörjar läge är aktiverat: Hjälptexter visas på alla sidor där de finns. Klicka här för att avaktivera.</string>
+  <string name="msg_help_purchased_date_settings">Om nedanstående funktion är aktiverad, så visas ett fält för inköps datum på alla inköps och lager sidor. Annars kommer inköps datum automatiskt bli \\"dagens datum\\".</string>
+  <string name="msg_help_normal_login">Tryck på det här kortet om du använder Home Assistant med grocy tillägg.</string>
+  <string name="msg_help_home_assistant_login">Du använder grocy Home Automation tillägget. Därför krävs några fler detaljer. Klicka på denna text för att ändra till bormal login igen.</string>
   <string name="msg_help_home_assistant_login_help_show">Tryck här för att visa hjälptexter.</string>
   <string name="msg_help_home_assistant_login_help_hide">Tryck här för att dölja hjälptexter.</string>
   <string name="msg_share">Kolla in denna Android app. för det ortoliga grocy-projektet: \nhttps://github.com/patzly/grocy-android</string>
@@ -334,7 +345,6 @@
   <string name="title_input">Inmatning</string>
   <string name="title_external_barcode_input">Extern scanner</string>
   <string name="title_confirmation">Bekräftelse</string>
-
   <string name="title_spoiled">Skämd</string>
   <string name="title_use_specific">Använd specifikt lagerobjekt</string>
   <string name="title_specific">Särskild lagervara</string>
@@ -629,7 +639,6 @@
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Beteende</string>
   <string name="category_debugging">Felsökning</string>
-
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Giltig API-nyckel</string>
 
