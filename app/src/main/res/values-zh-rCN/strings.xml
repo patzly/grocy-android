@@ -412,7 +412,6 @@
   <string name="subtitle_barcode_amount">数量:%1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">数量单位:%1$d</string>
-
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
