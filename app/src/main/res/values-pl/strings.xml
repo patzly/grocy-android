@@ -389,7 +389,6 @@
   <string name="subtitle_barcode_amount">Ilość: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Jednostka ilości: %1$d</string>
-
   <string name="description_input_product_part1">Pole produktu zawiera:</string>
   <string name="description_input_product_part2">Wybierz jak kontynuować:</string>
   <string name="description_input_product_option1">Utwórz nowy produkt i użyj danej wejściowej jako nazwy</string>
