@@ -35,7 +35,6 @@ import java.util.List;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -50,7 +49,6 @@ public class ChooseProductViewModel extends BaseViewModel {
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final GrocyApi grocyApi;
   private final ChooseProductRepository repository;
 
   private final MutableLiveData<Boolean> displayHelpLive;
@@ -58,11 +56,11 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Product>> displayedItemsLive;
   private final MutableLiveData<String> productNameLive;
-  private final MutableLiveData<Boolean> productNameIsFromOFFLive;
+  private final MutableLiveData<String> offHelpText;
   private final MutableLiveData<String> createProductTextLive;
   private final MutableLiveData<Boolean> productNameAlreadyExists;
 
-  private String barcode;
+  private final String barcode;
   private ArrayList<Product> products;
   private final HashMap<String, Product> productHashMap;
 
@@ -78,13 +76,12 @@ public class ChooseProductViewModel extends BaseViewModel {
     displayHelpLive = new MutableLiveData<>(false);
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    grocyApi = new GrocyApi(getApplication());
     repository = new ChooseProductRepository(application);
 
     offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
     productNameLive = new MutableLiveData<>();
-    productNameIsFromOFFLive = new MutableLiveData<>(false);
+    offHelpText = new MutableLiveData<>();
     createProductTextLive = new MutableLiveData<>(getString(R.string.msg_create_new_product));
     productNameAlreadyExists = new MutableLiveData<>(false);
 
@@ -169,12 +166,16 @@ public class ChooseProductViewModel extends BaseViewModel {
           productName -> {
             if (productName != null && !productName.isEmpty()) {
               productNameLive.setValue(productName);
-              productNameIsFromOFFLive.setValue(true);
+              offHelpText.setValue(getString(R.string.msg_product_name_off));
             } else {
+              offHelpText.setValue(getString(R.string.msg_product_name_off_empty));
               sendEvent(Event.FOCUS_INVALID_VIEWS);
             }
           },
-          error-> sendEvent(Event.FOCUS_INVALID_VIEWS)
+          error-> {
+            offHelpText.setValue(getString(R.string.msg_product_name_off_error));
+            sendEvent(Event.FOCUS_INVALID_VIEWS);
+          }
       );
     } else if (!productNameFilled) {
       sendEvent(Event.FOCUS_INVALID_VIEWS);
@@ -249,8 +250,8 @@ public class ChooseProductViewModel extends BaseViewModel {
     return productNameLive;
   }
 
-  public MutableLiveData<Boolean> getProductNameIsFromOFFLive() {
-    return productNameIsFromOFFLive;
+  public MutableLiveData<String> getOffHelpText() {
+    return offHelpText;
   }
 
   public MutableLiveData<String> getCreateProductTextLive() {

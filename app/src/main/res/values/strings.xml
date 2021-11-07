@@ -205,7 +205,8 @@
   <string name="option_synced_error">Option could not be synced</string>
   <string name="msg_choose_product">The barcode you\'ve scanned is not linked to a product yet. You can link it to an existing one or create a new product for it.</string>
   <string name="msg_product_name_off">Product name for barcode is from Open Food Facts.</string>
-  <string name="msg_product_name_not_off">Barcode could not be looked up on Open Food Facts.</string>
+  <string name="msg_product_name_off_error">Barcode could not be looked up on Open Food Facts.</string>
+  <string name="msg_product_name_off_empty">Barcode was not in Open Food Facts database.</string>
   <string name="msg_off_option_deactivated">For automatic suggestion of a product name you can activate Open Food Facts look up in the settings.</string>
   <string name="msg_create_new_product_filled">Create new product \"%1$s\"</string>
   <string name="msg_create_new_product">Create new product</string>
