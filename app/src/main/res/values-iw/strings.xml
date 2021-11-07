@@ -317,7 +317,6 @@
   <string name="title_input">קלט מספר</string>
   <string name="title_external_barcode_input">סורק חיצוני</string>
   <string name="title_confirmation">אישור</string>
-
   <string name="title_spoiled">מקולקל</string>
   <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
   <string name="title_specific">פריט מסוים במלאי</string>
@@ -652,7 +651,6 @@
   <string name="category_network_proxy">מתווך</string>
   <string name="category_behavior">התנהגות</string>
   <string name="category_debugging">ניפוי שגיאות</string>
-
   <string name="hint_server">כתובת שרת</string>
   <string name="hint_key">מפתח API תקני</string>
 
