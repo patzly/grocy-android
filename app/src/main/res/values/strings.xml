@@ -472,6 +472,7 @@
   <string name="subtitle_barcode_amount">Amount: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Quantity unit: %1$d</string>
+  <string name="subtitle_barcode">Barcode: %1$s</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>

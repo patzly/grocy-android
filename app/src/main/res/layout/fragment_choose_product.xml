@@ -236,7 +236,7 @@
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                 android:hint="@string/property_product_name"
                 app:helperTextEnabled="true"
-                app:helperText=" "
+                app:helperText="@{viewModel.productNameHelperTextLive}"
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -257,7 +257,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:visibility="@{viewModel.productNameAlreadyExists ? View.GONE : View.VISIBLE}">
+              android:visibility="@{viewModel.productNameAlreadyExistsLive ? View.GONE : View.VISIBLE}">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.Category"
@@ -295,7 +295,7 @@
             <TextView
               style="@style/Widget.Grocy.TextView.Category"
               android:layout_marginStart="16dp"
-              android:text="@{viewModel.productNameLive != null &amp;&amp; !viewModel.productNameLive.isEmpty() ? @string/category_existing_products_similar : @string/category_existing_products}" />
+              android:text="@{viewModel.existingProductsCategoryTextLive}" />
 
             <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/recycler"

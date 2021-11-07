@@ -58,7 +58,9 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final MutableLiveData<String> productNameLive;
   private final MutableLiveData<String> offHelpText;
   private final MutableLiveData<String> createProductTextLive;
-  private final MutableLiveData<Boolean> productNameAlreadyExists;
+  private final MutableLiveData<Boolean> productNameAlreadyExistsLive;
+  private final MutableLiveData<String> productNameHelperTextLive;
+  private final MutableLiveData<String> existingProductsCategoryTextLive;
 
   private final String barcode;
   private ArrayList<Product> products;
@@ -83,7 +85,13 @@ public class ChooseProductViewModel extends BaseViewModel {
     productNameLive = new MutableLiveData<>();
     offHelpText = new MutableLiveData<>();
     createProductTextLive = new MutableLiveData<>(getString(R.string.msg_create_new_product));
-    productNameAlreadyExists = new MutableLiveData<>(false);
+    productNameAlreadyExistsLive = new MutableLiveData<>(false);
+    productNameHelperTextLive = new MutableLiveData<>(
+        application.getString(R.string.subtitle_barcode, barcode)
+    );
+    existingProductsCategoryTextLive = new MutableLiveData<>(
+        getString(R.string.category_existing_products)
+    );
 
     this.barcode = barcode;
     products = new ArrayList<>();
@@ -199,7 +207,8 @@ public class ChooseProductViewModel extends BaseViewModel {
       SortUtil.sortProductsByName(products, true);
       displayedItemsLive.setValue(products);
       createProductTextLive.setValue(getString(R.string.msg_create_new_product));
-      productNameAlreadyExists.setValue(false);
+      productNameAlreadyExistsLive.setValue(false);
+      existingProductsCategoryTextLive.setValue(getString(R.string.category_existing_products));
       return;
     }
 
@@ -217,7 +226,10 @@ public class ChooseProductViewModel extends BaseViewModel {
     createProductTextLive.setValue(
         getApplication().getString(R.string.msg_create_new_product_filled, productName)
     );
-    productNameAlreadyExists.setValue(productHashMap.containsKey(productName.toLowerCase()));
+    productNameAlreadyExistsLive.setValue(productHashMap.containsKey(productName.toLowerCase()));
+    existingProductsCategoryTextLive.setValue(
+        getString(R.string.category_existing_products_similar)
+    );
   }
 
   @NonNull
@@ -258,8 +270,16 @@ public class ChooseProductViewModel extends BaseViewModel {
     return createProductTextLive;
   }
 
-  public MutableLiveData<Boolean> getProductNameAlreadyExists() {
-    return productNameAlreadyExists;
+  public MutableLiveData<Boolean> getProductNameAlreadyExistsLive() {
+    return productNameAlreadyExistsLive;
+  }
+
+  public MutableLiveData<String> getProductNameHelperTextLive() {
+    return productNameHelperTextLive;
+  }
+
+  public MutableLiveData<String> getExistingProductsCategoryTextLive() {
+    return existingProductsCategoryTextLive;
   }
 
   @NonNull
