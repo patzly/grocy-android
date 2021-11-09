@@ -25,6 +25,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 
@@ -43,6 +44,7 @@ public class OverviewStartRepository {
     void actionFinished(
         ArrayList<StockItem> stockItems,
         ArrayList<ShoppingListItem> shoppingListItems,
+        ArrayList<ShoppingList> shoppingLists,
         ArrayList<Product> products
     );
   }
@@ -63,6 +65,7 @@ public class OverviewStartRepository {
 
     private ArrayList<StockItem> stockItems;
     private ArrayList<ShoppingListItem> shoppingListItems;
+    private ArrayList<ShoppingList> shoppingLists;
     private ArrayList<Product> products;
 
     loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
@@ -76,6 +79,7 @@ public class OverviewStartRepository {
         products = new ArrayList<>(appDatabase.productDao().getAll());
         stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
         shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
+        shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
       } catch (Exception e) {
         Log.e(TAG, "doInBackground: " + e);
       }
@@ -86,7 +90,7 @@ public class OverviewStartRepository {
     @Override
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
-        listener.actionFinished(stockItems, shoppingListItems, products);
+        listener.actionFinished(stockItems, shoppingListItems, shoppingLists, products);
       }
     }
   }
@@ -94,6 +98,7 @@ public class OverviewStartRepository {
   public void updateDatabase(
       ArrayList<StockItem> stockItems,
       ArrayList<ShoppingListItem> shoppingListItems,
+      ArrayList<ShoppingList> shoppingLists,
       ArrayList<Product> products,
       DataUpdatedListener listener
   ) {
@@ -101,6 +106,7 @@ public class OverviewStartRepository {
         appDatabase,
         stockItems,
         shoppingListItems,
+        shoppingLists,
         products,
         listener
     ).execute();
@@ -113,12 +119,14 @@ public class OverviewStartRepository {
 
     private final ArrayList<StockItem> stockItems;
     private final ArrayList<ShoppingListItem> shoppingListItems;
+    private final ArrayList<ShoppingList> shoppingLists;
     private final ArrayList<Product> products;
 
     updateAsyncTask(
         AppDatabase appDatabase,
         ArrayList<StockItem> stockItems,
         ArrayList<ShoppingListItem> shoppingListItems,
+        ArrayList<ShoppingList> shoppingLists,
         ArrayList<Product> products,
         DataUpdatedListener listener
     ) {
@@ -126,6 +134,7 @@ public class OverviewStartRepository {
       this.listener = listener;
       this.stockItems = stockItems;
       this.shoppingListItems = shoppingListItems;
+      this.shoppingLists = shoppingLists;
       this.products = products;
     }
 
@@ -135,6 +144,8 @@ public class OverviewStartRepository {
       appDatabase.stockItemDao().insertAll(stockItems);
       appDatabase.shoppingListItemDao().deleteAll();
       appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
+      appDatabase.shoppingListDao().deleteAll();
+      appDatabase.shoppingListDao().insertAll(shoppingLists);
       appDatabase.productDao().deleteAll();
       appDatabase.productDao().insertAll(products);
       return null;

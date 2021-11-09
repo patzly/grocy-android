@@ -340,7 +340,6 @@
   <string name="title_input">数字输入</string>
   <string name="title_external_barcode_input">外部扫描仪</string>
   <string name="title_confirmation">确认</string>
-
   <string name="title_spoiled">损坏</string>
   <string name="title_use_specific">使用特定的库存物料</string>
   <string name="title_specific">具体库存项目</string>
@@ -413,7 +412,6 @@
   <string name="subtitle_barcode_amount">数量:%1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">数量单位:%1$d</string>
-
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
@@ -644,7 +642,6 @@
   <string name="category_network">网络</string>
   <string name="category_behavior">行为</string>
   <string name="category_debugging">调试</string>
-
   <string name="hint_server">服务器URL</string>
   <string name="hint_key">有效的API密钥</string>
 

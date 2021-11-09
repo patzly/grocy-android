@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="android.view.View" />
+    <import type="xyz.zedler.patrick.grocy.R" />
+    <variable
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.ChooseProductViewModel" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.ChooseProductFragment" />
+    <variable
+      name="clickUtil"
+      type="xyz.zedler.patrick.grocy.util.ClickUtil" />
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="?android:actionBarSize"
+      android:orientation="vertical"
+      android:background="@color/primary">
+
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center_vertical"
+          android:orientation="horizontal">
+
+          <FrameLayout
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="20dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:contentDescription="@string/action_back"
+            android:tooltipText="@string/action_back"
+            android:focusable="true"
+            tools:targetApi="o"
+            android:onClick="@{() -> activity.navigateUp()}">
+
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_gravity="center"
+              android:importantForAccessibility="no"
+              android:src="@drawable/ic_round_arrow_back" />
+
+          </FrameLayout>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/title_choose_product"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/on_primary" />
+
+          <FrameLayout
+            android:id="@+id/frame_help"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:contentDescription="@string/action_display_help"
+            android:tooltipText="@string/action_display_help"
+            android:focusable="true"
+            tools:targetApi="o"
+            android:onClick="@{() -> viewModel.toggleDisplayHelpLive()}">
+
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_gravity="center"
+              android:importantForAccessibility="no"
+              android:src="@{viewModel.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+
+          </FrameLayout>
+
+        </LinearLayout>
+
+      </FrameLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipe"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?android:actionBarSize"
+      android:overScrollMode="never"
+      app:progressBackgroundColor="@{@color/surface}"
+      app:progressForegroundColor="@{@color/secondary}"
+      app:setRefreshing="@{viewModel.isLoadingLive}"
+      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+
+      <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+          android:id="@+id/scroll"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:overScrollMode="never"
+          android:fillViewport="true">
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="0dp"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            transitionTypeChanging="@{true}">
+
+            <View
+              android:id="@+id/dummy_focus_view"
+              android:layout_width="0dp"
+              android:layout_height="0dp"
+              android:focusable="true"
+              android:focusableInTouchMode="true"/>
+
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="8dp"
+              android:visibility="@{viewModel.displayHelpLive ? View.VISIBLE : View.GONE}"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_choose_product" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="8dp"
+              android:visibility="@{viewModel.displayHelpLive &amp;&amp; !viewModel.isOpenFoodFactsEnabled() ? View.VISIBLE : View.GONE}"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_off_option_deactivated" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              android:layout_marginTop="8dp"
+              android:visibility="@{viewModel.displayHelpLive &amp;&amp; viewModel.offHelpText != null ? View.VISIBLE : View.GONE}"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.offHelpText}" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+              android:paddingTop="8dp"
+              android:paddingBottom="0dp">
+
+              <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_product"
+                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                android:hint="@string/property_product_name"
+                app:helperTextEnabled="true"
+                app:helperText="@{viewModel.productNameHelperTextLive}"
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/edit_text_product"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/on_background"
+                  android:text="@={viewModel.productNameLive}"
+                  android:imeOptions="actionSearch"
+                  android:inputType="text|textCapSentences"
+                  app:onSearchClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
+
+              </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:visibility="@{viewModel.productNameAlreadyExistsLive ? View.GONE : View.VISIBLE}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.Category"
+                android:layout_marginStart="16dp"
+                android:text="@string/category_new_product" />
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> fragment.createNewProduct()}"
+                app:clickUtil="@{clickUtil}">
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{viewModel.createProductTextLive}"
+                    android:maxLines="3"/>
+
+                </LinearLayout>
+
+                <ImageView
+                  android:layout_height="24dp"
+                  android:layout_width="24dp"
+                  android:layout_marginStart="16dp"
+                  android:clickable="false"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Category"
+              android:layout_marginStart="16dp"
+              android:text="@{viewModel.existingProductsCategoryTextLive}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/recycler"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:clipToPadding="false"
+              android:paddingTop="8dp"
+              android:paddingBottom="100dp"
+              android:overScrollMode="never" />
+
+          </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+      </FrameLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

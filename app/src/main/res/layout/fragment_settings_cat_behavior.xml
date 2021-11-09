@@ -175,8 +175,7 @@
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> switchOpenFoodFacts.setChecked(!switchOpenFoodFacts.isChecked())}"
-          android:visibility="gone">
+          android:onClick="@{v -> switchOpenFoodFacts.setChecked(!switchOpenFoodFacts.isChecked())}">
 
           <ImageView
             android:id="@+id/image_open_food_facts"

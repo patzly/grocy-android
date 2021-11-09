@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
@@ -167,7 +168,8 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
         productDetails -> {
           MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_open);
             if (productDetails != null && productDetails.getProduct()
-                .getEnableTareWeightHandlingBoolean() || menuItem == null) {
+                .getEnableTareWeightHandlingBoolean() || menuItem == null
+                || !viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)) {
                 return;
             }
           menuItem.setVisible(productDetails != null);

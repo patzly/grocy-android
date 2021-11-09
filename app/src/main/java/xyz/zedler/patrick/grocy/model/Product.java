@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -162,7 +163,11 @@ public class Product implements Parcelable {
     active = "1";
     parentProductId = null;
     description = null;
-    locationId = presetLocationId == -1 ? null : String.valueOf(presetLocationId);
+    if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_LOCATION_TRACKING, true)) {
+      locationId = presetLocationId == -1 ? null : String.valueOf(presetLocationId);
+    } else {
+      locationId = "1";
+    }
     storeId = null;
     minStockAmount = String.valueOf(0);
     accumulateSubProductsMinStockAmount = "0";

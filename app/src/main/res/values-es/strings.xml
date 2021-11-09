@@ -343,7 +343,6 @@
   <string name="title_input">campo</string>
   <string name="title_external_barcode_input">Escaner externo</string>
   <string name="title_confirmation">Confirmación</string>
-
   <string name="title_spoiled">Vencido</string>
   <string name="title_use_specific">Usar artículo específico del stock</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -625,7 +624,6 @@
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportamiento</string>
   <string name="category_debugging">Depuración</string>
-
   <string name="hint_server">URL del servidor</string>
   <string name="hint_key">Clave de API válida</string>
 

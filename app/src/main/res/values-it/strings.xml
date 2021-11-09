@@ -350,7 +350,6 @@
   <string name="title_input">Numero input</string>
   <string name="title_external_barcode_input">Scanner esterno</string>
   <string name="title_confirmation">Conferma</string>
-
   <string name="title_spoiled">Avariato</string>
   <string name="title_use_specific">Usa un articolo specifico della dispensa</string>
   <string name="title_specific">Articolo specifico della dispensa</string>
@@ -423,7 +422,6 @@
   <string name="subtitle_barcode_amount">Importo: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Unità di misura: %1$d</string>
-
   <string name="description_input_product_part1">Il campo prodotto contiene:</string>
   <string name="description_input_product_part2">Per favore scegli come procedere:</string>
   <string name="description_input_product_option1">Crea nuovo prodotto e usa il dato inserito come nome</string>
@@ -675,7 +673,6 @@
   <string name="category_network">Rete</string>
   <string name="category_behavior">Comportamento</string>
   <string name="category_debugging">Debugging</string>
-
   <string name="hint_server">URL server</string>
   <string name="hint_key">Chiave API valida</string>
 

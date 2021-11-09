@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class FilterChipLiveDataStockSort extends FilterChipLiveData {
 
@@ -100,12 +101,14 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
         application.getString(R.string.property_name),
         sortMode.equals(SORT_NAME)
     ));
-    menuItemDataList.add(new MenuItemData(
-        ID_SORT_DUE_DATE,
-        0,
-        application.getString(R.string.property_due_date),
-        sortMode.equals(SORT_DUE_DATE)
-    ));
+    if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true)) {
+      menuItemDataList.add(new MenuItemData(
+          ID_SORT_DUE_DATE,
+          0,
+          application.getString(R.string.property_due_date),
+          sortMode.equals(SORT_DUE_DATE)
+      ));
+    }
     menuItemDataList.add(new MenuItemData(
         ID_ASCENDING,
         1,

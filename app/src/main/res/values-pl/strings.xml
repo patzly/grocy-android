@@ -317,7 +317,6 @@
   <string name="title_input">Dane wejściowe numeru</string>
   <string name="title_external_barcode_input">Skaner zewnętrzny</string>
   <string name="title_confirmation">Potwierdzenie</string>
-
   <string name="title_spoiled">Zepsute</string>
   <string name="title_use_specific">Użyj konkretnej pozycji z zapasów</string>
   <string name="title_specific">Określona pozycja zapasów</string>
@@ -390,7 +389,6 @@
   <string name="subtitle_barcode_amount">Ilość: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Jednostka ilości: %1$d</string>
-
   <string name="description_input_product_part1">Pole produktu zawiera:</string>
   <string name="description_input_product_part2">Wybierz jak kontynuować:</string>
   <string name="description_input_product_option1">Utwórz nowy produkt i użyj danej wejściowej jako nazwy</string>
@@ -675,7 +673,6 @@
   <string name="category_network">Sieć</string>
   <string name="category_behavior">Zachowanie</string>
   <string name="category_debugging">Debugowanie</string>
-
   <string name="hint_server">Adres URL serwera</string>
   <string name="hint_key">Poprawny klucz API</string>
 

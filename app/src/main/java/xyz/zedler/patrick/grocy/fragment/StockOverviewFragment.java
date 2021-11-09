@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -52,6 +50,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
@@ -163,7 +162,8 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
-                true,
+                viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
+                viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
                 5,
                 viewModel.getSortMode()
             )
@@ -398,20 +398,6 @@ public class StockOverviewFragment extends BaseFragment implements
     if (viewModel.isScannerVisible()) {
       viewModel.toggleScannerVisibility();
     }
-  }
-
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-    }
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
-    );
   }
 
   @Override

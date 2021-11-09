@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
 import xyz.zedler.patrick.grocy.fragment.TransferFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickListener {
@@ -204,8 +205,10 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
 
   private void hideDisabledFeatures() {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
-      binding.linearDrawerShoppingList.setVisibility(View.GONE);
-      binding.dividerDrawerShoppingList.setVisibility(View.GONE);
+      binding.frameShoppingList.setVisibility(View.GONE);
+    }
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      binding.linearDrawerTransfer.setVisibility(View.GONE);
     }
   }
 

@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -27,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
@@ -37,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ExpandableCard;
@@ -47,6 +50,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
   private final static String TAG = MasterProductBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
+  private SharedPreferences sharedPrefs;
   private Product product;
   private Location location;
   private QuantityUnit quantityUnitPurchase, quantityUnitStock;
@@ -58,8 +62,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
       itemQuPurchase,
       itemQuStock,
       itemQuFactor,
-      itemProductGroup,
-      itemBarcodes;
+      itemProductGroup;
   private ExpandableCard cardDescription;
 
   @NonNull
@@ -85,6 +88,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
 
     activity = (MainActivity) getActivity();
     assert activity != null;
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
     Bundle bundle = getArguments();
     if (bundle != null) {
@@ -146,7 +150,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
     }
 
     // LOCATION
-    if (location != null) {
+    if (location != null && isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       itemLocation.setText(
           activity.getString(R.string.property_location),
           location.getName()
@@ -196,6 +200,14 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
     } else {
       itemProductGroup.setVisibility(View.GONE);
     }
+  }
+
+  @SuppressWarnings("SameParameterValue")
+  private boolean isFeatureEnabled(String pref) {
+    if (pref == null) {
+      return true;
+    }
+    return sharedPrefs.getBoolean(pref, true);
   }
 
   @NonNull

@@ -348,7 +348,6 @@
   <string name="title_input">Introduzir número</string>
   <string name="title_external_barcode_input">Scanner externo</string>
   <string name="title_confirmation">Confirmação</string>
-
   <string name="title_spoiled">Expirado</string>
   <string name="title_use_specific">Usar item de stock específico</string>
   <string name="title_specific">Item de stock específico</string>
@@ -421,7 +420,6 @@
   <string name="subtitle_barcode_amount">Quantidade: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Unidade de produto: %1$d</string>
-
   <string name="description_input_product_part1">Campo do produto contém:</string>
   <string name="description_input_product_part2">Por favor escolha como prosseguir:</string>
   <string name="description_input_product_option1">Criar novo produto introduzindo o nome</string>
@@ -673,7 +671,6 @@
   <string name="category_network">Rede</string>
   <string name="category_behavior">Comportamento</string>
   <string name="category_debugging">Debugging</string>
-
   <string name="hint_server">URL do servidor</string>
   <string name="hint_key">Chave API válida</string>
 

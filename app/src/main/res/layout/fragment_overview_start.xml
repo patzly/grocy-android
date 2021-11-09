@@ -24,6 +24,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel" />
@@ -246,122 +247,130 @@
                   android:text="@{viewModel.stockDescriptionTextLive}" />
 
                 <LinearLayout
-                  android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:gravity="top"
-                  android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}">
+                  android:orientation="vertical"
+                  android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING) ? View.VISIBLE : View.GONE}">
 
-                  <FrameLayout
-                    android:layout_width="wrap_content"
+                  <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:ignore="TooDeepLayout">
+                    android:gravity="top"
+                    android:visibility="@{viewModel.stockDescriptionDueNextTextLive != null ? View.VISIBLE : View.GONE}">
 
-                    <View
-                      android:layout_width="4dp"
-                      android:layout_height="4dp"
-                      android:layout_marginStart="6dp"
-                      android:layout_marginEnd="6dp"
-                      android:layout_gravity="center_vertical"
-                      android:background="@drawable/shape_circle"
-                      android:backgroundTint="@color/on_background" />
-
-                    <TextView
-                      style="@style/Widget.Grocy.TextView"
+                    <FrameLayout
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="E"
-                      android:visibility="invisible"
-                      tools:ignore="HardcodedText" />
+                      tools:ignore="TooDeepLayout">
 
-                  </FrameLayout>
+                      <View
+                        android:layout_width="4dp"
+                        android:layout_height="4dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/shape_circle"
+                        android:backgroundTint="@color/on_background" />
 
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.Paragraph"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.stockDescriptionDueNextTextLive}" />
+                      <TextView
+                        style="@style/Widget.Grocy.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="E"
+                        android:visibility="invisible"
+                        tools:ignore="HardcodedText" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="top"
-                  android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}">
-
-                  <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:ignore="TooDeepLayout">
-
-                    <View
-                      android:layout_width="4dp"
-                      android:layout_height="4dp"
-                      android:layout_marginStart="6dp"
-                      android:layout_marginEnd="6dp"
-                      android:layout_gravity="center_vertical"
-                      android:background="@drawable/shape_circle"
-                      android:backgroundTint="@color/on_background" />
+                    </FrameLayout>
 
                     <TextView
-                      style="@style/Widget.Grocy.TextView"
+                      style="@style/Widget.Grocy.TextView.Paragraph"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:text="@{viewModel.stockDescriptionDueNextTextLive}" />
+
+                  </LinearLayout>
+
+                  <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:visibility="@{viewModel.stockDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}">
+
+                    <FrameLayout
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="E"
-                      android:visibility="invisible"
-                      tools:ignore="HardcodedText" />
+                      tools:ignore="TooDeepLayout">
 
-                  </FrameLayout>
+                      <View
+                        android:layout_width="4dp"
+                        android:layout_height="4dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/shape_circle"
+                        android:backgroundTint="@color/on_background" />
 
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.Paragraph"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.stockDescriptionOverdueTextLive}" />
+                      <TextView
+                        style="@style/Widget.Grocy.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="E"
+                        android:visibility="invisible"
+                        tools:ignore="HardcodedText" />
 
-                </LinearLayout>
-
-                <LinearLayout
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="top"
-                  android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}">
-
-                  <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:ignore="TooDeepLayout">
-
-                    <View
-                      android:layout_width="4dp"
-                      android:layout_height="4dp"
-                      android:layout_marginStart="6dp"
-                      android:layout_marginEnd="6dp"
-                      android:layout_gravity="center_vertical"
-                      android:background="@drawable/shape_circle"
-                      android:backgroundTint="@color/on_background" />
+                    </FrameLayout>
 
                     <TextView
-                      style="@style/Widget.Grocy.TextView"
+                      style="@style/Widget.Grocy.TextView.Paragraph"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:text="@{viewModel.stockDescriptionOverdueTextLive}" />
+
+                  </LinearLayout>
+
+                  <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:visibility="@{viewModel.stockDescriptionExpiredTextLive != null ? View.VISIBLE : View.GONE}">
+
+                    <FrameLayout
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:text="E"
-                      android:visibility="invisible"
-                      tools:ignore="HardcodedText" />
+                      tools:ignore="TooDeepLayout">
 
-                  </FrameLayout>
+                      <View
+                        android:layout_width="4dp"
+                        android:layout_height="4dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/shape_circle"
+                        android:backgroundTint="@color/on_background" />
 
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.Paragraph"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.stockDescriptionExpiredTextLive}" />
+                      <TextView
+                        style="@style/Widget.Grocy.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="E"
+                        android:visibility="invisible"
+                        tools:ignore="HardcodedText" />
+
+                    </FrameLayout>
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView.Paragraph"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:text="@{viewModel.stockDescriptionExpiredTextLive}" />
+
+                  </LinearLayout>
 
                 </LinearLayout>
 
@@ -422,6 +431,7 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
               android:onLongClickVoid="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
               app:clickUtil="@{clickUtil}">
@@ -537,6 +547,7 @@
                 android:layout_width="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> fragment.navigate(R.id.transferFragment)}"
                 app:clickUtil="@{clickUtil}">
 

@@ -310,7 +310,6 @@
   <string name="title_input">Inndata</string>
   <string name="title_external_barcode_input">Ekstern skanner</string>
   <string name="title_confirmation">Bekreftelse</string>
-
   <string name="title_spoiled">Ødelagt</string>
   <string name="title_use_specific">Bruk spesifikk lagervare</string>
   <string name="title_specific">Spesifikt element på lager</string>
@@ -387,7 +386,6 @@
   <string name="subtitle_barcode_amount">Mengde: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Kvantitetsenhet %1$d</string>
-
   <string name="description_input_product_part1">Produktfelt inneholder:</string>
   <string name="description_input_product_part2">Vennligst velg hvordan du vil fortsette:</string>
   <string name="description_input_product_option1">Lag nytt produkt og bruk inndata som navn</string>
@@ -610,7 +608,6 @@
   <string name="category_network_proxy">Mellomtjener</string>
   <string name="category_behavior">Oppførsel</string>
   <string name="category_debugging">Feilsøking</string>
-
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Gyldig API-nøkkel</string>
 

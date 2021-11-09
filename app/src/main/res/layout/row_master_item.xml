@@ -35,7 +35,6 @@
     style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|start"
-    android:singleLine="true" />
+    android:layout_gravity="center_vertical|start" />
 
 </LinearLayout>

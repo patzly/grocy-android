@@ -282,7 +282,6 @@
   <string name="title_input">Číselný vstup</string>
   <string name="title_external_barcode_input">Externí čtečka</string>
   <string name="title_confirmation">Potvrzení</string>
-
   <string name="title_spoiled">Zkaženo</string>
   <string name="title_use_specific">Použit specifickou položku zásob</string>
   <string name="title_specific">Specifická položka zásob</string>
@@ -355,7 +354,6 @@
   <string name="subtitle_barcode_amount">Množství: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Jednotka množství: %1$d</string>
-
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Prosím zvolte jak pokračovat:</string>
   <string name="description_input_product_option1">Vytvořit produkt a použít zadanou hodnotu jako jméno</string>
@@ -594,7 +592,6 @@
   <string name="category_network">Síť</string>
   <string name="category_behavior">Chování</string>
   <string name="category_debugging">Ladění</string>
-
   <string name="hint_server">URL serveru</string>
   <string name="hint_key">Validní API klíč</string>
 

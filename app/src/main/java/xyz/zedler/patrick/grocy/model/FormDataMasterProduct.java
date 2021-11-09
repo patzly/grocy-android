@@ -20,16 +20,20 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class FormDataMasterProduct {
 
+  private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<String> nameLive;
   private final MediatorLiveData<Integer> nameErrorLive;
@@ -42,6 +46,7 @@ public class FormDataMasterProduct {
   private final MutableLiveData<Product> productLive;
 
   public FormDataMasterProduct(Application application, boolean beginnerMode) {
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     productLive = new MutableLiveData<>();
     productNamesLive = new MutableLiveData<>();
@@ -150,7 +155,9 @@ public class FormDataMasterProduct {
   public boolean isWholeFormValid() {
     boolean valid = isFormValid();
     valid = !catOptionalErrorLive.getValue() && valid;
-    valid = !catLocationErrorLive.getValue() && valid;
+    if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_LOCATION_TRACKING, true)) {
+      valid = !catLocationErrorLive.getValue() && valid;
+    }
     valid = !catDueDateErrorLive.getValue() && valid;
     valid = !catQuErrorLive.getValue() && valid;
     valid = !catAmountErrorLive.getValue() && valid;

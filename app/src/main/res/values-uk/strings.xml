@@ -366,7 +366,6 @@
   <string name="title_input">Введення числа</string>
   <string name="title_external_barcode_input">Зовнішній сканер</string>
   <string name="title_confirmation">Підтвердження</string>
-
   <string name="title_spoiled">Зіпсовано</string>
   <string name="title_use_specific">Використовувати конкретний запас</string>
   <string name="title_specific">Конкретный запас</string>
@@ -439,7 +438,6 @@
   <string name="subtitle_barcode_amount">Кількість: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Одиниця виміру: %1$d</string>
-
   <string name="description_input_product_part1">Поле продукту містить:</string>
   <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
   <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>
@@ -733,7 +731,6 @@
   <string name="category_network">Мережа</string>
   <string name="category_behavior">Поведінка</string>
   <string name="category_debugging">Налагодження</string>
-
   <string name="hint_server">Адреса сервера</string>
   <string name="hint_key">Дійсний ключ API</string>
 

@@ -260,11 +260,24 @@ public class BaseFragment extends Fragment {
     navigateDeepLink(getUriWithArgs(getString(uri), args));
   }
 
+  void navigateDeepLinkSlideStartEnd(@StringRes int uri, @NonNull Bundle args) {
+    navigateDeepLinkSlideStartEnd(getUriWithArgs(getString(uri), args));
+  }
+
   private void navigateDeepLink(@NonNull Uri uri) {
     NavOptions.Builder builder = new NavOptions.Builder();
     builder.setEnterAnim(R.anim.slide_in_up)
         .setPopExitAnim(R.anim.slide_out_down)
         .setExitAnim(R.anim.slide_no);
+    findNavController().navigate(uri, builder.build());
+  }
+
+  private void navigateDeepLinkSlideStartEnd(@NonNull Uri uri) {
+    NavOptions.Builder builder = new NavOptions.Builder();
+    builder.setEnterAnim(R.anim.slide_from_end)
+        .setPopExitAnim(R.anim.slide_to_end)
+        .setPopEnterAnim(R.anim.slide_from_start)
+        .setExitAnim(R.anim.slide_to_start);
     findNavController().navigate(uri, builder.build());
   }
 
