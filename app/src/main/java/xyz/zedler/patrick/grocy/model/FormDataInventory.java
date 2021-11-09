@@ -680,9 +680,6 @@ public class FormDataInventory {
   }
 
   public boolean isPriceValid() {
-    if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      return true;
-    }
     assert productWillBeAddedLive.getValue() != null;
     if (!productWillBeAddedLive.getValue()) {
       priceErrorLive.setValue(null);
@@ -704,8 +701,12 @@ public class FormDataInventory {
     boolean valid = isProductNameValid();
     valid = isQuantityUnitValid() && valid;
     valid = isAmountValid() && valid;
-    valid = isDueDateValid() && valid;
-    valid = isPriceValid() && valid;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING)) {
+      valid = isDueDateValid() && valid;
+    }
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      valid = isPriceValid() && valid;
+    }
     return valid;
   }
 

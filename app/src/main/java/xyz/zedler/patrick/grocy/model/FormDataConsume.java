@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -469,14 +470,16 @@ public class FormDataConsume {
 
     // over
     StockLocation currentLocation = stockLocationLive.getValue();
-    if (currentLocation == null) {
+    if (currentLocation == null && isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       amountErrorLive.setValue(null);
       return true;
     }
     double stockAmount;
     StockEntry specificStockEntry = specificStockEntryLive.getValue();
-    if (specificStockEntry == null) {
+    if (specificStockEntry == null && currentLocation != null) {
       stockAmount = currentLocation.getAmountDouble();
+    } else if (specificStockEntry == null) {
+      stockAmount = productDetailsLive.getValue().getStockAmount();
     } else {
       stockAmount = specificStockEntry.getAmount();
     }
@@ -536,12 +539,18 @@ public class FormDataConsume {
     QuantityUnit qU = quantityUnitLive.getValue();
     StockLocation stockLocation = stockLocationLive.getValue();
     assert qU != null && stockLocation != null;
+    String stockLocationName;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      stockLocationName = stockLocation.getLocationName();
+    } else {
+      stockLocationName = getString(R.string.subtitle_feature_disabled);
+    }
     return application.getString(
         R.string.msg_quick_mode_confirm_consume,
         NumUtil.trim(amountRemoved),
         pluralUtil.getQuantityUnitPlural(qU, amountRemoved),
         productDetails.getProduct().getName(),
-        stockLocation.getLocationName()
+        stockLocationName
     );
   }
 

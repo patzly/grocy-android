@@ -162,7 +162,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
-                true,
+                viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
                 viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
                 5,
                 viewModel.getSortMode()

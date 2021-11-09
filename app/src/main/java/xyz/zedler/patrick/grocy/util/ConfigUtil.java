@@ -114,6 +114,12 @@ public class ConfigUtil {
                   "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING"
               )
           ).apply();
+      if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
+        prefs.edit().putBoolean(
+            Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
+            jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")
+        ).apply();
+      }
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadConfig: " + e);

@@ -265,6 +265,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:animateLayoutChanges="true"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING) ? View.VISIBLE : View.GONE}"
               app:transitionTypeChanging="@{true}">
 
               <ImageView

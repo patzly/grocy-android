@@ -25,6 +25,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="formData"
       type="xyz.zedler.patrick.grocy.model.FormDataConsume" />
@@ -425,6 +426,7 @@
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
 
               <ImageView

@@ -696,9 +696,6 @@ public class FormDataPurchase {
   }
 
   public boolean isPriceValid() {
-    if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      return true;
-    }
     if (priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
       priceErrorLive.setValue(null);
       return true;
@@ -715,8 +712,12 @@ public class FormDataPurchase {
     boolean valid = isProductNameValid();
     valid = isQuantityUnitValid() && valid;
     valid = isAmountValid() && valid;
-    valid = isDueDateValid() && valid;
-    valid = isPriceValid() && valid;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING)) {
+      valid = isDueDateValid() && valid;
+    }
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      valid = isPriceValid() && valid;
+    }
     return valid;
   }
 

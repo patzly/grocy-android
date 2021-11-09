@@ -478,6 +478,7 @@
             <LinearLayout
               android:id="@+id/linear_due_date"
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING) ? View.VISIBLE : View.GONE}"
               android:focusableInTouchMode="true"
               android:onClick="@{() -> viewModel.showDueDateBottomSheet(true)}"
               app:onFocusChangeListener="@{(v, focus) -> viewModel.showDueDateBottomSheet(focus)}">
@@ -647,6 +648,7 @@
             <LinearLayout
               android:id="@+id/linear_purchase_location"
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> viewModel.showLocationsBottomSheet()}">
 
               <ImageView

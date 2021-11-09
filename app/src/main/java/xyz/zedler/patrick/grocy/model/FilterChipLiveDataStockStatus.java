@@ -20,10 +20,13 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
+import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
 
@@ -35,6 +38,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   public final static int STATUS_IN_STOCK = 5;
 
   private final Application application;
+  private final SharedPreferences sharedPrefs;
   private int dueSoonCount = 0;
   private int overdueCount = 0;
   private int expiredCount = 0;
@@ -43,6 +47,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
 
   public FilterChipLiveDataStockStatus(Application application, Runnable clickListener) {
     this.application = application;
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     setStatus(STATUS_ALL, null);
     if (clickListener != null) {
       setMenuItemClickListener(item -> {
@@ -103,21 +108,23 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
         0,
         application.getString(R.string.action_no_filter)
     ));
-    menuItemDataList.add(new MenuItemData(
-        STATUS_DUE_SOON,
-        0,
-        getQuString(R.plurals.msg_due_products, dueSoonCount)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        STATUS_OVERDUE,
-        0,
-        getQuString(R.plurals.msg_overdue_products, overdueCount)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        STATUS_EXPIRED,
-        0,
-        getQuString(R.plurals.msg_expired_products, expiredCount)
-    ));
+    if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true)) {
+      menuItemDataList.add(new MenuItemData(
+          STATUS_DUE_SOON,
+          0,
+          getQuString(R.plurals.msg_due_products, dueSoonCount)
+      ));
+      menuItemDataList.add(new MenuItemData(
+          STATUS_OVERDUE,
+          0,
+          getQuString(R.plurals.msg_overdue_products, overdueCount)
+      ));
+      menuItemDataList.add(new MenuItemData(
+          STATUS_EXPIRED,
+          0,
+          getQuString(R.plurals.msg_expired_products, expiredCount)
+      ));
+    }
     menuItemDataList.add(new MenuItemData(
         STATUS_BELOW_MIN,
         0,

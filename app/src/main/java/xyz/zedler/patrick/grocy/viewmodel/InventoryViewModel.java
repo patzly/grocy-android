@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
@@ -234,22 +235,26 @@ public class InventoryViewModel extends BaseViewModel {
       }
 
       // due days
-      int dueDays = productDetails.getProduct().getDefaultDueDaysInt();
-      if (dueDays < 0) {
-        formData.getDueDateLive().setValue(Constants.DATE.NEVER_OVERDUE);
-      } else if (dueDays == 0) {
-        formData.getDueDateLive().setValue(null);
-      } else {
-        formData.getDueDateLive()
-            .setValue(DateUtil.getTodayWithDaysAdded(dueDays));
+      if (isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING)) {
+        int dueDays = productDetails.getProduct().getDefaultDueDaysInt();
+        if (dueDays < 0) {
+          formData.getDueDateLive().setValue(Constants.DATE.NEVER_OVERDUE);
+        } else if (dueDays == 0) {
+          formData.getDueDateLive().setValue(null);
+        } else {
+          formData.getDueDateLive()
+              .setValue(DateUtil.getTodayWithDaysAdded(dueDays));
+        }
       }
 
       // price
-      String lastPrice = productDetails.getLastPrice();
-      if (lastPrice != null && !lastPrice.isEmpty()) {
-        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+      if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+        String lastPrice = productDetails.getLastPrice();
+        if (lastPrice != null && !lastPrice.isEmpty()) {
+          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+        }
+        formData.getPriceLive().setValue(lastPrice);
       }
-      formData.getPriceLive().setValue(lastPrice);
 
       // store
       String storeId = productDetails.getDefaultShoppingLocationId();
@@ -258,7 +263,9 @@ public class InventoryViewModel extends BaseViewModel {
       formData.getShowStoreSection().setValue(store != null || !stores.isEmpty());
 
       // location
-      formData.getLocationLive().setValue(productDetails.getLocation());
+      if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        formData.getLocationLive().setValue(productDetails.getLocation());
+      }
 
       formData.isFormValid();
         if (isQuickModeEnabled()) {
