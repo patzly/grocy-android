@@ -317,6 +317,8 @@
   <string name="title_input">קלט מספר</string>
   <string name="title_external_barcode_input">סורק חיצוני</string>
   <string name="title_confirmation">אישור</string>
+  <string name="title_choose_product">בחירת מוצר</string>
+
   <string name="title_spoiled">מקולקל</string>
   <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
   <string name="title_specific">פריט מסוים במלאי</string>
@@ -393,6 +395,9 @@
   <string name="subtitle_barcode_amount">כמות: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">יחידת כמות: %1$d</string>
+  <string name="subtitle_barcode">ברקוד: %1$s</string>
+  <string name="subtitle_feature_disabled">היכולת מושבתת</string>
+
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
@@ -650,6 +655,10 @@
   <string name="category_network_proxy">מתווך</string>
   <string name="category_behavior">התנהגות</string>
   <string name="category_debugging">ניפוי שגיאות</string>
+  <string name="category_new_product">מוצר חדש</string>
+  <string name="category_existing_products">מוצרים קיימים</string>
+  <string name="category_existing_products_similar">מוצרים קיימים דומים</string>
+
   <string name="hint_server">כתובת שרת</string>
   <string name="hint_key">מפתח API תקני</string>
 
@@ -731,6 +740,7 @@
   <string name="setting_proxy_port_description">מספר הפתחה של המתווך שלך</string>
   <string name="setting_synchronized">האפשרות שלהלן מסונכרנת עם השרת שלך.</string>
   <string name="settings_synchronized">הגדרות אלו מסונכרנות מול השרת שלך.</string>
+  <string name="setting_message_duration">הצגת זמן להודעות</string>
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://he.demo.grocy.info</string>
