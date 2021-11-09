@@ -459,6 +459,7 @@
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Mengeneinheit: %1$d</string>
   <string name="subtitle_barcode">Barcode: %1$s</string>
+  <string name="subtitle_feature_disabled">Feature deaktiviert</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
@@ -498,7 +499,7 @@
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">Davon steht %1$d auf Ihrer Einkaufsliste.</item>
-    <item quantity="other">Davon stehen %1$d auf Ihrer EInkaufsliste.</item>
+    <item quantity="other">Davon stehen %1$d auf Ihrer Einkaufsliste.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
