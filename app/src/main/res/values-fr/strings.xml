@@ -196,6 +196,13 @@
   <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
   <string name="option_synced_success">Option synchronisée avec succès</string>
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
+  <string name="msg_choose_product">Le code-barres que vous avez scanné n\'est pas encore lié à un produit. Vous pouvez le lier à un produit existant ou créer un nouveau produit associé.</string>
+  <string name="msg_product_name_off">Le nom du produit pour le code-barres provient d\'Open Food Facts.</string>
+  <string name="msg_product_name_off_error">Le code-barres n\'a pas pu être recherché sur Open Food Facts.</string>
+  <string name="msg_product_name_off_empty">Le code-barres n\'est pas dans la base de données d\'Open Food Facts.</string>
+  <string name="msg_off_option_deactivated">Pour la suggestion automatique d\'un nom de produit, vous pouvez activer la recherche Open Food Facts dans les paramètres.</string>
+  <string name="msg_create_new_product_filled">Créer un nouveau produit \"%1$s\"</string>
+  <string name="msg_create_new_product">Créer un nouveau produit</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Opération qui sera exécutée :\n\nAjouter %1$s %2$s de %3$s au stock\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -333,9 +340,9 @@
   <string name="error_unexpected_response_code">Code de réponse inattendu</string>
   <string name="error_unexpected_response">Réponse inattendue du serveur</string>
   <string name="error_no_browser">Installez un navigateur pour voir la site web d\'aide</string>
-  <string name="error_barcode_not_linked">Le code barre n\'est pas lié à un produit</string>
+  <string name="error_barcode_not_linked">Le code-barres n\'est pas lié à un produit</string>
   <string name="error_no_product_details">Impossible de récupérer les détails du produit</string>
-  <string name="error_failed_barcode_upload">Impossible d\'envoyer le code barre</string>
+  <string name="error_failed_barcode_upload">Impossible d\'envoyer le code-barres</string>
   <string name="error_wrong_grocycode_type">grocycode contient un type d\'entité incorrect</string>
   <string name="error_stock_entry_grocycode">Entrée de stock de grocycode introuvable</string>
   <string name="error_undefined">Une erreur est survenue</string>
@@ -346,7 +353,7 @@
   <string name="title_consume">Consommer</string>
   <string name="title_transfer">Transfert</string>
   <string name="title_inventory">inventaire</string>
-  <string name="title_barcode_input">Saisie du code barre</string>
+  <string name="title_barcode_input">Saisie du code-barres</string>
   <string name="title_product_overview">Présentation du produit</string>
   <string name="title_product">Produit</string>
   <string name="title_product_create">Créer produit</string>
@@ -373,6 +380,8 @@
   <string name="title_input">Entrée numérique</string>
   <string name="title_external_barcode_input">Scanner externe</string>
   <string name="title_confirmation">Confirmation</string>
+  <string name="title_choose_product">Choisir un produit</string>
+
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
   <string name="title_specific">Article spécifique du stock</string>
@@ -402,7 +411,7 @@
   <string name="title_product_cat_due_date">Date de péremption</string>
   <string name="title_product_cat_amount">Quantité</string>
   <string name="title_product_cat_quantity_unit">Unité de quantité</string>
-  <string name="title_product_cat_barcodes">Code barre</string>
+  <string name="title_product_cat_barcodes">Code-barres</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">Conversions de formats</string>
   <string name="title_unknown_input">Entrée inconnue</string>
@@ -449,11 +458,14 @@
   <string name="subtitle_barcode_amount">Quantité : %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Format : %1$d</string>
+  <string name="subtitle_barcode">Code-barres : %1$s</string>
+  <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
+
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
   <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>
-  <string name="description_input_product_option2">Créer un produit et utiliser l\'entrée en tant que code barre</string>
-  <string name="description_input_product_option3">Ajouter en tant que code barre à un produit existant</string>
+  <string name="description_input_product_option2">Créer un produit et utiliser l\'entrée en tant que code-barres</string>
+  <string name="description_input_product_option3">Ajouter en tant que code-barres à un produit existant</string>
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option1">Ne supprimer que les produits validés</string>
   <!-- Context: Clear shopping list -->
@@ -550,8 +562,8 @@
   <string name="property_qu_stock">Quantité unité stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Facteur entre la quantité à l\'achat et la quantité en stock</string>
-  <string name="property_barcode">Code barre</string>
-  <string name="property_barcodes">Codes barres</string>
+  <string name="property_barcode">Code-barres</string>
+  <string name="property_barcodes">Codes-barres</string>
   <string name="property_days">Jours</string>
   <string name="property_purchased_date">Date d\'achat</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -708,6 +720,10 @@
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Comportement</string>
   <string name="category_debugging">Débogage</string>
+  <string name="category_new_product">Nouveau produit</string>
+  <string name="category_existing_products">Produits existants</string>
+  <string name="category_existing_products_similar">Produits existants identiques</string>
+
   <string name="hint_server">URL du serveur</string>
   <string name="hint_key">Clé API valide</string>
 
@@ -732,7 +748,7 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="setting_crop_stream_description">Empêche le scanner de détecter les codes-barres en dehors de l\'aperçu. Ne fonctionne pas sur tous les appareils.</string>
   <string name="setting_use_front_cam">Utiliser la caméra frontale</string>
-  <string name="setting_use_front_cam_description">Pour scanner un code barre</string>
+  <string name="setting_use_front_cam_description">Pour scanner un code-barres</string>
   <string name="setting_use_2d_scanner_format">Utiliser le format de lecteur de codes-barres 2D</string>
   <string name="setting_use_2d_scanner_format_description">Forme carrée pour les QR codes</string>
   <string name="setting_barcode_formats">Formats de codes-barres</string>
