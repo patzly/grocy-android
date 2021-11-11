@@ -505,10 +505,11 @@ public class PurchaseViewModel extends BaseViewModel {
         sendEvent(Event.CHOOSE_PRODUCT, bundle);
 
         if (true) return; // TODO: Focus after barcode action?
+
+        formData.getBarcodeLive().setValue(barcode);
+        formData.isFormValid();
+        sendEvent(Event.FOCUS_INVALID_VIEWS);
       }
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
-      sendEvent(Event.FOCUS_INVALID_VIEWS);
     }
   }
 
