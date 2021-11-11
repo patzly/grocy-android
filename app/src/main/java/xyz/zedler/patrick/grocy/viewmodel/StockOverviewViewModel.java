@@ -155,7 +155,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           this.productBarcodesTemp = barcodes;
           productBarcodeHashMap = new HashMap<>();
           for (ProductBarcode barcode : barcodes) {
-            productBarcodeHashMap.put(barcode.getBarcode(), barcode);
+            productBarcodeHashMap.put(barcode.getBarcode().toLowerCase(), barcode);
           }
           int itemsDueCount = 0;
           int itemsOverdueCount = 0;
@@ -333,7 +333,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           this.productBarcodesTemp = productBarcodes;
           productBarcodeHashMap = new HashMap<>();
           for (ProductBarcode barcode : productBarcodes) {
-            productBarcodeHashMap.put(barcode.getBarcode(), barcode);
+            productBarcodeHashMap.put(barcode.getBarcode().toLowerCase(), barcode);
           }
         }), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
           this.dueItemsTemp = due;
