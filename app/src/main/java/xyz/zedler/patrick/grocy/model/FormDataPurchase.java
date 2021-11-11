@@ -39,9 +39,9 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataPurchase {
 
@@ -407,7 +407,7 @@ public class FormDataPurchase {
   }
 
   public void moreAmount(ImageView view) {
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       if (!isTareWeightEnabled() || productDetailsLive.getValue() == null) {
         amountLive.setValue(String.valueOf(1));
@@ -423,7 +423,7 @@ public class FormDataPurchase {
   }
 
   public void lessAmount(ImageView view) {
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
       double amountCurrent = Double.parseDouble(amountLive.getValue());
       Double amountNew = null;

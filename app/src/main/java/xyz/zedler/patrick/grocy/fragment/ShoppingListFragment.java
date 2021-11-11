@@ -367,7 +367,7 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
     if (search != null) {
       search.setOnMenuItemClickListener(item -> {
-        ViewUtil.start(item);
+        ViewUtil.startIcon(item);
         setUpSearch();
         return true;
       });
@@ -385,7 +385,7 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem addMissing = activity.getBottomMenu().findItem(R.id.action_add_missing);
     if (addMissing != null) {
       addMissing.setOnMenuItemClickListener(item -> {
-        ViewUtil.start(item);
+        ViewUtil.startIcon(item);
         viewModel.addMissingItems();
         return true;
       });
@@ -476,7 +476,7 @@ public class ShoppingListFragment extends BaseFragment implements
     MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
     if (clear != null) {
       clear.setOnMenuItemClickListener(item -> {
-        ViewUtil.start(item);
+        ViewUtil.startIcon(item);
         ShoppingList shoppingList = viewModel.getSelectedShoppingList();
         if (shoppingList == null) {
           showMessage(activity.getString(R.string.error_undefined));

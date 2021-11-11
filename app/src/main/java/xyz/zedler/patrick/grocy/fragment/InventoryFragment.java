@@ -48,8 +48,8 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.FAB;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel.InventoryViewModelFactory;
 
@@ -392,7 +392,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_product_overview) {
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       if (!viewModel.getFormData().isProductNameValid()) {
         return false;
       }

@@ -33,9 +33,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TextBottomSheet extends BaseBottomSheet {
 
@@ -71,7 +71,7 @@ public class TextBottomSheet extends BaseBottomSheet {
     String link = bundle.getString(Constants.ARGUMENT.LINK);
     if (link != null) {
       binding.frameTextOpenLink.setOnClickListener(v -> {
-        IconUtil.start(binding.imageTextOpenLink);
+        ViewUtil.startIcon(binding.imageTextOpenLink);
         new Handler().postDelayed(
             () -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
             500

@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
 public class OverviewStartFragment extends BaseFragment {
@@ -184,7 +184,7 @@ public class OverviewStartFragment extends BaseFragment {
     if (clickUtil.isDisabled()) {
       return;
     }
-    IconUtil.start(binding.imageLogo);
+    ViewUtil.startIcon(binding.imageLogo);
   }
 
   @Override

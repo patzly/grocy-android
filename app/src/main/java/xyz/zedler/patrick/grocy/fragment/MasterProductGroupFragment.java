@@ -46,9 +46,9 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterProductGroupFragment extends BaseFragment {
 
@@ -130,7 +130,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     binding.editTextMasterProductGroupName.setOnFocusChangeListener(
         (View v, boolean hasFocus) -> {
           if (hasFocus) {
-            IconUtil.start(binding.imageMasterProductGroupName);
+            ViewUtil.startIcon(binding.imageMasterProductGroupName);
           }
         });
 
@@ -138,7 +138,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     binding.editTextMasterProductGroupDescription.setOnFocusChangeListener(
         (View v, boolean hasFocus) -> {
           if (hasFocus) {
-            IconUtil.start(binding.imageMasterProductGroupDescription);
+            ViewUtil.startIcon(binding.imageMasterProductGroupDescription);
           }
         });
 
@@ -456,7 +456,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
     if (delete != null) {
       delete.setOnMenuItemClickListener(item -> {
-        IconUtil.start(item);
+        ViewUtil.startIcon(item);
         deleteProductGroupSafely();
         return true;
       });
