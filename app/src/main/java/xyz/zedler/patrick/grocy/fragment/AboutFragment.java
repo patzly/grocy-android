@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class AboutFragment extends BaseFragment implements View.OnClickListener {
 
@@ -113,13 +113,13 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     }
 
     if (v.getId() == R.id.linear_intro) {
-      IconUtil.start(activity, R.id.image_intro);
+      ViewUtil.startIcon(binding.imageIntro);
       navigate(R.id.onboardingFragment);
     } else if (v.getId() == R.id.linear_changelog) {
-      IconUtil.start(activity, R.id.image_changelog);
+      ViewUtil.startIcon(binding.imageChangelog);
       activity.showBottomSheet(new ChangelogBottomSheet());
     } else if (v.getId() == R.id.linear_developers) {
-      IconUtil.start(activity, R.id.image_developers);
+      ViewUtil.startIcon(binding.imageDevelopers);
       startActivity(new Intent(
           Intent.ACTION_VIEW,
           Uri.parse(getString(R.string.url_developer))
@@ -130,63 +130,63 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
           Uri.parse(getString(R.string.url_github))
       ));
     } else if (v.getId() == R.id.linear_license_conscrypt) {
-      IconUtil.start(activity, R.id.image_license_conscrypt);
+      ViewUtil.startIcon(binding.imageLicenseConscrypt);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_conscrypt,
           R.string.url_conscrypt
       );
     } else if (v.getId() == R.id.linear_license_fuzzywuzzy) {
-      IconUtil.start(activity, R.id.image_license_fuzzywuzzy);
+      ViewUtil.startIcon(binding.imageLicenseFuzzywuzzy);
       showTextBottomSheet(
           R.raw.license_gpl,
           R.string.license_fuzzywuzzy,
           R.string.url_fuzzywuzzy
       );
     } else if (v.getId() == R.id.linear_license_gson) {
-      IconUtil.start(activity, R.id.image_license_gson);
+      ViewUtil.startIcon(binding.imageLicenseGson);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_gson,
           R.string.url_gson
       );
     } else if (v.getId() == R.id.linear_license_jost) {
-      IconUtil.start(activity, R.id.image_license_jost);
+      ViewUtil.startIcon(binding.imageLicenseJost);
       showTextBottomSheet(
           R.raw.license_ofl,
           R.string.license_jost,
           R.string.url_jost
       );
     } else if (v.getId() == R.id.linear_license_material_components) {
-      IconUtil.start(activity, R.id.image_license_material_components);
+      ViewUtil.startIcon(binding.imageLicenseMaterialComponents);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_material_components,
           R.string.url_material_components
       );
     } else if (v.getId() == R.id.linear_license_material_icons) {
-      IconUtil.start(activity, R.id.image_license_material_icons);
+      ViewUtil.startIcon(binding.imageLicenseMaterialIcons);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_material_icons,
           R.string.url_material_icons
       );
     } else if (v.getId() == R.id.linear_license_netcipher) {
-      IconUtil.start(activity, R.id.image_license_netcipher);
+      ViewUtil.startIcon(binding.imageLicenseNetcipher);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_netcipher,
           R.string.url_netcipher
       );
     } else if (v.getId() == R.id.linear_license_volley) {
-      IconUtil.start(activity, R.id.image_license_volley);
+      ViewUtil.startIcon(binding.imageLicenseVolley);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_volley,
           R.string.url_volley
       );
     } else if (v.getId() == R.id.linear_license_xzing_android) {
-      IconUtil.start(activity, R.id.image_license_xzing_android);
+      ViewUtil.startIcon(binding.imageLicenseXzingAndroid);
       showTextBottomSheet(
           R.raw.license_apache,
           R.string.license_xzing_android,

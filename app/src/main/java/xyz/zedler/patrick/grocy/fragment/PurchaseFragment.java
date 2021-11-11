@@ -50,9 +50,9 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
 public class PurchaseFragment extends BaseFragment implements BarcodeListener {
@@ -436,7 +436,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_product_overview) {
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       if (!viewModel.getFormData().isProductNameValid()) {
         return false;
       }
@@ -453,7 +453,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       embeddedFragmentScanner.startScannerIfVisible();
       return true;
     } else if (item.getItemId() == R.id.action_skip) {
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       clearInputFocus();
       viewModel.getFormData().clearForm();
       boolean nextItemValid = viewModel.batchModeNextItem();

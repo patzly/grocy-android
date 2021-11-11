@@ -116,11 +116,11 @@ public class ViewUtil {
 
   // Animated icons
 
-  public static void startIcon(ImageView imageView) {
-    if (imageView == null) {
+  public static void startIcon(View imageView) {
+    if (!(imageView instanceof ImageView)) {
       return;
     }
-    startIcon(imageView.getDrawable());
+    startIcon(((ImageView) imageView).getDrawable());
   }
 
   public static void startIcon(Drawable drawable) {
@@ -134,7 +134,7 @@ public class ViewUtil {
     }
   }
 
-  public static void start(MenuItem item) {
+  public static void startIcon(MenuItem item) {
     if (item == null) {
       return;
     }

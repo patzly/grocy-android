@@ -45,9 +45,9 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomShe
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MasterStoreFragment extends BaseFragment {
 
@@ -118,7 +118,7 @@ public class MasterStoreFragment extends BaseFragment {
     // name
     binding.editTextMasterStoreName.setOnFocusChangeListener((View v, boolean hasFocus) -> {
       if (hasFocus) {
-        IconUtil.start(binding.imageMasterStoreName);
+        ViewUtil.startIcon(binding.imageMasterStoreName);
       }
     });
 
@@ -126,7 +126,7 @@ public class MasterStoreFragment extends BaseFragment {
     binding.editTextMasterStoreDescription.setOnFocusChangeListener(
         (View v, boolean hasFocus) -> {
           if (hasFocus) {
-            IconUtil.start(binding.imageMasterStoreDescription);
+            ViewUtil.startIcon(binding.imageMasterStoreDescription);
           }
         });
 
@@ -439,7 +439,7 @@ public class MasterStoreFragment extends BaseFragment {
     MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
     if (delete != null) {
       delete.setOnMenuItemClickListener(item -> {
-        IconUtil.start(item);
+        ViewUtil.startIcon(item);
         deleteStoreSafely();
         return true;
       });

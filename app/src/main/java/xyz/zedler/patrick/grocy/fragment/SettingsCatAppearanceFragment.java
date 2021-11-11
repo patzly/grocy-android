@@ -42,8 +42,8 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LanguagesBottomSheet;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatAppearanceFragment extends BaseFragment {
@@ -129,7 +129,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
         || currentTheme == SettingsViewModel.THEME_SYSTEM && theme == SettingsViewModel.THEME_LIGHT && currentlyDark
         || currentTheme == SettingsViewModel.THEME_SYSTEM && theme == SettingsViewModel.THEME_DARK && !currentlyDark
     ) {
-      IconUtil.start(binding.imageTheme);
+      ViewUtil.startIcon(binding.imageTheme);
     }
     viewModel.setTheme(theme);
     new Handler().postDelayed(() -> {
@@ -161,7 +161,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
   }
 
   public void showLanguageSelection() {
-    IconUtil.start(binding.imageLanguage);
+    ViewUtil.startIcon(binding.imageLanguage);
     activity.showBottomSheet(new LanguagesBottomSheet());
   }
 

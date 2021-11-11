@@ -53,8 +53,8 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
 
 public class ShoppingListItemEditFragment extends BaseFragment implements BarcodeListener {
@@ -350,7 +350,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     }
     if (menuItemDetails != null) {
       menuItemDetails.setOnMenuItemClickListener(item -> {
-        IconUtil.start(menuItemDetails);
+        ViewUtil.startIcon(menuItemDetails);
         viewModel.showProductDetailsBottomSheet();
         return true;
       });
@@ -366,11 +366,11 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_delete) {
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       viewModel.deleteItem();
       return true;
     } else if (item.getItemId() == R.id.action_product_overview) {
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       viewModel.showProductDetailsBottomSheet();
       return true;
     } else if (item.getItemId() == R.id.action_clear_form) {

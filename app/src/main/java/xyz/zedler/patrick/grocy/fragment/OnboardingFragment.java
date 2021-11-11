@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingBinding;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingPageBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class OnboardingFragment extends BaseFragment {
 
@@ -82,14 +82,14 @@ public class OnboardingFragment extends BaseFragment {
       if (binding.pagerOnboarding.getCurrentItem() == 0) {
         return;
       }
-      IconUtil.start(binding.imageOnboardingPrevious);
+      ViewUtil.startIcon(binding.imageOnboardingPrevious);
       binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() - 1);
     });
     binding.frameOnboardingNext.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 3) {
         return;
       }
-      IconUtil.start(binding.imageOnboardingNext);
+      ViewUtil.startIcon(binding.imageOnboardingNext);
       binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() + 1);
     });
     setArrows(0, false);

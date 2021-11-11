@@ -320,7 +320,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_search) {
-      ViewUtil.start(item);
+      ViewUtil.startIcon(item);
       setUpSearch();
       return true;
     }

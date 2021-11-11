@@ -61,8 +61,8 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
 
 public class MasterObjectListFragment extends BaseFragment
@@ -339,7 +339,7 @@ public class MasterObjectListFragment extends BaseFragment
               : R.drawable.ic_round_sort_desc_to_asc_anim
       );
       item.getIcon().setAlpha(255);
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       return true;
     });
 
@@ -349,7 +349,7 @@ public class MasterObjectListFragment extends BaseFragment
       return;
     }
     search.setOnMenuItemClickListener(item -> {
-      IconUtil.start(item);
+      ViewUtil.startIcon(item);
       setUpSearch();
       return true;
     });

@@ -155,7 +155,7 @@ public class BindingAdaptersUtil {
       } else if (view instanceof ActionButton && ((ActionButton) view).hasAnimatable()) {
         ((ActionButton) view).startIconAnimation();
       } else if (iconToAnimate instanceof ImageView) {
-        IconUtil.start(iconToAnimate);
+        ViewUtil.startIcon(iconToAnimate);
       }
       if (listener != null) {
         listener.onClick(view);
@@ -178,7 +178,7 @@ public class BindingAdaptersUtil {
     }
     view.setOnCheckedChangeListener((buttonView, isChecked) -> {
       if (iconToAnimate instanceof ImageView) {
-        IconUtil.start(iconToAnimate);
+        ViewUtil.startIcon(iconToAnimate);
       }
       if (listener != null) {
         listener.onCheckedChanged(view, isChecked);
