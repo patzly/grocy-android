@@ -30,6 +30,7 @@
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
   <queries>
+    <package android:name="org.torproject.android"/>
     <package android:name="xyz.zedler.patrick.grocy.unlock"/>
   </queries>
 
