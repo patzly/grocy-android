@@ -35,14 +35,12 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
 
   private final List<String> items;
   private final List<String> itemsAll;
-  private final List<String> suggestions;
 
   public MatchArrayAdapter(@NonNull Context context, List<String> items) {
     super(context, android.R.layout.simple_list_item_1, items);
 
     this.items = items;
     this.itemsAll = new ArrayList<>(items);
-    this.suggestions = new ArrayList<>();
   }
 
   @NonNull
@@ -78,21 +76,22 @@ public class MatchArrayAdapter extends ArrayAdapter<String> {
 
       @Override
       protected FilterResults performFiltering(CharSequence constraint) {
-        if (constraint != null) {
-          suggestions.clear();
-          for (String item : itemsAll) {
-            String match = constraint.toString().toLowerCase();
-            if (item.toLowerCase().contains(match)) {
-              suggestions.add(item);
-            }
-          }
-          FilterResults filterResults = new FilterResults();
-          filterResults.values = suggestions;
-          filterResults.count = suggestions.size();
-          return filterResults;
-        } else {
+        if (constraint == null) {
           return new FilterResults();
         }
+
+        // Initialize list with max. capacity to avoid growing.
+        List<String> suggestions = new ArrayList<>(itemsAll.size());
+        for (String item : itemsAll) {
+          String match = constraint.toString().toLowerCase();
+          if (item.toLowerCase().contains(match)) {
+            suggestions.add(item);
+          }
+        }
+        FilterResults filterResults = new FilterResults();
+        filterResults.values = suggestions;
+        filterResults.count = suggestions.size();
+        return filterResults;
       }
 
       @Override

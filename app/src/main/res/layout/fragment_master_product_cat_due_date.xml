@@ -25,6 +25,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.util.Constants" />
     <variable
       name="formData"
       type="xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate" />
@@ -251,7 +252,7 @@
             app:cardElevation="0dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+            android:visibility="@{formData.displayHelpLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}">
 
             <TextView
               style="@style/Widget.Grocy.TextView.Paragraph"
@@ -263,6 +264,7 @@
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_OPENED)}">
 
             <ImageView
@@ -296,7 +298,7 @@
             app:cardElevation="0dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+            android:visibility="@{formData.displayHelpLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}">
 
             <TextView
               style="@style/Widget.Grocy.TextView.Paragraph"
@@ -308,6 +310,7 @@
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_FREEZING)}">
 
             <ImageView
@@ -341,7 +344,7 @@
             app:cardElevation="0dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/on_background_variant"
-            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+            android:visibility="@{formData.displayHelpLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}">
 
             <TextView
               style="@style/Widget.Grocy.TextView.Paragraph"
@@ -353,6 +356,7 @@
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_THAWING)}">
 
             <ImageView

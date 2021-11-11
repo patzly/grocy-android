@@ -1878,6 +1878,7 @@ public class DownloadHelper {
             if(debug) Log.i(tag, "getOpenFoodFactsProductName: OpenFoodFacts = " + name);
           } catch (JSONException e) {
             if(debug) Log.e(tag, "getOpenFoodFactsProductName: " + e);
+            successListener.onResponse(null);
           }
         },
         error -> {

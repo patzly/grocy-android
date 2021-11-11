@@ -122,6 +122,8 @@ public class DateBottomSheet extends BaseBottomSheet {
 
     fillForm(selectedDate);
 
+    setSkipCollapsedInPortrait();
+
     return view;
   }
 

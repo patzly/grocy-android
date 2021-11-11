@@ -1,0 +1,690 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in purchase screen for example. -->
+  <string name="action_purchase">Comprar</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in consume screen for example. -->
+  <string name="action_consume">Consumir</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Transferir</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Actualizar cantidad</string>
+  <!-- This is an action – in English, it contains a verb. -->
+  <string name="action_consume_all">Consumir todo</string>
+
+  <string name="action_consume_one_spoiled">Consumir 1 como vencido</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_consume_one">Consumir 1 %1$s de %2$s</string>
+  <string name="action_open">Marcar como abierto</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_open_one">Abrir 1 %1$s de %2$s</string>
+  <string name="action_edit_product">Editar producto</string>
+  <string name="action_shopping_list_add">Añadir a la lista de compras</string>
+
+  <string name="action_back">Regresar</string>
+  <string name="action_search">Buscar</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_next">Siguiente</string>
+  <string name="action_new">Nuevo</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_prev">Anterior</string>
+  <string name="action_feedback">Enviar comentarios</string>
+  <string name="action_reset">Reiniciar</string>
+  <string name="action_reload">Recargar</string>
+  <string name="action_top_scroll">Deslizar hasta arriba</string>
+  <string name="action_send">Enviar</string>
+  <string name="action_close">Cerrar</string>
+  <string name="action_scan">Escanear</string>
+  <string name="action_cancel">Cancelar</string>
+  <string name="action_add">Añadir</string>
+  <string name="action_clear">Vaciar</string>
+  <string name="action_clear_shopping_list">Vaciar lista de compras</string>
+  <string name="action_rate">Calificar en Google Play</string>
+  <string name="action_rate_description">Apoya el desarrollo</string>
+  <string name="action_email">Enviar correo electrónico</string>
+  <string name="action_email_description">Contactar a los desarrolladores</string>
+  <string name="action_new_issue">Abrir nueva propuesta en GitHub</string>
+  <string name="action_new_issue_description">Reportar problemas o solicitar una característica</string>
+  <string name="action_get_started">Empieza</string>
+  <string name="action_ascending">Ascendiente</string>
+  <string name="action_filter">Filtrar</string>
+  <string name="action_sort">Ordenar</string>
+  <string name="action_undo">Deshacer</string>
+  <string name="action_retry">Reintentar</string>
+  <string name="action_edit">Editar</string>
+  <string name="action_copy">Copiar</string>
+  <string name="action_proceed">Continuar</string>
+  <string name="action_delete">Eliminar</string>
+  <string name="action_save">Guardar</string>
+  <string name="action_logout">Cerrar sesión</string>
+  <string name="action_restart">Reiniciar</string>
+  <string name="action_create">Crear</string>
+  <string name="action_link">Enlazar</string>
+  <string name="action_try_again">Probar otra vez</string>
+  <string name="action_open_scanner">Abrir escáner</string>
+  <string name="action_discard">Descartar</string>
+  <string name="action_clear_form">Borrar formulario</string>
+  <string name="action_toggle_done">Marcar como listo</string>
+  <string name="action_edit_notes">Editar notas</string>
+  <string name="action_add_missing">Añadir productos faltantes</string>
+  <string name="action_purchase_done_items">Comprar artículos completados</string>
+  <string name="action_purchase_all_items">Comprar todos los artículos</string>
+  <string name="action_skip_entry">Saltar entrada</string>
+  <string name="action_toggle_flash">Alternar el modo de flash</string>
+  <string name="action_delete_shopping_list">Eliminar lista de compras</string>
+  <string name="action_create_key">Crear llave</string>
+  <string name="action_login">Iniciar sesión</string>
+  <string name="action_ignore">Ignorar</string>
+  <!-- This string should follow the equality between "all" and "Clear all items" -->
+  <string name="action_clear_all">Todo</string>
+  <!-- This string should follow the equality between "done" and "Clear done items" -->
+  <string name="action_clear_done">Listo</string>
+  <string name="action_display_help">Mostrar los textos de ayuda</string>
+  <string name="action_demo_server">Servidor de prueba</string>
+  <string name="action_own_server">Servidor propio</string>
+  <string name="action_enter_data_manually">Introducir datos manualmente</string>
+  <string name="action_perform">Realizar una acción</string>
+  <string name="action_share">Compartir</string>
+  <string name="action_share_description">Cuéntale a tus amigos sobre Grocy Android</string>
+  <string name="action_no_filter">Sin filtros</string>
+
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$d se vence pronto</item>
+    <item quantity="other">%1$d se vencen pronto</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d caducado</item>
+    <item quantity="other">%1$d caducados</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d vencido</item>
+    <item quantity="other">%1$d vencidos</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d por debajo de la cantidad mínima</item>
+    <item quantity="other">%1$d  por debajo de la cantidad mínima</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d en existencia</item>
+    <item quantity="other">%1$d en existencia</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed">Consumido %1$s %2$s de %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed_spoiled">Consumido %1$s %2$s de %3$s como vencido</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_opened">Marcar %1$s %2$s de %3$s como abiertos</string>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d sin hacer</item>
+    <item quantity="other">%1$d sin hacer</item>
+  </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d completado</item>
+    <item quantity="other">%1$d completados</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_purchased">Comprado/s %1$s %2$s de %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">Se transfirió %1$s %2$s de %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">La cantidad en el inventario de %1$s es ahora %2$s %3$s (%4$s)</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_not_in_stock">%1$s no está en stock</string>
+  <string name="msg_no_connection">Sin conexión</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_locations">No hay ubicaciones de stock para %1$s</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_entries">No hay registros de stock para %1$s</string>
+  <string name="msg_not_found">Producto no encontrado</string>
+  <string name="msg_undone_transaction">Transacción deshecha</string>
+  <string name="msg_failed_to_sync">Falló la sincronización de registros</string>
+  <string name="msg_synced">Los regristros frueron sincronizados exitosamente</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_added_missing_products">Añadidos los productos faltantes a %1$s</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_cleared">%1$s vaciada exitosamente</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_deleted">%1$s eliminada exitosamente</string>
+  <string name="msg_barcode_duplicate">El codigo de barras ya existe</string>
+  <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+  <string name="msg_master_delete">Eliminar %1$s \"%2$s\"?</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_master_delete_product">¿Estás seguro de querer eliminar \"%1$s\"?\n\nEsto también elimina cualquier cantidad del inventario y cualquier otra referencia del producto. Considera deshabilitarlo si solamente quieres ocultar el producto.</string>
+  <!-- %1$s is a master data type like "location" or "product" -->
+  <string name="msg_master_delete_usage">El/la %1$s aún está en uso</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s será añadido al inventario.</item>
+    <item quantity="other">%1$s %2$s será añadido al inventario.</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s será eliminado del inventario.</item>
+    <item quantity="other">%1$s %2$s será eliminado del inventario.</item>
+  </plurals>
+  <string name="msg_item_marked_as_done">Elemento marcado como hecho</string>
+  <string name="msg_item_marked_as_undone">Elemento marcado como deshecho</string>
+  <string name="option_synced_success">Opción sincronizada exitosamente</string>
+  <string name="option_synced_error">La opción no se pudo sincronizar</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Transacción que se ejecutará:\n\nAñadir %1$s %2$s de %3$s a las existencias\nFecha de vencimiento: %4$s\nPrecio: %5$s\nTienda: %6$s\nUbicación: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Transacción que se ejecutará:\n\nBorrar %1$s %2$s de %3$s del inventario\nUbicación: %4$s </string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Transacción que se ejecutará:\n\nMover %1$s %2$s de %3$s\nde la ubicación: %4$s\nA la ubicación: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Transacción que se ejecutará:\n\nEStablecer %2$s %3$s de %1$s al inventario\nAplicar a los productos añadidos:\nFecha de vencimiento: %4$s\nPrecio: %5$s\nTienda: %6$s\nUbicación: %7$s</string>
+  <string name="msg_compatibility">Esta versión de la aplicación no es compatible con la versión de Grocy en el servidor.\n\nVersión actual del servidor: %1$s.\nVersión del servidor soportada: %2$s\nSi ignoras esta advertencia, pueden suceder errores (muy posible) o pérdida de datos (improbable). Te advertimos!</string>
+  <string name="msg_logout">Nada será cambiado en tu servidor. Serás redireccionado a la página de inicio de sesión.</string>
+  <string name="msg_logout_demo">Estás ejecutando la instancia de demostración de Grocy en <u>https://grocy.info</u>.\n\n<b>Ninguno de tus cambios aquí serán guardados!\nSe mantiene públicos hasta que el servidor automáticamente los re-escribe.</b>\n\nEn la página de inicio de sesión puedes ingresar tu propia dirección de servidor.</string>
+  <string name="msg_logout_demo_short">Servidor público de prueba. Haga clic para ver más detalles.</string>
+  <string name="msg_restart">La aplicación debe reiniciarse para aplicar la configuración actual. ¿Quieres reiniciar ahora?</string>
+  <string name="msg_shortcuts">Puedes habilitar 4 accesos directos.</string>
+  <string name="msg_shortcuts_not_supported">Los accesos directos no están soportados por esta versión de Android.</string>
+  <string name="msg_barcode_formats">Puedes mejorar la velocidad del lector de códigos de barras configurando solo los formatos que esperas leer.</string>
+  <string name="msg_features">Inicia la introducción de nuevo en \"Acerca de\"</string>
+  <string name="msg_feedback">Tienes algún deseo, preguntas o errores? Contáctanos y déjanos ayudar!\nDe otro modo estaríamos muy contentos de recibir una buena reseña en la Play Store.</string>
+  <string name="msg_point_at_barcode">Apunta tu cámara al código de barras.</string>
+  <string name="msg_press_hold_confirm">Mantén pulsado para confirmar</string>
+  <string name="msg_welcome_to_grocy">¡Bienvenido a Grocy Android!\n\nPara utilizar grocy de forma productiva necesitas tu propio servidor o el add-on de grocy para Home Assistant.\nSi solo quieres probar esta aplicación puedes utilizar el servidor de demostración de Bernd Bestel, el creador de grocy.</string>
+  <string name="msg_choose_option_below">Por favor, selecciona una opción de las que aparecen a continuación.</string>
+  <string name="msg_qr_code_scan">En otro dispositivo, visita tu sitio web de grocy y ve a la página de \"claves API\". Haz clic en \"Añadir\", luego haz clic en el pequeño símbolo del código QR y escanea el código QR.</string>
+  <string name="msg_port_connection_info_without_port">La aplicación se conectará al puerto %1$s.\nSi quieres conectarlo a otro puerto, puedes añadirlo a la URL.\nEjemplo: http://dominio.es:81/</string>
+  <string name="msg_port_connection_info_with_port">La aplicación se conectará al puerto %1$s.</string>
+  <string name="msg_not_implemented_yet">Esto será implementado pronto. Por favor, use su interfaz web de momento.</string>
+  <string name="msg_help_due_date_type">Según el tipo de fecha de caducidad seleccionada, el resaltado en la página de resumen de inventario será diferente. \"Fecha de consumo preferente\" significa que el producto podría ser consumido después de su fecha de vencimiento. \"Fecha de caducidad\" significa que el consumo del producto no es seguro después de su fecha de vencimiento.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days">Este número de días será añadido a la fecha de hoy para la sugerencia de fecha límite de la compra (-1 significa que este producto no tendrá fecha límite).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">Cuando este producto se marque como abierto, la fecha límite será reemplazada por la fecha de hoy más este número de días (un valor de 0 desactiva esto)</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_freezing">Al mover este producto a una ubicación congelador (al congelarlo), la fecha límite será reemplazada por la fecha de hoy más este número de días (-1 significa que este producto no tendrá fecha límite).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">Al mover este producto desde una ubicación congelador (al descongelarlo), la fecha límite será reemplazada por la fecha de hoy más este número de días</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_stock">La unidad de inventario no puede ser cambiada después de la primera compra.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">Esta es la unidad de cantidad predeterminada al añadir este producto a la lista de la compra.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">Si está activado, los mínimos de existencias de los subproductos se acumularán en este producto. Los subproductos nunca faltarán, solo este producto.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount">Esta cantidad se usa para los botones de \"consumo rápido/abrir\" en la página de resumen de inventario (medido en unidades de inventario).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight">El peso del contenedor es útil, por ejemplo, para harina en tarros: basta con pesar el tarro al comprar, consumir o inventariar. La nueva cantidad de existencias se calcula automáticamente en base a las existencias disponibles y el peso de contenedor definido aquí</string>
+  <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight_purchase">Peso del contenedor activado. Por favor, pesa el contenedor entero, la cantidad será calculada automáticamente.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_stock_check">Esto se usará como configuración predeterminada cuando añadas este producto como ingrediente de una receta.</string>
+  <string name="msg_help_external_scanner_ready">Puedes usar un escáner externo para el campo de debajo mientras esté enfocado y vacío. </string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_consume">Esto es solo para fines estadísticos</string>
+  <string name="msg_help_home_assistant_login_help_show">Pulsa aquí para mostrar los textos de ayuda.</string>
+  <string name="msg_help_home_assistant_login_help_hide">Pulsa aquí para ocultar los textos de ayuda.</string>
+  <string name="error_api_not_working">La clave de la API no está funcionando</string>
+  <string name="error_orbot_not_installed">Orbot no está instalado</string>
+  <string name="error_select_product">Selecciona un producto</string>
+  <string name="error_empty">Requerido</string>
+  <string name="error_empty_stock">Nada en stock</string>
+  <string name="error_empty_stock_sub">Ve a comprar productos</string>
+  <string name="error_empty_shopping_list">Lista de compras vacía</string>
+  <string name="error_empty_shopping_list_sub">Añade algunos productos que necesites</string>
+  <string name="error_empty_barcodes_sub">Añadir un código de barras con el botón a continuación</string>
+  <string name="error_empty_master_data_sub">Crea algo con el botón a continuación</string>
+  <string name="error_empty_product_barcodes">No hay códigos de barras de productos</string>
+  <string name="error_empty_locations">No hay ubicaciones</string>
+  <string name="error_empty_product_groups">No hay grupos de productos</string>
+  <string name="error_empty_products">No hay productos</string>
+  <string name="error_empty_qu">No hay unidades de cantidad</string>
+  <string name="error_empty_stores">No hay tiendas</string>
+  <string name="error_search">No hay resultados de búsqueda</string>
+  <string name="error_search_sub">Prueba con otras palabras</string>
+  <string name="error_filter">Nada que mostrar</string>
+  <string name="error_filter_sub">Prueba con otros filtros</string>
+  <string name="error_duplicate">Ya existe</string>
+  <string name="error_parent">No puede ser padre de sí mismo</string>
+  <string name="error_invalid_product">Producto inválido</string>
+  <string name="error_invalid_url">URL Inválida</string>
+  <string name="error_invalid_amount">Monto inválido</string>
+  <string name="error_invalid_price">Precio inválido</string>
+  <string name="error_invalid_best_before_days">Usa -1 para que nunca caduque.</string>
+  <string name="error_invalid_factor">Factor inválido</string>
+  <string name="error_api_qr_code">No es un código QR con credenciales válidas de la API de grocy</string>
+  <string name="error_loading_qus">Fallo al cargar las unidades de cantidad del producto</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">No puede ser igual a %1$s</string>
+  <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+  <string name="error_bounds_min_max">Entre %1$s y %2$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_min">Igual o mayor que %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_max">Tienen que ser menor o igual que %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_higher">Tiene que ser mayor que %1$s</string>
+  <string name="error_offline">Desconectado</string>
+  <string name="error_offline_subtitle">Revisa tu conexión y vuelve a intentarlo</string>
+  <string name="error_no_done_items">No hay artículos marcados como hechos</string>
+  <string name="error_name_exists">El nombre ya existe</string>
+  <string name="error_network">Error de red</string>
+  <string name="error_network_subtitle">Los datos requeridos no pudieron cargarse completamente</string>
+  <string name="error_unknown">Ups!</string>
+  <string name="error_not_grocy_instance">No es una instancia válida de grocy.</string>
+  <string name="error_timeout">Se agotó el tiempo de espera</string>
+  <string name="error_no_product_selected">Sin productos seleccionados</string>
+  <string name="error_failed_to_connect_to">Falló la conexión a %1$s</string>
+  <string name="error_missing_information">No todos los campos requeridos han sido completados</string>
+  <string name="error_handshake">Falta el certificado</string>
+  <string name="error_handshake_description">%1$s requiere un certificado que no es conocido ni confiado por Android.\mEl certificado del servidor tiene que ser firmado por una autoridad certificada (CA)\nPara cumplir estos requisitos, puedes usar un certificado gratuito de letsencrypt.org para un cifrado adecuado.</string>
+  <string name="error_unexpected_response_code">Código de respuesta no esperado: %1$d</string>
+  <string name="error_unexpected_response">Respuesta inesperada del servidor</string>
+  <string name="error_no_browser">Instala un navegador web para mostrar el sitio de ayuda</string>
+  <string name="error_barcode_not_linked">El código de barras no está relacionado con un producto</string>
+  <string name="error_no_product_details">No se pudieron obtener los detalles del producto</string>
+  <string name="error_failed_barcode_upload">No se pudo subir el código de barras</string>
+  <string name="error_undefined">Sucedió un error</string>
+
+  <string name="title_overview">Vista general</string>
+  <string name="title_stock_overview">Vista de stock</string>
+  <string name="title_purchase">Comprar</string>
+  <string name="title_consume">Consumir</string>
+  <string name="title_transfer">Transferir</string>
+  <string name="title_inventory">Inventario</string>
+  <string name="title_product_overview">Vista de producto</string>
+  <string name="title_product">Producto</string>
+  <string name="title_product_create">Crear producto</string>
+  <string name="title_product_edit">Editar producto</string>
+  <string name="title_master_data">Datos maestros</string>
+  <string name="title_stock_entries">Registros de stock</string>
+  <string name="title_shopping_list">Lista de compras</string>
+  <string name="title_feedback">Comentarios</string>
+  <string name="title_settings">Ajustes</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Lector de códigos de barras</string>
+  <!-- Context: About this app -->
+  <string name="title_about">Acerca de</string>
+  <string name="title_info">Información</string>
+  <string name="title_help">Ayuda</string>
+  <string name="title_logs">Registros</string>
+  <string name="title_compatibility">Problemas de compatibilidad</string>
+  <string name="title_logout">Cerrar sesión en Grocy?</string>
+  <string name="title_restart">Reiniciar Grocy?</string>
+  <string name="title_logout_demo">Cerrar sesión del modo de demostración?</string>
+  <string name="title_manage_master_data">Manejar datos maestros</string>
+  <string name="title_edit_description">Editar descripción</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
+  <string name="title_input">campo</string>
+  <string name="title_external_barcode_input">Escaner externo</string>
+  <string name="title_confirmation">Confirmación</string>
+  <string name="title_spoiled">Vencido</string>
+  <string name="title_use_specific">Usar artículo específico del stock</string>
+  <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_exact_amount">Consumir cantidad exacta</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">De la ubicación</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">A la ubicación</string>
+  <string name="title_recipe">Receta</string>
+  <string name="title_total_price">Precio total</string>
+  <string name="title_unit_price">Precio unidad</string>
+  <!-- %1$s is a quantity unit -->
+  <string name="title_unit_price_specific">%1$s precio</string>
+  <string name="title_stock_entry_no_specific">No hay registro específico</string>
+  <string name="title_shopping_list_ungrouped">Desagrupado</string>
+  <string name="title_list_entry">Registro de lista</string>
+  <string name="title_edit_list_entry">Editar registro de lista</string>
+  <string name="title_create_list_entry">Crear registro de lista</string>
+  <string name="title_shopping_list_edit">Editar lista de compras</string>
+  <string name="title_shopping_list_new">Nueva lista de compras</string>
+  <string name="title_shopping_mode">Modo de compras</string>
+  <string name="title_batch_mode_shopping_list">Modo de lista de compras por lotes</string>
+  <string name="title_product_cat_optional">Propiedades opcionales</string>
+  <string name="title_product_cat_location">Ubicación por defecto</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_product_cat_due_date">Fecha de vencimiento</string>
+  <string name="title_product_cat_amount">Cantidad</string>
+  <string name="title_product_cat_quantity_unit">Unidad de cantidad</string>
+  <string name="title_product_cat_barcodes">Códigos de barras</string>
+  <string name="title_unknown_input">Valor desconocido</string>
+  <string name="title_presets_new_products">Preajustes para nuevos productos</string>
+  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
+   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
+  <string name="title_use_scanner_tool">Usar %1$s</string>
+
+  <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+  <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- %1$s is a number like 1, 2, 3 -->
+  <string name="subtitle_amount_opened">(%1$s abierto)</string>
+  <!-- %1$s is a product name -->
+  <string name="subtitle_stock_locations">Donde %1$s tiene stock</string>
+  <string name="subtitle_default_location">Por defecto</string>
+  <string name="subtitle_none_selected">No se ha seleccionado nada</string>
+  <string name="subtitle_empty">Vacío</string>
+  <string name="subtitle_done">Hecho</string>
+  <string name="subtitle_undone">Deshecho</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_never_overdue">Nunca vence</string>
+  <string name="subtitle_selected">Seleccionado</string>
+  <string name="subtitle_stock_entry_no_specific">Primero los productos que vencen, después primero dentro - primero fuera</string>
+  <!-- %1$s is a purchase date -->
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_stock_entry_name">Comprado en: %1$s</string>
+  <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
+  <string name="subtitle_stock_entry">Consumir preferentemente antes de: %1$s; cantidad: %2$s; %3$s</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_entry_num_of_num">Registro %1$d de %2$d</string>
+  <!-- %1$s is an amount, %2$s is a quantity unit -->
+  <string name="subtitle_amount_compare">Esto es equivale a %1$s %2$s.</string>
+  <!-- %1$s is a price, %2$s is a quantity unit -->
+  <string name="subtitle_price_means">Esto equivale a %1$s por cada %2$s.</string>
+  <string name="subtitle_product_hidden">El producto está oculto</string>
+  <string name="subtitle_product_not_hidden">El producto no esta oculto</string>
+  <string name="subtitle_product_not_on_server">El producto no está en el servidor</string>
+  <string name="subtitle_unknown">Desconocido</string>
+  <!-- Like the word 'supported' from 'This version is supported.'-->
+  <string name="subtitle_supported">Soportado</string>
+  <!-- Like the words 'not supported' from 'This version is not supported.'-->
+  <string name="subtitle_not_supported">No soportado</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Cantidad: %1$s</string>
+  <string name="description_input_product_part2">Por favor, elija como continuar:</string>
+  <string name="description_input_product_option1">Crear un nuevo producto y utilizar como nombre</string>
+  <string name="description_input_product_option2">Crear un nuevo producto y utilizar como código de barras</string>
+  <string name="description_input_product_option3">Añadir como código de barras a un producto existente</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option1">Eliminar los objetos completados</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option2">Eliminar todos los objetos</string>
+
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock">
+    <item quantity="one">Tiene %1$d producto en existencia</item>
+    <item quantity="other">Tiene %1$d productos en existencia</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d producto vencerá en los próximos %2$d dias.</item>
+    <item quantity="other">%1$d productos vencerán en los próximos %2$d días.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d producto ha vencido.</item>
+    <item quantity="other">%1$d productos han vencido.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d producto ha expirado.</item>
+    <item quantity="other">%1$d productos han expirado.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_master_data">
+    <item quantity="one">Su base de datos contiene %1$d producto.</item>
+    <item quantity="other">Su base de datos contiene %1$d productos.</item>
+  </plurals>
+
+  <string name="property_name">Nombre</string>
+  <string name="property_name_singular">Nombre (en singular)</string>
+  <string name="property_name_plural">Nombre (en plural)</string>
+  <string name="property_product">Producto</string>
+  <string name="property_products">Productos</string>
+  <string name="property_product_name">Nombre de producto</string>
+  <string name="property_parent_product">Producto padre</string>
+  <string name="property_description">Descripción</string>
+  <string name="property_note">Notas</string>
+  <string name="property_status">Estado</string>
+  <string name="property_amount">Monto</string>
+  <string name="property_seconds">Segundos</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d segundo</item>
+    <item quantity="other">%1$d segundos</item>
+  </plurals>
+  <string name="property_amount_min_stock">Mín. monto de stock</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_in">Monto en %1$s</string>
+  <string name="property_price">Precio</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">Precio por %1$s</string>
+  <!-- %1$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_in">Precio en %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">Precio por %1$s en %2$s</string>
+  <string name="property_quantity_unit">Unidad de cantidad</string>
+  <string name="property_quantity_units">Unidades de cantidad</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_purchase">Compra de unidad de cantidad</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_stock">Stock de unidad de cantidad</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_factor">Factor de compra a stock</string>
+  <string name="property_barcode">Código de barras</string>
+  <string name="property_barcodes">Códigos de barra</string>
+  <string name="property_days">Días</string>
+  <string name="property_purchased_date">Fecha de compra</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_type">Tipo de fecha de vencimiento</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_best_before">Fecha de vencimiento</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_expiration">Fecha de caducidad</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date">Fecha de vencimiento</string>
+  <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_next">Siguiente fecha de vencimiento</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default">Días por defecto para la fecha de vencimiento</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_opened">Días para vencimiento después de abierto</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_freezing">Días para vencimiento después de congelar</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_thawing">Días para vencimiento después de descongelar</string>
+  <string name="property_location">Ubicación</string>
+  <string name="property_location_default">Ubicación por defecto</string>
+  <string name="property_notes">Notas</string>
+  <string name="property_locations">Ubicaciones</string>
+  <string name="property_store">Tienda</string>
+  <string name="property_store_unknown">Tienda desconocida</string>
+  <string name="property_store_default">Tienda por defecto</string>
+  <string name="property_stores">Tiendas</string>
+  <string name="property_shopping_list">Lista de compras</string>
+  <string name="property_shopping_lists">Listas de compra</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_purchased">Última compra</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_used">Útimo uso</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_price">Último precio</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_average_shelf_life">Vida útil promedio</string>
+  <string name="property_spoil_rate">Porcentaje de vencimiento</string>
+  <string name="property_price_history">Historial de precios</string>
+  <string name="property_product_group">Grupo de producto</string>
+  <string name="property_product_groups">Grupos de producto</string>
+  <string name="property_opened">abierto</string>
+  <string name="property_not_opened">cerrado</string>
+  <string name="property_is_freezer">Está en el congelador</string>
+  <!-- kcal (kilo calories) is a unit for energy -->
+  <string name="property_energy">Energía (kcal)</string>
+  <string name="property_active">Activo</string>
+  <string name="property_number">Número</string>
+  <string name="property_picture">Imagen</string>
+  <string name="property_note_singleline">Nota de una linea</string>
+  <string name="property_note_multiline">Nota de varias linea</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">En el inventario: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Ordenar: %1$s</string>
+
+  <string name="date_today">Hoy</string>
+  <string name="date_unknown">Desconocido</string>
+  <!-- This means the 'time' context -->
+  <string name="date_unlimited">Ilimitado</string>
+  <!-- This means the 'time' context, like 'Last used date: Never' -->
+  <string name="date_never">Nunca</string>
+
+  <plurals name="date_days">
+    <item quantity="one">%d dia</item>
+    <item quantity="other">%d dias</item>
+  </plurals>
+  <plurals name="date_months">
+    <item quantity="one">%d mes</item>
+    <item quantity="other">%d meses</item>
+  </plurals>
+  <plurals name="date_years">
+    <item quantity="one">%d año</item>
+    <item quantity="other">%d años</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_ago">
+    <item quantity="one">Hace %d dia</item>
+    <item quantity="other">Hace %d dias</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_ago">
+    <item quantity="one">Hace %d mes</item>
+    <item quantity="other">Hace %d meses</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_ago">
+    <item quantity="one">Hace %d año</item>
+    <item quantity="other">Hace %d años</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_from_now">
+    <item quantity="one">En %d día</item>
+    <item quantity="other">En %d dias</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one">En %d mes</item>
+    <item quantity="other">En %d meses</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">En %d año</item>
+    <item quantity="other">En %d años</item>
+  </plurals>
+
+  <string name="info_acknowledgement">Nos gustaría agradecerle a Bernd Bestel, sin su gran trabajo esta aplicación nunca hubiera sido posible.</string>
+  <string name="info_intro">Repetir la introducción</string>
+  <string name="info_intro_description">Exhibición de características</string>
+  <string name="info_version">Versión</string>
+  <string name="info_grocy_version">Versión de Grocy</string>
+  <string name="info_changelog">Registro de cambios</string>
+  <string name="info_changelog_description">Qué hay de nuevo?</string>
+  <string name="info_developers">Desarrolladores</string>
+  <string name="info_github">Grocy para Android en GitHub</string>
+  <string name="info_github_description">Código fuente</string>
+  <string name="info_website">Abrir sitio web de Grocy</string>
+
+  <string name="feature_1_title">Grocy para Android</string>
+  <string name="feature_1_description">Manejo de almacén auto-alojado para tu hogar</string>
+  <string name="feature_2_title">Diseño intuitivo</string>
+  <string name="feature_2_description">Abrir y consumir al deslizar</string>
+  <string name="feature_3_title">Poderoso procesamiento por lotes</string>
+  <string name="feature_3_description">Escanea toda tu compra en segundos</string>
+
+  <string name="category_licenses">Licencias de código abierto</string>
+  <string name="category_general">General</string>
+  <string name="category_stock">Inventario</string>
+  <string name="category_server">Servidor</string>
+  <string name="category_scanner">Lector de código de barras</string>
+  <string name="category_scanner_camera">Lector de cámara</string>
+  <string name="category_scanner_external">Lector externo</string>
+  <string name="category_appearance">Apariencia</string>
+  <string name="category_network">Red</string>
+  <string name="category_network_proxy">Proxy</string>
+  <string name="category_behavior">Comportamiento</string>
+  <string name="category_debugging">Depuración</string>
+  <string name="hint_server">URL del servidor</string>
+  <string name="hint_key">Clave de API válida</string>
+
+  <string name="setting_theme">Tema</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_follow_system">Escoger el del sistema</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Oscuro</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Claro</string>
+  <string name="setting_language">Idioma</string>
+  <string name="setting_language_description">Selecciona un idioma</string>
+  <string name="setting_language_info">Muchas gracias a todos los traductores voluntarios de Transifex!\nPr favor visítanos en GitHub para aprender como puedes ayudar a tener disponible Grocy Android en tu idioma.</string>
+  <string name="setting_language_system">Por defecto del sistema: %1$s</string>
+  <string name="setting_language_not_available">No disponible</string>
+  <string name="setting_open_food_facts">Usar Open Food Facts</string>
+  <string name="setting_open_food_facts_description">Obtener información de códigos de barra</string>
+  <string name="setting_choose_barcode_scanner">Elige un Lector de códigos de barras</string>
+  <string name="setting_choose_barcode_scanner_description">Para escanear códigos de barras desde la cámara</string>
+  <string name="setting_use_front_cam">Utilizar cámara frontal</string>
+  <string name="setting_use_front_cam_description">Para escanear códigos de barra</string>
+  <string name="setting_use_2d_scanner_format">Usar formato 2D para el lector de códigos de barras</string>
+  <string name="setting_use_2d_scanner_format_description">Formato cuadrado para códigos QR</string>
+  <string name="setting_barcode_formats">Formatos de códigos de barras</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Limitar a: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Sin restricción</string>
+  <string name="setting_external_support">Soporte para lector externo</string>
+  <string name="setting_external_support_description">A través de USB o Bluetooth</string>
+  <string name="setting_reload_config">Recargar configuración</string>
+  <string name="setting_reload_config_description">Se requiere reiniciar la aplicación</string>
+  <string name="setting_logout">Cerrar sesión</string>
+  <string name="setting_logout_description">Volver a la página de inicio de sesión</string>
+  <string name="setting_manage_shortcuts">Gestionar Accesos directos</string>
+  <string name="setting_list_indicator">Indicar registro de lista</string>
+  <string name="setting_list_indicator_description">Mostrar punto azul si el producto está en una lista de compras</string>
+  <string name="setting_shopping_mode_update_interval">Intervalo de actualización para modo de compras</string>
+  <string name="setting_keep_screen_on">Mantener la pantalla encendida</string>
+  <string name="setting_keep_screen_on_description">Mientras está en el modo de compras</string>
+  <string name="setting_show_done_items">Mostrar artículos completados</string>
+  <string name="setting_show_done_items_description">Al final</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_due_soon_days">Dias cuando vencerá pronto</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_purchase">Modo de compra por defecto</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_consume">Cantidad por defecto para consumir</string>
+  <string name="setting_empty_value">Vacío</string>
+  <string name="setting_sync_off">Sincronización apagada</string>
+  <string name="setting_not_loaded">No pudo ser cargado</string>
+  <string name="setting_debug">Habilitar registros de depuración</string>
+  <string name="setting_debug_description">Mostrar errores en los registros de depuración</string>
+  <string name="setting_info_logs">Mostrar registros de información</string>
+  <string name="setting_logs_description">Mostrar logcat de este proceso</string>
+  <string name="setting_beginner_mode">Modo principiante</string>
+  <string name="setting_tor">Usar Tor</string>
+  <string name="setting_proxy">Habilitar proxy HTTP</string>
+  <string name="setting_proxy_host">Proxy host</string>
+  <string name="setting_proxy_port">puerto Proxy</string>
+  <string name="settings_synchronized">Estos ajustes están sincronizados con tu servidor.</string>
+  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
+  Examples: 'de' for German; 'fr' for French -->
+  <string name="url_grocy_demo">https://es.demo.grocy.info/</string>
+  </resources>

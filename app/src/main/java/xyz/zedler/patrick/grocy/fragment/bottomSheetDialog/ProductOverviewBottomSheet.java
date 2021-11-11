@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -534,6 +535,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     }
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)) {
       binding.buttonOpen.setVisibility(View.GONE);
+    }
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      binding.chipTransfer.setVisibility(View.GONE);
     }
   }
 

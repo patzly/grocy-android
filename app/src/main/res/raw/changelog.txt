@@ -1,12 +1,23 @@
-2.0.0-beta4
+2.0.0-beta05
+This is the last beta before the final v2.0.0 release. Please report any issues that may
+have come up with the recent changes so that the final version is as bug-free as possible.
+- New: Native support for Android 12
+- Improved: Open Food Facts look up is back, together with page for linking new barcodes (#353)
+- Improved: Deactivated features on server are now hidden (#397)
+- Fixed: Crash when showing autocompletion results with large lists (#451)
+- Fixed: Search on stock overview page with barcode
+
+2.0.0-beta04
+- New: Support for server version 3.1.2
 - New: Redesigned filter bars
 - Improved: (not F-Droid) No cropping of camera stream in ML Kit, add option for it
 - Improved: Better handling of interrupted workflow in quick mode
 - Improved: Inventory page now has stock info like on consume page
 - Improved: Hide Open Food Facts option for now, because not implemented yet
 - Improved: Lists now have fade-in animations
-- Improved: Transaction message duration is lower and now adjustable (thanks @firesoft-de)
+- Improved: Transaction message duration is shorter and now adjustable (thanks @firesoft-de)
 - Improved: Grocycode with stock entry now also possible on transfer page
+- Fixed: Crash on onboarding page
 - Fixed: Some bottom sheet headers had wrong padding
 
 2.0.0-beta03

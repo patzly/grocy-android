@@ -43,6 +43,7 @@ public final class Constants {
     public final static String FEATURE_STOCK_PRICE_TRACKING = "feature_stock_price_tracking";
     public final static String FEATURE_STOCK_LOCATION_TRACKING = "feature_stock_location_tracking";
     public final static String FEATURE_STOCK_BBD_TRACKING = "feature_stock_bbd_tracking";
+    public final static String FEATURE_STOCK_FREEZING_TRACKING = "feature_stock_freezing_tracking";
     public final static String FEATURE_STOCK_OPENED_TRACKING = "feature_stock_opened_tracking";
     public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
     public final static String FEATURE_RECIPES = "feature_recipes";
@@ -315,6 +316,7 @@ public final class Constants {
     public final static String SERVER = "server";
     public final static String KEY = "key";
     public final static String SHOW_OFFLINE = "show_offline";
+    public final static String BARCODE = "barcode";
   }
 
   public final static class FAB {

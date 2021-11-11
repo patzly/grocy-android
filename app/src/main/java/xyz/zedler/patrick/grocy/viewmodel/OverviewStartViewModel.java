@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
@@ -80,6 +81,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private ArrayList<StockItem> overdueItemsTemp;
   private ArrayList<StockItem> expiredItemsTemp;
   private ArrayList<MissingItem> missingItemsTemp;
+  private ArrayList<ShoppingList> shoppingLists;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -196,11 +198,11 @@ public class OverviewStartViewModel extends BaseViewModel {
     stockDescriptionMissingShoppingListTextLive = Transformations.map(
         itemsMissingShoppingListCountLive,
         count -> {
-          if (count == null) {
+          if (count == null || !isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST)) {
             return null;
           }
           @PluralsRes int string;
-          if (isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
+          if (shoppingLists == null || shoppingLists.size() > 1) {
             string = R.plurals.description_overview_stock_missing_shopping_list_multi;
           } else {
             string = R.plurals.description_overview_stock_missing_shopping_list_single;
@@ -215,7 +217,7 @@ public class OverviewStartViewModel extends BaseViewModel {
             return null;
           }
           int size = shoppingListItems.size();
-          if (isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
+          if (shoppingLists == null || shoppingLists.size() > 1) {
             return getResources().getQuantityString(
                 R.plurals.description_overview_shopping_list_multi, size, size
             );
@@ -242,7 +244,8 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(
-        (stockItems, shoppingListItems, products) -> {
+        (stockItems, shoppingListItems, shoppingLists, products) -> {
+          this.shoppingLists = shoppingLists;
           this.stockItemsLive.setValue(stockItems);
           this.shoppingListItemsLive.setValue(shoppingListItems);
           this.productsLive.setValue(products);
@@ -382,6 +385,10 @@ public class OverviewStartViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateStockItems(dbChangedTime, stockItems -> stockItemsTemp = stockItems),
         dlHelper.updateShoppingListItems(dbChangedTime, this.shoppingListItemsLive::setValue),
+        dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
+          this.shoppingLists = shoppingLists;
+          this.shoppingListItemsLive.setValue(this.shoppingListItemsLive.getValue());
+        }),
         dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue),
         dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
           this.dueItemsTemp = due;
@@ -410,6 +417,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
     editPrefs.apply();
     downloadData();
@@ -423,6 +431,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     repository.updateDatabase(
         stockItemsTemp,
         this.shoppingListItemsLive.getValue(),
+        this.shoppingLists,
         this.productsLive.getValue(),
         () -> this.stockItemsLive.setValue(stockItemsTemp)
     );

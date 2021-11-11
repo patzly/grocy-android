@@ -91,7 +91,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -698,7 +697,7 @@ public class MainActivity extends AppCompatActivity {
     if (!hasFocus) {
       return;
     }
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
   }
 
   public void executeOnStart() {

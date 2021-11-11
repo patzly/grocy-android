@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -185,6 +186,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
+    hideDisabledFeatures();
+
     // UPDATE UI
     updateUI((getArguments() == null
         || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
@@ -201,6 +204,12 @@ public class MasterDataOverviewFragment extends BaseFragment {
         () -> {
         }
     );
+  }
+
+  private void hideDisabledFeatures() {
+    if (!viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      binding.linearLocations.setVisibility(View.GONE);
+    }
   }
 
   @Override

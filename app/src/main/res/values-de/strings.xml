@@ -196,6 +196,13 @@
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
+  <string name="msg_choose_product">Der von Ihnen gescannte Barcode ist noch nicht mit einem Produkt verknüpft. Sie können ihn mit einem vorhandenen verknüpfen oder ein neues Produkt erstellen.</string>
+  <string name="msg_product_name_off">Produktname für Barcode stammt von Open Food Facts.</string>
+  <string name="msg_product_name_off_error">Barcode konnte nicht auf Open Food Facts nachgeschaut werden.</string>
+  <string name="msg_product_name_off_empty">Barcode ist nicht in der Open Food Facts Datenbank.</string>
+  <string name="msg_off_option_deactivated">Sie können Open Food Facts in den Einstellungen aktivieren, damit automatisch ein Produktname vorgeschlagen wird.</string>
+  <string name="msg_create_new_product_filled">Neues Produkt \"%1$s\" erstellen</string>
+  <string name="msg_create_new_product">Neues Produkt erstellen</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -373,6 +380,7 @@
   <string name="title_input">Eingabe</string>
   <string name="title_external_barcode_input">Externer Scanner</string>
   <string name="title_confirmation">Bestätigung</string>
+  <string name="title_choose_product">Produkt auswählen</string>
 
   <string name="title_spoiled">Verdorben</string>
   <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
@@ -450,6 +458,8 @@
   <string name="subtitle_barcode_amount">Menge: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Mengeneinheit: %1$d</string>
+  <string name="subtitle_barcode">Barcode: %1$s</string>
+  <string name="subtitle_feature_disabled">Feature deaktiviert</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
@@ -489,7 +499,7 @@
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">Davon steht %1$d auf Ihrer Einkaufsliste.</item>
-    <item quantity="other">Davon stehen %1$d auf Ihrer EInkaufsliste.</item>
+    <item quantity="other">Davon stehen %1$d auf Ihrer Einkaufsliste.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
@@ -710,6 +720,9 @@
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Verhalten</string>
   <string name="category_debugging">Debugging</string>
+  <string name="category_new_product">Neues Produkt</string>
+  <string name="category_existing_products">Vorhandene Produkte</string>
+  <string name="category_existing_products_similar">Ähnliche vorhandene Produkte</string>
 
   <string name="hint_server">Server-URL</string>
   <string name="hint_key">Gültiger API-Schlüssel</string>

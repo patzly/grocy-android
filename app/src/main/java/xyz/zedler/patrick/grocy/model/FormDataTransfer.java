@@ -38,9 +38,9 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataTransfer {
 
@@ -288,7 +288,7 @@ public class FormDataTransfer {
   }
 
   public void moreAmount(ImageView view) {
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       if (productDetailsLive.getValue() == null) {
         amountLive.setValue(String.valueOf(1));
@@ -300,7 +300,7 @@ public class FormDataTransfer {
   }
 
   public void lessAmount(ImageView view) {
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
       double amountCurrent = Double.parseDouble(amountLive.getValue());
       Double amountNew = null;

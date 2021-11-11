@@ -60,6 +60,12 @@
       android:name="startWithScanner"
       app:argType="boolean"
       android:defaultValue="false" />
+    <action
+      android:id="@+id/action_purchaseFragment_to_chooseProductFragment"
+      app:destination="@id/chooseProductFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/consumeFragment"
@@ -878,5 +884,14 @@
     <deepLink
       android:id="@+id/deepLink"
       app:uri="@string/deep_link_stockOverviewFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/chooseProductFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ChooseProductFragment"
+    android:label="ChooseProductFragment"
+    tools:layout="@layout/fragment_choose_product">
+    <argument
+      android:name="barcode"
+      app:argType="string" />
   </fragment>
 </navigation>

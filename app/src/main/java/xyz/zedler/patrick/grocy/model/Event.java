@@ -35,6 +35,7 @@ public abstract class Event {
   public final static int SET_PRODUCT_ID = 18;
   public final static int LOGIN_SUCCESS = 20;
   public final static int CONSUME_SUCCESS = 22;
+  public final static int CHOOSE_PRODUCT = 24;
 
   abstract public int getType();
 

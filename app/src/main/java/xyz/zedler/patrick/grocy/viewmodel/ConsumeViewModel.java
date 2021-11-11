@@ -253,15 +253,17 @@ public class ConsumeViewModel extends BaseViewModel {
       }
 
       // stock location
-      ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-      StockLocation stockLocation = getStockLocation(
-          stockLocations,
-          product.getLocationIdInt()
-      );
-      if (stockLocation == null && !stockLocations.isEmpty()) {
-        stockLocation = stockLocations.get(stockLocations.size() - 1);
+      if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+        ArrayList<StockLocation> stockLocations = formData.getStockLocations();
+        StockLocation stockLocation = getStockLocation(
+            stockLocations,
+            product.getLocationIdInt()
+        );
+        if (stockLocation == null && !stockLocations.isEmpty()) {
+          stockLocation = stockLocations.get(stockLocations.size() - 1);
+        }
+        formData.getStockLocationLive().setValue(stockLocation);
       }
-      formData.getStockLocationLive().setValue(stockLocation);
 
       // stock entry
       StockEntry stockEntry = null;
@@ -570,13 +572,17 @@ public class ConsumeViewModel extends BaseViewModel {
     StockEntry currentStockEntry = formData.getSpecificStockEntryLive().getValue();
     String selectedId = currentStockEntry != null ? currentStockEntry.getStockId() : null;
     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
-    StockLocation stockLocation = formData.getStockLocationLive().getValue();
-    assert stockLocation != null;
-    int locationId = stockLocation.getLocationId();
-    for (StockEntry stockEntry : stockEntries) {
-      if (stockEntry.getLocationId() == locationId) {
-        filteredStockEntries.add(stockEntry);
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      StockLocation stockLocation = formData.getStockLocationLive().getValue();
+      assert stockLocation != null;
+      int locationId = stockLocation.getLocationId();
+      for (StockEntry stockEntry : stockEntries) {
+        if (stockEntry.getLocationId() == locationId) {
+          filteredStockEntries.add(stockEntry);
+        }
       }
+    } else {
+      filteredStockEntries = stockEntries;
     }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(

@@ -55,6 +55,7 @@ public class StockOverviewItemAdapter extends
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
   private final boolean showDateTracking;
+  private final boolean shoppingListFeatureEnabled;
   private final int daysExpiringSoon;
   private String sortMode;
 
@@ -66,6 +67,7 @@ public class StockOverviewItemAdapter extends
       ArrayList<Integer> missingItemsProductIds,
       StockOverviewItemAdapterListener listener,
       boolean showDateTracking,
+      boolean shoppingListFeatureEnabled,
       int daysExpiringSoon,
       String sortMode
   ) {
@@ -77,6 +79,7 @@ public class StockOverviewItemAdapter extends
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
     this.showDateTracking = showDateTracking;
+    this.shoppingListFeatureEnabled = shoppingListFeatureEnabled;
     this.daysExpiringSoon = daysExpiringSoon;
     this.sortMode = sortMode;
   }
@@ -126,7 +129,8 @@ public class StockOverviewItemAdapter extends
 
     // IS ON SHOPPING LIST
 
-    if (shoppingListItemsProductIds.contains(String.valueOf(stockItem.getProduct().getId()))) {
+    if (shoppingListItemsProductIds.contains(String.valueOf(stockItem.getProduct().getId()))
+        && shoppingListFeatureEnabled) {
       holder.binding.viewOnShoppingList.setVisibility(View.VISIBLE);
     } else {
       holder.binding.viewOnShoppingList.setVisibility(View.GONE);

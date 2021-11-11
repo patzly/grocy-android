@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.IconUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataShoppingListItemEdit {
 
@@ -187,7 +187,7 @@ public class FormDataShoppingListItemEdit {
   }
 
   public void moreAmount(ImageView view) {
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountLive.setValue(String.valueOf(1));
     } else {
@@ -197,7 +197,7 @@ public class FormDataShoppingListItemEdit {
   }
 
   public void lessAmount(ImageView view) {
-    IconUtil.start(view);
+    ViewUtil.startIcon(view);
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
       double amountNew = Double.parseDouble(amountLive.getValue()) - 1;
       if (amountNew >= 1) {
