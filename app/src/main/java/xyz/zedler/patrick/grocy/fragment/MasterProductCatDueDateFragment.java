@@ -30,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatDueDateBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -37,6 +38,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatDueDateViewModel;
 
 public class MasterProductCatDueDateFragment extends BaseFragment {
@@ -158,7 +160,30 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
     Bundle bundle = new Bundle();
     bundle.putInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, type);
     bundle.putInt(Constants.ARGUMENT.NUMBER, viewModel.getFormData().getDaysNumber(type));
+    String hint = null;
+    if (type == FormDataMasterProductCatDueDate.DUE_DAYS) {
+      hint = getString(R.string.property_due_days_default);
+    } else if (type == FormDataMasterProductCatDueDate.DUE_DAYS_OPENED) {
+      hint = getString(R.string.property_due_days_default_opened);
+    } else if (type == FormDataMasterProductCatDueDate.DUE_DAYS_FREEZING) {
+      hint = getString(R.string.property_due_days_default_freezing);
+    } else if (type == FormDataMasterProductCatDueDate.DUE_DAYS_THAWING) {
+      hint = getString(R.string.property_due_days_default_thawing);
+    }
+    bundle.putString(ARGUMENT.HINT, hint);
     activity.showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  public boolean showInputDateBottomSheet(int type) {
+    Bundle bundle = new Bundle();
+    bundle.putInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, type);
+    bundle.putInt(DateBottomSheet.DATE_TYPE, DateBottomSheet.DUE_DAYS_DEFAULT);
+    bundle.putString(
+        ARGUMENT.DEFAULT_DAYS_FROM_NOW,
+        String.valueOf(viewModel.getFormData().getDaysNumber(type))
+    );
+    activity.showBottomSheet(new DateBottomSheet(), bundle);
+    return true;
   }
 
   @Override

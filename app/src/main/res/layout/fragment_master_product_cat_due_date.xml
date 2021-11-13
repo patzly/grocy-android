@@ -206,6 +206,25 @@
             app:contentPadding="16dp"
             app:cardElevation="0dp"
             app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/on_background_variant">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/msg_help_default_due_days_format" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:contentPadding="16dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/on_background_variant"
             android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
@@ -219,7 +238,8 @@
 
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS)}">
+            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS)}"
+            android:onLongClick="@{() -> fragment.showInputDateBottomSheet(formData.DUE_DAYS)}">
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -265,7 +285,8 @@
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
             android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_OPENED)}">
+            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_OPENED)}"
+            android:onLongClick="@{() -> fragment.showInputDateBottomSheet(formData.DUE_DAYS_OPENED)}">
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -311,7 +332,8 @@
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
             android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_FREEZING)}">
+            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_FREEZING)}"
+            android:onLongClick="@{() -> fragment.showInputDateBottomSheet(formData.DUE_DAYS_FREEZING)}">
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -357,7 +379,8 @@
           <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
             android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}"
-            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_THAWING)}">
+            android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_THAWING)}"
+            android:onLongClick="@{() -> fragment.showInputDateBottomSheet(formData.DUE_DAYS_THAWING)}">
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
