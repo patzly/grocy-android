@@ -214,6 +214,13 @@
   <string name="msg_item_marked_as_undone">Пункт не выполнен</string>
   <string name="option_synced_success">Опция успешно синхронизирована</string>
   <string name="option_synced_error">Опция не была синхронизирована</string>
+  <string name="msg_choose_product">Отсканированный вами штрихкод еще не связан с продуктом. Вы можете связать его с существующим продуктом или создать для него новый.</string>
+  <string name="msg_product_name_off">Название продукта для штрихкода взято из Open Food Facts.</string>
+  <string name="msg_product_name_off_error">Невозможно найти штрихкод на Open Food Facts.</string>
+  <string name="msg_product_name_off_empty">Штрихкод отсутствует в базе данных Open Food Facts.</string>
+  <string name="msg_off_option_deactivated">Для автоматического предложения названия продукта вы можете активировать поиск по сервису Open Food Facts в настройках.</string>
+  <string name="msg_create_new_product_filled">Создать новый продукт \"%1$s\"</string>
+  <string name="msg_create_new_product">Создать новый продукт</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Операция, которая будет выполнена:\n\nДобавить %1$s %2$s %3$s в запасы\nСрок годности: %4$s\nЦена: %5$s\nМагазин:%6$s\nМесто: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -391,6 +398,8 @@
   <string name="title_input">Ввод числа</string>
   <string name="title_external_barcode_input">Внешний сканер</string>
   <string name="title_confirmation">Подтверждение</string>
+  <string name="title_choose_product">Выбрать продукт</string>
+
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
   <string name="title_specific">Конкретный товар в запасах</string>
@@ -467,6 +476,9 @@
   <string name="subtitle_barcode_amount">Количество: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Единица измерения: %1$d</string>
+  <string name="subtitle_barcode">Штрихкод: %1$s</string>
+  <string name="subtitle_feature_disabled">Функция отключена</string>
+
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
@@ -768,6 +780,10 @@
   <string name="category_network_proxy">Прокси</string>
   <string name="category_behavior">Поведение</string>
   <string name="category_debugging">Отладка</string>
+  <string name="category_new_product">Новый продукт</string>
+  <string name="category_existing_products">Существующие продукты</string>
+  <string name="category_existing_products_similar">Аналогичные существующие продукты</string>
+
   <string name="hint_server">Адрес сервера</string>
   <string name="hint_key">Действительный ключ доступа к API</string>
 

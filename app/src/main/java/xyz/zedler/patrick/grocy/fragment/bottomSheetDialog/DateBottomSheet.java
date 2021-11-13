@@ -45,7 +45,9 @@ import java.util.Date;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
+import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 
 public class DateBottomSheet extends BaseBottomSheet {
 
@@ -54,6 +56,7 @@ public class DateBottomSheet extends BaseBottomSheet {
   public final static String DATE_TYPE = "date_type";
   public final static int PURCHASED_DATE = 1;
   public final static int DUE_DATE = 2;
+  public final static int DUE_DAYS_DEFAULT = 3;
 
   private MainActivity activity;
   private Bundle args;
@@ -102,10 +105,17 @@ public class DateBottomSheet extends BaseBottomSheet {
       view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
           v -> neverExpires.setChecked(!neverExpires.isChecked())
       );
-    } else {
+    } else if (args.getInt(DATE_TYPE) == PURCHASED_DATE) {
       view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
       ((TextView) view.findViewById(R.id.text_bbd_title))
           .setText(R.string.property_purchased_date);
+    } else {
+      if (!(args.getInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, -1)
+          == FormDataMasterProductCatDueDate.DUE_DAYS)) {
+        view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
+      }
+      ((TextView) view.findViewById(R.id.text_bbd_title))
+          .setText(R.string.property_due_days_default);
     }
     view.findViewById(R.id.button_bbd_reset).setOnClickListener(
         v -> {
@@ -198,8 +208,15 @@ public class DateBottomSheet extends BaseBottomSheet {
     BaseFragment currentFragment = activity.getCurrentFragment();
     if (args.getInt(DATE_TYPE) == DUE_DATE) {
       currentFragment.selectDueDate(date);
-    } else {
+    } else if (args.getInt(DATE_TYPE) == PURCHASED_DATE) {
       currentFragment.selectPurchasedDate(date);
+    } else {
+      activity.getCurrentFragment().saveInput(
+          date.equals(Constants.DATE.NEVER_OVERDUE)
+              ? String.valueOf(-1)
+              : String.valueOf(DateUtil.getDaysFromNow(date)),
+          requireArguments()
+      );
     }
     currentFragment.onBottomSheetDismissed();
   }

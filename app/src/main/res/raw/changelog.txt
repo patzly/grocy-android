@@ -4,6 +4,8 @@ have come up with the recent changes so that the final version is as bug-free as
 - New: Native support for Android 12
 - Improved: Open Food Facts look up is back, together with page for linking new barcodes (#353)
 - Improved: Deactivated features on server are now hidden (#397)
+- Improved: Long press items on due date page from product to enter date instead of number (#458)
+- Improved: In number input bottom sheet, always save number on dismiss
 - Fixed: Crash when showing autocompletion results with large lists (#451)
 - Fixed: Search on stock overview page with barcode
 

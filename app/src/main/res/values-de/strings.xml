@@ -178,7 +178,7 @@
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
   <string name="msg_master_delete">%1$s \"%2$s\" wirklich löschen?</string>
   <!-- %1$s is a product name -->
-  <string name="msg_master_delete_product">Produkt \"%1$s\" wirklich löschen?\n\nDadurch wird auch der Bestand, das Journal und alle anderen Referenzen dieses Produkts entfernt - ziehe stattdessen in Betracht, dieses Produkt zu deaktivieren, wenn du dies behalten und nur das Produkt ausblenden willst.</string>
+  <string name="msg_master_delete_product">Produkt \"%1$s\" wirklich löschen?\n\nDadurch wird auch der Bestand, das Journal und alle anderen Referenzen dieses Produkts entfernt - ziehen Sie stattdessen in Betracht, dieses Produkt zu deaktivieren, wenn Sie es behalten und nur ausblenden wollen.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">Dieses %1$s ist noch in Benutzung</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
@@ -235,6 +235,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Dieses Produkt kann kein übergeordnetes Produkt haben, weil es schon in einem anderen Produkt als übergeodnetes Produkt benutzt wird.</string>
   <string name="msg_help_due_date_type">Je nach ausgewähltem Typ wird die Hervorhebung auf der Bestandsübersicht unterschiedlich sein. \"MHD\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum möglicherweise immer noch verzehrt werden kann. \"Verbrauchsdatum\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum nicht mehr verzehrt werden kann.</string>
+  <string name="msg_help_default_due_days_format">Sie können lange auf einen Eintrag unten tippen, um ein Datum anstatt einer Zahl einzugeben.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Bei Einkäufen wird hierauf basierend das Fälligkeitsdatum vorausgefüllt (-1 bedeutet, dass dieses Produkt niemals überfällig ist).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

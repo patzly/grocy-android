@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -98,6 +99,19 @@ public class InputBottomSheet extends BaseBottomSheet {
     }
   }
 
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    super.onDismiss(dialog);
+
+    String text = inputLive.getValue();
+    if (text != null) {
+      text = text.trim();
+    } else {
+      text = "";
+    }
+    activity.getCurrentFragment().saveInput(text, requireArguments());
+  }
+
   public MutableLiveData<String> getInputLive() {
     return inputLive;
   }
@@ -120,17 +134,6 @@ public class InputBottomSheet extends BaseBottomSheet {
     }
     String nextInput = NumUtil.trim(Double.parseDouble(currentInput) - 1);
     inputLive.setValue(nextInput);
-  }
-
-  public void save() {
-    String text = inputLive.getValue();
-    if (text != null) {
-      text = text.trim();
-    } else {
-      text = "";
-    }
-    activity.getCurrentFragment().saveInput(text, requireArguments());
-    dismiss();
   }
 
   @NonNull
