@@ -113,6 +113,8 @@ public class SettingsCatStockFragment extends BaseFragment {
     String type = argsBundle.getString(ARGUMENT.TYPE);
     if (type != null && type.equals(STOCK.DUE_SOON_DAYS)) {
       viewModel.setDueSoonDays(text);
+    } else if (type != null && type.equals(STOCK.DEFAULT_DUE_DAYS)) {
+      viewModel.setDefaultDueDays(text);
     } else if (type != null && type.equals(STOCK.DEFAULT_PURCHASE_AMOUNT)) {
       viewModel.setDefaultPurchaseAmount(text);
     } else if (type != null && type.equals(STOCK.DEFAULT_CONSUME_AMOUNT)) {

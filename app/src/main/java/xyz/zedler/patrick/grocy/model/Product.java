@@ -159,6 +159,10 @@ public class Product implements Parcelable {
         STOCK.QUANTITY_UNIT,
         SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT
     );
+    int presetDefaultDueDays = sharedPrefs.getInt(
+        STOCK.DEFAULT_DUE_DAYS,
+        SETTINGS_DEFAULT.STOCK.DEFAULT_DUE_DAYS
+    );
     name = null;  // initialize default values (used in masterProductFragment)
     active = "1";
     parentProductId = null;
@@ -172,7 +176,7 @@ public class Product implements Parcelable {
     minStockAmount = String.valueOf(0);
     accumulateSubProductsMinStockAmount = "0";
     dueDateType = "1";
-    defaultDueDays = "0";
+    defaultDueDays = String.valueOf(presetDefaultDueDays);
     defaultDueDaysAfterOpen = "0";
     productGroupId = presetProductGroupId == -1 ? null : String.valueOf(presetProductGroupId);
     String presetQuIdStr = presetQuId == -1 ? null : String.valueOf(presetQuId);
