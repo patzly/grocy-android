@@ -1,6 +1,7 @@
 2.0.0-beta05
 This is the last beta before the final v2.0.0 release. Please report any issues that may
 have come up with the recent changes so that the final version is as bug-free as possible.
+- New: Support for server version 3.1.3
 - New: Native support for Android 12
 - Improved: Open Food Facts look up is back, together with page for linking new barcodes (#353)
 - Improved: Deactivated features on server are now hidden (#397)
