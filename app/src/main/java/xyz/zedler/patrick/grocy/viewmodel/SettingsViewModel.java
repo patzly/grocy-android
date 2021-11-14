@@ -80,6 +80,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> presetProductGroupTextLive;
   private ArrayList<QuantityUnit> quantityUnits;
   private final MutableLiveData<String> presetQuantityUnitTextLive;
+  private final MutableLiveData<String> defaultDueDaysTextLive;
   private final MutableLiveData<String> dueSoonDaysTextLive;
   private final MutableLiveData<String> defaultPurchaseAmountTextLive;
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
@@ -107,6 +108,7 @@ public class SettingsViewModel extends BaseViewModel {
     presetLocationTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
     presetProductGroupTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
     presetQuantityUnitTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
+    defaultDueDaysTextLive = new MutableLiveData<>(getDefaultDueDaysText());
     dueSoonDaysTextLive = new MutableLiveData<>(getDueSoonDaysText());
     defaultPurchaseAmountTextLive = new MutableLiveData<>(getDefaultPurchaseAmountText());
     defaultConsumeAmountTextLive = new MutableLiveData<>(getDefaultConsumeAmountText());
@@ -554,6 +556,39 @@ public class SettingsViewModel extends BaseViewModel {
         sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT)
     );
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
+  }
+
+  public void showDefaultDueDaysBottomSheet() {
+    Bundle bundle = new Bundle();
+    int days = sharedPrefs.getInt(STOCK.DEFAULT_DUE_DAYS, SETTINGS_DEFAULT.STOCK.DEFAULT_DUE_DAYS);
+    bundle.putInt(ARGUMENT.NUMBER, days);
+    bundle.putString(ARGUMENT.TYPE, STOCK.DEFAULT_DUE_DAYS);
+    bundle.putString(ARGUMENT.HINT, getString(R.string.property_days));
+    showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  public String getDefaultDueDaysText() {
+    int days = sharedPrefs.getInt(STOCK.DEFAULT_DUE_DAYS, SETTINGS_DEFAULT.STOCK.DEFAULT_DUE_DAYS);
+    return getApplication().getResources().getQuantityString(R.plurals.date_days, days, days);
+  }
+
+  public MutableLiveData<String> getDefaultDueDaysTextLive() {
+    return defaultDueDaysTextLive;
+  }
+
+  public void setDefaultDueDays(String text) {
+    int days = 0;
+    if (NumUtil.isStringInt(text)) {
+      days = Integer.parseInt(text);
+      if (days < -1) {
+        days = -1;
+      }
+    }
+    sharedPrefs.edit().putInt(STOCK.DEFAULT_DUE_DAYS, days).apply();
+    defaultDueDaysTextLive.setValue(
+        getApplication().getResources().getQuantityString(R.plurals.date_days, days, days)
+    );
+    dlHelper.uploadSetting(STOCK.DEFAULT_DUE_DAYS, days, this::showMessage);
   }
 
   public void showDueSoonDaysBottomSheet() {

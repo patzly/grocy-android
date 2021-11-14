@@ -131,6 +131,7 @@ public final class Constants {
       public final static String LOCATION = "product_presets_location_id"; // used for pref sync, DO NOT EDIT VALUE
       public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
       public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String DEFAULT_DUE_DAYS = "product_presets_default_due_days"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DUE_SOON_DAYS = "stock_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
       public final static String SHOW_PURCHASED_DATE = "show_purchased_date_on_purchase"; // used for pref sync, DO NOT EDIT VALUE
@@ -210,6 +211,7 @@ public final class Constants {
       public final static int LOCATION = -1;
       public final static int PRODUCT_GROUP = -1;
       public final static int QUANTITY_UNIT = -1;
+      public final static int DEFAULT_DUE_DAYS = 0;
       public final static boolean DISPLAY_DOTS_IN_STOCK = true;
       public final static String DUE_SOON_DAYS = "5";
       public final static boolean SHOW_PURCHASED_DATE = false;

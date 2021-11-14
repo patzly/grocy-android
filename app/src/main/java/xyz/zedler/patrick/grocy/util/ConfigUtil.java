@@ -164,6 +164,12 @@ public class ConfigUtil {
           getBoolean(jsonObject, STOCK.USE_QUICK_CONSUME_AMOUNT,
               SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT, prefs)
       ).apply();
+      if (jsonObject.has(STOCK.DEFAULT_DUE_DAYS)) {
+        prefs.edit().putInt(
+            STOCK.DEFAULT_DUE_DAYS,
+            jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
+        ).apply();
+      }
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadUserSettings: " + e);
