@@ -222,7 +222,7 @@
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/setting_default_due_days" />
+              android:text="@string/property_due_days_default" />
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
