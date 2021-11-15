@@ -35,7 +35,7 @@
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar_log"
       android:layout_width="match_parent"
-      android:layout_height="?android:actionBarSize">
+      android:layout_height="?attr/actionBarSize">
 
       <LinearLayout
         android:id="@+id/linear_log_app_bar"
@@ -85,8 +85,8 @@
       android:id="@+id/scroll_log"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?android:actionBarSize"
-      android:layout_marginBottom="?android:actionBarSize"
+      android:layout_marginTop="?attr/actionBarSize"
+      android:layout_marginBottom="?attr/actionBarSize"
       android:scrollbars="vertical"
       android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
 

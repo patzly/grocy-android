@@ -45,7 +45,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="?android:actionBarSize"
+      android:layout_height="?attr/actionBarSize"
       android:background="@color/primary">
 
       <LinearLayout
@@ -118,7 +118,7 @@
       android:id="@+id/swipe_master_product_simple"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?android:actionBarSize"
+      android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       app:progressBackgroundColor="@{@color/surface}"
       app:progressForegroundColor="@{@color/secondary}"

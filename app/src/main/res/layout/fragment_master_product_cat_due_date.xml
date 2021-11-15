@@ -47,7 +47,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="?android:actionBarSize"
+      android:layout_height="?attr/actionBarSize"
       android:background="@color/primary">
 
       <LinearLayout
@@ -120,7 +120,7 @@
       android:id="@+id/container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?android:actionBarSize">
+      android:layout_marginTop="?attr/actionBarSize">
 
       <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
