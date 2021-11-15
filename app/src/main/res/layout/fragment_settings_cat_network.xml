@@ -50,7 +50,7 @@
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?android:actionBarSize">
+      android:layout_height="?attr/actionBarSize">
 
       <LinearLayout
         android:id="@+id/linear_app_bar"
@@ -100,7 +100,7 @@
       android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?android:actionBarSize"
+      android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       android:fillViewport="true">
 
