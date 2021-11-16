@@ -1,5 +1,15 @@
 # TODO
 
+## Android 12 and Material You
+
+1. Implement edge to edge behavior (including for BottomAppBar)
+2. Replace LinearLayouts in app bars with full-width MaterialToolbar
+3. Replace MaterialComponents themes with Material3 and implement attribute themes
+4. Replace all color references with attributes
+5. Replace all text appearances with Material3 text styles
+6. Implement different color themes
+7. Optimize splashscreen for Android 12
+
 ## Alpha testing text
 
 **Changelog**
