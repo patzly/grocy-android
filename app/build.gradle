@@ -100,9 +100,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 
-    implementation "androidx.camera:camera-camera2:1.0.1"
-    implementation "androidx.camera:camera-lifecycle:1.0.1"
-    implementation "androidx.camera:camera-view:1.0.0-SNAPSHOT"
+    implementation "androidx.camera:camera-camera2:1.0.2"
+    implementation "androidx.camera:camera-lifecycle:1.0.2"
+    implementation 'androidx.camera:camera-view:1.0.0-alpha31'
     implementation 'com.google.mlkit:camera:16.0.0-beta1'
     implementation 'com.google.mlkit:barcode-scanning:17.0.0'
 
