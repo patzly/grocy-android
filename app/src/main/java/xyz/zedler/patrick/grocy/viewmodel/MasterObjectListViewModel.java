@@ -30,8 +30,12 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
@@ -50,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -291,13 +296,19 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (objects == null) {
       return;
     }
+
+    Locale locale = LocaleUtil.getUserLocale(this.getApplication().getApplicationContext());
+
     Collections.sort(objects, (item1, item2) -> {
       String name1 = ObjectUtil.getObjectName(sortAscending ? item1 : item2, entity);
       String name2 = ObjectUtil.getObjectName(sortAscending ? item2 : item1, entity);
       if (name1 == null || name2 == null) {
         return 0;
       }
-      return name1.toLowerCase().compareTo(name2.toLowerCase());
+
+      return Collator.getInstance(locale).compare(
+              name1.toLowerCase(locale),
+              name2.toLowerCase(locale));
     });
   }
 
