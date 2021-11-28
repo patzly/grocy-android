@@ -19,9 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.FocusFinder;
 import android.view.LayoutInflater;
@@ -53,6 +52,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
@@ -123,6 +123,14 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       setArguments(new ShoppingListItemEditFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
       viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId));
+    } else if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
+      if (binding.autoCompleteProduct.getText() == null
+          || binding.autoCompleteProduct.getText().length() == 0) {
+        new Handler().postDelayed(
+            () -> activity.showKeyboard(binding.autoCompleteProduct),
+            50
+        );
+      }
     }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
@@ -241,6 +249,14 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     activity.showKeyboard(binding.editTextAmount);
   }
 
+  public void saveItemOrClearInputFocus() {
+    if (viewModel.getFormData().isFormValid()) {
+      viewModel.saveItem();
+    } else {
+      clearInputFocus();
+    }
+  }
+
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.dummyFocusView.requestFocus();
@@ -278,14 +294,6 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     nextView.requestFocus();
     if (nextView instanceof EditText) {
       activity.showKeyboard((EditText) nextView);
-    }
-  }
-
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
     }
   }
 
@@ -333,35 +341,6 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
     viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
-  }
-
-  public void setUpBottomMenu() {
-    MenuItem menuItemDelete, menuItemDetails, menuItemClear;
-    menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
-    menuItemDetails = activity.getBottomMenu().findItem(R.id.action_product_overview);
-    menuItemClear = activity.getBottomMenu().findItem(R.id.action_clear_form);
-    if (menuItemDelete != null) {
-      menuItemDelete.setVisible(viewModel.isActionEdit());
-      menuItemDelete.setOnMenuItemClickListener(item -> {
-        ((Animatable) menuItemDelete.getIcon()).start();
-        viewModel.deleteItem();
-        return true;
-      });
-    }
-    if (menuItemDetails != null) {
-      menuItemDetails.setOnMenuItemClickListener(item -> {
-        ViewUtil.startIcon(menuItemDetails);
-        viewModel.showProductDetailsBottomSheet();
-        return true;
-      });
-    }
-    if (menuItemClear != null) {
-      menuItemClear.setOnMenuItemClickListener(item -> {
-        clearInputFocus();
-        viewModel.getFormData().clearForm();
-        return true;
-      });
-    }
   }
 
   private boolean onMenuItemClick(MenuItem item) {

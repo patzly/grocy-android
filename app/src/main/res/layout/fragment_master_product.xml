@@ -168,6 +168,7 @@
                 app:errorText="@{formData.nameErrorLive}">
 
                 <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/edit_text_name"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"

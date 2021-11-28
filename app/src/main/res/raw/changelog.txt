@@ -1,3 +1,17 @@
+2.0.0
+Major changes since 1.10.1:
+- Compatibility with grocy v3.x.x
+- Incompatibility with grocy v2.7.x
+- Design & navigation overhaul
+- New pages: Overview, Inventory, Transfer & more
+- Rewritten pages: Settings, Purchase, Consume & more
+Changes since 2.0.0-beta05:
+- Improved: Focus product name field if empty on master product page init
+- Improved: Focus product field if empty on shopping list item page init
+- Improved: On shopping list item page tap done on keyboard when in notes field to save item
+- Fixed: Sorting of entries on master data pages (#463) (thanks @Turysaz)
+- Fixed: Occasional crash on stock overview page
+
 2.0.0-beta05
 This is the last beta before the final v2.0.0 release. Please report any issues that may have come up with the recent changes so that the final version is as bug-free as possible.
 - New: Support for server version 3.1.3
