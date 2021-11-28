@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -439,6 +440,15 @@ public class StockOverviewViewModel extends BaseViewModel {
     }
 
     for (StockItem item : this.stockItems) {
+      if (item.getProduct() == null) {
+        // invalidate products and stock items offline cache because products may have changed
+        SharedPreferences.Editor editPrefs = sharedPrefs.edit();
+        editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+        editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
+        editPrefs.apply();
+        continue;
+      }
+
       if (item.getProduct().getHideOnStockOverviewInt() == 1) {
         continue;
       }
