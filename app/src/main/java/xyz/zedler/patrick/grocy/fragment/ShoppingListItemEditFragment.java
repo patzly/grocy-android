@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
@@ -123,6 +124,11 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       setArguments(new ShoppingListItemEditFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
       viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId));
+    } else if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
+      if (binding.autoCompleteProduct.getText() == null
+          || binding.autoCompleteProduct.getText().length() == 0) {
+        activity.showKeyboard(binding.autoCompleteProduct);
+      }
     }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
