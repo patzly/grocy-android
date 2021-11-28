@@ -82,7 +82,7 @@ public class FormDataShoppingListItemEdit {
     productNameLive = new MutableLiveData<>();
     productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
-    amountLive = new MutableLiveData<>();
+    amountLive = new MutableLiveData<>(String.valueOf(1));
     amountErrorLive = new MutableLiveData<>();
     quantityUnitsFactorsLive = new MutableLiveData<>();
     quantityUnitsLive = Transformations.map(
