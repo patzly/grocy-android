@@ -105,9 +105,10 @@ public class MasterProductViewModel extends BaseViewModel {
           }
         });
       }
-    } else if (args.getProduct() != null) {
+    } else if (args.getProduct() != null) {  // on clone
       Product product = args.getProduct();
       product.setName(null);
+      sendEvent(Event.FOCUS_INVALID_VIEWS);
       setCurrentProduct(product);
     } else {
       Product product = new Product(sharedPrefs);
@@ -117,6 +118,8 @@ public class MasterProductViewModel extends BaseViewModel {
           product.setName(productName);
         } catch (Throwable ignore) {
         }
+      } else {
+        sendEvent(Event.FOCUS_INVALID_VIEWS);
       }
       setCurrentProduct(product);
     }
