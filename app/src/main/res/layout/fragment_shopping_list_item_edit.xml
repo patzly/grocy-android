@@ -402,7 +402,7 @@
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"
                   android:text="@={formData.noteLive}"
-                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
+                  app:onDoneClickInSoftKeyboard="@{() -> fragment.saveItemOrClearInputFocus()}"/>
 
               </com.google.android.material.textfield.TextInputLayout>
 
