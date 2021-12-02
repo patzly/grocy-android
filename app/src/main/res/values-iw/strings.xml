@@ -396,7 +396,6 @@
   <string name="subtitle_barcode_unit">יחידת כמות: %1$d</string>
   <string name="subtitle_barcode">ברקוד: %1$s</string>
   <string name="subtitle_feature_disabled">היכולת מושבתת</string>
-
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
