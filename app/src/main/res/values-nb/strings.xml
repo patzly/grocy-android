@@ -146,6 +146,11 @@
     <item quantity="one">%1$d uferdig</item>
     <item quantity="other">%1$d uferdige</item>
   </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">utført</item>
+    <item quantity="other">utført</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Kjøpt %1$s %2$s av %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -191,6 +196,8 @@
   <string name="msg_item_marked_as_undone">Merk element som uferdig</string>
   <string name="option_synced_success">Alternativet er synkronisert</string>
   <string name="option_synced_error">Alternativet kunne ikke synkroniseres</string>
+  <string name="msg_create_new_product_filled">Opprett produkt \"%1$s\"</string>
+  <string name="msg_create_new_product">Opprett produkt</string>
   <string name="msg_logout">Ingenting på serveren din vil bli endret. Du vil bli omdirigert til innloggingssiden.</string>
   <string name="msg_logout_demo">Du kjører demo versjonen av grocy <u>https://grocy.info</u>.\n\n<b>Ingen av dine endringer her blir lagret!\nDe blir offentlige til serveren automatisk overskriver dem.</b>\n\nPå innlogginsskjermen kan du skrive din egen serveradresse.</string>
   <string name="msg_logout_demo_short">Offentlig demoserver. Trykk for detaljer.</string>
@@ -309,6 +316,8 @@
   <string name="title_input">Inndata</string>
   <string name="title_external_barcode_input">Ekstern skanner</string>
   <string name="title_confirmation">Bekreftelse</string>
+  <string name="title_choose_product">Velg produkt</string>
+
   <string name="title_spoiled">Ødelagt</string>
   <string name="title_use_specific">Bruk spesifikk lagervare</string>
   <string name="title_specific">Spesifikt element på lager</string>
@@ -385,6 +394,8 @@
   <string name="subtitle_barcode_amount">Mengde: %1$s</string>
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Kvantitetsenhet %1$d</string>
+  <string name="subtitle_barcode">Strekkoder: %1$s </string>
+  <string name="subtitle_feature_disabled">Funksjon er slått av</string>
   <string name="description_input_product_part1">Produktfelt inneholder:</string>
   <string name="description_input_product_part2">Vennligst velg hvordan du vil fortsette:</string>
   <string name="description_input_product_option1">Lag nytt produkt og bruk inndata som navn</string>
@@ -607,6 +618,10 @@
   <string name="category_network_proxy">Mellomtjener</string>
   <string name="category_behavior">Oppførsel</string>
   <string name="category_debugging">Feilsøking</string>
+  <string name="category_new_product">Nytt produkt</string>
+  <string name="category_existing_products">Eksisterende produkter</string>
+  <string name="category_existing_products_similar">Lignende eksisterende produkter</string>
+
   <string name="hint_server">Server URL</string>
   <string name="hint_key">Gyldig API-nøkkel</string>
 
@@ -653,6 +668,7 @@
   <string name="setting_purchased_date">Spør etter innkjøpsdato</string>
   <string name="setting_empty_value">Tom</string>
   <string name="setting_sync_off">Synk av</string>
+  <string name="setting_loading">Laster verdi</string>
   <string name="setting_not_loaded">Kunne ikke bli lastet inn</string>
   <string name="setting_debug">Aktiver logging</string>
   <string name="setting_debug_description">Vise feil i loggene</string>
@@ -665,6 +681,11 @@
   <string name="setting_expand_bottom_sheets_description">I landskapsmodus</string>
   <string name="setting_loading_circle">Vis lastingssirkel for alle forespørsler</string>
   <string name="setting_loading_circle_description">Nyttig for treige nettverk</string>
+  <string name="setting_tor">Bruk Tor</string>
+  <string name="setting_tor_description">Krever Orbot</string>
+  <string name="setting_proxy">Aktiver HTTP proxy</string>
+  <string name="setting_proxy_host">Proxy host</string>
+  <string name="setting_proxy_port">Proxy port</string>
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://no.demo.grocy.info</string>
