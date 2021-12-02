@@ -246,7 +246,6 @@
   <string name="error_invalid_url">כתובת שגויה</string>
   <string name="error_invalid_amount">כמות שגויה</string>
   <string name="error_invalid_price">המחיר שגוי</string>
-  <string name="error_invalid_best_before_days">‎-1 מציין שאין תפוגה</string>
   <string name="error_invalid_factor">מקדם שגוי</string>
   <string name="error_api_qr_code">זה אינו קוד QR עם פרטי גישה ל־API של grocy</string>
   <string name="error_loading_qus">טעינת יחידות הכמות מהמוצר נכשלה</string>

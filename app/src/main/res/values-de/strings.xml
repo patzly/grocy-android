@@ -310,7 +310,6 @@
   <string name="error_invalid_url">Ungültige URL</string>
   <string name="error_invalid_amount">Ungültige Menge</string>
   <string name="error_invalid_price">Ungültiger Preis</string>
-  <string name="error_invalid_best_before_days">-1 für \"läuft nie ab\" benutzen</string>
   <string name="error_invalid_factor">Ungültiger Faktor</string>
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>

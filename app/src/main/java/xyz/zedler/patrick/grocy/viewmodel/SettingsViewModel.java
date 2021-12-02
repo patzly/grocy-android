@@ -271,6 +271,30 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
   }
 
+  public boolean getDateKeyboardInputEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.DATE_KEYBOARD_INPUT
+    );
+  }
+
+  public void setDateKeyboardInputEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_INPUT, enabled).apply();
+  }
+
+  public boolean getDateKeyboardReverseEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_REVERSE,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.DATE_KEYBOARD_REVERSE
+    );
+  }
+
+  public void setDateKeyboardReverseEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_REVERSE, enabled).apply();
+  }
+
   public boolean getFrontCamEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.SCANNER.FRONT_CAM,

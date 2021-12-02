@@ -240,7 +240,6 @@
   <string name="error_invalid_url">Ugyldig URL</string>
   <string name="error_invalid_amount">Ugyldig beløp</string>
   <string name="error_invalid_price">Ugyldig pris</string>
-  <string name="error_invalid_best_before_days">Bruk -1 for går aldri ut på dato</string>
   <string name="error_invalid_factor">Ugyldig faktor</string>
   <string name="error_api_qr_code">Ikke en QR-kode med grocy API-legitimasjoner</string>
   <string name="error_loading_qus">Feilet innlasting av enheter fra dette produktet</string>

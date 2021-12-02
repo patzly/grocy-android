@@ -309,7 +309,6 @@
   <string name="error_invalid_url">URL invalide</string>
   <string name="error_invalid_amount">Montant invalide</string>
   <string name="error_invalid_price">Prix invalide</string>
-  <string name="error_invalid_best_before_days">Utilisez -1 pour ne jamais expirer</string>
   <string name="error_invalid_factor">Facteur invalide</string>
   <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>

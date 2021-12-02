@@ -219,7 +219,6 @@
   <string name="error_invalid_url">Neplatná URL</string>
   <string name="error_invalid_amount">Neplatné množství</string>
   <string name="error_invalid_price">Neplatná cena</string>
-  <string name="error_invalid_best_before_days">Použij -1 pro nikdy neexpirující</string>
   <string name="error_invalid_factor">Neplatný faktor</string>
   <string name="error_api_qr_code">Tento QR kód neobsahuje autorizační údaje Grocy API</string>
   <string name="error_loading_qus">Nelze načíst jednotky množství z produktu</string>

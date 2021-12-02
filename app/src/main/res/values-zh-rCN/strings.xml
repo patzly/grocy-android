@@ -273,7 +273,6 @@
   <string name="error_invalid_url">URL无效</string>
   <string name="error_invalid_amount">金额无效</string>
   <string name="error_invalid_price">价格无效</string>
-  <string name="error_invalid_best_before_days">使用-1表示永不过期</string>
   <string name="error_invalid_factor">无效因素</string>
   <string name="error_api_qr_code">不是具有Grocy API凭据的QR码</string>
   <string name="error_loading_qus">无法从产品加载数量单位</string>

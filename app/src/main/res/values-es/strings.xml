@@ -275,7 +275,6 @@
   <string name="error_invalid_url">URL Inválida</string>
   <string name="error_invalid_amount">Monto inválido</string>
   <string name="error_invalid_price">Precio inválido</string>
-  <string name="error_invalid_best_before_days">Usa -1 para que nunca caduque.</string>
   <string name="error_invalid_factor">Factor inválido</string>
   <string name="error_api_qr_code">No es un código QR con credenciales válidas de la API de grocy</string>
   <string name="error_loading_qus">Fallo al cargar las unidades de cantidad del producto</string>
