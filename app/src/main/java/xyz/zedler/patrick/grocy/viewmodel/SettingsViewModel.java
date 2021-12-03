@@ -276,6 +276,30 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.BEHAVIOR.SPEED_UP_START, enabled).apply();
   }
 
+  public boolean getDateKeyboardInputEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.DATE_KEYBOARD_INPUT
+    );
+  }
+
+  public void setDateKeyboardInputEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_INPUT, enabled).apply();
+  }
+
+  public boolean getDateKeyboardReverseEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_REVERSE,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.DATE_KEYBOARD_REVERSE
+    );
+  }
+
+  public void setDateKeyboardReverseEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_REVERSE, enabled).apply();
+  }
+
   public MutableLiveData<Boolean> getShowBarcodeScannerZXingInfo() {
     return showBarcodeScannerZXingInfo;
   }
@@ -430,8 +454,19 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setShowDoneItemsEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
+    sharedPrefs.edit().putBoolean(SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
         .apply();
+  }
+
+  public boolean getUseSmallerFontEnabled() {
+    return sharedPrefs.getBoolean(
+        SHOPPING_MODE.USE_SMALLER_FONT,
+        SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
+    );
+  }
+
+  public void setUseSmallerFontEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(SHOPPING_MODE.USE_SMALLER_FONT, enabled).apply();
   }
 
   public boolean getListIndicatorEnabled() {

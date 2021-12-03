@@ -22,11 +22,17 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,8 +41,8 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,10 +50,15 @@ import java.util.Calendar;
 import java.util.Date;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.DATE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class DateBottomSheet extends BaseBottomSheet {
 
@@ -59,12 +70,15 @@ public class DateBottomSheet extends BaseBottomSheet {
   public final static int DUE_DAYS_DEFAULT = 3;
 
   private MainActivity activity;
+  private FragmentBottomsheetDateBinding binding;
   private Bundle args;
   private Calendar calendar;
-  private SimpleDateFormat dateFormat;
+  private DateUtil dateUtil;
+  private SimpleDateFormat dateFormatGrocy;
+  private SimpleDateFormat dateFormatKeyboardInput;
+  private SimpleDateFormat dateFormatKeyboardInputShort;
   private String defaultDueDays;
-  private DatePicker datePicker;
-  private MaterialCheckBox neverExpires;
+  private boolean keyboardInputEnabled;
 
   @NonNull
   @Override
@@ -79,110 +93,253 @@ public class DateBottomSheet extends BaseBottomSheet {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_due_date, container, false
-    );
-
+    binding = FragmentBottomsheetDateBinding.inflate(inflater, container, false);
     activity = (MainActivity) requireActivity();
     args = requireArguments();
 
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);;
+    keyboardInputEnabled = sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_INPUT,
+        SETTINGS_DEFAULT.BEHAVIOR.DATE_KEYBOARD_INPUT
+    );
+    boolean reverseDateFormat = sharedPrefs.getBoolean(
+        BEHAVIOR.DATE_KEYBOARD_REVERSE,
+        SETTINGS_DEFAULT.BEHAVIOR.DATE_KEYBOARD_REVERSE
+    );
+
     calendar = Calendar.getInstance();
-    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    dateUtil = new DateUtil(requireContext());
+    dateFormatGrocy = new SimpleDateFormat("yyyy-MM-dd");
+    if (reverseDateFormat) {
+      dateFormatKeyboardInput = new SimpleDateFormat("ddMMyy");
+      dateFormatKeyboardInputShort = new SimpleDateFormat("ddMM");
+      binding.textInputDate.setHint("DDMM | DDMMYY");
+    } else {
+      dateFormatKeyboardInput = new SimpleDateFormat("yyMMdd");
+      dateFormatKeyboardInputShort = new SimpleDateFormat("MMdd");
+    }
 
-    datePicker = view.findViewById(R.id.date_picker_bbd);
-    setDatePickerTextColor(datePicker);
+    String selectedDate = args.getString(Constants.ARGUMENT.SELECTED_DATE);
+    defaultDueDays = args.getString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW);
 
-    neverExpires = view.findViewById(R.id.checkbox_bbd_never_expires);
-    neverExpires.setOnCheckedChangeListener(
-        (v, isChecked) -> datePicker.animate()
+    binding.frameHelpButton.setOnClickListener(v -> {
+      if (keyboardInputEnabled) {
+        binding.helpKeyboard.setVisibility(View.VISIBLE);
+      } else {
+        binding.help.setVisibility(View.VISIBLE);
+      }
+    });
+    binding.help.setOnClickListener(v -> navigateToSettingsCatBehavior());
+    binding.helpKeyboard.setOnClickListener(v -> navigateToSettingsCatBehavior());
+
+    if (keyboardInputEnabled) {
+      binding.linearBodyPicker.setVisibility(View.GONE);
+      binding.linearBodyKeyboard.setVisibility(View.VISIBLE);
+
+      if (selectedDate == null || selectedDate.equals(DATE.NEVER_OVERDUE)) {
+        binding.editTextDate.setText("");
+      } else {
+        try {
+          Date date = dateFormatGrocy.parse(selectedDate);
+          if (date != null) {
+            calendar.setTime(date);
+            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
+          } else {
+            binding.editTextDate.setText("");
+          }
+        } catch (ParseException e) {
+          binding.editTextDate.setText("");
+        }
+      }
+
+      if (savedInstanceState == null) {
+        new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextDate), 50);
+      }
+
+      updateDateHint();
+      binding.editTextDate.addTextChangedListener(new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+        @Override
+        public void afterTextChanged(Editable editable) {
+          updateDateHint();
+        }
+      });
+      binding.editTextDate.setOnEditorActionListener(
+          (TextView v, int actionId, KeyEvent event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE && getTextFieldDate() != null) {
+              dismiss();
+              return true;
+            }
+            return false;
+          });
+
+      ActionButton moreMonth = reverseDateFormat ? binding.moreMonthReverse : binding.moreMonth;
+      ActionButton lessMonth = reverseDateFormat ? binding.lessMonthReverse : binding.lessMonth;
+      binding.linearMonth.setVisibility(reverseDateFormat ? View.GONE : View.VISIBLE);
+      binding.linearMonthReverse.setVisibility(reverseDateFormat ? View.VISIBLE : View.GONE);
+
+      moreMonth.setOnClickListener(view -> {
+        Date date = getTextFieldDate();
+        if (date != null) {
+          String input = binding.editTextDate.getText() != null
+              ? binding.editTextDate.getText().toString().trim()
+              : "";
+          calendar.setTime(date);
+          calendar.add(Calendar.MONTH, 1);
+          if (input.length() == 6) {
+            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
+          } else if (input.length() == 4) {
+            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
+          }
+        }
+      });
+      binding.moreDay.setOnClickListener(view -> {
+        Date date = getTextFieldDate();
+        if (date != null) {
+          String input = binding.editTextDate.getText() != null
+              ? binding.editTextDate.getText().toString().trim()
+              : "";
+          calendar.setTime(date);
+          calendar.add(Calendar.DAY_OF_MONTH, 1);
+          if (input.length() == 6) {
+            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
+          } else if (input.length() == 4) {
+            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
+          }
+        }
+      });
+      lessMonth.setOnClickListener(view -> {
+        Date date = getTextFieldDate();
+        if (date != null) {
+          String input = binding.editTextDate.getText() != null
+              ? binding.editTextDate.getText().toString().trim()
+              : "";
+          calendar.setTime(date);
+          calendar.add(Calendar.MONTH, -1);
+          if (input.length() == 6) {
+            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
+          } else if (input.length() == 4) {
+            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
+          }
+        }
+      });
+      binding.lessDay.setOnClickListener(view -> {
+        Date date = getTextFieldDate();
+        if (date != null) {
+          String input = binding.editTextDate.getText() != null
+              ? binding.editTextDate.getText().toString().trim()
+              : "";
+          calendar.setTime(date);
+          calendar.add(Calendar.DAY_OF_MONTH, -1);
+          if (input.length() == 6) {
+            binding.editTextDate.setText(dateFormatKeyboardInput.format(calendar.getTime()));
+          } else if (input.length() == 4) {
+            binding.editTextDate.setText(dateFormatKeyboardInputShort.format(calendar.getTime()));
+          }
+        }
+      });
+      binding.clear.setOnClickListener(v -> {
+        binding.editTextDate.setText("");
+        activity.showKeyboard(binding.editTextDate);
+      });
+
+    } else {
+      initDatePickerLayout();
+      fillDatePickerForm(selectedDate);
+    }
+
+    setSkipCollapsedInPortrait();
+
+    return binding.getRoot();
+  }
+
+  private void initDatePickerLayout() {
+    setDatePickerTextColor(binding.datePicker);
+
+    binding.checkboxNeverExpires.setOnCheckedChangeListener(
+        (v, isChecked) -> binding.datePicker.animate()
             .alpha(isChecked ? 0.5f : 1)
-            .withEndAction(() -> datePicker.setEnabled(!isChecked))
+            .withEndAction(() -> binding.datePicker.setEnabled(!isChecked))
             .setDuration(200)
             .start()
     );
 
     if (args.getInt(DATE_TYPE) == DUE_DATE) {
-      view.findViewById(R.id.linear_bbd_never_expires).setOnClickListener(
-          v -> neverExpires.setChecked(!neverExpires.isChecked())
+      binding.linearNeverExpires.setOnClickListener(
+          v -> binding.checkboxNeverExpires.setChecked(!binding.checkboxNeverExpires.isChecked())
       );
     } else if (args.getInt(DATE_TYPE) == PURCHASED_DATE) {
-      view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
-      ((TextView) view.findViewById(R.id.text_bbd_title))
-          .setText(R.string.property_purchased_date);
+      binding.linearNeverExpires.setVisibility(View.GONE);
+      binding.title.setText(R.string.property_purchased_date);
     } else {
       if (!(args.getInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, -1)
           == FormDataMasterProductCatDueDate.DUE_DAYS)) {
-        view.findViewById(R.id.linear_bbd_never_expires).setVisibility(View.GONE);
+        binding.linearNeverExpires.setVisibility(View.GONE);
       }
-      ((TextView) view.findViewById(R.id.text_bbd_title))
-          .setText(R.string.property_due_days_default);
+      binding.title.setText(R.string.property_due_days_default);
     }
-    view.findViewById(R.id.button_bbd_reset).setOnClickListener(
+    binding.reset.setOnClickListener(
         v -> {
           calendar = Calendar.getInstance();
-          fillForm(null);
+          fillDatePickerForm(null);
         }
     );
-    view.findViewById(R.id.button_bbd_save).setOnClickListener(
+    binding.save.setOnClickListener(
         v -> dismiss()
     );
-
-    String selectedDate = args.getString(Constants.ARGUMENT.SELECTED_DATE);
-    defaultDueDays = args.getString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW);
-
-    fillForm(selectedDate);
-
-    setSkipCollapsedInPortrait();
-
-    return view;
   }
 
-  private void fillForm(String selectedBestBeforeDate) {
+  private void fillDatePickerForm(String selectedBestBeforeDate) {
     if (selectedBestBeforeDate != null
         && selectedBestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)) {
 
-      datePicker.setEnabled(false);
-      datePicker.setAlpha(0.5f);
-      neverExpires.setChecked(true);
+      binding.datePicker.setEnabled(false);
+      binding.datePicker.setAlpha(0.5f);
+      binding.checkboxNeverExpires.setChecked(true);
 
     } else if (selectedBestBeforeDate != null) {
 
       try {
-        Date date = dateFormat.parse(selectedBestBeforeDate);
+        Date date = dateFormatGrocy.parse(selectedBestBeforeDate);
         if (date != null) {
           calendar.setTime(date);
         }
       } catch (ParseException e) {
-        fillForm(null);
+        fillDatePickerForm(null);
         activity.showMessage(activity.getString(R.string.error_undefined));
         return;
       }
-      datePicker.setEnabled(true);
-      datePicker.setAlpha(1.0f);
-      neverExpires.setChecked(false);
+      binding.datePicker.setEnabled(true);
+      binding.datePicker.setAlpha(1.0f);
+      binding.checkboxNeverExpires.setChecked(false);
 
     } else if (defaultDueDays != null) {
 
       if (Integer.parseInt(defaultDueDays) < 0) {
-        datePicker.setEnabled(false);
-        datePicker.setAlpha(0.5f);
-        neverExpires.setChecked(true);
+        binding.datePicker.setEnabled(false);
+        binding.datePicker.setAlpha(0.5f);
+        binding.checkboxNeverExpires.setChecked(true);
       } else {
-        datePicker.setEnabled(true);
-        datePicker.setAlpha(1.0f);
-        neverExpires.setChecked(false);
+        binding.datePicker.setEnabled(true);
+        binding.datePicker.setAlpha(1.0f);
+        binding.checkboxNeverExpires.setChecked(false);
         calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultDueDays));
       }
 
     } else {
 
-      datePicker.setEnabled(false);
-      datePicker.setAlpha(0.5f);
-      neverExpires.setChecked(true);
+      binding.datePicker.setEnabled(false);
+      binding.datePicker.setAlpha(0.5f);
+      binding.checkboxNeverExpires.setChecked(true);
 
     }
 
-    datePicker.updateDate(
+    binding.datePicker.updateDate(
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)
@@ -194,15 +351,25 @@ public class DateBottomSheet extends BaseBottomSheet {
     super.onDismiss(dialog);
 
     String date;
-    if (!neverExpires.isChecked()) {
-      calendar.set(
-          datePicker.getYear(),
-          datePicker.getMonth(),
-          datePicker.getDayOfMonth()
-      );
-      date = dateFormat.format(calendar.getTime());
+
+    if (!keyboardInputEnabled) {
+      if (!binding.checkboxNeverExpires.isChecked()) {
+        calendar.set(
+            binding.datePicker.getYear(),
+            binding.datePicker.getMonth(),
+            binding.datePicker.getDayOfMonth()
+        );
+        date = dateFormatGrocy.format(calendar.getTime());
+      } else {
+        date = Constants.DATE.NEVER_OVERDUE;
+      }
     } else {
-      date = Constants.DATE.NEVER_OVERDUE;
+      Date textFieldDate = getTextFieldDate();
+      if (textFieldDate != null) {
+        date = dateFormatGrocy.format(textFieldDate);
+      } else {
+        date = Constants.DATE.NEVER_OVERDUE;
+      }
     }
 
     BaseFragment currentFragment = activity.getCurrentFragment();
@@ -219,6 +386,62 @@ public class DateBottomSheet extends BaseBottomSheet {
       );
     }
     currentFragment.onBottomSheetDismissed();
+  }
+
+  private void updateDateHint() {
+    Date date = getTextFieldDate();
+    Date neverOverdueDate = null;
+    try {
+      neverOverdueDate = dateFormatGrocy.parse(DATE.NEVER_OVERDUE);
+    } catch (ParseException ignored) { }
+    if (date != null && date.equals(neverOverdueDate)) {
+      binding.textInputHint.setText(
+          getString(R.string.subtitle_date_from_input, getString(R.string.subtitle_never_overdue))
+      );
+    } else if (date != null) {
+      binding.textInputHint.setText(getString(
+          R.string.subtitle_date_from_input,
+          dateUtil.getLocalizedDate(dateFormatGrocy.format(date), DateUtil.FORMAT_SHORT)
+      ));
+    } else {
+      binding.textInputHint.setText(getString(
+          R.string.subtitle_date_from_input,
+          getString(R.string.error_invalid_date_format)
+      ));
+    }
+  }
+
+  private Date getTextFieldDate() {
+    String input = binding.editTextDate.getText() != null
+        ? binding.editTextDate.getText().toString().trim()
+        : "";
+    Date date;
+    if (input.length() == 0) {
+      date = parseDate(dateFormatGrocy, Constants.DATE.NEVER_OVERDUE);
+    } else if (input.length() == 6) {
+      date = parseDate(dateFormatKeyboardInput, input);
+    } else if (input.length() == 4) {
+      date = parseDate(dateFormatKeyboardInputShort, input);
+      if (date != null) {
+        calendar.setTime(date);
+        calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+        if (calendar.before(Calendar.getInstance())) {
+          calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR)+1);
+        }
+        date = calendar.getTime();
+      }
+    } else {
+      date = null;
+    }
+    return date;
+  }
+
+  private Date parseDate(SimpleDateFormat dateFormat, String date) {
+    try {
+      return dateFormat.parse(date);
+    } catch (ParseException e) {
+      return null;
+    }
   }
 
   private void setDatePickerTextColor(DatePicker datePicker) {
@@ -251,6 +474,11 @@ public class DateBottomSheet extends BaseBottomSheet {
       }
       numberPicker.invalidate();
     }
+  }
+
+  public void navigateToSettingsCatBehavior() {
+    dismiss();
+    navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
   }
 
   @NonNull

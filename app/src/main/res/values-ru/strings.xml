@@ -327,7 +327,6 @@
   <string name="error_invalid_url">Неверный адрес</string>
   <string name="error_invalid_amount">Неверное количество</string>
   <string name="error_invalid_price">Неверная цена</string>
-  <string name="error_invalid_best_before_days">Используйте -1 если срок годности не ограничен</string>
   <string name="error_invalid_factor">Неверный фактор</string>
   <string name="error_api_qr_code">QR-код без учетных данных Grocy API</string>
   <string name="error_loading_qus">Не удалось загрузить единицы количества из продукта</string>
@@ -478,7 +477,6 @@
   <string name="subtitle_barcode_unit">Единица измерения: %1$d</string>
   <string name="subtitle_barcode">Штрихкод: %1$s</string>
   <string name="subtitle_feature_disabled">Функция отключена</string>
-
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>

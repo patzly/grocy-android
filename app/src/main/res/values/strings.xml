@@ -279,6 +279,8 @@
   <string name="msg_help_specific_item">The first item in this list would be picked by the default rule which is \"Opened first, then first due first, then first in first out\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
+  <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
+  <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
   <string name="msg_help_loading_circle_settings">On each page where something has to be loaded from server, the app first checks with a tiny request whether the server database has changed since last time and only updates outdated data. Enable the option below to show a loading circle even for this tiny request.</string>
   <string name="msg_help_start">Beginner mode is active: Help texts are displayed by default on all pages if available. Tap to change.</string>
@@ -318,8 +320,8 @@
   <string name="error_invalid_url">Invalid URL</string>
   <string name="error_invalid_amount">Invalid amount</string>
   <string name="error_invalid_price">Invalid price</string>
-  <string name="error_invalid_best_before_days">Use -1 for never expiring</string>
   <string name="error_invalid_factor">Invalid factor</string>
+  <string name="error_invalid_date_format">Invalid date format</string>
   <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -475,6 +477,7 @@
   <string name="subtitle_barcode_unit">Quantity unit: %1$d</string>
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature disabled</string>
+  <string name="subtitle_date_from_input">Date from input:\n%1$s</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -784,6 +787,8 @@
   <string name="setting_keep_screen_on_description">While in shopping mode</string>
   <string name="setting_show_done_items">Show done items</string>
   <string name="setting_show_done_items_description">At the bottom</string>
+  <string name="setting_smaller_font">Use smaller font</string>
+  <string name="setting_smaller_font_description">To see more items at once</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Due soon days</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -812,6 +817,10 @@
   <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
   <string name="setting_speed_up_start">Reduce app startup time</string>
   <string name="setting_speed_up_start_description">Has an effect only on fast devices</string>
+  <string name="setting_date_keyboard_input">Enter dates with keyboard</string>
+  <string name="setting_date_keyboard_input_description">Instead of date picker wheels</string>
+  <string name="setting_date_keyboard_reverse">Use reverse date format for input</string>
+  <string name="setting_date_keyboard_reverse_description">DDMMYY instead of YYMMDD</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_tor">Use Tor</string>

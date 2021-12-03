@@ -299,7 +299,6 @@
   <string name="error_invalid_url">Некоректний URL</string>
   <string name="error_invalid_amount">Некоректна кількість</string>
   <string name="error_invalid_price">Некоректна ціна</string>
-  <string name="error_invalid_best_before_days">Використовуйте -1 якщо термін придатності необмежений</string>
   <string name="error_invalid_factor">Некоректний коефіцієнт</string>
   <string name="error_api_qr_code">Це не QR-код з обліковими даними API grocy</string>
   <string name="error_loading_qus">Не вдалося завантажити одиниці виміру з продукту</string>

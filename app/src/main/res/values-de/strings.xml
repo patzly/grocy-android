@@ -271,6 +271,8 @@
   <string name="msg_help_specific_item">Der erste Eintrag in dieser Liste würde von der Standardregel \"Geöffnete zuerst, dann zuerst fällige, dann First In - First Out\" ausgewählt werden.</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Dies wird nur für Auswertezwecke benötigt.</string>
+  <string name="msg_help_date_chooser">Sie können in den Einstellungen zu Tastatureingabe wechseln, damit ist es vielleicht möglich, Ihre Eingabegeschwindigkeit erhöhen.</string>
+  <string name="msg_help_date_chooser_keyboard">Sie können in den Einstellungen ein umgekehrtes Datumsformat aktivieren, falls DDMMYY in Ihrem Land bevorzugt ist.\nUm die Eingabe zu übernehmen und diese Seite zu schließen, drücken Sie die Erledigt-Taste auf Ihrer Tastatur.</string>
   <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>
   <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
   <string name="msg_help_start">Anfängermodus ist aktiv: Hilfe-Texte werden standardmäßig auf allen Seiten eingeblendet, wenn verfügbar. Zum Ändern tippen.</string>
@@ -310,8 +312,8 @@
   <string name="error_invalid_url">Ungültige URL</string>
   <string name="error_invalid_amount">Ungültige Menge</string>
   <string name="error_invalid_price">Ungültiger Preis</string>
-  <string name="error_invalid_best_before_days">-1 für \"läuft nie ab\" benutzen</string>
   <string name="error_invalid_factor">Ungültiger Faktor</string>
+  <string name="error_invalid_date_format">Ungültiges Datumsformat</string>
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -461,6 +463,7 @@
   <string name="subtitle_barcode_unit">Mengeneinheit: %1$d</string>
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature deaktiviert</string>
+  <string name="subtitle_date_from_input">Datum von der Eingabe:\n%1$s</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
@@ -798,6 +801,10 @@
   <string name="setting_expand_bottom_sheets_description">Im Querformat</string>
   <string name="setting_speed_up_start">App-Start beschleunigen</string>
   <string name="setting_speed_up_start_description">Hat nur auf schnellen Geräten eine Auswirkung</string>
+  <string name="setting_date_keyboard_input">Datum mit Tastatur eingeben</string>
+  <string name="setting_date_keyboard_input_description">Anstatt mit Auswahlrädern</string>
+  <string name="setting_date_keyboard_reverse">Umgekehrtes Datumsformat für Eingabe benutzen</string>
+  <string name="setting_date_keyboard_reverse_description">DDMMYY anstatt YYMMDD</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
   <string name="setting_tor">Tor verwenden</string>

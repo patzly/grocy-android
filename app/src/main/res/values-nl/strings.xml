@@ -290,7 +290,6 @@
   <string name="error_invalid_url">Ongeldige URL</string>
   <string name="error_invalid_amount">Ongeldige hoeveelheid</string>
   <string name="error_invalid_price">Ongeldige prijs</string>
-  <string name="error_invalid_best_before_days">Gebruik -1 om nooit te laten vervallen</string>
   <string name="error_invalid_factor">Ongeldige factor</string>
   <string name="error_api_qr_code">Geen QR code met grocy API inloggegevens</string>
   <string name="error_loading_qus">Kan geen eenheden laden van dit product</string>

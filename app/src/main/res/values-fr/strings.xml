@@ -235,6 +235,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Ce produit ne peut pas avoir un produit parent car celui-ci est défini en tant que produit parent pour un autre produit.</string>
   <string name="msg_help_due_date_type">D\'après le type d\'échéance sélectionné, la coloration de la page d\'aperçu du stock sera différente. \"A consommer de préférence avant le\" signifie que le produit est peut-être toujours consommable après la date limite. \"A consommer jusqu\'au\" signifie que le produit n\'est plus consommable après la date limite.</string>
+  <string name="msg_help_default_due_days_format">Vous pouvez appuyer longuement sur un élément ci-dessous pour entrer une date au lieu d\'un nombre.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Pour les achats, ce nombre de jour sera ajouté à aujourd\'hui pour la suggestion de date de péremption (-1 signifie que le produit ne sera jamais périmé).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -309,7 +310,6 @@
   <string name="error_invalid_url">URL invalide</string>
   <string name="error_invalid_amount">Montant invalide</string>
   <string name="error_invalid_price">Prix invalide</string>
-  <string name="error_invalid_best_before_days">Utilisez -1 pour ne jamais expirer</string>
   <string name="error_invalid_factor">Facteur invalide</string>
   <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>
@@ -460,7 +460,6 @@
   <string name="subtitle_barcode_unit">Format : %1$d</string>
   <string name="subtitle_barcode">Code-barres : %1$s</string>
   <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
-
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
   <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>

@@ -41,7 +41,7 @@
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_open_one">Abrir 1 %1$s de %2$s</string>
   <string name="action_edit_product">Editar producto</string>
-  <string name="action_shopping_list_add">Añadir a la lista de compras</string>
+  <string name="action_shopping_list_add">Añadir a la lista de la compra</string>
 
   <string name="action_back">Regresar</string>
   <string name="action_search">Buscar</string>
@@ -60,7 +60,7 @@
   <string name="action_cancel">Cancelar</string>
   <string name="action_add">Añadir</string>
   <string name="action_clear">Vaciar</string>
-  <string name="action_clear_shopping_list">Vaciar lista de compras</string>
+  <string name="action_clear_shopping_list">Vaciar lista de la compra</string>
   <string name="action_rate">Calificar en Google Play</string>
   <string name="action_rate_description">Apoya el desarrollo</string>
   <string name="action_email">Enviar correo electrónico</string>
@@ -93,7 +93,7 @@
   <string name="action_purchase_all_items">Comprar todos los artículos</string>
   <string name="action_skip_entry">Saltar entrada</string>
   <string name="action_toggle_flash">Alternar el modo de flash</string>
-  <string name="action_delete_shopping_list">Eliminar lista de compras</string>
+  <string name="action_delete_shopping_list">Borrar lista de la compra</string>
   <string name="action_create_key">Crear llave</string>
   <string name="action_login">Iniciar sesión</string>
   <string name="action_ignore">Ignorar</string>
@@ -128,7 +128,7 @@
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d por debajo de la cantidad mínima</item>
-    <item quantity="other">%1$d  por debajo de la cantidad mínima</item>
+    <item quantity="other">%1$d bajo mínimos</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
@@ -195,6 +195,9 @@
   <string name="msg_item_marked_as_undone">Elemento marcado como deshecho</string>
   <string name="option_synced_success">Opción sincronizada exitosamente</string>
   <string name="option_synced_error">La opción no se pudo sincronizar</string>
+  <string name="msg_choose_product">El código de barras escaneado no está asociado a ningún producto. Puedes asociarlo a uno ya existente o crear un producto nuevo.</string>
+  <string name="msg_create_new_product_filled">Crear nuevo producto \"%1$s\"</string>
+  <string name="msg_create_new_product">Crear nuevo producto</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Transacción que se ejecutará:\n\nAñadir %1$s %2$s de %3$s a las existencias\nFecha de vencimiento: %4$s\nPrecio: %5$s\nTienda: %6$s\nUbicación: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -205,7 +208,7 @@
   <string name="msg_quick_mode_confirm_inventory">Transacción que se ejecutará:\n\nEStablecer %2$s %3$s de %1$s al inventario\nAplicar a los productos añadidos:\nFecha de vencimiento: %4$s\nPrecio: %5$s\nTienda: %6$s\nUbicación: %7$s</string>
   <string name="msg_compatibility">Esta versión de la aplicación no es compatible con la versión de Grocy en el servidor.\n\nVersión actual del servidor: %1$s.\nVersión del servidor soportada: %2$s\nSi ignoras esta advertencia, pueden suceder errores (muy posible) o pérdida de datos (improbable). Te advertimos!</string>
   <string name="msg_logout">Nada será cambiado en tu servidor. Serás redireccionado a la página de inicio de sesión.</string>
-  <string name="msg_logout_demo">Estás ejecutando la instancia de demostración de Grocy en <u>https://grocy.info</u>.\n\n<b>Ninguno de tus cambios aquí serán guardados!\nSe mantiene públicos hasta que el servidor automáticamente los re-escribe.</b>\n\nEn la página de inicio de sesión puedes ingresar tu propia dirección de servidor.</string>
+  <string name="msg_logout_demo">Estás utilizando el servidor público de demostración <u>https://grocy.info</u>.\n\n<b>¡Ninguno de tus cambios aquí se guarda para siempre!\nPermanecen públicos hasta que el servidor los sobrescribe automáticamente una vez al día.</b>\n\nEn la pantalla de inicio de sesión puedes introducir la dirección de tu propio servidor.</string>
   <string name="msg_logout_demo_short">Servidor público de prueba. Haga clic para ver más detalles.</string>
   <string name="msg_restart">La aplicación debe reiniciarse para aplicar la configuración actual. ¿Quieres reiniciar ahora?</string>
   <string name="msg_shortcuts">Puedes habilitar 4 accesos directos.</string>
@@ -221,7 +224,11 @@
   <string name="msg_port_connection_info_without_port">La aplicación se conectará al puerto %1$s.\nSi quieres conectarlo a otro puerto, puedes añadirlo a la URL.\nEjemplo: http://dominio.es:81/</string>
   <string name="msg_port_connection_info_with_port">La aplicación se conectará al puerto %1$s.</string>
   <string name="msg_not_implemented_yet">Esto será implementado pronto. Por favor, use su interfaz web de momento.</string>
+  <string name="stock_disabled">Has desactivado la función de inventario en tu configuración de grocy, probablemente porque no la necesitas. Pero esta app solo puede hacer gestión de inventario por el momento, así que puede que no te sirva de mucho.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">La página de resumen de existencias muestra todos los productos que están actualmente en existencia o por debajo de su cantidad mínima. Habilite esta opción para ocultar este producto siempre.</string>
   <string name="msg_help_due_date_type">Según el tipo de fecha de caducidad seleccionada, el resaltado en la página de resumen de inventario será diferente. \"Fecha de consumo preferente\" significa que el producto podría ser consumido después de su fecha de vencimiento. \"Fecha de caducidad\" significa que el consumo del producto no es seguro después de su fecha de vencimiento.</string>
+  <string name="msg_help_default_due_days_format">Puede realizar una pulsación larga en un elemento de abajo para introducir una fecha en lugar de un número.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Este número de días será añadido a la fecha de hoy para la sugerencia de fecha límite de la compra (-1 significa que este producto no tendrá fecha límite).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -244,9 +251,17 @@
   <string name="msg_help_tare_weight_purchase">Peso del contenedor activado. Por favor, pesa el contenedor entero, la cantidad será calculada automáticamente.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Esto se usará como configuración predeterminada cuando añadas este producto como ingrediente de una receta.</string>
+  <string name="msg_help_inventory_fields">Los siguientes campos se aplican a los productos recién añadidos.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Puede elegir un escáner de códigos de barras para el escaneo de códigos de barras con cámara.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") utiliza los datos de contraste de la transmisión de la cámara para detectar un código de barras. A continuación, calcula la anchura relativa de todas las líneas.\n- A veces los resultados son incorrectos\n- El código de barras tiene que estar alineado horizontalmente\n- Requiere un buen contraste y nitidez\n- Se realiza completamente fuera de línea en su dispositivo\n- La infraestructura es de código abierto.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit utiliza el aprendizaje automático con las últimas tecnologías para el escaneo de códigos de barras.\n- Casi no hay resultados incorrectos\n- La orientación no importa\n- Funciona incluso para los códigos de barras borrosos o con contraste bajo\n- Se realiza completamente fuera de línea en su dispositivo\n- La infraestructura no es de código abierto</string>
   <string name="msg_help_external_scanner_ready">Puedes usar un escáner externo para el campo de debajo mientras esté enfocado y vacío. </string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Esto es solo para fines estadísticos</string>
+  <string name="msg_help_start">El modo principiante está activo: Los textos de ayuda se muestran por defecto en todas las páginas si están disponibles. Pulse para cambiar.</string>
   <string name="msg_help_home_assistant_login_help_show">Pulsa aquí para mostrar los textos de ayuda.</string>
   <string name="msg_help_home_assistant_login_help_hide">Pulsa aquí para ocultar los textos de ayuda.</string>
   <string name="error_api_not_working">La clave de la API no está funcionando</string>
@@ -255,7 +270,7 @@
   <string name="error_empty">Requerido</string>
   <string name="error_empty_stock">Nada en stock</string>
   <string name="error_empty_stock_sub">Ve a comprar productos</string>
-  <string name="error_empty_shopping_list">Lista de compras vacía</string>
+  <string name="error_empty_shopping_list">Lista de la compra vacía</string>
   <string name="error_empty_shopping_list_sub">Añade algunos productos que necesites</string>
   <string name="error_empty_barcodes_sub">Añadir un código de barras con el botón a continuación</string>
   <string name="error_empty_master_data_sub">Crea algo con el botón a continuación</string>
@@ -273,9 +288,8 @@
   <string name="error_parent">No puede ser padre de sí mismo</string>
   <string name="error_invalid_product">Producto inválido</string>
   <string name="error_invalid_url">URL Inválida</string>
-  <string name="error_invalid_amount">Monto inválido</string>
+  <string name="error_invalid_amount">Cantidad inválida</string>
   <string name="error_invalid_price">Precio inválido</string>
-  <string name="error_invalid_best_before_days">Usa -1 para que nunca caduque.</string>
   <string name="error_invalid_factor">Factor inválido</string>
   <string name="error_api_qr_code">No es un código QR con credenciales válidas de la API de grocy</string>
   <string name="error_loading_qus">Fallo al cargar las unidades de cantidad del producto</string>
@@ -309,10 +323,11 @@
   <string name="error_barcode_not_linked">El código de barras no está relacionado con un producto</string>
   <string name="error_no_product_details">No se pudieron obtener los detalles del producto</string>
   <string name="error_failed_barcode_upload">No se pudo subir el código de barras</string>
+  <string name="error_wrong_grocycode_type">grocycode contiene un tipo de entidad incorrecto</string>
   <string name="error_undefined">Sucedió un error</string>
 
   <string name="title_overview">Vista general</string>
-  <string name="title_stock_overview">Vista de stock</string>
+  <string name="title_stock_overview">Resumen de inventario</string>
   <string name="title_purchase">Comprar</string>
   <string name="title_consume">Consumir</string>
   <string name="title_transfer">Transferir</string>
@@ -323,7 +338,7 @@
   <string name="title_product_edit">Editar producto</string>
   <string name="title_master_data">Datos maestros</string>
   <string name="title_stock_entries">Registros de stock</string>
-  <string name="title_shopping_list">Lista de compras</string>
+  <string name="title_shopping_list">Lista de la compra</string>
   <string name="title_feedback">Comentarios</string>
   <string name="title_settings">Ajustes</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
@@ -343,8 +358,11 @@
   <string name="title_input">campo</string>
   <string name="title_external_barcode_input">Escaner externo</string>
   <string name="title_confirmation">Confirmación</string>
+  <string name="title_choose_product">Elegir producto</string>
+
   <string name="title_spoiled">Vencido</string>
   <string name="title_use_specific">Usar artículo específico del stock</string>
+  <string name="title_specific">Artículo específico en existencias</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Consumir cantidad exacta</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -361,8 +379,8 @@
   <string name="title_list_entry">Registro de lista</string>
   <string name="title_edit_list_entry">Editar registro de lista</string>
   <string name="title_create_list_entry">Crear registro de lista</string>
-  <string name="title_shopping_list_edit">Editar lista de compras</string>
-  <string name="title_shopping_list_new">Nueva lista de compras</string>
+  <string name="title_shopping_list_edit">Editar lista de la compra</string>
+  <string name="title_shopping_list_new">Nueva lista de la compra</string>
   <string name="title_shopping_mode">Modo de compras</string>
   <string name="title_batch_mode_shopping_list">Modo de lista de compras por lotes</string>
   <string name="title_product_cat_optional">Propiedades opcionales</string>
@@ -372,6 +390,8 @@
   <string name="title_product_cat_amount">Cantidad</string>
   <string name="title_product_cat_quantity_unit">Unidad de cantidad</string>
   <string name="title_product_cat_barcodes">Códigos de barras</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_product_cat_qu_conversions">Conversiones de UC</string>
   <string name="title_unknown_input">Valor desconocido</string>
   <string name="title_presets_new_products">Preajustes para nuevos productos</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
@@ -414,6 +434,11 @@
   <string name="subtitle_not_supported">No soportado</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Cantidad: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Unidad de cantidad: %1$d</string>
+  <string name="subtitle_barcode">Código de barras: %1$s</string>
+  <string name="subtitle_feature_disabled">Característica desactivada</string>
+  <string name="description_input_product_part1">El campo de producto contiene:</string>
   <string name="description_input_product_part2">Por favor, elija como continuar:</string>
   <string name="description_input_product_option1">Crear un nuevo producto y utilizar como nombre</string>
   <string name="description_input_product_option2">Crear un nuevo producto y utilizar como código de barras</string>
@@ -444,6 +469,16 @@
     <item quantity="other">%1$d productos han expirado.</item>
   </plurals>
   <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d producto por debajo del mínimo de existencias definido.</item>
+    <item quantity="other">%1$d productos por debajo del mínimo de existencias definido.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d artículo está en su lista de la compra.</item>
+    <item quantity="other">%1$d artículos están en su lista de la compra.</item>
+  </plurals>
+  <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Su base de datos contiene %1$d producto.</item>
     <item quantity="other">Su base de datos contiene %1$d productos.</item>
@@ -459,16 +494,16 @@
   <string name="property_description">Descripción</string>
   <string name="property_note">Notas</string>
   <string name="property_status">Estado</string>
-  <string name="property_amount">Monto</string>
+  <string name="property_amount">Cantidad</string>
   <string name="property_seconds">Segundos</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
     <item quantity="one">%1$d segundo</item>
     <item quantity="other">%1$d segundos</item>
   </plurals>
-  <string name="property_amount_min_stock">Mín. monto de stock</string>
+  <string name="property_amount_min_stock">Cantidad mín. de stock</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_in">Monto en %1$s</string>
+  <string name="property_amount_in">Cantidad en %1$s</string>
   <string name="property_price">Precio</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Precio por %1$s</string>
@@ -514,8 +549,8 @@
   <string name="property_store_unknown">Tienda desconocida</string>
   <string name="property_store_default">Tienda por defecto</string>
   <string name="property_stores">Tiendas</string>
-  <string name="property_shopping_list">Lista de compras</string>
-  <string name="property_shopping_lists">Listas de compra</string>
+  <string name="property_shopping_list">Lista de la compra</string>
+  <string name="property_shopping_lists">Listas de la compra</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_purchased">Última compra</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -659,7 +694,7 @@
   <string name="setting_logout_description">Volver a la página de inicio de sesión</string>
   <string name="setting_manage_shortcuts">Gestionar Accesos directos</string>
   <string name="setting_list_indicator">Indicar registro de lista</string>
-  <string name="setting_list_indicator_description">Mostrar punto azul si el producto está en una lista de compras</string>
+  <string name="setting_list_indicator_description">Mostrar un punto azul si el producto está en una lista de la compra</string>
   <string name="setting_shopping_mode_update_interval">Intervalo de actualización para modo de compras</string>
   <string name="setting_keep_screen_on">Mantener la pantalla encendida</string>
   <string name="setting_keep_screen_on_description">Mientras está en el modo de compras</string>

@@ -314,6 +314,7 @@
                     android:textColor="@color/on_background"
                     android:imeOptions="actionDone"
                     android:maxLength="10"
+                    android:selectAllOnFocus="true"
                     android:text="@={formData.amountLive}"
                     android:afterTextChanged="@{() -> formData.isAmountValid()}"
                     app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageAmount, focus)}"

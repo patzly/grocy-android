@@ -34,7 +34,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import xyz.zedler.patrick.grocy.R;
@@ -54,6 +53,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
@@ -141,7 +142,6 @@ public class ShoppingModeFragment extends BaseFragment implements
         getViewLifecycleOwner(), this::changeAppBarTitle
     );
 
-    Locale currentLocale = getResources().getConfiguration().locale;
     viewModel.getFilteredGroupedListItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) {
         return;
@@ -170,7 +170,11 @@ public class ShoppingModeFragment extends BaseFragment implements
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getShoppingListItemAmountsHashMap(),
                 viewModel.getMissingProductIds(),
-                this
+                this,
+                sharedPrefs.getBoolean(
+                    SHOPPING_MODE.USE_SMALLER_FONT,
+                    SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
+                )
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -228,7 +232,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     }
     timer = new Timer();
     initTimerTask();
-    timer.schedule(timerTask, 2000, seconds * 1000);
+    timer.schedule(timerTask, 2000, seconds * 1000L);
   }
 
   private void updateUI(boolean animated) {

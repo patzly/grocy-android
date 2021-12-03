@@ -274,7 +274,6 @@
   <string name="error_invalid_url">Ogiltig URL</string>
   <string name="error_invalid_amount">Ogiltig mängd</string>
   <string name="error_invalid_price">Ogiltigt pris</string>
-  <string name="error_invalid_best_before_days">Använd -1 för varor som inte går ut</string>
   <string name="error_invalid_factor">Ogiltig faktor</string>
   <string name="error_api_qr_code">Inte en känd QR-kod för grocy</string>
   <string name="error_loading_qus">Misslyckades att läsa in mängd enhet för varan</string>

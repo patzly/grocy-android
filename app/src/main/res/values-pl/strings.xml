@@ -251,7 +251,6 @@
   <string name="error_invalid_url">Błędny adres URL</string>
   <string name="error_invalid_amount">Błędna ilość</string>
   <string name="error_invalid_price">Błędna cena</string>
-  <string name="error_invalid_best_before_days">Wpisz -1 dla nieprzeterminowującego się produktu</string>
   <string name="error_invalid_factor">Błędny czynnik</string>
   <string name="error_api_qr_code">Nie jest to kod QR z danymi uwierzytelniającymi API grocy</string>
   <string name="error_loading_qus">Nie udało się załadować jednostki ilości dla produktu</string>
