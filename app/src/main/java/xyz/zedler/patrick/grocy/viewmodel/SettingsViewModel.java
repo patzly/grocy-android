@@ -404,8 +404,19 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setShowDoneItemsEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
+    sharedPrefs.edit().putBoolean(SHOPPING_MODE.SHOW_DONE_ITEMS, enabled)
         .apply();
+  }
+
+  public boolean getUseSmallerFontEnabled() {
+    return sharedPrefs.getBoolean(
+        SHOPPING_MODE.USE_SMALLER_FONT,
+        SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
+    );
+  }
+
+  public void setUseSmallerFontEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(SHOPPING_MODE.USE_SMALLER_FONT, enabled).apply();
   }
 
   public boolean getListIndicatorEnabled() {

@@ -34,7 +34,7 @@
     android:background="@drawable/bg_group_divider" />
 
   <TextView
-    android:id="@+id/text_shopping_group_name"
+    android:id="@+id/name"
     style="@style/Widget.Grocy.TextView.ShoppingModeGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

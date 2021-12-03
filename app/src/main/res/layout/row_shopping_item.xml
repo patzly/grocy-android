@@ -25,7 +25,7 @@
   android:layout_height="wrap_content">
 
   <com.google.android.material.card.MaterialCardView
-    android:id="@+id/card_shopping_item_container"
+    android:id="@+id/card"
     style="@style/Widget.Grocy.Card"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
@@ -34,13 +34,13 @@
     app:strokeWidth="1.5dp">
 
     <LinearLayout
-      android:id="@+id/linear_shopping_item_container"
+      android:id="@+id/container_row"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical">
 
       <TextView
-        android:id="@+id/text_shopping_item_name"
+        android:id="@+id/name"
         style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         android:textSize="26sp" />
 
       <TextView
-        android:id="@+id/text_shopping_note_as_name"
+        android:id="@+id/note_as_name"
         style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
         android:textSize="26sp" />
 
       <TextView
-        android:id="@+id/text_shopping_item_amount"
+        android:id="@+id/amount"
         style="@style/Widget.Grocy.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         android:singleLine="true" />
 
       <TextView
-        android:id="@+id/text_shopping_item_note"
+        android:id="@+id/note"
         style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

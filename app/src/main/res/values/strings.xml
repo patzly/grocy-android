@@ -787,6 +787,8 @@
   <string name="setting_keep_screen_on_description">While in shopping mode</string>
   <string name="setting_show_done_items">Show done items</string>
   <string name="setting_show_done_items_description">At the bottom</string>
+  <string name="setting_smaller_font">Use smaller font</string>
+  <string name="setting_smaller_font_description">To see more items at once</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Due soon days</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

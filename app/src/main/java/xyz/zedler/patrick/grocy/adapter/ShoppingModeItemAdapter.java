@@ -27,18 +27,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.RowShoppingBottomNotesBinding;
+import xyz.zedler.patrick.grocy.databinding.RowShoppingGroupBinding;
+import xyz.zedler.patrick.grocy.databinding.RowShoppingItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -47,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class ShoppingModeItemAdapter extends
     RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
@@ -59,6 +62,7 @@ public class ShoppingModeItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
   private final PluralUtil pluralUtil;
+  private boolean useSmallerFonts;
 
   public ShoppingModeItemAdapter(
       Context context,
@@ -68,7 +72,8 @@ public class ShoppingModeItemAdapter extends
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
-      ShoppingModeItemClickListener listener
+      ShoppingModeItemClickListener listener,
+      boolean useSmallerFonts
   ) {
     this.linearLayoutManager = linearLayoutManager;
     this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -77,32 +82,44 @@ public class ShoppingModeItemAdapter extends
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
+    this.useSmallerFonts = useSmallerFonts;
     pluralUtil = new PluralUtil(context);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    private final MaterialCardView cardViewContainer;
-    private final LinearLayout linearLayoutContainer;
-    private final TextView textViewName;
-    private final TextView textViewAmount;
-    private final TextView textViewGroupName;
-    private final TextView textViewNote;
-    private final TextView textViewNoteName;
-    private final TextView textViewBottomNotes;
-    private final View viewGroupSeparator;
-
     public ViewHolder(View view) {
       super(view);
-      cardViewContainer = view.findViewById(R.id.card_shopping_item_container);
-      linearLayoutContainer = view.findViewById(R.id.linear_shopping_item_container);
-      textViewName = view.findViewById(R.id.text_shopping_item_name);
-      textViewAmount = view.findViewById(R.id.text_shopping_item_amount);
-      textViewNote = view.findViewById(R.id.text_shopping_item_note);
-      textViewNoteName = view.findViewById(R.id.text_shopping_note_as_name);
-      textViewBottomNotes = view.findViewById(R.id.text_shopping_bottom_notes);
-      textViewGroupName = view.findViewById(R.id.text_shopping_group_name);
-      viewGroupSeparator = view.findViewById(R.id.separator);
+    }
+  }
+
+  public static class ShoppingItemViewHolder extends ViewHolder {
+
+    private final RowShoppingItemBinding binding;
+
+    public ShoppingItemViewHolder(RowShoppingItemBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
+    }
+  }
+
+  public static class ShoppingGroupViewHolder extends ViewHolder {
+
+    private final RowShoppingGroupBinding binding;
+
+    public ShoppingGroupViewHolder(RowShoppingGroupBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
+    }
+  }
+
+  public static class ShoppingNotesViewHolder extends ViewHolder {
+
+    private final RowShoppingBottomNotesBinding binding;
+
+    public ShoppingNotesViewHolder(RowShoppingBottomNotesBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
     }
   }
 
@@ -115,25 +132,25 @@ public class ShoppingModeItemAdapter extends
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == GroupedListItem.TYPE_HEADER) {
-      return new ShoppingModeItemAdapter.ViewHolder(
-          LayoutInflater.from(parent.getContext()).inflate(
-              R.layout.row_shopping_group,
+      return new ShoppingGroupViewHolder(
+          RowShoppingGroupBinding.inflate(
+              LayoutInflater.from(parent.getContext()),
               parent,
               false
           )
       );
     } else if (viewType == GroupedListItem.TYPE_ENTRY) {
-      return new ShoppingModeItemAdapter.ViewHolder(
-          LayoutInflater.from(parent.getContext()).inflate(
-              R.layout.row_shopping_item,
+      return new ShoppingItemViewHolder(
+          RowShoppingItemBinding.inflate(
+              LayoutInflater.from(parent.getContext()),
               parent,
               false
           )
       );
     } else {
-      return new ShoppingModeItemAdapter.ViewHolder(
-          LayoutInflater.from(parent.getContext()).inflate(
-              R.layout.row_shopping_bottom_notes,
+      return new ShoppingNotesViewHolder(
+          RowShoppingBottomNotesBinding.inflate(
+              LayoutInflater.from(parent.getContext()),
               parent,
               false
           )
@@ -143,51 +160,67 @@ public class ShoppingModeItemAdapter extends
 
   @SuppressLint("ClickableViewAccessibility")
   @Override
-  public void onBindViewHolder(@NonNull final ViewHolder holder, int positionDoNotUse) {
-    int position = holder.getAdapterPosition();
+  public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
 
-    GroupedListItem groupedListItem = groupedListItems.get(position);
+    GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
 
-    int type = getItemViewType(position);
+    int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
+      ShoppingGroupViewHolder holder = (ShoppingGroupViewHolder) viewHolder;
       String productGroupName = ((ProductGroup) groupedListItem).getName();
-      holder.textViewGroupName.setText(productGroupName);
-      if (!productGroupName.equals(holder.textViewGroupName.getContext()
+      if (useSmallerFonts) {
+        holder.binding.name.setTextSize(14.5f);
+      }
+      holder.binding.name.setText(productGroupName);
+      if (!productGroupName.equals(holder.binding.name.getContext()
           .getString(R.string.subtitle_done))
       ) {
-        holder.textViewGroupName.setTextColor(ContextCompat.getColor(
-            holder.textViewGroupName.getContext(), R.color.retro_green_fg
+        holder.binding.name.setTextColor(ContextCompat.getColor(
+            holder.binding.name.getContext(), R.color.retro_green_fg
         ));
-        holder.viewGroupSeparator.setBackgroundTintList(ColorStateList.valueOf(
-            ContextCompat.getColor(
-                holder.textViewGroupName.getContext(),
-                R.color.retro_green_fg
-            )
+        holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
+            ContextCompat.getColor(holder.binding.name.getContext(), R.color.retro_green_fg)
         ));
       } else {
-        holder.textViewGroupName.setTextColor(ContextCompat.getColor(
-            holder.textViewGroupName.getContext(), R.color.retro_yellow_fg
+        holder.binding.name.setTextColor(ContextCompat.getColor(
+            holder.binding.name.getContext(), R.color.retro_yellow_fg
         ));
-        holder.viewGroupSeparator.setBackgroundTintList(ColorStateList.valueOf(
-            ContextCompat.getColor(
-                holder.textViewGroupName.getContext(),
-                R.color.retro_yellow_fg
-            )
+        holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
+            ContextCompat.getColor(holder.binding.name.getContext(), R.color.retro_yellow_fg)
         ));
       }
       return;
     }
     if (type == GroupedListItem.TYPE_BOTTOM_NOTES) {
-      holder.textViewBottomNotes.setText(
-          ((ShoppingListBottomNotes) groupedListItem).getNotes()
-      );
-      holder.textViewBottomNotes.setOnClickListener(
-          view -> listener.onItemRowClicked(groupedListItem)
-      );
+      ShoppingNotesViewHolder holder = (ShoppingNotesViewHolder) viewHolder;
+      holder.binding.notes.setText(((ShoppingListBottomNotes) groupedListItem).getNotes());
+      holder.binding.notes.setOnClickListener(view -> listener.onItemRowClicked(groupedListItem));
       return;
     }
 
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
+    RowShoppingItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
+
+    if (useSmallerFonts) {
+      int px4 = UnitUtil.dpToPx(binding.name.getContext(), 4f);
+      binding.card.setContentPadding(px4*2, px4, px4*2, px4);
+      LinearLayout.LayoutParams paramsCard = new LinearLayout.LayoutParams(
+          LayoutParams.MATCH_PARENT,
+          LayoutParams.WRAP_CONTENT
+      );
+      paramsCard.setMargins(px4*4, px4, px4*4, px4);
+      binding.card.setLayoutParams(paramsCard);
+
+      LinearLayout.LayoutParams paramsRow = new LinearLayout.LayoutParams(
+          LayoutParams.MATCH_PARENT,
+          LayoutParams.WRAP_CONTENT
+      );
+      paramsRow.setMargins(0, 0, 0, 0);
+      binding.name.setLayoutParams(paramsRow);
+      binding.name.setTextSize(18f);
+      binding.noteAsName.setLayoutParams(paramsRow);
+      binding.noteAsName.setTextSize(18f);
+    }
 
     // NAME
 
@@ -197,27 +230,23 @@ public class ShoppingModeItemAdapter extends
     }
 
     if (product != null) {
-      holder.textViewName.setText(product.getName());
-      holder.textViewName.setVisibility(View.VISIBLE);
+      binding.name.setText(product.getName());
+      binding.name.setVisibility(View.VISIBLE);
     } else {
-      holder.textViewName.setText(null);
-      holder.textViewName.setVisibility(View.GONE);
+      binding.name.setText(null);
+      binding.name.setVisibility(View.GONE);
     }
     if (item.isUndone()) {
-      holder.textViewName.setPaintFlags(
-          holder.textViewName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
+      binding.name.setPaintFlags(binding.name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
     } else {
-      holder.textViewName.setPaintFlags(
-          holder.textViewName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
+      binding.name.setPaintFlags(binding.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
     // NOTE AS NAME
 
-    if (holder.textViewName.getVisibility() == View.VISIBLE) {
-      holder.textViewNoteName.setVisibility(View.GONE);
-      holder.textViewNoteName.setText(null);
+    if (binding.name.getVisibility() == View.VISIBLE) {
+      binding.noteAsName.setVisibility(View.GONE);
+      binding.noteAsName.setText(null);
     }
 
     // AMOUNT
@@ -227,83 +256,83 @@ public class ShoppingModeItemAdapter extends
       QuantityUnit quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
       if (quStr != null) {
-        holder.textViewAmount.setText(
-            holder.textViewAmount.getContext()
+        binding.amount.setText(
+            binding.amount.getContext()
                 .getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
         );
       } else {
-        holder.textViewAmount.setText(NumUtil.trim(amountInQuUnit));
+        binding.amount.setText(NumUtil.trim(amountInQuUnit));
       }
     } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
-        holder.textViewAmount.setText(
-            holder.textViewAmount.getContext()
+        binding.amount.setText(
+            binding.amount.getContext()
                 .getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
         );
       } else {
-        holder.textViewAmount.setText(NumUtil.trim(item.getAmountDouble()));
+        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
       }
     } else {
-      holder.textViewAmount.setText(NumUtil.trim(item.getAmountDouble()));
+      binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
     }
 
     if (item.isUndone()) {
-      holder.textViewAmount.setPaintFlags(
-          holder.textViewAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+      binding.amount.setPaintFlags(
+          binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
       );
     } else {
-      holder.textViewAmount.setPaintFlags(
-          holder.textViewAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+      binding.amount.setPaintFlags(
+          binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
       );
     }
 
     // NOTE
 
     if (item.getNote() != null && !item.getNote().isEmpty()) {
-      if (holder.textViewName.getVisibility() == View.VISIBLE) {
-        holder.textViewNote.setVisibility(View.VISIBLE);
-        holder.textViewNote.setText(item.getNote().trim());
+      if (binding.name.getVisibility() == View.VISIBLE) {
+        binding.note.setVisibility(View.VISIBLE);
+        binding.note.setText(item.getNote().trim());
       } else {
-        holder.textViewNoteName.setVisibility(View.VISIBLE);
-        holder.textViewNoteName.setText(item.getNote().trim());
-        holder.textViewNote.setVisibility(View.GONE);
-        holder.textViewNote.setText(null);
+        binding.noteAsName.setVisibility(View.VISIBLE);
+        binding.noteAsName.setText(item.getNote().trim());
+        binding.note.setVisibility(View.GONE);
+        binding.note.setText(null);
       }
     } else {
-      if (holder.textViewName.getVisibility() == View.VISIBLE) {
-        holder.textViewNote.setVisibility(View.GONE);
-        holder.textViewNote.setText(null);
+      if (binding.name.getVisibility() == View.VISIBLE) {
+        binding.note.setVisibility(View.GONE);
+        binding.note.setText(null);
       }
     }
-    if (holder.textViewNoteName.getVisibility() == View.VISIBLE) {
+    if (binding.noteAsName.getVisibility() == View.VISIBLE) {
       if (item.isUndone()) {
-        holder.textViewNoteName.setPaintFlags(
-            holder.textViewNoteName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+        binding.noteAsName.setPaintFlags(
+            binding.noteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
         );
       } else {
-        holder.textViewNoteName.setPaintFlags(
-            holder.textViewNoteName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+        binding.noteAsName.setPaintFlags(
+            binding.noteAsName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
         );
       }
     } else {
       if (item.isUndone()) {
-        holder.textViewNote.setPaintFlags(
-            holder.textViewNote.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+        binding.note.setPaintFlags(
+            binding.note.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
         );
       } else {
-        holder.textViewNote.setPaintFlags(
-            holder.textViewNote.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+        binding.note.setPaintFlags(
+            binding.note.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
         );
       }
     }
 
-    holder.linearLayoutContainer.setAlpha(item.getDoneInt() == 1 ? 0.4f : 1);
+    binding.containerRow.setAlpha(item.getDoneInt() == 1 ? 0.4f : 1);
 
     // CONTAINER
 
-    holder.cardViewContainer.setOnClickListener(
+    binding.card.setOnClickListener(
         view -> listener.onItemRowClicked(groupedListItem)
     );
   }

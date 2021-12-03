@@ -51,7 +51,6 @@ public class ShoppingListItemAdapter extends
 
   private final static String TAG = ShoppingListItemAdapter.class.getSimpleName();
 
-  private Context context;
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
@@ -59,7 +58,6 @@ public class ShoppingListItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
   private final PluralUtil pluralUtil;
-
 
   public ShoppingListItemAdapter(
       Context context,
@@ -70,7 +68,6 @@ public class ShoppingListItemAdapter extends
       ArrayList<Integer> missingProductIds,
       ShoppingListItemAdapterListener listener
   ) {
-    this.context = context;
     this.groupedListItems = new ArrayList<>(groupedListItems);
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -78,12 +75,6 @@ public class ShoppingListItemAdapter extends
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     pluralUtil = new PluralUtil(context);
-  }
-
-  @Override
-  public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-    super.onDetachedFromRecyclerView(recyclerView);
-    this.context = null;
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -228,7 +219,8 @@ public class ShoppingListItemAdapter extends
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
       if (quStr != null) {
         binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
+            binding.amount.getContext()
+                .getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
         );
       } else {
         binding.amount.setText(NumUtil.trim(amountInQuUnit));
@@ -238,7 +230,8 @@ public class ShoppingListItemAdapter extends
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
         binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+            binding.amount.getContext()
+                .getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
         );
       } else {
         binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
@@ -248,14 +241,18 @@ public class ShoppingListItemAdapter extends
     }
 
     if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
-      binding.amount.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
-      binding.amount.setTextColor(ContextCompat.getColor(context, R.color.retro_blue_fg));
-    } else {
       binding.amount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
+          ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_medium)
       );
       binding.amount.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
+          ContextCompat.getColor(binding.amount.getContext(), R.color.retro_blue_fg)
+      );
+    } else {
+      binding.amount.setTypeface(
+          ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_book)
+      );
+      binding.amount.setTextColor(
+          ContextCompat.getColor(binding.amount.getContext(), R.color.on_background_secondary)
       );
     }
     if (item.isUndone()) {
@@ -277,6 +274,8 @@ public class ShoppingListItemAdapter extends
       } else {
         binding.noteAsName.setVisibility(View.VISIBLE);
         binding.noteAsName.setText(item.getNote().trim());
+        binding.note.setVisibility(View.GONE);
+        binding.note.setText(null);
       }
     } else {
       if (binding.name.getVisibility() == View.VISIBLE) {

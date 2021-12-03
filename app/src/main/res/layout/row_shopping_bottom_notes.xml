@@ -32,7 +32,7 @@
   android:gravity="center_vertical">
 
   <TextView
-    android:id="@+id/text_shopping_bottom_notes"
+    android:id="@+id/notes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="22sp"
