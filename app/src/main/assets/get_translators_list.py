@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# last update of translators list (res/raw/locales.txt): 05/15/21
+# last update of translators list (res/raw/locales.txt): 12/04/21  (MM/DD/YY)
 
 import requests
 import sys
@@ -18,10 +18,13 @@ if r.status_code != 200:
     sys.exit(1)
 
 languages: list = r.json()
+languages.sort(key = lambda lang : lang['language_code'])
 
 for lang in languages:
     print(f"language code: {lang['language_code']}")
     translators: str = ""
     for translator in lang["translators"]:
-        translators += f"{translator} "
+        translators += f"{translator}"
+        if translator != lang["translators"][-1]:
+            translators += ", "
     print(f"translators: {translators}\n")

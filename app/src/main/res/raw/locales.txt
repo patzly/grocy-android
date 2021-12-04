@@ -12,15 +12,15 @@ Dominic Zedler, Patrick Zedler
 
 es
 es.demo.grocy.info
-ami232, martinvolantin, recognitium, rubensancor, adrigrillo
+netsyder, recognitium, SackCastellon, rubensancor, tmllull, xuko, martinvolantin, ami232, adrigrillo
 
 fr
 fr.demo.grocy.info
-Zorvalt, Keiishu, MrAlucardDante, lapourgagner, tesseract241, Clem844, prohand, voslin, erobertc, Mquiles
+Keiishu, Zorvalt, voslin, choukajohn, aleskx, Clem844, prohand, Mquiles, MrAlucardDante, erobertc, tesseract241, Stack_it_up, lapourgagner
 
 it
 it.demo.grocy.info
-lucanomax, silkevicious, alex.bernocchi.ab, bonerserk, sandman91, racerider, Matte23, nuraiman, mellotanica, wisewtf, tesseract241
+bonerserk, AlessandroSechi, iglox, loviuz, lucanomax, wisewtf, silkevicious, sandman91, mellotanica, tesseract241, alex.bernocchi.ab, nuraiman, racerider, Matte23
 
 iw
 en.demo.grocy.info
@@ -28,11 +28,11 @@ sefi.ninio, Yaron
 
 nb
 no.demo.grocy.info
-teitrand
+teitrand, Ziggiz
 
 nl
 nl.demo.grocy.info
-emielverstegen, 4lloyd, Llewy, knnnrd, MaartenSiersema, Wazzaaam
+decramy, emielverstegen, knnnrd, Llewy, 4lloyd, mcbloch, Wazzaaam, MaartenSiersema
 
 pl
 pl.demo.grocy.info
@@ -52,7 +52,7 @@ unwarkz, rrader, Dside, SergeyKodolov, iluhis
 
 sv
 sv.demo.grocy.info
-Busan15, googleoo, duxleon
+Bllstc, Joakim_S, duxleon, Busan15, googleoo, bexov
 
 uk
 en.demo.grocy.info
