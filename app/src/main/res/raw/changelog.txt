@@ -5,6 +5,7 @@ Major changes since 1.10.1:
 - Design & navigation overhaul ("Material You" redesign is coming in a future update)
 - New pages: Overview, Inventory, Transfer & more
 - Rewritten pages: Settings, Purchase, Consume & more
+- Additional better barcode scanner: ML Kit (not in F-Droid version)
 Changes since 2.0.0-beta05:
 - Improved: Ability to enter dates with keyboard with new option (#394)
 - Improved: Option to use smaller font on shopping mode page (#379)
