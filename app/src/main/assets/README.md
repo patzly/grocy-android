@@ -10,14 +10,6 @@
 6. Implement different color themes
 7. Optimize splashscreen for Android 12
 
-## Alpha testing text
-
-**Changelog**
-- Fixed: Annoying update info was displayed on every start
-- Fixed: Crash on quantity units list refresh (#331)
-- Fixed: Wrong product was created if name contained "&" (#333)
-- Updated translations
-
 ## Improvements
 
 Von den fragments die showMessage methods auf activity.showMessage umstellen, weil da noch die AnchorView gesetzt wird.

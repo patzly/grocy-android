@@ -1,0 +1,7 @@
+ Major changes since 1.10.1:
+- Compatibility with grocy v3.x.x
+- Incompatibility with grocy v2.7.x
+- Design & navigation overhaul
+- New pages: Overview, Inventory, Transfer & more
+- Rewritten pages: Settings, Purchase, Consume & more
+For changes since 2.0.0-beta05 you can go to our GitHub Releases page.
