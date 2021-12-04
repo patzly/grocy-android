@@ -42,8 +42,11 @@ import com.journeyapps.barcodescanner.camera.CameraSettings.FocusMode;
 import java.util.ArrayList;
 import java.util.Set;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ZXingPromptBottomSheet;
 import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
 import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
@@ -59,6 +62,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   private final BarcodeListener barcodeListener;
   private final DecoratedBarcodeView barcodeView;
   private final ZXingScanCaptureManager capture;
+  private final SharedPreferences sharedPrefs;
 
   public EmbeddedFragmentScannerZXing(
       Fragment fragment,
@@ -71,6 +75,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     super(fragment.requireActivity());
     this.fragment = fragment;
     this.barcodeListener = barcodeListener;
+    this.sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
 
     // set container size
     int width;
@@ -202,6 +207,15 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
       startScannerIfVisible();
       return;
     }
+
+    int promptCount = sharedPrefs.getInt(PREF.ZXING_PROMPT, 1);
+    if (promptCount > 0 && promptCount < 15) {
+      sharedPrefs.edit().putInt(PREF.ZXING_PROMPT, promptCount + 1).apply();
+    } else if (promptCount >= 15) {
+      ((MainActivity) this.fragment.requireActivity())
+          .showBottomSheet(new ZXingPromptBottomSheet());
+    }
+
     barcodeListener.onBarcodeRecognized(result.getText());
   }
 

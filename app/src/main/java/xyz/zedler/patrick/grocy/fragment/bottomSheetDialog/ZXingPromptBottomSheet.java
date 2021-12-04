@@ -21,9 +21,7 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,16 +31,15 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetPurchasePromptBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetZxingPromptBinding;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ResUtil;
-import xyz.zedler.patrick.grocy.util.UnlockUtil;
 
-public class PurchasePromptBottomSheet extends BaseBottomSheet {
+public class ZXingPromptBottomSheet extends BaseBottomSheet {
 
   private final static String TAG = "PurchasePromptBottomSheet";
 
-  private FragmentBottomsheetPurchasePromptBinding binding;
+  private FragmentBottomsheetZxingPromptBinding binding;
   private SharedPreferences sharedPrefs;
 
   @NonNull
@@ -57,7 +54,7 @@ public class PurchasePromptBottomSheet extends BaseBottomSheet {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetPurchasePromptBinding.inflate(
+    binding = FragmentBottomsheetZxingPromptBinding.inflate(
         getLayoutInflater(), container, false
     );
 
@@ -66,22 +63,12 @@ public class PurchasePromptBottomSheet extends BaseBottomSheet {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-    binding.text.setText(ResUtil.getRawText(requireContext(), R.raw.ml_kit_prompt));
+    binding.text.setText(ResUtil.getRawText(requireContext(), R.raw.zxing_prompt));
 
     binding.buttonIgnore.setOnClickListener(v -> dismiss());
 
-    binding.buttonVending.setOnClickListener(v -> {
-      try {
-        startActivity(new Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("market://details?id=" + UnlockUtil.PACKAGE)
-        ));
-      } catch (android.content.ActivityNotFoundException e) {
-        startActivity(new Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/apps/details?id=" + UnlockUtil.PACKAGE)
-        ));
-      }
+    binding.buttonSettings.setOnClickListener(v -> {
+      navigateDeepLink(R.string.deep_link_settingsCatScannerToolFragment);
       dismiss();
     });
 
@@ -99,7 +86,7 @@ public class PurchasePromptBottomSheet extends BaseBottomSheet {
 
   @Override
   public void onDismiss(@NonNull DialogInterface dialog) {
-    sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 0).apply();
+    sharedPrefs.edit().putInt(PREF.ZXING_PROMPT, 0).apply();
     super.onDismiss(dialog);
   }
 

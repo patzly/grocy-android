@@ -82,6 +82,7 @@ public final class Constants {
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
     public final static String PURCHASED = "purchased";
+    public final static String ZXING_PROMPT = "zxing_prompt";
     public final static String PURCHASE_PROMPT = "purchase_prompt";
   }
 

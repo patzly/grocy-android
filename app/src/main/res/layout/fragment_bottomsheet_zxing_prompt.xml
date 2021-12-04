@@ -69,12 +69,12 @@
           clickUtil="@{clickUtil}"/>
 
         <com.google.android.material.button.MaterialButton
-          android:id="@+id/button_vending"
+          android:id="@+id/button_settings"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
-          android:text="@string/action_play_store"
+          android:text="@string/title_settings"
           app:backgroundTint="@color/retro_green_bg_white"
           clickUtil="@{clickUtil}"/>
 

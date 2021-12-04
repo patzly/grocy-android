@@ -1,0 +1,6 @@
+Did you know that there are two different barcode scanners in this app?
+
+You are currently using ZXing ("Zebra crossing"), but there is an option to switch to a better scanner in the settings: ML Kit ("Machine Learning Kit").
+This one is faster, makes much less recognition mistakes and can recognize barcodes with any orientation.
+
+You can unlock the ML Kit scanner with an additional tiny app, more infos are on the settings page.

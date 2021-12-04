@@ -633,9 +633,13 @@
     </fragment>
     <fragment
       android:id="@+id/settingsCatScannerToolFragment"
-      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerChooseFragment"
       android:label="SettingsCatScannerToolFragment"
-      tools:layout="@layout/fragment_settings_cat_scanner_choose"/>
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatScannerChooseFragment"
+      tools:layout="@layout/fragment_settings_cat_scanner_choose">
+      <deepLink
+        android:id="@+id/deepLink13"
+        app:uri="@string/deep_link_settingsCatScannerToolFragment" />
+    </fragment>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"
