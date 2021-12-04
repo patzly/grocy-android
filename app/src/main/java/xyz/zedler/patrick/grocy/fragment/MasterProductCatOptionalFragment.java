@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
+import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
@@ -46,6 +47,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
 
 public class MasterProductCatOptionalFragment extends BaseFragment implements BarcodeListener {
@@ -236,9 +238,16 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void showProductGroupsBottomSheet() {
     Bundle bundle = new Bundle();
+    ArrayList<ProductGroup> productGroups = viewModel.getFormData()
+        .getProductGroupsLive().getValue();
+    SortUtil.sortProductGroupsByName(
+        requireContext(),
+        productGroups,
+        true
+    );
     bundle.putParcelableArrayList(
         Constants.ARGUMENT.PRODUCT_GROUPS,
-        viewModel.getFormData().getProductGroupsLive().getValue()
+        productGroups
     );
 
     ProductGroup productGroup = viewModel.getFormData().getProductGroupLive().getValue();
