@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
@@ -372,9 +373,9 @@ public class ConsumeViewModel extends BaseViewModel {
     if (product != null) {
       setProduct(product.getId(), productBarcode, stockEntryId);
     } else {
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
-      sendEvent(Event.FOCUS_INVALID_VIEWS);
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
     }
   }
 

@@ -773,6 +773,8 @@
   <string name="setting_keep_screen_on_description">Wenn im Shoppingmodus</string>
   <string name="setting_show_done_items">Erledigte Einträge anzeigen</string>
   <string name="setting_show_done_items_description">Am Listen-Ende</string>
+  <string name="setting_smaller_font">Kleinere Schrift benutzen</string>
+  <string name="setting_smaller_font_description">Um mehr Einträge auf einmal zu sehen</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">\"Bald fällig\" Tage</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
@@ -332,9 +333,9 @@ public class InventoryViewModel extends BaseViewModel {
     if (product != null) {
       setProduct(product.getId());
     } else {
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
-      sendEvent(Event.FOCUS_INVALID_VIEWS);
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
     }
   }
 

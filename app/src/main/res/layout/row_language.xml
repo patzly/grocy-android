@@ -64,8 +64,7 @@
         android:id="@+id/text_language_translators"
         style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="2" />
+        android:layout_height="wrap_content" />
 
     </LinearLayout>
 

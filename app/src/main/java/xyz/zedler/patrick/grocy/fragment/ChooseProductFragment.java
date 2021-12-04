@@ -85,8 +85,10 @@ public class ChooseProductFragment extends BaseFragment
     clickUtil = new ClickUtil();
 
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
+    boolean forbidCreateProduct = ChooseProductFragmentArgs.fromBundle(requireArguments())
+        .getForbidCreateProduct();
     Object newProductId = getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
-    if (newProductId != null) {
+    if (newProductId != null) {  // if user created a new product and navigates back to this fragment this is the new productId
       setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
       setForPreviousDestination(ARGUMENT.BARCODE, barcode);
       activity.navigateUp();
@@ -94,7 +96,7 @@ public class ChooseProductFragment extends BaseFragment
     }
 
     viewModel = new ViewModelProvider(this, new ChooseProductViewModel
-        .ChooseProductViewModelFactory(activity.getApplication(), barcode)
+        .ChooseProductViewModelFactory(activity.getApplication(), barcode, forbidCreateProduct)
     ).get(ChooseProductViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
 

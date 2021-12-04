@@ -58,18 +58,23 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final MutableLiveData<String> productNameLive;
   private final MutableLiveData<String> offHelpText;
   private final MutableLiveData<String> createProductTextLive;
-  private final MutableLiveData<Boolean> productNameAlreadyExistsLive;
+  private final MutableLiveData<Boolean> forbidCreateProductLive;
   private final MutableLiveData<String> productNameHelperTextLive;
   private final MutableLiveData<String> existingProductsCategoryTextLive;
 
   private final String barcode;
   private ArrayList<Product> products;
   private final HashMap<String, Product> productHashMap;
+  private boolean forbidCreateProductInitial;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
 
-  public ChooseProductViewModel(@NonNull Application application, String barcode) {
+  public ChooseProductViewModel(
+      @NonNull Application application,
+      String barcode,
+      boolean forbidCreateProduct
+  ) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -85,13 +90,14 @@ public class ChooseProductViewModel extends BaseViewModel {
     productNameLive = new MutableLiveData<>();
     offHelpText = new MutableLiveData<>();
     createProductTextLive = new MutableLiveData<>(getString(R.string.msg_create_new_product));
-    productNameAlreadyExistsLive = new MutableLiveData<>(false);
+    forbidCreateProductLive = new MutableLiveData<>(forbidCreateProduct);
     productNameHelperTextLive = new MutableLiveData<>(
         application.getString(R.string.subtitle_barcode, barcode)
     );
     existingProductsCategoryTextLive = new MutableLiveData<>(
         getString(R.string.category_existing_products)
     );
+    forbidCreateProductInitial = forbidCreateProduct;
 
     this.barcode = barcode;
     products = new ArrayList<>();
@@ -207,7 +213,9 @@ public class ChooseProductViewModel extends BaseViewModel {
       SortUtil.sortProductsByName(products, true);
       displayedItemsLive.setValue(products);
       createProductTextLive.setValue(getString(R.string.msg_create_new_product));
-      productNameAlreadyExistsLive.setValue(false);
+      if (!forbidCreateProductInitial) {
+        forbidCreateProductLive.setValue(false);
+      }
       existingProductsCategoryTextLive.setValue(getString(R.string.category_existing_products));
       return;
     }
@@ -226,7 +234,9 @@ public class ChooseProductViewModel extends BaseViewModel {
     createProductTextLive.setValue(
         getApplication().getString(R.string.msg_create_new_product_filled, productName)
     );
-    productNameAlreadyExistsLive.setValue(productHashMap.containsKey(productName.toLowerCase()));
+    if (!forbidCreateProductInitial) {
+      forbidCreateProductLive.setValue(productHashMap.containsKey(productName.toLowerCase()));
+    }
     existingProductsCategoryTextLive.setValue(
         getString(R.string.category_existing_products_similar)
     );
@@ -270,8 +280,8 @@ public class ChooseProductViewModel extends BaseViewModel {
     return createProductTextLive;
   }
 
-  public MutableLiveData<Boolean> getProductNameAlreadyExistsLive() {
-    return productNameAlreadyExistsLive;
+  public MutableLiveData<Boolean> getForbidCreateProductLive() {
+    return forbidCreateProductLive;
   }
 
   public MutableLiveData<String> getProductNameHelperTextLive() {
@@ -308,17 +318,23 @@ public class ChooseProductViewModel extends BaseViewModel {
 
     private final Application application;
     private final String barcode;
+    private final boolean forbidCreateProduct;
 
-    public ChooseProductViewModelFactory(Application application, String barcode) {
+    public ChooseProductViewModelFactory(
+        Application application,
+        String barcode,
+        boolean forbidCreateProduct
+    ) {
       this.application = application;
       this.barcode = barcode;
+      this.forbidCreateProduct = forbidCreateProduct;
     }
 
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-      return (T) new ChooseProductViewModel(application, barcode);
+      return (T) new ChooseProductViewModel(application, barcode, forbidCreateProduct);
     }
   }
 }
