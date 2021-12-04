@@ -13,6 +13,7 @@ Changes since 2.0.0-beta05:
 - Improved: Focus product field if empty on shopping list item page init
 - Improved: On shopping list item page tap done on keyboard when in notes field to save item
 - Improved: On shopping list item page amount is prefilled with 1 (#406)
+- Improved: (not F-Droid) Suggestion popup for ML Kit scanner after 15 scans with ZXing
 - Fixed: Sorting of entries on master data pages (#463) (thanks @Turysaz)
 
 2.0.0-beta05
