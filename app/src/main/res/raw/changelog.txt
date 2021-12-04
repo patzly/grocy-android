@@ -8,6 +8,7 @@ Major changes since 1.10.1:
 Changes since 2.0.0-beta05:
 - Improved: Ability to enter dates with keyboard with new option (#394)
 - Improved: Option to use smaller font on shopping mode page (#379)
+- Improved: Product Choose page with OFF is available on all four transaction pages (#466)
 - Improved: Focus product name field if empty on master product page init
 - Improved: Focus product field if empty on shopping list item page init
 - Improved: On shopping list item page tap done on keyboard when in notes field to save item

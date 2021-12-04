@@ -97,6 +97,12 @@
       android:name="startWithScanner"
       app:argType="boolean"
       android:defaultValue="false" />
+    <action
+      android:id="@+id/action_consumeFragment_to_chooseProductFragment"
+      app:destination="@id/chooseProductFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/transferFragment"
@@ -124,6 +130,12 @@
     <deepLink
       android:id="@+id/deepLink6"
       app:uri="@string/deep_link_transferFragment" />
+    <action
+      android:id="@+id/action_transferFragment_to_chooseProductFragment"
+      app:destination="@id/chooseProductFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/inventoryFragment"
@@ -155,6 +167,12 @@
       android:name="startWithScanner"
       app:argType="boolean"
       android:defaultValue="false" />
+    <action
+      android:id="@+id/action_inventoryFragment_to_chooseProductFragment"
+      app:destination="@id/chooseProductFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <dialog
     android:id="@+id/productOverviewBottomSheetDialogFragment"
@@ -893,5 +911,9 @@
     <argument
       android:name="barcode"
       app:argType="string" />
+    <argument
+      android:name="forbidCreateProduct"
+      app:argType="boolean"
+      android:defaultValue="false" />
   </fragment>
 </navigation>

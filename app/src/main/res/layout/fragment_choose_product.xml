@@ -257,7 +257,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:visibility="@{viewModel.productNameAlreadyExistsLive ? View.GONE : View.VISIBLE}">
+              android:visibility="@{viewModel.forbidCreateProductLive ? View.GONE : View.VISIBLE}">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.Category"

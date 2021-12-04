@@ -368,9 +368,9 @@ public class TransferViewModel extends BaseViewModel {
     if (product != null) {
       setProduct(product.getId(), productBarcode, stockEntryId);
     } else {
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
-      sendEvent(Event.FOCUS_INVALID_VIEWS);
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
     }
   }
 

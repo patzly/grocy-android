@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -139,6 +140,11 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
         clearInputFocus();
       } else if (event.getType() == Event.CONTINUE_SCANNING) {
         embeddedFragmentScanner.startScannerIfVisible();
+      } else if (event.getType() == Event.CHOOSE_PRODUCT) {
+        String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
+        navigate(TransferFragmentDirections
+            .actionTransferFragmentToChooseProductFragment(barcode)
+            .setForbidCreateProduct(true));
       }
     });
 
@@ -155,6 +161,11 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
       viewModel.setQueueEmptyAction(
           () -> viewModel.setProduct(productId, null, null)
       );
+    }
+    String barcode = (String) getFromThisDestinationNow(ARGUMENT.BARCODE);
+    if (barcode != null) {
+      removeForThisDestination(Constants.ARGUMENT.BARCODE);
+      viewModel.addBarcodeToExistingProduct(barcode);
     }
 
     embeddedFragmentScanner.setScannerVisibilityLive(
