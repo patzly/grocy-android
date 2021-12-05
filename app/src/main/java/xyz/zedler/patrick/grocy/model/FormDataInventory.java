@@ -755,8 +755,11 @@ public class FormDataInventory {
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       price = priceLive.getValue();
     }
-    Store store = storeLive.getValue();
-    String storeId = store != null ? String.valueOf(store.getId()) : null;
+    String storeId = null;
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      Store store = storeLive.getValue();
+      storeId = store != null ? String.valueOf(store.getId()) : null;
+    }
     Location location = locationLive.getValue();
     String purchasedDate = purchasedDateLive.getValue();
     String dueDate = dueDateLive.getValue();
@@ -797,10 +800,14 @@ public class FormDataInventory {
     assert productDetailsLive.getValue() != null;
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
+    Store store = storeLive.getValue();
 
     ProductBarcode productBarcode = new ProductBarcode();
     productBarcode.setProductId(product.getId());
     productBarcode.setBarcode(barcode);
+    if (store != null && isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      productBarcode.setStoreId(String.valueOf(store.getId()));
+    }
     return productBarcode;
   }
 

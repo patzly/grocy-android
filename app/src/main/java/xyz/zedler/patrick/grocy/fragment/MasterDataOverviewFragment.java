@@ -210,6 +210,9 @@ public class MasterDataOverviewFragment extends BaseFragment {
     if (!viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       binding.linearLocations.setVisibility(View.GONE);
     }
+    if (!viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      binding.linearStores.setVisibility(View.GONE);
+    }
   }
 
   @Override

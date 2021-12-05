@@ -622,7 +622,7 @@
               android:id="@+id/linear_purchase_store"
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
               android:onClick="@{() -> viewModel.showStoresBottomSheet()}"
-              android:visibility="@{formData.showStoreSection ? View.VISIBLE : View.GONE}">
+              android:visibility="@{formData.showStoreSection &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) ? View.VISIBLE : View.GONE}">
 
               <ImageView
                 android:id="@+id/image_purchase_store"
