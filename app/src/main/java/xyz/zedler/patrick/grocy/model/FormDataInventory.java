@@ -481,15 +481,16 @@ public class FormDataInventory {
     QuantityUnit stockUnit = quantityUnitStockLive.getValue();
     String amountStock = amountStockLive.getValue();
     assert productDetailsLive.getValue() != null && stockUnit != null && amountStock != null;
+    double amountStockDouble = Double.parseDouble(amountStock);
     if (isTareWeightEnabled()) {
-      amountStock = NumUtil.trim(Double.parseDouble(amountStock)
+      amountStock = NumUtil.trim(amountStockDouble
           - productDetailsLive.getValue().getProduct().getTareWeightDouble());
     }
     return application.getString(
         R.string.msg_inventoried,
         productDetailsLive.getValue().getProduct().getName(),
         amountStock,
-        pluralUtil.getQuantityUnitPlural(stockUnit, amountDiff),
+        pluralUtil.getQuantityUnitPlural(stockUnit, amountStockDouble),
         amountDiff >= 0 ? "+" + NumUtil.trim(amountDiff) : NumUtil.trim(amountDiff)
     );
   }
