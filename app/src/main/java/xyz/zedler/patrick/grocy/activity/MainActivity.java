@@ -277,11 +277,7 @@ public class MainActivity extends AppCompatActivity {
       );
     }
 
-    if (UnlockUtil.isKeyInstalled(this)) {
-      UnlockUtil.checkIfPurchased(this, sharedPrefs);
-    } else {
-      sharedPrefs.edit().putBoolean(PREF.PURCHASED, false).apply();
-    }
+    sharedPrefs.edit().putBoolean(PREF.PURCHASED, UnlockUtil.isKeyInstalled(this)).apply();
   }
 
   @Override

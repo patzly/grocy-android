@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.util;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,6 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 public class UnlockUtil {
 
   public final static String PACKAGE = "xyz.zedler.patrick.grocy.unlock";
-  private final static int PURCHASED = 1;
 
   public static boolean isKeyInstalled(Context context) {
     try {
@@ -47,24 +47,6 @@ public class UnlockUtil {
       return true;
     } catch (Exception e) {
       return false;
-    }
-  }
-
-  public static void checkIfPurchased(AppCompatActivity activity, SharedPreferences sharedPrefs) {
-    ActivityResultLauncher<Intent> launcher;
-    launcher = activity.registerForActivityResult(
-        new ActivityResultContracts.StartActivityForResult(),
-        result -> sharedPrefs.edit()
-            .putBoolean(PREF.PURCHASED, result.getResultCode() == PURCHASED)
-            .apply()
-    );
-    try {
-      Intent intent = activity.getPackageManager().getLaunchIntentForPackage(PACKAGE);
-      if (intent != null) {
-        intent.setFlags(0);
-        launcher.launch(intent);
-      }
-    } catch (Exception ignored) {
     }
   }
 }
