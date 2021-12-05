@@ -17,6 +17,7 @@ Changes since 2.0.0-beta05:
 - Improved: (not F-Droid) Suggestion popup for ML Kit scanner after 15 scans with ZXing
 - Improved: long lists are now displaying a vertical scrollbar
 - Fixed: Sorting of entries on master data pages (#463) (thanks @Turysaz)
+- Fixed: Hide store fields if price tracking feature is disabled
 
 2.0.0-beta05:
 This is the last beta before the final v2.0.0 release. Please report any issues that may have come up with the recent changes so that the final version is as bug-free as possible.
