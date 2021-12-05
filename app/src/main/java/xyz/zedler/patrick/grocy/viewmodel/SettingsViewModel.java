@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
@@ -530,6 +531,11 @@ public class SettingsViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
     dlHelper.getProductGroups(
         productGroups -> {
+          SortUtil.sortProductGroupsByName(
+              getApplication().getApplicationContext(),
+              productGroups,
+              true
+          );
           this.productGroups = productGroups;
           this.productGroups.add(
               0,

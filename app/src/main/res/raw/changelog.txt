@@ -5,6 +5,7 @@ Major changes since 1.10.1:
 - Design & navigation overhaul ("Material You" redesign is coming in a future update)
 - New pages: Overview, Inventory, Transfer & more
 - Rewritten pages: Settings, Purchase, Consume & more
+- Additional better barcode scanner: ML Kit (not in F-Droid version)
 Changes since 2.0.0-beta05:
 - Improved: Ability to enter dates with keyboard with new option (#394)
 - Improved: Option to use smaller font on shopping mode page (#379)
@@ -14,6 +15,7 @@ Changes since 2.0.0-beta05:
 - Improved: On shopping list item page tap done on keyboard when in notes field to save item
 - Improved: On shopping list item page amount is prefilled with 1 (#406)
 - Improved: (not F-Droid) Suggestion popup for ML Kit scanner after 15 scans with ZXing
+- Improved: long lists are now displaying a vertical scrollbar
 - Fixed: Sorting of entries on master data pages (#463) (thanks @Turysaz)
 
 2.0.0-beta05:

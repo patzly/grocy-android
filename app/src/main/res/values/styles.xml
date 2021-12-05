@@ -37,6 +37,14 @@
     <item name="android:tint">@color/icon</item>
   </style>
 
+  <!-- RECYCLER VIEW -->
+
+  <style name="Widget.Grocy.RecyclerView" parent="">
+    <item name="android:scrollbars">vertical</item>
+    <item name="android:scrollbarThumbVertical">@drawable/shape_scrollbar_rounded</item>
+    <item name="android:background">@color/transparent</item>
+  </style>
+
   <!-- DRAWER -->
 
   <style name="Widget.Grocy.LinearLayout.Drawer" parent="">
