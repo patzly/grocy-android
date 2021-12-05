@@ -481,15 +481,16 @@ public class FormDataInventory {
     QuantityUnit stockUnit = quantityUnitStockLive.getValue();
     String amountStock = amountStockLive.getValue();
     assert productDetailsLive.getValue() != null && stockUnit != null && amountStock != null;
+    double amountStockDouble = Double.parseDouble(amountStock);
     if (isTareWeightEnabled()) {
-      amountStock = NumUtil.trim(Double.parseDouble(amountStock)
+      amountStock = NumUtil.trim(amountStockDouble
           - productDetailsLive.getValue().getProduct().getTareWeightDouble());
     }
     return application.getString(
         R.string.msg_inventoried,
         productDetailsLive.getValue().getProduct().getName(),
         amountStock,
-        pluralUtil.getQuantityUnitPlural(stockUnit, amountDiff),
+        pluralUtil.getQuantityUnitPlural(stockUnit, amountStockDouble),
         amountDiff >= 0 ? "+" + NumUtil.trim(amountDiff) : NumUtil.trim(amountDiff)
     );
   }
@@ -732,7 +733,9 @@ public class FormDataInventory {
     }
     assert qU != null && details != null;
     String store = storeNameLive.getValue();
-    if (store == null) {
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      store = getString(R.string.subtitle_feature_disabled);
+    } else if (store == null) {
       store = getString(R.string.subtitle_none_selected);
     }
 
@@ -752,11 +755,9 @@ public class FormDataInventory {
     String amount = getAmountStock();
     assert amount != null && productWillBeAddedLive.getValue() != null;
     String price = null;
-    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      price = priceLive.getValue();
-    }
     String storeId = null;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      price = priceLive.getValue();
       Store store = storeLive.getValue();
       storeId = store != null ? String.valueOf(store.getId()) : null;
     }
