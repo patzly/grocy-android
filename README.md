@@ -34,21 +34,10 @@ iOS client for grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftU
 * Fast barcode scanning
 * OpenFoodFacts implementation
 * Master data editing
-* Intuitive batch processing
 * Dark mode
-* No ads, analytics or in-app purchases
-* Low data usage
-* Small app size (~6MB)
+* No ads or analytics
 
 ## Compatibility
-
-The developer of the grocy [server application](https://github.com/grocy/grocy) has released a new version `3.0.0` at the end of December 2020.  
-Among other great things it contains breaking changes in the API, which means that this unofficial Android app will not work properly after updating the server to version `3.0.0`.  
-So if you want to continue using this Android app as usual, you should wait for our update to `v2.0.0` before updating your server to version `3.0.0`.
-Version `v2.0.0` of our app will probably be released in early 2021 and will then no longer support grocy server version `2.7.1`.  
-Again in 'easy' language:
-- Grocy Android `v1.x.x` requires grocy Server `2.7.1`
-- Grocy Android `v2.x.x` requires grocy Server `3.0.0` or higher
 
 Grocy Android requires at least Android 5.0 Lollipop and works properly on devices without any Google service installed.
 
