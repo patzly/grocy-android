@@ -36,7 +36,7 @@ public class UnlockUtil {
     try {
       context.getPackageManager().getPackageInfo(PACKAGE, 0);
       return true;
-    } catch (Exception ignored) {
+    } catch (Exception e) {
       return false;
     }
   }
