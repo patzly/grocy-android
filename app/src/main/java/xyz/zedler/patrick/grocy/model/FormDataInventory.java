@@ -733,7 +733,9 @@ public class FormDataInventory {
     }
     assert qU != null && details != null;
     String store = storeNameLive.getValue();
-    if (store == null) {
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      store = getString(R.string.subtitle_feature_disabled);
+    } else if (store == null) {
       store = getString(R.string.subtitle_none_selected);
     }
 
@@ -753,11 +755,9 @@ public class FormDataInventory {
     String amount = getAmountStock();
     assert amount != null && productWillBeAddedLive.getValue() != null;
     String price = null;
-    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      price = priceLive.getValue();
-    }
     String storeId = null;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      price = priceLive.getValue();
       Store store = storeLive.getValue();
       storeId = store != null ? String.valueOf(store.getId()) : null;
     }
