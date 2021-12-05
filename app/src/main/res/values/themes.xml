@@ -40,6 +40,8 @@
     <item name="android:colorControlHighlight">@color/highlight</item>
     <item name="android:colorEdgeEffect">@color/highlight</item>
 
+    <item name="recyclerViewStyle">@style/Widget.Grocy.RecyclerView</item>
+
     <item name="actionOverflowButtonStyle">@style/Widget.Grocy.ActionButton.OverFlow</item>
 
     <item name="android:fontFamily">@font/jost_book</item>
