@@ -24,12 +24,14 @@ import android.os.AsyncTask;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 
 public class MasterObjectListRepository {
 
@@ -114,6 +116,9 @@ public class MasterObjectListRepository {
           break;
         case GrocyApi.ENTITY.PRODUCT_GROUPS:
           objects = new ArrayList<>(appDatabase.productGroupDao().getAll());
+          break;
+        case ENTITY.TASK_CATEGORIES:
+          objects = new ArrayList<>(appDatabase.taskCategoryDao().getAll());
           break;
         default: // STORES
           objects = new ArrayList<>(appDatabase.storeDao().getAll());
@@ -238,6 +243,10 @@ public class MasterObjectListRepository {
         case GrocyApi.ENTITY.PRODUCT_GROUPS:
           appDatabase.productGroupDao().deleteAll();
           appDatabase.productGroupDao().insertAll((List<ProductGroup>) (Object) objects);
+          break;
+        case ENTITY.TASK_CATEGORIES:
+          appDatabase.taskCategoryDao().deleteAll();
+          appDatabase.taskCategoryDao().insertAll((List<TaskCategory>) (Object) objects);
           break;
         default: // STORES
           appDatabase.storeDao().deleteAll();

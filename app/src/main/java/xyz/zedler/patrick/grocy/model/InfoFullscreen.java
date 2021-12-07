@@ -35,6 +35,7 @@ public class InfoFullscreen {
   public static final int INFO_EMPTY_LOCATIONS = 22;
   public static final int INFO_EMPTY_PRODUCT_BARCODES = 24;
   public static final int INFO_EMPTY_TASKS = 26;
+  public static final int INFO_EMPTY_TASK_CATEGORIES = 28;
 
   private final int type;
   private final String exact;

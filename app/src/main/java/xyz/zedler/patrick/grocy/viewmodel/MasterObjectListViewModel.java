@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
@@ -50,8 +51,11 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
@@ -75,6 +79,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private ArrayList<ProductGroup> productGroups;
   private ArrayList<QuantityUnit> quantityUnits;
   private ArrayList<Location> locations;
+  private ArrayList<TaskCategory> taskCategories;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
@@ -182,6 +187,12 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
       }));
     }
+    if ((entity.equals(ENTITY.TASK_CATEGORIES))) {
+      queue.append(dlHelper.updateTaskCategories(
+          dbChangedTime,
+          taskCategories -> this.taskCategories = taskCategories
+      ));
+    }
     if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
       queue.append(dlHelper.updateProducts(
           dbChangedTime,
@@ -215,6 +226,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
         break;
       case GrocyApi.ENTITY.QUANTITY_UNITS:
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        break;
+      case ENTITY.TASK_CATEGORIES:
+        editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
         break;
       default:  // products
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
@@ -331,6 +345,10 @@ public class MasterObjectListViewModel extends BaseViewModel {
       case GrocyApi.ENTITY.STORES:
         bundle.putParcelable(Constants.ARGUMENT.STORE, (Store) object);
         showBottomSheet(new MasterStoreBottomSheet(), bundle);
+        break;
+      case ENTITY.TASK_CATEGORIES:
+        bundle.putParcelable(ARGUMENT.TASK_CATEGORY, (TaskCategory) object);
+        //showBottomSheet(new MasterStoreBottomSheet(), bundle);
         break;
       case GrocyApi.ENTITY.PRODUCTS:
         Product product = (Product) object;

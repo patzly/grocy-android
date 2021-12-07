@@ -27,8 +27,8 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 
 public class MasterDataOverviewRepository {
 
@@ -45,7 +45,8 @@ public class MasterDataOverviewRepository {
         ArrayList<Location> locations,
         ArrayList<ProductGroup> productGroups,
         ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<Product> products
+        ArrayList<Product> products,
+        ArrayList<TaskCategory> taskCategories
     );
   }
 
@@ -73,6 +74,7 @@ public class MasterDataOverviewRepository {
     private ArrayList<ProductGroup> productGroups;
     private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<Product> products;
+    private ArrayList<TaskCategory> taskCategories;
 
     loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
       this.appDatabase = appDatabase;
@@ -87,13 +89,14 @@ public class MasterDataOverviewRepository {
       productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
       quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
       products = new ArrayList<>(appDatabase.productDao().getAll());
+      taskCategories = new ArrayList<>(appDatabase.taskCategoryDao().getAll());
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
-        listener.actionFinished(stores, locations, productGroups, quantityUnits, products);
+        listener.actionFinished(stores, locations, productGroups, quantityUnits, products, taskCategories);
       }
     }
   }
@@ -104,6 +107,7 @@ public class MasterDataOverviewRepository {
       ArrayList<ProductGroup> productGroups,
       ArrayList<QuantityUnit> quantityUnits,
       ArrayList<Product> products,
+      ArrayList<TaskCategory> taskCategories,
       DataUpdatedListener listener
   ) {
     new updateAsyncTask(
@@ -113,6 +117,7 @@ public class MasterDataOverviewRepository {
         productGroups,
         quantityUnits,
         products,
+        taskCategories,
         listener
     ).execute();
   }
@@ -127,6 +132,7 @@ public class MasterDataOverviewRepository {
     private final ArrayList<ProductGroup> productGroups;
     private final ArrayList<QuantityUnit> quantityUnits;
     private final ArrayList<Product> products;
+    private final ArrayList<TaskCategory> taskCategories;
 
     updateAsyncTask(
         AppDatabase appDatabase,
@@ -135,6 +141,7 @@ public class MasterDataOverviewRepository {
         ArrayList<ProductGroup> productGroups,
         ArrayList<QuantityUnit> quantityUnits,
         ArrayList<Product> products,
+        ArrayList<TaskCategory> taskCategories,
         DataUpdatedListener listener
     ) {
       this.appDatabase = appDatabase;
@@ -144,6 +151,7 @@ public class MasterDataOverviewRepository {
       this.productGroups = productGroups;
       this.quantityUnits = quantityUnits;
       this.products = products;
+      this.taskCategories = taskCategories;
     }
 
     @Override
@@ -158,41 +166,8 @@ public class MasterDataOverviewRepository {
       appDatabase.quantityUnitDao().insertAll(quantityUnits);
       appDatabase.productDao().deleteAll();
       appDatabase.productDao().insertAll(products);
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
-      }
-    }
-  }
-
-  public void insertShoppingListItems(
-      ShoppingListItemsInsertedListener listener,
-      ShoppingListItem... shoppingListItems
-  ) {
-    new insertShoppingListItemsAsyncTask(appDatabase, listener).execute(shoppingListItems);
-  }
-
-  private static class insertShoppingListItemsAsyncTask extends
-      AsyncTask<ShoppingListItem, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final ShoppingListItemsInsertedListener listener;
-
-    insertShoppingListItemsAsyncTask(
-        AppDatabase appDatabase,
-        ShoppingListItemsInsertedListener listener
-    ) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(ShoppingListItem... items) {
-      appDatabase.shoppingListItemDao().insertAll(items);
+      appDatabase.taskCategoryDao().deleteAll();
+      appDatabase.taskCategoryDao().insertAll(taskCategories);
       return null;
     }
 

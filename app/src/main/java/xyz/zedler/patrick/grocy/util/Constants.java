@@ -293,6 +293,7 @@ public final class Constants {
     public final static String LOCATIONS = "locations";
     public final static String STORE = "store";
     public final static String STORES = "stores";
+    public final static String TASK_CATEGORY = "task_category";
     public final static String SHOPPING_LIST = "shopping_list";
     public final static String PRODUCT_GROUP = "product_group";
     public final static String PRODUCT_GROUPS = "product_groups";

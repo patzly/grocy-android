@@ -41,8 +41,10 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterDataOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class MasterDataOverviewViewModel extends AndroidViewModel {
@@ -63,6 +65,7 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
   private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
   private final MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
+  private final MutableLiveData<ArrayList<TaskCategory>> taskCategoriesLive;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -85,16 +88,18 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     productGroupsLive = new MutableLiveData<>();
     quantityUnitsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
+    taskCategoriesLive = new MutableLiveData<>();
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(
-        (stores, locations, productGroups, quantityUnits, products) -> {
+        (stores, locations, productGroups, quantityUnits, products, taskCategories) -> {
           this.storesLive.setValue(stores);
           this.locationsLive.setValue(locations);
           this.productGroupsLive.setValue(productGroups);
           this.quantityUnitsLive.setValue(quantityUnits);
           this.productsLive.setValue(products);
+          this.taskCategoriesLive.setValue(taskCategories);
           if (downloadAfterLoading) {
             downloadData();
           }
@@ -129,6 +134,7 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
     String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
     String lastTimeProducts = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCTS);
+    String lastTimeTaskCategories = getLastTime(PREF.DB_LAST_TIME_TASK_CATEGORIES);
 
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
@@ -177,6 +183,15 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     } else if (debug) {
       Log.i(TAG, "downloadData: skipped Products download");
     }
+    if (lastTimeTaskCategories == null || !lastTimeTaskCategories.equals(dbChangedTime)) {
+      queue.append(dlHelper.getTaskCategories(taskCategories -> {
+        this.taskCategoriesLive.setValue(taskCategories);
+        editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime);
+        editPrefs.apply();
+      }));
+    } else if (debug) {
+      Log.i(TAG, "downloadData: skipped Task categories download");
+    }
 
     if (queue.isEmpty()) {
       return;
@@ -197,6 +212,7 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
     editPrefs.apply();
     downloadData();
   }
@@ -211,6 +227,7 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
         this.productGroupsLive.getValue(),
         this.quantityUnitsLive.getValue(),
         this.productsLive.getValue(),
+        this.taskCategoriesLive.getValue(),
         () -> {
         }
     );
@@ -268,6 +285,10 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
 
   public MutableLiveData<ArrayList<Product>> getProductsLive() {
     return productsLive;
+  }
+
+  public MutableLiveData<ArrayList<TaskCategory>> getTaskCategoriesLive() {
+    return taskCategoriesLive;
   }
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {

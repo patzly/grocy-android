@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
@@ -113,7 +114,12 @@ public class ConfigUtil {
               jsonObject.getBoolean(
                   "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING"
               )
-          ).apply();
+          ).putBoolean(
+          PREF.FEATURE_TASKS,
+          jsonObject.getBoolean(
+              "FEATURE_FLAG_TASKS"
+          )
+      ).apply();
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
         prefs.edit().putBoolean(
             Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
