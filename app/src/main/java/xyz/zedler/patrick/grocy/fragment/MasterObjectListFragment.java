@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
@@ -388,11 +389,6 @@ public class MasterObjectListFragment extends BaseFragment
     if (clickUtil.isDisabled()) {
       return;
     }
-    viewModel.showObjectBottomSheetOfDisplayedItem(object);
-  }
-
-  @Override
-  public void editObject(Object object) {
     switch (entity) {
       case GrocyApi.ENTITY.QUANTITY_UNITS:
         navigate(MasterObjectListFragmentDirections
@@ -415,11 +411,18 @@ public class MasterObjectListFragment extends BaseFragment
             .setStore((Store) object));
         break;
       case GrocyApi.ENTITY.PRODUCTS:
-        navigate(MasterObjectListFragmentDirections
-            .actionMasterObjectListFragmentToMasterProductFragment(
-                Constants.ACTION.EDIT
-            ).setProduct((Product) object));
+        viewModel.showProductBottomSheet((Product) object);
         break;
+    }
+  }
+
+  @Override
+  public void editObject(Object object) {
+    if (ENTITY.PRODUCTS.equals(entity)) {
+      navigate(MasterObjectListFragmentDirections
+          .actionMasterObjectListFragmentToMasterProductFragment(
+              ACTION.EDIT
+          ).setProduct((Product) object));
     }
   }
 

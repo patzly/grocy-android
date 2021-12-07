@@ -1,6 +1,7 @@
 2.1.0:
 - New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the inital work) (#391)
+- Improved: Unnecessary bottom sheets in master data section were removed
 
 2.0.0:
 Major changes since 1.10.1:
