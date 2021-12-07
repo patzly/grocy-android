@@ -460,7 +460,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Menge: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Mengeneinheit: %1$d</string>
+  <string name="subtitle_barcode_unit">Mengeneinheit: %1$s</string>
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature deaktiviert</string>
   <string name="subtitle_date_from_input">Datum von der Eingabe:\n%1$s</string>

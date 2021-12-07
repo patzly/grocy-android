@@ -393,7 +393,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Mengde: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Kvantitetsenhet %1$d</string>
+  <string name="subtitle_barcode_unit">Kvantitetsenhet %1$s</string>
   <string name="subtitle_barcode">Strekkoder: %1$s </string>
   <string name="subtitle_feature_disabled">Funksjon er slått av</string>
   <string name="description_input_product_part1">Produktfelt inneholder:</string>

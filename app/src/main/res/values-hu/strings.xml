@@ -457,7 +457,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Mennyiség: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Mennyiségi egység: %1$d</string>
+  <string name="subtitle_barcode_unit">Mennyiségi egység: %1$s</string>
   <string name="subtitle_barcode">Vonalkód: %1$s</string>
   <string name="subtitle_feature_disabled">Funkció letiltva</string>
   <string name="description_input_product_part1">A termék mező ezt tartalmazza:</string>

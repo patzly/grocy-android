@@ -25,33 +25,30 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
+public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
   private static final String TAG = MasterProductCatBarcodesViewModel.class.getSimpleName();
 
@@ -75,6 +72,12 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
 
+  private final MutableLiveData<Boolean> scannerVisibilityLive;
+  private final MutableLiveData<Boolean> barcodeInputVisibilityLive;
+  private final MutableLiveData<Boolean> amountInputVisibilityLive;
+  public MutableLiveData<String> barcodeLive;
+  public MutableLiveData<String> amountLive;
+
   public MasterProductCatBarcodesViewModel(
       @NonNull Application application,
       @NonNull MasterProductFragmentArgs startupArgs
@@ -94,6 +97,11 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
     productBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
+    scannerVisibilityLive = new MutableLiveData<>(false);
+    barcodeInputVisibilityLive = new MutableLiveData<>(false);
+    amountInputVisibilityLive = new MutableLiveData<>(false);
+    barcodeLive = new MutableLiveData<>(null);
+    amountLive = new MutableLiveData<>(String.valueOf(1));
   }
 
   public Product getFilledProduct() {
@@ -113,6 +121,48 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
           }
         });
   }
+
+  public MutableLiveData<Boolean> getScannerVisibilityLive() {
+    return scannerVisibilityLive;
+  }
+  public MutableLiveData<Boolean> getBarcodeInputVisibilityLive() {
+    return barcodeInputVisibilityLive;
+  }
+  public MutableLiveData<Boolean> getAmountInputVisibilityLive() {
+    return amountInputVisibilityLive;
+  }
+
+  public void uploadBarcode(ProductBarcode barcode) {
+    JSONObject jsonObject = barcode.getJsonFromProductBarcode(debug, TAG);
+    dlHelper.post(
+        grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
+        jsonObject,
+        response -> {
+          int objectId = -1;
+          try {
+            objectId = response.getInt("created_object_id");
+            Log.i(TAG, "uploadBarcode: " + objectId);
+          } catch (JSONException e) {
+            if (debug) {
+              Log.e(TAG, "uploadBarcode: " + e);
+            }
+          }
+          if (objectId != -1) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, objectId);
+            sendEvent(Event.SET_PRODUCT_ID, bundle);
+          }
+          sendEvent(Event.NAVIGATE_UP);
+        },
+        error -> {
+          showErrorMessage();
+          if (debug) {
+            Log.e(TAG, "uploadBarcode: " + error);
+          }
+        }
+    );
+  }
+
 
   public void downloadData(@Nullable String dbChangedTime) {
     if (currentQueueLoading != null) {
@@ -203,6 +253,14 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
     return productBarcodesLive;
   }
 
+  public ArrayList<QuantityUnit> getQuantityUnits() {
+    return quantityUnits;
+  }
+
+  public ArrayList<Store> getStores() {
+    return stores;
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getOfflineLive() {
     return offlineLive;
@@ -234,27 +292,6 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
     showMessage(getString(R.string.error_undefined));
   }
 
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-  }
-
-  private void navigateUp() {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return Event.NAVIGATE_UP;
-      }
-    });
-  }
-
   @NonNull
   public EventHandler getEventHandler() {
     return eventHandler;
@@ -265,10 +302,6 @@ public class MasterProductCatBarcodesViewModel extends AndroidViewModel {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
   }
 
   @Override

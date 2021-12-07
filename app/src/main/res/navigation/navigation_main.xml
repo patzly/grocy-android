@@ -885,6 +885,26 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <action
+        android:id="@+id/action_masterProductCatBarcodesFragment_to_masterProductCatBarcodesEditFragment"
+        app:destination="@id/masterProductCatBarcodesEditFragment"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/slide_no"
+        app:popExitAnim="@anim/slide_out_down"/>
+    </fragment>
+    <fragment
+      android:id="@+id/masterProductCatBarcodesEditFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatBarcodesEditFragment"
+      android:label="MasterProductCatBarcodesEditFragment"
+      tools:layout="@layout/fragment_master_product_cat_barcodes_edit">
+      <argument
+        android:name="productBarcode"
+        app:argType="xyz.zedler.patrick.grocy.model.ProductBarcode"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="product"
+        app:argType="xyz.zedler.patrick.grocy.model.Product" />
     </fragment>
   </navigation>
   <fragment

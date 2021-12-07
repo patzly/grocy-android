@@ -418,6 +418,8 @@
   <string name="title_list_entry">List entry</string>
   <string name="title_edit_list_entry">Edit list entry</string>
   <string name="title_create_list_entry">Create list entry</string>
+  <string name="title_edit_barcode">Edit barcode</string>
+  <string name="title_create_barcode">Create barcode</string>
   <string name="title_shopping_list_edit">Edit shopping list</string>
   <string name="title_shopping_list_new">New shopping list</string>
   <string name="title_shopping_mode">Shopping mode</string>
@@ -474,7 +476,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Amount: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Quantity unit: %1$d</string>
+  <string name="subtitle_barcode_unit">Quantity unit: %1$s</string>
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature disabled</string>
   <string name="subtitle_date_from_input">Date from input:\n%1$s</string>

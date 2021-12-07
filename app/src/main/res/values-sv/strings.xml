@@ -417,7 +417,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Antal: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Mängdenhet: %1$d</string>
+  <string name="subtitle_barcode_unit">Mängdenhet: %1$s</string>
   <string name="description_input_product_part1">Varufältet innehåller:</string>
   <string name="description_input_product_part2">Välj hur du vill fortsätta:</string>
   <string name="description_input_product_option3">Lägg till streckkod för befintlig vara</string>
