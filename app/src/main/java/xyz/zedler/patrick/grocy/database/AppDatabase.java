@@ -35,6 +35,8 @@ import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.dao.StockItemDao;
 import xyz.zedler.patrick.grocy.dao.StockLocationDao;
 import xyz.zedler.patrick.grocy.dao.StoreDao;
+import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
+import xyz.zedler.patrick.grocy.dao.TaskDao;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -47,6 +49,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 
 @Database(
     entities = {
@@ -61,9 +65,11 @@ import xyz.zedler.patrick.grocy.model.Store;
         QuantityUnitConversion.class,
         ProductBarcode.class,
         StockItem.class,
-        StockLocation.class
+        StockLocation.class,
+        Task.class,
+        TaskCategory.class
     },
-    version = 18
+    version = 19
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -92,6 +98,10 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract StockItemDao stockItemDao();
 
   public abstract StockLocationDao stockLocationDao();
+
+  public abstract TaskDao taskDao();
+
+  public abstract TaskCategoryDao taskCategoryDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

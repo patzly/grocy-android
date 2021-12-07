@@ -31,6 +31,7 @@
   <string name="deep_link_settingsCatServerFragment" translatable="false">grocy://settingsCatServerFragment</string>
   <string name="deep_link_settingsCatBehaviorFragment" translatable="false">grocy://settingsCatBehaviorFragment</string>
   <string name="deep_link_settingsCatScannerFragment" translatable="false">grocy://settingsCatScannerFragment</string>
+  <string name="deep_link_tasksFragment" translatable="false">grocy://tasksFragment</string>
   <string name="deep_link_aboutFragment" translatable="false">grocy://aboutFragment</string>
   <string name="deep_link_masterProductFragment" translatable="false">grocy://masterProductFragment?action={action}&amp;productName={productName}&amp;productId={productId}</string>
   <string name="deep_link_masterDataOverviewFragment" translatable="false">grocy://masterDataOverviewFragment</string>

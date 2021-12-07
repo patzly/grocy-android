@@ -1,4 +1,5 @@
 2.1.0:
+- New: View and manage tasks (#435)
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the inital work)
 
 2.0.0:
