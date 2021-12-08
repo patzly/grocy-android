@@ -36,12 +36,9 @@ import java.util.Collections;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterLocationBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterProductGroupBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterQuantityUnitBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterStoreBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.HorizontalFilterBarMulti;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -49,9 +46,10 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
@@ -75,6 +73,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private ArrayList<ProductGroup> productGroups;
   private ArrayList<QuantityUnit> quantityUnits;
   private ArrayList<Location> locations;
+  private ArrayList<TaskCategory> taskCategories;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
@@ -182,6 +181,12 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
       }));
     }
+    if ((entity.equals(ENTITY.TASK_CATEGORIES))) {
+      queue.append(dlHelper.updateTaskCategories(
+          dbChangedTime,
+          taskCategories -> this.taskCategories = taskCategories
+      ));
+    }
     if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
       queue.append(dlHelper.updateProducts(
           dbChangedTime,
@@ -215,6 +220,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
         break;
       case GrocyApi.ENTITY.QUANTITY_UNITS:
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+        break;
+      case ENTITY.TASK_CATEGORIES:
+        editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
         break;
       default:  // products
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
@@ -310,49 +318,29 @@ public class MasterObjectListViewModel extends BaseViewModel {
     });
   }
 
-  public void showObjectBottomSheetOfDisplayedItem(Object object) {
-    if (object == null) {
+  public void showProductBottomSheet(Product product) {
+    if (product == null) {
       return;
     }
     Bundle bundle = new Bundle();
-    switch (entity) {
-      case GrocyApi.ENTITY.QUANTITY_UNITS:
-        bundle.putParcelable(Constants.ARGUMENT.QUANTITY_UNIT, (QuantityUnit) object);
-        showBottomSheet(new MasterQuantityUnitBottomSheet(), bundle);
-        break;
-      case GrocyApi.ENTITY.PRODUCT_GROUPS:
-        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, (ProductGroup) object);
-        showBottomSheet(new MasterProductGroupBottomSheet(), bundle);
-        break;
-      case GrocyApi.ENTITY.LOCATIONS:
-        bundle.putParcelable(Constants.ARGUMENT.LOCATION, (Location) object);
-        showBottomSheet(new MasterLocationBottomSheet(), bundle);
-        break;
-      case GrocyApi.ENTITY.STORES:
-        bundle.putParcelable(Constants.ARGUMENT.STORE, (Store) object);
-        showBottomSheet(new MasterStoreBottomSheet(), bundle);
-        break;
-      case GrocyApi.ENTITY.PRODUCTS:
-        Product product = (Product) object;
-        bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
-        bundle.putParcelable(
-            Constants.ARGUMENT.LOCATION,
-            getLocation(product.getLocationIdInt())
-        );
-        bundle.putParcelable(
-            Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE,
-            getQuantityUnit(product.getQuIdPurchaseInt())
-        );
-        bundle.putParcelable(
-            Constants.ARGUMENT.QUANTITY_UNIT_STOCK,
-            getQuantityUnit(product.getQuIdStockInt())
-        );
-        ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
-            ? getProductGroup(Integer.parseInt(product.getProductGroupId()))
-            : null;
-        bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
-        showBottomSheet(new MasterProductBottomSheet(), bundle);
-    }
+    bundle.putParcelable(Constants.ARGUMENT.PRODUCT, product);
+    bundle.putParcelable(
+        Constants.ARGUMENT.LOCATION,
+        getLocation(product.getLocationIdInt())
+    );
+    bundle.putParcelable(
+        Constants.ARGUMENT.QUANTITY_UNIT_PURCHASE,
+        getQuantityUnit(product.getQuIdPurchaseInt())
+    );
+    bundle.putParcelable(
+        Constants.ARGUMENT.QUANTITY_UNIT_STOCK,
+        getQuantityUnit(product.getQuIdStockInt())
+    );
+    ProductGroup productGroup = NumUtil.isStringInt(product.getProductGroupId())
+        ? getProductGroup(Integer.parseInt(product.getProductGroupId()))
+        : null;
+    bundle.putParcelable(Constants.ARGUMENT.PRODUCT_GROUP, productGroup);
+    showBottomSheet(new MasterProductBottomSheet(), bundle);
   }
 
   public void deleteObjectSafely(Object object) {

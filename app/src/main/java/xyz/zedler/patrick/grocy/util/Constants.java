@@ -47,6 +47,7 @@ public final class Constants {
     public final static String FEATURE_STOCK_OPENED_TRACKING = "feature_stock_opened_tracking";
     public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
     public final static String FEATURE_RECIPES = "feature_recipes";
+    public final static String FEATURE_TASKS = "feature_tasks";
 
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
@@ -66,6 +67,8 @@ public final class Constants {
     public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
     public final static String DB_LAST_TIME_VOLATILE = "db_last_time_volatile";
     public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
+    public final static String DB_LAST_TIME_TASKS = "db_last_time_tasks";
+    public final static String DB_LAST_TIME_TASK_CATEGORIES = "db_last_time_task_categories";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -280,6 +283,8 @@ public final class Constants {
     public final static String EDIT = "action_edit";
     public final static String SAVE = "action_save";
     public final static String DELETE = "action_delete";
+    public final static String COMPLETE = "action_complete";
+    public final static String UNDO = "action_undo";
   }
 
   public final static class ARGUMENT {
@@ -295,6 +300,7 @@ public final class Constants {
     public final static String LOCATIONS = "locations";
     public final static String STORE = "store";
     public final static String STORES = "stores";
+    public final static String TASK_CATEGORY = "task_category";
     public final static String SHOPPING_LIST = "shopping_list";
     public final static String PRODUCT_GROUP = "product_group";
     public final static String PRODUCT_GROUPS = "product_groups";

@@ -23,18 +23,16 @@ import android.app.Application;
 import android.os.AsyncTask;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.model.TaskCategory;
 
-public class MasterDataOverviewRepository {
+public class MasterProductCatBarcodesEditRepository {
 
   private final AppDatabase appDatabase;
 
-  public MasterDataOverviewRepository(Application application) {
+  public MasterProductCatBarcodesEditRepository(Application application) {
     this.appDatabase = AppDatabase.getAppDatabase(application);
   }
 
@@ -42,20 +40,13 @@ public class MasterDataOverviewRepository {
 
     void actionFinished(
         ArrayList<Store> stores,
-        ArrayList<Location> locations,
-        ArrayList<ProductGroup> productGroups,
+        ArrayList<ProductBarcode> barcodes,
         ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<Product> products,
-        ArrayList<TaskCategory> taskCategories
+        ArrayList<QuantityUnitConversion> quantityUnitConversions
     );
   }
 
   public interface DataUpdatedListener {
-
-    void actionFinished();
-  }
-
-  public interface ShoppingListItemsInsertedListener {
 
     void actionFinished();
   }
@@ -70,11 +61,9 @@ public class MasterDataOverviewRepository {
     private final DataListener listener;
 
     private ArrayList<Store> stores;
-    private ArrayList<Location> locations;
-    private ArrayList<ProductGroup> productGroups;
+    private ArrayList<ProductBarcode> barcodes;
     private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<Product> products;
-    private ArrayList<TaskCategory> taskCategories;
+    private ArrayList<QuantityUnitConversion> quantityUnitConversions;
 
     loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
       this.appDatabase = appDatabase;
@@ -83,41 +72,35 @@ public class MasterDataOverviewRepository {
 
     @Override
     protected final Void doInBackground(Void... params) {
-      stores = new ArrayList<>(
-          appDatabase.storeDao().getAll()); // TODO: List instead of ArrayList maybe
-      locations = new ArrayList<>(appDatabase.locationDao().getAll());
-      productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
+      stores = new ArrayList<>(appDatabase.storeDao().getAll());
+      barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
       quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-      products = new ArrayList<>(appDatabase.productDao().getAll());
-      taskCategories = new ArrayList<>(appDatabase.taskCategoryDao().getAll());
+      quantityUnitConversions
+          = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
-        listener.actionFinished(stores, locations, productGroups, quantityUnits, products, taskCategories);
+        listener.actionFinished(stores, barcodes, quantityUnits, quantityUnitConversions);
       }
     }
   }
 
   public void updateDatabase(
       ArrayList<Store> stores,
-      ArrayList<Location> locations,
-      ArrayList<ProductGroup> productGroups,
+      ArrayList<ProductBarcode> barcodes,
       ArrayList<QuantityUnit> quantityUnits,
-      ArrayList<Product> products,
-      ArrayList<TaskCategory> taskCategories,
+      ArrayList<QuantityUnitConversion> quantityUnitConversions,
       DataUpdatedListener listener
   ) {
     new updateAsyncTask(
         appDatabase,
         stores,
-        locations,
-        productGroups,
+        barcodes,
         quantityUnits,
-        products,
-        taskCategories,
+        quantityUnitConversions,
         listener
     ).execute();
   }
@@ -128,46 +111,36 @@ public class MasterDataOverviewRepository {
     private final DataUpdatedListener listener;
 
     private final ArrayList<Store> stores;
-    private final ArrayList<Location> locations;
-    private final ArrayList<ProductGroup> productGroups;
+    private final ArrayList<ProductBarcode> barcodes;
     private final ArrayList<QuantityUnit> quantityUnits;
-    private final ArrayList<Product> products;
-    private final ArrayList<TaskCategory> taskCategories;
+    private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
 
     updateAsyncTask(
         AppDatabase appDatabase,
         ArrayList<Store> stores,
-        ArrayList<Location> locations,
-        ArrayList<ProductGroup> productGroups,
+        ArrayList<ProductBarcode> barcodes,
         ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<Product> products,
-        ArrayList<TaskCategory> taskCategories,
+        ArrayList<QuantityUnitConversion> quantityUnitConversions,
         DataUpdatedListener listener
     ) {
       this.appDatabase = appDatabase;
       this.listener = listener;
       this.stores = stores;
-      this.locations = locations;
-      this.productGroups = productGroups;
+      this.barcodes = barcodes;
       this.quantityUnits = quantityUnits;
-      this.products = products;
-      this.taskCategories = taskCategories;
+      this.quantityUnitConversions = quantityUnitConversions;
     }
 
     @Override
     protected final Void doInBackground(Void... params) {
       appDatabase.storeDao().deleteAll();
       appDatabase.storeDao().insertAll(stores);
-      appDatabase.locationDao().deleteAll();
-      appDatabase.locationDao().insertAll(locations);
-      appDatabase.productGroupDao().deleteAll();
-      appDatabase.productGroupDao().insertAll(productGroups);
+      appDatabase.productBarcodeDao().deleteAll();
+      appDatabase.productBarcodeDao().insertAll(barcodes);
       appDatabase.quantityUnitDao().deleteAll();
       appDatabase.quantityUnitDao().insertAll(quantityUnits);
-      appDatabase.productDao().deleteAll();
-      appDatabase.productDao().insertAll(products);
-      appDatabase.taskCategoryDao().deleteAll();
-      appDatabase.taskCategoryDao().insertAll(taskCategories);
+      appDatabase.quantityUnitConversionDao().deleteAll();
+      appDatabase.quantityUnitConversionDao().insertAll(quantityUnitConversions);
       return null;
     }
 

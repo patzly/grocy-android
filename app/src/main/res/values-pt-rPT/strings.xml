@@ -418,7 +418,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Quantidade: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Unidade de produto: %1$d</string>
+  <string name="subtitle_barcode_unit">Unidade de produto: %1$s</string>
   <string name="description_input_product_part1">Campo do produto contém:</string>
   <string name="description_input_product_part2">Por favor escolha como prosseguir:</string>
   <string name="description_input_product_option1">Criar novo produto introduzindo o nome</string>

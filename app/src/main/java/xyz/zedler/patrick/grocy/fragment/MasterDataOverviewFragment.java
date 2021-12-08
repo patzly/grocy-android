@@ -111,6 +111,12 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 GrocyApi.ENTITY.STORES
             ))
     );
+    binding.linearTaskCategories.setOnClickListener(v -> navigate(
+        MasterDataOverviewFragmentDirections
+            .actionMasterDataOverviewFragmentToMasterObjectListFragment(
+                GrocyApi.ENTITY.TASK_CATEGORIES
+            ))
+    );
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
       binding.swipe.setRefreshing(state);
@@ -178,6 +184,14 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 : getString(R.string.subtitle_unknown)
         )
     );
+    viewModel.getTaskCategoriesLive().observe(
+        getViewLifecycleOwner(),
+        taskCategories -> binding.countTaskCategories.setText(
+            taskCategories != null
+                ? String.valueOf(taskCategories.size())
+                : getString(R.string.subtitle_unknown)
+        )
+    );
 
     // for offline info in app bar
     binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
@@ -212,6 +226,9 @@ public class MasterDataOverviewFragment extends BaseFragment {
     }
     if (!viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       binding.linearStores.setVisibility(View.GONE);
+    }
+    if (!viewModel.isFeatureEnabled(PREF.FEATURE_TASKS)) {
+      binding.linearTaskCategories.setVisibility(View.GONE);
     }
   }
 

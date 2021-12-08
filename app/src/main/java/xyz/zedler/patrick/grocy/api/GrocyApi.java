@@ -50,6 +50,8 @@ public class GrocyApi {
     public final static String RECIPES_NEST = "recipes_nestings";
     public final static String PRODUCT_GROUPS = "product_groups";
     public final static String MEAL_PLAN = "meal_plan";
+    public final static String TASKS = "tasks";
+    public final static String TASK_CATEGORIES = "task_categories";
   }
 
   public GrocyApi(Application application) {
@@ -261,5 +263,21 @@ public class GrocyApi {
    */
   public String clearShoppingList() {
     return getUrl("/stock/shoppinglist/clear");
+  }
+
+  // TASK
+
+  /**
+   * Marks the given task as completed
+   */
+  public String completeTask(int taskId) {
+    return getUrl("/tasks/" + taskId + "/complete");
+  }
+
+  /**
+   * Marks the given task as not completed
+   */
+  public String undoTask(int taskId) {
+    return getUrl("/tasks/" + taskId + "/undo");
   }
 }

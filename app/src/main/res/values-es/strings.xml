@@ -435,7 +435,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Cantidad: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Unidad de cantidad: %1$d</string>
+  <string name="subtitle_barcode_unit">Unidad de cantidad: %1$s</string>
   <string name="subtitle_barcode">Código de barras: %1$s</string>
   <string name="subtitle_feature_disabled">Característica desactivada</string>
   <string name="description_input_product_part1">El campo de producto contiene:</string>

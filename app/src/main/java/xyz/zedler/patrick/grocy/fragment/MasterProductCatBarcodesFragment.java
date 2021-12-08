@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatBarcodesViewModel;
 
 public class MasterProductCatBarcodesFragment extends BaseFragment implements
@@ -143,7 +144,9 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
       } else {
         binding.recycler.setAdapter(new ProductBarcodeAdapter(
             barcodes,
-            this
+            this,
+            viewModel.getQuantityUnits(),
+            viewModel.getStores()
         ));
       }
     });
@@ -159,35 +162,26 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        POSITION.CENTER,
         R.menu.menu_master_product_edit,
         menuItem -> {
-          if (menuItem.getItemId() != R.id.action_delete) {
-            return false;
+          if (menuItem.getItemId() == R.id.action_delete) {
+            activity.showMessage(R.string.msg_not_implemented_yet);
+
+            return true;
           }
-          setForDestination(
-              R.id.masterProductFragment,
-              Constants.ARGUMENT.ACTION,
-              Constants.ACTION.DELETE
-          );
-          activity.onBackPressed();
-          return true;
+          return false;
         }
     );
-    activity.updateFab(
-        R.drawable.ic_round_backup,
-        R.string.action_save,
-        Constants.FAB.TAG.SAVE,
+    activity.updateFab(R.drawable.ic_round_add_anim,
+        R.string.action_add,
+        Constants.FAB.TAG.ADD,
         animated,
-        () -> {
-          setForDestination(
-              R.id.masterProductFragment,
-              Constants.ARGUMENT.ACTION,
-              Constants.ACTION.SAVE
-          );
-          activity.onBackPressed();
-        }
-    );
+        () -> navigate(MasterProductCatBarcodesFragmentDirections
+            .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(
+                viewModel.getFilledProduct()
+            )
+        ));
   }
 
   @Override
@@ -195,20 +189,10 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-  }
-
-  public void clearInputFocus() {
-    activity.hideKeyboard();
-  }
-
-  @Override
-  public boolean onBackPressed() {
-    setForDestination(
-        R.id.masterProductFragment,
-        Constants.ARGUMENT.PRODUCT,
-        viewModel.getFilledProduct()
+    navigate(MasterProductCatBarcodesFragmentDirections
+        .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(viewModel.getFilledProduct())
+        .setProductBarcode(productBarcode)
     );
-    return false;
   }
 
   @Override

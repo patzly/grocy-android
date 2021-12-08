@@ -99,11 +99,9 @@ public class MasterProductFragment extends BaseFragment {
     binding.categoryQuantityUnit.setOnClickListener(v -> navigate(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(args.getAction())
         .setProduct(viewModel.getFilledProduct())));
-    /*binding.categoryBarcodes.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+    binding.categoryBarcodes.setOnClickListener(v -> navigate(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatBarcodesFragment(args.getAction())
-        .setProduct(viewModel.getFilledProduct())));*/
-    binding.categoryBarcodes
-        .setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
+        .setProduct(viewModel.getFilledProduct())));
     binding.categoryQuConversions
         .setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
 

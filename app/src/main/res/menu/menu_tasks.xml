@@ -17,12 +17,16 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources>
+<menu
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <string name="transition_overview_products">transition_overview_products</string>
-  <string name="transition_overview_qus">transition_overview_qus</string>
-  <string name="transition_overview_locations">transition_overview_locations</string>
-  <string name="transition_overview_product_groups">transition_overview_product_groups</string>
-  <string name="transition_overview_stores">transition_overview_stores</string>
+  <item
+    android:id="@+id/action_search"
+    android:title="@string/action_search"
+    android:icon="@drawable/ic_round_search_anim"
+    app:showAsAction="always"
+    tools:ignore="AlwaysShowAction" />
 
-</resources>
+</menu>

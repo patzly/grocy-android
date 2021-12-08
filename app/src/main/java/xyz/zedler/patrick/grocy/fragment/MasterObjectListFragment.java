@@ -22,7 +22,6 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,7 +37,6 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.transition.TransitionInflater;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
@@ -46,6 +44,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterObjectListAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterObjectListBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -61,6 +60,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
@@ -103,21 +103,13 @@ public class MasterObjectListFragment extends BaseFragment
       case GrocyApi.ENTITY.PRODUCT_GROUPS:
         title = R.string.property_product_groups;
         break;
+      case ENTITY.TASK_CATEGORIES:
+        title = R.string.property_task_categories;
+        break;
       default: // STORES
         title = R.string.property_stores;
     }
     binding.title.setText(title);
-
-    String transitionName = MasterObjectListFragmentArgs
-        .fromBundle(requireArguments()).getTransitionName();
-    if (!TextUtils.isEmpty(transitionName)) {
-      binding.title.setTransitionName(transitionName);
-      setSharedElementEnterTransition(
-          TransitionInflater.from(requireContext())
-              .inflateTransition(android.R.transition.move)
-      );
-    }
-
     return binding.getRoot();
   }
 
@@ -181,6 +173,9 @@ public class MasterObjectListFragment extends BaseFragment
               break;
             case GrocyApi.ENTITY.PRODUCT_GROUPS:
               fullscreenType = InfoFullscreen.INFO_EMPTY_PRODUCT_GROUPS;
+              break;
+            case ENTITY.TASK_CATEGORIES:
+              fullscreenType = InfoFullscreen.INFO_EMPTY_TASK_CATEGORIES;
               break;
             default: // STORES
               fullscreenType = InfoFullscreen.INFO_EMPTY_STORES;
@@ -317,6 +312,9 @@ public class MasterObjectListFragment extends BaseFragment
             case GrocyApi.ENTITY.PRODUCTS:
               navigate(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
+              break;
+            case ENTITY.TASK_CATEGORIES:
+              break;
           }
         }
     );
@@ -391,11 +389,6 @@ public class MasterObjectListFragment extends BaseFragment
     if (clickUtil.isDisabled()) {
       return;
     }
-    viewModel.showObjectBottomSheetOfDisplayedItem(object);
-  }
-
-  @Override
-  public void editObject(Object object) {
     switch (entity) {
       case GrocyApi.ENTITY.QUANTITY_UNITS:
         navigate(MasterObjectListFragmentDirections
@@ -418,11 +411,18 @@ public class MasterObjectListFragment extends BaseFragment
             .setStore((Store) object));
         break;
       case GrocyApi.ENTITY.PRODUCTS:
-        navigate(MasterObjectListFragmentDirections
-            .actionMasterObjectListFragmentToMasterProductFragment(
-                Constants.ACTION.EDIT
-            ).setProduct((Product) object));
+        viewModel.showProductBottomSheet((Product) object);
         break;
+    }
+  }
+
+  @Override
+  public void editObject(Object object) {
+    if (ENTITY.PRODUCTS.equals(entity)) {
+      navigate(MasterObjectListFragmentDirections
+          .actionMasterObjectListFragmentToMasterProductFragment(
+              ACTION.EDIT
+          ).setProduct((Product) object));
     }
   }
 

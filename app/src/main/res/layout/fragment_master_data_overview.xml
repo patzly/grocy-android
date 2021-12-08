@@ -140,8 +140,7 @@
               <TextView
                 android:id="@+id/title_products"
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/property_products"
-                android:transitionName="@string/transition_overview_products" />
+                android:text="@string/property_products" />
 
               <TextView
                 android:id="@+id/count_products"
@@ -168,8 +167,7 @@
               <TextView
                 android:id="@+id/title_locations"
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/property_locations"
-                android:transitionName="@string/transition_overview_locations" />
+                android:text="@string/property_locations" />
 
               <TextView
                 android:id="@+id/count_locations"
@@ -196,8 +194,7 @@
               <TextView
                 android:id="@+id/title_stores"
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/property_stores"
-                android:transitionName="@string/transition_overview_stores" />
+                android:text="@string/property_stores" />
 
               <TextView
                 android:id="@+id/count_stores"
@@ -224,8 +221,7 @@
               <TextView
                 android:id="@+id/title_quantity_units"
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/property_quantity_units"
-                android:transitionName="@string/transition_overview_qus" />
+                android:text="@string/property_quantity_units" />
 
               <TextView
                 android:id="@+id/count_quantity_units"
@@ -252,11 +248,37 @@
               <TextView
                 android:id="@+id/title_product_groups"
                 style="@style/Widget.Grocy.TextView.ListItem.Title"
-                android:text="@string/property_product_groups"
-                android:transitionName="@string/transition_overview_product_groups" />
+                android:text="@string/property_product_groups" />
 
               <TextView
                 android:id="@+id/count_product_groups"
+                style="@style/Widget.Grocy.TextView.ListItem.Description" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            android:id="@+id/linear_task_categories"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:importantForAccessibility="no"
+              android:src="@drawable/ic_round_view_list"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                android:id="@+id/title_task_categories"
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/property_task_categories" />
+
+              <TextView
+                android:id="@+id/count_task_categories"
                 style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
             </LinearLayout>

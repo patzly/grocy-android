@@ -4,8 +4,6 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Release](https://img.shields.io/github/v/release/patzly/grocy-android?label=Release&logo=github)](https://github.com/patzly/grocy-android/releases)  [![APK Downloads](https://img.shields.io/github/downloads/patzly/grocy-android/total.svg?label=APK%20Downloads&logo=github)](https://github.com/patzly/grocy-android/releases)
 
-**Version 2.0.0 is finished soon. You can download the latest beta from the sources listed below. Compatibility details are [here](https://github.com/patzly/grocy-android/blob/master/README.md#user-content-compatibility).**
-
 Grocy Android is an open-source Android client for [grocy](https://grocy.info/) ([source code](https://github.com/grocy/grocy)). grocy is a self-hosted groceries & household management solution for your home.
 
 Grocy Android uses grocy's official API to provide you a beautiful interface on your smartphone with powerful barcode scanning and intuitive batch processing, all what you need to efficiently manage your groceries.
@@ -17,8 +15,6 @@ You can try it using the demo option available on the login screen.
 iOS client for grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftUI)
 
 ## Downloads
-
-**On Google Play you need to join our public beta channel to receive the prereleases.**
 
 <a href='https://play.google.com/store/apps/details?id=xyz.zedler.patrick.grocy'><img alt='Get it on Google Play' height="80" src='assets/badge_playstore.png'/></a><a href='https://f-droid.org/de/packages/xyz.zedler.patrick.grocy/'><img alt='Get it on F-Droid' height="80" src='assets/badge_fdroid.png'/></a><a href='https://github.com/patzly/grocy-android/releases'><img alt='Get it on GitHub' height="80" src='assets/badge_github.png'/></a>
 
@@ -34,21 +30,10 @@ iOS client for grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftU
 * Fast barcode scanning
 * OpenFoodFacts implementation
 * Master data editing
-* Intuitive batch processing
 * Dark mode
-* No ads, analytics or in-app purchases
-* Low data usage
-* Small app size (~6MB)
+* No ads or analytics
 
 ## Compatibility
-
-The developer of the grocy [server application](https://github.com/grocy/grocy) has released a new version `3.0.0` at the end of December 2020.  
-Among other great things it contains breaking changes in the API, which means that this unofficial Android app will not work properly after updating the server to version `3.0.0`.  
-So if you want to continue using this Android app as usual, you should wait for our update to `v2.0.0` before updating your server to version `3.0.0`.
-Version `v2.0.0` of our app will probably be released in early 2021 and will then no longer support grocy server version `2.7.1`.  
-Again in 'easy' language:
-- Grocy Android `v1.x.x` requires grocy Server `2.7.1`
-- Grocy Android `v2.x.x` requires grocy Server `3.0.0` or higher
 
 Grocy Android requires at least Android 5.0 Lollipop and works properly on devices without any Google service installed.
 

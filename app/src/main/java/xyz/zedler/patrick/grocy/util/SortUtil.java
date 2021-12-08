@@ -38,6 +38,8 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 
 public class SortUtil {
 
@@ -111,6 +113,34 @@ public class SortUtil {
         )
     );
   }
+
+  public static void sortTasksByName(Context context, List<Task> tasks, boolean ascending) {
+    if (tasks == null || tasks.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(tasks, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).getName().toLowerCase(),
+        (ascending ? item2 : item1).getName().toLowerCase()
+    ));
+  }
+
+  public static void sortTaskCategoriesByName(
+      Context context,
+      ArrayList<TaskCategory> taskCategories,
+      boolean ascending
+  ) {
+    if (taskCategories == null || taskCategories.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(taskCategories, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).getName().toLowerCase(),
+        (ascending ? item2 : item1).getName().toLowerCase()
+    ));
+  }
+
+
 
   public static void sortLocationsByName(
       Context context, ArrayList<Location> locations, boolean ascending
@@ -246,4 +276,6 @@ public class SortUtil {
     }
     return sorted;
   }
+
+
 }

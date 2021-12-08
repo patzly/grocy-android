@@ -158,6 +158,30 @@
     <item quantity="one">%1$d done</item>
     <item quantity="other">%1$d done</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d done</item>
+    <item quantity="other">%1$d done</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d not done</item>
+    <item quantity="other">%1$d not done</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d due soon</item>
+    <item quantity="other">%1$d due soon</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d overdue</item>
+    <item quantity="other">%1$d overdue</item>
+  </plurals>
+  <!-- 1$s is a task -->
+  <string name="msg_task_completed">Task completed</string>
+  <!-- %1$s is a task -->
+  <string name="msg_task_undo">Undid completion of task</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -310,6 +334,8 @@
   <string name="error_empty_products">No products</string>
   <string name="error_empty_qu">No quantity units</string>
   <string name="error_empty_stores">No stores</string>
+  <string name="error_empty_tasks">No tasks</string>
+  <string name="error_empty_task_categories">No task categories</string>
   <string name="error_search">No search results</string>
   <string name="error_search_sub">Try other terms</string>
   <string name="error_filter">Nothing to display</string>
@@ -369,6 +395,7 @@
   <string name="title_product">Product</string>
   <string name="title_product_create">Create product</string>
   <string name="title_product_edit">Edit product</string>
+  <string name="title_tasks">Tasks</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_shopping_list">Shopping list</string>
@@ -418,6 +445,8 @@
   <string name="title_list_entry">List entry</string>
   <string name="title_edit_list_entry">Edit list entry</string>
   <string name="title_create_list_entry">Create list entry</string>
+  <string name="title_edit_barcode">Edit barcode</string>
+  <string name="title_create_barcode">Create barcode</string>
   <string name="title_shopping_list_edit">Edit shopping list</string>
   <string name="title_shopping_list_new">New shopping list</string>
   <string name="title_shopping_mode">Shopping mode</string>
@@ -474,7 +503,7 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Amount: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Quantity unit: %1$d</string>
+  <string name="subtitle_barcode_unit">Quantity unit: %1$s</string>
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature disabled</string>
   <string name="subtitle_date_from_input">Date from input:\n%1$s</string>
@@ -654,6 +683,7 @@
   <string name="property_in_stock">In stock: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Sort: %1$s</string>
+  <string name="property_task_categories">Task categories</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

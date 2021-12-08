@@ -436,7 +436,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Aantal: %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Hoeveelheid eenheid: %1$d</string>
+  <string name="subtitle_barcode_unit">Hoeveelheid eenheid: %1$s</string>
   <string name="description_input_product_part1">Product veld bevat:</string>
   <string name="description_input_product_part2">Kies hoe je door wil gaan:</string>
   <string name="description_input_product_option1">Maak een nieuw product aan en gebruik de invoer als naam</string>

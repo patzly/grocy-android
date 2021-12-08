@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowProductBarcodeBinding;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAdapter.ViewHolder> {
@@ -38,13 +40,20 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
 
   private final ArrayList<ProductBarcode> productBarcodes;
   private final ProductBarcodeAdapterListener listener;
+  private final ArrayList<QuantityUnit> quantityUnits;
+  private ArrayList<Store> stores;
+
 
   public ProductBarcodeAdapter(
       ArrayList<ProductBarcode> productBarcodes,
-      ProductBarcodeAdapterListener listener
+      ProductBarcodeAdapterListener listener,
+      ArrayList<QuantityUnit> quantityUnits,
+      ArrayList<Store> stores
   ) {
     this.productBarcodes = new ArrayList<>(productBarcodes);
     this.listener = listener;
+    this.quantityUnits = quantityUnits;
+    this.stores = stores;
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,6 +104,33 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
       holder.binding.note.setVisibility(View.VISIBLE);
     } else {
       holder.binding.note.setVisibility(View.GONE);
+    }
+
+    if (productBarcode.getQuIdInt() != -1){
+      for (QuantityUnit qU : quantityUnits) {
+        if (qU.getId() == productBarcode.getQuIdInt()){
+          String qUnitStr = holder.binding.amount.getContext().getString(
+              R.string.subtitle_barcode_unit,
+              qU.getName()
+          );
+          holder.binding.quantityUnit.setText(qUnitStr);
+          holder.binding.quantityUnit.setVisibility(View.VISIBLE);
+        }
+      }
+    } else {
+      holder.binding.quantityUnit.setVisibility(View.GONE);
+    }
+    if (productBarcode.getStoreIdInt() != -1){
+      for (Store store : stores) {
+        if (store.getId() == productBarcode.getStoreIdInt()){
+          //TODO create dedicated string
+          String storeStr = holder.binding.store.getContext().getString(R.string.property_store)+": "+store.getName();
+          holder.binding.store.setText(storeStr);
+          holder.binding.store.setVisibility(View.VISIBLE);
+        }
+      }
+    } else {
+      holder.binding.store.setVisibility(View.GONE);
     }
 
     holder.binding.container.setOnClickListener(
