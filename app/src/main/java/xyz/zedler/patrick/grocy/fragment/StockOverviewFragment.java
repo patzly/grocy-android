@@ -348,7 +348,8 @@ public class StockOverviewFragment extends BaseFragment implements
     QuantityUnit quantityUnit = viewModel
         .getQuantityUnitFromId(stockItem.getProduct().getQuIdStockInt());
     Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
-    if (quantityUnit == null || location == null) {
+    if (quantityUnit == null) {
+      activity.showMessage(R.string.error_undefined);
       return;
     }
     navigate(StockOverviewFragmentDirections
