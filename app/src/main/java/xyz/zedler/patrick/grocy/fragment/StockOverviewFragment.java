@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
+import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -62,7 +62,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
   private MainActivity activity;
   private StockOverviewViewModel viewModel;
-  private AppBarBehaviorNew appBarBehavior;
+  private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
   private SwipeBehavior swipeBehavior;
   private FragmentStockOverviewBinding binding;
@@ -115,7 +115,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
     // APP BAR BEHAVIOR
 
-    appBarBehavior = new AppBarBehaviorNew(
+    appBarBehavior = new AppBarBehavior(
         activity,
         binding.appBarDefault,
         binding.appBarSearch,

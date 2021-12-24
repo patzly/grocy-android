@@ -5,6 +5,7 @@
 - Fixed: Product info bottom sheet didn't open if location not set in product
 - Fixed: Scrollbars don't stop above the bottom anymore
 - Fixed: Unsorted lists on master data product pages (thanks @Turysaz) (#473)
+- Fixed: Search on master data products list was broken after back press
 
 2.0.0:
 Major changes since 1.10.1:
@@ -28,7 +29,6 @@ Changes since 2.0.0-beta05:
 - Fixed: Hide store fields if price tracking feature is disabled
 
 2.0.0-beta05:
-This is the last beta before the final v2.0.0 release. Please report any issues that may have come up with the recent changes so that the final version is as bug-free as possible.
 - New: Support for server version 3.1.3
 - New: Native support for Android 12
 - New: Preset option in stock settings for "Default due days" of new products

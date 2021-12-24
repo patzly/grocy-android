@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.TasksItemAdapter;
-import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
+import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentTasksBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -60,7 +60,7 @@ public class TasksFragment extends BaseFragment implements
 
   private MainActivity activity;
   private TasksViewModel viewModel;
-  private AppBarBehaviorNew appBarBehavior;
+  private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
   private SwipeBehavior swipeBehavior;
   private FragmentTasksBinding binding;
@@ -106,7 +106,7 @@ public class TasksFragment extends BaseFragment implements
 
     // APP BAR BEHAVIOR
 
-    appBarBehavior = new AppBarBehaviorNew(
+    appBarBehavior = new AppBarBehavior(
         activity,
         binding.appBarDefault,
         binding.appBarSearch,
