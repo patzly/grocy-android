@@ -764,9 +764,6 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    if (stores.get(0).getId() != -1) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-    }
     bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
@@ -774,6 +771,7 @@ public class PurchaseViewModel extends BaseViewModel {
             ? formData.getStoreLive().getValue().getId()
             : -1
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new StoresBottomSheet(), bundle);
   }
 

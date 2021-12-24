@@ -227,11 +227,9 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
 
   @Override
   public void selectStore(Store store) {
-    if (store != null && store.getId() == -1) {
-      viewModel.getFormData().getStoreLive().setValue(null);
-    } else {
-      viewModel.getFormData().getStoreLive().setValue(store);
-    }
+    viewModel.getFormData().getStoreLive().setValue(
+        store == null || store.getId() == -1 ? null : store
+    );
   }
 
   private boolean onMenuItemClick(MenuItem item) {

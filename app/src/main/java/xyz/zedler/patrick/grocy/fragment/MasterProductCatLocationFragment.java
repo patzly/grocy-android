@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatLocationViewModel;
 
 public class MasterProductCatLocationFragment extends BaseFragment {
@@ -164,9 +164,6 @@ public class MasterProductCatLocationFragment extends BaseFragment {
       viewModel.showErrorMessage();
       return;
     }
-
-    SortUtil.sortLocationsByName(requireContext(), locations, true);
-
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
     Location location = viewModel.getFormData().getLocationLive().getValue();
@@ -181,15 +178,9 @@ public class MasterProductCatLocationFragment extends BaseFragment {
       viewModel.showErrorMessage();
       return;
     }
-
-    SortUtil.sortStoresByName(requireContext(), stores, true);
-
-    if (stores != null && !stores.isEmpty() && stores.get(0).getId() != -1) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-    }
-
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     Store store = viewModel.getFormData().getStoreLive().getValue();
     int storeId = store != null ? store.getId() : -1;
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, storeId);
@@ -203,7 +194,9 @@ public class MasterProductCatLocationFragment extends BaseFragment {
 
   @Override
   public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(store);
+    viewModel.getFormData().getStoreLive().setValue(
+        store == null || store.getId() == -1 ? null : store
+    );
   }
 
   @Override

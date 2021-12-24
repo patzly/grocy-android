@@ -160,19 +160,9 @@ public class SortUtil {
       return;
     }
     Locale locale = LocaleUtil.getUserLocale(context);
-    Collections.sort(stores, (item1, item2) -> {
-        // items with id == -1 ("None selected") shall always be on top.
-        if (item1.getId() == -1) {
-          return -1;
-        }
-        if (item2.getId() == -1) {
-          return 1;
-        }
-
-        return Collator.getInstance(locale).compare(
-                (ascending ? item1 : item2).getName().toLowerCase(),
-                (ascending ? item2 : item1).getName().toLowerCase());
-      });
+    Collections.sort(stores, (item1, item2) -> Collator.getInstance(locale).compare(
+            (ascending ? item1 : item2).getName().toLowerCase(),
+            (ascending ? item2 : item1).getName().toLowerCase()));
   }
 
   public static void sortProductGroupsByName(
@@ -199,20 +189,10 @@ public class SortUtil {
       return;
     }
     Locale locale = LocaleUtil.getUserLocale(context);
-    Collections.sort(quantityUnits, (item1, item2) -> {
-      // Units with id == -1 ("None selected") shall always be on top.
-      if (item1.getId() == -1) {
-        return -1;
-      }
-      if (item2.getId() == -1) {
-        return 1;
-      }
-
-      return Collator.getInstance(locale).compare(
-              (ascending ? item1 : item2).getName().toLowerCase(),
-              (ascending ? item2 : item1).getName().toLowerCase()
-      );
-    });
+    Collections.sort(quantityUnits, (item1, item2) -> Collator.getInstance(locale).compare(
+            (ascending ? item1 : item2).getName().toLowerCase(),
+            (ascending ? item2 : item1).getName().toLowerCase()
+    ));
   }
 
   public static void sortShoppingListItemsByName(

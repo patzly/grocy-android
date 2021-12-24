@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -47,7 +46,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
 
 public class MasterProductCatOptionalFragment extends BaseFragment implements BarcodeListener {
@@ -240,15 +239,11 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     Bundle bundle = new Bundle();
     ArrayList<ProductGroup> productGroups = viewModel.getFormData()
         .getProductGroupsLive().getValue();
-    SortUtil.sortProductGroupsByName(
-        requireContext(),
-        productGroups,
-        true
-    );
     bundle.putParcelableArrayList(
         Constants.ARGUMENT.PRODUCT_GROUPS,
         productGroups
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
 
     ProductGroup productGroup = viewModel.getFormData().getProductGroupLive().getValue();
     int productGroupId = productGroup != null ? productGroup.getId() : -1;
@@ -258,7 +253,9 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   @Override
   public void selectProductGroup(ProductGroup productGroup) {
-    viewModel.getFormData().getProductGroupLive().setValue(productGroup);
+    viewModel.getFormData().getProductGroupLive().setValue(
+        productGroup == null || productGroup.getId() == -1 ? null : productGroup
+    );
   }
 
   @Override
@@ -269,14 +266,6 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         viewModel.getFilledProduct()
     );
     return false;
-  }
-
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-    }
   }
 
   @Override

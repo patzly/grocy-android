@@ -43,7 +43,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
@@ -175,18 +174,9 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       return;
     }
     ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
-    SortUtil.sortQuantityUnitsByName(
-            this.getApplication().getApplicationContext(),
-            quantityUnits,
-            true);
-
     if (quantityUnits == null) {
       showErrorMessage();
       return;
-    }
-
-    if (quantityUnits != null && !quantityUnits.isEmpty() && quantityUnits.get(0).getId() != -1) {
-      quantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
     }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);

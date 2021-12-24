@@ -266,7 +266,9 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
 
   @Override
   public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(store.getId() != -1 ? store : null);
+    viewModel.getFormData().getStoreLive().setValue(
+        store == null || store.getId() == -1 ? null : store
+    );
   }
 
   @Override
@@ -386,18 +388,6 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onBottomSheetDismissed() {
     clearInputFocusOrFocusNextInvalidView();
-  }
-
-  private void hideDisabledFeatures() {
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      binding.linearPurchasePrice.setVisibility(View.GONE);
-    }
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-      binding.linearPurchaseLocation.setVisibility(View.GONE);
-    }
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-      binding.linearDueDate.setVisibility(View.GONE);
-    }
   }
 
   private boolean onMenuItemClick(MenuItem item) {

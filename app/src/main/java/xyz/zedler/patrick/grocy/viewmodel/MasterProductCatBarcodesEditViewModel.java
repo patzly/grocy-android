@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductCatBarcodesEditRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -317,9 +318,6 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    if (stores.get(0).getId() != -1) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-    }
     bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
@@ -327,6 +325,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
             ? formData.getStoreLive().getValue().getId()
             : -1
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new StoresBottomSheet(), bundle);
   }
 

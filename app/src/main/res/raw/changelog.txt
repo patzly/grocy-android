@@ -4,6 +4,7 @@
 - Improved: Unnecessary bottom sheets in master data section were removed
 - Fixed: Product info bottom sheet didn't open if location not set in product
 - Fixed: Scrollbars don't stop above the bottom anymore
+- Fixed: Unsorted lists on master data product pages (thanks @Turysaz) (#473)
 
 2.0.0:
 Major changes since 1.10.1:

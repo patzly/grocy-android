@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class LocationsBottomSheet extends BaseBottomSheet
     implements LocationAdapter.LocationAdapterListener {
@@ -64,11 +65,19 @@ public class LocationsBottomSheet extends BaseBottomSheet
     );
 
     activity = (MainActivity) requireActivity();
+    Bundle bundle = requireArguments();
 
-    locations = requireArguments().getParcelableArrayList(Constants.ARGUMENT.LOCATIONS);
-    int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    ArrayList<Location> locationsArg = bundle.getParcelableArrayList(ARGUMENT.LOCATIONS);
+    assert locationsArg != null;
+    locations = new ArrayList<>(locationsArg);
 
-    String title = requireArguments().getString(ARGUMENT.TITLE);
+    SortUtil.sortLocationsByName(requireContext(), locations, true);
+    if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
+      locations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
+    }
+    int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+
+    String title = bundle.getString(ARGUMENT.TITLE);
     TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
     textViewTitle.setText(title != null ? title : activity.getString(R.string.property_locations));
 

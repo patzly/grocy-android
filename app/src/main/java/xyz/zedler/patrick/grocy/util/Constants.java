@@ -331,6 +331,7 @@ public final class Constants {
     public final static String KEY = "key";
     public final static String SHOW_OFFLINE = "show_offline";
     public final static String BARCODE = "barcode";
+    public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
   }
 
   public final static class FAB {
