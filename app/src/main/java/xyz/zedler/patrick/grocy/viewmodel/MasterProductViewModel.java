@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.ConnectivityLiveData;
 
@@ -132,6 +133,10 @@ public class MasterProductViewModel extends BaseViewModel {
 
   public MutableLiveData<Boolean> getActionEditLive() {
     return actionEditLive;
+  }
+
+  public String getAction() {
+    return isActionEdit() ? ACTION.EDIT : ACTION.CREATE;
   }
 
   public FormDataMasterProduct getFormData() {
@@ -223,7 +228,7 @@ public class MasterProductViewModel extends BaseViewModel {
     return names;
   }
 
-  public void saveProduct() {
+  public void saveProduct(boolean withClosing) {
     if (!formData.isWholeFormValid()) {
       showMessage(getString(R.string.error_missing_information));
       return;
@@ -263,12 +268,18 @@ public class MasterProductViewModel extends BaseViewModel {
                 Log.e(TAG, "saveProduct: " + e);
               }
             }
-            if (objectId != -1) {
-              Bundle bundle = new Bundle();
-              bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, objectId);
-              sendEvent(Event.SET_PRODUCT_ID, bundle);
+            if (withClosing) {
+              if (objectId != -1) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, objectId);
+                sendEvent(Event.SET_PRODUCT_ID, bundle);
+              }
+              sendEvent(Event.NAVIGATE_UP);
+            } else {
+              actionEditLive.setValue(true);
+              product.setId(objectId);
+              setCurrentProduct(product);
             }
-            sendEvent(Event.NAVIGATE_UP);
           },
           error -> {
             showErrorMessage();

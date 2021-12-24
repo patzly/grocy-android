@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
 
 public class MasterProductFragment extends BaseFragment {
@@ -75,6 +76,8 @@ public class MasterProductFragment extends BaseFragment {
         .MasterProductViewModelFactory(activity.getApplication(), args)
     ).get(MasterProductViewModel.class);
     if (!viewModel.isActionEdit() && args.getProductName() != null) {
+      // remove product name from arguments because it was filled
+      // in the form during ViewModel creation
       setArguments(new MasterProductFragmentArgs.Builder(args).setProductName(null)
           .setProductId(null).build().toBundle());
     }
@@ -85,23 +88,29 @@ public class MasterProductFragment extends BaseFragment {
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
     binding.categoryOptional.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatOptionalFragment(args.getAction())
+        .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryLocation.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatLocationFragment(args.getAction())
+        .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryDueDate.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatDueDateFragment(args.getAction())
+        .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryAmount.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatAmountFragment(args.getAction())
+        .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryQuantityUnit.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(args.getAction())
+        .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
-    binding.categoryBarcodes.setOnClickListener(v -> navigate(MasterProductFragmentDirections
-        .actionMasterProductFragmentToMasterProductCatBarcodesFragment(args.getAction())
-        .setProduct(viewModel.getFilledProduct())));
+    binding.categoryBarcodes.setOnClickListener(v -> {
+      if (!viewModel.isActionEdit()) {
+        activity.showMessage(R.string.subtitle_product_not_on_server);
+        return;
+      }
+      navigate(MasterProductFragmentDirections
+          .actionMasterProductFragmentToMasterProductCatBarcodesFragment(viewModel.getAction())
+          .setProduct(viewModel.getFilledProduct()));
+    });
     binding.categoryQuConversions
         .setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
 
@@ -147,10 +156,16 @@ public class MasterProductFragment extends BaseFragment {
     String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
     if (action != null) {
       removeForThisDestination(Constants.ARGUMENT.ACTION);
-      if (action.equals(Constants.ACTION.SAVE)) {
-        new Handler().postDelayed(() -> viewModel.saveProduct(), 500);
-      } else if (action.equals(Constants.ACTION.DELETE)) {
-        new Handler().postDelayed(() -> viewModel.deleteProductSafely(), 500);
+      switch (action) {
+        case ACTION.SAVE_CLOSE:
+          new Handler().postDelayed(() -> viewModel.saveProduct(true), 500);
+          break;
+        case ACTION.SAVE_NOT_CLOSE:
+          new Handler().postDelayed(() -> viewModel.saveProduct(false), 500);
+          break;
+        case ACTION.DELETE:
+          new Handler().postDelayed(() -> viewModel.deleteProductSafely(), 500);
+          break;
       }
     }
 
@@ -170,21 +185,27 @@ public class MasterProductFragment extends BaseFragment {
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
+        viewModel.isActionEdit()
+            ? R.menu.menu_master_product_edit
+            : R.menu.menu_master_product_create,
         menuItem -> {
-          if (menuItem.getItemId() != R.id.action_delete) {
-            return false;
+          if (menuItem.getItemId() == R.id.action_delete) {
+            viewModel.deleteProductSafely();
+            return true;
           }
-          viewModel.deleteProductSafely();
-          return true;
+          if (menuItem.getItemId() == R.id.action_save_not_close) {
+            viewModel.saveProduct(false);
+            return true;
+          }
+          return false;
         }
     );
     activity.updateFab(
-        R.drawable.ic_round_backup,
-        R.string.action_save,
+        R.drawable.ic_round_save,
+        R.string.action_save_close,
         Constants.FAB.TAG.SAVE,
         animated,
-        () -> viewModel.saveProduct()
+        () -> viewModel.saveProduct(true)
     );
   }
 

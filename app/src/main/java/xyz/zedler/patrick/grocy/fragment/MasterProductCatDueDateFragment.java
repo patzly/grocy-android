@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatDueDateViewModel;
 
@@ -122,30 +123,41 @@ public class MasterProductCatDueDateFragment extends BaseFragment {
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
+        viewModel.isActionEdit()
+            ? R.menu.menu_master_product_edit
+            : R.menu.menu_master_product_create,
         menuItem -> {
-          if (menuItem.getItemId() != R.id.action_delete) {
-            return false;
+          if (menuItem.getItemId() == R.id.action_delete) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                Constants.ACTION.DELETE
+            );
+            activity.onBackPressed();
+            return true;
           }
-          setForDestination(
-              R.id.masterProductFragment,
-              Constants.ARGUMENT.ACTION,
-              Constants.ACTION.DELETE
-          );
-          activity.onBackPressed();
-          return true;
+          if (menuItem.getItemId() == R.id.action_save_not_close) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                ACTION.SAVE_NOT_CLOSE
+            );
+            activity.onBackPressed();
+            return true;
+          }
+          return false;
         }
     );
     activity.updateFab(
         R.drawable.ic_round_backup,
-        R.string.action_save,
+        R.string.action_save_close,
         Constants.FAB.TAG.SAVE,
         animated,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              Constants.ACTION.SAVE
+              ACTION.SAVE_CLOSE
           );
           activity.onBackPressed();
         }

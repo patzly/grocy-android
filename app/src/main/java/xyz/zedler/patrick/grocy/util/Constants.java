@@ -275,6 +275,8 @@ public final class Constants {
     public final static String CREATE = "action_create";
     public final static String EDIT = "action_edit";
     public final static String SAVE = "action_save";
+    public final static String SAVE_CLOSE = "action_save_close";
+    public final static String SAVE_NOT_CLOSE = "action_save_not_close";
     public final static String DELETE = "action_delete";
     public final static String COMPLETE = "action_complete";
     public final static String UNDO = "action_undo";
