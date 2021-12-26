@@ -47,7 +47,7 @@ public class FormDataMasterProductCatBarcodesEdit {
   private final MutableLiveData<String> amountErrorLive;
   private final MediatorLiveData<String> amountHelperLive;
   private final LiveData<String> amountHintLive;
-  private final MediatorLiveData<String> amountStockLive;
+  private final MediatorLiveData<String> amountPurchaseLive;
   private final MutableLiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive;
   private final LiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
@@ -57,6 +57,7 @@ public class FormDataMasterProductCatBarcodesEdit {
   private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithProductBarcode;
+  private QuantityUnit quantityUnitPurchase;
 
   public FormDataMasterProductCatBarcodesEdit(Application application, Product product) {
     this.application = application;
@@ -72,6 +73,7 @@ public class FormDataMasterProductCatBarcodesEdit {
         quantityUnitsFactors -> quantityUnitsFactors != null
             ? new ArrayList<>(quantityUnitsFactors.keySet()) : null
     );
+    quantityUnitPurchase = null;
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitNameLive = Transformations.map(
         quantityUnitLive,
@@ -84,12 +86,13 @@ public class FormDataMasterProductCatBarcodesEdit {
             quantityUnit.getNamePlural()
         ) : null
     );
-    amountStockLive = new MediatorLiveData<>();
-    amountStockLive.addSource(amountLive, i -> amountStockLive.setValue(getAmountStock()));
-    amountStockLive.addSource(quantityUnitLive, i -> amountStockLive.setValue(getAmountStock()));
+    amountPurchaseLive = new MediatorLiveData<>();
+    amountPurchaseLive.addSource(amountLive, i -> amountPurchaseLive.setValue(getAmountPurchase()));
+    amountPurchaseLive.addSource(quantityUnitLive, i -> amountPurchaseLive.setValue(
+        getAmountPurchase()));
     amountHelperLive = new MediatorLiveData<>();
     amountHelperLive
-        .addSource(amountStockLive, i -> amountHelperLive.setValue(getAmountHelpText()));
+        .addSource(amountPurchaseLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     amountHelperLive
         .addSource(quantityUnitsFactorsLive, i -> amountHelperLive.setValue(getAmountHelpText()));
     storeLive = new MutableLiveData<>();
@@ -167,6 +170,10 @@ public class FormDataMasterProductCatBarcodesEdit {
     return quantityUnitsLive;
   }
 
+  public void setQuantityUnitPurchase(QuantityUnit quantityUnitPurchase) {
+    this.quantityUnitPurchase = quantityUnitPurchase;
+  }
+
   public MutableLiveData<QuantityUnit> getQuantityUnitLive() {
     return quantityUnitLive;
   }
@@ -188,8 +195,8 @@ public class FormDataMasterProductCatBarcodesEdit {
     return null;
   }
 
-  private String getAmountStock() {
-    QuantityUnit stock = getStockQuantityUnit();
+  private String getAmountPurchase() {
+    QuantityUnit purchase = quantityUnitPurchase;
     QuantityUnit current = quantityUnitLive.getValue();
     if (!NumUtil.isStringDouble(amountLive.getValue())
         || quantityUnitsFactorsLive.getValue() == null
@@ -198,7 +205,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     }
     assert amountLive.getValue() != null;
 
-    if (stock != null && current != null && stock.getId() != current.getId()) {
+    if (purchase != null && current != null && purchase.getId() != current.getId()) {
       HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
       double amount = Double.parseDouble(amountLive.getValue());
       Object currentFactor = hashMap.get(current);
@@ -206,10 +213,8 @@ public class FormDataMasterProductCatBarcodesEdit {
         amountHelperLive.setValue(null);
         return null;
       }
-      double amountMultiplied;
-      if (product != null && current.getId() == product.getQuIdPurchaseInt()) {
-        amountMultiplied = amount * (double) currentFactor;
-      } else {
+      double amountMultiplied = amount;
+      if (product != null) {
         amountMultiplied = amount / (double) currentFactor;
       }
       return NumUtil.trim(amountMultiplied);
@@ -219,14 +224,14 @@ public class FormDataMasterProductCatBarcodesEdit {
   }
 
   private String getAmountHelpText() {
-    QuantityUnit stock = getStockQuantityUnit();
-    if (stock == null || !NumUtil.isStringDouble(amountStockLive.getValue())) {
+    QuantityUnit purchase = quantityUnitPurchase;
+    if (purchase == null || !NumUtil.isStringDouble(amountPurchaseLive.getValue())) {
       return null;
     }
     return application.getString(
         R.string.subtitle_amount_compare,
-        amountStockLive.getValue(),
-        pluralUtil.getQuantityUnitPlural(stock, Double.parseDouble(amountStockLive.getValue()))
+        amountPurchaseLive.getValue(),
+        pluralUtil.getQuantityUnitPlural(purchase, Double.parseDouble(amountPurchaseLive.getValue()))
     );
   }
 

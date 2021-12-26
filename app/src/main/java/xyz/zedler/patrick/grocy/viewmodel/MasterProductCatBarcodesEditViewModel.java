@@ -226,7 +226,10 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
   }
 
   private void fillWithProductBarcodeIfNecessary() {
-    if (!isActionEdit || formData.isFilledWithProductBarcode()) {
+    if (formData.isFilledWithProductBarcode()) {
+      return;
+    } else if(!isActionEdit) {
+      setProductQuantityUnitsAndFactors(args.getProduct());
       return;
     }
 
@@ -240,22 +243,12 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       formData.getAmountLive().setValue(NumUtil.trim(amount));
     }
 
-    HashMap<QuantityUnit, Double> unitFactors
-        = setProductQuantityUnitsAndFactors(args.getProduct());
+    setProductQuantityUnitsAndFactors(args.getProduct());
 
     if (productBarcode.hasQuId()) {
       QuantityUnit quantityUnit = getQuantityUnit(productBarcode.getQuIdInt());
       if (productBarcode.hasAmount()) {
         double amount = productBarcode.getAmountDouble();
-        if (unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
-          Double factor = unitFactors.get(quantityUnit);
-          assert factor != null;
-          if (factor != -1 && quantityUnit.getId() == args.getProduct().getQuIdPurchaseInt()) {
-            amount = amount / factor;
-          } else if (factor != -1) {
-            amount = amount * factor;
-          }
-        }
         formData.getAmountLive().setValue(NumUtil.trim(amount));
       }
       formData.getQuantityUnitLive().setValue(quantityUnit);
@@ -277,12 +270,14 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       return null;
     }
 
+    formData.setQuantityUnitPurchase(purchase);
+
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
     ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-    unitFactors.put(stock, (double) -1);
-    quIdsInHashMap.add(stock.getId());
-    if (!quIdsInHashMap.contains(purchase.getId())) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
+    unitFactors.put(purchase, (double) -1);
+    quIdsInHashMap.add(purchase.getId());
+    if (!quIdsInHashMap.contains(stock.getId())) {
+      unitFactors.put(stock, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (product.getId() != conversion.getProductId()) {
