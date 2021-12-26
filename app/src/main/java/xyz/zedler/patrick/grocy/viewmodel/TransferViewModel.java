@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntriesBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockLocationsBottomSheet;
@@ -538,7 +538,9 @@ public class TransferViewModel extends BaseViewModel {
         Constants.ARGUMENT.QUANTITY_UNITS,
         unitsFactors != null ? new ArrayList<>(unitsFactors.keySet()) : null
     );
-    showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
+    QuantityUnit quantityUnit = formData.getQuantityUnitLive().getValue();
+    bundle.putInt(ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
+    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
   public void showStockEntriesBottomSheet() {

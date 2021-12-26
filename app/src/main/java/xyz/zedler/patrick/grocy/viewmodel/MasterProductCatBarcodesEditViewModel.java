@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatBarcodesEditFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatBarcodesEdit;
@@ -306,11 +306,11 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
     ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
     if (quantityUnits == null) return;
     Bundle bundle = new Bundle();
-    if (quantityUnits.get(0).getId() != -1) {
-      quantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
-    }
     bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
-    showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    QuantityUnit quantityUnit = formData.getQuantityUnitLive().getValue();
+    bundle.putInt(ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
+    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
   public void showStoresBottomSheet() {

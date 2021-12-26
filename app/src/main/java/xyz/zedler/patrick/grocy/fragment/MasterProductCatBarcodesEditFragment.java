@@ -208,15 +208,6 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   }
 
   @Override
-  public int getSelectedQuantityUnitId() {
-    QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
-    if (selectedId == null) {
-      return -1;
-    }
-    return selectedId.getId();
-  }
-
-  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
     if (quantityUnit != null && quantityUnit.getId() == -1) {
       viewModel.getFormData().getQuantityUnitLive().setValue(null);

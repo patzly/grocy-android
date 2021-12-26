@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +107,12 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheet
         quantityUnits.get(position), requireArguments()
     );
     dismiss();
+  }
+
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    activity.getCurrentFragment().onBottomSheetDismissed();
+    super.onDismiss(dialog);
   }
 
   @NonNull

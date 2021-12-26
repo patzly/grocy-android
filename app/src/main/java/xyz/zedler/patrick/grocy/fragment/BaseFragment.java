@@ -118,10 +118,6 @@ public class BaseFragment extends Fragment {
     return null;
   }
 
-  public int getSelectedQuantityUnitId() {
-    return -1;
-  }
-
   public void updateConnectivity(boolean isOnline) {
   }
 
