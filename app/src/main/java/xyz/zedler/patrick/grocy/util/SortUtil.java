@@ -161,9 +161,8 @@ public class SortUtil {
     }
     Locale locale = LocaleUtil.getUserLocale(context);
     Collections.sort(stores, (item1, item2) -> Collator.getInstance(locale).compare(
-        (ascending ? item1 : item2).getName().toLowerCase(),
-        (ascending ? item2 : item1).getName().toLowerCase()
-    ));
+            (ascending ? item1 : item2).getName().toLowerCase(),
+            (ascending ? item2 : item1).getName().toLowerCase()));
   }
 
   public static void sortProductGroupsByName(
@@ -191,8 +190,8 @@ public class SortUtil {
     }
     Locale locale = LocaleUtil.getUserLocale(context);
     Collections.sort(quantityUnits, (item1, item2) -> Collator.getInstance(locale).compare(
-        (ascending ? item1 : item2).getName().toLowerCase(),
-        (ascending ? item2 : item1).getName().toLowerCase()
+            (ascending ? item1 : item2).getName().toLowerCase(),
+            (ascending ? item2 : item1).getName().toLowerCase()
     ));
   }
 

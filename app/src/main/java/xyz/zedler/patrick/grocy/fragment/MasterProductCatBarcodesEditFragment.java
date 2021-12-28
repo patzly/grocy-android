@@ -208,15 +208,6 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   }
 
   @Override
-  public int getSelectedQuantityUnitId() {
-    QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
-    if (selectedId == null) {
-      return -1;
-    }
-    return selectedId.getId();
-  }
-
-  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
     if (quantityUnit != null && quantityUnit.getId() == -1) {
       viewModel.getFormData().getQuantityUnitLive().setValue(null);
@@ -227,11 +218,9 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
 
   @Override
   public void selectStore(Store store) {
-    if (store != null && store.getId() == -1) {
-      viewModel.getFormData().getStoreLive().setValue(null);
-    } else {
-      viewModel.getFormData().getStoreLive().setValue(store);
-    }
+    viewModel.getFormData().getStoreLive().setValue(
+        store == null || store.getId() == -1 ? null : store
+    );
   }
 
   private boolean onMenuItemClick(MenuItem item) {

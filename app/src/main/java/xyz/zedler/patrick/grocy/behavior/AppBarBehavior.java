@@ -20,13 +20,10 @@
 package xyz.zedler.patrick.grocy.behavior;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class AppBarBehavior {
@@ -34,68 +31,32 @@ public class AppBarBehavior {
   private final static String TAG = AppBarBehavior.class.getSimpleName();
 
   private static final int ANIM_DURATION = 300;
+  private static final String SAVED_STATE_KEY = "app_bar_layout_is_primary";
 
-  private final Activity activity;
-  private View viewPrimary, viewSecondary;
-  private boolean isPrimary;
+  private final View viewPrimary;
+  private final View viewSecondary;
+  private boolean isPrimary = true;
   private final boolean debug;
 
-  public AppBarBehavior(Activity activity, @IdRes int primary, @IdRes int secondary) {
-    this.activity = activity;
+  public AppBarBehavior(Activity activity, View primary, View secondary, Bundle savedState) {
+    debug = PrefsUtil.isDebuggingEnabled(activity);
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    if (savedState == null) {
+      isPrimary = true;
+    } else if (savedState.containsKey(SAVED_STATE_KEY)) {
+      isPrimary = savedState.getBoolean(SAVED_STATE_KEY);
+    }
 
-    viewPrimary = activity.findViewById(primary);
-    viewPrimary.setVisibility(View.VISIBLE);
+    viewPrimary = primary;
     viewPrimary.setAlpha(1);
-
-    viewSecondary = activity.findViewById(secondary);
-    viewSecondary.setVisibility(View.GONE);
-
-    isPrimary = true;
+    viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
+    viewSecondary = secondary;
+    viewSecondary.setAlpha(1);
+    viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
   }
 
   public void saveInstanceState(@NonNull Bundle outState) {
-    if (viewPrimary != null) {
-      outState.putInt("appBarBehavior_primary_view_id", viewPrimary.getId());
-    }
-    if (viewSecondary != null) {
-      outState.putInt("appBarBehavior_secondary_view_id", viewSecondary.getId());
-    }
-    outState.putBoolean("appBarBehavior_is_primary", isPrimary);
-
-    if (debug) {
-      Log.i(TAG, "saved state: isPrimary = " + isPrimary);
-    }
-  }
-
-  public void restoreInstanceState(@NonNull Bundle savedInstanceState) {
-    View viewPrimary = activity.findViewById(
-        savedInstanceState.getInt("appBarBehavior_primary_view_id")
-    );
-    View viewSecondary = activity.findViewById(
-        savedInstanceState.getInt("appBarBehavior_secondary_view_id")
-    );
-
-    this.viewPrimary = viewPrimary;
-    this.viewSecondary = viewSecondary;
-
-    isPrimary = savedInstanceState.getBoolean(
-        "appBarBehavior_is_primary",
-        true
-    );
-
-    if (viewPrimary != null) {
-      viewPrimary.setVisibility(isPrimary ? View.VISIBLE : View.GONE);
-    }
-    if (viewSecondary != null) {
-      viewSecondary.setVisibility(isPrimary ? View.GONE : View.VISIBLE);
-    }
-
-    if (debug) {
-      Log.i(TAG, "restored state: isPrimary = " + isPrimary);
-    }
+    outState.putBoolean(SAVED_STATE_KEY, isPrimary);
   }
 
   public void switchToPrimary() {

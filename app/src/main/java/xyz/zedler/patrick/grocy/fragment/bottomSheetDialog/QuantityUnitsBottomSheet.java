@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,8 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class QuantityUnitsBottomSheet extends BaseBottomSheet
     implements QuantityUnitAdapter.QuantityUnitAdapterListener {
@@ -62,9 +65,19 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheet
     );
 
     activity = (MainActivity) requireActivity();
+    Bundle bundle = requireArguments();
 
-    quantityUnits = requireArguments().getParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS);
-    int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    ArrayList<QuantityUnit> qUsArg = bundle.getParcelableArrayList(ARGUMENT.QUANTITY_UNITS);
+    assert qUsArg != null;
+    quantityUnits = new ArrayList<>(qUsArg);
+
+    SortUtil.sortQuantityUnitsByName(requireContext(), quantityUnits, true);
+    if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
+      quantityUnits.add(
+          0,
+          new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
+    }
+    int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
     textViewTitle.setText(activity.getString(R.string.property_quantity_units));
@@ -94,6 +107,12 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheet
         quantityUnits.get(position), requireArguments()
     );
     dismiss();
+  }
+
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    activity.getCurrentFragment().onBottomSheetDismissed();
+    super.onDismiss(dialog);
   }
 
   @NonNull

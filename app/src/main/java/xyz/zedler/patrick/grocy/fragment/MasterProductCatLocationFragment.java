@@ -40,6 +40,8 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatLocationViewModel;
 
 public class MasterProductCatLocationFragment extends BaseFragment {
@@ -123,30 +125,41 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
+        viewModel.isActionEdit()
+            ? R.menu.menu_master_product_edit
+            : R.menu.menu_master_product_create,
         menuItem -> {
-          if (menuItem.getItemId() != R.id.action_delete) {
-            return false;
+          if (menuItem.getItemId() == R.id.action_delete) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                Constants.ACTION.DELETE
+            );
+            activity.onBackPressed();
+            return true;
           }
-          setForDestination(
-              R.id.masterProductFragment,
-              Constants.ARGUMENT.ACTION,
-              Constants.ACTION.DELETE
-          );
-          activity.onBackPressed();
-          return true;
+          if (menuItem.getItemId() == R.id.action_save_not_close) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                ACTION.SAVE_NOT_CLOSE
+            );
+            activity.onBackPressed();
+            return true;
+          }
+          return false;
         }
     );
     activity.updateFab(
         R.drawable.ic_round_backup,
-        R.string.action_save,
+        R.string.action_save_close,
         Constants.FAB.TAG.SAVE,
         animated,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              Constants.ACTION.SAVE
+              ACTION.SAVE_CLOSE
           );
           activity.onBackPressed();
         }
@@ -177,11 +190,9 @@ public class MasterProductCatLocationFragment extends BaseFragment {
       viewModel.showErrorMessage();
       return;
     }
-    if (stores != null && !stores.isEmpty() && stores.get(0).getId() != -1) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-    }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     Store store = viewModel.getFormData().getStoreLive().getValue();
     int storeId = store != null ? store.getId() : -1;
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, storeId);
@@ -195,7 +206,9 @@ public class MasterProductCatLocationFragment extends BaseFragment {
 
   @Override
   public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(store);
+    viewModel.getFormData().getStoreLive().setValue(
+        store == null || store.getId() == -1 ? null : store
+    );
   }
 
   @Override

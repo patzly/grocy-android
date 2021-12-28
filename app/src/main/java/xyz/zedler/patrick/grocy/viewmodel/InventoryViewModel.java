@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.fragment.InventoryFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -495,7 +495,9 @@ public class InventoryViewModel extends BaseViewModel {
         Constants.ARGUMENT.QUANTITY_UNITS,
         unitsFactors != null ? new ArrayList<>(unitsFactors.keySet()) : null
     );
-    showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
+    QuantityUnit quantityUnit = formData.getQuantityUnitLive().getValue();
+    bundle.putInt(ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
+    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
   public void showPurchasedDateBottomSheet() {
@@ -535,9 +537,6 @@ public class InventoryViewModel extends BaseViewModel {
           return;
       }
     Bundle bundle = new Bundle();
-    if (stores.get(0).getId() != -1) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-    }
     bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
@@ -545,6 +544,7 @@ public class InventoryViewModel extends BaseViewModel {
             ? formData.getStoreLive().getValue().getId()
             : -1
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new StoresBottomSheet(), bundle);
   }
 

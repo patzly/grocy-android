@@ -1652,11 +1652,11 @@ public class DownloadHelper {
       String dbChangedTime,
       OnStoresResponseListener onResponseListener
   ) {
-    OnStoresResponseListener newOnResponseListener = products -> {
+    OnStoresResponseListener newOnResponseListener = stores -> {
       SharedPreferences.Editor editPrefs = sharedPrefs.edit();
       editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
       editPrefs.apply();
-      onResponseListener.onResponse(products);
+      onResponseListener.onResponse(stores);
     };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_STORES, null

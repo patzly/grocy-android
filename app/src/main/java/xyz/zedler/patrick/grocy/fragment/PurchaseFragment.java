@@ -284,15 +284,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
-  public int getSelectedQuantityUnitId() {
-    QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
-    if (selectedId == null) {
-      return -1;
-    }
-    return selectedId.getId();
-  }
-
-  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
     viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
   }
@@ -310,7 +301,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
   @Override
   public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(store.getId() != -1 ? store : null);
+    viewModel.getFormData().getStoreLive().setValue(
+        store == null || store.getId() == -1 ? null : store
+    );
   }
 
   @Override

@@ -38,7 +38,7 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
@@ -315,16 +316,9 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         Constants.ARGUMENT.QUANTITY_UNITS,
         viewModel.getFormData().getQuantityUnitsLive().getValue()
     );
-    activity.showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
-  }
-
-  @Override
-  public int getSelectedQuantityUnitId() {
-    QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
-    if (selectedId == null) {
-      return -1;
-    }
-    return selectedId.getId();
+    QuantityUnit quantityUnit = viewModel.getFormData().getQuantityUnitLive().getValue();
+    bundle.putInt(ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
+    activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
   @Nullable

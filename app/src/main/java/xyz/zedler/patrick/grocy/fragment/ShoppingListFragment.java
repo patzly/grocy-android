@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.behavior.AppBarBehaviorNew;
+import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
@@ -74,7 +74,7 @@ public class ShoppingListFragment extends BaseFragment implements
   private MainActivity activity;
   private SharedPreferences sharedPrefs;
   private ShoppingListViewModel viewModel;
-  private AppBarBehaviorNew appBarBehavior;
+  private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
   private SwipeBehavior swipeBehavior;
   private FragmentShoppingListBinding binding;
@@ -125,7 +125,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
     // APP BAR BEHAVIOR
 
-    appBarBehavior = new AppBarBehaviorNew(
+    appBarBehavior = new AppBarBehavior(
         activity,
         binding.appBarDefault,
         binding.appBarSearch,

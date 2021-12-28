@@ -59,8 +59,8 @@ Anything on this list is in random order and *might* be added in the near future
 * [(3) My API key is invalid. What can I do?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq3)
 * [(4) How can I use this app with Hass.io?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq4)
 * [(5) Why are my barcodes unreadable if I use the selfie camera?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq5)
-* [(6) What is the APK with ML Kit as barcode scanner?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq6)
-* [(7) How can I connect to my instance through Tor Hidden Service?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq7)
+* [(6) What is ML Kit barcode scanner?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq6)
+* [(7) How can I connect to my instance through Tor Hidden Service or Proxy?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq7)
 * [(8) How can I use my USB or Bluetooth™ barcode scanner device?](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-faq8)
 
 [I have another question.](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
@@ -127,42 +127,23 @@ With this distance, the picture resolution is sometimes too low for the scanning
 <br />
 
 <a name="faq6"></a>
-**(6) What is the APK with ML Kit as barcode scanner?**
+**(6) What is ML Kit barcode scanner?**
 
-(Coming soon)
-
-It is possible to use the APK option with ML Kit as barcode recognition instead of ZXing.
-ML Kit uses (like the names indicates) a machine learning approach for barcode recognition and works with a trained model instead of stroke width detection.
-This has many advantages:
-
-- No horizontal alignment of barcodes necessary
-- We never saw any recognition mistakes
-- It uses the new CameraX implementation
+ML Kit is an alternative AI-based barcode scanner which is implemented in the Google Play and GitHub version of our app since v2.0.0, F-Droid doesn't allow closed-source app components and thus we can't offer the same version there. ML Kit is from Google and doesn't make recognition mistakes compared to ZXing (the primary scanner option in our app). Additionaly, you don't have to align the barcode horizontally in your camera because it recognizes barcodes with any orientation. Go to `app settings -> Scanner -> Barcode scanner` to use ML Kit. You can either purchase the required unlock app in Google Play Store (which would make us happy) or you can download the unlock APK [here](https://github.com/patzly/grocy-android-unlock).
 
 <br />
 
 <a name="faq7"></a>
-**(7) How can I connect to my instance through Tor Hidden Service?**
+**(7) How can I connect to my instance through Tor Hidden Service or Proxy?**
 
-This is only available on v1.9.0 and later.  
-Simply enter your onion hostname in the server field like this:
-
-`http://myhiddenservice.onion`
-
-Orbot needs to be installed on your device and will be automatically launched if it's not running.
-Currently there can be error messages if Orbot is not connected after you press the login button.
+Go to `app settings -> Network` and enable Tor support or HTTP-Proxy. Orbot is required for Tor support.
 
 <br />
 
 <a name="faq8"></a>
 **(8) How can I use my USB or Bluetooth™ barcode scanner device?**
 
-This is only available on v1.9.0 and later. Currently only possible in batch mode.  
-Connect your scanner device with your smartphone and configure it so that it uses (only!) TAB as suffix.
-Nothing else should be added (no other prefix or suffix) because else barcodes could be stored wrong.
-In later versions our app will get an option where you can configure the prefix and/or suffix and there
-will be a separate page for scanner device batch mode, because now the camera is active while using a
-scanner device.
+Go to `app settings -> Scanner` and enable support for external scanners. Then you can connect a scanner for example using USB or Bluetooth™ and use it on the purchase/consume/transfer/inventory pages (the product field must be focused). Your scanner should have TAB or Enter as suffix, otherwise the workflow won't start after a scan.
 
 ## Support
 

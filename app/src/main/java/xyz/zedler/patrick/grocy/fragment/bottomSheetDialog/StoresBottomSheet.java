@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -38,6 +37,8 @@ import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StoresBottomSheet extends BaseBottomSheet
     implements StoreAdapter.StoreAdapterListener {
@@ -66,29 +67,25 @@ public class StoresBottomSheet extends BaseBottomSheet
     activity = (MainActivity) requireActivity();
     Bundle bundle = requireArguments();
 
-    stores = bundle.getParcelableArrayList(Constants.ARGUMENT.STORES);
+    ArrayList<Store> storesArg = bundle.getParcelableArrayList(Constants.ARGUMENT.STORES);
+    assert storesArg != null;
+    stores = new ArrayList<>(storesArg);
+
+    SortUtil.sortStoresByName(requireContext(), stores, true);
+    if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
+      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
+    }
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
     textViewTitle.setText(activity.getString(R.string.property_stores));
 
-    MaterialButton button = view.findViewById(R.id.button_list_selection_discard);
-
     RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
     recyclerView.setLayoutManager(
-        new LinearLayoutManager(
-            activity,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
     recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(
-        new StoreAdapter(
-            stores, selected, this
-        )
-    );
-
+    recyclerView.setAdapter(new StoreAdapter(stores, selected, this));
     return view;
   }
 

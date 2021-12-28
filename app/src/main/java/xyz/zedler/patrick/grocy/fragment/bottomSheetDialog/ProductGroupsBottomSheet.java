@@ -36,6 +36,8 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class ProductGroupsBottomSheet extends BaseBottomSheet
     implements ProductGroupAdapter.ProductGroupAdapterListener {
@@ -62,9 +64,20 @@ public class ProductGroupsBottomSheet extends BaseBottomSheet
     );
 
     activity = (MainActivity) requireActivity();
+    Bundle bundle = requireArguments();
 
-    productGroups = requireArguments().getParcelableArrayList(Constants.ARGUMENT.PRODUCT_GROUPS);
-    int selected = requireArguments().getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    ArrayList<ProductGroup> productGroupsArg = bundle
+        .getParcelableArrayList(ARGUMENT.PRODUCT_GROUPS);
+    assert productGroupsArg != null;
+    productGroups = new ArrayList<>(productGroupsArg);
+
+    SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
+    if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
+      productGroups.add(
+          0,
+          new ProductGroup(-1, getString(R.string.subtitle_none_selected)));
+    }
+    int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
     textViewTitle.setText(activity.getString(R.string.property_product_groups));
@@ -89,8 +102,9 @@ public class ProductGroupsBottomSheet extends BaseBottomSheet
 
   @Override
   public void onItemRowClicked(int position) {
-    activity.getCurrentFragment().selectProductGroup(productGroups.get(position));
-
+    ProductGroup productGroup = productGroups.get(position);
+    activity.getCurrentFragment()
+        .selectProductGroup(productGroup);
     dismiss();
   }
 

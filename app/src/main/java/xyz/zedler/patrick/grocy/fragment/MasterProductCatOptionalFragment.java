@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -47,7 +46,8 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatOptionalViewModel;
 
 public class MasterProductCatOptionalFragment extends BaseFragment implements BarcodeListener {
@@ -141,30 +141,41 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        viewModel.isActionEdit() ? R.menu.menu_master_product_edit : R.menu.menu_empty,
+        viewModel.isActionEdit()
+            ? R.menu.menu_master_product_edit
+            : R.menu.menu_master_product_create,
         menuItem -> {
-          if (menuItem.getItemId() != R.id.action_delete) {
-            return false;
+          if (menuItem.getItemId() == R.id.action_delete) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                Constants.ACTION.DELETE
+            );
+            activity.onBackPressed();
+            return true;
           }
-          setForDestination(
-              R.id.masterProductFragment,
-              Constants.ARGUMENT.ACTION,
-              Constants.ACTION.DELETE
-          );
-          activity.onBackPressed();
-          return true;
+          if (menuItem.getItemId() == R.id.action_save_not_close) {
+            setForDestination(
+                R.id.masterProductFragment,
+                Constants.ARGUMENT.ACTION,
+                ACTION.SAVE_NOT_CLOSE
+            );
+            activity.onBackPressed();
+            return true;
+          }
+          return false;
         }
     );
     activity.updateFab(
         R.drawable.ic_round_backup,
-        R.string.action_save,
+        R.string.action_save_close,
         Constants.FAB.TAG.SAVE,
         animated,
         () -> {
           setForDestination(
               R.id.masterProductFragment,
               Constants.ARGUMENT.ACTION,
-              Constants.ACTION.SAVE
+              ACTION.SAVE_CLOSE
           );
           activity.onBackPressed();
         }
@@ -240,15 +251,11 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     Bundle bundle = new Bundle();
     ArrayList<ProductGroup> productGroups = viewModel.getFormData()
         .getProductGroupsLive().getValue();
-    SortUtil.sortProductGroupsByName(
-        requireContext(),
-        productGroups,
-        true
-    );
     bundle.putParcelableArrayList(
         Constants.ARGUMENT.PRODUCT_GROUPS,
         productGroups
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
 
     ProductGroup productGroup = viewModel.getFormData().getProductGroupLive().getValue();
     int productGroupId = productGroup != null ? productGroup.getId() : -1;
@@ -258,7 +265,9 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   @Override
   public void selectProductGroup(ProductGroup productGroup) {
-    viewModel.getFormData().getProductGroupLive().setValue(productGroup);
+    viewModel.getFormData().getProductGroupLive().setValue(
+        productGroup == null || productGroup.getId() == -1 ? null : productGroup
+    );
   }
 
   @Override
@@ -269,14 +278,6 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         viewModel.getFilledProduct()
     );
     return false;
-  }
-
-  private void lockOrUnlockRotation(boolean scannerIsVisible) {
-    if (scannerIsVisible) {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-    } else {
-      activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
-    }
   }
 
   @Override

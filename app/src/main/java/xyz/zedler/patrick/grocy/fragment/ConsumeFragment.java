@@ -256,15 +256,6 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
-  public int getSelectedQuantityUnitId() {
-    QuantityUnit selectedId = viewModel.getFormData().getQuantityUnitLive().getValue();
-      if (selectedId == null) {
-          return -1;
-      }
-    return selectedId.getId();
-  }
-
-  @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
     viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
   }

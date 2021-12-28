@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.MasterProductCatBarcodesEditFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheetNew;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatBarcodesEdit;
@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductCatBarcodesEditRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -225,7 +226,10 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
   }
 
   private void fillWithProductBarcodeIfNecessary() {
-    if (!isActionEdit || formData.isFilledWithProductBarcode()) {
+    if (formData.isFilledWithProductBarcode()) {
+      return;
+    } else if(!isActionEdit) {
+      setProductQuantityUnitsAndFactors(args.getProduct());
       return;
     }
 
@@ -239,22 +243,12 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       formData.getAmountLive().setValue(NumUtil.trim(amount));
     }
 
-    HashMap<QuantityUnit, Double> unitFactors
-        = setProductQuantityUnitsAndFactors(args.getProduct());
+    setProductQuantityUnitsAndFactors(args.getProduct());
 
     if (productBarcode.hasQuId()) {
       QuantityUnit quantityUnit = getQuantityUnit(productBarcode.getQuIdInt());
       if (productBarcode.hasAmount()) {
         double amount = productBarcode.getAmountDouble();
-        if (unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
-          Double factor = unitFactors.get(quantityUnit);
-          assert factor != null;
-          if (factor != -1 && quantityUnit.getId() == args.getProduct().getQuIdPurchaseInt()) {
-            amount = amount / factor;
-          } else if (factor != -1) {
-            amount = amount * factor;
-          }
-        }
         formData.getAmountLive().setValue(NumUtil.trim(amount));
       }
       formData.getQuantityUnitLive().setValue(quantityUnit);
@@ -276,12 +270,14 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       return null;
     }
 
+    formData.setQuantityUnitPurchase(purchase);
+
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
     ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-    unitFactors.put(stock, (double) -1);
-    quIdsInHashMap.add(stock.getId());
-    if (!quIdsInHashMap.contains(purchase.getId())) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
+    unitFactors.put(purchase, (double) -1);
+    quIdsInHashMap.add(purchase.getId());
+    if (!quIdsInHashMap.contains(stock.getId())) {
+      unitFactors.put(stock, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (product.getId() != conversion.getProductId()) {
@@ -305,11 +301,11 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
     ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
     if (quantityUnits == null) return;
     Bundle bundle = new Bundle();
-    if (quantityUnits.get(0).getId() != -1) {
-      quantityUnits.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
-    }
     bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
-    showBottomSheet(new QuantityUnitsBottomSheetNew(), bundle);
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    QuantityUnit quantityUnit = formData.getQuantityUnitLive().getValue();
+    bundle.putInt(ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
+    showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 
   public void showStoresBottomSheet() {
@@ -317,9 +313,6 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    if (stores.get(0).getId() != -1) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
-    }
     bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
@@ -327,6 +320,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
             ? formData.getStoreLive().getValue().getId()
             : -1
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new StoresBottomSheet(), bundle);
   }
 

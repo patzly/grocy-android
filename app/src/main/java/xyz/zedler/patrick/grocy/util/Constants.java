@@ -282,6 +282,8 @@ public final class Constants {
     public final static String CREATE = "action_create";
     public final static String EDIT = "action_edit";
     public final static String SAVE = "action_save";
+    public final static String SAVE_CLOSE = "action_save_close";
+    public final static String SAVE_NOT_CLOSE = "action_save_not_close";
     public final static String DELETE = "action_delete";
     public final static String COMPLETE = "action_complete";
     public final static String UNDO = "action_undo";
@@ -338,6 +340,7 @@ public final class Constants {
     public final static String KEY = "key";
     public final static String SHOW_OFFLINE = "show_offline";
     public final static String BARCODE = "barcode";
+    public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
   }
 
   public final static class FAB {

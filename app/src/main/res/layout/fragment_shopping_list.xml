@@ -256,6 +256,7 @@
           android:paddingBottom="120dp"
           android:overScrollMode="never"
           android:clipToPadding="false"
+          android:scrollbarStyle="outsideOverlay"
           android:layoutAnimation="@anim/recycler_layout" />
 
       </FrameLayout>

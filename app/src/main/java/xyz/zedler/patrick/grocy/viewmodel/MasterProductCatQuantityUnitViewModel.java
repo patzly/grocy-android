@@ -173,16 +173,13 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       showMessage(getString(R.string.msg_help_qu_stock));
       return;
     }
-    ArrayList<QuantityUnit> qUs = formData.getQuantityUnitsLive().getValue();
-    if (qUs == null) {
+    ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
+    if (quantityUnits == null) {
       showErrorMessage();
       return;
     }
-    if (qUs != null && !qUs.isEmpty() && qUs.get(0).getId() != -1) {
-      qUs.add(0, new QuantityUnit(-1, getString(R.string.subtitle_none_selected)));
-    }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, qUs);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
     QuantityUnit quantityUnit;
     if (type == FormDataMasterProductCatQuantityUnit.STOCK) {
       quantityUnit = formData.getQuStockLive().getValue();

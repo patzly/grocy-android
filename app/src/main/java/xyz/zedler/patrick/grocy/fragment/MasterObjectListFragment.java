@@ -254,8 +254,9 @@ public class MasterObjectListFragment extends BaseFragment
 
     appBarBehavior = new AppBarBehavior(
         activity,
-        R.id.app_bar_default,
-        R.id.app_bar_search
+        binding.appBarDefault,
+        binding.appBarSearch,
+        savedInstanceState
     );
     if (viewModel.isSearchActive()) {
       appBarBehavior.switchToSecondary();
@@ -447,9 +448,8 @@ public class MasterObjectListFragment extends BaseFragment
     appBarBehavior.switchToPrimary();
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
-    viewModel.setSearch(null);
-
     viewModel.setIsSearchVisible(false);
+    viewModel.setSearch(null);
   }
 
   @Override

@@ -520,10 +520,6 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getLocations(
         locations -> {
           this.locations = locations;
-          this.locations.add(
-              0,
-              new Location(-1, getString(R.string.subtitle_none_selected))
-          );
           Location location = getLocation(locationId);
           presetLocationTextLive.setValue(location != null ? location.getName()
               : getString(R.string.subtitle_none_selected));
@@ -537,10 +533,6 @@ public class SettingsViewModel extends BaseViewModel {
               true
           );
           this.productGroups = productGroups;
-          this.productGroups.add(
-              0,
-              new ProductGroup(-1, getString(R.string.subtitle_none_selected))
-          );
           ProductGroup productGroup = getProductGroup(groupId);
           presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()
               : getString(R.string.subtitle_none_selected));
@@ -549,10 +541,6 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getQuantityUnits(
         quantityUnits -> {
           this.quantityUnits = quantityUnits;
-          this.quantityUnits.add(
-              0,
-              new QuantityUnit(-1, getString(R.string.subtitle_none_selected))
-          );
           QuantityUnit quantityUnit = getQuantityUnit(unitId);
           presetQuantityUnitTextLive.setValue(quantityUnit != null ? quantityUnit.getName()
               : getString(R.string.subtitle_none_selected));
@@ -570,6 +558,7 @@ public class SettingsViewModel extends BaseViewModel {
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.LOCATION, SETTINGS_DEFAULT.STOCK.LOCATION)
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new LocationsBottomSheet(), bundle);
   }
 
@@ -583,6 +572,7 @@ public class SettingsViewModel extends BaseViewModel {
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.PRODUCT_GROUP, SETTINGS_DEFAULT.STOCK.PRODUCT_GROUP)
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new ProductGroupsBottomSheet(), bundle);
   }
 
@@ -596,6 +586,7 @@ public class SettingsViewModel extends BaseViewModel {
         ARGUMENT.SELECTED_ID,
         sharedPrefs.getInt(STOCK.QUANTITY_UNIT, SETTINGS_DEFAULT.STOCK.QUANTITY_UNIT)
     );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
   }
 

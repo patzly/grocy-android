@@ -432,9 +432,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   }
 
   public void setSearch(@Nullable String search) {
-    if (search != null) {
-      this.search = search.toLowerCase();
-    }
+    this.search = search != null ? search.toLowerCase() : null;
     displayItems();
   }
 
