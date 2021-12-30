@@ -140,7 +140,16 @@ public class SortUtil {
     ));
   }
 
-
+  public static void sortStringsByName(Context context, List<String> strings, boolean ascending) {
+    if (strings == null || strings.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(strings, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).toLowerCase(),
+        (ascending ? item2 : item1).toLowerCase()
+    ));
+  }
 
   public static void sortLocationsByName(
       Context context, ArrayList<Location> locations, boolean ascending

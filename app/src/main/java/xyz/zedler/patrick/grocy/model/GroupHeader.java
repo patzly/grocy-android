@@ -19,42 +19,28 @@
 
 package xyz.zedler.patrick.grocy.model;
 
-import android.text.Spanned;
-import androidx.annotation.NonNull;
-import java.util.Objects;
+public class GroupHeader extends GroupedListItem {
 
-public class ShoppingListBottomNotes extends GroupedListItem {
+  private final String groupName;
+  private int displayDivider = 1;
 
-  private final Spanned notes;
-
-  public ShoppingListBottomNotes(Spanned notes) {
-    this.notes = notes;
+  public GroupHeader(String groupName) {
+    this.groupName = groupName;
   }
 
-  public Spanned getNotes() {
-    return notes;
+  public String getGroupName() {
+    return groupName;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ShoppingListBottomNotes that = (ShoppingListBottomNotes) o;
-    return Objects.equals(notes, that.notes);
+  public int getDisplayDivider() {
+    return displayDivider;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(notes);
+  public void setDisplayDivider(int display) {
+    displayDivider = display;
   }
 
-  @NonNull
-  @Override
-  public String toString() {
-    return "ShoppingListBottomNotes(" + notes.toString() + ')';
+  public void setDisplayDivider(boolean display) {
+    displayDivider = display ? 1 : 0;
   }
 }

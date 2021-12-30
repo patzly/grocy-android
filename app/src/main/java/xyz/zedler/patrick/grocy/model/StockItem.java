@@ -31,7 +31,7 @@ import java.util.Objects;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_item_table")
-public class StockItem implements Parcelable {
+public class StockItem extends GroupedListItem implements Parcelable {
 
   public static int DUE_TYPE_BEST_BEFORE = 1;
   public static int DUE_TYPE_EXPIRATION = 2;

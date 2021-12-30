@@ -476,6 +476,8 @@
   <string name="subtitle_stock_locations">Where %1$s has stock</string>
   <string name="subtitle_default_location">Default location</string>
   <string name="subtitle_none_selected">None selected</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">None</string>
   <string name="subtitle_empty">Empty</string>
   <string name="subtitle_done">Done</string>
   <string name="subtitle_undone">Undone</string>
@@ -655,6 +657,7 @@
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
+  <string name="property_value">Value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
@@ -685,7 +688,14 @@
   <string name="property_in_stock">In stock: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Sort: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Group by: %1$s</string>
+  <string name="property_not_grouped">Not grouped</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Extra field: %1$s</string>
   <string name="property_task_categories">Task categories</string>
+  <string name="property_calories">Calories</string>
+  <string name="property_calories_per_unit">Calories (per stock unit)</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

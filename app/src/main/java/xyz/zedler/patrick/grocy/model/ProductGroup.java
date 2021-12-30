@@ -139,11 +139,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
   }
 
   @Override
-  public int getType() {
-    return TYPE_HEADER;
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;

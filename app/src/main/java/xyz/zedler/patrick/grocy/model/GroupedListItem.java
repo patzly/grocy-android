@@ -25,5 +25,30 @@ public abstract class GroupedListItem {
   public static final int TYPE_ENTRY = 1;
   public static final int TYPE_BOTTOM_NOTES = 2;
 
-  abstract public int getType();
+  public static final String CONTEXT_SHOPPING_LIST = "shopping_list";
+  public static final String CONTEXT_STOCK_OVERVIEW = "stock_overview";
+
+  public static int getType(GroupedListItem groupedListItem, String context) {
+    if (context.equals(CONTEXT_SHOPPING_LIST)) {
+      if (groupedListItem instanceof ShoppingListItem) {
+        return GroupedListItem.TYPE_ENTRY;
+      } else if (groupedListItem instanceof ProductGroup) {
+        return GroupedListItem.TYPE_HEADER;
+      } else {
+        return GroupedListItem.TYPE_BOTTOM_NOTES;
+      }
+    } else if (context.equals(CONTEXT_STOCK_OVERVIEW)) {
+      if (groupedListItem instanceof StockItem) {
+        return GroupedListItem.TYPE_ENTRY;
+      } else {
+        return GroupedListItem.TYPE_HEADER;
+      }
+    } else {
+      return TYPE_ENTRY;
+    }
+  }
+
+  public int getType(String context) {
+    return getType(this, context);
+  }
 }

@@ -147,11 +147,15 @@ public class StockOverviewFragment extends BaseFragment implements
       if (items == null) return;
       if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
         ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
+            requireContext(),
             items,
             viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getProductGroupHashMap(),
             viewModel.getProductIdsMissingStockItems(),
-            viewModel.getSortMode()
+            viewModel.getSortMode(),
+            viewModel.isSortAscending(),
+            viewModel.getGroupingMode()
         );
       } else {
         binding.recycler.setAdapter(
@@ -160,12 +164,16 @@ public class StockOverviewFragment extends BaseFragment implements
                 items,
                 viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getProductGroupHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
                 viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
-                5,
-                viewModel.getSortMode()
+                viewModel.getDaysExpriringSoon(),
+                viewModel.getCurrency(),
+                viewModel.getSortMode(),
+                viewModel.isSortAscending(),
+                viewModel.getGroupingMode()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -254,11 +262,10 @@ public class StockOverviewFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(StockOverviewFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
-        && savedInstanceState == null);
+    updateUI();
   }
 
-  private void updateUI(boolean animated) {
+  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(

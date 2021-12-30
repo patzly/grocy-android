@@ -125,7 +125,10 @@ public class ShoppingModeItemAdapter extends
 
   @Override
   public int getItemViewType(int position) {
-    return groupedListItems.get(position).getType();
+    return GroupedListItem.getType(
+        groupedListItems.get(position),
+        GroupedListItem.CONTEXT_SHOPPING_LIST
+    );
   }
 
   @NonNull
@@ -428,8 +431,14 @@ public class ShoppingModeItemAdapter extends
     }
 
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-      int oldItemType = oldItems.get(oldItemPos).getType();
-      int newItemType = newItems.get(newItemPos).getType();
+      int oldItemType = GroupedListItem.getType(
+          oldItems.get(oldItemPos),
+          GroupedListItem.CONTEXT_SHOPPING_LIST
+      );
+      int newItemType = GroupedListItem.getType(
+          newItems.get(newItemPos),
+          GroupedListItem.CONTEXT_SHOPPING_LIST
+      );
       if (oldItemType != newItemType) {
         return false;
       }

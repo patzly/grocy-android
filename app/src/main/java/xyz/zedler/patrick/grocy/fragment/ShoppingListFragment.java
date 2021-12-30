@@ -520,7 +520,8 @@ public class ShoppingListFragment extends BaseFragment implements
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    if (groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
+    if (groupedListItem.getType(GroupedListItem.CONTEXT_SHOPPING_LIST)
+        == GroupedListItem.TYPE_ENTRY) {
       showItemBottomSheet((ShoppingListItem) groupedListItem);
     } else if (!viewModel.isOffline()) {  // Click on bottom notes
       showNotesEditor();
