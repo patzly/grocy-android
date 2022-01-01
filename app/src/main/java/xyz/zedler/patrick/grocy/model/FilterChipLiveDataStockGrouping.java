@@ -35,6 +35,9 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
   public final static int ID_GROUPING_DUE_DATE = 3;
   public final static int ID_GROUPING_CALORIES_PER_STOCK = 4;
   public final static int ID_GROUPING_CALORIES = 5;
+  public final static int ID_GROUPING_MIN_STOCK_AMOUNT = 6;
+  public final static int ID_GROUPING_PARENT_PRODUCT = 7;
+  public final static int ID_GROUPING_DEFAULT_LOCATION = 8;
 
   public final static String GROUPING_NONE = "grouping_none";
   public final static String GROUPING_PRODUCT_GROUP = "grouping_product_group";
@@ -42,6 +45,9 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
   public final static String GROUPING_DUE_DATE = "grouping_due_date";
   public final static String GROUPING_CALORIES_PER_STOCK = "grouping_calories_per_stock";
   public final static String GROUPING_CALORIES = "grouping_calories";
+  public final static String GROUPING_MIN_STOCK_AMOUNT = "grouping_min_stock_amount";
+  public final static String GROUPING_PARENT_PRODUCT = "grouping_parent_product";
+  public final static String GROUPING_DEFAULT_LOCATION = "grouping_default_location";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -80,13 +86,22 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
         groupBy = R.string.property_value;
         break;
       case GROUPING_DUE_DATE:
-        groupBy = R.string.property_due_date;
+        groupBy = R.string.property_due_date_next;
         break;
       case GROUPING_CALORIES_PER_STOCK:
         groupBy = R.string.property_calories_per_unit;
         break;
       case GROUPING_CALORIES:
         groupBy = R.string.property_calories;
+        break;
+      case GROUPING_MIN_STOCK_AMOUNT:
+        groupBy = R.string.property_amount_min_stock;
+        break;
+      case GROUPING_PARENT_PRODUCT:
+        groupBy = R.string.property_parent_product;
+        break;
+      case GROUPING_DEFAULT_LOCATION:
+        groupBy = R.string.property_location_default;
         break;
       default:
         groupBy = R.string.subtitle_none;
@@ -109,6 +124,12 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
       groupingMode = GROUPING_CALORIES_PER_STOCK;
     } else if (id == ID_GROUPING_CALORIES) {
       groupingMode = GROUPING_CALORIES;
+    } else if (id == ID_GROUPING_MIN_STOCK_AMOUNT) {
+      groupingMode = GROUPING_MIN_STOCK_AMOUNT;
+    } else if (id == ID_GROUPING_PARENT_PRODUCT) {
+      groupingMode = GROUPING_PARENT_PRODUCT;
+    } else if (id == ID_GROUPING_DEFAULT_LOCATION) {
+      groupingMode = GROUPING_DEFAULT_LOCATION;
     } else {
       groupingMode = GROUPING_NONE;
     }
@@ -139,7 +160,7 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
     menuItemDataList.add(new MenuItemData(
         ID_GROUPING_DUE_DATE,
         0,
-        application.getString(R.string.property_due_date),
+        application.getString(R.string.property_due_date_next),
         groupingMode.equals(GROUPING_DUE_DATE)
     ));
     menuItemDataList.add(new MenuItemData(
@@ -153,6 +174,24 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
         0,
         application.getString(R.string.property_calories),
         groupingMode.equals(GROUPING_CALORIES)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_GROUPING_MIN_STOCK_AMOUNT,
+        0,
+        application.getString(R.string.property_amount_min_stock),
+        groupingMode.equals(GROUPING_MIN_STOCK_AMOUNT)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_GROUPING_PARENT_PRODUCT,
+        0,
+        application.getString(R.string.property_parent_product),
+        groupingMode.equals(GROUPING_PARENT_PRODUCT)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_GROUPING_DEFAULT_LOCATION,
+        0,
+        application.getString(R.string.property_location_default),
+        groupingMode.equals(GROUPING_DEFAULT_LOCATION)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));

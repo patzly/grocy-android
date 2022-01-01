@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -152,6 +153,8 @@ public class StockOverviewFragment extends BaseFragment implements
             viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
             viewModel.getProductGroupHashMap(),
+            viewModel.getProductHashMap(),
+            viewModel.getLocationHashMap(),
             viewModel.getProductIdsMissingStockItems(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
@@ -165,6 +168,8 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductGroupHashMap(),
+                viewModel.getProductHashMap(),
+                viewModel.getLocationHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
@@ -201,6 +206,7 @@ public class StockOverviewFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
           int position = viewHolder.getAdapterPosition();
           ArrayList<StockItem> displayedItems = viewModel.getFilteredStockItemsLive()
               .getValue();

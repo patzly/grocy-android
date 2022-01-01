@@ -39,6 +39,8 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -57,6 +59,8 @@ public class StockOverviewItemAdapter extends
   private final ArrayList<String> shoppingListItemsProductIds;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final HashMap<Integer, ProductGroup> productGroupHashMap;
+  private final HashMap<Integer, Product> productHashMap;
+  private final HashMap<Integer, Location> locationHashMap;
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
@@ -66,8 +70,9 @@ public class StockOverviewItemAdapter extends
   private String sortMode;
   private boolean sortAscending;
   private String groupingMode;
-  private ArrayList<GroupedListItem> groupedListItems;
-  private String currency;
+  private final ArrayList<GroupedListItem> groupedListItems;
+  private final DateUtil dateUtil;
+  private final String currency;
 
   public StockOverviewItemAdapter(
       Context context,
@@ -75,6 +80,8 @@ public class StockOverviewItemAdapter extends
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, Location> locationHashMap,
       ArrayList<Integer> missingItemsProductIds,
       StockOverviewItemAdapterListener listener,
       boolean showDateTracking,
@@ -88,6 +95,8 @@ public class StockOverviewItemAdapter extends
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.productGroupHashMap = new HashMap<>(productGroupHashMap);
+    this.productHashMap = new HashMap<>(productHashMap);
+    this.locationHashMap = new HashMap<>(locationHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
@@ -95,18 +104,23 @@ public class StockOverviewItemAdapter extends
     this.shoppingListFeatureEnabled = shoppingListFeatureEnabled;
     this.daysExpiringSoon = daysExpiringSoon;
     this.currency = currency;
+    this.dateUtil = new DateUtil(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
     this.groupedListItems = getGroupedListItems(context, stockItems,
-        productGroupHashMap, currency, sortMode, sortAscending, groupingMode);
+        productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
+        sortAscending, groupingMode);
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
       Context context,
       ArrayList<StockItem> stockItems,
       HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, Location> locationHashMap,
       String currency,
+      DateUtil dateUtil,
       String sortMode,
       boolean sortAscending,
       String groupingMode
@@ -125,12 +139,33 @@ public class StockOverviewItemAdapter extends
         ProductGroup productGroup = productGroupHashMap.get(productGroupId);
         groupNullable = productGroup != null ? productGroup.getName() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
-        groupNullable = NumUtil.trimPrice(stockItem.getValueDouble()) + " " + currency;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
+        groupNullable = NumUtil.trimPrice(stockItem.getValueDouble());
+      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES_PER_STOCK)) {
         groupNullable = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
             ? stockItem.getProduct().getCalories() : null;
+      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
+        groupNullable = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
+            ? NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
+            * stockItem.getAmountDouble()) : null;
+      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
+        groupNullable = stockItem.getBestBeforeDate();
+        if (groupNullable != null && !groupNullable.isEmpty()) {
+          groupNullable += "  " + dateUtil.getHumanForDaysFromNow(groupNullable);
+        }
+      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
+        groupNullable = stockItem.getProduct().getMinStockAmount();
+      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PARENT_PRODUCT)
+          && NumUtil.isStringInt(stockItem.getProduct().getParentProductId())) {
+        int productId = Integer.parseInt(stockItem.getProduct().getParentProductId());
+        Product product = productHashMap.get(productId);
+        groupNullable = product != null ? product.getName() : null;
+      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DEFAULT_LOCATION)
+          && NumUtil.isStringInt(stockItem.getProduct().getLocationId())) {
+        int locationId = Integer.parseInt(stockItem.getProduct().getLocationId());
+        Location location = locationHashMap.get(locationId);
+        groupNullable = location != null ? location.getName() : null;
       }
-      String groupNotNull = groupNullable != null
+      String groupNotNull = groupNullable != null && !groupNullable.isEmpty()
           ? groupNullable
           : context.getString(R.string.property_not_grouped);
       ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(groupNotNull);
@@ -142,11 +177,23 @@ public class StockOverviewItemAdapter extends
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(stockItemsGroupedHashMap.keySet());
-    SortUtil.sortStringsByName(context, groupsSorted, true);
+    if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)
+        || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)
+        || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
+      SortUtil.sortStringsByValue(groupsSorted);
+    } else {
+      SortUtil.sortStringsByName(context, groupsSorted, true);
+    }
     for (String group : groupsSorted) {
       ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(group);
       if (itemsFromGroup == null) continue;
-      GroupHeader groupHeader = new GroupHeader(group);
+      String groupString;
+      if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
+        groupString = group + " " + currency;
+      } else {
+        groupString = group;
+      }
+      GroupHeader groupHeader = new GroupHeader(groupString);
       groupHeader.setDisplayDivider(!groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
       sortStockItems(context, itemsFromGroup, sortMode, sortAscending);
@@ -355,13 +402,16 @@ public class StockOverviewItemAdapter extends
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, Location> locationHashMap,
       ArrayList<Integer> missingItemsProductIds,
       String sortMode,
       boolean sortAscending,
       String groupingMode
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
-        productGroupHashMap, this.currency, sortMode, sortAscending, groupingMode);
+        productGroupHashMap, productHashMap, locationHashMap, this.currency, this.dateUtil,
+        sortMode, sortAscending, groupingMode);
     StockOverviewItemAdapter.DiffCallback diffCallback = new StockOverviewItemAdapter.DiffCallback(
         this.groupedListItems,
         newGroupedListItems,
@@ -369,8 +419,6 @@ public class StockOverviewItemAdapter extends
         shoppingListItemsProductIds,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
-        this.productGroupHashMap,
-        productGroupHashMap,
         this.missingItemsProductIds,
         missingItemsProductIds,
         this.sortMode,
@@ -389,6 +437,10 @@ public class StockOverviewItemAdapter extends
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
     this.productGroupHashMap.clear();
     this.productGroupHashMap.putAll(productGroupHashMap);
+    this.productHashMap.clear();
+    this.productHashMap.putAll(productHashMap);
+    this.locationHashMap.clear();
+    this.locationHashMap.putAll(locationHashMap);
     this.missingItemsProductIds.clear();
     this.missingItemsProductIds.addAll(missingItemsProductIds);
     this.sortMode = sortMode;
@@ -405,8 +457,6 @@ public class StockOverviewItemAdapter extends
     ArrayList<String> shoppingListItemsProductIdsNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
-    HashMap<Integer, ProductGroup> productGroupHashMapOld;
-    HashMap<Integer, ProductGroup> productGroupHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
     String sortModeOld;
@@ -423,8 +473,6 @@ public class StockOverviewItemAdapter extends
         ArrayList<String> shoppingListItemsProductIdsNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
-        HashMap<Integer, ProductGroup> productGroupHashMapOld,
-        HashMap<Integer, ProductGroup> productGroupHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
         String sortModeOld,
@@ -440,8 +488,6 @@ public class StockOverviewItemAdapter extends
       this.shoppingListItemsProductIdsNew = shoppingListItemsProductIdsNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
-      this.productGroupHashMapOld = productGroupHashMapOld;
-      this.productGroupHashMapNew = productGroupHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
       this.sortModeOld = sortModeOld;

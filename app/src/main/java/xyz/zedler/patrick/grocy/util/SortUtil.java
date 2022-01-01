@@ -151,6 +151,25 @@ public class SortUtil {
     ));
   }
 
+  public static void sortStringsByValue(List<String> strings) {
+    if (strings == null || strings.isEmpty()) {
+      return;
+    }
+    Collections.sort(strings, (item1, item2) -> {
+      if (!NumUtil.isStringDouble(item1) && !NumUtil.isStringDouble(item2)) {
+        return 0;
+      } else if (NumUtil.isStringDouble(item1) && !NumUtil.isStringDouble(item2)) {
+        return 1;
+      } else if (!NumUtil.isStringDouble(item1) && NumUtil.isStringDouble(item2)) {
+        return -1;
+      } else {
+        double item1Double = Double.parseDouble(item1);
+        double item2Double = Double.parseDouble(item2);
+        return Double.compare(item1Double, item2Double);
+      }
+    });
+  }
+
   public static void sortLocationsByName(
       Context context, ArrayList<Location> locations, boolean ascending
   ) {

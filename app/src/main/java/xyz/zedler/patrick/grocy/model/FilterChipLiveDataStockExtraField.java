@@ -80,7 +80,7 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
         groupBy = R.string.property_value;
         break;
       case GROUPING_DUE_DATE:
-        groupBy = R.string.property_due_date;
+        groupBy = R.string.property_due_date_next;
         break;
       case GROUPING_CALORIES_PER_STOCK:
         groupBy = R.string.property_calories_per_unit;
@@ -139,7 +139,7 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
     menuItemDataList.add(new MenuItemData(
         ID_GROUPING_DUE_DATE,
         0,
-        application.getString(R.string.property_due_date),
+        application.getString(R.string.property_due_date_next),
         extraField.equals(GROUPING_DUE_DATE)
     ));
     menuItemDataList.add(new MenuItemData(

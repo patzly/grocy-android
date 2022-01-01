@@ -731,8 +731,16 @@ public class StockOverviewViewModel extends BaseViewModel {
     return productGroupHashMap;
   }
 
+  public HashMap<Integer, Product> getProductHashMap() {
+    return productHashMap;
+  }
+
   public ArrayList<String> getShoppingListItemsProductIds() {
     return shoppingListItemsProductIds;
+  }
+
+  public HashMap<Integer, Location> getLocationHashMap() {
+    return locationHashMap;
   }
 
   public Location getLocationFromId(int id) {
