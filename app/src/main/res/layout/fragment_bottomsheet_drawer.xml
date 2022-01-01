@@ -94,66 +94,85 @@
         style="@style/Widget.Grocy.Divider" />
 
       <LinearLayout
-        android:id="@+id/linear_drawer_consume"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        android:id="@+id/transactions_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:paddingHorizontal="16dp"
+        android:baselineAligned="false">
 
-        <ImageView
-          style="@style/Widget.Grocy.ImageView.Drawer"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_consume_product" />
+        <LinearLayout
+          android:id="@+id/linear_drawer_consume"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="25"
+          android:paddingVertical="10dp"
+          android:orientation="vertical"
+          android:gravity="center_horizontal"
+          android:background="@drawable/bg_drawer_item_multirow_ripple">
 
-        <TextView
-          android:id="@+id/text_drawer_consume"
-          style="@style/Widget.Grocy.TextView.DrawerItem"
-          android:text="@string/title_consume" />
+          <ImageView
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_consume_product"/>
 
-      </LinearLayout>
+        </LinearLayout>
 
-      <LinearLayout
-        android:id="@+id/linear_drawer_purchase"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        <LinearLayout
+          android:id="@+id/linear_drawer_purchase"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="25"
+          android:paddingVertical="10dp"
+          android:orientation="vertical"
+          android:gravity="center_horizontal"
+          android:background="@drawable/bg_drawer_item_multirow_ripple">
 
-        <ImageView
-          style="@style/Widget.Grocy.ImageView.Drawer"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_local_grocery_store" />
+          <ImageView
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_local_grocery_store" />
 
-        <TextView
-          android:id="@+id/text_drawer_purchase"
-          style="@style/Widget.Grocy.TextView.DrawerItem"
-          android:text="@string/title_purchase" />
+        </LinearLayout>
 
-      </LinearLayout>
+        <LinearLayout
+          android:id="@+id/linear_drawer_transfer"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="25"
+          android:paddingVertical="10dp"
+          android:orientation="vertical"
+          android:gravity="center_horizontal"
+          android:background="@drawable/bg_drawer_item_multirow_ripple">
 
-      <LinearLayout
-        android:id="@+id/linear_drawer_transfer"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+          <ImageView
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_swap_horiz" />
 
-        <ImageView
-          style="@style/Widget.Grocy.ImageView.Drawer"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_swap_horiz" />
+        </LinearLayout>
 
-        <TextView
-          android:id="@+id/text_drawer_transfer"
-          style="@style/Widget.Grocy.TextView.DrawerItem"
-          android:text="@string/title_transfer" />
+        <LinearLayout
+          android:id="@+id/linear_drawer_inventory"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="25"
+          android:paddingVertical="10dp"
+          android:orientation="vertical"
+          android:gravity="center_horizontal"
+          android:background="@drawable/bg_drawer_item_multirow_ripple">
 
-      </LinearLayout>
+          <ImageView
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_inventory" />
 
-      <LinearLayout
-        android:id="@+id/linear_drawer_inventory"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
-
-        <ImageView
-          style="@style/Widget.Grocy.ImageView.Drawer"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_inventory" />
-
-        <TextView
-          android:id="@+id/text_drawer_inventory"
-          style="@style/Widget.Grocy.TextView.DrawerItem"
-          android:text="@string/title_inventory" />
+        </LinearLayout>
 
       </LinearLayout>
 

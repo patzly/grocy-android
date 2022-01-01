@@ -102,21 +102,21 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
 
     BaseFragment currentFragment = activity.getCurrentFragment();
     if (currentFragment instanceof StockOverviewFragment) {
-      select(binding.linearDrawerStock, binding.textDrawerStock);
+      select(binding.linearDrawerStock, binding.textDrawerStock, false);
     } else if (currentFragment instanceof ShoppingListFragment) {
-      select(binding.linearDrawerShoppingList, binding.textDrawerShoppingList);
+      select(binding.linearDrawerShoppingList, binding.textDrawerShoppingList, false);
     } else if (currentFragment instanceof ConsumeFragment) {
-      select(binding.linearDrawerConsume, binding.textDrawerConsume);
+      select(binding.linearDrawerConsume, null, true);
     } else if (currentFragment instanceof PurchaseFragment) {
-      select(binding.linearDrawerPurchase, binding.textDrawerPurchase);
+      select(binding.linearDrawerPurchase, null, true);
     } else if (currentFragment instanceof TransferFragment) {
-      select(binding.linearDrawerTransfer, binding.textDrawerTransfer);
+      select(binding.linearDrawerTransfer, null, true);
     } else if (currentFragment instanceof InventoryFragment) {
-      select(binding.linearDrawerInventory, binding.textDrawerInventory);
+      select(binding.linearDrawerInventory, null, true);
     } else if (currentFragment instanceof MasterObjectListFragment) {
-      select(binding.linearDrawerMasterData, binding.textDrawerMasterData);
+      select(binding.linearDrawerMasterData, binding.textDrawerMasterData, false);
     } else if (currentFragment instanceof SettingsFragment) {
-      select(binding.linearDrawerSettings, binding.textDrawerSettings);
+      select(binding.linearDrawerSettings, binding.textDrawerSettings, false);
     }
 
     hideDisabledFeatures();
@@ -197,10 +197,16 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
     findNavController().navigate(Uri.parse(getString(uri)), builder.build());
   }
 
-  private void select(LinearLayout linearLayout, TextView textView) {
-    linearLayout.setBackgroundResource(R.drawable.bg_drawer_item_selected);
+  private void select(LinearLayout linearLayout, TextView textView, boolean multiRowItem) {
+    linearLayout.setBackgroundResource(
+        multiRowItem
+            ? R.drawable.bg_drawer_item_multirow_selected
+            : R.drawable.bg_drawer_item_selected
+    );
     linearLayout.setClickable(false);
-    textView.setTextColor(ContextCompat.getColor(activity, R.color.retro_green_fg));
+    if (textView != null) {
+      textView.setTextColor(ContextCompat.getColor(activity, R.color.retro_green_fg));
+    }
   }
 
   private void hideDisabledFeatures() {
@@ -209,6 +215,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
     }
     if (!isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       binding.linearDrawerTransfer.setVisibility(View.GONE);
+      binding.transactionsContainer.setWeightSum(75f);
     }
   }
 

@@ -5,6 +5,7 @@
 - Improved: Unnecessary bottom sheets in master data section were removed
 - Improved: Master product page has new button (save without closing) to add barcodes after creation
 - Improved: Workflow for master data pages with keyboard
+- Improved: Navigation menu has less horizontal entries, transaction pages are in one row
 - Fixed: Product info bottom sheet didn't open if location not set in product
 - Fixed: Scrollbars don't stop above the bottom anymore
 - Fixed: Unsorted lists on master data product pages (thanks @Turysaz) (#473)
