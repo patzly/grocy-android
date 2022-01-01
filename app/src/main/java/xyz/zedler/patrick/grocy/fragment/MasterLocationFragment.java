@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -154,8 +155,12 @@ public class MasterLocationFragment extends BaseFragment {
     editLocation = args.getLocation();
     if (editLocation != null) {
       fillWithEditReferences();
-    } else {
+    } else if (savedInstanceState == null) {
       resetAll();
+      new Handler().postDelayed(
+          () -> activity.showKeyboard(binding.editTextMasterLocationName),
+          50
+      );
     }
 
     // START
