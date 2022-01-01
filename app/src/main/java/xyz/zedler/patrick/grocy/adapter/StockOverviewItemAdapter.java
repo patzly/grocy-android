@@ -130,50 +130,52 @@ public class StockOverviewItemAdapter extends
       return new ArrayList<>(stockItems);
     }
     HashMap<String, ArrayList<StockItem>> stockItemsGroupedHashMap = new HashMap<>();
+    ArrayList<StockItem> ungroupedItems = new ArrayList<>();
     for (StockItem stockItem : stockItems) {
-      String groupNullable = null;
+      String groupName = null;
       if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PRODUCT_GROUP)
           && NumUtil.isStringInt(stockItem.getProduct().getProductGroupId())
       ) {
         int productGroupId = Integer.parseInt(stockItem.getProduct().getProductGroupId());
         ProductGroup productGroup = productGroupHashMap.get(productGroupId);
-        groupNullable = productGroup != null ? productGroup.getName() : null;
+        groupName = productGroup != null ? productGroup.getName() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
-        groupNullable = NumUtil.trimPrice(stockItem.getValueDouble());
+        groupName = NumUtil.trimPrice(stockItem.getValueDouble());
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES_PER_STOCK)) {
-        groupNullable = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
+        groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
             ? stockItem.getProduct().getCalories() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
-        groupNullable = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
+        groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
             ? NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
             * stockItem.getAmountDouble()) : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
-        groupNullable = stockItem.getBestBeforeDate();
-        if (groupNullable != null && !groupNullable.isEmpty()) {
-          groupNullable += "  " + dateUtil.getHumanForDaysFromNow(groupNullable);
+        groupName = stockItem.getBestBeforeDate();
+        if (groupName != null && !groupName.isEmpty()) {
+          groupName += "  " + dateUtil.getHumanForDaysFromNow(groupName);
         }
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
-        groupNullable = stockItem.getProduct().getMinStockAmount();
+        groupName = stockItem.getProduct().getMinStockAmount();
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PARENT_PRODUCT)
           && NumUtil.isStringInt(stockItem.getProduct().getParentProductId())) {
         int productId = Integer.parseInt(stockItem.getProduct().getParentProductId());
         Product product = productHashMap.get(productId);
-        groupNullable = product != null ? product.getName() : null;
+        groupName = product != null ? product.getName() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DEFAULT_LOCATION)
           && NumUtil.isStringInt(stockItem.getProduct().getLocationId())) {
         int locationId = Integer.parseInt(stockItem.getProduct().getLocationId());
         Location location = locationHashMap.get(locationId);
-        groupNullable = location != null ? location.getName() : null;
+        groupName = location != null ? location.getName() : null;
       }
-      String groupNotNull = groupNullable != null && !groupNullable.isEmpty()
-          ? groupNullable
-          : context.getString(R.string.property_not_grouped);
-      ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(groupNotNull);
-      if (itemsFromGroup == null) {
-        itemsFromGroup = new ArrayList<>();
-        stockItemsGroupedHashMap.put(groupNotNull, itemsFromGroup);
+      if (groupName != null && !groupName.isEmpty()) {
+        ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(groupName);
+        if (itemsFromGroup == null) {
+          itemsFromGroup = new ArrayList<>();
+          stockItemsGroupedHashMap.put(groupName, itemsFromGroup);
+        }
+        itemsFromGroup.add(stockItem);
+      } else {
+        ungroupedItems.add(stockItem);
       }
-      itemsFromGroup.add(stockItem);
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(stockItemsGroupedHashMap.keySet());
@@ -183,6 +185,11 @@ public class StockOverviewItemAdapter extends
       SortUtil.sortStringsByValue(groupsSorted);
     } else {
       SortUtil.sortStringsByName(context, groupsSorted, true);
+    }
+    if (!ungroupedItems.isEmpty()) {
+      groupedListItems.add(new GroupHeader(context.getString(R.string.property_not_grouped)));
+      sortStockItems(context, ungroupedItems, sortMode, sortAscending);
+      groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
       ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(group);
@@ -194,7 +201,7 @@ public class StockOverviewItemAdapter extends
         groupString = group;
       }
       GroupHeader groupHeader = new GroupHeader(groupString);
-      groupHeader.setDisplayDivider(!groupsSorted.get(0).equals(group));
+      groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
       sortStockItems(context, itemsFromGroup, sortMode, sortAscending);
       groupedListItems.addAll(itemsFromGroup);

@@ -22,7 +22,7 @@ package xyz.zedler.patrick.grocy.model;
 public class GroupHeader extends GroupedListItem {
 
   private final String groupName;
-  private int displayDivider = 1;
+  private int displayDivider = 0;
 
   public GroupHeader(String groupName) {
     this.groupName = groupName;
