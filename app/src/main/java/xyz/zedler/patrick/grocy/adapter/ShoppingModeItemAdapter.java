@@ -23,6 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class ShoppingModeItemAdapter extends
@@ -62,7 +65,8 @@ public class ShoppingModeItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
   private final PluralUtil pluralUtil;
-  private boolean useSmallerFonts;
+  private final boolean useSmallerFonts;
+  private final boolean showProductDescription;
 
   public ShoppingModeItemAdapter(
       Context context,
@@ -73,7 +77,8 @@ public class ShoppingModeItemAdapter extends
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       ShoppingModeItemClickListener listener,
-      boolean useSmallerFonts
+      boolean useSmallerFonts,
+      boolean showProductDescription
   ) {
     this.linearLayoutManager = linearLayoutManager;
     this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -83,6 +88,7 @@ public class ShoppingModeItemAdapter extends
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     this.useSmallerFonts = useSmallerFonts;
+    this.showProductDescription = showProductDescription;
     pluralUtil = new PluralUtil(context);
   }
 
@@ -328,6 +334,20 @@ public class ShoppingModeItemAdapter extends
         binding.note.setPaintFlags(
             binding.note.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
         );
+      }
+    }
+
+    // PRODUCT DESCRIPTION
+
+    if (showProductDescription) {
+      String productDescription = product != null ? product.getDescription() : null;
+      Spanned description = productDescription != null ? Html.fromHtml(productDescription) : null;
+      description = (Spanned) TextUtil.trimCharSequence(description);
+      if (description != null && !description.toString().isEmpty()) {
+        binding.cardDescription.setText(description.toString());
+        binding.cardDescription.setVisibility(View.VISIBLE);
+      } else {
+        binding.cardDescription.setVisibility(View.GONE);
       }
     }
 

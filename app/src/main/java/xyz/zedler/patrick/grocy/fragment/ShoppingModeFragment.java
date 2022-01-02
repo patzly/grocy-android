@@ -174,6 +174,10 @@ public class ShoppingModeFragment extends BaseFragment implements
                 sharedPrefs.getBoolean(
                     SHOPPING_MODE.USE_SMALLER_FONT,
                     SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
+                ),
+                sharedPrefs.getBoolean(
+                    SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
+                    SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
                 )
             )
         );

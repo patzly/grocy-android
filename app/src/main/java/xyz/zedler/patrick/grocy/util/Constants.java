@@ -149,6 +149,7 @@ public final class Constants {
       public final static String KEEP_SCREEN_ON = "shopping_keep_screen_on";
       public final static String SHOW_DONE_ITEMS = "show_done_items";
       public final static String USE_SMALLER_FONT = "use_smaller_font";
+      public final static String SHOW_PRODUCT_DESCRIPTION = "show_product_description";
     }
 
     public final static class DEBUGGING {
@@ -230,6 +231,7 @@ public final class Constants {
       public final static boolean KEEP_SCREEN_ON = true;
       public final static boolean SHOW_DONE_ITEMS = true;
       public final static boolean USE_SMALLER_FONT = false;
+      public final static boolean SHOW_PRODUCT_DESCRIPTION = false;
     }
 
     public final static class DEBUGGING {

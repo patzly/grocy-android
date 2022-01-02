@@ -420,6 +420,17 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putBoolean(SHOPPING_MODE.USE_SMALLER_FONT, enabled).apply();
   }
 
+  public boolean getShoppingModeShowProductDescriptionEnabled() {
+    return sharedPrefs.getBoolean(
+        SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
+        SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
+    );
+  }
+
+  public void setShoppingModeShowProductDescriptionEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION, enabled).apply();
+  }
+
   public boolean getListIndicatorEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.STOCK.DISPLAY_DOTS_IN_STOCK,
