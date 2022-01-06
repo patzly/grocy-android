@@ -180,10 +180,8 @@
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
   </plurals>
-  <!-- 1$s is a task -->
-  <string name="msg_task_completed">Task completed</string>
-  <!-- %1$s is a task -->
-  <string name="msg_task_undo">Undid completion of task</string>
+  <string name="msg_task_completed">Marked task as completed</string>
+  <string name="msg_task_undo">Undo task</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
