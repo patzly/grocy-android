@@ -81,7 +81,7 @@
   <string name="action_proceed">Proceed</string>
   <string name="action_delete">Delete</string>
   <string name="action_save">Save</string>
-  <string name="action_save_close">Save &amp; close</string>
+  <string name="action_save_close">Save and close</string>
   <string name="action_save_not_close">Save without closing</string>
   <string name="action_logout">Logout</string>
   <string name="action_restart">Restart</string>
