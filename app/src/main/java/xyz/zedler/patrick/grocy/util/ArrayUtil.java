@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.Store;
 
 public class ArrayUtil {
 
@@ -37,6 +38,17 @@ public class ArrayUtil {
       hashMap.put(p.getId(), p);
     }
     return hashMap;
+  }
+
+  public static HashMap<Integer, String> getProductNamesHashMap(ArrayList<Product> products) {
+    if (products == null) {
+      return null;
+    }
+    HashMap<Integer, String> productNamesHashMap = new HashMap<>();
+    for (Product product : products) {
+      productNamesHashMap.put(product.getId(), product.getName());
+    }
+    return productNamesHashMap;
   }
 
   public static ArrayList<Integer> getMissingProductsIds(ArrayList<MissingItem> missingItems) {
@@ -61,6 +73,14 @@ public class ArrayUtil {
     HashMap<Integer, ProductGroup> hashMap = new HashMap<>();
     for (ProductGroup p : productGroups) {
       hashMap.put(p.getId(), p);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, Store> getStoresHashMap(ArrayList<Store> stores) {
+    HashMap<Integer, Store> hashMap = new HashMap<>();
+    for (Store s : stores) {
+      hashMap.put(s.getId(), s);
     }
     return hashMap;
   }

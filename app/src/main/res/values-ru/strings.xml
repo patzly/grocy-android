@@ -414,7 +414,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">Цена за %1$s</string>
   <string name="title_stock_entry_no_specific">Неопределенный запас</string>
-  <string name="title_shopping_list_ungrouped">Не в группе</string>
   <string name="title_list_entry">Элемент списка</string>
   <string name="title_edit_list_entry">Редактировать элемент списка</string>
   <string name="title_create_list_entry">Создать элемент списка</string>

@@ -2,6 +2,7 @@
 - New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the inital work) (#391)
 - New: Grouping feature for stock overview like on server
+- New: Grouping feature for shopping list which allows group by default store (#430)
 - Improved: Unnecessary bottom sheets in master data section were removed
 - Improved: Master product page has new button (save without closing) to add barcodes after creation
 - Improved: Workflow for master data pages with keyboard

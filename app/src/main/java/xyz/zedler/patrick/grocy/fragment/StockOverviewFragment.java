@@ -207,27 +207,32 @@ public class StockOverviewFragment extends BaseFragment implements
             List<UnderlayButton> underlayButtons
         ) {
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
+          if (!(binding.recycler.getAdapter() instanceof StockOverviewItemAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<StockItem> displayedItems = viewModel.getFilteredStockItemsLive()
-              .getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
+          ArrayList<GroupedListItem> groupedListItems =
+              ((StockOverviewItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
+          if (groupedListItems == null || position < 0
+              || position >= groupedListItems.size()) {
             return;
           }
-          StockItem stockItem = displayedItems.get(position);
+          GroupedListItem item = groupedListItems.get(position);
+          if (!(item instanceof StockItem)) {
+            return;
+          }
+          StockItem stockItem = (StockItem) item;
           if (stockItem.getAmountAggregatedDouble() > 0
               && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
           ) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_consume_product,
                 pos -> {
-                  if (pos >= displayedItems.size()) {
+                  if (pos >= groupedListItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.CONSUME,
-                      displayedItems.get(pos)
+                      stockItem
                   );
                 }
             ));
@@ -240,13 +245,13 @@ public class StockOverviewFragment extends BaseFragment implements
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_open,
                 pos -> {
-                  if (pos >= displayedItems.size()) {
+                  if (pos >= groupedListItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.OPEN,
-                      displayedItems.get(pos)
+                      stockItem
                   );
                 }
             ));

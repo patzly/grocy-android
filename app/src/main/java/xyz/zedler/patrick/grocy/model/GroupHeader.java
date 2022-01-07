@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import java.util.Objects;
+
 public class GroupHeader extends GroupedListItem {
 
   private final String groupName;
@@ -42,5 +44,23 @@ public class GroupHeader extends GroupedListItem {
 
   public void setDisplayDivider(boolean display) {
     displayDivider = display ? 1 : 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    GroupHeader that = (GroupHeader) o;
+    return displayDivider == that.displayDivider && Objects
+        .equals(groupName, that.groupName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(groupName, displayDivider);
   }
 }

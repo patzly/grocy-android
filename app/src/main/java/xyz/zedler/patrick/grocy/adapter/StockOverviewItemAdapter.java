@@ -56,11 +56,9 @@ public class StockOverviewItemAdapter extends
 
   private final static String TAG = StockOverviewItemAdapter.class.getSimpleName();
 
+  private final ArrayList<GroupedListItem> groupedListItems;
   private final ArrayList<String> shoppingListItemsProductIds;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private final HashMap<Integer, ProductGroup> productGroupHashMap;
-  private final HashMap<Integer, Product> productHashMap;
-  private final HashMap<Integer, Location> locationHashMap;
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
@@ -70,7 +68,6 @@ public class StockOverviewItemAdapter extends
   private String sortMode;
   private boolean sortAscending;
   private String groupingMode;
-  private final ArrayList<GroupedListItem> groupedListItems;
   private final DateUtil dateUtil;
   private final String currency;
 
@@ -94,9 +91,6 @@ public class StockOverviewItemAdapter extends
   ) {
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
-    this.productGroupHashMap = new HashMap<>(productGroupHashMap);
-    this.productHashMap = new HashMap<>(productHashMap);
-    this.locationHashMap = new HashMap<>(locationHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
@@ -187,7 +181,7 @@ public class StockOverviewItemAdapter extends
       SortUtil.sortStringsByName(context, groupsSorted, true);
     }
     if (!ungroupedItems.isEmpty()) {
-      groupedListItems.add(new GroupHeader(context.getString(R.string.property_not_grouped)));
+      groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
       sortStockItems(context, ungroupedItems, sortMode, sortAscending);
       groupedListItems.addAll(ungroupedItems);
     }
@@ -398,6 +392,10 @@ public class StockOverviewItemAdapter extends
     return groupedListItems.size();
   }
 
+  public ArrayList<GroupedListItem> getGroupedListItems() {
+    return groupedListItems;
+  }
+
   public interface StockOverviewItemAdapterListener {
 
     void onItemRowClicked(StockItem stockItem);
@@ -442,12 +440,6 @@ public class StockOverviewItemAdapter extends
     this.shoppingListItemsProductIds.addAll(shoppingListItemsProductIds);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
-    this.productGroupHashMap.clear();
-    this.productGroupHashMap.putAll(productGroupHashMap);
-    this.productHashMap.clear();
-    this.productHashMap.putAll(productHashMap);
-    this.locationHashMap.clear();
-    this.locationHashMap.putAll(locationHashMap);
     this.missingItemsProductIds.clear();
     this.missingItemsProductIds.addAll(missingItemsProductIds);
     this.sortMode = sortMode;

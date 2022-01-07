@@ -163,15 +163,21 @@ public class ShoppingListFragment extends BaseFragment implements
         getViewLifecycleOwner(), this::changeAppBarTitle
     );
 
-    viewModel.getFilteredGroupedListItemsLive().observe(getViewLifecycleOwner(), items -> {
+    viewModel.getFilteredShoppingListItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
       if (binding.recycler.getAdapter() instanceof ShoppingListItemAdapter) {
         ((ShoppingListItemAdapter) binding.recycler.getAdapter()).updateData(
+            requireContext(),
             items,
             viewModel.getProductHashMap(),
+            viewModel.getProductNamesHashMap(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getProductGroupHashMap(),
+            viewModel.getStoreHashMap(),
             viewModel.getShoppingListItemAmountsHashMap(),
-            viewModel.getMissingProductIds()
+            viewModel.getMissingProductIds(),
+            viewModel.getShoppingListNotes(),
+            viewModel.getGroupingMode()
         );
       } else {
         binding.recycler.setAdapter(
@@ -179,10 +185,15 @@ public class ShoppingListFragment extends BaseFragment implements
                 requireContext(),
                 items,
                 viewModel.getProductHashMap(),
+                viewModel.getProductNamesHashMap(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getProductGroupHashMap(),
+                viewModel.getStoreHashMap(),
                 viewModel.getShoppingListItemAmountsHashMap(),
                 viewModel.getMissingProductIds(),
-                this
+                this,
+                viewModel.getShoppingListNotes(),
+                viewModel.getGroupingMode()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -208,9 +219,11 @@ public class ShoppingListFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
+          if (!(binding.recycler.getAdapter() instanceof ShoppingListItemAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<GroupedListItem> groupedListItems = viewModel
-              .getFilteredGroupedListItemsLive().getValue();
+          ArrayList<GroupedListItem> groupedListItems =
+              ((ShoppingListItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
           if (groupedListItems == null || position < 0
               || position >= groupedListItems.size()) {
             return;
@@ -395,7 +408,7 @@ public class ShoppingListFragment extends BaseFragment implements
     if (purchaseAllItems != null) {
       purchaseAllItems.setOnMenuItemClickListener(item -> {
         ArrayList<ShoppingListItem> shoppingListItemsSelected
-            = viewModel.getFilteredShoppingListItems();
+            = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
           showMessage(activity.getString(R.string.error_undefined));
           return true;
@@ -428,7 +441,7 @@ public class ShoppingListFragment extends BaseFragment implements
     if (purchaseDoneItems != null) {
       purchaseDoneItems.setOnMenuItemClickListener(item -> {
         ArrayList<ShoppingListItem> shoppingListItemsSelected
-            = viewModel.getFilteredShoppingListItems();
+            = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
           showMessage(activity.getString(R.string.error_undefined));
           return true;

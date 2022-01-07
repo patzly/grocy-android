@@ -441,7 +441,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s price</string>
   <string name="title_stock_entry_no_specific">No specific entry</string>
-  <string name="title_shopping_list_ungrouped">Ungrouped</string>
   <string name="title_list_entry">List entry</string>
   <string name="title_edit_list_entry">Edit list entry</string>
   <string name="title_create_list_entry">Create list entry</string>
@@ -688,7 +687,7 @@
   <string name="property_sort_mode">Sort: %1$s</string>
   <!-- %1$s is a grouping mode like "product group" or "due date" -->
   <string name="property_group_by">Group by: %1$s</string>
-  <string name="property_not_grouped">Not grouped</string>
+  <string name="property_ungrouped">Ungrouped</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Extra field: %1$s</string>
   <string name="property_task_categories">Task categories</string>

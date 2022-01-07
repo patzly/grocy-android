@@ -376,7 +376,6 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s prijs</string>
   <string name="title_stock_entry_no_specific">Geen specifieke vermelding</string>
-  <string name="title_shopping_list_ungrouped">Ongegroepeerd</string>
   <string name="title_list_entry">Lijstvermelding</string>
   <string name="title_edit_list_entry">Lijstitem bewerken</string>
   <string name="title_create_list_entry">Lijstitem aanmaken</string>

@@ -296,7 +296,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">Cena za %1$s</string>
   <string name="title_stock_entry_no_specific">Nespecifikovaná položka</string>
-  <string name="title_shopping_list_ungrouped">Neseskupeno</string>
   <string name="title_list_entry">Seznam položek</string>
   <string name="title_edit_list_entry">Upravit seznam položek</string>
   <string name="title_create_list_entry">Vytvořit seznam položek</string>

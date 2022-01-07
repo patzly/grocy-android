@@ -205,6 +205,19 @@
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataStatus}"/>
 
+          <View
+            android:layout_width="1dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/filter_chip_stroke_inactive"/>
+
+          <xyz.zedler.patrick.grocy.view.FilterChip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:data="@{viewModel.filterChipLiveDataGrouping}"/>
+
         </LinearLayout>
 
       </HorizontalScrollView>

@@ -359,7 +359,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$spris</string>
   <string name="title_stock_entry_no_specific">Inget specifikt objekt</string>
-  <string name="title_shopping_list_ungrouped">Ogrupperat</string>
   <string name="title_list_entry">Listobjekt</string>
   <string name="title_edit_list_entry">Redigera listobjekt</string>
   <string name="title_create_list_entry">Skapa listobjekt</string>

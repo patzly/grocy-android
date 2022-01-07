@@ -364,7 +364,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s prezzo</string>
   <string name="title_stock_entry_no_specific">È il prezzo totale</string>
-  <string name="title_shopping_list_ungrouped">Non raggruppato</string>
   <string name="title_list_entry">Voce della lista</string>
   <string name="title_edit_list_entry">Modifica voce della lista</string>
   <string name="title_create_list_entry">Crea una voce nella lista</string>
