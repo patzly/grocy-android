@@ -56,7 +56,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
-import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
@@ -77,7 +76,6 @@ public class ConsumeViewModel extends BaseViewModel {
   private final FormDataConsume formData;
 
   private ArrayList<Product> products;
-  private HashMap<Integer, Product> productHashMap;
   private ArrayList<QuantityUnit> quantityUnits;
   private ArrayList<QuantityUnitConversion> unitConversions;
   private ArrayList<ProductBarcode> barcodes;
@@ -124,7 +122,6 @@ public class ConsumeViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase((products, barcodes, qUs, conversions) -> {
       this.products = products;
-      productHashMap = ArrayUtil.getProductsHashMap(products);
       this.barcodes = barcodes;
       this.quantityUnits = qUs;
       this.unitConversions = conversions;
@@ -149,7 +146,6 @@ public class ConsumeViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
@@ -351,7 +347,7 @@ public class ConsumeViewModel extends BaseViewModel {
     String stockEntryId = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
-      product = productHashMap.get(grocycode.getObjectId());
+      product = Product.getProductFromId(products, grocycode.getObjectId());
       if (product == null) {
         showMessageAndContinueScanning(R.string.msg_not_found);
         return;
@@ -366,7 +362,7 @@ public class ConsumeViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(barcode)) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductId());
+          product = Product.getProductFromId(products, code.getProductId());
         }
       }
     }
@@ -385,14 +381,25 @@ public class ConsumeViewModel extends BaseViewModel {
     if (input == null || input.isEmpty()) {
       return;
     }
-    Product product = getProductFromName(input);
+    Product product = Product.getProductFromName(products, input);
 
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(input.trim());
+    if (grocycode != null && grocycode.isProduct()) {
+      product = Product.getProductFromId(products, grocycode.getObjectId());
+      if (product == null) {
+        showMessageAndContinueScanning(R.string.msg_not_found);
+        return;
+      }
+    } else if (grocycode != null) {
+      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+      return;
+    }
     if (product == null) {
       ProductBarcode productBarcode = null;
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductId());
+          product = Product.getProductFromId(products, code.getProductId());
         }
       }
       if (product != null) {
@@ -502,19 +509,6 @@ public class ConsumeViewModel extends BaseViewModel {
         onSuccess.run();
       }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
-  }
-
-  @Nullable
-  public Product getProductFromName(@Nullable String name) {
-    if (name == null) {
-      return null;
-    }
-    for (Product product : products) {
-      if (product.getName().equals(name)) {
-        return product;
-      }
-    }
-    return null;
   }
 
   private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {

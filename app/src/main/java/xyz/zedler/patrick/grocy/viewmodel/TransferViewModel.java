@@ -382,6 +382,17 @@ public class TransferViewModel extends BaseViewModel {
     }
     Product product = Product.getProductFromName(products, input);
 
+    Grocycode grocycode = GrocycodeUtil.getGrocycode(input.trim());
+    if (grocycode != null && grocycode.isProduct()) {
+      product = Product.getProductFromId(products, grocycode.getObjectId());
+      if (product == null) {
+        showMessageAndContinueScanning(R.string.msg_not_found);
+        return;
+      }
+    } else if (grocycode != null) {
+      showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
+      return;
+    }
     if (product == null) {
       ProductBarcode productBarcode = null;
       for (ProductBarcode code : barcodes) {

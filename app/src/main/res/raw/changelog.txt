@@ -13,6 +13,7 @@
 - Fixed: Unsorted lists on master data product pages (thanks @Turysaz) (#473)
 - Fixed: Search on master data products list was broken after back press
 - Fixed: 'Due soon days' value in stock overview was always 5 days
+- Fixed: Grocycode not looked up when using external scanner (#472)
 
 2.0.0:
 Major changes since 1.10.1:
