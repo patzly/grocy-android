@@ -418,8 +418,6 @@
   <string name="subtitle_not_supported">Non supportato</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Importo: %1$s</string>
-  <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Unità di misura: %1$s</string>
   <string name="description_input_product_part1">Il campo prodotto contiene:</string>
   <string name="description_input_product_part2">Per favore scegli come procedere:</string>
   <string name="description_input_product_option1">Crea nuovo prodotto e usa il dato inserito come nome</string>
