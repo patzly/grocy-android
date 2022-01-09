@@ -88,16 +88,6 @@ public class NumUtil {
     if (s == null || s.isEmpty()) {
       return false;
     }
-    try {
-      Integer.parseInt(s);
-      return true;
-    } catch (NumberFormatException ex) {
-      try {
-        Double.parseDouble(s);
-        return true;
-      } catch (NumberFormatException ex1) {
-        return false;
-      }
-    }
+    return isStringInt(s) || isStringDouble(s);
   }
 }
