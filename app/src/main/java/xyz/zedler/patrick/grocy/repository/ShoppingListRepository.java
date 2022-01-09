@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.Store;
 
 public class ShoppingListRepository {
 
@@ -51,6 +52,7 @@ public class ShoppingListRepository {
         ArrayList<QuantityUnit> quantityUnits,
         ArrayList<QuantityUnitConversion> unitConversions,
         ArrayList<Product> products,
+        ArrayList<Store> stores,
         ArrayList<MissingItem> missingItems
     );
   }
@@ -83,6 +85,7 @@ public class ShoppingListRepository {
     private ArrayList<QuantityUnit> quantityUnits;
     private ArrayList<QuantityUnitConversion> unitConversions;
     private ArrayList<Product> products;
+    private ArrayList<Store> stores;
     private ArrayList<MissingItem> missingItems;
 
     loadAsyncTask(AppDatabase appDatabase, ShoppingListDataListener listener) {
@@ -99,6 +102,7 @@ public class ShoppingListRepository {
       quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
       unitConversions = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
       products = new ArrayList<>(appDatabase.productDao().getAll());
+      stores = new ArrayList<>(appDatabase.storeDao().getAll());
       missingItems = new ArrayList<>(appDatabase.missingItemDao().getAll());
       return null;
     }
@@ -107,7 +111,7 @@ public class ShoppingListRepository {
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
         listener.actionFinished(shoppingListItems, shoppingLists, productGroups, quantityUnits,
-            unitConversions, products, missingItems);
+            unitConversions, products, stores, missingItems);
       }
     }
   }
@@ -119,6 +123,7 @@ public class ShoppingListRepository {
       ArrayList<QuantityUnit> quantityUnits,
       ArrayList<QuantityUnitConversion> unitConversions,
       ArrayList<Product> products,
+      ArrayList<Store> stores,
       ArrayList<MissingItem> missingItems,
       ShoppingListDataUpdatedListener listener
   ) {
@@ -130,6 +135,7 @@ public class ShoppingListRepository {
         quantityUnits,
         unitConversions,
         products,
+        stores,
         missingItems,
         listener
     ).execute();
@@ -146,6 +152,7 @@ public class ShoppingListRepository {
     private final ArrayList<QuantityUnit> quantityUnits;
     private final ArrayList<QuantityUnitConversion> unitConversions;
     private final ArrayList<Product> products;
+    private final ArrayList<Store> stores;
     private final ArrayList<MissingItem> missingItems;
     private final ArrayList<ShoppingListItem> itemsToSync;
     private final HashMap<Integer, ShoppingListItem> serverItemsHashMap;
@@ -158,6 +165,7 @@ public class ShoppingListRepository {
         ArrayList<QuantityUnit> quantityUnits,
         ArrayList<QuantityUnitConversion> unitConversions,
         ArrayList<Product> products,
+        ArrayList<Store> stores,
         ArrayList<MissingItem> missingItems,
         ShoppingListDataUpdatedListener listener
     ) {
@@ -169,6 +177,7 @@ public class ShoppingListRepository {
       this.quantityUnits = quantityUnits;
       this.unitConversions = unitConversions;
       this.products = products;
+      this.stores = stores;
       this.missingItems = missingItems;
       this.itemsToSync = new ArrayList<>();
       this.serverItemsHashMap = new HashMap<>();
@@ -209,6 +218,8 @@ public class ShoppingListRepository {
       appDatabase.quantityUnitConversionDao().insertAll(unitConversions);
       appDatabase.productDao().deleteAll();
       appDatabase.productDao().insertAll(products);
+      appDatabase.storeDao().deleteAll();
+      appDatabase.storeDao().insertAll(stores);
       appDatabase.missingItemDao().deleteAll();
       appDatabase.missingItemDao().insertAll(missingItems);
       return null;

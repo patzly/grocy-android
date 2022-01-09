@@ -232,6 +232,32 @@
 
         </LinearLayout>
 
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchProductDescription.setChecked(!switchProductDescription.isChecked())}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_short_text"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_show_product_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_product_description"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.shoppingModeShowProductDescriptionEnabled}" />
+
+        </LinearLayout>
+
       </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

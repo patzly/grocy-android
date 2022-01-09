@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -147,11 +148,17 @@ public class StockOverviewFragment extends BaseFragment implements
       if (items == null) return;
       if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
         ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
+            requireContext(),
             items,
             viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getProductGroupHashMap(),
+            viewModel.getProductHashMap(),
+            viewModel.getLocationHashMap(),
             viewModel.getProductIdsMissingStockItems(),
-            viewModel.getSortMode()
+            viewModel.getSortMode(),
+            viewModel.isSortAscending(),
+            viewModel.getGroupingMode()
         );
       } else {
         binding.recycler.setAdapter(
@@ -160,12 +167,18 @@ public class StockOverviewFragment extends BaseFragment implements
                 items,
                 viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getProductGroupHashMap(),
+                viewModel.getProductHashMap(),
+                viewModel.getLocationHashMap(),
                 viewModel.getProductIdsMissingStockItems(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
                 viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
-                5,
-                viewModel.getSortMode()
+                viewModel.getDaysExpriringSoon(),
+                viewModel.getCurrency(),
+                viewModel.getSortMode(),
+                viewModel.isSortAscending(),
+                viewModel.getGroupingMode()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -193,27 +206,33 @@ public class StockOverviewFragment extends BaseFragment implements
             RecyclerView.ViewHolder viewHolder,
             List<UnderlayButton> underlayButtons
         ) {
+          if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
+          if (!(binding.recycler.getAdapter() instanceof StockOverviewItemAdapter)) return;
           int position = viewHolder.getAdapterPosition();
-          ArrayList<StockItem> displayedItems = viewModel.getFilteredStockItemsLive()
-              .getValue();
-          if (displayedItems == null || position < 0
-              || position >= displayedItems.size()) {
+          ArrayList<GroupedListItem> groupedListItems =
+              ((StockOverviewItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
+          if (groupedListItems == null || position < 0
+              || position >= groupedListItems.size()) {
             return;
           }
-          StockItem stockItem = displayedItems.get(position);
+          GroupedListItem item = groupedListItems.get(position);
+          if (!(item instanceof StockItem)) {
+            return;
+          }
+          StockItem stockItem = (StockItem) item;
           if (stockItem.getAmountAggregatedDouble() > 0
               && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
           ) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_consume_product,
                 pos -> {
-                  if (pos >= displayedItems.size()) {
+                  if (pos >= groupedListItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.CONSUME,
-                      displayedItems.get(pos)
+                      stockItem
                   );
                 }
             ));
@@ -226,13 +245,13 @@ public class StockOverviewFragment extends BaseFragment implements
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
                 R.drawable.ic_round_open,
                 pos -> {
-                  if (pos >= displayedItems.size()) {
+                  if (pos >= groupedListItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
                   viewModel.performAction(
                       Constants.ACTION.OPEN,
-                      displayedItems.get(pos)
+                      stockItem
                   );
                 }
             ));
@@ -254,11 +273,10 @@ public class StockOverviewFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(StockOverviewFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
-        && savedInstanceState == null);
+    updateUI();
   }
 
-  private void updateUI(boolean animated) {
+  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(

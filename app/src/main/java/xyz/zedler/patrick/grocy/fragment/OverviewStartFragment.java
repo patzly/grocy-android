@@ -112,7 +112,9 @@ public class OverviewStartFragment extends BaseFragment {
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
-      if (id == R.id.action_about) {
+      if (id == R.id.action_settings) {
+        navigateDeepLink(getString(R.string.deep_link_settingsFragment));
+      } else if (id == R.id.action_about) {
         navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());

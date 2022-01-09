@@ -8,16 +8,13 @@
    <li>Fast barcode scanning</li>
    <li>OpenFoodFacts implementation</li>
    <li>Master data editing</li>
-   <li>Intuitive batch processing</li>
    <li>Dark mode</li>
-   <li>No ads, analytics or in-app purchases</li>
-   <li>Low data usage</li>
-   <li>Small app size (~6MB)</li>
+   <li>No ads, analytics or in-app purchases</li></li>
 </ul>
 
 <p><b>Contribution:</b></p>
 <p>If you run into a bug or miss a feature, feel free to give feedback in the app, send us an email or <a href="https://github.com/patzly/grocy-android/issues">open an issue</a> on GitHub. Like the grocy project, Grocy Android can be translated, too. Please go to our <a href="https://github.com/patzly/grocy-android">GitHub page</a> for more information.</p>
 
 <p><b>Compatibility:</b></p>
-<p>Grocy Android requires at least grocy 2.7.0 on your server. It is also possible to use the grocy Add-on on a Hass.io server. Our in-app help explains how to do that.</p>
+<p>Grocy Android requires at least Android 5.0 Lollipop on your device and grocy 3.0.0 on your server. It is also possible to use the grocy Add-on on a Hass.io server. Our in-app help explains how to do that.</p>
 <p>We'd like to thank the developer of Grocy, Bernd Bestel, without whose great work this app would never have been possible.</p>

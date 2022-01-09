@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -83,6 +84,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
   private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private ArrayList<Product> products;
+  private ArrayList<Store> stores;
   private HashMap<Integer, Product> productHashMap;
   private ArrayList<MissingItem> missingItems;
   private ArrayList<Integer> missingProductIds;
@@ -120,7 +122,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(
-        (shoppingListItems, shoppingLists, productGroups, quantityUnits, unitConversions, products, missingItems) -> {
+        (shoppingListItems, shoppingLists, productGroups, quantityUnits, unitConversions, products, stores, missingItems) -> {
           this.shoppingListItems = shoppingListItems;
           this.shoppingLists = shoppingLists;
           this.productGroups = productGroups;
@@ -130,6 +132,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
           unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
+          this.stores = stores;
           this.missingItems = missingItems;
           missingProductIds = ArrayUtil.getMissingProductsIds(missingItems);
           fillShoppingListItemAmountsHashMap();
@@ -224,8 +227,9 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         ), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
-        }),
-        dlHelper.updateMissingItems(dbChangedTime, missing -> {
+        }), dlHelper.updateStores(dbChangedTime, stores -> {
+          this.stores = stores;
+        }), dlHelper.updateMissingItems(dbChangedTime, missing -> {
           this.missingItems = missing;
           missingProductIds = ArrayUtil.getMissingProductsIds(missingItems);
         })
@@ -253,6 +257,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
     downloadData();
   }
@@ -265,6 +270,7 @@ public class ShoppingModeViewModel extends AndroidViewModel {
         this.quantityUnits,
         this.unitConversions,
         this.products,
+        this.stores,
         this.missingItems,
         (itemsToSync, serverItemHashMap) -> {
           Log.i(TAG, "onQueueEmpty: itemsToSync: " + itemsToSync.size());

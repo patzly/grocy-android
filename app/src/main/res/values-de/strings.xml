@@ -400,7 +400,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s Preis</string>
   <string name="title_stock_entry_no_specific">Kein bestimmter Eintrag</string>
-  <string name="title_shopping_list_ungrouped">Ungruppiert</string>
   <string name="title_list_entry">Eintrag</string>
   <string name="title_edit_list_entry">Eintrag bearbeiten</string>
   <string name="title_create_list_entry">Eintrag erstellen</string>

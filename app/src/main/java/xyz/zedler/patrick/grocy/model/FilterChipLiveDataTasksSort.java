@@ -24,10 +24,9 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
-public class FilterChipLiveDataStockSort extends FilterChipLiveData {
+public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
 
   public final static int ID_SORT_NAME = 0;
   public final static int ID_SORT_DUE_DATE = 1;
@@ -41,13 +40,13 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
   private String sortMode;
   private boolean sortAscending;
 
-  public FilterChipLiveDataStockSort(Application application, Runnable clickListener) {
+  public FilterChipLiveDataTasksSort(Application application, Runnable clickListener) {
     this.application = application;
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
+    sortMode = sharedPrefs.getString(PREF.STOCK_SORT_MODE, SORT_NAME);
+    sortAscending = sharedPrefs.getBoolean(PREF.STOCK_SORT_ASCENDING, true);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -74,7 +73,7 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
         R.string.property_sort_mode,
         sortMode.equals(SORT_NAME)
             ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_date_next)
+            : application.getString(R.string.property_due_date)
     ));
   }
 
@@ -82,14 +81,14 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
     if (id == ID_SORT_NAME) {
       sortMode = SORT_NAME;
       setFilterText();
-      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
     } else if (id == ID_SORT_DUE_DATE) {
       sortMode = SORT_DUE_DATE;
       setFilterText();
-      sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
     } else if (id == ID_ASCENDING) {
       sortAscending = !sortAscending;
-      sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
+      sharedPrefs.edit().putBoolean(PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
     }
   }
 
@@ -105,7 +104,7 @@ public class FilterChipLiveDataStockSort extends FilterChipLiveData {
       menuItemDataList.add(new MenuItemData(
           ID_SORT_DUE_DATE,
           0,
-          application.getString(R.string.property_due_date_next),
+          application.getString(R.string.property_due_date),
           sortMode.equals(SORT_DUE_DATE)
       ));
     }

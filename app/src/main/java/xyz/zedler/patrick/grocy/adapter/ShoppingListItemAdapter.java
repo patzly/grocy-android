@@ -22,6 +22,8 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +39,19 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
+import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class ShoppingListItemAdapter extends
     RecyclerView.Adapter<ShoppingListItemAdapter.ViewHolder> {
@@ -58,23 +65,134 @@ public class ShoppingListItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
   private final PluralUtil pluralUtil;
+  private String groupingMode;
 
   public ShoppingListItemAdapter(
       Context context,
-      ArrayList<GroupedListItem> groupedListItems,
+      ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
-      ShoppingListItemAdapterListener listener
+      ShoppingListItemAdapterListener listener,
+      String shoppingListNotes,
+      String groupingMode
   ) {
-    this.groupedListItems = new ArrayList<>(groupedListItems);
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
-    pluralUtil = new PluralUtil(context);
+    this.pluralUtil = new PluralUtil(context);
+    this.groupingMode = groupingMode;
+    this.groupedListItems = getGroupedListItems(context, shoppingListItems,
+        productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
+        shoppingListNotes, groupingMode);
+  }
+
+  static ArrayList<GroupedListItem> getGroupedListItems(
+      Context context,
+      ArrayList<ShoppingListItem> shoppingListItems,
+      HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, String> productNamesHashMap,
+      HashMap<Integer, Store> storeHashMap,
+      String shoppingListNotes,
+      String groupingMode
+  ) {
+    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
+      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
+      addBottomNotes(
+          context,
+          shoppingListNotes,
+          groupedListItems,
+          !shoppingListItems.isEmpty()
+      );
+      return groupedListItems;
+    }
+    HashMap<String, ArrayList<ShoppingListItem>> shoppingListItemsGroupedHashMap = new HashMap<>();
+    ArrayList<ShoppingListItem> ungroupedItems = new ArrayList<>();
+    for (ShoppingListItem shoppingListItem : shoppingListItems) {
+      String groupName = null;
+      if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
+          && shoppingListItem.hasProduct()) {
+        Product product = productHashMap.get(shoppingListItem.getProductIdInt());
+        Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
+            ? Integer.parseInt(product.getProductGroupId())
+            : null;
+        ProductGroup productGroup = productGroupId != null
+            ? productGroupHashMap.get(productGroupId)
+            : null;
+        groupName = productGroup != null ? productGroup.getName() : null;
+      } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
+          && shoppingListItem.hasProduct()) {
+        Product product = productHashMap.get(shoppingListItem.getProductIdInt());
+        Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
+            ? Integer.parseInt(product.getStoreId())
+            : null;
+        Store store = storeId != null
+            ? storeHashMap.get(storeId)
+            : null;
+        groupName = store != null ? store.getName() : null;
+      }
+      if (groupName != null && !groupName.isEmpty()) {
+        ArrayList<ShoppingListItem> itemsFromGroup = shoppingListItemsGroupedHashMap.get(groupName);
+        if (itemsFromGroup == null) {
+          itemsFromGroup = new ArrayList<>();
+          shoppingListItemsGroupedHashMap.put(groupName, itemsFromGroup);
+        }
+        itemsFromGroup.add(shoppingListItem);
+      } else {
+        ungroupedItems.add(shoppingListItem);
+      }
+    }
+    ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
+    ArrayList<String> groupsSorted = new ArrayList<>(shoppingListItemsGroupedHashMap.keySet());
+    SortUtil.sortStringsByName(context, groupsSorted, true);
+    if (!ungroupedItems.isEmpty()) {
+      groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
+      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      groupedListItems.addAll(ungroupedItems);
+    }
+    for (String group : groupsSorted) {
+      ArrayList<ShoppingListItem> itemsFromGroup = shoppingListItemsGroupedHashMap.get(group);
+      if (itemsFromGroup == null) continue;
+      GroupHeader groupHeader = new GroupHeader(group);
+      groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
+      groupedListItems.add(groupHeader);
+      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      groupedListItems.addAll(itemsFromGroup);
+    }
+    addBottomNotes(
+        context,
+        shoppingListNotes,
+        groupedListItems,
+        !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
+    );
+    return groupedListItems;
+  }
+
+  private static void addBottomNotes(
+      Context context,
+      String shoppingListNotes,
+      ArrayList<GroupedListItem> groupedListItems,
+      boolean displayDivider
+  ) {
+    if (shoppingListNotes == null) {
+      return;
+    }
+    Spanned spanned = Html.fromHtml(shoppingListNotes.trim());
+    Spanned notes = (Spanned) TextUtil.trimCharSequence(spanned);
+    if (notes != null && !notes.toString().trim().isEmpty()) {
+      GroupHeader h = new GroupHeader(context.getString(R.string.property_notes));
+      h.setDisplayDivider(displayDivider);
+      groupedListItems.add(h);
+      groupedListItems.add(new ShoppingListBottomNotes(notes));
+    }
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -116,7 +234,10 @@ public class ShoppingListItemAdapter extends
 
   @Override
   public int getItemViewType(int position) {
-    return groupedListItems.get(position).getType();
+    return GroupedListItem.getType(
+        groupedListItems.get(position),
+        GroupedListItem.CONTEXT_SHOPPING_LIST
+    );
   }
 
   @NonNull
@@ -158,12 +279,12 @@ public class ShoppingListItemAdapter extends
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
       ShoppingListGroupViewHolder holder = (ShoppingListGroupViewHolder) viewHolder;
-      if (((ProductGroup) groupedListItem).getDisplayDivider() == 1) {
+      if (((GroupHeader) groupedListItem).getDisplayDivider() == 1) {
         holder.binding.divider.setVisibility(View.VISIBLE);
       } else {
         holder.binding.divider.setVisibility(View.GONE);
       }
-      holder.binding.name.setText(((ProductGroup) groupedListItem).getName());
+      holder.binding.name.setText(((GroupHeader) groupedListItem).getGroupName());
       return;
     }
     if (type == GroupedListItem.TYPE_BOTTOM_NOTES) {
@@ -318,6 +439,10 @@ public class ShoppingListItemAdapter extends
     return groupedListItems.size();
   }
 
+  public ArrayList<GroupedListItem> getGroupedListItems() {
+    return groupedListItems;
+  }
+
   public interface ShoppingListItemAdapterListener {
 
     void onItemRowClicked(GroupedListItem groupedListItem);
@@ -446,15 +571,24 @@ public class ShoppingListItemAdapter extends
   }
 
   public void updateData(
-      ArrayList<GroupedListItem> newList,
+      Context context,
+      ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, String> productNamesHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
-      ArrayList<Integer> missingProductIds
+      ArrayList<Integer> missingProductIds,
+      String shoppingListNotes,
+      String groupingMode
   ) {
+    ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, shoppingListItems,
+        productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
+        shoppingListNotes, groupingMode);
     ShoppingListItemAdapter.DiffCallback diffCallback = new ShoppingListItemAdapter.DiffCallback(
-        newList,
         this.groupedListItems,
+        newGroupedListItems,
         this.productHashMap,
         productHashMap,
         this.quantityUnitHashMap,
@@ -462,11 +596,13 @@ public class ShoppingListItemAdapter extends
         this.shoppingListItemAmountsHashMap,
         shoppingListItemAmountsHashMap,
         this.missingProductIds,
-        missingProductIds
+        missingProductIds,
+        this.groupingMode,
+        groupingMode
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
-    this.groupedListItems.addAll(newList);
+    this.groupedListItems.addAll(newGroupedListItems);
     this.productHashMap.clear();
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
@@ -475,6 +611,7 @@ public class ShoppingListItemAdapter extends
     this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
+    this.groupingMode = groupingMode;
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -490,10 +627,12 @@ public class ShoppingListItemAdapter extends
     HashMap<Integer, Double> shoppingListItemAmountsHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
+    String groupingModeOld;
+    String groupingModeNew;
 
     public DiffCallback(
-        ArrayList<GroupedListItem> newItems,
         ArrayList<GroupedListItem> oldItems,
+        ArrayList<GroupedListItem> newItems,
         HashMap<Integer, Product> productHashMapOld,
         HashMap<Integer, Product> productHashMapNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
@@ -501,10 +640,12 @@ public class ShoppingListItemAdapter extends
         HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
         HashMap<Integer, Double> shoppingListItemAmountsHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
-        ArrayList<Integer> missingProductIdsNew
+        ArrayList<Integer> missingProductIdsNew,
+        String groupingModeOld,
+        String groupingModeNew
     ) {
-      this.newItems = newItems;
       this.oldItems = oldItems;
+      this.newItems = newItems;
       this.productHashMapOld = productHashMapOld;
       this.productHashMapNew = productHashMapNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
@@ -513,6 +654,8 @@ public class ShoppingListItemAdapter extends
       this.shoppingListItemAmountsHashMapNew = shoppingListItemAmountsHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
+      this.groupingModeOld = groupingModeOld;
+      this.groupingModeNew = groupingModeNew;
     }
 
     @Override
@@ -536,9 +679,18 @@ public class ShoppingListItemAdapter extends
     }
 
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-      int oldItemType = oldItems.get(oldItemPos).getType();
-      int newItemType = newItems.get(newItemPos).getType();
+      int oldItemType = GroupedListItem.getType(
+          oldItems.get(oldItemPos),
+          GroupedListItem.CONTEXT_SHOPPING_LIST
+      );
+      int newItemType = GroupedListItem.getType(
+          newItems.get(newItemPos),
+          GroupedListItem.CONTEXT_SHOPPING_LIST
+      );
       if (oldItemType != newItemType) {
+        return false;
+      }
+      if (!groupingModeOld.equals(groupingModeNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
@@ -587,8 +739,8 @@ public class ShoppingListItemAdapter extends
 
         return newItem.equals(oldItem);
       } else if (oldItemType == GroupedListItem.TYPE_HEADER) {
-        ProductGroup newGroup = (ProductGroup) newItems.get(newItemPos);
-        ProductGroup oldGroup = (ProductGroup) oldItems.get(oldItemPos);
+        GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
+        GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
         return newGroup.equals(oldGroup);
       } else { // Type: Bottom notes
         ShoppingListBottomNotes newNotes = (ShoppingListBottomNotes) newItems.get(newItemPos);

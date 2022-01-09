@@ -333,7 +333,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">מחיר על%1$s</string>
   <string name="title_stock_entry_no_specific">אין רשומה מסוימת</string>
-  <string name="title_shopping_list_ungrouped">לא מקובץ</string>
   <string name="title_list_entry">רשומה ברשימה</string>
   <string name="title_edit_list_entry">עריכת רשומה ברשימה</string>
   <string name="title_create_list_entry">יצירת רשומה ברשימה</string>

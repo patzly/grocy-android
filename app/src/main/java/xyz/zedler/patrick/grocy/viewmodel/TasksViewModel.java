@@ -35,7 +35,8 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListStatus;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -43,7 +44,6 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -64,6 +64,7 @@ public class TasksViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Task>> filteredTasksLive;
   private final FilterChipLiveDataTasksStatus filterChipLiveDataStatus;
+  private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
 
   private ArrayList<Task> tasks;
   private ArrayList<TaskCategory> taskCategories;
@@ -97,6 +98,10 @@ public class TasksViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredTasks
     );
+    filterChipLiveDataSort = new FilterChipLiveDataTasksSort(
+        getApplication(),
+        this::updateFilteredTasks
+    );
     tasksDoneCount = 0;
     tasksNotDoneCount = 0;
     sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
@@ -122,6 +127,11 @@ public class TasksViewModel extends BaseViewModel {
               tasksNotDoneCount++;
             }
           }
+
+          filterChipLiveDataStatus
+              .setDueSoonCount(0)
+              .setOverdueCount(0)
+              .emitCounts();
 
           updateFilteredTasks();
           if (downloadAfterLoading) {
@@ -306,6 +316,14 @@ public class TasksViewModel extends BaseViewModel {
 
   public MutableLiveData<ArrayList<Task>> getFilteredTasksLive() {
     return filteredTasksLive;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {
+    return () -> filterChipLiveDataStatus;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
+    return () -> filterChipLiveDataSort;
   }
 
   public int getTasksDoneCount() {

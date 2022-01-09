@@ -259,11 +259,6 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
   }
 
   @Override
-  public int getType() {
-    return TYPE_ENTRY;
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;

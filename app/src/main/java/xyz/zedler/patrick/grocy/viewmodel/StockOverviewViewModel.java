@@ -38,6 +38,8 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -52,12 +54,14 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewViewModel extends BaseViewModel {
 
@@ -78,10 +82,13 @@ public class StockOverviewViewModel extends BaseViewModel {
   private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
   private final FilterChipLiveDataStockSort filterChipLiveDataSort;
+  private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataStockExtraField filterChipLiveDataExtraField;
 
   private ArrayList<StockItem> stockItems;
   private ArrayList<Product> products;
   private ArrayList<ProductGroup> productGroups;
+  private HashMap<Integer, ProductGroup> productGroupHashMap;
   private ArrayList<ProductBarcode> productBarcodesTemp;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
@@ -136,6 +143,14 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockItems
     );
+    filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
+        getApplication(),
+        this::updateFilteredStockItems
+    );
+    filterChipLiveDataExtraField = new FilterChipLiveDataStockExtraField(
+        getApplication(),
+        this::updateFilteredStockItems
+    );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -147,6 +162,7 @@ public class StockOverviewViewModel extends BaseViewModel {
             quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
           }
           this.productGroups = productGroups;
+          productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups);
           filterChipLiveDataProductGroup.setProductGroups(productGroups);
           this.products = products;
           productHashMap = new HashMap<>();
@@ -319,6 +335,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         }),
         dlHelper.updateProductGroups(dbChangedTime, groups -> {
           this.productGroups = groups;
+          productGroupHashMap = ArrayUtil.getProductGroupsHashMap(groups);
           filterChipLiveDataProductGroup.setProductGroups(groups);
         }),
         dlHelper.updateStockItems(dbChangedTime, stockItems -> {
@@ -495,16 +512,6 @@ public class StockOverviewViewModel extends BaseViewModel {
       ) {
         filteredStockItems.add(item);
       }
-    }
-
-    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
-      SortUtil.sortStockItemsByBBD(filteredStockItems, filterChipLiveDataSort.isSortAscending());
-    } else {
-      SortUtil.sortStockItemsByName(
-          getApplication(),
-          filteredStockItems,
-          filterChipLiveDataSort.isSortAscending()
-      );
     }
 
     if (filteredStockItems.isEmpty()) {
@@ -720,12 +727,20 @@ public class StockOverviewViewModel extends BaseViewModel {
     return new ArrayList<>(productIdsMissingStockItems.keySet());
   }
 
+  public HashMap<Integer, ProductGroup> getProductGroupHashMap() {
+    return productGroupHashMap;
+  }
+
+  public HashMap<Integer, Product> getProductHashMap() {
+    return productHashMap;
+  }
+
   public ArrayList<String> getShoppingListItemsProductIds() {
     return shoppingListItemsProductIds;
   }
 
-  public String getSortMode() {
-    return filterChipLiveDataSort.getSortMode();
+  public HashMap<Integer, Location> getLocationHashMap() {
+    return locationHashMap;
   }
 
   public Location getLocationFromId(int id) {
@@ -754,6 +769,26 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
     return () -> filterChipLiveDataSort;
+  }
+
+  public String getSortMode() {
+    return filterChipLiveDataSort.getSortMode();
+  }
+
+  public boolean isSortAscending() {
+    return filterChipLiveDataSort.isSortAscending();
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataGrouping() {
+    return () -> filterChipLiveDataGrouping;
+  }
+
+  public String getGroupingMode() {
+    return filterChipLiveDataGrouping.getGroupingMode();
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
+    return () -> filterChipLiveDataExtraField;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -801,6 +836,21 @@ public class StockOverviewViewModel extends BaseViewModel {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
+  }
+
+  public int getDaysExpriringSoon() {
+    String days = sharedPrefs.getString(
+        STOCK.DUE_SOON_DAYS,
+        SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+    );
+    return NumUtil.isStringInt(days) ? Integer.parseInt(days) : 5;
+  }
+
+  public String getCurrency() {
+    return sharedPrefs.getString(
+        PREF.CURRENCY,
+        ""
+    );
   }
 
   @Override

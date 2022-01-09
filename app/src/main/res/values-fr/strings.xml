@@ -397,7 +397,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">Prix de %1$s</string>
   <string name="title_stock_entry_no_specific">Aucune entrée spécifique</string>
-  <string name="title_shopping_list_ungrouped">Dissociée</string>
   <string name="title_list_entry">Entrée de liste</string>
   <string name="title_edit_list_entry">Modifier l\'entrée de liste</string>
   <string name="title_create_list_entry">Créer une entrée de liste</string>

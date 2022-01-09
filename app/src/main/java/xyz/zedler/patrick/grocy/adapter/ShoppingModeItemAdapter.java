@@ -23,6 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class ShoppingModeItemAdapter extends
@@ -62,7 +65,8 @@ public class ShoppingModeItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
   private final PluralUtil pluralUtil;
-  private boolean useSmallerFonts;
+  private final boolean useSmallerFonts;
+  private final boolean showProductDescription;
 
   public ShoppingModeItemAdapter(
       Context context,
@@ -73,7 +77,8 @@ public class ShoppingModeItemAdapter extends
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       ShoppingModeItemClickListener listener,
-      boolean useSmallerFonts
+      boolean useSmallerFonts,
+      boolean showProductDescription
   ) {
     this.linearLayoutManager = linearLayoutManager;
     this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -83,6 +88,7 @@ public class ShoppingModeItemAdapter extends
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     this.useSmallerFonts = useSmallerFonts;
+    this.showProductDescription = showProductDescription;
     pluralUtil = new PluralUtil(context);
   }
 
@@ -125,7 +131,10 @@ public class ShoppingModeItemAdapter extends
 
   @Override
   public int getItemViewType(int position) {
-    return groupedListItems.get(position).getType();
+    return GroupedListItem.getType(
+        groupedListItems.get(position),
+        GroupedListItem.CONTEXT_SHOPPING_LIST
+    );
   }
 
   @NonNull
@@ -328,6 +337,20 @@ public class ShoppingModeItemAdapter extends
       }
     }
 
+    // PRODUCT DESCRIPTION
+
+    if (showProductDescription) {
+      String productDescription = product != null ? product.getDescription() : null;
+      Spanned description = productDescription != null ? Html.fromHtml(productDescription) : null;
+      description = (Spanned) TextUtil.trimCharSequence(description);
+      if (description != null && !description.toString().isEmpty()) {
+        binding.cardDescription.setText(description.toString());
+        binding.cardDescription.setVisibility(View.VISIBLE);
+      } else {
+        binding.cardDescription.setVisibility(View.GONE);
+      }
+    }
+
     binding.containerRow.setAlpha(item.getDoneInt() == 1 ? 0.4f : 1);
 
     // CONTAINER
@@ -428,8 +451,14 @@ public class ShoppingModeItemAdapter extends
     }
 
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-      int oldItemType = oldItems.get(oldItemPos).getType();
-      int newItemType = newItems.get(newItemPos).getType();
+      int oldItemType = GroupedListItem.getType(
+          oldItems.get(oldItemPos),
+          GroupedListItem.CONTEXT_SHOPPING_LIST
+      );
+      int newItemType = GroupedListItem.getType(
+          newItems.get(newItemPos),
+          GroupedListItem.CONTEXT_SHOPPING_LIST
+      );
       if (oldItemType != newItemType) {
         return false;
       }

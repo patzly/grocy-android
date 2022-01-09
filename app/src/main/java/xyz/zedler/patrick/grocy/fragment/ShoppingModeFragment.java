@@ -174,6 +174,10 @@ public class ShoppingModeFragment extends BaseFragment implements
                 sharedPrefs.getBoolean(
                     SHOPPING_MODE.USE_SMALLER_FONT,
                     SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
+                ),
+                sharedPrefs.getBoolean(
+                    SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
+                    SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
                 )
             )
         );
@@ -308,10 +312,11 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (groupedListItem == null) {
       return;
     }
-    if (groupedListItem.getType() == GroupedListItem.TYPE_ENTRY) {
+    if (groupedListItem.getType(GroupedListItem.CONTEXT_SHOPPING_LIST)
+        == GroupedListItem.TYPE_ENTRY) {
       toggleDoneStatus((ShoppingListItem) groupedListItem);
     } else if (!viewModel.isOffline()
-        && groupedListItem.getType()
+        && groupedListItem.getType(GroupedListItem.CONTEXT_SHOPPING_LIST)
         == GroupedListItem.TYPE_BOTTOM_NOTES) {  // Click on bottom notes
       showNotesEditor();
     }

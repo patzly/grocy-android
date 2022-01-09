@@ -17,28 +17,21 @@
   ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
   -->
 
-<menu
+<layer-list
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  android:autoMirrored="true">
 
   <item
-    android:id="@+id/action_settings"
-    android:title="@string/title_settings"
-    app:showAsAction="never" />
+    android:left="4dp"
+    android:bottom="1dp"
+    android:top="1dp">
+    <shape android:shape="rectangle">
 
-  <item
-    android:id="@+id/action_about"
-    android:title="@string/title_about"
-    app:showAsAction="never" />
+      <corners
+        android:radius="32dp" />
 
-  <item
-    android:id="@+id/action_feedback"
-    android:title="@string/action_feedback"
-    app:showAsAction="never" />
+      <solid android:color="@color/secondary_translucent" />
+    </shape>
+  </item>
 
-  <item
-    android:id="@+id/action_changelog"
-    android:title="@string/info_changelog"
-    app:showAsAction="never" />
-
-</menu>
+</layer-list>

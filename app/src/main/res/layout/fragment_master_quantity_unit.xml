@@ -147,7 +147,7 @@
               android:layout_height="wrap_content"
               android:textColor="@color/on_background"
               android:inputType="text|textCapSentences|textNoSuggestions"
-              android:imeOptions="actionNext" />
+              android:imeOptions="actionDone" />
 
           </com.google.android.material.textfield.TextInputLayout>
 

@@ -354,7 +354,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s价格</string>
   <string name="title_stock_entry_no_specific">没有特定条目</string>
-  <string name="title_shopping_list_ungrouped">未分组</string>
   <string name="title_list_entry">列表条目</string>
   <string name="title_edit_list_entry">编辑列表条目</string>
   <string name="title_create_list_entry">创建列表条目</string>

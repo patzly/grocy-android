@@ -39,98 +39,6 @@ import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class ShoppingListHelper {
 
-  public static ArrayList<GroupedListItem> groupItems(
-      Context context,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      HashMap<Integer, Product> productHashMap,
-      HashMap<Integer, String> productNamesHashMap,
-      ArrayList<ProductGroup> productGroups,
-      ArrayList<ShoppingList> shoppingLists,
-      int selectedShoppingListId,
-      boolean showNotes
-  ) {
-    HashMap<String, ProductGroup> productGroupHashMap = new HashMap<>();
-    for (ProductGroup p : productGroups) {
-      productGroupHashMap.put(String.valueOf(p.getId()), p);
-    }
-    HashMap<ProductGroup, Collection<ShoppingListItem>> sortedShoppingListItems = new HashMap<>();
-    ProductGroup ungrouped = new ProductGroup(
-        -1,
-        context.getString(R.string.title_shopping_list_ungrouped)
-    );
-    // sort displayedItems by productGroup
-    for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      String groupId = null;
-      ProductGroup productGroup = null;
-      Product product = null;
-      if (shoppingListItem.hasProduct()) {
-        product = productHashMap.get(shoppingListItem.getProductIdInt());
-      }
-      if (product != null) {
-        groupId = product.getProductGroupId();
-      }
-      if (groupId != null && groupId.isEmpty()) {
-        groupId = null;
-      }
-      if (groupId != null) {
-        productGroup = productGroupHashMap.get(groupId);
-      }
-      if (groupId == null || productGroup == null) {
-        productGroup = ungrouped;
-      }
-      Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
-      if (items == null) {
-        items = new ArrayList<>();
-        sortedShoppingListItems.put(productGroup, items);
-      }
-      items.add(shoppingListItem);
-    }
-    // sort product groups
-    ArrayList<ProductGroup> sortedProductGroups = new ArrayList<>(sortedShoppingListItems.keySet());
-    SortUtil.sortProductGroupsByName(context, sortedProductGroups, true);
-    if (sortedProductGroups.contains(ungrouped)) {
-      sortedProductGroups.remove(ungrouped);
-      sortedProductGroups.add(ungrouped);
-    }
-    // create list with groups (headers) and entries
-    ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
-    for (ProductGroup productGroup : sortedProductGroups) {
-      ProductGroup clonedProductGroup = productGroup
-          .getClone(); // clone is necessary because else adapter contains
-      groupedListItems.add(
-          clonedProductGroup);                  // same productGroup objects and could not calculate diff properly
-      clonedProductGroup.setDisplayDivider(groupedListItems.get(0) != clonedProductGroup);
-      Collection<ShoppingListItem> items = sortedShoppingListItems.get(productGroup);
-      assert items != null;
-      ArrayList<ShoppingListItem> itemsOneGroup = new ArrayList<>(items);
-      SortUtil.sortShoppingListItemsByName(context, itemsOneGroup, productNamesHashMap, true);
-      groupedListItems.addAll(itemsOneGroup);
-    }
-    if (!showNotes) {
-      return groupedListItems;
-    }
-    // add bottom notes if they are not empty
-    HashMap<Integer, ShoppingList> shoppingListHashMap = new HashMap<>();
-    for (ShoppingList s : shoppingLists) {
-      shoppingListHashMap.put(s.getId(), s);
-    }
-    ShoppingList shoppingList = shoppingListHashMap.get(selectedShoppingListId);
-    Spanned notes = null;
-    if (shoppingList != null && shoppingList.getNotes() != null) {
-      Spanned spanned = Html.fromHtml(shoppingList.getNotes().trim());
-      notes = (Spanned) TextUtil.trimCharSequence(spanned);
-    }
-    if (notes != null && notes.toString().trim().isEmpty()) {
-      notes = null;
-    }
-    if (shoppingList != null && notes != null) {
-      ProductGroup p = new ProductGroup(-1, context.getString(R.string.property_notes));
-      groupedListItems.add(p);
-      groupedListItems.add(new ShoppingListBottomNotes(notes));
-    }
-    return groupedListItems;
-  }
-
   public static ArrayList<GroupedListItem> groupItemsShoppingMode(
       Context context,
       ArrayList<ShoppingListItem> shoppingListItems,
@@ -149,7 +57,7 @@ public class ShoppingListHelper {
     ArrayList<ShoppingListItem> doneItems = new ArrayList<>();
     ProductGroup ungrouped = new ProductGroup(
         -1,
-        context.getString(R.string.title_shopping_list_ungrouped)
+        context.getString(R.string.property_ungrouped)
     );
     // sort displayedItems by productGroup
     for (ShoppingListItem shoppingListItem : shoppingListItems) {

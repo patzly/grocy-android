@@ -76,6 +76,13 @@
         android:textSize="18sp"
         android:textColor="@color/retro_red_fg" />
 
+      <xyz.zedler.patrick.grocy.view.ExpandableCard
+        android:id="@+id/card_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
+
     </LinearLayout>
 
   </com.google.android.material.card.MaterialCardView>

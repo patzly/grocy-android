@@ -81,7 +81,7 @@
   <string name="action_proceed">Proceed</string>
   <string name="action_delete">Delete</string>
   <string name="action_save">Save</string>
-  <string name="action_save_close">Save &amp; close</string>
+  <string name="action_save_close">Save and close</string>
   <string name="action_save_not_close">Save without closing</string>
   <string name="action_logout">Logout</string>
   <string name="action_restart">Restart</string>
@@ -180,10 +180,8 @@
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
   </plurals>
-  <!-- 1$s is a task -->
-  <string name="msg_task_completed">Task completed</string>
-  <!-- %1$s is a task -->
-  <string name="msg_task_undo">Undid completion of task</string>
+  <string name="msg_task_completed">Marked task as completed</string>
+  <string name="msg_task_undo">Undo task</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -443,7 +441,6 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">%1$s price</string>
   <string name="title_stock_entry_no_specific">No specific entry</string>
-  <string name="title_shopping_list_ungrouped">Ungrouped</string>
   <string name="title_list_entry">List entry</string>
   <string name="title_edit_list_entry">Edit list entry</string>
   <string name="title_create_list_entry">Create list entry</string>
@@ -476,6 +473,8 @@
   <string name="subtitle_stock_locations">Where %1$s has stock</string>
   <string name="subtitle_default_location">Default location</string>
   <string name="subtitle_none_selected">None selected</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">None</string>
   <string name="subtitle_empty">Empty</string>
   <string name="subtitle_done">Done</string>
   <string name="subtitle_undone">Undone</string>
@@ -655,6 +654,7 @@
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
+  <string name="property_value">Value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
@@ -685,7 +685,14 @@
   <string name="property_in_stock">In stock: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Sort: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Group by: %1$s</string>
+  <string name="property_ungrouped">Ungrouped</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Extra field: %1$s</string>
   <string name="property_task_categories">Task categories</string>
+  <string name="property_calories">Calories</string>
+  <string name="property_calories_per_unit">Calories (per stock unit)</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -821,6 +828,7 @@
   <string name="setting_show_done_items_description">At the bottom</string>
   <string name="setting_smaller_font">Use smaller font</string>
   <string name="setting_smaller_font_description">To see more items at once</string>
+  <string name="setting_show_product_description">Show product description</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Due soon days</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
