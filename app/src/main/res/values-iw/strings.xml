@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -78,6 +78,8 @@
   <string name="action_proceed">להמשיך</string>
   <string name="action_delete">מחיקה</string>
   <string name="action_save">שמירה</string>
+  <string name="action_save_close">שמירה וסגירה</string>
+  <string name="action_save_not_close">שמירה ללא סגירה</string>
   <string name="action_logout">יציאה</string>
   <string name="action_restart">הפעלה מחדש</string>
   <string name="action_create">יצירה</string>
@@ -171,6 +173,7 @@
   <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
   <string name="option_synced_success">האפשרות סונכרנה בהצלחה</string>
   <string name="option_synced_error">לא ניתן לסנכרן את האפשרות</string>
+  <string name="msg_create_new_product">יצירת מוצר חדש</string>
   <string name="msg_logout">שום דבר על השרת שלך לא ישתנה. מיד תתבצע הפנייה לעמוד הכניסה למערכת.</string>
   <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
   <string name="msg_logout_demo_short">שרת להדגמה ציבורית. יש לגעת לקבלת פרטים.</string>
@@ -391,8 +394,6 @@
   <string name="subtitle_not_supported">לא נתמך</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">כמות: %1$s</string>
-  <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">יחידת כמות: %1$s</string>
   <string name="subtitle_barcode">ברקוד: %1$s</string>
   <string name="subtitle_feature_disabled">היכולת מושבתת</string>
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
@@ -550,7 +551,6 @@
   <string name="property_in_stock">במלאי: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">מיון: %1$s</string>
-
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->

@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -78,6 +78,8 @@
   <string name="action_proceed">Weiter</string>
   <string name="action_delete">Löschen</string>
   <string name="action_save">Speichern</string>
+  <string name="action_save_close">Speichern und schließen</string>
+  <string name="action_save_not_close">Speichern ohne zu schließen</string>
   <string name="action_logout">Abmelden</string>
   <string name="action_restart">Neustarten</string>
   <string name="action_create">Erstellen</string>
@@ -151,6 +153,30 @@
     <item quantity="one">%1$d erledigt</item>
     <item quantity="other">%1$d erledigt</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d erledigt</item>
+    <item quantity="other">%1$d erledigt</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d nicht erledigt</item>
+    <item quantity="other">%1$d nicht erledigt</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d bald fällig</item>
+    <item quantity="other">%1$d bald fällig</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d abgelaufen</item>
+    <item quantity="other">%1$d abgelaufen</item>
+  </plurals>
+  <string name="msg_task_mark">Aufgabe als erledigt markieren</string>
+  <string name="msg_task_completed">Aufgabe als erledigt markiert</string>
+  <string name="msg_task_not_completed">Aufgabe als nicht erledigt markiert</string>
+  <string name="msg_task_undo">Aufgabe rückgängig machen</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -302,6 +328,8 @@
   <string name="error_empty_products">Keine Produkte</string>
   <string name="error_empty_qu">Keine Mengeneinheiten</string>
   <string name="error_empty_stores">Keine Geschäfte</string>
+  <string name="error_empty_tasks">Keine Aufgaben</string>
+  <string name="error_empty_task_categories">Keine Aufgabenkategorien</string>
   <string name="error_search">Keine Suchergebnisse</string>
   <string name="error_search_sub">Versuchen Sie andere Begriffe</string>
   <string name="error_filter">Nichts zum Anzeigen</string>
@@ -361,6 +389,7 @@
   <string name="title_product">Produkt</string>
   <string name="title_product_create">Produkt erstellen</string>
   <string name="title_product_edit">Produkt bearbeiten</string>
+  <string name="title_tasks">Aufgaben</string>
   <string name="title_master_data">Stammdaten</string>
   <string name="title_stock_entries">Bestandseinträge</string>
   <string name="title_shopping_list">Einkaufszettel</string>
@@ -403,6 +432,8 @@
   <string name="title_list_entry">Eintrag</string>
   <string name="title_edit_list_entry">Eintrag bearbeiten</string>
   <string name="title_create_list_entry">Eintrag erstellen</string>
+  <string name="title_edit_barcode">Barcode bearbeiten</string>
+  <string name="title_create_barcode">Barcode erstellen</string>
   <string name="title_shopping_list_edit">Einkaufszettel bearbeiten</string>
   <string name="title_shopping_list_new">Neuer Einkaufszettel</string>
   <string name="title_shopping_mode">Einkaufsmodus</string>
@@ -430,6 +461,8 @@
   <string name="subtitle_stock_locations">Wo %1$s Bestand hat</string>
   <string name="subtitle_default_location">Standard-Standort</string>
   <string name="subtitle_none_selected">Nichts ausgewählt</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Nichts</string>
   <string name="subtitle_empty">Leer</string>
   <string name="subtitle_done">Erledigt</string>
   <string name="subtitle_undone">Unerledigt</string>
@@ -609,6 +642,7 @@
   <string name="property_price_history">Preisentwicklung</string>
   <string name="property_product_group">Produktgruppe</string>
   <string name="property_product_groups">Produktgruppen</string>
+  <string name="property_value">Wert</string>
   <string name="property_opened">geöffnet</string>
   <string name="property_not_opened">nicht geöffnet</string>
   <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
@@ -639,6 +673,14 @@
   <string name="property_in_stock">Im Bestand: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Sortierung: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Gruppieren nach: %1$s</string>
+  <string name="property_ungrouped">Ungruppiert</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Extrafeld: %1$s</string>
+  <string name="property_task_categories">Aufgabenkategorien</string>
+  <string name="property_calories">Kalorien</string>
+  <string name="property_calories_per_unit">Kalorien (pro Bestandseinheit)</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>
@@ -774,6 +816,7 @@
   <string name="setting_show_done_items_description">Am Listen-Ende</string>
   <string name="setting_smaller_font">Kleinere Schrift benutzen</string>
   <string name="setting_smaller_font_description">Um mehr Einträge auf einmal zu sehen</string>
+  <string name="setting_show_product_description">Produktbeschreibung anzeigen</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">\"Bald fällig\" Tage</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->

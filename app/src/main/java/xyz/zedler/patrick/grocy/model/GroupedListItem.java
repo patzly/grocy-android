@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -32,7 +32,7 @@ public abstract class GroupedListItem {
     if (context.equals(CONTEXT_SHOPPING_LIST)) {
       if (groupedListItem instanceof ShoppingListItem) {
         return GroupedListItem.TYPE_ENTRY;
-      } else if (groupedListItem instanceof GroupHeader) {
+      } else if (groupedListItem instanceof GroupHeader || groupedListItem instanceof ProductGroup) {
         return GroupedListItem.TYPE_HEADER;
       } else {
         return GroupedListItem.TYPE_BOTTOM_NOTES;

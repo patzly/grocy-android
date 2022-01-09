@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.model;
@@ -365,7 +365,7 @@ public class Product implements Parcelable {
   }
 
   public double getQuFactorPurchaseToStockDouble() {
-    return NumUtil.isDouble(quFactorPurchaseToStock)
+    return NumUtil.isStringDouble(quFactorPurchaseToStock)
         ? Double.parseDouble(quFactorPurchaseToStock)
         : 1;
   }
@@ -383,7 +383,7 @@ public class Product implements Parcelable {
   }
 
   public double getMinStockAmountDouble() {
-    return NumUtil.isDouble(minStockAmount) ? Double.parseDouble(minStockAmount) : 0;
+    return NumUtil.isStringDouble(minStockAmount) ? Double.parseDouble(minStockAmount) : 0;
   }
 
   public void setMinStockAmount(String minStockAmount) {
@@ -460,7 +460,7 @@ public class Product implements Parcelable {
   }
 
   public double getTareWeightDouble() {
-    return NumUtil.isDouble(tareWeight) ? Double.parseDouble(tareWeight) : 0;
+    return NumUtil.isStringDouble(tareWeight) ? Double.parseDouble(tareWeight) : 0;
   }
 
   public void setTareWeight(String tareWeight) {
@@ -497,7 +497,7 @@ public class Product implements Parcelable {
   }
 
   public double getCaloriesDouble() {
-    return NumUtil.isDouble(calories) ? Double.parseDouble(calories) : 0;
+    return NumUtil.isStringDouble(calories) ? Double.parseDouble(calories) : 0;
   }
 
   public void setCalories(String calories) {
@@ -542,7 +542,7 @@ public class Product implements Parcelable {
   }
 
   public double getQuickConsumeAmountDouble() {
-    return NumUtil.isDouble(quickConsumeAmount) ? Double.parseDouble(quickConsumeAmount) : 1;
+    return NumUtil.isStringDouble(quickConsumeAmount) ? Double.parseDouble(quickConsumeAmount) : 1;
   }
 
   public void setQuickConsumeAmount(String quickConsumeAmount) {

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+ * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
@@ -31,22 +31,6 @@ public class NumUtil {
   public static String trimPrice(double value) {
     DecimalFormat decimalFormat = new DecimalFormat("0.00");
     return decimalFormat.format(value).replace(",", ".");
-  }
-
-  public static String formatPrice(String value) {
-    return trimPrice(toDouble(value));
-  }
-
-  public static boolean isDouble(String input) {
-    if (input == null || input.isEmpty()) {
-      return false;
-    }
-    try {
-      Double.parseDouble(input.replace(",", "."));
-      return true;
-    } catch (NumberFormatException ex) {
-      return false;
-    }
   }
 
   public static double toDouble(String input) {
@@ -76,9 +60,10 @@ public class NumUtil {
     if (s == null || s.isEmpty()) {
       return false;
     }
+    s = s.replace(",", ".");
     try {
-      Double.parseDouble(s);
-      return !Double.isNaN(Double.parseDouble(s));
+      double result = Double.parseDouble(s);
+      return !Double.isNaN(result);
     } catch (NumberFormatException ex) {
       return false;
     }
@@ -88,16 +73,6 @@ public class NumUtil {
     if (s == null || s.isEmpty()) {
       return false;
     }
-    try {
-      Integer.parseInt(s);
-      return true;
-    } catch (NumberFormatException ex) {
-      try {
-        Double.parseDouble(s);
-        return true;
-      } catch (NumberFormatException ex1) {
-        return false;
-      }
-    }
+    return isStringInt(s) || isStringDouble(s);
   }
 }

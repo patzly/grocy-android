@@ -14,7 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
   ~
-  ~ Copyright (c) 2020-2021 by Patrick Zedler and Dominic Zedler
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -78,6 +78,8 @@
   <string name="action_proceed">Continuer</string>
   <string name="action_delete">Supprimer</string>
   <string name="action_save">Sauvegarder</string>
+  <string name="action_save_close">Sauvegarder et fermer</string>
+  <string name="action_save_not_close">Enregistrer sans fermer</string>
   <string name="action_logout">Se déconnecter</string>
   <string name="action_restart">Redémarrer</string>
   <string name="action_create">Créer</string>
@@ -151,6 +153,28 @@
     <item quantity="one">%1$d terminé</item>
     <item quantity="other">%1$d terminés</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d terminée</item>
+    <item quantity="other">%1$d terminées</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d non terminée</item>
+    <item quantity="other">%1$d non terminées</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d à faire prochainement</item>
+    <item quantity="other">%1$d à faire prochainement</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d en retard</item>
+    <item quantity="other">%1$d en retard</item>
+  </plurals>
+  <string name="msg_task_completed">Tâche marquée comme terminée</string>
+  <string name="msg_task_undo">Annuler la tâche</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -271,6 +295,8 @@
   <string name="msg_help_specific_item">Le premier élément de cette liste est choisi par à la règle de consommation par défaut : \"Ouvert en premier, puis périme en premier, puis plus ancien ajouté\"</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">À des fins statistiques uniquement</string>
+  <string name="msg_help_date_chooser">Vous pouvez passer à la saisie au clavier dans les paramètres, cela pourrait augmenter la vitesse de saisie pour vous.</string>
+  <string name="msg_help_date_chooser_keyboard">Vous pouvez activer le format de date inversé dans les paramètres si JJMMAA est préféré dans votre pays.\nPour appliquer la saisie et fermer cette page, vous pouvez utiliser la touche Entrée de votre clavier.</string>
   <string name="msg_help_quick_mode">Vous pouvez appuyer longuement sur la barre de titre ci-dessus afin d\'activer le mode rapide. Dans ce mode, une opération sera exécutée immédiatement si un produit a été entré ou scanné et que tous les champs ont pu être automatiquement remplis (grâce aux paramètres par défaut du produit ou du code-barres).</string>
   <string name="msg_help_loading_circle_settings">Sur chaque page où quelque chose a été chargé depuis le serveur, l\'application vérifie en premier, avec une petite requête, si la base de donnée du serveur a changé depuis la dernière fois et ne met à jour que les données obsolètes. Activez l\'option ci-dessous pour afficher une animation de chargement durant cette petite requête.</string>
   <string name="msg_help_start">Le mode débutant est actif : Les textes d\'aide sont affichés par défaut sur toutes les pages, si disponible. Tapez pour changer.</string>
@@ -300,6 +326,8 @@
   <string name="error_empty_products">Pas de produits</string>
   <string name="error_empty_qu">Pas d\'unités de quantité</string>
   <string name="error_empty_stores">Pas de magasins</string>
+  <string name="error_empty_tasks">Aucune tâche</string>
+  <string name="error_empty_task_categories">Aucune catégorie de tâches</string>
   <string name="error_search">Aucun résultat trouvé</string>
   <string name="error_search_sub">Essayez d\'autres termes</string>
   <string name="error_filter">Rien à afficher</string>
@@ -311,6 +339,7 @@
   <string name="error_invalid_amount">Montant invalide</string>
   <string name="error_invalid_price">Prix invalide</string>
   <string name="error_invalid_factor">Facteur invalide</string>
+  <string name="error_invalid_date_format">Format de date invalide</string>
   <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -358,6 +387,7 @@
   <string name="title_product">Produit</string>
   <string name="title_product_create">Créer produit</string>
   <string name="title_product_edit">Modifier produit</string>
+  <string name="title_tasks">Tâches</string>
   <string name="title_master_data">Données de base</string>
   <string name="title_stock_entries">Entrées de stock</string>
   <string name="title_shopping_list">Liste de courses</string>
@@ -400,6 +430,8 @@
   <string name="title_list_entry">Entrée de liste</string>
   <string name="title_edit_list_entry">Modifier l\'entrée de liste</string>
   <string name="title_create_list_entry">Créer une entrée de liste</string>
+  <string name="title_edit_barcode">Modifier le code-barres</string>
+  <string name="title_create_barcode">Créer un code-barres</string>
   <string name="title_shopping_list_edit">Modifier la liste de courses</string>
   <string name="title_shopping_list_new">Nouvelle liste de courses</string>
   <string name="title_shopping_mode">Mode d\'achat</string>
@@ -427,6 +459,8 @@
   <string name="subtitle_stock_locations">Où %1$s a du stock</string>
   <string name="subtitle_default_location">Emplacement par défaut</string>
   <string name="subtitle_none_selected">Aucune sélection</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Aucun</string>
   <string name="subtitle_empty">Vide</string>
   <string name="subtitle_done">Terminé</string>
   <string name="subtitle_undone">Non terminé</string>
@@ -456,9 +490,11 @@
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Quantité : %1$s</string>
   <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Format : %1$s</string>
+  <string name="subtitle_barcode_unit">Unité de quantité : %1$s</string>
   <string name="subtitle_barcode">Code-barres : %1$s</string>
   <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
+  <string name="subtitle_date_from_input">Date de saisie :\n%1$s</string>
+
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
   <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>
@@ -604,6 +640,7 @@
   <string name="property_price_history">Historique des prix</string>
   <string name="property_product_group">Groupe de produits</string>
   <string name="property_product_groups">Groupes de produits</string>
+  <string name="property_value">Valeur</string>
   <string name="property_opened">ouvert</string>
   <string name="property_not_opened">pas ouvert</string>
   <string name="property_is_freezer">C\'est le congélateur</string>
@@ -634,6 +671,14 @@
   <string name="property_in_stock">En stock : %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Trier : %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Grouper par : %1$s</string>
+  <string name="property_ungrouped">Non groupé</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Champ supplémentaire : %1$s</string>
+  <string name="property_task_categories">Catégories de tâches</string>
+  <string name="property_calories">Calories</string>
+  <string name="property_calories_per_unit">Calories (par unité)</string>
 
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
@@ -767,6 +812,9 @@
   <string name="setting_keep_screen_on_description">En mode shopping</string>
   <string name="setting_show_done_items">Afficher les articles inactifs</string>
   <string name="setting_show_done_items_description">En bas</string>
+  <string name="setting_smaller_font">Utiliser une police plus petite</string>
+  <string name="setting_smaller_font_description">Pour voir plus d\'articles à la fois</string>
+  <string name="setting_show_product_description">Afficher la description du produit</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Seuil de péremption</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -795,6 +843,10 @@
   <string name="setting_expand_bottom_sheets_description">En mode paysage</string>
   <string name="setting_speed_up_start">Réduire le temps de chargement de l\'application</string>
   <string name="setting_speed_up_start_description">N\'a un effet que sur les appareils performants</string>
+  <string name="setting_date_keyboard_input">Saisir les dates avec le clavier</string>
+  <string name="setting_date_keyboard_input_description">Au lieu du sélecteur de date</string>
+  <string name="setting_date_keyboard_reverse">Utiliser le format de date inversé pour la saisie</string>
+  <string name="setting_date_keyboard_reverse_description">JJMMAA au lieu de AAMMJJ</string>
   <string name="setting_loading_circle">Afficher une animation de chargement pour toutes les requêtes</string>
   <string name="setting_loading_circle_description">Utile pour les connexions lentes</string>
   <string name="setting_tor">Utiliser Tor</string>
