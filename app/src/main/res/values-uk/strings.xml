@@ -434,8 +434,6 @@
   <string name="subtitle_not_supported">Не підтримується</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Кількість: %1$s</string>
-  <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Одиниця виміру: %1$s</string>
   <string name="description_input_product_part1">Поле продукту містить:</string>
   <string name="description_input_product_part2">Будь ласка, виберіть, що робити:</string>
   <string name="description_input_product_option1">Створіть новий продукт і використовуйте введення як назву</string>
