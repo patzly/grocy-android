@@ -78,6 +78,8 @@
   <string name="action_proceed">Продолжить</string>
   <string name="action_delete">Удалить</string>
   <string name="action_save">Сохранить</string>
+  <string name="action_save_close">Сохранить и закрыть</string>
+  <string name="action_save_not_close">Сохранить без закрытия</string>
   <string name="action_logout">Выйти</string>
   <string name="action_restart">Перезапустить</string>
   <string name="action_create">Создать</string>
@@ -165,6 +167,36 @@
     <item quantity="many">%1$d выполнено</item>
     <item quantity="other">%1$d выполнено</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d выполнено</item>
+    <item quantity="few">%1$d выполнено</item>
+    <item quantity="many">%1$d выполнено</item>
+    <item quantity="other">%1$d выполнено</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d не выполнено</item>
+    <item quantity="few">%1$d не выполнено</item>
+    <item quantity="many">%1$d не выполнено</item>
+    <item quantity="other">%1$d не выполнено</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$d скоро</item>
+    <item quantity="few">%1$d скоро</item>
+    <item quantity="many">%1$d скоро</item>
+    <item quantity="other">%1$d скоро</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d просрочено</item>
+    <item quantity="few">%1$d просрочено</item>
+    <item quantity="many">%1$d просрочено</item>
+    <item quantity="other">%1$d просрочено</item>
+  </plurals>
+  <string name="msg_task_completed">Помеченные выполненными задачи</string>
+  <string name="msg_task_undo">Отмененные задачи</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -253,12 +285,13 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Продукт не может иметь родительский продукт потому что этот продукт уже используется как родительский продукт для другого продукта.</string>
   <string name="msg_help_due_date_type">В зависимости от выбранного типа срока годности, отображение на странице обзора запасов будет другим. «Рекомендуемый» означает, что продукт может быть безопасным для употребления после наступления срока его годности. «Обязательный» означает, что продукт небезопасно употреблять после наступления срока его годности.</string>
+  <string name="msg_help_default_due_days_format">Используйте долгое нажатие на элемент ниже, чтобы ввести дату вместо числа.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days">Данное количество дней будет добавлено к предлагаемому сроку годности при покупке (-1 означает, что этот товар никогда не будет просрочен).</string>
+  <string name="msg_help_default_due_days">Данное количество дней будет добавлено к предлагаемому сроку годности при покупке (-1 означает, что этот продукт никогда не будет просрочен).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_opened">Когда продукт помечается как открытый, срок годности меняется по формуле: сегодня + это количество дней (значение 0 отключает этот функционал).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_freezing">При перемещении данного продукта в морозильную камеру (т. е. при его заморозке), срок годности меняется по формуле: сегодня + это количество дней (-1 означает, что этот товар никогда не будет просрочен).</string>
+  <string name="msg_help_default_due_days_freezing">При перемещении данного продукта в морозильную камеру (т. е. при его заморозке), срок годности меняется по формуле: сегодня + это количество дней (-1 означает, что этот продукт никогда не будет просрочен).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">При перемещении данного продукта из морозильной камеры (т. е. при его разморозке), срок годности меняется по формуле: сегодня + это количество дней.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -288,6 +321,8 @@
   <string name="msg_help_specific_item">Первый элемент в этом списке будет выбран по правилу \"сначала вскрытый, потом с меньшим сроком годности, остальные по очереди\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Это только для статистических целей.</string>
+  <string name="msg_help_date_chooser">Вы можете переключиться на ввод с клавиатуры в настройках, это может увеличить скорость ввода для вас.</string>
+  <string name="msg_help_date_chooser_keyboard">Вы можете активировать обратный формат даты в настройках, если в вашей стране предпочтителен ДДММГГ.\n Чтобы применить ввод и закрыть эту страницу, вы можете использовать клавишу \"Готово\" на клавиатуре.</string>
   <string name="msg_help_quick_mode">Нажмите и удерживайте панель заголовка, чтобы включить быстрый режим. В этом режиме операция будет выполнена немедленно при вводе или сканировании продукта, если удастся автоматически заполнить все поля (значениями по умолчанию для продукта и/или штрихкода).</string>
   <string name="msg_help_loading_circle_settings">На каждой странице, где что-то должно быть загружено с сервера, приложение сначала проверяет небольшим запросом, изменилась ли база данных сервера с прошлого раза, и обновляет только устаревшие данные. Включите опцию ниже, чтобы показать анимацию загрузки для этого запроса.</string>
   <string name="msg_help_start">Активен режим для начинающих: подсказки по умолчанию отображаются на всех страницах, если они доступны. Нажмите, чтобы изменить.</string>
@@ -317,6 +352,8 @@
   <string name="error_empty_products">Нет продуктов</string>
   <string name="error_empty_qu">Нет единиц измерения</string>
   <string name="error_empty_stores">Нет магазинов</string>
+  <string name="error_empty_tasks">Нет задач</string>
+  <string name="error_empty_task_categories">Нет категорий задач</string>
   <string name="error_search">Нет результатов поиска</string>
   <string name="error_search_sub">Попробуйте другие условия</string>
   <string name="error_filter">Нечего показать</string>
@@ -328,6 +365,7 @@
   <string name="error_invalid_amount">Неверное количество</string>
   <string name="error_invalid_price">Неверная цена</string>
   <string name="error_invalid_factor">Неверный фактор</string>
+  <string name="error_invalid_date_format">Неверный формат даты</string>
   <string name="error_api_qr_code">QR-код без учетных данных Grocy API</string>
   <string name="error_loading_qus">Не удалось загрузить единицы количества из продукта</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -375,6 +413,7 @@
   <string name="title_product">Продукт</string>
   <string name="title_product_create">Создать продукт</string>
   <string name="title_product_edit">Редактировать продукт</string>
+  <string name="title_tasks">Задачи</string>
   <string name="title_master_data">Основные данные</string>
   <string name="title_stock_entries">Список запасов</string>
   <string name="title_shopping_list">Список покупок</string>
@@ -401,7 +440,7 @@
 
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
-  <string name="title_specific">Конкретный товар в запасах</string>
+  <string name="title_specific">Конкретный продукт в запасах</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Использовать точное количество</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -417,6 +456,8 @@
   <string name="title_list_entry">Элемент списка</string>
   <string name="title_edit_list_entry">Редактировать элемент списка</string>
   <string name="title_create_list_entry">Создать элемент списка</string>
+  <string name="title_edit_barcode">Изменить штрихкод</string>
+  <string name="title_create_barcode">Создать штрихкод</string>
   <string name="title_shopping_list_edit">Редактировать список покупок</string>
   <string name="title_shopping_list_new">Новый список покупок</string>
   <string name="title_shopping_mode">Режим покупки</string>
@@ -476,6 +517,8 @@
   <string name="subtitle_barcode_unit">Единица измерения: %1$s</string>
   <string name="subtitle_barcode">Штрихкод: %1$s</string>
   <string name="subtitle_feature_disabled">Функция отключена</string>
+  <string name="subtitle_date_from_input">Введенная дата:\n%1$s</string>
+
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
@@ -544,17 +587,17 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
-    <item quantity="one">В списках покупок %1$d товар.</item>
-    <item quantity="few">В списках покупок %1$d товара.</item>
-    <item quantity="many">В списках покупок %1$d товаров.</item>
-    <item quantity="other">В списках покупок %1$d товаров.</item>
+    <item quantity="one">В списках покупок %1$d продукт.</item>
+    <item quantity="few">В списках покупок %1$d продукта.</item>
+    <item quantity="many">В списках покупок %1$d продуктов.</item>
+    <item quantity="other">В списках покупок %1$d продуктов.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="one">В списке покупок %1$d товар.</item>
-    <item quantity="few">В списке покупок %1$d товара.</item>
-    <item quantity="many">В списке покупок %1$d товаров.</item>
-    <item quantity="other">В списке покупок %1$d товаров.</item>
+    <item quantity="one">В списке покупок %1$d продукт.</item>
+    <item quantity="few">В списке покупок %1$d продукта.</item>
+    <item quantity="many">В списке покупок %1$d продуктов.</item>
+    <item quantity="other">В списке покупок %1$d продуктов.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
@@ -645,6 +688,7 @@
   <string name="property_price_history">История цен</string>
   <string name="property_product_group">Продуктовая группа</string>
   <string name="property_product_groups">Продуктовые группы</string>
+  <string name="property_value">Значение</string>
   <string name="property_opened">вскрыто</string>
   <string name="property_not_opened">не вскрыто</string>
   <string name="property_is_freezer">Морозильник</string>
@@ -675,6 +719,14 @@
   <string name="property_in_stock">В запасах: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Сортировка: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Группировать по: %1$s</string>
+  <string name="property_ungrouped">Не группированные</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Дополнительное поле: %1$s</string>
+  <string name="property_task_categories">Категории задач</string>
+  <string name="property_calories">Калории</string>
+  <string name="property_calories_per_unit">Калории (на единицу запаса)</string>
 
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
@@ -826,6 +878,9 @@
   <string name="setting_keep_screen_on_description">В режиме покупок</string>
   <string name="setting_show_done_items">Показать выполненные пункты</string>
   <string name="setting_show_done_items_description">Внизу</string>
+  <string name="setting_smaller_font">Использовать шрифт меньшего размера</string>
+  <string name="setting_smaller_font_description">Чтобы увидеть больше предметов сразу</string>
+  <string name="setting_show_product_description">Показать описание продукта</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">За сколько дней предупреждать об истечении срока годности</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -854,6 +909,10 @@
   <string name="setting_expand_bottom_sheets_description">Выдвигающийся снизу экран в альбомном режиме</string>
   <string name="setting_speed_up_start">Уменьшить время запуска приложения</string>
   <string name="setting_speed_up_start_description">Применимо только для производительных устройств</string>
+  <string name="setting_date_keyboard_input">Ввод дат с клавиатуры</string>
+  <string name="setting_date_keyboard_input_description">Вместо колес для выбора даты</string>
+  <string name="setting_date_keyboard_reverse">Использовать обратный формат даты для ввода</string>
+  <string name="setting_date_keyboard_reverse_description">ДДММГГ вместо ГГММВВ</string>
   <string name="setting_loading_circle">Показывать анимацию загрузки для всех запросов</string>
   <string name="setting_loading_circle_description">Полезно для медленных соединений</string>
   <string name="setting_tor">Использовать Tor</string>
