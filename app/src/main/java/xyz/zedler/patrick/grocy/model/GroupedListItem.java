@@ -32,7 +32,7 @@ public abstract class GroupedListItem {
     if (context.equals(CONTEXT_SHOPPING_LIST)) {
       if (groupedListItem instanceof ShoppingListItem) {
         return GroupedListItem.TYPE_ENTRY;
-      } else if (groupedListItem instanceof GroupHeader) {
+      } else if (groupedListItem instanceof GroupHeader || groupedListItem instanceof ProductGroup) {
         return GroupedListItem.TYPE_HEADER;
       } else {
         return GroupedListItem.TYPE_BOTTOM_NOTES;

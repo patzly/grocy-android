@@ -284,8 +284,11 @@ public class MasterObjectListViewModel extends BaseViewModel {
       HorizontalFilterBarMulti.Filter filter = horizontalFilterBarMulti
           .getFilter(HorizontalFilterBarMulti.PRODUCT_GROUP);
       for (Object object : searchedItems) {
-        int productGroupId = (int) NumUtil.toDouble(((Product) object).getProductGroupId());
-        if (productGroupId != -1 && productGroupId == filter.getObjectId()) {
+        if (!NumUtil.isStringInt(((Product) object).getProductGroupId())) {
+          continue;
+        }
+        int productGroupId = Integer.parseInt(((Product) object).getProductGroupId());
+        if (productGroupId == filter.getObjectId()) {
           filteredItems.add(object);
         }
       }

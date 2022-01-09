@@ -303,7 +303,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     } else {
       productBarcode.setBarcode(null);
     }
-    if (NumUtil.isDouble(amountLive.getValue())) {
+    if (NumUtil.isStringDouble(amountLive.getValue())) {
       productBarcode.setAmount(amountLive.getValue().trim());
     } else {
       productBarcode.setAmount(null);

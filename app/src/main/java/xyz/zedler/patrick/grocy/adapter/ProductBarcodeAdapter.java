@@ -91,7 +91,7 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
     if (NumUtil.isStringDouble(productBarcode.getAmount())) {
       String amountStr = holder.binding.amount.getContext().getString(
           R.string.subtitle_barcode_amount,
-          NumUtil.trim(NumUtil.toDouble(productBarcode.getAmount()))
+          NumUtil.trim(Double.parseDouble(productBarcode.getAmount()))
       );
       holder.binding.amount.setText(amountStr);
       holder.binding.amount.setVisibility(View.VISIBLE);
