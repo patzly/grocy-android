@@ -468,7 +468,7 @@ public class SettingsFragment extends BaseFragment {
     if (error.networkResponse == null) {
       activity.showMessage(R.string.error_network);
     } else {
-      activity.showMessage(R.string.error_undefined);
+      getErrorMessage(error);
     }
   }
 

@@ -293,7 +293,7 @@ public class TasksViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
           if (debug) {
             if (completed) {
               Log.i(TAG, "completeTask: " + error);

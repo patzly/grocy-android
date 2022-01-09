@@ -612,7 +612,7 @@ public class PurchaseViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "purchaseProduct: " + error);
           }
@@ -630,7 +630,7 @@ public class PurchaseViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

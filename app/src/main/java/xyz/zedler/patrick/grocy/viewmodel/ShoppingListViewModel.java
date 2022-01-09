@@ -475,7 +475,7 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public void toggleDoneStatus(ShoppingListItem listItem) {
     if (listItem == null) {
-      showErrorMessage();
+      showErrorMessage(null);
       return;
     }
     ShoppingListItem shoppingListItem = listItem.getClone();

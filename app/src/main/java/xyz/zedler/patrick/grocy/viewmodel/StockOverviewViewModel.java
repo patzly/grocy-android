@@ -615,7 +615,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     Log.i(TAG, "consumeProduct: undone");
                   }
                 },
-                error -> showErrorMessage()
+                this::showErrorMessage
             ));
           }
           downloadData();
@@ -627,7 +627,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeProduct: " + error);
           }
@@ -689,7 +689,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     Log.i(TAG, "openProduct: undone");
                   }
                 },
-                error -> showErrorMessage()
+                this::showErrorMessage
             ));
           }
           downloadData();
@@ -701,7 +701,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "openProduct: " + error);
           }
