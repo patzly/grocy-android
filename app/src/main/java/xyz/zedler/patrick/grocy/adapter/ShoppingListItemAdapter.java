@@ -155,7 +155,7 @@ public class ShoppingListItemAdapter extends
     SortUtil.sortStringsByName(context, groupsSorted, true);
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(context, ungroupedItems, productNamesHashMap, true);
       groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
@@ -164,7 +164,7 @@ public class ShoppingListItemAdapter extends
       GroupHeader groupHeader = new GroupHeader(group);
       groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
-      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(context, itemsFromGroup, productNamesHashMap, true);
       groupedListItems.addAll(itemsFromGroup);
     }
     addBottomNotes(
