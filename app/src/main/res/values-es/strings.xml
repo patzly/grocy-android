@@ -433,8 +433,6 @@
   <string name="subtitle_not_supported">No soportado</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Cantidad: %1$s</string>
-  <!-- %1$s is a unit -->
-  <string name="subtitle_barcode_unit">Unidad de cantidad: %1$s</string>
   <string name="subtitle_barcode">Código de barras: %1$s</string>
   <string name="subtitle_feature_disabled">Característica desactivada</string>
   <string name="description_input_product_part1">El campo de producto contiene:</string>
@@ -576,7 +574,6 @@
   <string name="property_in_stock">En el inventario: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Ordenar: %1$s</string>
-
   <string name="date_today">Hoy</string>
   <string name="date_unknown">Desconocido</string>
   <!-- This means the 'time' context -->
