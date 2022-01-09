@@ -78,7 +78,7 @@ public class NumUtil {
     }
     try {
       Double.parseDouble(s);
-      return !Double.isNaN(Double.parseDouble(s));
+      return !Double.isNaN(Double.parseDouble(s.replace(",", ".")));
     } catch (NumberFormatException ex) {
       return false;
     }
