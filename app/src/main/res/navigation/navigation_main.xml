@@ -800,6 +800,13 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
+      <action
+        android:id="@+id/action_masterProductFragment_to_masterProductCatConversionsFragment"
+        app:destination="@id/masterProductCatConversionsFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
       <argument
         android:name="productName"
         app:argType="string"
@@ -914,6 +921,20 @@
       <argument
         android:name="product"
         app:argType="xyz.zedler.patrick.grocy.model.Product" />
+    </fragment>
+    <fragment
+      android:id="@+id/masterProductCatConversionsFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatConversionsFragment"
+      android:label="MasterProductCatConversionsFragment"
+      tools:layout="@layout/fragment_master_product_cat_conversions">
+      <argument
+        android:name="product"
+        app:argType="xyz.zedler.patrick.grocy.model.Product"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="action"
+        app:argType="string" />
     </fragment>
   </navigation>
   <fragment

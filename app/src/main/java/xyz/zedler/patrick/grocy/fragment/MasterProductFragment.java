@@ -111,8 +111,15 @@ public class MasterProductFragment extends BaseFragment {
           .actionMasterProductFragmentToMasterProductCatBarcodesFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
-    binding.categoryQuConversions
-        .setOnClickListener(v -> activity.showMessage(R.string.msg_not_implemented_yet));
+    binding.categoryQuConversions.setOnClickListener(v -> {
+      if (!viewModel.isActionEdit()) {
+        activity.showMessage(R.string.subtitle_product_not_on_server);
+        return;
+      }
+      navigate(MasterProductFragmentDirections
+          .actionMasterProductFragmentToMasterProductCatConversionsFragment(viewModel.getAction())
+          .setProduct(viewModel.getFilledProduct()));
+    });
 
     Product product = (Product) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT);
     if (product != null) {

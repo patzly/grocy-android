@@ -492,4 +492,55 @@ public class MasterProductRepository {
       }
     }
   }
+
+  public void updateQuantityUnitsUnitConversions(
+      ArrayList<QuantityUnit> quantityUnits,
+      ArrayList<QuantityUnitConversion> conversions,
+      DataUpdatedListener listener
+  ) {
+    new updateQuantityUnitsUnitConversionsAsyncTask(
+        appDatabase,
+        quantityUnits,
+        conversions,
+        listener
+    ).execute();
+  }
+
+  private static class updateQuantityUnitsUnitConversionsAsyncTask extends
+      AsyncTask<Void, Void, Void> {
+
+    private final AppDatabase appDatabase;
+    private final DataUpdatedListener listener;
+
+    private final ArrayList<QuantityUnit> quantityUnits;
+    private final ArrayList<QuantityUnitConversion> conversions;
+
+    updateQuantityUnitsUnitConversionsAsyncTask(
+        AppDatabase appDatabase,
+        ArrayList<QuantityUnit> quantityUnits,
+        ArrayList<QuantityUnitConversion> conversions,
+        DataUpdatedListener listener
+    ) {
+      this.appDatabase = appDatabase;
+      this.listener = listener;
+      this.quantityUnits = quantityUnits;
+      this.conversions = conversions;
+    }
+
+    @Override
+    protected final Void doInBackground(Void... params) {
+      appDatabase.quantityUnitDao().deleteAll();
+      appDatabase.quantityUnitDao().insertAll(quantityUnits);
+      appDatabase.quantityUnitConversionDao().deleteAll();
+      appDatabase.quantityUnitConversionDao().insertAll(conversions);
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      if (listener != null) {
+        listener.actionFinished();
+      }
+    }
+  }
 }

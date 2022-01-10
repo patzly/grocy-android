@@ -1,6 +1,7 @@
 2.1.0:
 - New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the inital work) (#391)
+- New: Quantity unit conversions are now editable on master product page (#396)
 - New: Grouping feature for stock overview like on server
 - New: Grouping feature for shopping list which allows group by default store (#430)
 - Improved: Unnecessary bottom sheets in master data section were removed
