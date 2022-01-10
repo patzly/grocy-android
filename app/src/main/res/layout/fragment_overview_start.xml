@@ -649,6 +649,7 @@
             <View
               android:layout_width="70dp"
               android:layout_height="1dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) ? View.VISIBLE : View.GONE}"
               android:background="@color/stroke_secondary"
               android:layout_gravity="center_horizontal"
               android:layout_marginBottom="16dp"
