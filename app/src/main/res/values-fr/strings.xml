@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -37,7 +37,7 @@
   <string name="action_consume_one_spoiled">Consommer 1 comme périmé</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Consommer 1 %1$s de %2$s</string>
-  <string name="action_open">Marqué comme ouvert</string>
+  <string name="action_open">Marquer comme ouvert</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_open_one">Ouvert 1 %1$s de %2$s</string>
   <string name="action_edit_product">Modifier le produit</string>
@@ -173,7 +173,9 @@
     <item quantity="one">%1$d en retard</item>
     <item quantity="other">%1$d en retard</item>
   </plurals>
+  <string name="msg_task_mark">Marquer la tâche comme terminée</string>
   <string name="msg_task_completed">Tâche marquée comme terminée</string>
+  <string name="msg_task_not_completed">Marquer la tâche comme non terminée</string>
   <string name="msg_task_undo">Annuler la tâche</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
