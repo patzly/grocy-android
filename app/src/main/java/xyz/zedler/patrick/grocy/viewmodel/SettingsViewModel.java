@@ -163,7 +163,7 @@ public class SettingsViewModel extends BaseViewModel {
         grocyApi,
         sharedPrefs,
         () -> showBottomSheet(new RestartBottomSheet(), null),
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

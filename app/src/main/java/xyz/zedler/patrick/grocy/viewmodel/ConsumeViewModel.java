@@ -343,6 +343,10 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    if (formData.getProductDetailsLive().getValue() != null) {
+      formData.getBarcodeLive().setValue(barcode);
+      return;
+    }
     Product product = null;
     String stockEntryId = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
@@ -478,7 +482,7 @@ public class ConsumeViewModel extends BaseViewModel {
           sendEvent(Event.CONSUME_SUCCESS);
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeProduct: " + error);
           }
@@ -495,7 +499,7 @@ public class ConsumeViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

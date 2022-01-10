@@ -311,6 +311,10 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    if (formData.getProductDetailsLive().getValue() != null) {
+      formData.getBarcodeLive().setValue(barcode);
+      return;
+    }
     Product product = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
@@ -438,7 +442,7 @@ public class InventoryViewModel extends BaseViewModel {
           sendEvent(Event.TRANSACTION_SUCCESS);
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
             if (debug) {
                 Log.i(TAG, "inventoryProduct: " + error);
             }
@@ -455,7 +459,7 @@ public class InventoryViewModel extends BaseViewModel {
                 Log.i(TAG, "undoTransaction: undone");
             }
         },
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

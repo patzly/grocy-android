@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.preference.PreferenceManager;
+import com.android.volley.VolleyError;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -82,7 +83,14 @@ public class BaseViewModel extends AndroidViewModel {
     );
   }
 
-  void showErrorMessage() {
+  void showErrorMessage(VolleyError volleyError) {
+    // similar method is also in BaseFragment
+    if (volleyError != null && volleyError.networkResponse != null) {
+      if (volleyError.networkResponse.statusCode == 403) {
+        showMessage(getString(R.string.error_permission));
+        return;
+      }
+    }
     showMessage(getString(R.string.error_undefined));
   }
 

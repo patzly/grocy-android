@@ -204,7 +204,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -216,7 +216,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -336,7 +336,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
             productBarcode.getId()
         ),
         response -> navigateUp(),
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

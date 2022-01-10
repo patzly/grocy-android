@@ -428,6 +428,10 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    if (formData.getProductDetailsLive().getValue() != null) {
+      formData.getBarcodeLive().setValue(barcode);
+      return;
+    }
     Product product = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {
@@ -612,7 +616,7 @@ public class PurchaseViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage();
+          showErrorMessage(error);
           if (debug) {
             Log.i(TAG, "purchaseProduct: " + error);
           }
@@ -630,7 +634,7 @@ public class PurchaseViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

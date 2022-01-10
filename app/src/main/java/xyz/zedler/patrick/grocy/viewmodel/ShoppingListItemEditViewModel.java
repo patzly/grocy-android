@@ -225,7 +225,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           jsonObject,
           response -> saveProductBarcodeAndNavigateUp(),
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -237,7 +237,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           jsonObject,
           response -> saveProductBarcodeAndNavigateUp(),
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -402,7 +402,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
             shoppingListItem.getId()
         ),
         response -> navigateUp(),
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 

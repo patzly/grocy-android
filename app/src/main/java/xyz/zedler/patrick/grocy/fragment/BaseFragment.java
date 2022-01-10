@@ -40,6 +40,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
+import com.android.volley.VolleyError;
 import java.net.URLEncoder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -57,6 +58,16 @@ import xyz.zedler.patrick.grocy.model.Store;
 
 @SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
+
+  String getErrorMessage(VolleyError volleyError) {
+    // similar method is also in BaseViewmodel
+    if (volleyError != null && volleyError.networkResponse != null) {
+      if (volleyError.networkResponse.statusCode == 403) {
+        return getString(R.string.error_permission);
+      }
+    }
+    return getString(R.string.error_undefined);
+  }
 
   public boolean isSearchVisible() {
     return false;

@@ -33,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -300,7 +301,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
           activity.showSnackbar(
               Snackbar.make(
                   activity.binding.frameMainContainer,
-                  activity.getString(R.string.error_undefined),
+                  getErrorMessage(error),
                   Snackbar.LENGTH_SHORT
               ).setAction(
                   activity.getString(R.string.action_retry),
@@ -407,7 +408,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
           jsonObject,
           response -> activity.navigateUp(),
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveQuantityUnit: " + error);
             }
@@ -419,7 +420,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
           jsonObject,
           response -> activity.navigateUp(),
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveQuantityUnit: " + error);
             }
@@ -475,15 +476,15 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.QUANTITY_UNITS, quantityUnitId),
         response -> activity.navigateUp(),
-        error -> showErrorMessage()
+        this::showErrorMessage
     );
   }
 
-  private void showErrorMessage() {
+  private void showErrorMessage(VolleyError volleyError) {
     activity.showSnackbar(
         Snackbar.make(
             activity.binding.frameMainContainer,
-            activity.getString(R.string.error_undefined),
+            getErrorMessage(volleyError),
             Snackbar.LENGTH_SHORT
         )
     );

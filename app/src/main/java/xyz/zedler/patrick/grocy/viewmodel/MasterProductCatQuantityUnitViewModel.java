@@ -175,7 +175,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
     }
     ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
     if (quantityUnits == null) {
-      showErrorMessage();
+      showErrorMessage(null);
       return;
     }
     Bundle bundle = new Bundle();

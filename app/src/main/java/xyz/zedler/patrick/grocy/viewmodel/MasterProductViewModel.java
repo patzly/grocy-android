@@ -248,7 +248,7 @@ public class MasterProductViewModel extends BaseViewModel {
             sendEvent(Event.NAVIGATE_UP);
           },
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveProduct: " + error);
             }
@@ -282,7 +282,7 @@ public class MasterProductViewModel extends BaseViewModel {
             }
           },
           error -> {
-            showErrorMessage();
+            showErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveProduct: " + error);
             }
