@@ -311,6 +311,10 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    if (formData.getProductDetailsLive().getValue() != null) {
+      formData.getBarcodeLive().setValue(barcode);
+      return;
+    }
     Product product = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
     if (grocycode != null && grocycode.isProduct()) {

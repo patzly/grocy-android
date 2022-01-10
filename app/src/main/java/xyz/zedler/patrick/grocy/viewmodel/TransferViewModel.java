@@ -344,6 +344,10 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void onBarcodeRecognized(String barcode) {
+    if (formData.getProductDetailsLive().getValue() != null) {
+      formData.getBarcodeLive().setValue(barcode);
+      return;
+    }
     Product product = null;
     String stockEntryId = null;
     Grocycode grocycode = GrocycodeUtil.getGrocycode(barcode);
