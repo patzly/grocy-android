@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->
@@ -330,6 +330,7 @@
   <string name="error_empty_stores">Keine Geschäfte</string>
   <string name="error_empty_tasks">Keine Aufgaben</string>
   <string name="error_empty_task_categories">Keine Aufgabenkategorien</string>
+  <string name="error_empty_unit_conversions">Keine ME-Umrechnungen</string>
   <string name="error_search">Keine Suchergebnisse</string>
   <string name="error_search_sub">Versuchen Sie andere Begriffe</string>
   <string name="error_filter">Nichts zum Anzeigen</string>
@@ -376,6 +377,7 @@
   <string name="error_failed_barcode_upload">Barcode konnte nicht hochgeladen werden</string>
   <string name="error_wrong_grocycode_type">grocycode enthält falschen Typ</string>
   <string name="error_stock_entry_grocycode">Bestandseintrag vom grocycode nicht gefunden</string>
+  <string name="error_permission">Keine Berechtigung für diese Aktion</string>
   <string name="error_undefined">Ein Fehler ist aufgetreten</string>
 
   <string name="title_overview">Übersicht</string>
