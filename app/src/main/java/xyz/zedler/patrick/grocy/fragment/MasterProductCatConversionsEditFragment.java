@@ -30,39 +30,30 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatBarcodesEditBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatConversionsEditBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
-import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatBarcodesEditViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatConversionsEditViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatConversionsEditViewModel.MasterProductCatConversionsEditViewModelFactory;
 
-public class MasterProductCatBarcodesEditFragment extends BaseFragment implements BarcodeListener {
+public class MasterProductCatConversionsEditFragment extends BaseFragment {
 
-  private final static String TAG = MasterProductCatBarcodesEditFragment.class.getSimpleName();
+  private final static String TAG = MasterProductCatConversionsEditFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private FragmentMasterProductCatBarcodesEditBinding binding;
-  private MasterProductCatBarcodesEditViewModel viewModel;
+  private FragmentMasterProductCatConversionsEditBinding binding;
+  private MasterProductCatConversionsEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
-  private EmbeddedFragmentScanner embeddedFragmentScanner;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
-    binding = FragmentMasterProductCatBarcodesEditBinding.inflate(inflater, group, false);
-    embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this,
-        binding.containerScanner,
-        this
-    );
+    binding = FragmentMasterProductCatConversionsEditBinding.inflate(inflater, group, false);
     return binding.getRoot();
   }
 
@@ -75,11 +66,10 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    MasterProductCatBarcodesEditFragmentArgs args = MasterProductCatBarcodesEditFragmentArgs
+    MasterProductCatConversionsEditFragmentArgs args = MasterProductCatConversionsEditFragmentArgs
         .fromBundle(requireArguments());
-    viewModel = new ViewModelProvider(this, new MasterProductCatBarcodesEditViewModel
-        .MasterProductCatBarcodesEditViewModelFactory(activity.getApplication(), args)
-    ).get(MasterProductCatBarcodesEditViewModel.class);
+    viewModel = new ViewModelProvider(this, new MasterProductCatConversionsEditViewModelFactory(activity.getApplication(), args)
+    ).get(MasterProductCatConversionsEditViewModel.class);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
     binding.setFormData(viewModel.getFormData());
@@ -122,10 +112,6 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    embeddedFragmentScanner.setScannerVisibilityLive(
-        viewModel.getFormData().getScannerVisibilityLive()
-    );
-
     // necessary because else getValue() doesn't give current value (?)
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {
     });
@@ -156,71 +142,32 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
     );
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-    embeddedFragmentScanner.onResume();
-  }
-
-  @Override
-  public void onPause() {
-    embeddedFragmentScanner.onPause();
-    super.onPause();
-  }
-
-  @Override
-  public void onDestroy() {
-    embeddedFragmentScanner.onDestroy();
-    super.onDestroy();
-  }
-
-  @Override
-  public void onBarcodeRecognized(String rawValue) {
-    clearInputFocus();
-    viewModel.getFormData().toggleScannerVisibility();
-    viewModel.onBarcodeRecognized(rawValue);
-  }
-
-  public void toggleTorch() {
-    embeddedFragmentScanner.toggleTorch();
-  }
-
-  public void toggleScannerVisibility() {
-    viewModel.getFormData().toggleScannerVisibility();
-    if (viewModel.getFormData().isScannerVisible()) {
-      clearInputFocus();
-    }
-  }
-
   public void clearAmountFieldAndFocusIt() {
-    binding.editTextAmount.setText("");
-    activity.showKeyboard(binding.editTextAmount);
+    binding.editTextFactor.setText("");
+    activity.showKeyboard(binding.editTextFactor);
   }
 
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.dummyFocusView.requestFocus();
-    binding.textInputBarcode.clearFocus();
-    binding.textInputAmount.clearFocus();
-    binding.textInputNote.clearFocus();
-    binding.shoppingListContainer.clearFocus();
-    binding.quantityUnitContainer.clearFocus();
+    binding.textInputFactor.clearFocus();
   }
 
   @Override
-  public void selectQuantityUnit(QuantityUnit quantityUnit) {
-    if (quantityUnit != null && quantityUnit.getId() == -1) {
-      viewModel.getFormData().getQuantityUnitLive().setValue(null);
+  public void selectQuantityUnit(QuantityUnit quantityUnit, Bundle args) {
+    if (args.getBoolean(MasterProductCatConversionsEditViewModel.QUANTITY_UNIT_IS_FROM)) {
+      if (quantityUnit != null && quantityUnit.getId() == -1) {
+        viewModel.getFormData().getQuantityUnitFromLive().setValue(null);
+      } else {
+        viewModel.getFormData().getQuantityUnitFromLive().setValue(quantityUnit);
+      }
     } else {
-      viewModel.getFormData().getQuantityUnitLive().setValue(quantityUnit);
+      if (quantityUnit != null && quantityUnit.getId() == -1) {
+        viewModel.getFormData().getQuantityUnitToLive().setValue(null);
+      } else {
+        viewModel.getFormData().getQuantityUnitToLive().setValue(quantityUnit);
+      }
     }
-  }
-
-  @Override
-  public void selectStore(Store store) {
-    viewModel.getFormData().getStoreLive().setValue(
-        store == null || store.getId() == -1 ? null : store
-    );
   }
 
   private boolean onMenuItemClick(MenuItem item) {

@@ -134,7 +134,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         return;
       }
       if (conversions.isEmpty()) {
-        InfoFullscreen info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_PRODUCT_BARCODES);
+        InfoFullscreen info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_UNIT_CONVERSIONS);
         viewModel.getInfoFullscreenLive().setValue(info);
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
@@ -177,8 +177,8 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         animated,
-        () -> navigate(MasterProductCatBarcodesFragmentDirections
-            .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(
+        () -> navigate(MasterProductCatConversionsFragmentDirections
+            .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(
                 viewModel.getFilledProduct()
             )
         ));
@@ -189,8 +189,9 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    navigate(MasterProductCatBarcodesFragmentDirections
-        .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(viewModel.getFilledProduct())
+    navigate(MasterProductCatConversionsFragmentDirections
+        .actionMasterProductCatConversionsFragmentToMasterProductCatConversionsEditFragment(viewModel.getFilledProduct())
+        .setConversion(conversion)
     );
   }
 

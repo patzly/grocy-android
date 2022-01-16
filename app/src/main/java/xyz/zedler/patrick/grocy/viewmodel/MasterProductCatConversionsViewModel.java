@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
+import xyz.zedler.patrick.grocy.repository.MasterProductCatConversionsEditRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -50,7 +50,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final EventHandler eventHandler;
-  private final MasterProductRepository repository;
+  private final MasterProductCatConversionsEditRepository repository;
   private final MasterProductFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
@@ -77,7 +77,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     eventHandler = new EventHandler();
-    repository = new MasterProductRepository(application);
+    repository = new MasterProductCatConversionsEditRepository(application);
     args = startupArgs;
 
     quantityUnitConversionsLive = new MutableLiveData<>();
@@ -90,8 +90,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository
-        .loadBarcodesQuantityUnitsStoresUnitConversions((barcodes, qUs, stores, conversions) -> {
+    repository.loadFromDatabase((qUs, conversions) -> {
           this.quantityUnits = qUs;
           this.unitConversions = conversions;
           this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
@@ -150,7 +149,8 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateQuantityUnitsUnitConversions(quantityUnits, unitConversions, () -> {});
+    repository.updateDatabase(quantityUnits, unitConversions, () -> {});
+    quantityUnitConversionsLive.setValue(filterConversions(unitConversions));
   }
 
   private void onDownloadError(@Nullable VolleyError error) {

@@ -86,8 +86,6 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
       int position
   ) {
     QuantityUnitConversion conversion = quantityUnitConversions.get(holder.getAdapterPosition());
-    QuantityUnit unitTo = quantityUnitHashMap.get(conversion.getToQuId());
-
     Context context = holder.binding.getRoot().getContext();
     holder.binding.fromAmountUnit.setText(context.getString(
         R.string.subtitle_amount,
@@ -97,7 +95,7 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
     holder.binding.toAmountUnit.setText(context.getString(
         R.string.subtitle_amount,
         NumUtil.trim(conversion.getFactor()),
-        pluralUtil.getQuantityUnitPlural(quantityUnitHashMap, conversion.getFromQuId(), conversion.getFactor())
+        pluralUtil.getQuantityUnitPlural(quantityUnitHashMap, conversion.getToQuId(), conversion.getFactor())
     ));
 
     holder.binding.container.setOnClickListener(

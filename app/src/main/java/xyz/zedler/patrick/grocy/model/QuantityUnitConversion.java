@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -28,6 +29,8 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Entity(tableName = "quantity_unit_conversion_table")
 public class QuantityUnitConversion implements Parcelable {
@@ -166,6 +169,26 @@ public class QuantityUnitConversion implements Parcelable {
   @Override
   public int hashCode() {
     return Objects.hash(id, fromQuId, toQuId, factor, productId, rowCreatedTimestamp);
+  }
+
+  public static JSONObject getJsonFromConversion(QuantityUnitConversion conversion, boolean debug,
+      String TAG) {
+    JSONObject json = new JSONObject();
+    try {
+      json.put("product_id", conversion.getProductId());
+      json.put("from_qu_id", conversion.getFromQuId());
+      json.put("to_qu_id", conversion.getToQuId());
+      json.put("factor", conversion.getFactor());
+    } catch (JSONException e) {
+      if (debug) {
+        Log.e(TAG, "getJsonFromProductBarcode: " + e);
+      }
+    }
+    return json;
+  }
+
+  public JSONObject getJsonFromConversion(boolean debug, String TAG) {
+    return getJsonFromConversion(this, debug, TAG);
   }
 
   @NonNull
