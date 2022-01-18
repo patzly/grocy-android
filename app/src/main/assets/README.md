@@ -32,7 +32,7 @@ Replace color on_primary with on_background and delete on_primary (it's always t
 - version name updated?
 - latest libs?
 - German translation complete?
-- changelog added in CHANGELOG.txt?
+- changelog added in changelog.txt?
 - changelog added in fastlane/metadata/android/[language]/changelogs/[versionCode].txt?
 
 # Conventions
