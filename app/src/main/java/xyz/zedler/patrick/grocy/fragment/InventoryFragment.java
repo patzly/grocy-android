@@ -169,8 +169,6 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    //hideDisabledFeatures();
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
