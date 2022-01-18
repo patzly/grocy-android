@@ -436,6 +436,10 @@
   <string name="title_create_list_entry">Eintrag erstellen</string>
   <string name="title_edit_barcode">Barcode bearbeiten</string>
   <string name="title_create_barcode">Barcode erstellen</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">ME-Umrechnung bearbeiten</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">ME-Umrechnung erstellen</string>
   <string name="title_shopping_list_edit">Einkaufszettel bearbeiten</string>
   <string name="title_shopping_list_new">Neuer Einkaufszettel</string>
   <string name="title_shopping_mode">Einkaufsmodus</string>
@@ -483,6 +487,8 @@
   <string name="subtitle_amount_compare">Das entspricht %1$s %2$s. </string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Das bedeutet %1$s pro %2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">Das bedeutet %1$s entspricht %2$s. </string>
   <string name="subtitle_product_hidden">Produkt ist versteckt</string>
   <string name="subtitle_product_not_hidden">Produkt ist nicht versteckt</string>
   <string name="subtitle_product_not_on_server">Produkt ist nicht auf dem Server</string>
@@ -600,6 +606,11 @@
   <string name="property_qu_stock">Mengeneinheit Bestand</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Faktor Einkauf zu Bestand Mengeneinheit</string>
+  <!-- This string is part of a pair, there is also 'quantity unit to' -->
+  <string name="property_quantity_unit_from">ME von</string>
+  <!-- This string is part of a pair, there is also 'quantity unit from' -->
+  <string name="property_quantity_unit_to">ME nach</string>
+  <string name="property_factor">Faktor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
   <string name="property_days">Tage</string>
