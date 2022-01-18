@@ -1,5 +1,8 @@
 # TODO
 
+## upcoming changelog lines:
+- New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
+
 ## Android 12 and Material You
 
 1. Implement edge to edge behavior (including for BottomAppBar)
@@ -29,7 +32,7 @@ Replace color on_primary with on_background and delete on_primary (it's always t
 - version name updated?
 - latest libs?
 - German translation complete?
-- changelog added in CHANGELOG.txt?
+- changelog added in changelog.txt?
 - changelog added in fastlane/metadata/android/[language]/changelogs/[versionCode].txt?
 
 # Conventions

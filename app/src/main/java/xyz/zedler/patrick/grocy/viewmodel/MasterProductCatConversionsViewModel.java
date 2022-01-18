@@ -30,43 +30,42 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
+import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
+import xyz.zedler.patrick.grocy.repository.MasterProductCatConversionsEditRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class MasterProductCatBarcodesViewModel extends BaseViewModel {
+public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
-  private static final String TAG = MasterProductCatBarcodesViewModel.class.getSimpleName();
+  private static final String TAG = MasterProductCatConversionsViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final EventHandler eventHandler;
-  private final MasterProductRepository repository;
+  private final MasterProductCatConversionsEditRepository repository;
   private final MasterProductFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
-  private final MutableLiveData<ArrayList<ProductBarcode>> productBarcodesLive;
+  private final MutableLiveData<ArrayList<QuantityUnitConversion>> quantityUnitConversionsLive;
 
-  private ArrayList<ProductBarcode> productBarcodes;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<Store> stores;
   private ArrayList<QuantityUnitConversion> unitConversions;
+  private ArrayList<QuantityUnit> quantityUnits;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
 
-  public MasterProductCatBarcodesViewModel(
+  public MasterProductCatConversionsViewModel(
       @NonNull Application application,
       @NonNull MasterProductFragmentArgs startupArgs
   ) {
@@ -78,10 +77,10 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     eventHandler = new EventHandler();
-    repository = new MasterProductRepository(application);
+    repository = new MasterProductCatConversionsEditRepository(application);
     args = startupArgs;
 
-    productBarcodesLive = new MutableLiveData<>();
+    quantityUnitConversionsLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
   }
@@ -91,19 +90,16 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository
-        .loadBarcodesQuantityUnitsStoresUnitConversions((barcodes, qUs, stores, conversions) -> {
-          this.productBarcodes = barcodes;
+    repository.loadFromDatabase((qUs, conversions) -> {
           this.quantityUnits = qUs;
-          this.stores = stores;
           this.unitConversions = conversions;
-          productBarcodesLive.setValue(filterBarcodes(barcodes));
+          this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
+          quantityUnitConversionsLive.setValue(filterConversions(conversions));
           if (downloadAfterLoading) {
             downloadData();
           }
         });
   }
-
 
   public void downloadData(@Nullable String dbChangedTime) {
     if (currentQueueLoading != null) {
@@ -121,16 +117,10 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
     DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
-        dlHelper.updateProductBarcodes(
-            dbChangedTime,
-            barcodes -> this.productBarcodes = barcodes
-        ), dlHelper.updateQuantityUnits(
-            dbChangedTime,
-            qUs -> this.quantityUnits = qUs
-        ), dlHelper.updateStores(
-            dbChangedTime,
-            stores -> this.stores = stores
-        ), dlHelper.updateQuantityUnitConversions(
+        dlHelper.updateQuantityUnits(dbChangedTime, qUs -> {
+          this.quantityUnits = qUs;
+          this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
+        }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime,
             conversions -> this.unitConversions = conversions
         )
@@ -149,9 +139,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
@@ -161,11 +149,8 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    productBarcodesLive.setValue(filterBarcodes(productBarcodes));
-    repository
-        .updateBarcodesQuantityUnitsStoresUnitConversions(productBarcodes, quantityUnits, stores,
-            unitConversions, () -> {
-            });
+    repository.updateDatabase(quantityUnits, unitConversions, () -> {});
+    quantityUnitConversionsLive.setValue(filterConversions(unitConversions));
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -178,28 +163,24 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     }
   }
 
-  private ArrayList<ProductBarcode> filterBarcodes(ArrayList<ProductBarcode> barcodes) {
-    ArrayList<ProductBarcode> filteredBarcodes = new ArrayList<>();
+  private ArrayList<QuantityUnitConversion> filterConversions(ArrayList<QuantityUnitConversion> conversions) {
+    ArrayList<QuantityUnitConversion> filteredConversions = new ArrayList<>();
     assert args.getProduct() != null;
     int productId = args.getProduct().getId();
-    for (ProductBarcode barcode : barcodes) {
-      if (barcode.getProductId() == productId) {
-        filteredBarcodes.add(barcode);
+    for (QuantityUnitConversion conversion : conversions) {
+      if (conversion.getProductId() == productId) {
+        filteredConversions.add(conversion);
       }
     }
-    return filteredBarcodes;
+    return filteredConversions;
   }
 
-  public MutableLiveData<ArrayList<ProductBarcode>> getProductBarcodesLive() {
-    return productBarcodesLive;
+  public MutableLiveData<ArrayList<QuantityUnitConversion>> getQuantityUnitConversionsLive() {
+    return quantityUnitConversionsLive;
   }
 
-  public ArrayList<QuantityUnit> getQuantityUnits() {
-    return quantityUnits;
-  }
-
-  public ArrayList<Store> getStores() {
-    return stores;
+  public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
+    return quantityUnitHashMap;
   }
 
   @NonNull
@@ -251,13 +232,13 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     super.onCleared();
   }
 
-  public static class MasterProductCatBarcodesViewModelFactory implements
+  public static class MasterProductCatConversionsViewModelFactory implements
       ViewModelProvider.Factory {
 
     private final Application application;
     private final MasterProductFragmentArgs args;
 
-    public MasterProductCatBarcodesViewModelFactory(
+    public MasterProductCatConversionsViewModelFactory(
         Application application,
         MasterProductFragmentArgs args
     ) {
@@ -269,7 +250,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-      return (T) new MasterProductCatBarcodesViewModel(application, args);
+      return (T) new MasterProductCatConversionsViewModel(application, args);
     }
   }
 }

@@ -1,0 +1,6 @@
+New:
+- Barcodes are now editable on master product page (#391)
+- Quantity unit conversions are now editable on master product page (#396)
+- Grouping feature for stock overview like on server
+- Grouping feature for shopping list (#430)
+Full changelog is available in the app.

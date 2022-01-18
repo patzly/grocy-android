@@ -43,8 +43,8 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 37
-        versionName "2.0.0"
+        versionCode 38
+        versionName "2.1.0"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -81,7 +81,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.4.0'
@@ -90,9 +90,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
 
-    implementation 'androidx.room:room-runtime:2.4.0'
-    implementation "androidx.room:room-guava:2.4.0"
-    annotationProcessor 'androidx.room:room-compiler:2.4.0'
+    implementation 'androidx.room:room-runtime:2.4.1'
+    implementation 'androidx.room:room-guava:2.4.1'
+    annotationProcessor 'androidx.room:room-compiler:2.4.1'
 
     implementation 'com.google.android.material:material:1.6.0-alpha01'
 

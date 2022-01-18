@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in purchase screen for example. -->

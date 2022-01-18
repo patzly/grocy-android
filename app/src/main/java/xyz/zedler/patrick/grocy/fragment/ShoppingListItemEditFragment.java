@@ -205,7 +205,13 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
         animated,
-        () -> viewModel.saveItem()
+        () -> {
+          if (!viewModel.getFormData().isProductNameValid()) {
+            clearFocusAndCheckProductInput();
+          } else {
+            viewModel.saveItem();
+          }
+        }
     );
   }
 
@@ -256,6 +262,11 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     } else {
       clearInputFocus();
     }
+  }
+
+  public void clearFocusAndCheckProductInput() {
+    clearInputFocus();
+    viewModel.checkProductInput();
   }
 
   public void clearInputFocus() {

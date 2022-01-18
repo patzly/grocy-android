@@ -816,6 +816,13 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
+      <action
+        android:id="@+id/action_masterProductFragment_to_masterProductCatConversionsFragment"
+        app:destination="@id/masterProductCatConversionsFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
       <argument
         android:name="productName"
         app:argType="string"
@@ -925,6 +932,40 @@
       <argument
         android:name="productBarcode"
         app:argType="xyz.zedler.patrick.grocy.model.ProductBarcode"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="product"
+        app:argType="xyz.zedler.patrick.grocy.model.Product" />
+    </fragment>
+    <fragment
+      android:id="@+id/masterProductCatConversionsFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatConversionsFragment"
+      android:label="MasterProductCatConversionsFragment"
+      tools:layout="@layout/fragment_master_product_cat_conversions">
+      <argument
+        android:name="product"
+        app:argType="xyz.zedler.patrick.grocy.model.Product"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="action"
+        app:argType="string" />
+      <action
+        android:id="@+id/action_masterProductCatConversionsFragment_to_masterProductCatConversionsEditFragment"
+        app:destination="@id/masterProductCatConversionsEditFragment"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/slide_no"
+        app:popExitAnim="@anim/slide_out_down"/>
+    </fragment>
+    <fragment
+      android:id="@+id/masterProductCatConversionsEditFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterProductCatConversionsEditFragment"
+      android:label="MasterProductCatConversionsEditFragment"
+      tools:layout="@layout/fragment_master_product_cat_conversions_edit">
+      <argument
+        android:name="conversion"
+        app:argType="xyz.zedler.patrick.grocy.model.QuantityUnitConversion"
         app:nullable="true"
         android:defaultValue="@null" />
       <argument

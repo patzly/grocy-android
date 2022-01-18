@@ -1,6 +1,6 @@
 2.1.0:
-- New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the inital work) (#391)
+- New: Quantity unit conversions are now editable on master product page (#396)
 - New: Grouping feature for stock overview like on server
 - New: Grouping feature for shopping list which allows group by default store (#430)
 - Improved: Unnecessary bottom sheets in master data section were removed
@@ -9,6 +9,7 @@
 - Improved: Navigation menu has less horizontal entries, transaction pages are in one row
 - Improved: Added option to show product description on shopping mode page (#443)
 - Improved: Error message for 403 response "no permission" (#432)
+- Improved: Shopping list item edit page now has better handling of invalid product input (#481)
 - Fixed: Product info bottom sheet didn't open if location not set in product
 - Fixed: Scrollbars don't stop above the bottom anymore
 - Fixed: Unsorted lists on master data product pages (thanks @Turysaz) (#473)
