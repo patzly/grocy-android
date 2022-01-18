@@ -330,6 +330,7 @@
   <string name="error_empty_stores">Pas de magasins</string>
   <string name="error_empty_tasks">Aucune tâche</string>
   <string name="error_empty_task_categories">Aucune catégorie de tâches</string>
+  <string name="error_empty_unit_conversions">Pas de conversion d\'unité de quantité</string>
   <string name="error_search">Aucun résultat trouvé</string>
   <string name="error_search_sub">Essayez d\'autres termes</string>
   <string name="error_filter">Rien à afficher</string>
@@ -376,6 +377,7 @@
   <string name="error_failed_barcode_upload">Impossible d\'envoyer le code-barres</string>
   <string name="error_wrong_grocycode_type">grocycode contient un type d\'entité incorrect</string>
   <string name="error_stock_entry_grocycode">Entrée de stock de grocycode introuvable</string>
+  <string name="error_permission">Aucune autorisation pour cette action</string>
   <string name="error_undefined">Une erreur est survenue</string>
 
   <string name="title_overview">Aperçu</string>
@@ -434,6 +436,10 @@
   <string name="title_create_list_entry">Créer une entrée de liste</string>
   <string name="title_edit_barcode">Modifier le code-barres</string>
   <string name="title_create_barcode">Créer un code-barres</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">Éditer conversion de format</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">Créer conversion de format</string>
   <string name="title_shopping_list_edit">Modifier la liste de courses</string>
   <string name="title_shopping_list_new">Nouvelle liste de courses</string>
   <string name="title_shopping_mode">Mode d\'achat</string>
@@ -481,6 +487,8 @@
   <string name="subtitle_amount_compare">Ça vaut %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Ça représente %1$s par %2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">Cela signifie que %1$s est identique à %2$s.</string>
   <string name="subtitle_product_hidden">Le produit est caché</string>
   <string name="subtitle_product_not_hidden">Le produit n\'est pas caché</string>
   <string name="subtitle_product_not_on_server">Le produit n\'est pas sur le serveur</string>
@@ -598,6 +606,11 @@
   <string name="property_qu_stock">Quantité unité stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Facteur entre la quantité à l\'achat et la quantité en stock</string>
+  <!-- This string is part of a pair, there is also 'quantity unit to' -->
+  <string name="property_quantity_unit_from">Unité de quantité depuis</string>
+  <!-- This string is part of a pair, there is also 'quantity unit from' -->
+  <string name="property_quantity_unit_to">Unité de quantité jusqu\'à</string>
+  <string name="property_factor">Facteur</string>
   <string name="property_barcode">Code-barres</string>
   <string name="property_barcodes">Codes-barres</string>
   <string name="property_days">Jours</string>
