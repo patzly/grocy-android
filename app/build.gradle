@@ -94,7 +94,7 @@ dependencies {
     implementation 'androidx.room:room-guava:2.4.1'
     annotationProcessor 'androidx.room:room-compiler:2.4.1'
 
-    implementation 'com.google.android.material:material:1.6.0-alpha01'
+    implementation 'com.google.android.material:material:1.6.0-alpha02'
 
     implementation 'com.android.volley:volley:1.2.1'
 
