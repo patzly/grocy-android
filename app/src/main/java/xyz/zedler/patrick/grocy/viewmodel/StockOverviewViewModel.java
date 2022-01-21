@@ -483,6 +483,8 @@ public class StockOverviewViewModel extends BaseViewModel {
       if (productGroupFilterId != FilterChipLiveDataProductGroup.NO_FILTER
           && NumUtil.isStringInt(item.getProduct().getProductGroupId())
           && productGroupFilterId != Integer.parseInt(item.getProduct().getProductGroupId())
+          || productGroupFilterId != FilterChipLiveDataProductGroup.NO_FILTER
+          && !NumUtil.isStringInt(item.getProduct().getProductGroupId())
       ) {
         continue;
       }
