@@ -108,9 +108,9 @@ dependencies {
 
     implementation "androidx.camera:camera-camera2:1.0.2"
     implementation "androidx.camera:camera-lifecycle:1.0.2"
-    implementation 'androidx.camera:camera-view:1.0.0-alpha31'
-    implementation 'com.google.mlkit:camera:16.0.0-beta1'
-    implementation 'com.google.mlkit:barcode-scanning:17.0.0'
+    implementation 'androidx.camera:camera-view:1.0.0-alpha32'
+    implementation 'com.google.mlkit:camera:16.0.0-beta2'
+    implementation 'com.google.mlkit:barcode-scanning:17.0.1'
 
     implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
 
