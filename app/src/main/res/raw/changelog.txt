@@ -17,6 +17,7 @@
 - Fixed: 'Due soon days' value in stock overview was always 5 days
 - Fixed: Grocycode not looked up when using external scanner (#472)
 - Fixed: Adding barcode now works on transaction pages even if product already selected (#480)
+- Fixed: Product group filter on stock overview page always displayed ungrouped products (#484)
 
 2.0.0:
 Major changes since 1.10.1:

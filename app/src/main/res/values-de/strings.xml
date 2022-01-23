@@ -310,7 +310,7 @@
   <string name="msg_help_home_assistant_login_server">In dem nächsten Feld können Sie auch Ihre Nabu Casa Cloud-URL eingeben, falls Sie diesen Service benutzen. Auf diese Karte tippen, um die Nabu Casa Website zu besuchen.</string>
   <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
-  <string name="msg_share">Schau Dir mal diesen Android-Klient für das großartige grocy-Projekt an: \nhttps://github.com/patzly/grocy-android</string>
+  <string name="msg_share">Schau Dir mal diesen Android-Client für grocy an: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
   <string name="error_orbot_not_installed">Orbot ist nicht installiert</string>
