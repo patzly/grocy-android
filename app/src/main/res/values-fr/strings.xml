@@ -510,6 +510,11 @@
   <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>
   <string name="description_input_product_option2">Créer un produit et utiliser l\'entrée en tant que code-barres</string>
   <string name="description_input_product_option3">Ajouter en tant que code-barres à un produit existant</string>
+  <string name="description_input_product_amount">Stock min., Consommation rapide, Facteur, Tarage</string>
+  <string name="description_input_product_default_location">Emplacement, Magasin</string>
+  <string name="description_input_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
+  <string name="description_input_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
+  <string name="description_input_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option1">Ne supprimer que les produits validés</string>
   <!-- Context: Clear shopping list -->
@@ -664,7 +669,6 @@
   <string name="property_active">Actif</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne jamais afficher sur l\'aperçu du stock</string>
-  <string name="property_number">Nombre</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Activer la gestion du tarage du poids</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -880,4 +884,5 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
-  </resources>
+
+</resources>
