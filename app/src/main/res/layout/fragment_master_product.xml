@@ -203,7 +203,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/description_input_product_optional_properties"
+                  android:text="@string/subtitle_product_optional_properties"
                   android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
@@ -243,7 +243,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/description_input_product_default_location"
+                  android:text="@string/subtitle_product_default_location"
                   android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
@@ -283,7 +283,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/description_input_product_due_date"
+                  android:text="@string/subtitle_product_due_date"
                   android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
@@ -322,7 +322,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/description_input_product_quantity_unit"
+                  android:text="@string/subtitle_product_quantity_unit"
                   android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
@@ -361,7 +361,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/description_input_product_amount"
+                  android:text="@string/subtitle_product_amount"
                   android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
