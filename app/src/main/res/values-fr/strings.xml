@@ -504,6 +504,11 @@
   <string name="subtitle_barcode">Code-barres : %1$s</string>
   <string name="subtitle_feature_disabled">Fonctionnalité désactivée</string>
   <string name="subtitle_date_from_input">Date de saisie :\n%1$s</string>
+  <string name="subtitle_product_amount">Stock min., Consommation rapide, Facteur, Tarage</string>
+  <string name="subtitle_product_default_location">Emplacement, Magasin</string>
+  <string name="subtitle_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
+  <string name="subtitle_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
+  <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
 
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
@@ -880,4 +885,5 @@
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://fr.demo.grocy.info</string>
-  </resources>
+
+</resources>

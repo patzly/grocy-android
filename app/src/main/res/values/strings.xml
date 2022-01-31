@@ -518,6 +518,11 @@
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature disabled</string>
   <string name="subtitle_date_from_input">Date from input:\n%1$s</string>
+  <string name="subtitle_product_amount">Min. stock, Quick consume, Factor, Tare weight handling</string>
+  <string name="subtitle_product_default_location">Location, Store</string>
+  <string name="subtitle_product_due_date">Type, Default days (after opened, freezing, thawing)</string>
+  <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
+  <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
