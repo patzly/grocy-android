@@ -122,7 +122,7 @@ public class LogFragment extends BaseFragment {
         while ((line = bufferedReader.readLine()) != null) {
           log.append(line).append('\n');
         }
-        log.deleteCharAt(log.length() - 1);
+        if (log.length() > 0) log.deleteCharAt(log.length() - 1);
       } catch (IOException ignored) {
       }
       return log.toString();
