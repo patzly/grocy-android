@@ -629,6 +629,7 @@
   <string name="property_picture">Зображення</string>
   <string name="property_note_singleline">Однорядкова примітка</string>
   <string name="property_note_multiline">Багаторядна примітка</string>
+  <string name="property_ungrouped">Не в групі</string>
   <string name="date_today">Сьогодні</string>
   <string name="date_unknown">Невідомо</string>
   <!-- This means the 'time' context -->
@@ -723,6 +724,7 @@
   <string name="category_stock">Запас</string>
   <string name="category_server">Сервер</string>
   <string name="category_scanner">Сканер</string>
+  <string name="category_scanner_external">Зовнішній сканер</string>
   <string name="category_appearance">Зовнішній вигляд</string>
   <string name="category_network">Мережа</string>
   <string name="category_behavior">Поведінка</string>
