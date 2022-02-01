@@ -195,7 +195,9 @@
     <item quantity="many">%1$d просрочено</item>
     <item quantity="other">%1$d просрочено</item>
   </plurals>
+  <string name="msg_task_mark">Отметить задачу выполненной</string>
   <string name="msg_task_completed">Помеченные выполненными задачи</string>
+  <string name="msg_task_not_completed">Отметить задачу невыполненной</string>
   <string name="msg_task_undo">Отмененные задачи</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
@@ -354,6 +356,7 @@
   <string name="error_empty_stores">Нет магазинов</string>
   <string name="error_empty_tasks">Нет задач</string>
   <string name="error_empty_task_categories">Нет категорий задач</string>
+  <string name="error_empty_unit_conversions">Без преобразования е.и. количества</string>
   <string name="error_search">Нет результатов поиска</string>
   <string name="error_search_sub">Попробуйте другие условия</string>
   <string name="error_filter">Нечего показать</string>
@@ -400,6 +403,7 @@
   <string name="error_failed_barcode_upload">Не удалось загрузить штрихкод</string>
   <string name="error_wrong_grocycode_type">Grocycode содержит неправильный тип объекта</string>
   <string name="error_stock_entry_grocycode">Запись о запасе по Grocycode не найдена</string>
+  <string name="error_permission">Нет разрешения на это действие</string>
   <string name="error_undefined">Возникла ошибка</string>
 
   <string name="title_overview">Обзор</string>
@@ -458,6 +462,10 @@
   <string name="title_create_list_entry">Создать элемент списка</string>
   <string name="title_edit_barcode">Изменить штрихкод</string>
   <string name="title_create_barcode">Создать штрихкод</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">Изменить преобразование е.и.</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">Создать преобразование е.и.</string>
   <string name="title_shopping_list_edit">Редактировать список покупок</string>
   <string name="title_shopping_list_new">Новый список покупок</string>
   <string name="title_shopping_mode">Режим покупки</string>
@@ -485,6 +493,8 @@
   <string name="subtitle_stock_locations">Где есть запасы %1$s</string>
   <string name="subtitle_default_location">По умолчанию</string>
   <string name="subtitle_none_selected">Ничего не выбрано</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Ничего</string>
   <string name="subtitle_empty">Пусто</string>
   <string name="subtitle_done">Выполнено</string>
   <string name="subtitle_undone">Отменено</string>
@@ -503,6 +513,8 @@
   <string name="subtitle_amount_compare">Это равно %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">Это означает %1$s за %2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">Это означает, что %1$s совпадает с %2$s.</string>
   <string name="subtitle_product_hidden">Продукт скрыт</string>
   <string name="subtitle_product_not_hidden">Продукт не скрыт</string>
   <string name="subtitle_product_not_on_server">Продукта нет на сервере</string>
@@ -518,7 +530,8 @@
   <string name="subtitle_barcode">Штрихкод: %1$s</string>
   <string name="subtitle_feature_disabled">Функция отключена</string>
   <string name="subtitle_date_from_input">Введенная дата:\n%1$s</string>
-
+  <string name="subtitle_product_due_date">Тип, Дни по умолчанию (после открытия, замораживания, оттаивания)</string>
+  <string name="subtitle_product_optional_properties">Состояние, Родительский продукт, Описание, Группа продукта, Энергетическая ценность, Изображение</string>
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
