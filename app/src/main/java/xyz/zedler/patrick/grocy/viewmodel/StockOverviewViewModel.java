@@ -179,6 +179,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           int itemsExpiredCount = 0;
           int itemsMissingCount = 0;
           int itemsInStockCount = 0;
+          int itemsOpenedCount = 0;
           productIdsMissingStockItems = new HashMap<>();
           this.stockItems = stockItems;
           for (StockItem stockItem : stockItems) {
@@ -198,6 +199,9 @@ public class StockOverviewViewModel extends BaseViewModel {
             }
             if (!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
               itemsInStockCount++;
+            }
+            if (stockItem.getAmountOpenedDouble() > 0) {
+              itemsOpenedCount++;
             }
           }
 
@@ -233,6 +237,7 @@ public class StockOverviewViewModel extends BaseViewModel {
               .setExpiredCount(itemsExpiredCount)
               .setBelowStockCount(itemsMissingCount)
               .setInStockCount(itemsInStockCount)
+              .setOpenedCount(itemsOpenedCount)
               .emitCounts();
           updateFilteredStockItems();
           if (downloadAfterLoading) {
@@ -340,7 +345,18 @@ public class StockOverviewViewModel extends BaseViewModel {
         }),
         dlHelper.updateStockItems(dbChangedTime, stockItems -> {
           this.stockItems = stockItems;
-          filterChipLiveDataStatus.setInStockCount(stockItems.size()).emitCounts();
+          int itemsOpenedCount = 0;
+          if (isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)) {
+            for (StockItem stockItem : stockItems) {
+              if (stockItem.getAmountOpenedDouble() > 0) {
+                itemsOpenedCount++;
+              }
+            }
+          }
+          filterChipLiveDataStatus
+              .setInStockCount(stockItems.size())
+              .setOpenedCount(itemsOpenedCount)
+              .emitCounts();
         }), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = new HashMap<>();
@@ -511,6 +527,8 @@ public class StockOverviewViewModel extends BaseViewModel {
           && missingStockItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
           && (missingStockItem == null || missingStockItem.isItemMissingAndPartlyInStock())
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OPENED
+          && item.getAmountOpenedDouble() > 0
       ) {
         filteredStockItems.add(item);
       }

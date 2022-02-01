@@ -36,6 +36,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   public final static int STATUS_EXPIRED = 3;
   public final static int STATUS_BELOW_MIN = 4;
   public final static int STATUS_IN_STOCK = 5;
+  public final static int STATUS_OPENED = 6;
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -44,6 +45,7 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   private int expiredCount = 0;
   private int belowStockCount = 0;
   private int inStockCount = 0;
+  private int openedCount = 0;
 
   public FilterChipLiveDataStockStatus(Application application, Runnable clickListener) {
     this.application = application;
@@ -101,6 +103,11 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     return this;
   }
 
+  public FilterChipLiveDataStockStatus setOpenedCount(int openedCount) {
+    this.openedCount = openedCount;
+    return this;
+  }
+
   public void emitCounts() {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
@@ -135,6 +142,13 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
         0,
         getQuString(R.plurals.msg_in_stock_products, inStockCount)
     ));
+    if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_OPENED_TRACKING, true)) {
+      menuItemDataList.add(new MenuItemData(
+          STATUS_OPENED,
+          0,
+          getQuString(R.plurals.msg_opened_products, openedCount)
+      ));
+    }
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));
     for (MenuItemData menuItemData : menuItemDataList) {

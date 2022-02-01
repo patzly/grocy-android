@@ -1,3 +1,6 @@
+2.2.0:
+- Improved: Filter for opened products was added on stock overview page
+
 2.1.0:
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the initial work) (#391)
 - New: Quantity unit conversions are now editable on master product page (#396)
