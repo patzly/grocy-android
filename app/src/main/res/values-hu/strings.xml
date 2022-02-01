@@ -488,7 +488,6 @@
   <string name="subtitle_barcode">Vonalkód: %1$s</string>
   <string name="subtitle_feature_disabled">Funkció letiltva</string>
   <string name="subtitle_date_from_input">Beviteli mező dátuma:\n%1$s</string>
-
   <string name="description_input_product_part1">A termék mező ezt tartalmazza:</string>
   <string name="description_input_product_part2">Válaszd ki, hogyan tovább:</string>
   <string name="description_input_product_option1">Új termék létrehozása és a mező tartalma legyen a név</string>
@@ -664,6 +663,7 @@
   <string name="property_in_stock">Készleten: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Rendezés: %1$s</string>
+  <string name="property_ungrouped">Nem csoportosított</string>
   <string name="property_task_categories">Feladat kategóriák</string>
   <string name="date_today">Ma</string>
   <string name="date_unknown">Ismeretlen</string>
