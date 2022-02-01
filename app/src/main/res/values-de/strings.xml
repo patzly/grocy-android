@@ -137,6 +137,11 @@
     <item quantity="one">%1$d im Bestand</item>
     <item quantity="other">%1$d im Bestand</item>
   </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d geöffnet</item>
+    <item quantity="other">%1$d geöffnet</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">%1$s %2$s %3$s aus dem Bestand entfernt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -504,6 +509,11 @@
   <string name="subtitle_barcode">Barcode: %1$s</string>
   <string name="subtitle_feature_disabled">Feature deaktiviert</string>
   <string name="subtitle_date_from_input">Datum von der Eingabe:\n%1$s</string>
+  <string name="subtitle_product_amount">Mindestbestand, Schnell-Verbrauch, Faktor, Taragewichtsbehandlung</string>
+  <string name="subtitle_product_default_location">Standort, Geschäft</string>
+  <string name="subtitle_product_due_date">Typ, Standard Tage (nach öffnen, einfrieren, auftauen)</string>
+  <string name="subtitle_product_optional_properties">Status, Übergeordnetes Produkt, Beschreibung, Produktgruppe, Energie, Bild</string>
+  <string name="subtitle_product_quantity_unit">Bestand, Einkauf Standard</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
