@@ -473,7 +473,6 @@
   <string name="subtitle_barcode">Čiarový kód: %1$s</string>
   <string name="subtitle_feature_disabled">Funkcia je vypnutá</string>
   <string name="subtitle_date_from_input">Dátum zo vstupu:\n%1$s</string>
-
   <string name="description_input_product_part1">Pole výrobku obsahuje:</string>
   <string name="description_input_product_part2">Prosím zvoľte ako pokračovať:</string>
   <string name="description_input_product_option1">Vytvoriť nový výrobok a použiť vstup ako názov</string>

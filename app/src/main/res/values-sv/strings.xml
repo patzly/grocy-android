@@ -368,6 +368,8 @@
   <string name="title_batch_mode_shopping_list">Batch-läge för shoppinglista</string>
   <string name="title_product_cat_optional">Extra egenskaper</string>
   <string name="title_product_cat_location">Standardplats</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_product_cat_due_date">Bäst före-datum</string>
   <string name="title_product_cat_amount">Antal</string>
   <string name="title_product_cat_quantity_unit">Mängdenhet</string>
   <string name="title_product_cat_barcodes">Streckkoder</string>
@@ -551,6 +553,7 @@
   <string name="property_note_multiline">Flerraders anteckning</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">I lager: %1$s</string>
+  <string name="property_ungrouped">Ogrupperat</string>
   <string name="date_today">Idag</string>
   <string name="date_unknown">Okänt</string>
   <!-- This means the 'time' context -->

@@ -567,6 +567,7 @@
   <string name="property_picture">图片</string>
   <string name="property_note_singleline">单行的注释</string>
   <string name="property_note_multiline">多行注释</string>
+  <string name="property_ungrouped">未分组</string>
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
@@ -634,6 +635,7 @@
   <string name="category_stock">库存</string>
   <string name="category_server">服务器</string>
   <string name="category_scanner">扫描器</string>
+  <string name="category_scanner_external">外部扫描仪</string>
   <string name="category_appearance">主题</string>
   <string name="category_network">网络</string>
   <string name="category_behavior">行为</string>

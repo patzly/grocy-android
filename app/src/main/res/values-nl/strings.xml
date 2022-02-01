@@ -607,6 +607,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="property_note_multiline">Notitie met meerdere regels</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">In voorraad: %1$s</string>
+  <string name="property_ungrouped">Ongegroepeerd</string>
   <string name="date_today">Vandaag</string>
   <string name="date_unknown">Onbekend</string>
   <!-- This means the 'time' context -->
@@ -683,6 +684,7 @@ Het servercertificaat moet zijn ondertekend door een vertrouwde certificeringsin
   <string name="category_stock">Voorraad</string>
   <string name="category_server">Server</string>
   <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_external">Externe scanner</string>
   <string name="category_appearance">Weergave</string>
   <string name="category_network">Netwerk</string>
   <string name="category_behavior">Gedrag</string>

@@ -587,6 +587,7 @@
   <string name="property_picture">Imagem</string>
   <string name="property_note_singleline">Nota curta</string>
   <string name="property_note_multiline">Nota longa</string>
+  <string name="property_ungrouped">Desagrupado</string>
   <string name="date_today">Hoje</string>
   <string name="date_unknown">Desconhecido</string>
   <!-- This means the 'time' context -->
@@ -663,6 +664,7 @@
   <string name="category_stock">Stock</string>
   <string name="category_server">Servidor</string>
   <string name="category_scanner">Scanner</string>
+  <string name="category_scanner_external">Scanner externo</string>
   <string name="category_appearance">Aparência</string>
   <string name="category_network">Rede</string>
   <string name="category_behavior">Comportamento</string>

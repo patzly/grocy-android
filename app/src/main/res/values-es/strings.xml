@@ -574,6 +574,7 @@
   <string name="property_in_stock">En el inventario: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">Ordenar: %1$s</string>
+  <string name="property_ungrouped">Desagrupado</string>
   <string name="date_today">Hoy</string>
   <string name="date_unknown">Desconocido</string>
   <!-- This means the 'time' context -->
