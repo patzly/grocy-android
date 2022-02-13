@@ -1,4 +1,5 @@
-2.2.0:
+2.1.1:
+- New: Support for grocy server 3.2.0
 - Improved: Filter for opened products was added on stock overview page
 
 2.1.0:
