@@ -26,17 +26,14 @@ apply plugin: "androidx.navigation.safeargs"
 android {
     compileSdkVersion 31
 
-    lintOptions {
+    lint {
         abortOnError false
+        disable 'MissingTranslation'
     }
 
     buildFeatures {
         viewBinding true
         dataBinding true
-    }
-
-    lintOptions {
-        disable 'MissingTranslation'
     }
 
     defaultConfig {
