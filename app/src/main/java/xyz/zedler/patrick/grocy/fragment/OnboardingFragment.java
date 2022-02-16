@@ -173,7 +173,7 @@ public class OnboardingFragment extends BaseFragment {
       activity.showMessage(R.string.msg_features);
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
-    if (findNavController().getBackStack().size() == 2) { // TODO: Better condition
+    if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition
       navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
       return true;
     } else {

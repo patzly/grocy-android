@@ -79,13 +79,14 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
 
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
-    implementation 'androidx.navigation:navigation-ui:2.3.5'
+    implementation 'androidx.navigation:navigation-fragment:2.4.1'
+    implementation 'androidx.navigation:navigation-ui:2.4.1'
 
     implementation 'androidx.room:room-runtime:2.4.1'
     implementation 'androidx.room:room-guava:2.4.1'
