@@ -229,7 +229,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
 
   @Override
   public void onDestroy() {
-    embeddedFragmentScanner.onDestroy();
+    if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 

@@ -59,7 +59,7 @@ public class StockOverviewFragment extends BaseFragment implements
     StockOverviewItemAdapter.StockOverviewItemAdapterListener,
     BarcodeListener {
 
-  private final static String TAG = ShoppingListFragment.class.getSimpleName();
+  private final static String TAG = StockOverviewFragment.class.getSimpleName();
 
   private MainActivity activity;
   private StockOverviewViewModel viewModel;
@@ -317,7 +317,7 @@ public class StockOverviewFragment extends BaseFragment implements
 
   @Override
   public void onDestroy() {
-    embeddedFragmentScanner.onDestroy();
+    if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 

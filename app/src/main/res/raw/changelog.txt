@@ -2,6 +2,7 @@
 - New: Support for grocy server 3.2.0
 - Improved: Filter for opened products was added on stock overview page
 - Improved: Items marked as done on shopping list are slightly greyed out (#498)
+- Fixed: Crash when phone was rotated after successful barcode scan (#487)
 
 2.1.0:
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the initial work) (#391)

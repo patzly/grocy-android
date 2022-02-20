@@ -92,7 +92,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
 
   @Override
   public void onDestroy() {
-    embeddedFragmentScanner.onDestroy();
+    if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 
