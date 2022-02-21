@@ -257,6 +257,7 @@
   <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
   <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
+  <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
   <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
@@ -349,6 +350,7 @@
   <string name="error_invalid_factor">Ungültiger Faktor</string>
   <string name="error_invalid_date_format">Ungültiges Datumsformat</string>
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
+  <string name="error_token_qr_code">Kein QR-Code mit einem langlebigen Zugangsschlüssel von Home Assistant</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Darf nicht gleich %1$s sein</string>
