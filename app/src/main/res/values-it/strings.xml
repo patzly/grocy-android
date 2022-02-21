@@ -255,7 +255,6 @@
   <string name="msg_help_home_assistant_login_help_show">Premi qui per mostrare testi guida.</string>
   <string name="msg_help_home_assistant_login_help_hide">Premi qui per nascondere testi guida.</string>
   <string name="msg_help_home_assistant_login_server">Nel campo sottostante puoi anche inserire l\'indirizzo web del tuo spazio Nabu Casa se stai utilizzando quel servizio. Premi questo riquadro per visitare il sito web di Nabu Casa.</string>
-  <string name="msg_help_home_assistant_login_token">Puoi creare un token di accesso permanente nelle impostazioni del tuo profilo Home Assistant (ultima sezione). Premi qui per aprire l\'indirizzo web qui sopra.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Torna indietro o premi questo riquadro per scannerizzare il codice QR che riempirà i campi qui sotto.</string>
   <string name="error_api_not_working">La chiave API non funziona</string>
   <string name="error_orbot_not_installed">Orbot non è installato</string>
