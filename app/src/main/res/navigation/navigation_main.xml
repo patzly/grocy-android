@@ -361,6 +361,23 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
+      <action
+        android:id="@+id/action_loginApiQrCodeFragment_self"
+        app:destination="@id/loginApiQrCodeFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
+      <argument
+        android:name="grocyApiKey"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="grocyIngressProxyId"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
     </fragment>
     <fragment
       android:id="@+id/loginApiFormFragment"
@@ -381,6 +398,11 @@
         android:defaultValue="@null" />
       <argument
         android:name="grocyApiKey"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="homeAssistantToken"
         app:argType="string"
         app:nullable="true"
         android:defaultValue="@null" />

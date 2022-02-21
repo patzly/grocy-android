@@ -265,6 +265,7 @@
   <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose one option from below.</string>
   <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
+  <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
@@ -321,7 +322,7 @@
   <string name="msg_help_home_assistant_login_help_show">Tap here to show help texts.</string>
   <string name="msg_help_home_assistant_login_help_hide">Tap here to hide help texts.</string>
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
-  <string name="msg_help_home_assistant_login_token">You can create an long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
+  <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
   <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
 
@@ -357,6 +358,7 @@
   <string name="error_invalid_factor">Invalid factor</string>
   <string name="error_invalid_date_format">Invalid date format</string>
   <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
+  <string name="error_token_qr_code">Not a QR code with a long-lived access token from Home Assistant</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Cannot be equal to %1$s</string>
