@@ -2155,7 +2155,6 @@ public class DownloadHelper {
         hassServerUrl + hassUrlExtension,
         jsonObject,
         response -> {
-          Log.d("TAG", "homeAssistantSessionAuth: " + response);
           try {
             boolean isOk = response.get("result").equals("ok");
             JSONObject data = isOk && response.has("data") ? response.getJSONObject("data") : null;
