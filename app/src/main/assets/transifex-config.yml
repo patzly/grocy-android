@@ -5,6 +5,7 @@ filters:
     source_file: app/src/main/res/values/strings.xml
     translation_files_expression: 'app/src/main/res/values-<lang>/strings.xml'
 settings:
+    git:
     language_mapping:
       ca_ES: ca-rES
       el_GR: el-rGR
@@ -22,4 +23,3 @@ settings:
       ru_UA: ru-rUA
       zh_CN: zh-rCN
       zh_TW: zh-rTW
-git:
