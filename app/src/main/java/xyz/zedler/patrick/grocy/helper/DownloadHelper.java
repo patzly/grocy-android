@@ -2083,6 +2083,28 @@ public class DownloadHelper {
     return getStringData(url, onResponseListener, null);
   }
 
+  public void checkHassLongLivedToken(OnStringResponseListener onResponseListener) {
+    postHassIngress(
+        hassServerUrl + "/api/hassio/ingress/session",
+        null,
+        response -> {
+          try {
+            boolean isOk = response.get("result").equals("ok");
+            onResponseListener.onResponse(isOk ? (String) response.get("result") : null);
+          } catch (JSONException e) {
+            Log.e(tag,
+                "checkHassLongLivedToken (/api/hassio/ingress/session): JSONException:");
+            e.printStackTrace();
+            onResponseListener.onResponse(null);
+          }
+        },
+        error -> {
+          Log.e(tag, "checkHassLongLivedToken (/api/hassio/ingress/session): error: " + error);
+          onResponseListener.onResponse(null);
+        }
+    );
+  }
+
   public void validateHassIngressSessionIfNecessary(OnStringResponseListener onFinishedListener) {
     validateHassIngressSessionIfNecessary(onFinishedListener, onFinishedListener);
   }
@@ -2106,132 +2128,69 @@ public class DownloadHelper {
       return;
     }
 
-    if (sessionKey == null) {
-      postHassIngress(
-          hassServerUrl + "/api/hassio/ingress/session",
-          null,
-          response -> {
-            try {
-              boolean isOk = response.get("result").equals("ok");
-              if (isOk && response.has("data")) {
-                JSONObject data = response.getJSONObject("data");
-                if (!data.has("session")) {
-                  Log.e(tag,
-                      "validateHassIngressSession (/api/hassio/ingress/session): data doesn't contain session");
-                  onErrorListener.onResponse(null);
-                  return;
-                }
-                sharedPrefs.edit().putString(
-                    Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY,
-                    data.getString("session")
-                ).putString(
-                    Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME,
-                    dateUtil.getCurrentDateWithTimeStr()
-                ).apply();
-                onSuccessListener.onResponse(data.getString("session"));
-              } else if (!isOk) {
-                Log.e(tag,
-                    "validateHassIngressSession (/api/hassio/ingress/session): isOk is false");
-                onErrorListener.onResponse(null);
-              } else if (!response.has("data")) {
-                Log.e(tag,
-                    "validateHassIngressSession (/api/hassio/ingress/session): response doesn't contain data");
-                onErrorListener.onResponse(null);
-              }
-            } catch (JSONException e) {
-              Log.e(tag,
-                  "validateHassIngressSession (/api/hassio/ingress/session): JSONException:");
-              e.printStackTrace();
-              onErrorListener.onResponse(null);
-            }
-          },
-          error -> {
-            Log.e(tag, "validateHassIngressSession (/api/hassio/ingress/session): error: " + error);
-            onErrorListener.onResponse(null);
-          }
-      );
-      return;
+    homeAssistantSessionAuth(sessionKey, onSuccessListener, onErrorListener);
+  }
+
+  private void homeAssistantSessionAuth(
+      String sessionOld,
+      OnStringResponseListener onSuccessListener,
+      OnStringResponseListener onErrorListener
+  ) {
+    String hassUrlExtension;
+    JSONObject jsonObject = null;
+    if (sessionOld != null) {
+      hassUrlExtension = "/api/hassio/ingress/validate_session";
+      try {
+        jsonObject = new JSONObject();
+        jsonObject.put("session", sessionOld);
+      } catch (JSONException e) {
+        Log.e(tag, "homeAssistantSessionAuth: JSONException1:");
+        e.printStackTrace();
+      }
+    } else {
+      hassUrlExtension = "/api/hassio/ingress/session";
     }
 
-    JSONObject jsonObject = new JSONObject();
-    try {
-      jsonObject.put("session", sessionKey);
-    } catch (JSONException e) {
-      Log.e(tag,
-          "validateHassIngressSession (/api/hassio/ingress/validate_session): JSONException1:");
-      e.printStackTrace();
-    }
     postHassIngress(
-        hassServerUrl + "/api/hassio/ingress/validate_session",
+        hassServerUrl + hassUrlExtension,
         jsonObject,
         response -> {
           try {
             boolean isOk = response.get("result").equals("ok");
-            if (!isOk && response.has("data")) {
-              JSONObject data = response.getJSONObject("data");
-              if (!data.has("session")) {
-                Log.e(tag,
-                    "validateHassIngressSession (/api/hassio/ingress/validate_session): data doesn't contain session");
-                onErrorListener.onResponse(null);
-                return;
-              }
+            JSONObject data = isOk && response.has("data") ? response.getJSONObject("data") : null;
+            String session = data != null && data.has("session") ? data.getString("session") : null;
+            if (session != null) {
               sharedPrefs.edit().putString(
                   Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY,
-                  data.getString("session")
+                  session
               ).putString(
                   Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME,
                   dateUtil.getCurrentDateWithTimeStr()
               ).apply();
+              onSuccessListener.onResponse(session);
+            } else if (isOk && sessionOld != null) {
+              sharedPrefs.edit().putString(
+                  Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME,
+                  dateUtil.getCurrentDateWithTimeStr()
+              ).apply();
+              onSuccessListener.onResponse(sessionOld);
+            } else {
+              Log.e(tag, "homeAssistantSessionAuth: " + hassUrlExtension + ": bad response: " + response);
+              onErrorListener.onResponse(null);
             }
-            onSuccessListener.onResponse(sessionKey);
           } catch (JSONException e) {
-            Log.e(tag,
-                "validateHassIngressSession (/api/hassio/ingress/validate_session): JSONException2:");
+            Log.e(tag, "homeAssistantSessionAuth: " + hassUrlExtension + ": JSONException2: ");
             e.printStackTrace();
             onErrorListener.onResponse(null);
           }
         },
         error -> {
-          Log.e(tag, "validateHassIngressSession: error: " + error);
-          if (error instanceof AuthFailureError) {
-            postHassIngress(
-                hassServerUrl + "/api/hassio/ingress/session",
-                null,
-                response2 -> {
-                  try {
-                    boolean isOk = response2.get("result").equals("ok");
-                    if (isOk && response2.has("data")) {
-                      JSONObject data = response2.getJSONObject("data");
-                      if (!data.has("session")) {
-                        onErrorListener.onResponse(null);
-                        return;
-                      }
-                      sharedPrefs.edit().putString(
-                          Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY,
-                          data.getString("session")
-                      ).putString(
-                          Constants.PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME,
-                          dateUtil.getCurrentDateWithTimeStr()
-                      ).apply();
-                      onSuccessListener.onResponse(data.getString("session"));
-                    } else if (!isOk) {
-                      Log.e(tag, "validateHassIngressSession: isOk is false");
-                      onErrorListener.onResponse(null);
-                    }
-                  } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(tag, "validateHassIngressSession: JSONException");
-                    onErrorListener.onResponse(null);
-                  }
-                },
-                error2 -> {
-                  Log.e(tag, "validateHassIngressSession: error2: " + error2);
-                  onErrorListener.onResponse(null);
-                }
-            );
-          } else {
-            onErrorListener.onResponse(null);
+          Log.e(tag, "homeAssistantSessionAuth: " + hassUrlExtension + ": error: " + error);
+          if (sessionOld != null && error instanceof AuthFailureError) {
+            homeAssistantSessionAuth(null, onSuccessListener, onErrorListener);
+            return;
           }
+          onErrorListener.onResponse(null);
         }
     );
   }

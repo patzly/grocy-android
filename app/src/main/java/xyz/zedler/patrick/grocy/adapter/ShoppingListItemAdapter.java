@@ -319,10 +319,12 @@ public class ShoppingListItemAdapter extends
       binding.name.setPaintFlags(
           binding.name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
       );
+      binding.name.setAlpha(1.0f);
     } else {
       binding.name.setPaintFlags(
           binding.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
       );
+      binding.name.setAlpha(0.6f);
     }
 
     // NOTE AS NAME
@@ -380,10 +382,12 @@ public class ShoppingListItemAdapter extends
       binding.amount.setPaintFlags(
           binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
       );
+      binding.amount.setAlpha(1.0f);
     } else {
       binding.amount.setPaintFlags(
           binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
       );
+      binding.amount.setAlpha(0.6f);
     }
 
     // NOTE
@@ -409,20 +413,24 @@ public class ShoppingListItemAdapter extends
         binding.noteAsName.setPaintFlags(
             binding.noteAsName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
         );
+        binding.noteAsName.setAlpha(1.0f);
       } else {
         binding.noteAsName.setPaintFlags(
             binding.noteAsName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
         );
+        binding.noteAsName.setAlpha(0.6f);
       }
     } else {
       if (item.isUndone()) {
         binding.note.setPaintFlags(
             binding.note.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
         );
+        binding.note.setAlpha(1.0f);
       } else {
         binding.note.setPaintFlags(
             binding.note.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
         );
+        binding.note.setAlpha(0.6f);
       }
     }
 

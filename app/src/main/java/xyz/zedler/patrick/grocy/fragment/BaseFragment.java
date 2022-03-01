@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
@@ -314,11 +313,6 @@ public class BaseFragment extends Fragment {
       }
     }
     return Uri.parse(finalDeepLink.toString());
-  }
-
-  @SuppressLint("RestrictedApi")
-  int getBackStackSize() {
-    return findNavController().getBackStack().size();
   }
 
   /**

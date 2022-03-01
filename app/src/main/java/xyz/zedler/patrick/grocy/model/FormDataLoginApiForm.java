@@ -97,7 +97,7 @@ public class FormDataLoginApiForm {
           }
         }
     );
-    longLivedAccessTokenLive = new MutableLiveData<>();
+    longLivedAccessTokenLive = new MutableLiveData<>(args.getHomeAssistantToken());
     longLivedAccessTokenErrorLive = new MutableLiveData<>();
     ingressProxyIdLive = new MutableLiveData<>(args.getGrocyIngressProxyId());
     ingressProxyIdErrorLive = new MutableLiveData<>();

@@ -78,6 +78,8 @@
   <string name="action_proceed">Continuar</string>
   <string name="action_delete">Apagar</string>
   <string name="action_save">Guardar</string>
+  <string name="action_save_close">Guardar e sair</string>
+  <string name="action_save_not_close">Guardar sem sair</string>
   <string name="action_logout">Sair</string>
   <string name="action_restart">Reiniciar</string>
   <string name="action_create">Criar</string>
@@ -106,6 +108,10 @@
   <string name="action_own_server">Servidor pessoal</string>
   <string name="action_enter_data_manually">Introduzir dados manualmente</string>
   <string name="action_perform">Executar acção</string>
+  <string name="action_share">Partilhar</string>
+  <string name="action_share_description">Partilha o Grocy Android com os teus amigos</string>
+  <string name="action_no_filter">Sem filtro</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d a expirar</item>
@@ -131,6 +137,11 @@
     <item quantity="one">%1$d em stock</item>
     <item quantity="other">%1$d em stock</item>
   </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d aberto</item>
+    <item quantity="other">%1$d abertos</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Consumido %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -141,6 +152,21 @@
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d não concluído</item>
     <item quantity="other">%1$d não concluídos</item>
+  </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d concluído</item>
+    <item quantity="other">%1$d concluídos</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d concluída</item>
+    <item quantity="other">%1$d concluídas</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d não concluída</item>
+    <item quantity="other">%1$d não concluídas</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Comprou %1$s %2$s de %3$s</string>
@@ -253,7 +279,6 @@
   <string name="msg_help_home_assistant_login_help_show">Toque aqui para mostrar textos de ajuda.</string>
   <string name="msg_help_home_assistant_login_help_hide">Toque aqui para esconder textos de ajuda.</string>
   <string name="msg_help_home_assistant_login_server">No campo abaixo também pode introduzir o URL da sua instância Nabu Casa se estiver a usar esse serviço. Toque neste cartão para visitar o website da Nabu Casa.</string>
-  <string name="msg_help_home_assistant_login_token">Pode criar um token the longa duração no seu perfil de utilizador do Home Assistant (última secção). Seleccione aqui para abrir o URL acima.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Volte atrás ou toque nesta carta para ler um código de barras que preencha os campos abaixo.</string>
   <string name="error_api_not_working">API key não está a funcionar</string>
   <string name="error_orbot_not_installed">Orbot não está instalado</string>

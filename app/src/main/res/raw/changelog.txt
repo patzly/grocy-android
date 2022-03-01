@@ -1,5 +1,12 @@
-2.2.0:
+2.1.1:
+- New: Support for grocy server 3.2.0
+- New: Login flow for Home Assistant contains scanner for long-lived access token QR code
 - Improved: Filter for opened products was added on stock overview page
+- Improved: Items marked as done on shopping list are slightly greyed out (#498)
+- Improved: Additional error descriptions for Home Assistant on login page
+- Improved: Connection improvements for Home Assistant (#249)
+- Fixed: Crash when phone was rotated after successful barcode scan (#487)
+- Fixed: Crash with ZXing scanner on Android versions below Android 7 (#425)
 
 2.1.0:
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the initial work) (#391)

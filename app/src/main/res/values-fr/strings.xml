@@ -137,6 +137,11 @@
     <item quantity="one">%1$d en stock</item>
     <item quantity="other">%1$d en stock</item>
   </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d ouvert</item>
+    <item quantity="other">%1$d ouverts</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Consommé %1$s %2$s de %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -308,7 +313,6 @@
   <string name="msg_help_home_assistant_login_help_show">Appuyez ici pour afficher les messages d\'aide.</string>
   <string name="msg_help_home_assistant_login_help_hide">Appuyez ici pour cacher les messages d\'aide.</string>
   <string name="msg_help_home_assistant_login_server">Dans le champ ci-dessous, vous pouvez saisir l\'URL de votre instance Nabu Casa, si vous utilisez ce service. Appuyer ici pour consulter le site de Nabu Casa.</string>
-  <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès longue durée dans votre profil Home Assistant (bas de page). Appuyez ici pour ouvrir l\'URL ci-dessus.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
   <string name="msg_share">Découvrez ce client Android pour l\'excellent projet grocy : \nhttps://github.com/patzly/grocy-android</string>
 

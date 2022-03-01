@@ -456,7 +456,11 @@ public class ConsumeViewModel extends BaseViewModel {
             transactionId = response.getJSONObject(0)
                 .getString("transaction_id");
             for (int i = 0; i < response.length(); i++) {
-              amountConsumed -= response.getJSONObject(i).getDouble("amount");
+              if (isActionOpen) {
+                amountConsumed += response.getJSONObject(i).getDouble("amount");
+              } else {
+                amountConsumed -= response.getJSONObject(i).getDouble("amount");
+              }
             }
           } catch (JSONException e) {
             if (debug)

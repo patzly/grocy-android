@@ -61,6 +61,7 @@ public class LoginRequestViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> loginErrorOccurred;
   private final MutableLiveData<String> loginErrorMsg;
   private final MutableLiveData<String> loginErrorExactMsg;
+  private final MutableLiveData<String> loginErrorHassMsg;
 
   private final String serverUrl;
   private final String homeAssistantServerUrl;
@@ -100,12 +101,14 @@ public class LoginRequestViewModel extends BaseViewModel {
     loginErrorOccurred = new MutableLiveData<>(false);
     loginErrorMsg = new MutableLiveData<>();
     loginErrorExactMsg = new MutableLiveData<>();
+    loginErrorHassMsg = new MutableLiveData<>();
   }
 
   public void login(boolean checkVersion) {
     loginErrorOccurred.setValue(false);
     loginErrorMsg.setValue(null);
     loginErrorExactMsg.setValue(null);
+    loginErrorHassMsg.setValue(null);
 
     dlHelper.getSystemInfo(
         response -> {
@@ -158,42 +161,62 @@ public class LoginRequestViewModel extends BaseViewModel {
         },
         error -> {
           Log.e(TAG, "requestLogin: VolleyError: " + error);
+          loginErrorOccurred.setValue(true);
           if (error instanceof AuthFailureError) {
-            loginErrorOccurred.setValue(true);
-            loginErrorMsg.setValue(getString(R.string.error_api_not_working));
             loginErrorExactMsg.setValue(error.toString());
+            if(useHassLoginFlow) {
+              dlHelper.checkHassLongLivedToken(response -> {
+                if (response == null) {
+                  loginErrorHassMsg.setValue("Please check the Home Assistant long-lived token on the previous page.");
+                } else {
+                  loginErrorMsg.setValue(getString(R.string.error_api_not_working));
+                  loginErrorHassMsg.setValue("Please check the grocy API key on the previous page. ");
+                }
+              });
+            } else {
+              loginErrorMsg.setValue(getString(R.string.error_api_not_working));
+            }
           } else if (error instanceof NoConnectionError) {
             if (error.toString().contains("SSLHandshakeException")) {
               showMessage("SSLHandshakeException");
-              loginErrorOccurred.setValue(true);
               loginErrorMsg.setValue(getString(R.string.error_handshake));
               loginErrorExactMsg.setValue(getString(R.string.error_handshake_description));
             } else if (error.toString().contains("Invalid host")) {
-              loginErrorOccurred.setValue(true);
               loginErrorMsg.setValue(getString(R.string.error_invalid_url));
+              loginErrorExactMsg.setValue("Please check the server URL:\n" + serverUrl);
             } else {
-              loginErrorOccurred.setValue(true);
               loginErrorMsg.setValue(getString(R.string.error_failed_to_connect_to));
               loginErrorExactMsg
-                  .setValue("Server: " + serverUrl + "\n\nError: " + error.toString());
+                  .setValue("Server URL: " + serverUrl + "\n\nError: " + error);
             }
           } else if (error instanceof ServerError && error.networkResponse != null) {
             int code = error.networkResponse.statusCode;
-            loginErrorOccurred.setValue(true);
-            loginErrorExactMsg.setValue("Code: " + code);
             if (code == 404) {
               loginErrorMsg.setValue(getString(R.string.error_not_grocy_instance));
+              loginErrorExactMsg.setValue("Server URL: " + serverUrl + "\n\nResponse code: " + code);
+              loginErrorHassMsg.setValue("If you use grocy with Home Assistant, please check if you have chosen Home Assistant mode on the previous page.");
             } else {
               loginErrorMsg.setValue(getString(R.string.error_unexpected_response_code));
+              loginErrorExactMsg.setValue("Response code: " + code);
+              if (useHassLoginFlow && code == 503) {
+                loginErrorHassMsg.setValue("The ingress proxy identifier may be wrong. Please check it on the previous page. It should be a longer string like \"s65bor48v40w3r0m8v-cn945mwdj5icjvwsd43cfnm3\" and not \"gs6h7m3o_grocy\".");
+              } else if (useHassLoginFlow && code == 401) {
+                dlHelper.checkHassLongLivedToken(response -> {
+                  if (response == null) {
+                    loginErrorHassMsg.setValue("Additional info: long-lived access token may be invalid for Home Assistant.");
+                  } else {
+                    loginErrorHassMsg.setValue("Additional info: long-lived access token is valid for Home Assistant.");
+                  }
+                });
+              }
             }
           } else if (error instanceof ServerError) {
-            loginErrorOccurred.setValue(true);
             loginErrorMsg.setValue(getString(R.string.error_unexpected_response));
+            loginErrorExactMsg.setValue(error.toString());
           } else if (error instanceof TimeoutError) {
-            loginErrorOccurred.setValue(true);
             loginErrorMsg.setValue(getString(R.string.error_timeout));
+            loginErrorExactMsg.setValue(error.toString());
           } else {
-            loginErrorOccurred.setValue(true);
             loginErrorMsg.setValue(getString(R.string.error_undefined));
             loginErrorExactMsg.setValue(error.toString());
           }
@@ -230,6 +253,10 @@ public class LoginRequestViewModel extends BaseViewModel {
 
   public MutableLiveData<String> getLoginErrorExactMsg() {
     return loginErrorExactMsg;
+  }
+
+  public MutableLiveData<String> getLoginErrorHassMsg() {
+    return loginErrorHassMsg;
   }
 
   private boolean isDemoServer() {

@@ -227,7 +227,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
 
   @Override
   public void onDestroy() {
-    embeddedFragmentScanner.onDestroy();
+    if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 

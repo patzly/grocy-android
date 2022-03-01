@@ -245,7 +245,6 @@
   <string name="msg_help_home_assistant_login_help_show">点按此处显示帮助文本。</string>
   <string name="msg_help_home_assistant_login_help_hide">点按此处隐藏帮助文本。</string>
   <string name="msg_help_home_assistant_login_server">如果您使用该服务，您还可以输入您的Nabu Casa Cloud URL。点击此卡以访问Nabu Casa网站。</string>
-  <string name="msg_help_home_assistant_login_token">您可以在Home Assistant Profile设置（最后一节）中创建访问令牌。点击此处以从上面打开URL。</string>
   <string name="msg_help_home_assistant_login_proxy_id">导航后或点击此卡以扫描填充下面的字段的QR码。</string>
   <string name="error_api_not_working">API密钥不起作用</string>
   <string name="error_orbot_not_installed">未安装Orbot</string>

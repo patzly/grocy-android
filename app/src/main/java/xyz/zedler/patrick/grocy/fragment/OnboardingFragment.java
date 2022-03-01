@@ -166,13 +166,14 @@ public class OnboardingFragment extends BaseFragment {
     return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
   }
 
+  @SuppressLint("RestrictedApi")
   @Override
   public boolean onBackPressed() {
     if (!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
       activity.showMessage(R.string.msg_features);
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
-    if (getBackStackSize() == 2) { // TODO: Better condition
+    if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition
       navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
       return true;
     } else {

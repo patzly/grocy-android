@@ -79,7 +79,7 @@
             style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/msg_qr_code_scan" />
+            android:text="@{fragment.isPageForGrocyKey() ? @string/msg_qr_code_scan : @string/msg_qr_code_scan_token}" />
 
         </com.google.android.material.card.MaterialCardView>
 

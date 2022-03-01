@@ -302,7 +302,6 @@
   <string name="msg_help_home_assistant_login_help_show">Koppints ide a súgó szövegek megjelenítéséhez.</string>
   <string name="msg_help_home_assistant_login_help_hide">Koppints ide a súgó szövegek elrejtéséhez.</string>
   <string name="msg_help_home_assistant_login_server">A lenti mezőbe bírhatod a Nabu Casa URL címedet, amennyiben használod. Koppints a kártyára a Nabu Casa weboldal megtekintéséhez.</string>
-  <string name="msg_help_home_assistant_login_token">Létrehozhatsz egy hosszú életű tokent a Home Assistant profilod beállításaiban (utolsó rész). Koppints ide a fenti URL megnyitásához.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Lépj vissza vagy koppints erre a kártyára QR kód beolvasásához, amely kitölti ezeket a mezőket.</string>
   <string name="msg_share">Nézd meg ezt az Android klienst a fantasztikus Grocy projekthez: \nhttps://github.com/patzly/grocy-android</string>
 

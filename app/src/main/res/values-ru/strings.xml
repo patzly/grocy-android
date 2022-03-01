@@ -334,7 +334,6 @@
   <string name="msg_help_home_assistant_login_help_show">Нажмите здесь, чтобы показать подсказки.</string>
   <string name="msg_help_home_assistant_login_help_hide">Нажмите здесь, чтобы скрыть подсказки.</string>
   <string name="msg_help_home_assistant_login_server">В поле ниже вы также можете ввести URL-адрес вашего облака Nabu Casa, если вы используете эту службу. Нажмите на эту карточку, чтобы перейти на сайт Nabu Casa.</string>
-  <string name="msg_help_home_assistant_login_token">Вы можете создать долгосрочный токен доступа в настройках профиля Home Assistant (последний раздел). Нажмите здесь, чтобы открыть URL-адрес сверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Вернитесь назад или нажмите на эту карточку, чтобы отсканировать QR-код, который заполняет поля ниже.</string>
   <string name="msg_share">Привет! Я использую Grocy Android для эффективного управления домашним хозяйством. Присоединяйся!\nhttps://github.com/patzly/grocy-android</string>
 
@@ -494,7 +493,7 @@
   <string name="subtitle_default_location">По умолчанию</string>
   <string name="subtitle_none_selected">Ничего не выбрано</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
-  <string name="subtitle_none">Ничего</string>
+  <string name="subtitle_none">Без группировки</string>
   <string name="subtitle_empty">Пусто</string>
   <string name="subtitle_done">Выполнено</string>
   <string name="subtitle_undone">Отменено</string>

@@ -196,7 +196,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   @Override
   public void onDestroy() {
-    embeddedFragmentScanner.onDestroy();
+    if (embeddedFragmentScanner != null) embeddedFragmentScanner.onDestroy();
     super.onDestroy();
   }
 
