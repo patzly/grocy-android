@@ -257,7 +257,7 @@
   <string name="msg_welcome_to_grocy">Bem-vindo ao Grocy Android!\n\nPara usar o grocy de forma mais produtiva precisa do seu próprio servidor ou do add-on do grocy para o Home Assistant.\nSe apenas pretende experimentar esta aplicação pode usar o servidor de demonstração de Bernd Bestel, o criador do grocy.</string>
   <string name="msg_choose_option_below">Por favor seleccione uma das seguintes opções.</string>
   <string name="msg_qr_code_scan">Noutro dispositivo, visite o seu website do grocy e navegue até à página \'API keys\'. Seleccione \"Adicionar\", depois seleccione o pequeno símbolo de código QR e digitalize o código QR.</string>
-  <string name="msg_qr_code_scan_token">Está a usar o add-on do grocy par ao Home Assistant. Crie um token de acesso de longa duração na configuração do seu perfil do Home Assistant (última secção). Em baixo do campo do token seleccione \"Gerar código QR\" e leia-o aqui.</string>
+  <string name="msg_qr_code_scan_token">Está a usar o add-on do grocy par ao Home Assistant. Crie um token de acesso de longa duração nas definições do seu perfil do Home Assistant (última secção). Em baixo do campo do token seleccione \"Gerar código QR\" e leia-o aqui.</string>
   <string name="msg_port_connection_info_without_port">A aplicação vai-se conectar à porta %1$s.\nSe prefere ligar-se a uma porta diferente pode acrescentar a porta no URL.\nExemplo: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">A aplicação vai-se conectar à porta %1$s.</string>
   <string name="msg_not_implemented_yet">Isto será implementado em breve. Por favor utilize o seu interface do servidor por agora.</string>
