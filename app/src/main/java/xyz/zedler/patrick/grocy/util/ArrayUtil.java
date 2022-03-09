@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -68,7 +69,7 @@ public class ArrayUtil {
   }
 
   public static HashMap<Integer, ProductGroup> getProductGroupsHashMap(
-      ArrayList<ProductGroup> productGroups
+      List<ProductGroup> productGroups
   ) {
     HashMap<Integer, ProductGroup> hashMap = new HashMap<>();
     for (ProductGroup p : productGroups) {

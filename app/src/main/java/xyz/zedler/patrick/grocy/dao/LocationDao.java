@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.Location;
 
@@ -36,6 +37,9 @@ public interface LocationDao {
 
   @Query("SELECT * FROM location_table")
   List<Location> getAll();
+
+  @Query("SELECT * FROM location_table")
+  Single<List<Location>> getLocations();
 
   @Query("SELECT COUNT(*) FROM location_table")
   int count();

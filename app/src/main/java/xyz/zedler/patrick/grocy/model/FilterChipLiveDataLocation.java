@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.model;
 import android.app.Application;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -60,7 +61,7 @@ public class FilterChipLiveDataLocation extends FilterChipLiveData {
     setItemIdChecked(id);
   }
 
-  public void setLocations(ArrayList<Location> locations) {
+  public void setLocations(List<Location> locations) {
     SortUtil.sortLocationsByName(application, locations, true);
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(

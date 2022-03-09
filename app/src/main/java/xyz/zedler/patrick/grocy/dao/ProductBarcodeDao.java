@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 
@@ -36,6 +37,9 @@ public interface ProductBarcodeDao {
 
   @Query("SELECT * FROM product_barcode_table")
   List<ProductBarcode> getAll();
+
+  @Query("SELECT * FROM product_barcode_table")
+  Single<List<ProductBarcode>> getProductBarcodes();
 
   @Query("SELECT COUNT(*) FROM product_barcode_table")
   int count();

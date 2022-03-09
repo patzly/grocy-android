@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 
@@ -36,6 +37,9 @@ public interface QuantityUnitDao {
 
   @Query("SELECT * FROM quantity_unit_table")
   List<QuantityUnit> getAll();
+
+  @Query("SELECT * FROM quantity_unit_table")
+  Single<List<QuantityUnit>> getQuantityUnits();
 
   @Query("SELECT COUNT(*) FROM quantity_unit_table")
   int count();

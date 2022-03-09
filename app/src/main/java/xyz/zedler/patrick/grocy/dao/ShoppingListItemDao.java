@@ -26,7 +26,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 
@@ -39,6 +39,9 @@ public interface ShoppingListItemDao {
   @Query("SELECT * FROM shopping_list_item_table")
   List<ShoppingListItem> getAll();
 
+  @Query("SELECT * FROM shopping_list_item_table")
+  Single<List<ShoppingListItem>> getShoppingListItems();
+
   @Query("SELECT * FROM shopping_list_item_table WHERE id LIKE :id LIMIT 1")
   ShoppingListItem findById(int id);
 
@@ -46,7 +49,7 @@ public interface ShoppingListItemDao {
   int count();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(ArrayList<ShoppingListItem> shoppingListItems);
+  void insertAll(List<ShoppingListItem> shoppingListItems);
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   void insertAll(ShoppingListItem... shoppingListItems);

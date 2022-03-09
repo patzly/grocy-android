@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.Product;
 
@@ -36,6 +37,9 @@ public interface ProductDao {
 
   @Query("SELECT * FROM product_table")
   List<Product> getAll();
+
+  @Query("SELECT * FROM product_table")
+  Single<List<Product>> getProducts();
 
   @Query("SELECT COUNT(*) FROM product_table")
   int count();

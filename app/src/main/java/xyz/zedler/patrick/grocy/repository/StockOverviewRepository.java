@@ -21,7 +21,10 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -41,79 +44,102 @@ public class StockOverviewRepository {
   }
 
   public interface StockOverviewDataListener {
-
-    void actionFinished(
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<ProductGroup> productGroups,
-        ArrayList<StockItem> stockItems,
-        ArrayList<Product> products,
-        ArrayList<ProductBarcode> productBarcodes,
-        ArrayList<ShoppingListItem> shoppingListItems,
-        ArrayList<Location> locations,
-        ArrayList<StockLocation> stockCurrentLocations
-    );
+    void actionFinished(StockOverviewData data);
   }
 
-  public interface StockOverviewDataUpdatedListener {
+  public static class StockOverviewData {
 
-    void actionFinished();
+    private final List<QuantityUnit> quantityUnits;
+    private final List<ProductGroup> productGroups;
+    private final List<StockItem> stockItems;
+    private final List<Product> products;
+    private final List<ProductBarcode> productBarcodes;
+    private final List<ShoppingListItem> shoppingListItems;
+    private final List<Location> locations;
+    private final List<StockLocation> stockCurrentLocations;
+
+    public StockOverviewData(
+        List<QuantityUnit> quantityUnits,
+        List<ProductGroup> productGroups,
+        List<StockItem> stockItems,
+        List<Product> products,
+        List<ProductBarcode> productBarcodes,
+        List<ShoppingListItem> shoppingListItems,
+        List<Location> locations,
+        List<StockLocation> stockCurrentLocations
+    ) {
+      this.quantityUnits = quantityUnits;
+      this.productGroups = productGroups;
+      this.stockItems = stockItems;
+      this.products = products;
+      this.productBarcodes = productBarcodes;
+      this.shoppingListItems = shoppingListItems;
+      this.locations = locations;
+      this.stockCurrentLocations = stockCurrentLocations;
+    }
+
+    public List<QuantityUnit> getQuantityUnits() {
+      return quantityUnits;
+    }
+
+    public List<ProductGroup> getProductGroups() {
+      return productGroups;
+    }
+
+    public List<StockItem> getStockItems() {
+      return stockItems;
+    }
+
+    public List<Product> getProducts() {
+      return products;
+    }
+
+    public List<ProductBarcode> getProductBarcodes() {
+      return productBarcodes;
+    }
+
+    public List<ShoppingListItem> getShoppingListItems() {
+      return shoppingListItems;
+    }
+
+    public List<Location> getLocations() {
+      return locations;
+    }
+
+    public List<StockLocation> getStockCurrentLocations() {
+      return stockCurrentLocations;
+    }
   }
 
   public void loadFromDatabase(StockOverviewDataListener listener) {
-    new loadAsyncTask(appDatabase, listener).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final StockOverviewDataListener listener;
-
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<ProductGroup> productGroups;
-    private ArrayList<StockItem> stockItems;
-    private ArrayList<Product> products;
-    private ArrayList<ProductBarcode> productBarcodes;
-    private ArrayList<ShoppingListItem> shoppingListItems;
-    private ArrayList<Location> locations;
-    private ArrayList<StockLocation> stockCurrentLocations;
-
-    loadAsyncTask(AppDatabase appDatabase, StockOverviewDataListener listener) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-      productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
-      stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
-      products = new ArrayList<>(appDatabase.productDao().getAll());
-      productBarcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
-      shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
-      locations = new ArrayList<>(appDatabase.locationDao().getAll());
-      stockCurrentLocations = new ArrayList<>(appDatabase.stockLocationDao().getAll());
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(quantityUnits, productGroups, stockItems, products, productBarcodes,
-            shoppingListItems, locations, stockCurrentLocations);
-      }
-    }
+    Single
+        .zip(
+            appDatabase.quantityUnitDao().getQuantityUnits(),
+            appDatabase.productGroupDao().getProductGroups(),
+            appDatabase.stockItemDao().getStockItems(),
+            appDatabase.productDao().getProducts(),
+            appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.shoppingListItemDao().getShoppingListItems(),
+            appDatabase.locationDao().getLocations(),
+            appDatabase.stockLocationDao().getStockLocations(),
+            StockOverviewData::new
+        )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(listener::actionFinished)
+        .subscribe();
   }
 
   public void updateDatabase(
-      ArrayList<QuantityUnit> quantityUnits,
-      ArrayList<ProductGroup> productGroups,
-      ArrayList<StockItem> stockItems,
-      ArrayList<Product> products,
-      ArrayList<ProductBarcode> productBarcodes,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      ArrayList<Location> locations,
-      ArrayList<StockLocation> stockCurrentLocations,
-      StockOverviewDataUpdatedListener listener
+      List<QuantityUnit> quantityUnits,
+      List<ProductGroup> productGroups,
+      List<StockItem> stockItems,
+      List<Product> products,
+      List<ProductBarcode> productBarcodes,
+      List<ShoppingListItem> shoppingListItems,
+      List<Location> locations,
+      List<StockLocation> stockCurrentLocations,
+      Runnable listener
   ) {
     new updateAsyncTask(
         appDatabase,
@@ -132,28 +158,28 @@ public class StockOverviewRepository {
   private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private final AppDatabase appDatabase;
-    private final StockOverviewDataUpdatedListener listener;
+    private final Runnable listener;
 
-    private final ArrayList<QuantityUnit> quantityUnits;
-    private final ArrayList<ProductGroup> productGroups;
-    private final ArrayList<StockItem> stockItems;
-    private final ArrayList<Product> products;
-    private final ArrayList<ProductBarcode> productBarcodes;
-    private final ArrayList<ShoppingListItem> shoppingListItems;
-    private final ArrayList<Location> locations;
-    private final ArrayList<StockLocation> stockCurrentLocations;
+    private final List<QuantityUnit> quantityUnits;
+    private final List<ProductGroup> productGroups;
+    private final List<StockItem> stockItems;
+    private final List<Product> products;
+    private final List<ProductBarcode> productBarcodes;
+    private final List<ShoppingListItem> shoppingListItems;
+    private final List<Location> locations;
+    private final List<StockLocation> stockCurrentLocations;
 
     updateAsyncTask(
         AppDatabase appDatabase,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<ProductGroup> productGroups,
-        ArrayList<StockItem> stockItems,
-        ArrayList<Product> products,
-        ArrayList<ProductBarcode> productBarcodes,
-        ArrayList<ShoppingListItem> shoppingListItems,
-        ArrayList<Location> locations,
-        ArrayList<StockLocation> stockCurrentLocations,
-        StockOverviewDataUpdatedListener listener
+        List<QuantityUnit> quantityUnits,
+        List<ProductGroup> productGroups,
+        List<StockItem> stockItems,
+        List<Product> products,
+        List<ProductBarcode> productBarcodes,
+        List<ShoppingListItem> shoppingListItems,
+        List<Location> locations,
+        List<StockLocation> stockCurrentLocations,
+        Runnable listener
     ) {
       this.appDatabase = appDatabase;
       this.listener = listener;
@@ -191,7 +217,7 @@ public class StockOverviewRepository {
     @Override
     protected void onPostExecute(Void aVoid) {
       if (listener != null) {
-        listener.actionFinished();
+        listener.run();
       }
     }
   }
