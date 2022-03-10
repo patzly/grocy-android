@@ -55,4 +55,7 @@ public interface StockLocationDao {
 
   @Query("DELETE FROM stock_current_location_table")
   void deleteAll();
+
+  @Query("DELETE FROM stock_current_location_table")
+  Single<Integer> deleteStockLocations();
 }

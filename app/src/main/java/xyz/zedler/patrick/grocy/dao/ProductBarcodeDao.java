@@ -56,4 +56,7 @@ public interface ProductBarcodeDao {
   @Query("DELETE FROM product_barcode_table")
   void deleteAll();
 
+  @Query("DELETE FROM product_barcode_table")
+  Single<Integer> deleteProductBarcodes();
+
 }

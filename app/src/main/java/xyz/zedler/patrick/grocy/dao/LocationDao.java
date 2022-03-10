@@ -56,4 +56,7 @@ public interface LocationDao {
   @Query("DELETE FROM location_table")
   void deleteAll();
 
+  @Query("DELETE FROM location_table")
+  Single<Integer> deleteLocations();
+
 }

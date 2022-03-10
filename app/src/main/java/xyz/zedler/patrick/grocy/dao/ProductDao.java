@@ -56,4 +56,7 @@ public interface ProductDao {
   @Query("DELETE FROM product_table")
   void deleteAll();
 
+  @Query("DELETE FROM product_table")
+  Single<Integer> deleteProducts();
+
 }

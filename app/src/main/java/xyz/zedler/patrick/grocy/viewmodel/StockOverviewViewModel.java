@@ -441,14 +441,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private void onQueueEmpty() {
     repository.updateDatabase(
-        this.quantityUnits,
-        this.productGroups,
         this.stockItems,
-        this.products,
-        this.productBarcodesTemp,
-        this.shoppingListItems,
-        this.locations,
-        this.stockCurrentLocationsTemp,
         this::updateFilteredStockItems
     );
   }

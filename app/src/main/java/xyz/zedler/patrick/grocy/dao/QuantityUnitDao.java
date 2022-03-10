@@ -56,4 +56,7 @@ public interface QuantityUnitDao {
   @Query("DELETE FROM quantity_unit_table")
   void deleteAll();
 
+  @Query("DELETE FROM quantity_unit_table")
+  Single<Integer> deleteQuantityUnits();
+
 }

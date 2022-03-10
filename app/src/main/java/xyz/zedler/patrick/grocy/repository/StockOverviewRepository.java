@@ -131,26 +131,12 @@ public class StockOverviewRepository {
   }
 
   public void updateDatabase(
-      List<QuantityUnit> quantityUnits,
-      List<ProductGroup> productGroups,
       List<StockItem> stockItems,
-      List<Product> products,
-      List<ProductBarcode> productBarcodes,
-      List<ShoppingListItem> shoppingListItems,
-      List<Location> locations,
-      List<StockLocation> stockCurrentLocations,
       Runnable listener
   ) {
     new updateAsyncTask(
         appDatabase,
-        quantityUnits,
-        productGroups,
         stockItems,
-        products,
-        productBarcodes,
-        shoppingListItems,
-        locations,
-        stockCurrentLocations,
         listener
     ).execute();
   }
@@ -160,57 +146,22 @@ public class StockOverviewRepository {
     private final AppDatabase appDatabase;
     private final Runnable listener;
 
-    private final List<QuantityUnit> quantityUnits;
-    private final List<ProductGroup> productGroups;
     private final List<StockItem> stockItems;
-    private final List<Product> products;
-    private final List<ProductBarcode> productBarcodes;
-    private final List<ShoppingListItem> shoppingListItems;
-    private final List<Location> locations;
-    private final List<StockLocation> stockCurrentLocations;
 
     updateAsyncTask(
         AppDatabase appDatabase,
-        List<QuantityUnit> quantityUnits,
-        List<ProductGroup> productGroups,
         List<StockItem> stockItems,
-        List<Product> products,
-        List<ProductBarcode> productBarcodes,
-        List<ShoppingListItem> shoppingListItems,
-        List<Location> locations,
-        List<StockLocation> stockCurrentLocations,
         Runnable listener
     ) {
       this.appDatabase = appDatabase;
       this.listener = listener;
-      this.quantityUnits = quantityUnits;
-      this.productGroups = productGroups;
       this.stockItems = stockItems;
-      this.products = products;
-      this.productBarcodes = productBarcodes;
-      this.shoppingListItems = shoppingListItems;
-      this.locations = locations;
-      this.stockCurrentLocations = stockCurrentLocations;
     }
 
     @Override
     protected final Void doInBackground(Void... params) {
-      appDatabase.quantityUnitDao().deleteAll();
-      appDatabase.quantityUnitDao().insertAll(quantityUnits);
-      appDatabase.productGroupDao().deleteAll();
-      appDatabase.productGroupDao().insertAll(productGroups);
       appDatabase.stockItemDao().deleteAll();
       appDatabase.stockItemDao().insertAll(stockItems);
-      appDatabase.productDao().deleteAll();
-      appDatabase.productDao().insertAll(products);
-      appDatabase.productBarcodeDao().deleteAll();
-      appDatabase.productBarcodeDao().insertAll(productBarcodes);
-      appDatabase.shoppingListItemDao().deleteAll();
-      appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
-      appDatabase.locationDao().deleteAll();
-      appDatabase.locationDao().insertAll(locations);
-      appDatabase.stockLocationDao().deleteAll();
-      appDatabase.stockLocationDao().insertAll(stockCurrentLocations);
       return null;
     }
 

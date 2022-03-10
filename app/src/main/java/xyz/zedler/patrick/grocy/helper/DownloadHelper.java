@@ -32,6 +32,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -77,6 +80,7 @@ public class DownloadHelper {
   private final OnLoadingListener onLoadingListener;
   private final SharedPreferences sharedPrefs;
   private final DateUtil dateUtil;
+  private final AppDatabase appDatabase;
 
   private final ArrayList<Queue> queueArrayList;
   private final String tag;
@@ -97,6 +101,7 @@ public class DownloadHelper {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     dateUtil = new DateUtil(application);
+    appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
     gson = new Gson();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application);
@@ -134,6 +139,7 @@ public class DownloadHelper {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     gson = new Gson();
     dateUtil = new DateUtil(application);
+    appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
     RequestQueueSingleton.getInstance(application).newRequestQueue();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application, serverUrl);
@@ -525,12 +531,17 @@ public class DownloadHelper {
       String dbChangedTime,
       OnProductGroupsResponseListener onResponseListener
   ) {
-    OnProductGroupsResponseListener newOnResponseListener = productGroups -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(productGroups);
-    };
+    OnProductGroupsResponseListener newOnResponseListener = productGroups -> appDatabase
+        .productGroupDao().deleteProductGroups()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.productGroupDao().insertAll(productGroups))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
+          onResponseListener.onResponse(productGroups);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null
     );
@@ -593,14 +604,17 @@ public class DownloadHelper {
       String dbChangedTime,
       OnQuantityUnitsResponseListener onResponseListener
   ) {
-    OnQuantityUnitsResponseListener newOnResponseListener = conversions -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(
-          Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime
-      );
-      editPrefs.apply();
-      onResponseListener.onResponse(conversions);
-    };
+    OnQuantityUnitsResponseListener newOnResponseListener = quantityUnits -> appDatabase
+        .quantityUnitDao().deleteQuantityUnits()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.quantityUnitDao().insertAll(quantityUnits))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
+          onResponseListener.onResponse(quantityUnits);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null
     );
@@ -737,12 +751,17 @@ public class DownloadHelper {
       String dbChangedTime,
       OnLocationsResponseListener onResponseListener
   ) {
-    OnLocationsResponseListener newOnResponseListener = products -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(products);
-    };
+    OnLocationsResponseListener newOnResponseListener = locations -> appDatabase
+        .locationDao().deleteLocations()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.locationDao().insertAll(locations))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime).apply();
+          onResponseListener.onResponse(locations);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_LOCATIONS, null
     );
@@ -797,20 +816,21 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getStockCurrentLocations(OnStockLocationsResponseListener onResponseListener) {
-    return getStockCurrentLocations(onResponseListener, null);
-  }
-
   public QueueItem updateStockCurrentLocations(
       String dbChangedTime,
       OnStockLocationsResponseListener onResponseListener
   ) {
-    OnStockLocationsResponseListener newOnResponseListener = stockLocations -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(stockLocations);
-    };
+    OnStockLocationsResponseListener newOnResponseListener = stockLocations -> appDatabase
+        .stockLocationDao().deleteStockLocations()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.stockLocationDao().insertAll(stockLocations))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime).apply();
+          onResponseListener.onResponse(stockLocations);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null
     );
@@ -873,12 +893,17 @@ public class DownloadHelper {
       String dbChangedTime,
       OnProductsResponseListener onResponseListener
   ) {
-    OnProductsResponseListener newOnResponseListener = products -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(products);
-    };
+    OnProductsResponseListener newOnResponseListener = products -> appDatabase
+        .productDao().deleteProducts()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.productDao().insertAll(products))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime).apply();
+          onResponseListener.onResponse(products);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCTS, null
     );
@@ -934,20 +959,21 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getProductBarcodes(OnProductBarcodesResponseListener onResponseListener) {
-    return getProductBarcodes(onResponseListener, null);
-  }
-
   public QueueItem updateProductBarcodes(
       String dbChangedTime,
       OnProductBarcodesResponseListener onResponseListener
   ) {
-    OnProductBarcodesResponseListener newOnResponseListener = barcodes -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(barcodes);
-    };
+    OnProductBarcodesResponseListener newOnResponseListener = barcodes -> appDatabase
+        .productBarcodeDao().deleteProductBarcodes()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.productBarcodeDao().insertAll(barcodes))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime).apply();
+          onResponseListener.onResponse(barcodes);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null
     );
@@ -1514,14 +1540,17 @@ public class DownloadHelper {
       String dbChangedTime,
       OnShoppingListItemsResponseListener onResponseListener
   ) {
-    OnShoppingListItemsResponseListener newOnResponseListener = shoppingListItems -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(
-          Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime
-      );
-      editPrefs.apply();
-      onResponseListener.onResponse(shoppingListItems);
-    };
+    OnShoppingListItemsResponseListener newOnResponseListener = shoppingListItems -> appDatabase
+        .shoppingListItemDao().deleteShoppingListItems()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.shoppingListItemDao().insertAll(shoppingListItems))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(() -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
+          onResponseListener.onResponse(shoppingListItems);
+        })
+        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null
     );
