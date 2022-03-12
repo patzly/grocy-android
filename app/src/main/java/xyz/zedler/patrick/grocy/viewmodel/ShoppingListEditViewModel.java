@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -62,7 +63,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<ShoppingList> shoppingLists;
+  private List<ShoppingList> shoppingLists;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final ShoppingList startupShoppingList;
@@ -105,16 +106,12 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     );
   }
 
-  private ArrayList<String> getShoppingListNames(ArrayList<ShoppingList> shoppingLists) {
+  private ArrayList<String> getShoppingListNames(List<ShoppingList> shoppingLists) {
     ArrayList<String> shoppingListNames = new ArrayList<>();
     for (ShoppingList sl : shoppingLists) {
       shoppingListNames.add(sl.getName());
     }
     return shoppingListNames;
-  }
-
-  private String getLastTime(String sharedPref) {
-    return sharedPrefs.getString(sharedPref, null);
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -163,8 +160,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateDatabase(this.shoppingLists, () -> {
-    });
+    repository.updateShoppingLists(this.shoppingLists);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {

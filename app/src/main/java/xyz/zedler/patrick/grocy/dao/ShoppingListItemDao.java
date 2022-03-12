@@ -55,6 +55,9 @@ public interface ShoppingListItemDao {
   void insertAll(ShoppingListItem... shoppingListItems);
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
+  Single<List<Long>> insertItems(ShoppingListItem... shoppingListItems);
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
   void insert(ShoppingListItem shoppingListItem);
 
   @Update

@@ -64,6 +64,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
@@ -1923,7 +1924,46 @@ public class DownloadHelper {
         Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getShoppingLists(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ShoppingList>>() {
+                }.getType();
+                ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ShoppingLists: " + shoppingLists);
+                }
+                appDatabase
+                    .shoppingListDao().deleteShoppingLists()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.shoppingListDao().insertAll(shoppingLists))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime).apply();
+                      onResponseListener.onResponse(shoppingLists);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped ShoppingLists download");

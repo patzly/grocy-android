@@ -62,4 +62,7 @@ public interface ShoppingListDao {
   @Query("DELETE FROM shopping_list_table")
   void deleteAll();
 
+  @Query("DELETE FROM shopping_list_table")
+  Single<Integer> deleteShoppingLists();
+
 }

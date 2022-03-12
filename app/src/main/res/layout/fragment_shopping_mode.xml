@@ -152,7 +152,7 @@
       app:progressBackgroundColor="@{@color/surface}"
       app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
-      app:onRefreshListener="@{() -> viewModel.downloadData()}">
+      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
       <FrameLayout
         android:id="@+id/frame"
