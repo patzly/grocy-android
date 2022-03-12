@@ -20,8 +20,8 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -34,81 +34,28 @@ public class ChooseProductRepository {
     this.appDatabase = AppDatabase.getAppDatabase(application);
   }
 
-  public interface DataListenerProducts {
-
-    void actionFinished(ArrayList<Product> products);
+  public interface DataListener {
+    void actionFinished(ChooseProductData data);
   }
 
-  public interface DataUpdatedListener {
-
-    void actionFinished();
-  }
-
-  public void loadFromDatabase(DataListenerProducts listener) {
-    new loadAsyncTask(appDatabase, listener).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataListenerProducts listener;
-    private ArrayList<Product> products;
-
-    loadAsyncTask(AppDatabase appDatabase, DataListenerProducts listener) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      products = new ArrayList<>(appDatabase.productDao().getAll());
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(products);
-      }
-    }
-  }
-
-  public void updateDatabase(
-      ArrayList<Product> products,
-      DataUpdatedListener listener
-  ) {
-    new updateAsyncTask(appDatabase, products, listener).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataUpdatedListener listener;
+  public static class ChooseProductData {
 
     private final List<Product> products;
 
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        ArrayList<Product> products,
-        DataUpdatedListener listener
-    ) {
-      this.appDatabase = appDatabase;
+    public ChooseProductData(List<Product> products) {
       this.products = products;
-      this.listener = listener;
     }
 
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.productDao().deleteAll();
-      appDatabase.productDao().insertAll(products);
-      return null;
+    public List<Product> getProducts() {
+      return products;
     }
+  }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
-      }
-    }
+  public void loadFromDatabase(DataListener listener) {
+    appDatabase.productDao().getProducts()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(products -> listener.actionFinished(new ChooseProductData(products)))
+        .subscribe();
   }
 }

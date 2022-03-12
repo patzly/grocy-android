@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -75,10 +76,10 @@ public class ConsumeViewModel extends BaseViewModel {
   private final ConsumeRepository repository;
   private final FormDataConsume formData;
 
-  private ArrayList<Product> products;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<QuantityUnitConversion> unitConversions;
-  private ArrayList<ProductBarcode> barcodes;
+  private List<Product> products;
+  private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> unitConversions;
+  private List<ProductBarcode> barcodes;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -120,12 +121,12 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, qUs, conversions) -> {
-      this.products = products;
-      this.barcodes = barcodes;
-      this.quantityUnits = qUs;
-      this.unitConversions = conversions;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      this.barcodes = data.getBarcodes();
+      this.quantityUnits = data.getQuantityUnits();
+      this.unitConversions = data.getQuantityUnitConversions();
+      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -146,7 +147,7 @@ public class ConsumeViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateProductBarcodes(
@@ -182,9 +183,6 @@ public class ConsumeViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    repository.updateDatabase(products, barcodes,
-        quantityUnits, unitConversions, () -> {
-        });
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -517,16 +515,6 @@ public class ConsumeViewModel extends BaseViewModel {
         onSuccess.run();
       }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
-  }
-
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-      if (product.isActive()) {
-        activeProductsOnly.add(product);
-      }
-    }
-    return activeProductsOnly;
   }
 
   private QuantityUnit getQuantityUnit(int id) {

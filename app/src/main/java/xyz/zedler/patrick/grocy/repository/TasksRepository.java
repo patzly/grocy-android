@@ -20,10 +20,10 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
-
-import java.util.ArrayList;
-
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
@@ -38,96 +38,41 @@ public class TasksRepository {
 
   public interface TasksDataListener {
 
-    void actionFinished(
-        ArrayList<TaskCategory> taskGroups,
-        ArrayList<Task> tasks
-    );
+    void actionFinished(TasksData data);
   }
 
-  public interface TasksDataUpdatedListener {
+  public static class TasksData {
 
-    void actionFinished();
-  }
+    private final List<TaskCategory> taskGroups;
+    private final List<Task> tasks;
 
-  public void loadFromDatabase(TasksDataListener listener) {
-    new loadAsyncTask(appDatabase, listener).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final TasksDataListener listener;
-
-    private ArrayList<TaskCategory> taskCategories;
-    private ArrayList<Task> tasks;
-
-    loadAsyncTask(AppDatabase appDatabase, TasksDataListener listener) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      taskCategories = new ArrayList<>(appDatabase.taskCategoryDao().getAll());
-      tasks = new ArrayList<>(appDatabase.taskDao().getAll());
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(taskCategories, tasks);
-      }
-    }
-  }
-
-  public void updateDatabase(
-      ArrayList<TaskCategory> taskCategories,
-      ArrayList<Task> tasks,
-      TasksDataUpdatedListener listener
-  ) {
-    new updateAsyncTask(
-        appDatabase,
-        taskCategories,
-        tasks,
-        listener
-    ).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final TasksDataUpdatedListener listener;
-
-    private final ArrayList<TaskCategory> taskCategories;
-    private final ArrayList<Task> tasks;
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        ArrayList<TaskCategory> taskCategories,
-        ArrayList<Task> tasks,
-        TasksDataUpdatedListener listener
+    public TasksData(
+        List<TaskCategory> taskGroups,
+        List<Task> tasks
     ) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-      this.taskCategories = taskCategories;
+      this.taskGroups = taskGroups;
       this.tasks = tasks;
     }
 
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.taskCategoryDao().deleteAll();
-      appDatabase.taskCategoryDao().insertAll(taskCategories);
-      appDatabase.taskDao().deleteAll();
-      appDatabase.taskDao().insertAll(tasks);
-      return null;
+    public List<TaskCategory> getTaskGroups() {
+      return taskGroups;
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
-      }
+    public List<Task> getTasks() {
+      return tasks;
     }
+  }
+
+  public void loadFromDatabase(TasksDataListener listener) {
+    Single
+        .zip(
+            appDatabase.taskCategoryDao().getTaskCategories(),
+            appDatabase.taskDao().getTasks(),
+            TasksData::new
+        )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(listener::actionFinished)
+        .subscribe();
   }
 }

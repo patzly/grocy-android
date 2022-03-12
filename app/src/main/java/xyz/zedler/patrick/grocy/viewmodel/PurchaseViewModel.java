@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -81,17 +82,17 @@ public class PurchaseViewModel extends BaseViewModel {
   private final PurchaseRepository repository;
   private final FormDataPurchase formData;
 
-  private ArrayList<Product> products;
+  private List<Product> products;
   private HashMap<Integer, Product> productHashMap;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private ArrayList<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversion> unitConversions;
   private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
-  private ArrayList<ProductBarcode> barcodes;
-  private ArrayList<Store> stores;
-  private ArrayList<Location> locations;
-  private ArrayList<ShoppingListItem> shoppingListItems;
+  private List<ProductBarcode> barcodes;
+  private List<Store> stores;
+  private List<Location> locations;
+  private List<ShoppingListItem> shoppingListItems;
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
 
@@ -140,25 +141,24 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, qUs, conversions, stores,
-        locations, shoppingListItems) -> {
-      this.products = products;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       productHashMap = ArrayUtil.getProductsHashMap(products);
-      this.barcodes = barcodes;
-      this.quantityUnits = qUs;
+      this.barcodes = data.getBarcodes();
+      this.quantityUnits = data.getQuantityUnits();
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-      this.unitConversions = conversions;
+      this.unitConversions = data.getQuantityUnitConversions();
       unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-      this.stores = stores;
-      this.locations = locations;
-      this.shoppingListItems = shoppingListItems;
+      this.stores = data.getStores();
+      this.locations = data.getLocations();
+      this.shoppingListItems = data.getShoppingListItems();
       shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       fillShoppingListItemAmountsHashMap();
       if (downloadAfterLoading) {
         downloadData();
       }
-    }, batchShoppingListItemIds != null);
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -171,12 +171,12 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> onQueueEmpty(true), this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
           unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
@@ -192,13 +192,13 @@ public class PurchaseViewModel extends BaseViewModel {
         )
     );
     if (batchShoppingListItemIds != null) {
-      dlHelper.updateShoppingListItems(dbChangedTime, items -> {
+      dlHelper.updateShoppingListItems(dbChangedTime, (items) -> {
         this.shoppingListItems = items;
         shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       });
     }
     if (queue.isEmpty()) {
-      onQueueEmpty(false);
+      onQueueEmpty();
       return;
     }
 
@@ -222,12 +222,8 @@ public class PurchaseViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty(boolean offlineDataUpdated) {
+  private void onQueueEmpty() {
     fillShoppingListItemAmountsHashMap();
-    if (offlineDataUpdated) {
-      repository.updateDatabase(products, barcodes,
-          quantityUnits, unitConversions, stores, locations, shoppingListItems);
-    }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -680,16 +676,6 @@ public class PurchaseViewModel extends BaseViewModel {
     return productHashMap;
   }
 
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-      if (product.isActive()) {
-        activeProductsOnly.add(product);
-      }
-    }
-    return activeProductsOnly;
-  }
-
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
   }
@@ -781,7 +767,7 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, new ArrayList<>(stores));
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
         formData.getStoreLive().getValue() != null
@@ -797,7 +783,7 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
         formData.getLocationLive().getValue() != null

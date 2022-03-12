@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -44,8 +45,8 @@ public class ShoppingListHelper {
       ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, String> productNamesHashMap,
-      ArrayList<ProductGroup> productGroups,
-      ArrayList<ShoppingList> shoppingLists,
+      List<ProductGroup> productGroups,
+      List<ShoppingList> shoppingLists,
       int selectedShoppingListId,
       boolean showDoneItems
   ) {

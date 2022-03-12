@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 
@@ -36,6 +37,9 @@ public interface MissingItemDao {
 
   @Query("SELECT * FROM missing_item_table")
   List<MissingItem> getAll();
+
+  @Query("SELECT * FROM missing_item_table")
+  Single<List<MissingItem>> getMissingItems();
 
   @Query("SELECT COUNT(*) FROM missing_item_table")
   int count();

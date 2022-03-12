@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 
@@ -36,6 +37,9 @@ public interface ShoppingListDao {
 
   @Query("SELECT * FROM shopping_list_table")
   List<ShoppingList> getAll();
+
+  @Query("SELECT * FROM shopping_list_table")
+  Single<List<ShoppingList>> getShoppingLists();
 
   @Query("SELECT * FROM shopping_list_table WHERE id IN (:shoppingListIds)")
   List<ShoppingList> loadAllByIds(int[] shoppingListIds);

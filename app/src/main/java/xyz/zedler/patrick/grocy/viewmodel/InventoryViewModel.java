@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -77,12 +78,12 @@ public class InventoryViewModel extends BaseViewModel {
   private final InventoryRepository repository;
   private final FormDataInventory formData;
 
-  private ArrayList<Product> products;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<QuantityUnitConversion> unitConversions;
-  private ArrayList<ProductBarcode> barcodes;
-  private ArrayList<Store> stores;
-  private ArrayList<Location> locations;
+  private List<Product> products;
+  private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> unitConversions;
+  private List<ProductBarcode> barcodes;
+  private List<Store> stores;
+  private List<Location> locations;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -124,13 +125,13 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, qUs, conversions, stores, locations) -> {
-      this.products = products;
-      this.barcodes = barcodes;
-      this.quantityUnits = qUs;
-      this.unitConversions = conversions;
-      this.stores = stores;
-      this.locations = locations;
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      this.barcodes = data.getBarcodes();
+      this.quantityUnits = data.getQuantityUnits();
+      this.unitConversions = data.getQuantityUnitConversions();
+      this.stores = data.getStores();
+      this.locations = data.getLocations();
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         if (downloadAfterLoading) {
             downloadData();
@@ -194,9 +195,6 @@ public class InventoryViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    repository.updateDatabase(products, barcodes,
-        quantityUnits, unitConversions, stores, locations, () -> {
-        });
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -552,7 +550,7 @@ public class InventoryViewModel extends BaseViewModel {
           return;
       }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, new ArrayList<>(stores));
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
         formData.getStoreLive().getValue() != null
@@ -568,7 +566,7 @@ public class InventoryViewModel extends BaseViewModel {
           return;
       }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
         formData.getLocationLive().getValue() != null

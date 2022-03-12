@@ -113,7 +113,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       this.barcodes = barcodes;
       this.quantityUnits = qUs;
       this.unitConversions = conversions;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (!isActionEdit) {
         formData.getShoppingListLive().setValue(getLastShoppingList());
       }
@@ -147,7 +147,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           }
         }), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateProductBarcodes(
@@ -428,16 +428,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       showBottomSheet(new InputProductBottomSheet(), bundle);
     }
     return product;
-  }
-
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-      if (product.isActive()) {
-        activeProductsOnly.add(product);
-      }
-    }
-    return activeProductsOnly;
   }
 
   private QuantityUnit getQuantityUnit(int id) {

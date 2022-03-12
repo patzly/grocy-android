@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 
@@ -36,6 +37,9 @@ public interface TaskCategoryDao {
 
   @Query("SELECT * FROM task_category_table")
   List<TaskCategory> getAll();
+
+  @Query("SELECT * FROM task_category_table")
+  Single<List<TaskCategory>> getTaskCategories();
 
   @Query("SELECT COUNT(*) FROM task_category_table")
   int count();

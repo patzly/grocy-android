@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Product;
 
@@ -37,11 +38,11 @@ public class ChooseProductAdapter extends
 
   private final static String TAG = ChooseProductAdapter.class.getSimpleName();
 
-  private final ArrayList<Product> products;
+  private final List<Product> products;
   private final ChooseProductAdapterListener listener;
 
   public ChooseProductAdapter(
-      ArrayList<Product> products,
+      List<Product> products,
       ChooseProductAdapterListener listener
   ) {
     this.products = new ArrayList<>(products);
@@ -95,7 +96,7 @@ public class ChooseProductAdapter extends
     );
   }
 
-  public void updateData(ArrayList<Product> newProducts) {
+  public void updateData(List<Product> newProducts) {
     DiffCallback diffCallback = new DiffCallback(
         newProducts,
         this.products
@@ -108,12 +109,12 @@ public class ChooseProductAdapter extends
 
   static class DiffCallback extends DiffUtil.Callback {
 
-    ArrayList<Product> oldItems;
-    ArrayList<Product> newItems;
+    List<Product> oldItems;
+    List<Product> newItems;
 
     public DiffCallback(
-        ArrayList<Product> newItems,
-        ArrayList<Product> oldItems
+        List<Product> newItems,
+        List<Product> oldItems
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;

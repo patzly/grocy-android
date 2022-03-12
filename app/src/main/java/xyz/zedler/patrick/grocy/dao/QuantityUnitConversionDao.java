@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 
@@ -36,6 +37,9 @@ public interface QuantityUnitConversionDao {
 
   @Query("SELECT * FROM quantity_unit_conversion_table")
   List<QuantityUnitConversion> getAll();
+
+  @Query("SELECT * FROM quantity_unit_conversion_table")
+  Single<List<QuantityUnitConversion>> getConversions();
 
   @Query("SELECT COUNT(*) FROM quantity_unit_conversion_table")
   int count();
@@ -51,5 +55,8 @@ public interface QuantityUnitConversionDao {
 
   @Query("DELETE FROM quantity_unit_conversion_table")
   void deleteAll();
+
+  @Query("DELETE FROM quantity_unit_conversion_table")
+  Single<Integer> deleteConversions();
 
 }

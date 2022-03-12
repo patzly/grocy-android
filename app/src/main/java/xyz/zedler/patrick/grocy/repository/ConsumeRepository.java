@@ -21,12 +21,17 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.repository.PurchaseRepository.PurchaseData;
 
 public class ConsumeRepository {
 
@@ -38,12 +43,43 @@ public class ConsumeRepository {
 
   public interface DataListener {
 
-    void actionFinished(
-        ArrayList<Product> products,
-        ArrayList<ProductBarcode> barcodes,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<QuantityUnitConversion> quantityUnitConversions
-    );
+    void actionFinished(ConsumeData data);
+  }
+
+  public static class ConsumeData {
+
+    private final List<Product> products;
+    private final List<ProductBarcode> barcodes;
+    private final List<QuantityUnit> quantityUnits;
+    private final List<QuantityUnitConversion> quantityUnitConversions;
+
+    public ConsumeData(
+        List<Product> products,
+        List<ProductBarcode> barcodes,
+        List<QuantityUnit> quantityUnits,
+        List<QuantityUnitConversion> quantityUnitConversions
+    ) {
+      this.products = products;
+      this.barcodes = barcodes;
+      this.quantityUnits = quantityUnits;
+      this.quantityUnitConversions = quantityUnitConversions;
+    }
+
+    public List<Product> getProducts() {
+      return products;
+    }
+
+    public List<ProductBarcode> getBarcodes() {
+      return barcodes;
+    }
+
+    public List<QuantityUnit> getQuantityUnits() {
+      return quantityUnits;
+    }
+
+    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+      return quantityUnitConversions;
+    }
   }
 
   public interface DataUpdatedListener {
@@ -52,42 +88,18 @@ public class ConsumeRepository {
   }
 
   public void loadFromDatabase(DataListener listener) {
-    new loadAsyncTask(appDatabase, listener).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataListener listener;
-
-    private ArrayList<Product> products;
-    private ArrayList<ProductBarcode> barcodes;
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<QuantityUnitConversion> quantityUnitConversions;
-
-
-    loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      products = new ArrayList<>(appDatabase.productDao().getAll());
-      barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
-      quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-      quantityUnitConversions
-          = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(products, barcodes,
-            quantityUnits, quantityUnitConversions);
-      }
-    }
+    Single
+        .zip(
+            appDatabase.productDao().getProducts(),
+            appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.quantityUnitDao().getQuantityUnits(),
+            appDatabase.quantityUnitConversionDao().getConversions(),
+            ConsumeData::new
+        )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(listener::actionFinished)
+        .subscribe();
   }
 
   public void updateDatabase(

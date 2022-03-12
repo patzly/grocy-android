@@ -20,8 +20,10 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -40,116 +42,28 @@ public class PurchaseRepository {
   }
 
   public interface DataListener {
-
-    void actionFinished(
-        ArrayList<Product> products,
-        ArrayList<ProductBarcode> barcodes,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<QuantityUnitConversion> quantityUnitConversions,
-        ArrayList<Store> stores,
-        ArrayList<Location> locations,
-        ArrayList<ShoppingListItem> shoppingListItems
-    );
+    void actionFinished(PurchaseData data);
   }
 
-  public interface DataUpdatedListener {
+  public static class PurchaseData {
 
-    void actionFinished();
-  }
+    private final List<Product> products;
+    private final List<ProductBarcode> barcodes;
+    private final List<QuantityUnit> quantityUnits;
+    private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<Store> stores;
+    private final List<Location> locations;
+    private final List<ShoppingListItem> shoppingListItems;
 
-  public void loadFromDatabase(DataListener listener, boolean loadShoppingListItems) {
-    new loadAsyncTask(appDatabase, listener, loadShoppingListItems).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataListener listener;
-
-    private ArrayList<Product> products;
-    private ArrayList<ProductBarcode> barcodes;
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<QuantityUnitConversion> quantityUnitConversions;
-    private ArrayList<Store> stores;
-    private ArrayList<Location> locations;
-    private ArrayList<ShoppingListItem> shoppingListItems;
-    private final boolean loadShoppingListItems;
-
-
-    loadAsyncTask(AppDatabase appDatabase, DataListener listener, boolean loadShoppingListItems) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-      this.loadShoppingListItems = loadShoppingListItems;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      products = new ArrayList<>(appDatabase.productDao().getAll());
-      barcodes = new ArrayList<>(appDatabase.productBarcodeDao().getAll());
-      quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-      quantityUnitConversions
-          = new ArrayList<>(appDatabase.quantityUnitConversionDao().getAll());
-      stores = new ArrayList<>(appDatabase.storeDao().getAll());
-      locations = new ArrayList<>(appDatabase.locationDao().getAll());
-      if (loadShoppingListItems) {
-        shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
-      }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(products, barcodes,
-            quantityUnits, quantityUnitConversions, stores, locations, shoppingListItems);
-      }
-    }
-  }
-
-  public void updateDatabase(
-      ArrayList<Product> products,
-      ArrayList<ProductBarcode> barcodes,
-      ArrayList<QuantityUnit> quantityUnits,
-      ArrayList<QuantityUnitConversion> quantityUnitConversions,
-      ArrayList<Store> stores,
-      ArrayList<Location> locations,
-      ArrayList<ShoppingListItem> shoppingListItems
-  ) {
-    new updateAsyncTask(
-        appDatabase,
-        products,
-        barcodes,
-        quantityUnits,
-        quantityUnitConversions,
-        stores,
-        locations,
-        shoppingListItems
-    ).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-
-    private final ArrayList<Product> products;
-    private final ArrayList<ProductBarcode> barcodes;
-    private final ArrayList<QuantityUnit> quantityUnits;
-    private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
-    private final ArrayList<Store> stores;
-    private final ArrayList<Location> locations;
-    private final ArrayList<ShoppingListItem> shoppingListItems;
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        ArrayList<Product> products,
-        ArrayList<ProductBarcode> barcodes,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<QuantityUnitConversion> quantityUnitConversions,
-        ArrayList<Store> stores,
-        ArrayList<Location> locations,
-        ArrayList<ShoppingListItem> shoppingListItems
+    public PurchaseData(
+        List<Product> products,
+        List<ProductBarcode> barcodes,
+        List<QuantityUnit> quantityUnits,
+        List<QuantityUnitConversion> quantityUnitConversions,
+        List<Store> stores,
+        List<Location> locations,
+        List<ShoppingListItem> shoppingListItems
     ) {
-      this.appDatabase = appDatabase;
       this.products = products;
       this.barcodes = barcodes;
       this.quantityUnits = quantityUnits;
@@ -159,25 +73,50 @@ public class PurchaseRepository {
       this.shoppingListItems = shoppingListItems;
     }
 
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.productDao().deleteAll();
-      appDatabase.productDao().insertAll(products);
-      appDatabase.productBarcodeDao().deleteAll();
-      appDatabase.productBarcodeDao().insertAll(barcodes);
-      appDatabase.quantityUnitDao().deleteAll();
-      appDatabase.quantityUnitDao().insertAll(quantityUnits);
-      appDatabase.quantityUnitConversionDao().deleteAll();
-      appDatabase.quantityUnitConversionDao().insertAll(quantityUnitConversions);
-      appDatabase.storeDao().deleteAll();
-      appDatabase.storeDao().insertAll(stores);
-      appDatabase.locationDao().deleteAll();
-      appDatabase.locationDao().insertAll(locations);
-      if (shoppingListItems != null) {
-        appDatabase.shoppingListItemDao().deleteAll();
-        appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
-      }
-      return null;
+    public List<Product> getProducts() {
+      return products;
     }
+
+    public List<ProductBarcode> getBarcodes() {
+      return barcodes;
+    }
+
+    public List<QuantityUnit> getQuantityUnits() {
+      return quantityUnits;
+    }
+
+    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+      return quantityUnitConversions;
+    }
+
+    public List<Store> getStores() {
+      return stores;
+    }
+
+    public List<Location> getLocations() {
+      return locations;
+    }
+
+    public List<ShoppingListItem> getShoppingListItems() {
+      return shoppingListItems;
+    }
+  }
+
+  public void loadFromDatabase(DataListener listener) {
+    Single
+        .zip(
+            appDatabase.productDao().getProducts(),
+            appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.quantityUnitDao().getQuantityUnits(),
+            appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.storeDao().getStores(),
+            appDatabase.locationDao().getLocations(),
+            appDatabase.shoppingListItemDao().getShoppingListItems(),
+            PurchaseData::new
+        )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(listener::actionFinished)
+        .subscribe();
   }
 }

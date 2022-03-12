@@ -54,7 +54,7 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> offlineLive;
-  private final MutableLiveData<ArrayList<Product>> displayedItemsLive;
+  private final MutableLiveData<List<Product>> displayedItemsLive;
   private final MutableLiveData<String> productNameLive;
   private final MutableLiveData<String> offHelpText;
   private final MutableLiveData<String> createProductTextLive;
@@ -63,9 +63,9 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final MutableLiveData<String> existingProductsCategoryTextLive;
 
   private final String barcode;
-  private ArrayList<Product> products;
+  private List<Product> products;
   private final HashMap<String, Product> productHashMap;
-  private boolean forbidCreateProductInitial;
+  private final boolean forbidCreateProductInitial;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -105,8 +105,8 @@ public class ChooseProductViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products) -> {
-      this.products = products;
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
       productHashMap.clear();
       for (Product product : products) {
         productHashMap.put(product.getName().toLowerCase(), product);
@@ -169,9 +169,8 @@ public class ChooseProductViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateDatabase(
-        products, this::displayItems
-    );
+    displayItems();
+
     boolean productNameFilled = productNameLive.getValue() != null
         && !productNameLive.getValue().isEmpty();
     if(isOpenFoodFactsEnabled() && !productNameFilled) {
@@ -256,7 +255,7 @@ public class ChooseProductViewModel extends BaseViewModel {
   }
 
   @NonNull
-  public MutableLiveData<ArrayList<Product>> getDisplayedItemsLive() {
+  public MutableLiveData<List<Product>> getDisplayedItemsLive() {
     return displayedItemsLive;
   }
 

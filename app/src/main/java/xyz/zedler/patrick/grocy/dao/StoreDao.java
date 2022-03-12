@@ -25,6 +25,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.Store;
 
@@ -36,6 +37,9 @@ public interface StoreDao {
 
   @Query("SELECT * FROM store_table")
   List<Store> getAll();
+
+  @Query("SELECT * FROM store_table")
+  Single<List<Store>> getStores();
 
   @Query("SELECT COUNT(*) FROM store_table")
   int count();
@@ -51,5 +55,8 @@ public interface StoreDao {
 
   @Query("DELETE FROM store_table")
   void deleteAll();
+
+  @Query("DELETE FROM store_table")
+  Single<Integer> deleteStores();
 
 }

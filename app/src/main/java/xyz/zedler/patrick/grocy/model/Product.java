@@ -30,6 +30,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -625,7 +626,7 @@ public class Product implements Parcelable {
     return getJsonFromProduct(this, debug, TAG);
   }
 
-  public static Product getProductFromId(ArrayList<Product> products, int id) {
+  public static Product getProductFromId(List<Product> products, int id) {
     for (Product product : products) {
       if (product.getId() == id) {
         return product;
@@ -634,7 +635,7 @@ public class Product implements Parcelable {
     return null;
   }
 
-  public static Product getProductFromName(ArrayList<Product> products, String name) {
+  public static Product getProductFromName(List<Product> products, String name) {
     if (name == null || name.isEmpty()) return null;
     for (Product product : products) {
       if (product.getName() != null && product.getName().equals(name)) {
@@ -657,7 +658,7 @@ public class Product implements Parcelable {
     return null;
   }
 
-  public static ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
+  public static ArrayList<Product> getActiveProductsOnly(List<Product> allProducts) {
     ArrayList<Product> activeProductsOnly = new ArrayList<>();
     for (Product product : allProducts) {
       if (product.isActive()) {

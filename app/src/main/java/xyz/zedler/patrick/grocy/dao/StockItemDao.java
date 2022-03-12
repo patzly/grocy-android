@@ -52,4 +52,7 @@ public interface StockItemDao {
   @Query("DELETE FROM stock_item_table")
   void deleteAll();
 
+  @Query("DELETE FROM stock_item_table")
+  Single<Integer> deleteStockItems();
+
 }

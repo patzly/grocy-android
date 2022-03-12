@@ -33,7 +33,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 
 public class ArrayUtil {
 
-  public static HashMap<Integer, Product> getProductsHashMap(ArrayList<Product> products) {
+  public static HashMap<Integer, Product> getProductsHashMap(List<Product> products) {
     HashMap<Integer, Product> hashMap = new HashMap<>();
     for (Product p : products) {
       hashMap.put(p.getId(), p);
@@ -41,7 +41,7 @@ public class ArrayUtil {
     return hashMap;
   }
 
-  public static HashMap<Integer, String> getProductNamesHashMap(ArrayList<Product> products) {
+  public static HashMap<Integer, String> getProductNamesHashMap(List<Product> products) {
     if (products == null) {
       return null;
     }
@@ -52,7 +52,7 @@ public class ArrayUtil {
     return productNamesHashMap;
   }
 
-  public static ArrayList<Integer> getMissingProductsIds(ArrayList<MissingItem> missingItems) {
+  public static ArrayList<Integer> getMissingProductsIds(List<MissingItem> missingItems) {
     ArrayList<Integer> missingProductIds = new ArrayList<>();
     for (MissingItem missingItem : missingItems) {
       missingProductIds.add(missingItem.getId());
@@ -78,7 +78,7 @@ public class ArrayUtil {
     return hashMap;
   }
 
-  public static HashMap<Integer, Store> getStoresHashMap(ArrayList<Store> stores) {
+  public static HashMap<Integer, Store> getStoresHashMap(List<Store> stores) {
     HashMap<Integer, Store> hashMap = new HashMap<>();
     for (Store s : stores) {
       hashMap.put(s.getId(), s);
@@ -87,7 +87,7 @@ public class ArrayUtil {
   }
 
   public static HashMap<Integer, QuantityUnit> getQuantityUnitsHashMap(
-      ArrayList<QuantityUnit> quantityUnits
+      List<QuantityUnit> quantityUnits
   ) {
     HashMap<Integer, QuantityUnit> hashMap = new HashMap<>();
     for (QuantityUnit q : quantityUnits) {
@@ -97,7 +97,7 @@ public class ArrayUtil {
   }
 
   public static HashMap<Integer, ArrayList<QuantityUnitConversion>> getUnitConversionsHashMap(
-      ArrayList<QuantityUnitConversion> unitConversions
+      List<QuantityUnitConversion> unitConversions
   ) {
     HashMap<Integer, ArrayList<QuantityUnitConversion>> hashMap = new HashMap<>();
     for (QuantityUnitConversion unitConversion : unitConversions) {
@@ -113,7 +113,7 @@ public class ArrayUtil {
   }
 
   public static HashMap<Integer, ShoppingListItem> getShoppingListItemHashMap(
-      ArrayList<ShoppingListItem> shoppingListItems
+      List<ShoppingListItem> shoppingListItems
   ) {
     if (shoppingListItems == null) {
       return null;

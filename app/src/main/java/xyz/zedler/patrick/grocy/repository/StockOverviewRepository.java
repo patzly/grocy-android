@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -134,42 +133,12 @@ public class StockOverviewRepository {
       List<StockItem> stockItems,
       Runnable listener
   ) {
-    new updateAsyncTask(
-        appDatabase,
-        stockItems,
-        listener
-    ).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final Runnable listener;
-
-    private final List<StockItem> stockItems;
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        List<StockItem> stockItems,
-        Runnable listener
-    ) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-      this.stockItems = stockItems;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.stockItemDao().deleteAll();
-      appDatabase.stockItemDao().insertAll(stockItems);
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.run();
-      }
-    }
+    appDatabase
+        .stockItemDao().deleteStockItems()
+        .subscribeOn(Schedulers.io())
+        .doFinally(() -> appDatabase.stockItemDao().insertAll(stockItems))
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(listener::run)
+        .subscribe();
   }
 }

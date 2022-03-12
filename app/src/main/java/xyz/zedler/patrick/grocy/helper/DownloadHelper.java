@@ -36,6 +36,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import org.json.JSONArray;
@@ -531,22 +532,50 @@ public class DownloadHelper {
       String dbChangedTime,
       OnProductGroupsResponseListener onResponseListener
   ) {
-    OnProductGroupsResponseListener newOnResponseListener = productGroups -> appDatabase
-        .productGroupDao().deleteProductGroups()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.productGroupDao().insertAll(productGroups))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
-          onResponseListener.onResponse(productGroups);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getProductGroups(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_GROUPS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ProductGroup>>() {
+                }.getType();
+                ArrayList<ProductGroup> productGroups = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ProductGroups: " + productGroups);
+                }
+                appDatabase
+                    .productGroupDao().deleteProductGroups()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.productGroupDao().insertAll(productGroups))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
+                      onResponseListener.onResponse(productGroups);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped ProductGroups download");
@@ -604,22 +633,50 @@ public class DownloadHelper {
       String dbChangedTime,
       OnQuantityUnitsResponseListener onResponseListener
   ) {
-    OnQuantityUnitsResponseListener newOnResponseListener = quantityUnits -> appDatabase
-        .quantityUnitDao().deleteQuantityUnits()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.quantityUnitDao().insertAll(quantityUnits))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
-          onResponseListener.onResponse(quantityUnits);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getQuantityUnits(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNITS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<QuantityUnit>>() {
+                }.getType();
+                ArrayList<QuantityUnit> quantityUnits = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download QuantityUnits: " + quantityUnits);
+                }
+                appDatabase
+                    .quantityUnitDao().deleteQuantityUnits()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.quantityUnitDao().insertAll(quantityUnits))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
+                      onResponseListener.onResponse(quantityUnits);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped QuantityUnits download");
@@ -681,19 +738,52 @@ public class DownloadHelper {
       String dbChangedTime,
       OnQuantityUnitConversionsResponseListener onResponseListener
   ) {
-    OnQuantityUnitConversionsResponseListener newOnResponseListener = conversions -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(
-          Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, dbChangedTime
-      );
-      editPrefs.apply();
-      onResponseListener.onResponse(conversions);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getQuantityUnitConversions(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<QuantityUnitConversion>>() {
+                }.getType();
+                ArrayList<QuantityUnitConversion> conversions
+                    = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download QuantityUnitConversions: "
+                      + conversions);
+                }
+                appDatabase
+                    .quantityUnitConversionDao().deleteConversions()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.quantityUnitConversionDao().insertAll(conversions))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, dbChangedTime).apply();
+                      onResponseListener.onResponse(conversions);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped QuantityUnitConversions download");
@@ -751,22 +841,50 @@ public class DownloadHelper {
       String dbChangedTime,
       OnLocationsResponseListener onResponseListener
   ) {
-    OnLocationsResponseListener newOnResponseListener = locations -> appDatabase
-        .locationDao().deleteLocations()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.locationDao().insertAll(locations))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime).apply();
-          onResponseListener.onResponse(locations);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_LOCATIONS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getLocations(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.LOCATIONS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<Location>>() {
+                }.getType();
+                ArrayList<Location> locations = gson.fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Locations: " + locations);
+                }
+                appDatabase
+                    .locationDao().deleteLocations()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.locationDao().insertAll(locations))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime).apply();
+                      onResponseListener.onResponse(locations);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped Locations download");
@@ -820,22 +938,50 @@ public class DownloadHelper {
       String dbChangedTime,
       OnStockLocationsResponseListener onResponseListener
   ) {
-    OnStockLocationsResponseListener newOnResponseListener = stockLocations -> appDatabase
-        .stockLocationDao().deleteStockLocations()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.stockLocationDao().insertAll(stockLocations))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime).apply();
-          onResponseListener.onResponse(stockLocations);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getStockCurrentLocations(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.STOCK_CURRENT_LOCATIONS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<StockLocation>>() {
+                }.getType();
+                ArrayList<StockLocation> locations = gson.fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download StockCurrentLocations: " + locations);
+                }
+                appDatabase
+                    .stockLocationDao().deleteStockLocations()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.stockLocationDao().insertAll(locations))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime).apply();
+                      onResponseListener.onResponse(locations);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped StockCurrentLocations download");
@@ -893,22 +1039,50 @@ public class DownloadHelper {
       String dbChangedTime,
       OnProductsResponseListener onResponseListener
   ) {
-    OnProductsResponseListener newOnResponseListener = products -> appDatabase
-        .productDao().deleteProducts()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.productDao().insertAll(products))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime).apply();
-          onResponseListener.onResponse(products);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCTS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getProducts(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<Product>>() {
+                }.getType();
+                ArrayList<Product> products = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Products: " + products);
+                }
+                appDatabase
+                    .productDao().deleteProducts()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.productDao().insertAll(products))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime).apply();
+                      onResponseListener.onResponse(products);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped Products download");
@@ -963,22 +1137,51 @@ public class DownloadHelper {
       String dbChangedTime,
       OnProductBarcodesResponseListener onResponseListener
   ) {
-    OnProductBarcodesResponseListener newOnResponseListener = barcodes -> appDatabase
-        .productBarcodeDao().deleteProductBarcodes()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.productBarcodeDao().insertAll(barcodes))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime).apply();
-          onResponseListener.onResponse(barcodes);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getProductBarcodes(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ProductBarcode>>() {
+                }.getType();
+                ArrayList<ProductBarcode> barcodes
+                    = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Barcodes: " + barcodes);
+                }
+                appDatabase
+                    .productBarcodeDao().deleteProductBarcodes()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.productBarcodeDao().insertAll(barcodes))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime).apply();
+                      onResponseListener.onResponse(barcodes);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped ProductsBarcodes download");
@@ -1114,10 +1317,6 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getStockItems(OnStockItemsResponseListener onResponseListener) {
-    return getStockItems(onResponseListener, null);
-  }
-
   public QueueItem updateStockItems(
       String dbChangedTime,
       OnStockItemsResponseListener onResponseListener
@@ -1229,10 +1428,6 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getVolatile(OnVolatileResponseListener onResponseListener) {
-    return getVolatile(onResponseListener, null);
-  }
-
   public QueueItem updateVolatile(
       String dbChangedTime,
       OnVolatileResponseListener onResponseListener
@@ -1311,10 +1506,6 @@ public class DownloadHelper {
         );
       }
     };
-  }
-
-  public QueueItem getMissingItems(OnMissingItemsResponseListener onResponseListener) {
-    return getMissingItems(onResponseListener, null);
   }
 
   public QueueItem updateMissingItems(
@@ -1540,22 +1731,131 @@ public class DownloadHelper {
       String dbChangedTime,
       OnShoppingListItemsResponseListener onResponseListener
   ) {
-    OnShoppingListItemsResponseListener newOnResponseListener = shoppingListItems -> appDatabase
-        .shoppingListItemDao().deleteShoppingListItems()
-        .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.shoppingListItemDao().insertAll(shoppingListItems))
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(() -> {
-          sharedPrefs.edit()
-              .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
-          onResponseListener.onResponse(shoppingListItems);
-        })
-        .subscribe();
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getShoppingListItems(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ShoppingListItem>>() {
+                }.getType();
+                ArrayList<ShoppingListItem> shoppingListItems = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ShoppingListItems: " + shoppingListItems);
+                }
+                appDatabase
+                    .shoppingListItemDao().deleteShoppingListItems()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.shoppingListItemDao().insertAll(shoppingListItems))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
+                      onResponseListener.onResponse(shoppingListItems);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped ShoppingListItems download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateShoppingListItems(
+      String dbChangedTime,
+      OnShoppingListItemsWithSyncResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ShoppingListItem>>() {
+                }.getType();
+                ArrayList<ShoppingListItem> shoppingListItems = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ShoppingListItems: " + shoppingListItems);
+                }
+                ArrayList<ShoppingListItem> itemsToSync = new ArrayList<>();
+                HashMap<Integer, ShoppingListItem> serverItemsHashMap = new HashMap<>();
+                for (ShoppingListItem s : shoppingListItems) {
+                  serverItemsHashMap.put(s.getId(), s);
+                }
+
+                appDatabase.shoppingListItemDao().getShoppingListItems()
+                    .doOnSuccess(offlineItems -> {
+                      // compare server items with offline items and add modified to separate list
+                      for (ShoppingListItem offlineItem : offlineItems) {
+                        ShoppingListItem serverItem = serverItemsHashMap.get(offlineItem.getId());
+                        if (serverItem != null  // sync only items which are still on server
+                            && offlineItem.getDoneSynced() != -1
+                            && offlineItem.getDoneInt() != offlineItem.getDoneSynced()
+                            && offlineItem.getDoneInt() != serverItem.getDoneInt()
+                            || serverItem != null
+                            && serverItem.getDoneSynced() != -1  // server database hasn't changed
+                            && offlineItem.getDoneSynced() != -1
+                            && offlineItem.getDoneInt() != offlineItem.getDoneSynced()
+                        ) {
+                          itemsToSync.add(offlineItem);
+                        }
+                      }
+                    })
+                    .doFinally(() -> {
+                      appDatabase.shoppingListItemDao().deleteAll();
+                      appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
+                      onResponseListener.onResponse(shoppingListItems, itemsToSync, serverItemsHashMap);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped ShoppingListItems download");
@@ -1681,17 +1981,50 @@ public class DownloadHelper {
       String dbChangedTime,
       OnStoresResponseListener onResponseListener
   ) {
-    OnStoresResponseListener newOnResponseListener = stores -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(stores);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_STORES, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getStores(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(GrocyApi.ENTITY.STORES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<Store>>() {
+                }.getType();
+                ArrayList<Store> stores = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Stores: " + stores);
+                }
+                appDatabase
+                    .storeDao().deleteStores()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.storeDao().insertAll(stores))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime).apply();
+                      onResponseListener.onResponse(stores);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped Stores download");
@@ -1843,10 +2176,6 @@ public class DownloadHelper {
         );
       }
     };
-  }
-
-  public QueueItem getTasks(OnTasksResponseListener onResponseListener) {
-    return getTasks(onResponseListener, null);
   }
 
   public QueueItem updateTasks(
@@ -2423,6 +2752,15 @@ public class DownloadHelper {
   public interface OnShoppingListItemsResponseListener {
 
     void onResponse(ArrayList<ShoppingListItem> shoppingListItems);
+  }
+
+  public interface OnShoppingListItemsWithSyncResponseListener {
+
+    void onResponse(
+        ArrayList<ShoppingListItem> shoppingListItems,
+        ArrayList<ShoppingListItem> itemsToSync,
+        HashMap<Integer, ShoppingListItem> serverItemHashMap
+    );
   }
 
   public interface OnShoppingListsResponseListener {

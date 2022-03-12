@@ -20,7 +20,8 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 
 public class MainRepository {
@@ -32,21 +33,10 @@ public class MainRepository {
   }
 
   public void clearAllTables() {
-    new clearAsyncTask(appDatabase).execute();
-  }
-
-  private static class clearAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-
-    clearAsyncTask(AppDatabase appDatabase) {
-      this.appDatabase = appDatabase;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.clearAllTables();
-      return null;
-    }
+    Single
+        .just(0)
+        .doFinally(appDatabase::clearAllTables)
+        .subscribeOn(Schedulers.io())
+        .subscribe();
   }
 }
