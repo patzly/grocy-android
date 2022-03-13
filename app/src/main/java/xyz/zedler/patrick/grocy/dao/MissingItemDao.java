@@ -56,4 +56,7 @@ public interface MissingItemDao {
   @Query("DELETE FROM missing_item_table")
   void deleteAll();
 
+  @Query("DELETE FROM missing_item_table")
+  Single<Integer> deleteMissingItems();
+
 }

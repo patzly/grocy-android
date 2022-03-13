@@ -1513,19 +1513,66 @@ public class DownloadHelper {
       String dbChangedTime,
       OnMissingItemsResponseListener onResponseListener
   ) {
-    OnMissingItemsResponseListener newOnResponseListener = shoppingListItems -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(
-          Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime
-      );
-      editPrefs.apply();
-      onResponseListener.onResponse(shoppingListItems);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getMissingItems(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getStockVolatile(),
+              uuid,
+              response -> {
+                if (debug) {
+                  Log.i(tag, "download Volatile (only missing): success");
+                }
+                ArrayList<MissingItem> missingItems = new ArrayList<>();
+                try {
+                  JSONObject jsonObject = new JSONObject(response);
+                  // Parse fourth part of volatile array: missing products
+                  missingItems = gson.fromJson(
+                      jsonObject.getJSONArray("missing_products").toString(),
+                      new TypeToken<List<MissingItem>>() {
+                      }.getType()
+                  );
+                  if (debug) {
+                    Log.i(tag, "download Volatile (only missing): missing = " + missingItems);
+                  }
+
+                } catch (JSONException e) {
+                  if (debug) {
+                    Log.e(tag, "download Volatile (only missing): " + e);
+                  }
+                }
+                ArrayList<MissingItem> finalMissingItems = missingItems;
+                appDatabase
+                    .missingItemDao().deleteMissingItems()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.missingItemDao().insertAll(finalMissingItems))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime).apply();
+                      onResponseListener.onResponse(finalMissingItems);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped MissingItems download");
