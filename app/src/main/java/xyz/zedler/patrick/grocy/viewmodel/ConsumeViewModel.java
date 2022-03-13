@@ -260,6 +260,14 @@ public class ConsumeViewModel extends BaseViewModel {
         formData.getStockLocationLive().setValue(stockLocation);
       }
 
+      // open
+      if (productDetails.getProduct().getEnableTareWeightHandlingBoolean()) {
+        formData.getOpenVisibilityLive().setValue(false);
+      } else {
+        formData.getOpenVisibilityLive().setValue(true);
+        formData.getOpenLive().setValue(false);
+      }
+
       // stock entry
       StockEntry stockEntry = null;
       if (stockEntryId != null) {
@@ -429,16 +437,20 @@ public class ConsumeViewModel extends BaseViewModel {
     formData.getProductNameLive().setValue(null);
   }
 
-  public void consumeProduct(boolean isActionOpen) {
+  public void consumeProduct() {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
     }
     if (formData.getBarcodeLive().getValue() != null) {
-      uploadProductBarcode(() -> consumeProduct(isActionOpen));
+      uploadProductBarcode(this::consumeProduct);
       return;
     }
-
+    assert formData.getOpenLive().getValue() != null
+        && formData.getOpenVisibilityLive().getValue() != null
+        && formData.getProductDetailsLive().getValue() != null;
+    boolean isActionOpen = formData.getOpenLive().getValue()
+        && formData.getOpenVisibilityLive().getValue();
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject(isActionOpen);
     dlHelper.postWithArray(
