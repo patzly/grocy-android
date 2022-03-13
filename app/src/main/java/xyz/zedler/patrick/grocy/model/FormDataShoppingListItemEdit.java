@@ -367,7 +367,8 @@ public class FormDataShoppingListItemEdit {
   }
 
   public boolean isFormValid() {
-    boolean valid = isProductNameValid();
+    boolean valid = shoppingListLive.getValue() != null;
+    valid = isProductNameValid() && valid;
     valid = isAmountValid() && valid;
     valid = isQuantityUnitValid() && valid;
     return valid;
