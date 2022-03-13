@@ -27,7 +27,7 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -52,7 +52,6 @@ public class FormDataMasterProductCatAmount {
   private final LiveData<Boolean> tareWeightErrorLive;
   private final MutableLiveData<Boolean> disableStockCheckLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
-  private ArrayList<QuantityUnit> quantityUnits;
 
   private boolean filledWithProduct;
 
@@ -143,10 +142,6 @@ public class FormDataMasterProductCatAmount {
     return disableStockCheckLive;
   }
 
-  public void setQuantityUnits(ArrayList<QuantityUnit> quantityUnits) {
-    this.quantityUnits = quantityUnits;
-  }
-
   public void setAmount(String input, Bundle argsBundle) {
     String number = NumUtil.isStringDouble(input) ? input : String.valueOf(0);
     int type = argsBundle.getInt(AMOUNT_ARG);
@@ -195,7 +190,7 @@ public class FormDataMasterProductCatAmount {
     return number;
   }
 
-  private QuantityUnit getQuantityUnitFromId(ArrayList<QuantityUnit> quantityUnits, int id) {
+  private QuantityUnit getQuantityUnitFromId(List<QuantityUnit> quantityUnits, int id) {
     if (quantityUnits == null) {
       return null;
     }
@@ -241,7 +236,7 @@ public class FormDataMasterProductCatAmount {
     return product;
   }
 
-  public void fillWithProductIfNecessary(Product product, ArrayList<QuantityUnit> quantityUnits) {
+  public void fillWithProductIfNecessary(Product product, List<QuantityUnit> quantityUnits) {
     if (filledWithProduct || product == null) {
       return;
     }

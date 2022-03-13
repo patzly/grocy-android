@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatLocationBinding;
@@ -171,13 +172,13 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   }
 
   public void showLocationsBottomSheet() {
-    ArrayList<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
+    List<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
     if (locations == null) {
-      viewModel.showErrorMessage();
+      viewModel.showErrorMessage(null);
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     Location location = viewModel.getFormData().getLocationLive().getValue();
     int locationId = location != null ? location.getId() : -1;
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, locationId);
@@ -185,13 +186,13 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   }
 
   public void showStoresBottomSheet() {
-    ArrayList<Store> stores = viewModel.getFormData().getStoresLive().getValue();
+    List<Store> stores = viewModel.getFormData().getStoresLive().getValue();
     if (stores == null) {
-      viewModel.showErrorMessage();
+      viewModel.showErrorMessage(null);
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, new ArrayList<>(stores));
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
     Store store = viewModel.getFormData().getStoreLive().getValue();
     int storeId = store != null ? store.getId() : -1;

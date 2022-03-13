@@ -646,8 +646,8 @@ public class Product implements Parcelable {
   }
 
   public static Product getProductFromBarcode(
-      ArrayList<Product> products,
-      ArrayList<ProductBarcode> barcodes,
+      List<Product> products,
+      List<ProductBarcode> barcodes,
       String barcode
   ) {
     for (ProductBarcode code : barcodes) {

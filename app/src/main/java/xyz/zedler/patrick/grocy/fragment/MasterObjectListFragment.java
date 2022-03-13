@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterObjectListAdapter;
@@ -361,7 +362,7 @@ public class MasterObjectListFragment extends BaseFragment
       }
       SubMenu menuProductGroups = menuItem.getSubMenu();
       menuProductGroups.clear();
-      ArrayList<ProductGroup> productGroups = viewModel.getProductGroups();
+      List<ProductGroup> productGroups = viewModel.getProductGroups();
       if (productGroups != null && !productGroups.isEmpty()) {
         ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
         SortUtil.sortProductGroupsByName(requireContext(), sorted, true);

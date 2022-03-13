@@ -20,9 +20,10 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -31,8 +32,6 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 
 public class OverviewStartRepository {
 
-  private final static String TAG = OverviewStartRepository.class.getSimpleName();
-
   private final AppDatabase appDatabase;
 
   public OverviewStartRepository(Application application) {
@@ -40,122 +39,57 @@ public class OverviewStartRepository {
   }
 
   public interface DataListener {
-
-    void actionFinished(
-        ArrayList<StockItem> stockItems,
-        ArrayList<ShoppingListItem> shoppingListItems,
-        ArrayList<ShoppingList> shoppingLists,
-        ArrayList<Product> products
-    );
+    void actionFinished(OverviewStartData data);
   }
 
-  public interface DataUpdatedListener {
+  public static class OverviewStartData {
 
-    void actionFinished();
-  }
+    private final List<StockItem> stockItems;
+    private final List<ShoppingListItem> shoppingListItems;
+    private final List<ShoppingList> shoppingLists;
+    private final List<Product> products;
 
-  public void loadFromDatabase(DataListener listener) {
-    new loadAsyncTask(appDatabase, listener).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataListener listener;
-
-    private ArrayList<StockItem> stockItems;
-    private ArrayList<ShoppingListItem> shoppingListItems;
-    private ArrayList<ShoppingList> shoppingLists;
-    private ArrayList<Product> products;
-
-    loadAsyncTask(AppDatabase appDatabase, DataListener listener) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      try {
-        products = new ArrayList<>(appDatabase.productDao().getAll());
-        stockItems = new ArrayList<>(appDatabase.stockItemDao().getAll());
-        shoppingListItems = new ArrayList<>(appDatabase.shoppingListItemDao().getAll());
-        shoppingLists = new ArrayList<>(appDatabase.shoppingListDao().getAll());
-      } catch (Exception e) {
-        Log.e(TAG, "doInBackground: " + e);
-      }
-
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(stockItems, shoppingListItems, shoppingLists, products);
-      }
-    }
-  }
-
-  public void updateDatabase(
-      ArrayList<StockItem> stockItems,
-      ArrayList<ShoppingListItem> shoppingListItems,
-      ArrayList<ShoppingList> shoppingLists,
-      ArrayList<Product> products,
-      DataUpdatedListener listener
-  ) {
-    new updateAsyncTask(
-        appDatabase,
-        stockItems,
-        shoppingListItems,
-        shoppingLists,
-        products,
-        listener
-    ).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataUpdatedListener listener;
-
-    private final ArrayList<StockItem> stockItems;
-    private final ArrayList<ShoppingListItem> shoppingListItems;
-    private final ArrayList<ShoppingList> shoppingLists;
-    private final ArrayList<Product> products;
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        ArrayList<StockItem> stockItems,
-        ArrayList<ShoppingListItem> shoppingListItems,
-        ArrayList<ShoppingList> shoppingLists,
-        ArrayList<Product> products,
-        DataUpdatedListener listener
+    public OverviewStartData(
+        List<StockItem> stockItems,
+        List<ShoppingListItem> shoppingListItems,
+        List<ShoppingList> shoppingLists,
+        List<Product> products
     ) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
       this.stockItems = stockItems;
       this.shoppingListItems = shoppingListItems;
       this.shoppingLists = shoppingLists;
       this.products = products;
     }
 
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.stockItemDao().deleteAll();
-      appDatabase.stockItemDao().insertAll(stockItems);
-      appDatabase.shoppingListItemDao().deleteAll();
-      appDatabase.shoppingListItemDao().insertAll(shoppingListItems);
-      appDatabase.shoppingListDao().deleteAll();
-      appDatabase.shoppingListDao().insertAll(shoppingLists);
-      appDatabase.productDao().deleteAll();
-      appDatabase.productDao().insertAll(products);
-      return null;
+    public List<StockItem> getStockItems() {
+      return stockItems;
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
-      }
+    public List<ShoppingListItem> getShoppingListItems() {
+      return shoppingListItems;
     }
+
+    public List<ShoppingList> getShoppingLists() {
+      return shoppingLists;
+    }
+
+    public List<Product> getProducts() {
+      return products;
+    }
+  }
+
+  public void loadFromDatabase(DataListener listener) {
+    Single
+        .zip(
+            appDatabase.stockItemDao().getStockItems(),
+            appDatabase.shoppingListItemDao().getShoppingListItems(),
+            appDatabase.shoppingListDao().getShoppingLists(),
+            appDatabase.productDao().getProducts(),
+            OverviewStartData::new
+        )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(listener::actionFinished)
+        .subscribe();
   }
 }

@@ -28,7 +28,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -41,7 +41,7 @@ public class FormDataMasterProductCatConversionsEdit {
   private final MutableLiveData<String> factorLive;
   private final MutableLiveData<String> factorErrorLive;
   private final MediatorLiveData<String> factorHelperLive;
-  private final MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
+  private final MutableLiveData<List<QuantityUnit>> quantityUnitsLive;
   private final MutableLiveData<QuantityUnit> quantityUnitFromLive;
   private final MutableLiveData<Boolean> quantityUnitFromErrorLive;
   private final LiveData<String> quantityUnitFromNameLive;
@@ -112,7 +112,7 @@ public class FormDataMasterProductCatConversionsEdit {
     }
   }
 
-  public MutableLiveData<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
+  public MutableLiveData<List<QuantityUnit>> getQuantityUnitsLive() {
     return quantityUnitsLive;
   }
 

@@ -20,18 +20,15 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.repository.PurchaseRepository.PurchaseData;
 
 public class ConsumeRepository {
 
@@ -100,69 +97,5 @@ public class ConsumeRepository {
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
         .subscribe();
-  }
-
-  public void updateDatabase(
-      ArrayList<Product> products,
-      ArrayList<ProductBarcode> barcodes,
-      ArrayList<QuantityUnit> quantityUnits,
-      ArrayList<QuantityUnitConversion> quantityUnitConversions,
-      DataUpdatedListener listener
-  ) {
-    new updateAsyncTask(
-        appDatabase,
-        products,
-        barcodes,
-        quantityUnits,
-        quantityUnitConversions,
-        listener
-    ).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final DataUpdatedListener listener;
-
-    private final ArrayList<Product> products;
-    private final ArrayList<ProductBarcode> barcodes;
-    private final ArrayList<QuantityUnit> quantityUnits;
-    private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        ArrayList<Product> products,
-        ArrayList<ProductBarcode> barcodes,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<QuantityUnitConversion> quantityUnitConversions,
-        DataUpdatedListener listener
-    ) {
-      this.appDatabase = appDatabase;
-      this.listener = listener;
-      this.products = products;
-      this.barcodes = barcodes;
-      this.quantityUnits = quantityUnits;
-      this.quantityUnitConversions = quantityUnitConversions;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      appDatabase.productDao().deleteAll();
-      appDatabase.productDao().insertAll(products);
-      appDatabase.productBarcodeDao().deleteAll();
-      appDatabase.productBarcodeDao().insertAll(barcodes);
-      appDatabase.quantityUnitDao().deleteAll();
-      appDatabase.quantityUnitDao().insertAll(quantityUnits);
-      appDatabase.quantityUnitConversionDao().deleteAll();
-      appDatabase.quantityUnitConversionDao().insertAll(quantityUnitConversions);
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
-      }
-    }
   }
 }

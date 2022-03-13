@@ -21,51 +21,43 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.util.ArrayList;
-import xyz.zedler.patrick.grocy.R;
+import java.util.List;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterDataOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class MasterDataOverviewViewModel extends AndroidViewModel {
+public class MasterDataOverviewViewModel extends BaseViewModel {
 
   private static final String TAG = MasterDataOverviewViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final EventHandler eventHandler;
   private final MasterDataOverviewRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private final MutableLiveData<ArrayList<Store>> storesLive;
-  private final MutableLiveData<ArrayList<Location>> locationsLive;
-  private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
-  private final MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
-  private final MutableLiveData<ArrayList<Product>> productsLive;
-  private final MutableLiveData<ArrayList<TaskCategory>> taskCategoriesLive;
+  private final MutableLiveData<List<Store>> storesLive;
+  private final MutableLiveData<List<Location>> locationsLive;
+  private final MutableLiveData<List<ProductGroup>> productGroupsLive;
+  private final MutableLiveData<List<QuantityUnit>> quantityUnitsLive;
+  private final MutableLiveData<List<Product>> productsLive;
+  private final MutableLiveData<List<TaskCategory>> taskCategoriesLive;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -78,7 +70,6 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    eventHandler = new EventHandler();
     repository = new MasterDataOverviewRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
@@ -92,23 +83,17 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase(
-        (stores, locations, productGroups, quantityUnits, products, taskCategories) -> {
-          this.storesLive.setValue(stores);
-          this.locationsLive.setValue(locations);
-          this.productGroupsLive.setValue(productGroups);
-          this.quantityUnitsLive.setValue(quantityUnits);
-          this.productsLive.setValue(products);
-          this.taskCategoriesLive.setValue(taskCategories);
-          if (downloadAfterLoading) {
-            downloadData();
-          }
-        }
-    );
-  }
-
-  private String getLastTime(String sharedPref) {
-    return sharedPrefs.getString(sharedPref, null);
+    repository.loadFromDatabase(data -> {
+      this.storesLive.setValue(data.getStores());
+      this.locationsLive.setValue(data.getLocations());
+      this.productGroupsLive.setValue(data.getProductGroups());
+      this.quantityUnitsLive.setValue(data.getQuantityUnits());
+      this.productsLive.setValue(data.getProducts());
+      this.taskCategoriesLive.setValue(data.getTaskCategories());
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -121,77 +106,19 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          this::downloadData,
-          () -> onDownloadError(null)
-      );
+      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
     }
 
-    // get last offline db-changed-time values
-    String lastTimeStores = getLastTime(Constants.PREF.DB_LAST_TIME_STORES);
-    String lastTimeLocations = getLastTime(Constants.PREF.DB_LAST_TIME_LOCATIONS);
-    String lastTimeProductGroups = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS);
-    String lastTimeQuantityUnits = getLastTime(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
-    String lastTimeProducts = getLastTime(Constants.PREF.DB_LAST_TIME_PRODUCTS);
-    String lastTimeTaskCategories = getLastTime(PREF.DB_LAST_TIME_TASK_CATEGORIES);
-
-    SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    if (lastTimeStores == null || !lastTimeStores.equals(dbChangedTime)) {
-      queue.append(dlHelper.getStores(stores -> {
-        this.storesLive.setValue(stores);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime);
-        editPrefs.apply();
-      }));
-    } else if (debug) {
-      Log.i(TAG, "downloadData: skipped Stores download");
-    }
-    if (lastTimeLocations == null || !lastTimeLocations.equals(dbChangedTime)) {
-      queue.append(dlHelper.getLocations(locations -> {
-        this.locationsLive.setValue(locations);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime);
-        editPrefs.apply();
-      }));
-    } else if (debug) {
-      Log.i(TAG, "downloadData: skipped Locations download");
-    }
-    if (lastTimeProductGroups == null || !lastTimeProductGroups.equals(dbChangedTime)) {
-      queue.append(dlHelper.getProductGroups(productGroups -> {
-        this.productGroupsLive.setValue(productGroups);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime);
-        editPrefs.apply();
-      }));
-    } else if (debug) {
-      Log.i(TAG, "downloadData: skipped ProductGroups download");
-    }
-    if (lastTimeQuantityUnits == null || !lastTimeQuantityUnits.equals(dbChangedTime)) {
-      queue.append(dlHelper.getQuantityUnits(quantityUnits -> {
-        this.quantityUnitsLive.setValue(quantityUnits);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime);
-        editPrefs.apply();
-      }));
-    } else if (debug) {
-      Log.i(TAG, "downloadData: skipped QuantityUnits download");
-    }
-    if (lastTimeProducts == null || !lastTimeProducts.equals(dbChangedTime)) {
-      queue.append(dlHelper.getProducts(products -> {
-        this.productsLive.setValue(products);
-        editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime);
-        editPrefs.apply();
-      }));
-    } else if (debug) {
-      Log.i(TAG, "downloadData: skipped Products download");
-    }
-    if (lastTimeTaskCategories == null || !lastTimeTaskCategories.equals(dbChangedTime)) {
-      queue.append(dlHelper.getTaskCategories(taskCategories -> {
-        this.taskCategoriesLive.setValue(taskCategories);
-        editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime);
-        editPrefs.apply();
-      }));
-    } else if (debug) {
-      Log.i(TAG, "downloadData: skipped Task categories download");
-    }
+    DownloadHelper.Queue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
+    queue.append(
+        dlHelper.updateStores(dbChangedTime, this.storesLive::setValue),
+        dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue),
+        dlHelper.updateProductGroups(dbChangedTime, this.productGroupsLive::setValue),
+        dlHelper.updateQuantityUnits(dbChangedTime, this.quantityUnitsLive::setValue),
+        dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue),
+        dlHelper.updateTaskCategories(dbChangedTime, this.taskCategoriesLive::setValue)
+    );
 
     if (queue.isEmpty()) {
       return;
@@ -212,25 +139,9 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    repository.updateDatabase(
-        this.storesLive.getValue(),
-        this.locationsLive.getValue(),
-        this.productGroupsLive.getValue(),
-        this.quantityUnitsLive.getValue(),
-        this.productsLive.getValue(),
-        this.taskCategoriesLive.getValue(),
-        () -> {
-        }
-    );
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -267,87 +178,32 @@ public class MasterDataOverviewViewModel extends AndroidViewModel {
   }
 
   @NonNull
-  public MutableLiveData<ArrayList<Store>> getStoresLive() {
+  public MutableLiveData<List<Store>> getStoresLive() {
     return storesLive;
   }
 
-  public MutableLiveData<ArrayList<Location>> getLocationsLive() {
+  public MutableLiveData<List<Location>> getLocationsLive() {
     return locationsLive;
   }
 
-  public MutableLiveData<ArrayList<ProductGroup>> getProductGroupsLive() {
+  public MutableLiveData<List<ProductGroup>> getProductGroupsLive() {
     return productGroupsLive;
   }
 
-  public MutableLiveData<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
+  public MutableLiveData<List<QuantityUnit>> getQuantityUnitsLive() {
     return quantityUnitsLive;
   }
 
-  public MutableLiveData<ArrayList<Product>> getProductsLive() {
+  public MutableLiveData<List<Product>> getProductsLive() {
     return productsLive;
   }
 
-  public MutableLiveData<ArrayList<TaskCategory>> getTaskCategoriesLive() {
+  public MutableLiveData<List<TaskCategory>> getTaskCategoriesLive() {
     return taskCategoriesLive;
   }
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
-  }
-
-  private void showErrorMessage() {
-    showMessage(getString(R.string.error_undefined));
-  }
-
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void sendEvent(int type) {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return type;
-      }
-    });
-  }
-
-  private void sendEvent(int type, Bundle bundle) {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return type;
-      }
-
-      @Override
-      public Bundle getBundle() {
-        return bundle;
-      }
-    });
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
-  }
-
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@SuppressWarnings("SameParameterValue") @StringRes int resId) {
-    return getApplication().getString(resId);
-  }
-
-  private String getString(@StringRes int resId, Object... formatArgs) {
-    return getApplication().getString(resId, formatArgs);
   }
 
   @Override

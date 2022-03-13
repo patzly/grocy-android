@@ -56,4 +56,7 @@ public interface TaskCategoryDao {
   @Query("DELETE FROM task_category_table")
   void deleteAll();
 
+  @Query("DELETE FROM task_category_table")
+  Single<Integer> deleteCategories();
+
 }

@@ -21,43 +21,33 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
-import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatLocation;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class MasterProductCatLocationViewModel extends AndroidViewModel {
+public class MasterProductCatLocationViewModel extends BaseViewModel {
 
   private static final String TAG = MasterProductCatLocationViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final GrocyApi grocyApi;
-  private final EventHandler eventHandler;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatLocation formData;
   private final MasterProductFragmentArgs args;
@@ -66,8 +56,8 @@ public class MasterProductCatLocationViewModel extends AndroidViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<Location> locations;
-  private ArrayList<Store> stores;
+  private List<Location> locations;
+  private List<Store> stores;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -84,8 +74,6 @@ public class MasterProductCatLocationViewModel extends AndroidViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    grocyApi = new GrocyApi(getApplication());
-    eventHandler = new EventHandler();
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatLocation(application);
     args = startupArgs;
@@ -108,11 +96,11 @@ public class MasterProductCatLocationViewModel extends AndroidViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadLocationsStoresFromDatabase((locations, stores) -> {
-      this.locations = locations;
-      this.stores = stores;
-      formData.getLocationsLive().setValue(locations);
-      formData.getStoresLive().setValue(stores);
+    repository.loadFromDatabase(data -> {
+      this.locations = data.getLocations();
+      this.stores = data.getStores();
+      formData.getLocationsLive().setValue(this.locations);
+      formData.getStoresLive().setValue(this.stores);
       formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
         downloadData();
@@ -170,8 +158,6 @@ public class MasterProductCatLocationViewModel extends AndroidViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct());
-    repository.updateLocationsStoresDatabase(locations, stores, () -> {
-    });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -209,47 +195,6 @@ public class MasterProductCatLocationViewModel extends AndroidViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
-  }
-
-  public void showErrorMessage() {
-    showMessage(getString(R.string.error_undefined));
-  }
-
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void showBottomSheet(BaseBottomSheet bottomSheet, Bundle bundle) {
-    eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
-  }
-
-  private void navigateUp() {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return Event.NAVIGATE_UP;
-      }
-    });
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
-  }
-
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
   }
 
   @Override

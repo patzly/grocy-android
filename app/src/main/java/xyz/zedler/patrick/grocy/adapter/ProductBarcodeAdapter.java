@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowProductBarcodeBinding;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -40,15 +41,15 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
 
   private final ArrayList<ProductBarcode> productBarcodes;
   private final ProductBarcodeAdapterListener listener;
-  private final ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<Store> stores;
+  private final List<QuantityUnit> quantityUnits;
+  private final List<Store> stores;
 
 
   public ProductBarcodeAdapter(
       ArrayList<ProductBarcode> productBarcodes,
       ProductBarcodeAdapterListener listener,
-      ArrayList<QuantityUnit> quantityUnits,
-      ArrayList<Store> stores
+      List<QuantityUnit> quantityUnits,
+      List<Store> stores
   ) {
     this.productBarcodes = new ArrayList<>(productBarcodes);
     this.listener = listener;

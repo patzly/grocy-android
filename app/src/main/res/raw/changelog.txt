@@ -1,3 +1,6 @@
+2.2.0:
+- Fixed: App could show old data when page loading was interrupted (#409)
+
 2.1.1:
 - New: Support for grocy server 3.2.0
 - New: Login flow for Home Assistant contains scanner for long-lived access token QR code

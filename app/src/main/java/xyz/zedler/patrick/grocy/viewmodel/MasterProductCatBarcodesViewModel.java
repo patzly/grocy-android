@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -37,7 +38,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -58,10 +58,9 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<ProductBarcode>> productBarcodesLive;
 
-  private ArrayList<ProductBarcode> productBarcodes;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<Store> stores;
-  private ArrayList<QuantityUnitConversion> unitConversions;
+  private List<ProductBarcode> productBarcodes;
+  private List<QuantityUnit> quantityUnits;
+  private List<Store> stores;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -91,17 +90,15 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository
-        .loadBarcodesQuantityUnitsStoresUnitConversions((barcodes, qUs, stores, conversions) -> {
-          this.productBarcodes = barcodes;
-          this.quantityUnits = qUs;
-          this.stores = stores;
-          this.unitConversions = conversions;
-          productBarcodesLive.setValue(filterBarcodes(barcodes));
-          if (downloadAfterLoading) {
-            downloadData();
-          }
-        });
+    repository.loadFromDatabase(data -> {
+      this.productBarcodes = data.getBarcodes();
+      this.quantityUnits = data.getQuantityUnits();
+      this.stores = data.getStores();
+      productBarcodesLive.setValue(filterBarcodes(data.getBarcodes()));
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
 
@@ -130,9 +127,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
         ), dlHelper.updateStores(
             dbChangedTime,
             stores -> this.stores = stores
-        ), dlHelper.updateQuantityUnitConversions(
-            dbChangedTime,
-            conversions -> this.unitConversions = conversions
         )
     );
     if (queue.isEmpty()) {
@@ -152,7 +146,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -162,10 +155,6 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
       setOfflineLive(false);
     }
     productBarcodesLive.setValue(filterBarcodes(productBarcodes));
-    repository
-        .updateBarcodesQuantityUnitsStoresUnitConversions(productBarcodes, quantityUnits, stores,
-            unitConversions, () -> {
-            });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -178,7 +167,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     }
   }
 
-  private ArrayList<ProductBarcode> filterBarcodes(ArrayList<ProductBarcode> barcodes) {
+  private ArrayList<ProductBarcode> filterBarcodes(List<ProductBarcode> barcodes) {
     ArrayList<ProductBarcode> filteredBarcodes = new ArrayList<>();
     assert args.getProduct() != null;
     int productId = args.getProduct().getId();
@@ -194,11 +183,11 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     return productBarcodesLive;
   }
 
-  public ArrayList<QuantityUnit> getQuantityUnits() {
+  public List<QuantityUnit> getQuantityUnits() {
     return quantityUnits;
   }
 
-  public ArrayList<Store> getStores() {
+  public List<Store> getStores() {
     return stores;
   }
 

@@ -1914,12 +1914,6 @@ public class DownloadHelper {
       String dbChangedTime,
       OnShoppingListsResponseListener onResponseListener
   ) {
-    OnShoppingListsResponseListener newOnResponseListener = shoppingListItems -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(shoppingListItems);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null
     );
@@ -2282,25 +2276,54 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getTaskCategories(OnTaskCategoriesResponseListener onResponseListener) {
-    return getTaskCategories(onResponseListener, null);
-  }
-
   public QueueItem updateTaskCategories(
       String dbChangedTime,
       OnTaskCategoriesResponseListener onResponseListener
   ) {
-    OnTaskCategoriesResponseListener newOnResponseListener = taskCategories -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(taskCategories);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getTaskCategories(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(ENTITY.TASK_CATEGORIES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<TaskCategory>>() {
+                }.getType();
+                ArrayList<TaskCategory> taskCategories = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Task categories: " + taskCategories);
+                }
+                appDatabase
+                    .taskCategoryDao().deleteCategories()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.taskCategoryDao().insertAll(taskCategories))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime).apply();
+                      onResponseListener.onResponse(taskCategories);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped TaskCategories download");

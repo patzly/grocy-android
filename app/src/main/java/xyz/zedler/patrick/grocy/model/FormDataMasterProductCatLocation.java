@@ -25,17 +25,17 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class FormDataMasterProductCatLocation {
 
   private final Application application;
-  private final MutableLiveData<ArrayList<Location>> locationsLive;
+  private final MutableLiveData<List<Location>> locationsLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
   private final LiveData<Boolean> locationErrorLive;
-  private final MutableLiveData<ArrayList<Store>> storesLive;
+  private final MutableLiveData<List<Store>> storesLive;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
 
@@ -66,7 +66,7 @@ public class FormDataMasterProductCatLocation {
     filledWithProduct = false;
   }
 
-  public MutableLiveData<ArrayList<Location>> getLocationsLive() {
+  public MutableLiveData<List<Location>> getLocationsLive() {
     return locationsLive;
   }
 
@@ -82,7 +82,7 @@ public class FormDataMasterProductCatLocation {
     return locationErrorLive;
   }
 
-  public MutableLiveData<ArrayList<Store>> getStoresLive() {
+  public MutableLiveData<List<Store>> getStoresLive() {
     return storesLive;
   }
 

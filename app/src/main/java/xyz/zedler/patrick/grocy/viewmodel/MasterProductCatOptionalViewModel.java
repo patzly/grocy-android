@@ -28,7 +28,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.android.volley.VolleyError;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -55,9 +55,9 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<Product> products;
-  private ArrayList<ProductGroup> productGroups;
-  private ArrayList<ProductBarcode> barcodes;
+  private List<Product> products;
+  private List<ProductGroup> productGroups;
+  private List<ProductBarcode> barcodes;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean isActionEdit;
@@ -92,10 +92,10 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, productGroups, barcodes) -> {
-      this.products = products;
-      this.productGroups = productGroups;
-      this.barcodes = barcodes;
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      this.productGroups = data.getProductGroups();
+      this.barcodes = data.getBarcodes();
       formData.getProductsLive().setValue(products);
       formData.getProductGroupsLive().setValue(productGroups);
       formData.fillWithProductIfNecessary(args.getProduct());
@@ -154,8 +154,6 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct());
-    repository.updateDatabase(products, productGroups, barcodes, () -> {
-    });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {

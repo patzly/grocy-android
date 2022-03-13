@@ -83,7 +83,7 @@ public class BaseViewModel extends AndroidViewModel {
     );
   }
 
-  void showErrorMessage(VolleyError volleyError) {
+  public void showErrorMessage(VolleyError volleyError) {
     // similar method is also in BaseFragment
     if (volleyError != null && volleyError.networkResponse != null) {
       if (volleyError.networkResponse.statusCode == 403) {

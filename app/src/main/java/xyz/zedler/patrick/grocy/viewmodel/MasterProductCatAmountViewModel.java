@@ -29,9 +29,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
@@ -48,7 +47,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final GrocyApi grocyApi;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatAmount formData;
   private final MasterProductFragmentArgs args;
@@ -57,7 +55,7 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnit> quantityUnits;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -74,7 +72,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatAmount(application, getBeginnerModeEnabled());
     args = startupArgs;
@@ -97,10 +94,9 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadQuantityUnitsFromDatabase(quantityUnits -> {
-      this.quantityUnits = quantityUnits;
-      formData.setQuantityUnits(quantityUnits);
-      formData.fillWithProductIfNecessary(args.getProduct(), quantityUnits);
+    repository.loadFromDatabase(data -> {
+      this.quantityUnits = data.getQuantityUnits();
+      formData.fillWithProductIfNecessary(args.getProduct(), this.quantityUnits);
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -123,10 +119,10 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
 
     DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
-        dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
-          this.quantityUnits = quantityUnits;
-          formData.setQuantityUnits(quantityUnits);
-        })
+        dlHelper.updateQuantityUnits(
+            dbChangedTime,
+            quantityUnits -> this.quantityUnits = quantityUnits
+        )
     );
     if (queue.isEmpty()) {
       return;
@@ -145,8 +141,6 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct(), quantityUnits);
-    repository.updateQuantityUnitsDatabase(quantityUnits, () -> {
-    });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {

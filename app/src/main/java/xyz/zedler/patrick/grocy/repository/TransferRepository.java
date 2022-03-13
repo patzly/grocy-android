@@ -87,11 +87,6 @@ public class TransferRepository {
     }
   }
 
-  public interface DataUpdatedListener {
-
-    void actionFinished();
-  }
-
   public void loadFromDatabase(DataListener listener) {
     Single
         .zip(

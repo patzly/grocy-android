@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -38,7 +39,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.repository.MasterProductCatConversionsEditRepository;
+import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -50,7 +51,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final EventHandler eventHandler;
-  private final MasterProductCatConversionsEditRepository repository;
+  private final MasterProductRepository repository;
   private final MasterProductFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
@@ -58,8 +59,8 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<QuantityUnitConversion>> quantityUnitConversionsLive;
 
-  private ArrayList<QuantityUnitConversion> unitConversions;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
@@ -77,7 +78,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     eventHandler = new EventHandler();
-    repository = new MasterProductCatConversionsEditRepository(application);
+    repository = new MasterProductRepository(application);
     args = startupArgs;
 
     quantityUnitConversionsLive = new MutableLiveData<>();
@@ -90,15 +91,15 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((qUs, conversions) -> {
-          this.quantityUnits = qUs;
-          this.unitConversions = conversions;
-          this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-          quantityUnitConversionsLive.setValue(filterConversions(conversions));
-          if (downloadAfterLoading) {
-            downloadData();
-          }
-        });
+    repository.loadFromDatabase(data -> {
+      this.quantityUnits = data.getQuantityUnits();
+      this.unitConversions = data.getConversions();
+      this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(this.quantityUnits);
+      quantityUnitConversionsLive.setValue(filterConversions(this.unitConversions));
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -149,7 +150,6 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateDatabase(quantityUnits, unitConversions, () -> {});
     quantityUnitConversionsLive.setValue(filterConversions(unitConversions));
   }
 
@@ -163,7 +163,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     }
   }
 
-  private ArrayList<QuantityUnitConversion> filterConversions(ArrayList<QuantityUnitConversion> conversions) {
+  private ArrayList<QuantityUnitConversion> filterConversions(List<QuantityUnitConversion> conversions) {
     ArrayList<QuantityUnitConversion> filteredConversions = new ArrayList<>();
     assert args.getProduct() != null;
     int productId = args.getProduct().getId();

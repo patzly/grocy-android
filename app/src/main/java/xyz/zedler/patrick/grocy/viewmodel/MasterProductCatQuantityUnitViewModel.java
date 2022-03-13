@@ -31,8 +31,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -50,7 +50,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final GrocyApi grocyApi;
   private final MasterProductRepository repository;
   private final FormDataMasterProductCatQuantityUnit formData;
   private final MasterProductFragmentArgs args;
@@ -59,7 +58,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<QuantityUnit> quantityUnits;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -76,7 +75,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatQuantityUnit(application, getBeginnerModeEnabled());
     args = startupArgs;
@@ -99,9 +97,9 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadQuantityUnitsFromDatabase(quantityUnits -> {
-      this.quantityUnits = quantityUnits;
-      formData.getQuantityUnitsLive().setValue(quantityUnits);
+    repository.loadFromDatabase(data -> {
+      this.quantityUnits = data.getQuantityUnits();
+      formData.getQuantityUnitsLive().setValue(this.quantityUnits);
       formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
         downloadData();
@@ -154,8 +152,6 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       setOfflineLive(false);
     }
     formData.fillWithProductIfNecessary(args.getProduct());
-    repository.updateQuantityUnitsDatabase(quantityUnits, () -> {
-    });
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -173,13 +169,13 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       showMessage(getString(R.string.msg_help_qu_stock));
       return;
     }
-    ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
+    List<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
     if (quantityUnits == null) {
       showErrorMessage(null);
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, quantityUnits);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     QuantityUnit quantityUnit;
     if (type == FormDataMasterProductCatQuantityUnit.STOCK) {
       quantityUnit = formData.getQuStockLive().getValue();
