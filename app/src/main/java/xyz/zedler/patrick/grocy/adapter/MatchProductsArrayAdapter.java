@@ -102,14 +102,6 @@ public class MatchProductsArrayAdapter extends ArrayAdapter<Product> {
       for (ExtractedResult result : results) {
         suggestions.add(tempItems.get(result.getString()));
       }
-
-      //alternative without fuzzy
-                /*for (Product product : tempItems) {
-                    if (product.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
-                        suggestions.add(product);
-                    }
-                }*/
-
       FilterResults filterResults = new FilterResults();
       filterResults.values = suggestions;
       filterResults.count = suggestions.size();

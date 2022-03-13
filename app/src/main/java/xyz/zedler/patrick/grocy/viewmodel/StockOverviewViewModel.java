@@ -31,6 +31,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -109,6 +111,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
+  private ArrayList<String> searchResultsFuzzy;
   private final boolean debug;
 
   public StockOverviewViewModel(@NonNull Application application) {
@@ -480,7 +483,11 @@ public class StockOverviewViewModel extends BaseViewModel {
 
       boolean searchContainsItem = true;
       if (searchInput != null && !searchInput.isEmpty()) {
-        searchContainsItem = item.getProduct().getName().toLowerCase().contains(searchInput);
+        String productName = item.getProduct().getName().toLowerCase();
+        searchContainsItem = productName.contains(searchInput);
+        if (!searchContainsItem) {
+          searchContainsItem = searchResultsFuzzy.contains(productName);
+        }
       }
       if (!searchContainsItem && productBarcodeSearch == null
           || !searchContainsItem && productBarcodeSearch.getProductId() != item.getProductId()) {
@@ -732,6 +739,19 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
+
+    // Initialize suggestion list with max. capacity; growing is expensive.
+    searchResultsFuzzy = new ArrayList<>(products.size());
+    List<BoundExtractedResult<Product>> results = FuzzySearch.extractSorted(
+        this.searchInput,
+        products,
+        item -> item.getName().toLowerCase(),
+        70
+    );
+    for (BoundExtractedResult<Product> result : results) {
+      searchResultsFuzzy.add(result.getString());
+    }
+
     updateFilteredStockItems();
   }
 
