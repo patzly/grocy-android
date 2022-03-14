@@ -627,6 +627,28 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.uploadSetting(STOCK.DUE_SOON_DAYS, String.valueOf(interval), this::showMessage);
   }
 
+  public boolean hasServerNewOptionTreatOpenedAsOutOfStock() {
+    return sharedPrefs.getInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, -1) != -1;
+  }
+
+  public boolean getTreatOpenedAsOutOfStockEnabled() {
+    if (!hasServerNewOptionTreatOpenedAsOutOfStock()) {
+      return false;
+    }
+    return sharedPrefs.getInt(
+        STOCK.TREAT_OPENED_OUT_OF_STOCK,
+        Constants.SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK
+    ) == 1;
+  }
+
+  public void setTreatOpenedAsOutOfStockEnabled(boolean enabled) {
+    if (!hasServerNewOptionTreatOpenedAsOutOfStock()) {
+      return;
+    }
+    sharedPrefs.edit().putInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled ? 1 : 0).apply();
+    dlHelper.uploadSetting(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled, this::showMessage);
+  }
+
   public void showDefaultPurchaseAmountBottomSheet() {
     Bundle bundle = new Bundle();
     String amount = sharedPrefs.getString(

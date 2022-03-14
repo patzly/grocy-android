@@ -43,6 +43,8 @@ public class FormDataMasterProductCatAmount {
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<String> minAmountLive;
   private final MutableLiveData<Boolean> accumulateMinAmount;
+  private final MutableLiveData<Boolean> treatOpenedAsOutOfStockVisible;
+  private final MutableLiveData<Boolean> treatOpenedAsOutOfStock;
   private final MutableLiveData<String> quickConsumeAmountLive;
   private final LiveData<String> quickConsumeAmountTitleLive;
   private final MutableLiveData<String> factorPurchaseToStockLive;
@@ -61,6 +63,8 @@ public class FormDataMasterProductCatAmount {
     quantityUnitLive = new MutableLiveData<>();
     minAmountLive = new MutableLiveData<>();
     accumulateMinAmount = new MutableLiveData<>(false);
+    treatOpenedAsOutOfStockVisible = new MutableLiveData<>(true);
+    treatOpenedAsOutOfStock = new MutableLiveData<>(false);
     quickConsumeAmountLive = new MutableLiveData<>();
     quickConsumeAmountTitleLive = Transformations.map(
         quantityUnitLive,
@@ -108,6 +112,14 @@ public class FormDataMasterProductCatAmount {
 
   public MutableLiveData<Boolean> getAccumulateMinAmount() {
     return accumulateMinAmount;
+  }
+
+  public MutableLiveData<Boolean> getTreatOpenedAsOutOfStockVisible() {
+    return treatOpenedAsOutOfStockVisible;
+  }
+
+  public MutableLiveData<Boolean> getTreatOpenedAsOutOfStock() {
+    return treatOpenedAsOutOfStock;
   }
 
   public MutableLiveData<String> getQuickConsumeAmountLive() {
@@ -228,6 +240,11 @@ public class FormDataMasterProductCatAmount {
     }
     product.setMinStockAmount(minAmountLive.getValue());
     product.setAccumulateSubProductsMinStockAmount(accumulateMinAmount.getValue());
+    product.setTreatOpenedAsOutOfStock(
+        treatOpenedAsOutOfStockVisible.getValue()
+            ? treatOpenedAsOutOfStock.getValue() ? "1" : "0"
+            : "-1"
+    );
     product.setQuickConsumeAmount(quickConsumeAmountLive.getValue());
     product.setQuFactorPurchaseToStock(factorPurchaseToStockLive.getValue());
     product.setEnableTareWeightHandling(enableTareWeightHandlingLive.getValue());
@@ -247,6 +264,10 @@ public class FormDataMasterProductCatAmount {
     String tareWeight = NumUtil.trim(product.getTareWeightDouble());
     minAmountLive.setValue(minAmount);
     accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
+    treatOpenedAsOutOfStockVisible.setValue(product.getTreatOpenedAsOutOfStock() != null
+        && !product.getTreatOpenedAsOutOfStock().isEmpty()
+        && !product.getTreatOpenedAsOutOfStock().equals("-1"));
+    treatOpenedAsOutOfStock.setValue(product.getTreatOpenedAsOutOfStockBoolean());
     quickConsumeAmountLive.setValue(quickAmount);
     factorPurchaseToStockLive.setValue(factor);
     enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());

@@ -69,7 +69,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         Task.class,
         TaskCategory.class
     },
-    version = 19
+    version = 20
 )
 public abstract class AppDatabase extends RoomDatabase {
 

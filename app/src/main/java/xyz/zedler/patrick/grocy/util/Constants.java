@@ -136,6 +136,7 @@ public final class Constants {
       public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
       public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DEFAULT_DUE_DAYS = "product_presets_default_due_days"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String TREAT_OPENED_OUT_OF_STOCK = "product_presets_treat_opened_as_out_of_stock"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DUE_SOON_DAYS = "stock_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
       public final static String SHOW_PURCHASED_DATE = "show_purchased_date_on_purchase"; // used for pref sync, DO NOT EDIT VALUE
@@ -224,6 +225,7 @@ public final class Constants {
       public final static String DEFAULT_PURCHASE_AMOUNT = "1";
       public final static String DEFAULT_CONSUME_AMOUNT = "1";
       public final static boolean USE_QUICK_CONSUME_AMOUNT = false;
+      public final static int TREAT_OPENED_OUT_OF_STOCK = 1;
     }
 
     public final static class SHOPPING_MODE {

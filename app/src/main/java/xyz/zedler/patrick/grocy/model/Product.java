@@ -131,6 +131,10 @@ public class Product implements Parcelable {
   @SerializedName("cumulate_min_stock_amount_of_sub_products")
   private String accumulateSubProductsMinStockAmount;
 
+  @ColumnInfo(name = "treat_opened_as_out_of_stock")
+  @SerializedName("treat_opened_as_out_of_stock")
+  private String treatOpenedAsOutOfStock;
+
   @ColumnInfo(name = "due_type")
   @SerializedName("due_type")
   private String dueDateType;
@@ -164,6 +168,10 @@ public class Product implements Parcelable {
         STOCK.DEFAULT_DUE_DAYS,
         SETTINGS_DEFAULT.STOCK.DEFAULT_DUE_DAYS
     );
+    int presetTreatOpened = sharedPrefs.getInt(
+        STOCK.TREAT_OPENED_OUT_OF_STOCK,
+        SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK
+    );
     name = null;  // initialize default values (used in masterProductFragment)
     active = "1";
     parentProductId = null;
@@ -176,6 +184,7 @@ public class Product implements Parcelable {
     storeId = null;
     minStockAmount = String.valueOf(0);
     accumulateSubProductsMinStockAmount = "0";
+    treatOpenedAsOutOfStock = String.valueOf(presetTreatOpened);
     dueDateType = "1";
     defaultDueDays = String.valueOf(presetDefaultDueDays);
     defaultDueDaysAfterOpen = "0";
@@ -218,6 +227,7 @@ public class Product implements Parcelable {
     parentProductId = parcel.readString();
     calories = parcel.readString();
     accumulateSubProductsMinStockAmount = parcel.readString();
+    treatOpenedAsOutOfStock = parcel.readString();
     dueDateType = parcel.readString();
     quickConsumeAmount = parcel.readString();
     hideOnStockOverview = parcel.readString();
@@ -247,6 +257,7 @@ public class Product implements Parcelable {
     dest.writeString(parentProductId);
     dest.writeString(calories);
     dest.writeString(accumulateSubProductsMinStockAmount);
+    dest.writeString(treatOpenedAsOutOfStock);
     dest.writeString(dueDateType);
     dest.writeString(quickConsumeAmount);
     dest.writeString(hideOnStockOverview);
@@ -522,6 +533,19 @@ public class Product implements Parcelable {
     this.accumulateSubProductsMinStockAmount = accumulateSubProductsMinStockAmount ? "1" : "0";
   }
 
+  public boolean getTreatOpenedAsOutOfStockBoolean() {
+    return NumUtil.isStringInt(treatOpenedAsOutOfStock)
+        && Integer.parseInt(treatOpenedAsOutOfStock) == 1;
+  }
+
+  public String getTreatOpenedAsOutOfStock() {
+    return treatOpenedAsOutOfStock;
+  }
+
+  public void setTreatOpenedAsOutOfStock(String treatOpenedAsOutOfStock) {
+    this.treatOpenedAsOutOfStock = treatOpenedAsOutOfStock;
+  }
+
   public String getDueDateType() {
     return dueDateType;
   }
@@ -573,22 +597,23 @@ public class Product implements Parcelable {
       Object description = product.description != null ? product.description : JSONObject.NULL;
       Object groupId = product.productGroupId != null ? product.productGroupId : JSONObject.NULL;
       Object storeId = product.storeId != null ? product.storeId : JSONObject.NULL;
-      String defaultDueDays = String.valueOf(product.defaultDueDays);
-      String defaultDueDaysOpen = String.valueOf(product.defaultDueDaysAfterOpen);
-      String defaultDueDaysFreezing = String.valueOf(product.defaultDueDaysAfterFreezing);
-      String defaultDueDaysThawing = String.valueOf(product.defaultDueDaysAfterThawing);
+      String defaultDueDays = product.defaultDueDays;
+      String defaultDueDaysOpen = product.defaultDueDaysAfterOpen;
+      String defaultDueDaysFreezing = product.defaultDueDaysAfterFreezing;
+      String defaultDueDaysThawing = product.defaultDueDaysAfterThawing;
       Object pictureFile =
           product.pictureFileName != null ? product.pictureFileName : JSONObject.NULL;
-      String enableTareWeight = String.valueOf(product.enableTareWeightHandling);
+      String enableTareWeight = product.enableTareWeightHandling;
       String tareWeight = product.tareWeight;
-      String notCheckStock = String.valueOf(product.notCheckStockFulfillmentForRecipes);
+      String notCheckStock = product.notCheckStockFulfillmentForRecipes;
       Object parentProductId =
           product.parentProductId != null ? product.parentProductId : JSONObject.NULL;
       String calories = product.calories;
-      String cumulateAmounts = String.valueOf(product.accumulateSubProductsMinStockAmount);
-      String dueType = String.valueOf(product.dueDateType);
+      String cumulateAmounts = product.accumulateSubProductsMinStockAmount;
+      String treatOpened = product.treatOpenedAsOutOfStock;
+      String dueType = product.dueDateType;
       String quickConsume = product.quickConsumeAmount;
-      String hideOnStock = String.valueOf(product.hideOnStockOverview);
+      String hideOnStock = product.hideOnStockOverview;
 
       json.put("name", name);
       json.put("description", description);
@@ -611,6 +636,9 @@ public class Product implements Parcelable {
       json.put("parent_product_id", parentProductId);
       json.put("calories", calories);
       json.put("cumulate_min_stock_amount_of_sub_products", cumulateAmounts);
+      if (treatOpened != null && (treatOpened.equals("1") || treatOpened.equals("0"))) {
+        json.put("treat_opened_as_out_of_stock", treatOpened);
+      }
       json.put("due_type", dueType);
       json.put("quick_consume_amount", quickConsume);
       json.put("hide_on_stock_overview", hideOnStock);
@@ -709,6 +737,7 @@ public class Product implements Parcelable {
             .equals(accumulateSubProductsMinStockAmount,
                 product.accumulateSubProductsMinStockAmount)
         &&
+        Objects.equals(treatOpenedAsOutOfStock, product.treatOpenedAsOutOfStock) &&
         Objects.equals(dueDateType, product.dueDateType) &&
         Objects.equals(quickConsumeAmount, product.quickConsumeAmount) &&
         Objects.equals(hideOnStockOverview, product.hideOnStockOverview);
@@ -722,8 +751,8 @@ public class Product implements Parcelable {
             defaultDueDaysAfterOpen, defaultDueDaysAfterFreezing, defaultDueDaysAfterThawing,
             pictureFileName, enableTareWeightHandling, tareWeight,
             notCheckStockFulfillmentForRecipes,
-            parentProductId, calories, accumulateSubProductsMinStockAmount, dueDateType,
-            quickConsumeAmount, hideOnStockOverview);
+            parentProductId, calories, accumulateSubProductsMinStockAmount, treatOpenedAsOutOfStock,
+            dueDateType, quickConsumeAmount, hideOnStockOverview);
   }
 
   @NonNull
