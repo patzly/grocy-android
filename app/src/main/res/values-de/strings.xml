@@ -238,6 +238,8 @@
   <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s als geöffnet markieren\nStandort: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s umlagern\nVon Standort: %4$s\nNach Standort: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
