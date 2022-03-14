@@ -541,7 +541,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="one">%1$d Produkt ist abgelaufen.</item>
+    <item quantity="one">%1$d Produkt ist überfällig.</item>
     <item quantity="other">%1$d Produkte sind überfällig.</item>
   </plurals>
   <!-- %1$s is a number -->
