@@ -44,7 +44,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -276,7 +275,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (shoppingList == null) {
       return;
     }
-    ShoppingListHelper.changeAppBarTitle(
+    ShoppingListFragment.changeAppBarTitle(
         binding.textShoppingListTitle,
         binding.buttonShoppingListLists,
         shoppingList
