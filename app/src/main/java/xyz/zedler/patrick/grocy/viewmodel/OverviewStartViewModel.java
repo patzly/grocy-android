@@ -426,6 +426,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
+    repository.updateDatabase(stockItemsTemp, () -> {});
     infoFullscreenLive.setValue(null);
     this.stockItemsLive.setValue(stockItemsTemp);
   }
