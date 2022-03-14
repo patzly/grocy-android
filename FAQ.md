@@ -101,7 +101,7 @@ If you use Hass.io with the Grocy Add-on, read [this](https://github.com/patzly/
 
 After tapping "Own server" on the login page, you will be prompted to scan the QR code from an API key of your grocy server. Once you do that, the app will detect that you are using Home Assistant and prompt you to scan the QR code of a long-lived access token from Home Assistant. You can get this in your Home Assistant user profile in the bottom section. Once you scan the QR code, you will be directed to a form where you will need to fill in any missing data. If you have followed the steps up to this point, all that should be left is the server URL of Home Assistant (i.e. the URL where you can reach your Home Assistant instance). Be aware that you may add the port if your server uses another port than 443 or 80 (e.g. the local port of Home Assistant server is 8123).
   
-You can also enter the URL of your Home Assistant Cloud (Nabu Casa), if you use this service. The URL must then be in the form https://xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.ui.nabu.casa/. Since typing can cause typos, we recommend copying the URL from somewhere else via Android's clipboard and pasting it into the field.
+You can also enter the URL of your Home Assistant Cloud (Nabu Casa), if you use this service. The URL must then be in the form `https://xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.ui.nabu.casa/`. Since typing can cause typos, we recommend copying the URL from somewhere else via Android's clipboard and pasting it into the field.
 
 <br />
 
