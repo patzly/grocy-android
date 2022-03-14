@@ -120,7 +120,7 @@
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
     <item quantity="one">%1$d abgelaufen</item>
-    <item quantity="other">%1$d abgelaufen</item>
+    <item quantity="other">%1$d überfällig</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
@@ -176,7 +176,7 @@
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d abgelaufen</item>
-    <item quantity="other">%1$d abgelaufen</item>
+    <item quantity="other">%1$d überfällig</item>
   </plurals>
   <string name="msg_task_mark">Aufgabe als erledigt markieren</string>
   <string name="msg_task_completed">Aufgabe als erledigt markiert</string>
