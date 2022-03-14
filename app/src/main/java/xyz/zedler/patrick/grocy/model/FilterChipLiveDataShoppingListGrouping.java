@@ -46,7 +46,7 @@ public class FilterChipLiveDataShoppingListGrouping extends FilterChipLiveData {
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    groupingMode = sharedPrefs.getString(PREF.STOCK_GROUPING_MODE, GROUPING_PRODUCT_GROUP);
+    groupingMode = sharedPrefs.getString(PREF.SHOPPING_LIST_GROUPING_MODE, GROUPING_PRODUCT_GROUP);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -92,7 +92,7 @@ public class FilterChipLiveDataShoppingListGrouping extends FilterChipLiveData {
       groupingMode = GROUPING_NONE;
     }
     setFilterText();
-    sharedPrefs.edit().putString(PREF.STOCK_GROUPING_MODE, groupingMode).apply();
+    sharedPrefs.edit().putString(PREF.SHOPPING_LIST_GROUPING_MODE, groupingMode).apply();
   }
 
   private void setItems() {

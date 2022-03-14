@@ -83,6 +83,10 @@ public class BaseViewModel extends AndroidViewModel {
     );
   }
 
+  public void showErrorMessage() {
+    showMessage(getString(R.string.error_undefined));
+  }
+
   public void showErrorMessage(VolleyError volleyError) {
     // similar method is also in BaseFragment
     if (volleyError != null && volleyError.networkResponse != null) {

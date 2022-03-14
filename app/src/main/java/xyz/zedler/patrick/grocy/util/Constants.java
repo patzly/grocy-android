@@ -54,6 +54,7 @@ public final class Constants {
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
     public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
 
+    public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";

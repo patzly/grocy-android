@@ -117,28 +117,8 @@ public class ShoppingListItemAdapter extends
     HashMap<String, ArrayList<ShoppingListItem>> shoppingListItemsGroupedHashMap = new HashMap<>();
     ArrayList<ShoppingListItem> ungroupedItems = new ArrayList<>();
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      String groupName = null;
-      if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
-          && shoppingListItem.hasProduct()) {
-        Product product = productHashMap.get(shoppingListItem.getProductIdInt());
-        Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
-            ? Integer.parseInt(product.getProductGroupId())
-            : null;
-        ProductGroup productGroup = productGroupId != null
-            ? productGroupHashMap.get(productGroupId)
-            : null;
-        groupName = productGroup != null ? productGroup.getName() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
-          && shoppingListItem.hasProduct()) {
-        Product product = productHashMap.get(shoppingListItem.getProductIdInt());
-        Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
-            ? Integer.parseInt(product.getStoreId())
-            : null;
-        Store store = storeId != null
-            ? storeHashMap.get(storeId)
-            : null;
-        groupName = store != null ? store.getName() : null;
-      }
+      String groupName = getGroupName(shoppingListItem, productHashMap, productGroupHashMap,
+          storeHashMap, groupingMode);
       if (groupName != null && !groupName.isEmpty()) {
         ArrayList<ShoppingListItem> itemsFromGroup = shoppingListItemsGroupedHashMap.get(groupName);
         if (itemsFromGroup == null) {
@@ -174,6 +154,38 @@ public class ShoppingListItemAdapter extends
         !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
     );
     return groupedListItems;
+  }
+
+  public static String getGroupName(
+      ShoppingListItem shoppingListItem,
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Store> storeHashMap,
+      String groupingMode
+  ) {
+    String groupName = null;
+    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
+        && shoppingListItem.hasProduct()) {
+      Product product = productHashMap.get(shoppingListItem.getProductIdInt());
+      Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
+          ? Integer.parseInt(product.getProductGroupId())
+          : null;
+      ProductGroup productGroup = productGroupId != null
+          ? productGroupHashMap.get(productGroupId)
+          : null;
+      groupName = productGroup != null ? productGroup.getName() : null;
+    } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
+        && shoppingListItem.hasProduct()) {
+      Product product = productHashMap.get(shoppingListItem.getProductIdInt());
+      Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
+          ? Integer.parseInt(product.getStoreId())
+          : null;
+      Store store = storeId != null
+          ? storeHashMap.get(storeId)
+          : null;
+      groupName = store != null ? store.getName() : null;
+    }
+    return groupName;
   }
 
   private static void addBottomNotes(
