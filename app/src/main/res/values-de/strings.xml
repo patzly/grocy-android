@@ -546,7 +546,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="one">%1$d Produkt ist verdorben.</item>
+    <item quantity="one">%1$d Produkt ist abgelaufen.</item>
     <item quantity="other">%1$d Produkte sind abgelaufen.</item>
   </plurals>
   <!-- %1$s is a number -->
