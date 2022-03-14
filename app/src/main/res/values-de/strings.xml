@@ -175,7 +175,7 @@
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
-    <item quantity="one">%1$d abgelaufen</item>
+    <item quantity="one">%1$d überfällig</item>
     <item quantity="other">%1$d überfällig</item>
   </plurals>
   <string name="msg_task_mark">Aufgabe als erledigt markieren</string>
