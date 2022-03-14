@@ -99,22 +99,9 @@ If you use Hass.io with the Grocy Add-on, read [this](https://github.com/patzly/
 <a name="faq4"></a>
 **(4) How can I use this app with the grocy Home Assistant add-on?**
 
-*In the v2.0.0 beta version of our app you can login with a long-term token from Home Assistant (together with a grocy API key). You won't need to open a port then anymore.
-  To set it up, you can scan a QR code from the grocy API keys page. If this doesn't work you can enter the data manually: Enter your IP address with the according port (e. g. 8123). Get a long lived access token from your Home Assistant and an API key from your Grocy instance. To get the ingress instance name, go into Grocy -> Settings -> REST-API browser. In the window which opened, select the part of the URL between /hassio_ingress/ and /api/. That´s your ingress instance.*
-
-In the Supervisor of Hass.io, open the Configuration tab of the Grocy Add-on.
-Change the host port (which will be exposed) from "null" to any other number like "40" (without the quotes) in the Network section.
-Now in this app here in the field "Server URL", enter the domain or IP address of your Hass.io server together with ":" and the chosen port number.
-So the Server URL can look like this:
-
-- `http://192.168.178.123:40`
-- `https://myhassioserver.com:40`
-
-Attention! If your Hass.io server is publicly accessible, following points are important for you:
-
-- Make sure that you have set up a working HTTPS certificate in the Configuration section of the Grocy Add-on.
-- Start the URL with "https://" like above.
-- Set a strong password for all users in Grocy (default is "admin"), because anyone has now access to your Grocy instance and it is not protected by Hass.io login anymore.
+After tapping "Own server" on the login page, you will be prompted to scan the QR code from an API key of your grocy server. Once you do that, the app will detect that you are using Home Assistant and prompt you to scan the QR code of a long-lived access token from Home Assistant. You can get this in your Home Assistant user profile in the bottom section. Once you scan the QR code, you will be directed to a form where you will need to fill in any missing data. If you have followed the steps up to this point, all that should be left is the server URL of Home Assistant (i.e. the URL where you can reach your Home Assistant instance). Be aware that you may add the port if your server uses another port than 443 or 80 (e.g. the local port of Home Assistant server is 8123).
+  
+You can also enter the URL of your Home Assistant Cloud (Nabu Casa), if you use this service. The URL must then be in the form `https://xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.ui.nabu.casa/`. Since typing can cause typos, we recommend copying the URL from somewhere else via Android's clipboard and pasting it into the field.
 
 <br />
 
