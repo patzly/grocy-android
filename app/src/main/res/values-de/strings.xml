@@ -229,8 +229,9 @@
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
   <string name="msg_choose_product">Der von Ihnen gescannte Barcode ist noch nicht mit einem Produkt verknüpft. Sie können ihn mit einem vorhandenen verknüpfen oder ein neues Produkt erstellen.</string>
   <string name="msg_product_name_off">Produktname für Barcode stammt von Open Food Facts.</string>
-  <string name="msg_product_name_lookup_error">Barcode konnte nicht auf Open Food Facts nachgeschaut werden.</string>
-  <string name="msg_product_name_lookup_empty">Barcode ist nicht in der Open Food Facts Datenbank.</string>
+  <string name="msg_product_name_obf">Produktname für Barcode stammt von Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">Barcode konnte nicht auf Open Food Facts oder Open Beauty Facts nachgeschaut werden.</string>
+  <string name="msg_product_name_lookup_empty">Barcode ist nicht in der Open Food Facts oder Open Beauty Facts Datenbank.</string>
   <string name="msg_off_option_deactivated">Sie können Open Food Facts in den Einstellungen aktivieren, damit automatisch ein Produktname vorgeschlagen wird.</string>
   <string name="msg_create_new_product_filled">Neues Produkt \"%1$s\" erstellen</string>
   <string name="msg_create_new_product">Neues Produkt erstellen</string>
@@ -284,6 +285,8 @@
   <string name="msg_help_qu_purchase">Dies ist die Standardmengeneinheit, die beim Hinzufügen dieses Produkts zum Einkaufszettel verwendet wird.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Wenn aktiviert, werden die Mindestbestände von untergeordneten Produkten aufsummiert, heißt das untergeordnete Produkt wird nie \"fehlen\", nur dieses.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Wenn aktiviert, werden geöffnete Bestandseinträge für die Ermittlung des Mindestbestands als bereits verbraucht betrachtet.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Diese Menge wird für die \"Schnell-Verbrauch/Öffnen\"-Buttons auf der Bestandsübersicht benutzt (bezieht sich auf die Bestandsmengeneinheit)</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -811,7 +814,7 @@
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
   <string name="setting_language_system">Systemvorgabe: %1$s</string>
   <string name="setting_language_not_available">Nicht verfügbar</string>
-  <string name="setting_open_food_facts">Open Food Facts benutzen</string>
+  <string name="setting_open_food_facts">Open Food Facts und Open Beauty Facts benutzen</string>
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
   <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
   <string name="setting_choose_barcode_scanner_description">Für Barcode-Scannen mit der Kamera</string>
@@ -850,6 +853,7 @@
   <string name="setting_default_amount_purchase">Standardmenge für Einkauf</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Standardmenge für Verbrauch</string>
+  <string name="setting_treat_opened_as_out_of_stock">Geöffnete als nicht vorrätig behandeln</string>
   <string name="setting_purchased_date">Nach Einkaufsdatum fragen</string>
   <string name="setting_purchased_date_description">Auf der Einkauf- und Inventur-Seite</string>
   <string name="setting_use_quick_consume_amount">Die Schnell-Verbrauchs-Menge des Produkts verwenden</string>
