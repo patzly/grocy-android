@@ -181,14 +181,40 @@ public class ChooseProductViewModel extends BaseViewModel {
               productNameLive.setValue(productName);
               offHelpText.setValue(getString(R.string.msg_product_name_off));
             } else {
-              offHelpText.setValue(getString(R.string.msg_product_name_off_empty));
-              sendEvent(Event.FOCUS_INVALID_VIEWS);
+              dlHelper.getOpenBeautyFactsProductName(
+                  barcode,
+                  productName1 -> {
+                    if (productName1 != null && !productName1.isEmpty()) {
+                      productNameLive.setValue(productName1);
+                      offHelpText.setValue(getString(R.string.msg_product_name_obf));
+                    } else {
+                      offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
+                      sendEvent(Event.FOCUS_INVALID_VIEWS);
+                    }
+                  },
+                  error1 -> {
+                    offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
+                    sendEvent(Event.FOCUS_INVALID_VIEWS);
+                  }
+              );
             }
           },
-          error-> {
-            offHelpText.setValue(getString(R.string.msg_product_name_off_error));
-            sendEvent(Event.FOCUS_INVALID_VIEWS);
-          }
+          error -> dlHelper.getOpenBeautyFactsProductName(
+              barcode,
+              productName -> {
+                if (productName != null && !productName.isEmpty()) {
+                  productNameLive.setValue(productName);
+                  offHelpText.setValue(getString(R.string.msg_product_name_obf));
+                } else {
+                  offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
+                  sendEvent(Event.FOCUS_INVALID_VIEWS);
+                }
+              },
+              error1 -> {
+                offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
+                sendEvent(Event.FOCUS_INVALID_VIEWS);
+              }
+          )
       );
     } else if (!productNameFilled) {
       sendEvent(Event.FOCUS_INVALID_VIEWS);

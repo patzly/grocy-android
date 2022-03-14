@@ -1,5 +1,6 @@
 2.2.0:
 - New: Shopping mode now groups items like on shopping list page (#430)
+- New: Open Beauty Facts lookup as second online source (#257)
 - Improved: Open button on consume page is now checkbox
 - Improved: Product search on stock overview is now fuzzy search (#486)
 - Fixed: App could show old data when page loading was interrupted (#409)

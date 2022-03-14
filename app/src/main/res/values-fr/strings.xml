@@ -229,8 +229,8 @@
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
   <string name="msg_choose_product">Le code-barres que vous avez scanné n\'est pas encore lié à un produit. Vous pouvez le lier à un produit existant ou créer un nouveau produit associé.</string>
   <string name="msg_product_name_off">Le nom du produit pour le code-barres provient d\'Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Le code-barres n\'a pas pu être recherché sur Open Food Facts.</string>
-  <string name="msg_product_name_off_empty">Le code-barres n\'est pas dans la base de données d\'Open Food Facts.</string>
+  <string name="msg_product_name_lookup_error">Le code-barres n\'a pas pu être recherché sur Open Food Facts.</string>
+  <string name="msg_product_name_lookup_empty">Le code-barres n\'est pas dans la base de données d\'Open Food Facts.</string>
   <string name="msg_off_option_deactivated">Pour la suggestion automatique d\'un nom de produit, vous pouvez activer la recherche Open Food Facts dans les paramètres.</string>
   <string name="msg_create_new_product_filled">Créer un nouveau produit \"%1$s\"</string>
   <string name="msg_create_new_product">Créer un nouveau produit</string>

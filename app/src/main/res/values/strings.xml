@@ -236,8 +236,9 @@
   <string name="option_synced_error">Option could not be synced</string>
   <string name="msg_choose_product">The barcode you\'ve scanned is not linked to a product yet. You can link it to an existing one or create a new product for it.</string>
   <string name="msg_product_name_off">Product name for barcode is from Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Barcode could not be looked up on Open Food Facts.</string>
-  <string name="msg_product_name_off_empty">Barcode is not in Open Food Facts database.</string>
+  <string name="msg_product_name_obf">Product name for barcode is from Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">Barcode could not be looked up on Open Food Facts or Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_empty">Barcode is not in Open Food Facts or Open Beauty Facts database.</string>
   <string name="msg_off_option_deactivated">For automatic suggestion of a product name you can activate Open Food Facts look up in the settings.</string>
   <string name="msg_create_new_product_filled">Create new product \"%1$s\"</string>
   <string name="msg_create_new_product">Create new product</string>
@@ -825,7 +826,7 @@
   <string name="setting_language_info">Many thanks to all the volunteer translators at Transifex!\nPlease visit us on GitHub to learn how you can help make Grocy Android available for your language.</string>
   <string name="setting_language_system">System default: %1$s</string>
   <string name="setting_language_not_available">Not available</string>
-  <string name="setting_open_food_facts">Use Open Food Facts</string>
+  <string name="setting_open_food_facts">Use Open Food Facts and Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Get info from barcodes</string>
   <string name="setting_choose_barcode_scanner">Choose barcode scanner</string>
   <string name="setting_choose_barcode_scanner_description">For camera barcode scanning</string>

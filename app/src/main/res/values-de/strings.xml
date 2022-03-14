@@ -229,8 +229,8 @@
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
   <string name="msg_choose_product">Der von Ihnen gescannte Barcode ist noch nicht mit einem Produkt verknüpft. Sie können ihn mit einem vorhandenen verknüpfen oder ein neues Produkt erstellen.</string>
   <string name="msg_product_name_off">Produktname für Barcode stammt von Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Barcode konnte nicht auf Open Food Facts nachgeschaut werden.</string>
-  <string name="msg_product_name_off_empty">Barcode ist nicht in der Open Food Facts Datenbank.</string>
+  <string name="msg_product_name_lookup_error">Barcode konnte nicht auf Open Food Facts nachgeschaut werden.</string>
+  <string name="msg_product_name_lookup_empty">Barcode ist nicht in der Open Food Facts Datenbank.</string>
   <string name="msg_off_option_deactivated">Sie können Open Food Facts in den Einstellungen aktivieren, damit automatisch ein Produktname vorgeschlagen wird.</string>
   <string name="msg_create_new_product_filled">Neues Produkt \"%1$s\" erstellen</string>
   <string name="msg_create_new_product">Neues Produkt erstellen</string>

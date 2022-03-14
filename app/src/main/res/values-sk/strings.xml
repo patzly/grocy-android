@@ -247,8 +247,8 @@
   <string name="option_synced_error">Voľbu sa nepodario synchronizovať</string>
   <string name="msg_choose_product">Zosnímaný čiarový kód ešte nie je spojený s výrobkom. Možete ho prepojiť s existujúcim výrobkom alebo preň vytvoriť nový.</string>
   <string name="msg_product_name_off">Názov výrobku pre čiarový kód je z Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Čiarový kód sa nepodarilo vyhľadať v Open Food Facts.</string>
-  <string name="msg_product_name_off_empty"> Čiarový kód nie je v databáze Open Food Facts.</string>
+  <string name="msg_product_name_lookup_error">Čiarový kód sa nepodarilo vyhľadať v Open Food Facts.</string>
+  <string name="msg_product_name_lookup_empty"> Čiarový kód nie je v databáze Open Food Facts.</string>
   <string name="msg_off_option_deactivated">V nastaveniach môžete zapnúť automatický návrh názvu výrobku vyhľadaním v Open Food Facts.</string>
   <string name="msg_create_new_product_filled">Vytvoriť nový výrobok \"%1$s\"</string>
   <string name="msg_create_new_product">Vytvoriť nový výrobok</string>

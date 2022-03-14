@@ -257,8 +257,8 @@
   <string name="option_synced_error">Опция не была синхронизирована</string>
   <string name="msg_choose_product">Отсканированный вами штрихкод еще не связан с продуктом. Вы можете связать его с существующим продуктом или создать для него новый.</string>
   <string name="msg_product_name_off">Название продукта для штрихкода взято из Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Невозможно найти штрихкод на Open Food Facts.</string>
-  <string name="msg_product_name_off_empty">Штрихкод отсутствует в базе данных Open Food Facts.</string>
+  <string name="msg_product_name_lookup_error">Невозможно найти штрихкод на Open Food Facts.</string>
+  <string name="msg_product_name_lookup_empty">Штрихкод отсутствует в базе данных Open Food Facts.</string>
   <string name="msg_off_option_deactivated">Для автоматического предложения названия продукта вы можете активировать поиск по сервису Open Food Facts в настройках.</string>
   <string name="msg_create_new_product_filled">Создать новый продукт \"%1$s\"</string>
   <string name="msg_create_new_product">Создать новый продукт</string>

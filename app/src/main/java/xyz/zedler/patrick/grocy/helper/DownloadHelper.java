@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
+import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -2499,6 +2500,43 @@ public class DownloadHelper {
           errorListener.onError(error);
         },
         OpenFoodFactsApi.getUserAgent(application)
+    );
+  }
+
+  public void getOpenBeautyFactsProductName(
+      String barcode,
+      OnStringResponseListener successListener,
+      OnErrorListener errorListener
+  ) {
+    get(
+        OpenBeautyFactsApi.getProduct(barcode),
+        response -> {
+          String language = application.getResources().getConfiguration().locale.getLanguage();
+          String country = application.getResources().getConfiguration().locale.getCountry();
+          String both = language + "_" + country;
+          if(debug) Log.i(tag, "getOpenBeautyFactsProductName: locale = " + both);
+          try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject product = jsonObject.getJSONObject("product");
+            String name = product.optString("product_name_" + both);
+            if(name.isEmpty()) {
+              name = product.optString("product_name_" + language);
+            }
+            if(name.isEmpty()) {
+              name = product.optString("product_name");
+            }
+            successListener.onResponse(name);
+            if(debug) Log.i(tag, "getOpenBeautyFactsProductName: OpenBeautyFacts = " + name);
+          } catch (JSONException e) {
+            if(debug) Log.e(tag, "getOpenBeautyFactsProductName: " + e);
+            successListener.onResponse(null);
+          }
+        },
+        error -> {
+          if(debug) Log.e(tag, "getOpenBeautyFactsProductName: can't get OpenBeautyFacts product");
+          errorListener.onError(error);
+        },
+        OpenBeautyFactsApi.getUserAgent(application)
     );
   }
 
