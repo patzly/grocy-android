@@ -124,7 +124,7 @@
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
-    <item quantity="one">%1$d verdorben</item>
+    <item quantity="one">%1$d abgelaufen</item>
     <item quantity="other">%1$d abgelaufen</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
