@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -71,6 +72,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
   private final FilterChipLiveDataShoppingListStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataShoppingListGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataShoppingListExtraField filterChipLiveDataExtraField;
 
   private List<ShoppingListItem> shoppingListItems;
   private List<ShoppingList> shoppingLists;
@@ -112,6 +114,10 @@ public class ShoppingListViewModel extends BaseViewModel {
     filterChipLiveDataGrouping = new FilterChipLiveDataShoppingListGrouping(
         getApplication(),
         this::updateFilteredShoppingListItems
+    );
+    filterChipLiveDataExtraField = new FilterChipLiveDataShoppingListExtraField(
+            getApplication(),
+            this::updateFilteredShoppingListItems
     );
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
@@ -758,8 +764,16 @@ public class ShoppingListViewModel extends BaseViewModel {
     return () -> filterChipLiveDataGrouping;
   }
 
+  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
+    return () -> filterChipLiveDataExtraField;
+  }
+
   public String getGroupingMode() {
     return filterChipLiveDataGrouping.getGroupingMode();
+  }
+
+  public String getExtraField() {
+    return filterChipLiveDataExtraField.getExtraField();
   }
 
   private void fillShoppingListItemAmountsHashMap() {

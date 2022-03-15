@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -66,6 +67,7 @@ public class ShoppingListItemAdapter extends
   private final ShoppingListItemAdapterListener listener;
   private final PluralUtil pluralUtil;
   private String groupingMode;
+  private String extraField;
 
   public ShoppingListItemAdapter(
       Context context,
@@ -79,7 +81,8 @@ public class ShoppingListItemAdapter extends
       ArrayList<Integer> missingProductIds,
       ShoppingListItemAdapterListener listener,
       String shoppingListNotes,
-      String groupingMode
+      String groupingMode,
+      String extraField
   ) {
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -88,6 +91,7 @@ public class ShoppingListItemAdapter extends
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
     this.groupingMode = groupingMode;
+    this.extraField = extraField;
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
         shoppingListNotes, groupingMode);
@@ -446,6 +450,13 @@ public class ShoppingListItemAdapter extends
       }
     }
 
+    if (extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE)) {
+      binding.extraField.setText("Test");
+      binding.extraField.setVisibility(View.VISIBLE);
+    } else {
+      binding.extraField.setVisibility(View.GONE);
+    }
+
     // CONTAINER
 
     binding.containerRow.setOnClickListener(
@@ -601,7 +612,8 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       String shoppingListNotes,
-      String groupingMode
+      String groupingMode,
+      String extraField
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
@@ -618,7 +630,9 @@ public class ShoppingListItemAdapter extends
         this.missingProductIds,
         missingProductIds,
         this.groupingMode,
-        groupingMode
+        groupingMode,
+        this.extraField,
+        extraField
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
@@ -632,6 +646,7 @@ public class ShoppingListItemAdapter extends
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
     this.groupingMode = groupingMode;
+    this.extraField = extraField;
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -649,6 +664,8 @@ public class ShoppingListItemAdapter extends
     ArrayList<Integer> missingProductIdsNew;
     String groupingModeOld;
     String groupingModeNew;
+    String extraFieldOld;
+    String extraFieldNew;
 
     public DiffCallback(
         ArrayList<GroupedListItem> oldItems,
@@ -662,7 +679,9 @@ public class ShoppingListItemAdapter extends
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
         String groupingModeOld,
-        String groupingModeNew
+        String groupingModeNew,
+        String extraFieldOld,
+        String extraFieldNew
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -676,6 +695,8 @@ public class ShoppingListItemAdapter extends
       this.missingProductIdsNew = missingProductIdsNew;
       this.groupingModeOld = groupingModeOld;
       this.groupingModeNew = groupingModeNew;
+      this.extraFieldOld = extraFieldOld;
+      this.extraFieldNew = extraFieldNew;
     }
 
     @Override
@@ -710,7 +731,7 @@ public class ShoppingListItemAdapter extends
       if (oldItemType != newItemType) {
         return false;
       }
-      if (!groupingModeOld.equals(groupingModeNew)) {
+      if (!groupingModeOld.equals(groupingModeNew) || !extraFieldOld.equals(extraFieldNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {

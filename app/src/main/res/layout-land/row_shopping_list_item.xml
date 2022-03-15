@@ -65,4 +65,13 @@
     android:layout_height="wrap_content"
     android:singleLine="true" />
 
+  <TextView
+      android:id="@+id/extra_field"
+      style="@style/Widget.Grocy.TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:singleLine="true"
+      android:visibility="gone"/>
+
 </LinearLayout>

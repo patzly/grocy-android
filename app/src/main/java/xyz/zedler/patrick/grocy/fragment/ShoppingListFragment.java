@@ -178,7 +178,8 @@ public class ShoppingListFragment extends BaseFragment implements
             viewModel.getShoppingListItemAmountsHashMap(),
             viewModel.getMissingProductIds(),
             viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode()
+            viewModel.getGroupingMode(),
+            viewModel.getExtraField()
         );
       } else {
         binding.recycler.setAdapter(
@@ -194,7 +195,8 @@ public class ShoppingListFragment extends BaseFragment implements
                 viewModel.getMissingProductIds(),
                 this,
                 viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode()
+                viewModel.getGroupingMode(),
+                viewModel.getExtraField()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
