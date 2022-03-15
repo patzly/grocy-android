@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.dao.MissingItemDao;
 import xyz.zedler.patrick.grocy.dao.ProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.ProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
+import xyz.zedler.patrick.grocy.dao.ProductLastPurchasedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
@@ -42,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -67,9 +69,10 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         StockItem.class,
         StockLocation.class,
         Task.class,
-        TaskCategory.class
+        TaskCategory.class,
+        ProductLastPurchased.class
     },
-    version = 20
+    version = 21
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -102,6 +105,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract TaskDao taskDao();
 
   public abstract TaskCategoryDao taskCategoryDao();
+
+  public abstract ProductLastPurchasedDao productLastPurchasedDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {
