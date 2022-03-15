@@ -29,6 +29,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -56,6 +57,7 @@ public class ShoppingListRepository {
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> unitConversions;
     private final List<Product> products;
+    private final List<ProductLastPurchased> productsLastPurchased;
     private final List<Store> stores;
     private final List<MissingItem> missingItems;
 
@@ -66,6 +68,7 @@ public class ShoppingListRepository {
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversion> unitConversions,
         List<Product> products,
+        List<ProductLastPurchased> productsLastPurchased,
         List<Store> stores,
         List<MissingItem> missingItems
     ) {
@@ -75,6 +78,7 @@ public class ShoppingListRepository {
       this.quantityUnits = quantityUnits;
       this.unitConversions = unitConversions;
       this.products = products;
+      this.productsLastPurchased = productsLastPurchased;
       this.stores = stores;
       this.missingItems = missingItems;
     }
@@ -103,6 +107,10 @@ public class ShoppingListRepository {
       return products;
     }
 
+    public List<ProductLastPurchased> getProductsLastPurchased() {
+      return productsLastPurchased;
+    }
+
     public List<Store> getStores() {
       return stores;
     }
@@ -121,6 +129,7 @@ public class ShoppingListRepository {
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),
             appDatabase.productDao().getProducts(),
+            appDatabase.productLastPurchasedDao().getProductsLastPurchased(),
             appDatabase.storeDao().getStores(),
             appDatabase.missingItemDao().getMissingItems(),
             ShoppingListData::new

@@ -1135,16 +1135,13 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getProductsLastPurchased(OnProductsLastPurchasedResponseListener onResponseListener) {
-    return getProductsLastPurchased(onResponseListener, null);
-  }
-
   public QueueItem updateProductsLastPurchased(
-          String dbChangedTime,
-          OnProductsLastPurchasedResponseListener onResponseListener
+      String dbChangedTime,
+      OnProductsLastPurchasedResponseListener onResponseListener,
+      boolean isOptional
   ) {
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
-            PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null
+        PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
       return new QueueItem() {
@@ -1155,35 +1152,42 @@ public class DownloadHelper {
                 @Nullable String uuid
         ) {
           get(
-                  grocyApi.getObjects(ENTITY.PRODUCTS_LAST_PURCHASED),
-                  uuid,
-                  response -> {
-                    Type type = new TypeToken<List<ProductLastPurchased>>() {
-                    }.getType();
-                    ArrayList<ProductLastPurchased> productsLastPurchased = new Gson().fromJson(response, type);
-                    if (debug) {
-                      Log.i(tag, "download ProductsLastPurchased: " + productsLastPurchased);
-                    }
-                    appDatabase
-                            .productLastPurchasedDao().deleteProductsLastPurchased()
-                            .subscribeOn(Schedulers.io())
-                            .doFinally(() -> appDatabase.productLastPurchasedDao().insertAll(productsLastPurchased))
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doFinally(() -> {
-                              sharedPrefs.edit()
-                                      .putString(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, dbChangedTime).apply();
-                              onResponseListener.onResponse(productsLastPurchased);
-                              if (responseListener != null) {
-                                responseListener.onResponse(response);
-                              }
-                            })
-                            .subscribe();
-                  },
-                  error -> {
-                    if (errorListener != null) {
-                      errorListener.onError(error);
-                    }
+              grocyApi.getObjects(ENTITY.PRODUCTS_LAST_PURCHASED),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ProductLastPurchased>>() {
+                }.getType();
+                ArrayList<ProductLastPurchased> productsLastPurchased = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ProductsLastPurchased: " + productsLastPurchased);
+                }
+                appDatabase
+                    .productLastPurchasedDao().deleteProductsLastPurchased()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.productLastPurchasedDao().insertAll(productsLastPurchased))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, dbChangedTime).apply();
+                      onResponseListener.onResponse(productsLastPurchased);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (isOptional) {
+                  onResponseListener.onResponse(null);
+                  if (responseListener != null) {
+                    responseListener.onResponse(null);
                   }
+                  return;
+                }
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
           );
         }
       };
@@ -2956,7 +2960,7 @@ public class DownloadHelper {
 
   public interface OnProductsLastPurchasedResponseListener {
 
-    void onResponse(ArrayList<ProductLastPurchased> products);
+    void onResponse(ArrayList<ProductLastPurchased> productsLastPurchased);
   }
 
   public interface OnProductBarcodesResponseListener {

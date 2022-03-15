@@ -25,24 +25,21 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-import java.util.List;
-
 import io.reactivex.rxjava3.core.Single;
-import xyz.zedler.patrick.grocy.model.Product;
+import java.util.List;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 
 @Dao
 public interface ProductLastPurchasedDao {
 
   @Query("SELECT * FROM product_last_purchased_table")
-  LiveData<List<Product>> getAllLive();
+  LiveData<List<ProductLastPurchased>> getAllLive();
 
   @Query("SELECT * FROM product_last_purchased_table")
-  List<Product> getAll();
+  List<ProductLastPurchased> getAll();
 
   @Query("SELECT * FROM product_last_purchased_table")
-  Single<List<Product>> getProductsLastPurchased();
+  Single<List<ProductLastPurchased>> getProductsLastPurchased();
 
   @Query("SELECT COUNT(*) FROM product_last_purchased_table")
   int count();

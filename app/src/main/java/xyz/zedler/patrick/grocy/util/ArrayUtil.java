@@ -26,6 +26,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -50,6 +51,16 @@ public class ArrayUtil {
       productNamesHashMap.put(product.getId(), product.getName());
     }
     return productNamesHashMap;
+  }
+
+  public static HashMap<Integer, ProductLastPurchased> getProductLastPurchasedHashMap(
+      List<ProductLastPurchased> productsLastPurchased
+  ) {
+    HashMap<Integer, ProductLastPurchased> hashMap = new HashMap<>();
+    for (ProductLastPurchased p : productsLastPurchased) {
+      hashMap.put(p.getProductId(), p);
+    }
+    return hashMap;
   }
 
   public static ArrayList<Integer> getMissingProductsIds(List<MissingItem> missingItems) {

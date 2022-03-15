@@ -584,6 +584,7 @@ public class MainActivity extends AppCompatActivity {
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS);
+    editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);

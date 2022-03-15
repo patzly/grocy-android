@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -82,6 +83,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, String> productNamesHashMap;
+  private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private HashMap<Integer, Store> storeHashMap;
   private ArrayList<Integer> missingProductIds;
 
@@ -142,6 +144,8 @@ public class ShoppingListViewModel extends BaseViewModel {
       missingProductIds = ArrayUtil.getMissingProductsIds(data.getMissingItems());
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productNamesHashMap = ArrayUtil.getProductNamesHashMap(data.getProducts());
+      productLastPurchasedHashMap = ArrayUtil
+          .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
       fillShoppingListItemAmountsHashMap();
       updateFilteredShoppingListItems();
       if (downloadAfterLoading) {
@@ -285,7 +289,12 @@ public class ShoppingListViewModel extends BaseViewModel {
         ), dlHelper.updateProducts(dbChangedTime, products -> {
           productHashMap = ArrayUtil.getProductsHashMap(products);
           productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
-        }), dlHelper.updateStores(
+        }), dlHelper.updateProductsLastPurchased(
+            dbChangedTime,
+            productsLastPurchased -> productLastPurchasedHashMap = ArrayUtil
+            .getProductLastPurchasedHashMap(productsLastPurchased),
+            true
+        ), dlHelper.updateStores(
             dbChangedTime,
             stores -> storeHashMap = ArrayUtil.getStoresHashMap(stores)
         ), dlHelper.updateMissingItems(
@@ -316,6 +325,7 @@ public class ShoppingListViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
     downloadData();
@@ -750,6 +760,10 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
+  }
+
+  public HashMap<Integer, ProductLastPurchased> getProductLastPurchasedHashMap() {
+    return productLastPurchasedHashMap;
   }
 
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {

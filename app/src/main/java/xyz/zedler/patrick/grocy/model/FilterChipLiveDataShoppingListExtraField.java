@@ -33,10 +33,12 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 public class FilterChipLiveDataShoppingListExtraField extends FilterChipLiveData {
 
   public final static int ID_EXTRA_FIELD_NONE = 0;
-  public final static int ID_EXTRA_FIELD_LAST_PRICE = 1;
+  public final static int ID_EXTRA_FIELD_LAST_PRICE_UNIT = 1;
+  public final static int ID_EXTRA_FIELD_LAST_PRICE_TOTAL = 2;
 
   public final static String EXTRA_FIELD_NONE = "extra_field_none";
-  public final static String EXTRA_FIELD_LAST_PRICE = "extra_field_last_price";
+  public final static String EXTRA_FIELD_LAST_PRICE_UNIT = "extra_field_last_price_unit";
+  public final static String EXTRA_FIELD_LAST_PRICE_TOTAL = "extra_field_last_price_total";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -68,8 +70,11 @@ public class FilterChipLiveDataShoppingListExtraField extends FilterChipLiveData
   private void setFilterText() {
     @StringRes int extraField;
     switch (this.extraField) {
-      case EXTRA_FIELD_LAST_PRICE:
-        extraField = R.string.property_last_price;
+      case EXTRA_FIELD_LAST_PRICE_UNIT:
+        extraField = R.string.property_last_price_unit;
+        break;
+      case EXTRA_FIELD_LAST_PRICE_TOTAL:
+        extraField = R.string.property_last_price_total;
         break;
       default:
         extraField = R.string.subtitle_none;
@@ -82,8 +87,10 @@ public class FilterChipLiveDataShoppingListExtraField extends FilterChipLiveData
   }
 
   public void setValues(int id) {
-    if (id == ID_EXTRA_FIELD_LAST_PRICE) {
-      extraField = EXTRA_FIELD_LAST_PRICE;
+    if (id == ID_EXTRA_FIELD_LAST_PRICE_UNIT) {
+      extraField = EXTRA_FIELD_LAST_PRICE_UNIT;
+    } else if (id == ID_EXTRA_FIELD_LAST_PRICE_TOTAL) {
+      extraField = EXTRA_FIELD_LAST_PRICE_TOTAL;
     } else {
       extraField = EXTRA_FIELD_NONE;
     }
@@ -100,10 +107,16 @@ public class FilterChipLiveDataShoppingListExtraField extends FilterChipLiveData
         extraField.equals(EXTRA_FIELD_NONE)
     ));
     menuItemDataList.add(new MenuItemData(
-        ID_EXTRA_FIELD_LAST_PRICE,
+        ID_EXTRA_FIELD_LAST_PRICE_UNIT,
         0,
-        application.getString(R.string.property_last_price),
-        extraField.equals(EXTRA_FIELD_LAST_PRICE)
+        application.getString(R.string.property_last_price_unit),
+        extraField.equals(EXTRA_FIELD_LAST_PRICE_UNIT)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_EXTRA_FIELD_LAST_PRICE_TOTAL,
+        0,
+        application.getString(R.string.property_last_price_total),
+        extraField.equals(EXTRA_FIELD_LAST_PRICE_TOTAL)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));

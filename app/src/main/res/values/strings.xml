@@ -680,6 +680,8 @@
   <string name="property_last_used">Last used</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Last price</string>
+  <string name="property_last_price_unit">Last price (unit)</string>
+  <string name="property_last_price_total">Last price (total)</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>
