@@ -95,6 +95,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private List<ProductBarcode> productBarcodesTemp;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
+  private HashMap<Integer, String> productAveragePriceHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
   private List<QuantityUnit> quantityUnits;
@@ -168,10 +169,9 @@ public class StockOverviewViewModel extends BaseViewModel {
       productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups);
       filterChipLiveDataProductGroup.setProductGroups(productGroups);
       this.products = data.getProducts();
-      productHashMap = new HashMap<>();
-      for (Product product : products) {
-        productHashMap.put(product.getId(), product);
-      }
+      productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
+      productAveragePriceHashMap = ArrayUtil
+          .getProductAveragePriceHashMap(data.getProductsAveragePrice());
       this.productBarcodesTemp = data.getProductBarcodes();
       productBarcodeHashMap = new HashMap<>();
       for (ProductBarcode barcode : this.productBarcodesTemp) {
@@ -397,7 +397,12 @@ public class StockOverviewViewModel extends BaseViewModel {
           for (Location location : locations) {
             locationHashMap.put(location.getId(), location);
           }
-        }),
+        }), dlHelper.updateProductsAveragePrice(
+            dbChangedTime,
+            productsAveragePrice -> productAveragePriceHashMap = ArrayUtil
+                .getProductAveragePriceHashMap(productsAveragePrice),
+            true
+        ),
         dlHelper.updateStockCurrentLocations(dbChangedTime, stockLocations -> {
           this.stockCurrentLocationsTemp = stockLocations;
 
@@ -433,6 +438,7 @@ public class StockOverviewViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
@@ -765,6 +771,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public HashMap<Integer, Product> getProductHashMap() {
     return productHashMap;
+  }
+
+  public HashMap<Integer, String> getProductAveragePriceHashMap() {
+    return productAveragePriceHashMap;
   }
 
   public ArrayList<String> getShoppingListItemsProductIds() {

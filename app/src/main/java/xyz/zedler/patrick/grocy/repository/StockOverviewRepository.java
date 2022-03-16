@@ -27,6 +27,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -52,6 +53,7 @@ public class StockOverviewRepository {
     private final List<ProductGroup> productGroups;
     private final List<StockItem> stockItems;
     private final List<Product> products;
+    private final List<ProductAveragePrice> productsAveragePrice;
     private final List<ProductBarcode> productBarcodes;
     private final List<ShoppingListItem> shoppingListItems;
     private final List<Location> locations;
@@ -62,6 +64,7 @@ public class StockOverviewRepository {
         List<ProductGroup> productGroups,
         List<StockItem> stockItems,
         List<Product> products,
+        List<ProductAveragePrice> productsAveragePrice,
         List<ProductBarcode> productBarcodes,
         List<ShoppingListItem> shoppingListItems,
         List<Location> locations,
@@ -71,6 +74,7 @@ public class StockOverviewRepository {
       this.productGroups = productGroups;
       this.stockItems = stockItems;
       this.products = products;
+      this.productsAveragePrice = productsAveragePrice;
       this.productBarcodes = productBarcodes;
       this.shoppingListItems = shoppingListItems;
       this.locations = locations;
@@ -91,6 +95,10 @@ public class StockOverviewRepository {
 
     public List<Product> getProducts() {
       return products;
+    }
+
+    public List<ProductAveragePrice> getProductsAveragePrice() {
+      return productsAveragePrice;
     }
 
     public List<ProductBarcode> getProductBarcodes() {
@@ -117,6 +125,7 @@ public class StockOverviewRepository {
             appDatabase.productGroupDao().getProductGroups(),
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.productDao().getProducts(),
+            appDatabase.productAveragePriceDao().getProductsAveragePrice(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
             appDatabase.locationDao().getLocations(),

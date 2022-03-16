@@ -35,7 +35,6 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
@@ -44,7 +43,6 @@ import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -62,6 +60,7 @@ public class StockOverviewItemAdapter extends
   private final ArrayList<GroupedListItem> groupedListItems;
   private final ArrayList<String> shoppingListItemsProductIds;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final HashMap<Integer, String> productAveragePriceHashMap;
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
@@ -80,6 +79,7 @@ public class StockOverviewItemAdapter extends
       ArrayList<StockItem> stockItems,
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, String> productAveragePriceHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
@@ -96,6 +96,7 @@ public class StockOverviewItemAdapter extends
   ) {
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+    this.productAveragePriceHashMap = new HashMap<>(productAveragePriceHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
@@ -395,7 +396,7 @@ public class StockOverviewItemAdapter extends
           holder.binding.extraField.setVisibility(View.GONE);
         }
         break;
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_PER_STOCK:
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_UNIT:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
           holder.binding.extraField.setText(stockItem.getProduct().getCalories());
           holder.binding.extraField.setVisibility(View.VISIBLE);
@@ -403,11 +404,21 @@ public class StockOverviewItemAdapter extends
           holder.binding.extraField.setVisibility(View.GONE);
         }
         break;
-      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES:
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_TOTAL:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
           holder.binding.extraField.setText(
                   NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
                           * stockItem.getAmountDouble())
+          );
+          holder.binding.extraField.setVisibility(View.VISIBLE);
+        } else {
+          holder.binding.extraField.setVisibility(View.GONE);
+        }
+        break;
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:
+        if (productAveragePriceHashMap.get(stockItem.getProductId()) != null) {
+          holder.binding.extraField.setText(
+              productAveragePriceHashMap.get(stockItem.getProductId())
           );
           holder.binding.extraField.setVisibility(View.VISIBLE);
         } else {
@@ -445,6 +456,7 @@ public class StockOverviewItemAdapter extends
       ArrayList<StockItem> newList,
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      HashMap<Integer, String> productAveragePriceHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
@@ -464,6 +476,8 @@ public class StockOverviewItemAdapter extends
         shoppingListItemsProductIds,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
+        this.productAveragePriceHashMap,
+        productAveragePriceHashMap,
         this.missingItemsProductIds,
         missingItemsProductIds,
         this.sortMode,
@@ -499,6 +513,8 @@ public class StockOverviewItemAdapter extends
     ArrayList<String> shoppingListItemsProductIdsNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
+    HashMap<Integer, String> productAveragePriceHashMapOld;
+    HashMap<Integer, String> productAveragePriceHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
     String sortModeOld;
@@ -517,6 +533,8 @@ public class StockOverviewItemAdapter extends
         ArrayList<String> shoppingListItemsProductIdsNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
+        HashMap<Integer, String> productAveragePriceHashMapOld,
+        HashMap<Integer, String> productAveragePriceHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
         String sortModeOld,
@@ -534,6 +552,8 @@ public class StockOverviewItemAdapter extends
       this.shoppingListItemsProductIdsNew = shoppingListItemsProductIdsNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
+      this.productAveragePriceHashMapOld = productAveragePriceHashMapOld;
+      this.productAveragePriceHashMapNew = productAveragePriceHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
       this.sortModeOld = sortModeOld;
@@ -610,6 +630,15 @@ public class StockOverviewItemAdapter extends
             .contains(String.valueOf(newItem.getProduct().getId()));
         if (isOnShoppingListNew != isOnShoppingListOld) {
           return false;
+        }
+
+        if (extraFieldNew.equals(FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE)) {
+          String priceOld = productAveragePriceHashMapOld.get(oldItem.getProductId());
+          String priceNew = productAveragePriceHashMapNew.get(newItem.getProductId());
+          if (priceOld == null && priceNew != null
+              || priceOld != null && priceNew != null && !priceOld.equals(priceNew)) {
+            return false;
+          }
         }
 
         boolean missingOld = missingProductIdsOld.contains(oldItem.getProductId());

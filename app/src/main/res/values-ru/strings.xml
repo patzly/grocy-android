@@ -757,7 +757,7 @@
   <string name="property_extra_field">Дополнительное поле: %1$s</string>
   <string name="property_task_categories">Категории задач</string>
   <string name="property_calories">Калории</string>
-  <string name="property_calories_per_unit">Калории (на единицу запаса)</string>
+  <string name="property_calories_unit">Калории (на единицу запаса)</string>
 
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>

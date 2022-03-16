@@ -25,6 +25,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -60,6 +61,17 @@ public class ArrayUtil {
     if (productsLastPurchased == null) return hashMap;
     for (ProductLastPurchased p : productsLastPurchased) {
       hashMap.put(p.getProductId(), p);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, String> getProductAveragePriceHashMap(
+      List<ProductAveragePrice> productsAveragePrice
+  ) {
+    HashMap<Integer, String> hashMap = new HashMap<>();
+    if (productsAveragePrice == null) return hashMap;
+    for (ProductAveragePrice p : productsAveragePrice) {
+      hashMap.put(p.getProductId(), p.getPrice());
     }
     return hashMap;
   }

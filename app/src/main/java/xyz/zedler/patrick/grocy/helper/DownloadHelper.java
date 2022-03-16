@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -1094,47 +1095,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getProductsLastPurchased(
-          OnProductsLastPurchasedResponseListener onResponseListener,
-          OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-              @Nullable OnStringResponseListener responseListener,
-              @Nullable OnErrorListener errorListener,
-              @Nullable String uuid
-      ) {
-        get(
-                grocyApi.getObjects(ENTITY.PRODUCTS_LAST_PURCHASED),
-                uuid,
-                response -> {
-                  Type type = new TypeToken<List<ProductLastPurchased>>() {
-                  }.getType();
-                  ArrayList<ProductLastPurchased> productsLastPurchased = new Gson().fromJson(response, type);
-                  if (debug) {
-                    Log.i(tag, "download ProductsLastPurchased: " + productsLastPurchased);
-                  }
-                  if (onResponseListener != null) {
-                    onResponseListener.onResponse(productsLastPurchased);
-                  }
-                  if (responseListener != null) {
-                    responseListener.onResponse(response);
-                  }
-                },
-                error -> {
-                  if (onErrorListener != null) {
-                    onErrorListener.onError(error);
-                  }
-                  if (errorListener != null) {
-                    errorListener.onError(error);
-                  }
-                }
-        );
-      }
-    };
-  }
-
   public QueueItem updateProductsLastPurchased(
       String dbChangedTime,
       OnProductsLastPurchasedResponseListener onResponseListener,
@@ -1194,6 +1154,70 @@ public class DownloadHelper {
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped ProductsLastPurchased download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateProductsAveragePrice(
+      String dbChangedTime,
+      OnProductsAveragePriceResponseListener onResponseListener,
+      boolean isOptional
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(ENTITY.PRODUCTS_AVERAGE_PRICE),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ProductAveragePrice>>() {
+                }.getType();
+                ArrayList<ProductAveragePrice> productsAveragePrice = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ProductsAveragePrice: " + productsAveragePrice);
+                }
+                appDatabase
+                    .productAveragePriceDao().deleteProductsAveragePrice()
+                    .subscribeOn(Schedulers.io())
+                    .doFinally(() -> appDatabase.productAveragePriceDao().insertAll(productsAveragePrice))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, dbChangedTime).apply();
+                      onResponseListener.onResponse(productsAveragePrice);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (isOptional) {
+                  onResponseListener.onResponse(null);
+                  if (responseListener != null) {
+                    responseListener.onResponse(null);
+                  }
+                  return;
+                }
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped ProductsAveragePrice download");
       }
       return null;
     }
@@ -2961,6 +2985,11 @@ public class DownloadHelper {
   public interface OnProductsLastPurchasedResponseListener {
 
     void onResponse(ArrayList<ProductLastPurchased> productsLastPurchased);
+  }
+
+  public interface OnProductsAveragePriceResponseListener {
+
+    void onResponse(ArrayList<ProductAveragePrice> productsAveragePrice);
   }
 
   public interface OnProductBarcodesResponseListener {

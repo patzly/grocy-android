@@ -597,7 +597,7 @@
   <string name="property_extra_field">שדה נוסף: %1$s</string>
   <string name="property_task_categories">קטגוריות משימות</string>
   <string name="property_calories">קלוריות</string>
-  <string name="property_calories_per_unit">קלוריות (ליחידת מלאי)</string>
+  <string name="property_calories_unit">קלוריות (ליחידת מלאי)</string>
 
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>

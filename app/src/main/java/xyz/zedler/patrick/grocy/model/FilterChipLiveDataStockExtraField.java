@@ -31,13 +31,15 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
 
   public final static int ID_EXTRA_FIELD_NONE = 0;
   public final static int ID_EXTRA_FIELD_VALUE = 1;
-  public final static int ID_EXTRA_FIELD_CALORIES_PER_STOCK = 2;
-  public final static int ID_EXTRA_FIELD_CALORIES = 3;
+  public final static int ID_EXTRA_FIELD_CALORIES_UNIT = 2;
+  public final static int ID_EXTRA_FIELD_CALORIES_TOTAL = 3;
+  public final static int ID_EXTRA_FIELD_AVERAGE_PRICE = 4;
 
   public final static String EXTRA_FIELD_NONE = "extra_field_none";
   public final static String EXTRA_FIELD_VALUE = "extra_field_value";
-  public final static String EXTRA_FIELD_CALORIES_PER_STOCK = "extra_field_calories_per_stock";
-  public final static String EXTRA_FIELD_CALORIES = "extra_field_calories";
+  public final static String EXTRA_FIELD_CALORIES_UNIT = "extra_field_calories_unit";
+  public final static String EXTRA_FIELD_CALORIES_TOTAL = "extra_field_calories_total";
+  public final static String EXTRA_FIELD_AVERAGE_PRICE = "extra_field_average_price";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -72,11 +74,14 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
       case EXTRA_FIELD_VALUE:
         groupBy = R.string.property_value;
         break;
-      case EXTRA_FIELD_CALORIES_PER_STOCK:
-        groupBy = R.string.property_calories_per_unit;
+      case EXTRA_FIELD_CALORIES_UNIT:
+        groupBy = R.string.property_calories_unit;
         break;
-      case EXTRA_FIELD_CALORIES:
-        groupBy = R.string.property_calories;
+      case EXTRA_FIELD_CALORIES_TOTAL:
+        groupBy = R.string.property_calories_total;
+        break;
+      case EXTRA_FIELD_AVERAGE_PRICE:
+        groupBy = R.string.property_price_average;
         break;
       default:
         groupBy = R.string.subtitle_none;
@@ -91,10 +96,12 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
   public void setValues(int id) {
     if (id == ID_EXTRA_FIELD_VALUE) {
       extraField = EXTRA_FIELD_VALUE;
-    } else if (id == ID_EXTRA_FIELD_CALORIES_PER_STOCK) {
-      extraField = EXTRA_FIELD_CALORIES_PER_STOCK;
-    } else if (id == ID_EXTRA_FIELD_CALORIES) {
-      extraField = EXTRA_FIELD_CALORIES;
+    } else if (id == ID_EXTRA_FIELD_CALORIES_UNIT) {
+      extraField = EXTRA_FIELD_CALORIES_UNIT;
+    } else if (id == ID_EXTRA_FIELD_CALORIES_TOTAL) {
+      extraField = EXTRA_FIELD_CALORIES_TOTAL;
+    } else if (id == ID_EXTRA_FIELD_AVERAGE_PRICE) {
+      extraField = EXTRA_FIELD_AVERAGE_PRICE;
     } else {
       extraField = EXTRA_FIELD_NONE;
     }
@@ -117,16 +124,22 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
         extraField.equals(EXTRA_FIELD_VALUE)
     ));
     menuItemDataList.add(new MenuItemData(
-            ID_EXTRA_FIELD_CALORIES_PER_STOCK,
+        ID_EXTRA_FIELD_CALORIES_UNIT,
             0,
-            application.getString(R.string.property_calories_per_unit),
-            extraField.equals(EXTRA_FIELD_CALORIES_PER_STOCK)
+            application.getString(R.string.property_calories_unit),
+            extraField.equals(EXTRA_FIELD_CALORIES_UNIT)
     ));
     menuItemDataList.add(new MenuItemData(
-            ID_EXTRA_FIELD_CALORIES,
+        ID_EXTRA_FIELD_CALORIES_TOTAL,
             0,
-            application.getString(R.string.property_calories),
-            extraField.equals(EXTRA_FIELD_CALORIES)
+            application.getString(R.string.property_calories_total),
+            extraField.equals(EXTRA_FIELD_CALORIES_TOTAL)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_EXTRA_FIELD_AVERAGE_PRICE,
+        0,
+        application.getString(R.string.property_price_average),
+        extraField.equals(EXTRA_FIELD_AVERAGE_PRICE)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));

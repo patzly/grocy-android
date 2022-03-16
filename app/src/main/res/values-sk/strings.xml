@@ -638,7 +638,7 @@
   <string name="property_extra_field">Prídavné pole: %1$s</string>
   <string name="property_task_categories">Kategórie úloh</string>
   <string name="property_calories">Kalórie</string>
-  <string name="property_calories_per_unit">Kalórie (na jednotku v zásobe)</string>
+  <string name="property_calories_unit">Kalórie (na jednotku v zásobe)</string>
 
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznáme</string>

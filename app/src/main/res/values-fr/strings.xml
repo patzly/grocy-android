@@ -702,7 +702,7 @@
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
   <string name="property_task_categories">Catégories de tâches</string>
   <string name="property_calories">Calories</string>
-  <string name="property_calories_per_unit">Calories (par unité)</string>
+  <string name="property_calories_unit">Calories (par unité)</string>
 
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>

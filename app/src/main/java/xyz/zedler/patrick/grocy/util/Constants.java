@@ -69,6 +69,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS = "db_last_time_quantity_unit_conversions";
     public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
     public final static String DB_LAST_TIME_PRODUCTS_LAST_PURCHASED = "db_last_time_products_last_purchased";
+    public final static String DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE = "db_last_time_products_average_price";
     public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
     public final static String DB_LAST_TIME_VOLATILE = "db_last_time_volatile";
     public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";

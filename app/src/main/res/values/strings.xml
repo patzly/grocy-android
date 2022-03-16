@@ -623,6 +623,7 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Amount in %1$s</string>
   <string name="property_price">Price</string>
+  <string name="property_price_average">Average price</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Price per %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
@@ -726,7 +727,8 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>
-  <string name="property_calories_per_unit">Calories (per stock unit)</string>
+  <string name="property_calories_unit">Calories (unit)</string>
+  <string name="property_calories_total">Calories (total)</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

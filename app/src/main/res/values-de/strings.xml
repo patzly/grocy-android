@@ -712,7 +712,7 @@
   <string name="property_extra_field">Extrafeld: %1$s</string>
   <string name="property_task_categories">Aufgabenkategorien</string>
   <string name="property_calories">Kalorien</string>
-  <string name="property_calories_per_unit">Kalorien (pro Bestandseinheit)</string>
+  <string name="property_calories_unit">Kalorien (pro Bestandseinheit)</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>
