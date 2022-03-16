@@ -158,7 +158,8 @@ public class StockOverviewFragment extends BaseFragment implements
             viewModel.getProductIdsMissingStockItems(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
-            viewModel.getGroupingMode()
+            viewModel.getGroupingMode(),
+            viewModel.getExtraField()
         );
       } else {
         binding.recycler.setAdapter(
@@ -178,7 +179,8 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getCurrency(),
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
-                viewModel.getGroupingMode()
+                viewModel.getGroupingMode(),
+                viewModel.getExtraField()
             )
         );
         binding.recycler.scheduleLayoutAnimation();

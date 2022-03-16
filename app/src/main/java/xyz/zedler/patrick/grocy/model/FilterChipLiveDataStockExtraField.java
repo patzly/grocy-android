@@ -29,19 +29,15 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
 
-  public final static int ID_GROUPING_NONE = 0;
-  public final static int ID_GROUPING_PRODUCT_GROUP = 1;
-  public final static int ID_GROUPING_VALUE = 2;
-  public final static int ID_GROUPING_DUE_DATE = 3;
-  public final static int ID_GROUPING_CALORIES_PER_STOCK = 4;
-  public final static int ID_GROUPING_CALORIES = 5;
+  public final static int ID_EXTRA_FIELD_NONE = 0;
+  public final static int ID_EXTRA_FIELD_VALUE = 1;
+  public final static int ID_EXTRA_FIELD_CALORIES_PER_STOCK = 2;
+  public final static int ID_EXTRA_FIELD_CALORIES = 3;
 
-  public final static String GROUPING_NONE = "grouping_none";
-  public final static String GROUPING_PRODUCT_GROUP = "grouping_product_group";
-  public final static String GROUPING_VALUE = "grouping_value";
-  public final static String GROUPING_DUE_DATE = "grouping_due_date";
-  public final static String GROUPING_CALORIES_PER_STOCK = "grouping_calories_per_stock";
-  public final static String GROUPING_CALORIES = "grouping_calories";
+  public final static String EXTRA_FIELD_NONE = "extra_field_none";
+  public final static String EXTRA_FIELD_VALUE = "extra_field_value";
+  public final static String EXTRA_FIELD_CALORIES_PER_STOCK = "extra_field_calories_per_stock";
+  public final static String EXTRA_FIELD_CALORIES = "extra_field_calories";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -52,7 +48,7 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    extraField = sharedPrefs.getString(PREF.STOCK_GROUPING_MODE, GROUPING_NONE);
+    extraField = sharedPrefs.getString(PREF.STOCK_EXTRA_FIELD, EXTRA_FIELD_NONE);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -73,19 +69,13 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
   private void setFilterText() {
     @StringRes int groupBy;
     switch (extraField) {
-      case GROUPING_PRODUCT_GROUP:
-        groupBy = R.string.property_product_group;
-        break;
-      case GROUPING_VALUE:
+      case EXTRA_FIELD_VALUE:
         groupBy = R.string.property_value;
         break;
-      case GROUPING_DUE_DATE:
-        groupBy = R.string.property_due_date_next;
-        break;
-      case GROUPING_CALORIES_PER_STOCK:
+      case EXTRA_FIELD_CALORIES_PER_STOCK:
         groupBy = R.string.property_calories_per_unit;
         break;
-      case GROUPING_CALORIES:
+      case EXTRA_FIELD_CALORIES:
         groupBy = R.string.property_calories;
         break;
       default:
@@ -99,18 +89,14 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
   }
 
   public void setValues(int id) {
-    if (id == ID_GROUPING_PRODUCT_GROUP) {
-      extraField = GROUPING_PRODUCT_GROUP;
-    } else if (id == ID_GROUPING_VALUE) {
-      extraField = GROUPING_VALUE;
-    } else if (id == ID_GROUPING_DUE_DATE) {
-      extraField = GROUPING_DUE_DATE;
-    } else if (id == ID_GROUPING_CALORIES_PER_STOCK) {
-      extraField = GROUPING_CALORIES_PER_STOCK;
-    } else if (id == ID_GROUPING_CALORIES) {
-      extraField = GROUPING_CALORIES;
+    if (id == ID_EXTRA_FIELD_VALUE) {
+      extraField = EXTRA_FIELD_VALUE;
+    } else if (id == ID_EXTRA_FIELD_CALORIES_PER_STOCK) {
+      extraField = EXTRA_FIELD_CALORIES_PER_STOCK;
+    } else if (id == ID_EXTRA_FIELD_CALORIES) {
+      extraField = EXTRA_FIELD_CALORIES;
     } else {
-      extraField = GROUPING_NONE;
+      extraField = EXTRA_FIELD_NONE;
     }
     setFilterText();
     sharedPrefs.edit().putString(PREF.STOCK_EXTRA_FIELD, extraField).apply();
@@ -119,40 +105,28 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
   private void setItems() {
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
-        ID_GROUPING_NONE,
+        ID_EXTRA_FIELD_NONE,
         0,
         application.getString(R.string.subtitle_none),
-        extraField.equals(GROUPING_NONE)
+        extraField.equals(EXTRA_FIELD_NONE)
     ));
     menuItemDataList.add(new MenuItemData(
-        ID_GROUPING_PRODUCT_GROUP,
-        0,
-        application.getString(R.string.property_product_group),
-        extraField.equals(GROUPING_PRODUCT_GROUP)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        ID_GROUPING_VALUE,
+        ID_EXTRA_FIELD_VALUE,
         0,
         application.getString(R.string.property_value),
-        extraField.equals(GROUPING_VALUE)
+        extraField.equals(EXTRA_FIELD_VALUE)
     ));
     menuItemDataList.add(new MenuItemData(
-        ID_GROUPING_DUE_DATE,
-        0,
-        application.getString(R.string.property_due_date_next),
-        extraField.equals(GROUPING_DUE_DATE)
+            ID_EXTRA_FIELD_CALORIES_PER_STOCK,
+            0,
+            application.getString(R.string.property_calories_per_unit),
+            extraField.equals(EXTRA_FIELD_CALORIES_PER_STOCK)
     ));
     menuItemDataList.add(new MenuItemData(
-        ID_GROUPING_CALORIES_PER_STOCK,
-        0,
-        application.getString(R.string.property_calories_per_unit),
-        extraField.equals(GROUPING_CALORIES_PER_STOCK)
-    ));
-    menuItemDataList.add(new MenuItemData(
-        ID_GROUPING_CALORIES,
-        0,
-        application.getString(R.string.property_calories),
-        extraField.equals(GROUPING_CALORIES)
+            ID_EXTRA_FIELD_CALORIES,
+            0,
+            application.getString(R.string.property_calories),
+            extraField.equals(EXTRA_FIELD_CALORIES)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));

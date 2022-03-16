@@ -35,6 +35,8 @@ import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
@@ -42,6 +44,7 @@ import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -68,6 +71,7 @@ public class StockOverviewItemAdapter extends
   private String sortMode;
   private boolean sortAscending;
   private String groupingMode;
+  private String extraField;
   private final DateUtil dateUtil;
   private final String currency;
 
@@ -87,7 +91,8 @@ public class StockOverviewItemAdapter extends
       String currency,
       String sortMode,
       boolean sortAscending,
-      String groupingMode
+      String groupingMode,
+      String extraField
   ) {
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -102,6 +107,7 @@ public class StockOverviewItemAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
+    this.extraField = extraField;
     this.groupedListItems = getGroupedListItems(context, stockItems,
         productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
         sortAscending, groupingMode);
@@ -380,6 +386,39 @@ public class StockOverviewItemAdapter extends
       );
     }
 
+    switch (extraField) {
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_VALUE:
+        if (NumUtil.isStringDouble(stockItem.getValue())) {
+          holder.binding.extraField.setText(NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue())));
+          holder.binding.extraField.setVisibility(View.VISIBLE);
+        } else {
+          holder.binding.extraField.setVisibility(View.GONE);
+        }
+        break;
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_PER_STOCK:
+        if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
+          holder.binding.extraField.setText(stockItem.getProduct().getCalories());
+          holder.binding.extraField.setVisibility(View.VISIBLE);
+        } else {
+          holder.binding.extraField.setVisibility(View.GONE);
+        }
+        break;
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES:
+        if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
+          holder.binding.extraField.setText(
+                  NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
+                          * stockItem.getAmountDouble())
+          );
+          holder.binding.extraField.setVisibility(View.VISIBLE);
+        } else {
+          holder.binding.extraField.setVisibility(View.GONE);
+        }
+        break;
+      default:
+        holder.binding.extraField.setVisibility(View.GONE);
+        break;
+    }
+
     // CONTAINER
 
     holder.binding.linearContainer.setOnClickListener(
@@ -412,7 +451,8 @@ public class StockOverviewItemAdapter extends
       ArrayList<Integer> missingItemsProductIds,
       String sortMode,
       boolean sortAscending,
-      String groupingMode
+      String groupingMode,
+      String extraField
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
         productGroupHashMap, productHashMap, locationHashMap, this.currency, this.dateUtil,
@@ -431,7 +471,9 @@ public class StockOverviewItemAdapter extends
         this.sortAscending,
         sortAscending,
         this.groupingMode,
-        groupingMode
+        groupingMode,
+        this.extraField,
+        extraField
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
@@ -445,6 +487,7 @@ public class StockOverviewItemAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
+    this.extraField = extraField;
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -464,6 +507,8 @@ public class StockOverviewItemAdapter extends
     boolean sortAscendingNew;
     String groupingModeOld;
     String groupingModeNew;
+    String extraFieldOld;
+    String extraFieldNew;
 
     public DiffCallback(
         ArrayList<GroupedListItem> oldItems,
@@ -479,7 +524,9 @@ public class StockOverviewItemAdapter extends
         boolean sortAscendingOld,
         boolean sortAscendingNew,
         String groupingModeOld,
-        String groupingModeNew
+        String groupingModeNew,
+        String extraFieldOld,
+        String extraFieldNew
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
@@ -495,6 +542,8 @@ public class StockOverviewItemAdapter extends
       this.sortAscendingNew = sortAscendingNew;
       this.groupingModeOld = groupingModeOld;
       this.groupingModeNew = groupingModeNew;
+      this.extraFieldOld = extraFieldOld;
+      this.extraFieldNew = extraFieldNew;
     }
 
     @Override
@@ -535,7 +584,7 @@ public class StockOverviewItemAdapter extends
       if (sortAscendingOld != sortAscendingNew) {
         return false;
       }
-      if (!groupingModeOld.equals(groupingModeNew)) {
+      if (!groupingModeOld.equals(groupingModeNew) || !extraFieldOld.equals(extraFieldNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {

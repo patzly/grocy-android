@@ -823,6 +823,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     return () -> filterChipLiveDataExtraField;
   }
 
+  public String getExtraField() {
+    return filterChipLiveDataExtraField.getExtraField();
+  }
+
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
     return scannerVisibilityLive;
   }
