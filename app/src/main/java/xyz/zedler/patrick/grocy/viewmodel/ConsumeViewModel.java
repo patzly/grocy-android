@@ -373,7 +373,7 @@ public class ConsumeViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(barcode)) {
           productBarcode = code;
-          product = Product.getProductFromId(products, code.getProductId());
+          product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
     }
@@ -410,7 +410,7 @@ public class ConsumeViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = Product.getProductFromId(products, code.getProductId());
+          product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
       if (product != null) {

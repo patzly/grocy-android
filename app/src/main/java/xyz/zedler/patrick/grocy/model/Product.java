@@ -680,7 +680,7 @@ public class Product implements Parcelable {
   ) {
     for (ProductBarcode code : barcodes) {
       if (code.getBarcode().equals(barcode)) {
-        return getProductFromId(products, code.getProductId());
+        return getProductFromId(products, code.getProductIdInt());
       }
     }
     return null;

@@ -75,7 +75,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         ProductLastPurchased.class,
         ProductAveragePrice.class
     },
-    version = 22
+    version = 23
 )
 public abstract class AppDatabase extends RoomDatabase {
 

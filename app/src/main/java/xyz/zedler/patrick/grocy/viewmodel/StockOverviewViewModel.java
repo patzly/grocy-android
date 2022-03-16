@@ -505,7 +505,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
       }
       if (!searchContainsItem && productBarcodeSearch == null
-          || !searchContainsItem && productBarcodeSearch.getProductId() != item.getProductId()) {
+          || !searchContainsItem && productBarcodeSearch.getProductIdInt() != item.getProductId()) {
         continue;
       }
 

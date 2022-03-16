@@ -329,7 +329,7 @@ public class InventoryViewModel extends BaseViewModel {
     if (product == null) {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(barcode)) {
-          product = Product.getProductFromId(products, code.getProductId());
+          product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
     }
@@ -364,7 +364,7 @@ public class InventoryViewModel extends BaseViewModel {
     if (product == null) {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
-          product = Product.getProductFromId(products, code.getProductId());
+          product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
       if (product != null) {

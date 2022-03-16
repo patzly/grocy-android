@@ -546,7 +546,7 @@ public class FormDataTransfer {
     Product product = productDetailsLive.getValue().getProduct();
 
     ProductBarcode productBarcode = new ProductBarcode();
-    productBarcode.setProductId(product.getId());
+    productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
     return productBarcode;
   }

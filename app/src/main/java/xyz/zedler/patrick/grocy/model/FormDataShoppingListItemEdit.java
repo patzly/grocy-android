@@ -411,7 +411,7 @@ public class FormDataShoppingListItemEdit {
     if (product == null) {
       return productBarcode;
     }
-    productBarcode.setProductId(product.getId());
+    productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
     return productBarcode;
   }

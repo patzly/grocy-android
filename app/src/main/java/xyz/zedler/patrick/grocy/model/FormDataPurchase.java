@@ -813,7 +813,7 @@ public class FormDataPurchase {
     Store store = storeLive.getValue();
 
     ProductBarcode productBarcode = new ProductBarcode();
-    productBarcode.setProductId(product.getId());
+    productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
     if (store != null && isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       productBarcode.setStoreId(String.valueOf(store.getId()));

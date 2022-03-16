@@ -296,7 +296,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     if (productBarcode == null) {
       productBarcode = new ProductBarcode();
     }
-    productBarcode.setProductId(product.getId());
+    productBarcode.setProductIdInt(product.getId());
 
     if (barcodeLive.getValue() != null && !barcodeLive.getValue().trim().isEmpty()) {
       productBarcode.setBarcode(barcodeLive.getValue().trim());

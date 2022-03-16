@@ -172,7 +172,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     assert args.getProduct() != null;
     int productId = args.getProduct().getId();
     for (ProductBarcode barcode : barcodes) {
-      if (barcode.getProductId() == productId) {
+      if (barcode.getProductIdInt() == productId) {
         filteredBarcodes.add(barcode);
       }
     }

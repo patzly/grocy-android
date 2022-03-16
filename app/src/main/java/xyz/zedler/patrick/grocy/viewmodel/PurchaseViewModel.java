@@ -446,7 +446,7 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(barcode)) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductId());
+          product = productHashMap.get(code.getProductIdInt());
         }
       }
     }
@@ -483,7 +483,7 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductId());
+          product = productHashMap.get(code.getProductIdInt());
         }
       }
       if (product != null) {
