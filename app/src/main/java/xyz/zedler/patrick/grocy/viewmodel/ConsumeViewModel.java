@@ -334,6 +334,7 @@ public class ConsumeViewModel extends BaseViewModel {
         continue;
       }
       unitFactors.put(unit, conversion.getFactor());
+      quIdsInHashMap.add(unit.getId());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
