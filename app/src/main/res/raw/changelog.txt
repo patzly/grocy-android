@@ -9,6 +9,7 @@
 - Fixed: App could show old data when page loading was interrupted (#409)
 - Fixed: Open action now works with quickmode (#500)
 - Fixed: Unwanted linking between grouping option from stock & shopping list page
+- Fixed: Private demo test instances not working after app restart
 
 2.1.1:
 - New: Support for grocy server 3.2.0

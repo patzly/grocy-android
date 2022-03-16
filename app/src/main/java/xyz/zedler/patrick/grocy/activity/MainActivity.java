@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
     resApp.updateConfiguration(configApp, getResources().getDisplayMetrics());
     // set localized demo instance
     String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    if (serverUrl != null && serverUrl.contains("demo.grocy.info")) {
+    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
+            && !serverUrl.contains("test-")) {
       List<Language> languages = LocaleUtil.getLanguages(this);
       String demoDomain = null;
       for (Language language : languages) {
