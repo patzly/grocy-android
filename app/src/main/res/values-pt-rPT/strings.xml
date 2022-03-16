@@ -229,8 +229,9 @@
   <string name="option_synced_error">Não foi possivel sincronizar a opção</string>
   <string name="msg_choose_product">O código de barras indicado ainda não se encontra associado a um produto. Pode associar a um produto existente ou criar um novo.</string>
   <string name="msg_product_name_off">O nome do produto para este código de barras é proveniente do Open Food Facts.</string>
-  <string name="msg_product_name_lookup_error">Não foi possivel pesquisar este código de barras no Open Food Facts.</string>
-  <string name="msg_product_name_lookup_empty">Código de barras não existe no Open Food Facts.</string>
+  <string name="msg_product_name_obf">Nome do produto para o código de barras obtido do Open Beauty Facts. </string>
+  <string name="msg_product_name_lookup_error">Não foi possível pesquisar o código de barras no Open Food Facts nem no Open Beauty Facts </string>
+  <string name="msg_product_name_lookup_empty">Código de barras não existe na base de dados do Open Food Facts nem do Open Beauty Facts. </string>
   <string name="msg_off_option_deactivated">Para uma sugestão automática do nome de um produto pode activar a pesquisa no Open Food Facts nas definições.</string>
   <string name="msg_create_new_product_filled">Criar novo produto \"%1$s\"</string>
   <string name="msg_create_new_product">Criar novo produto</string>
@@ -238,6 +239,8 @@
   <string name="msg_quick_mode_confirm_purchase">Transação que será executada:\n\nAdicionar %1$s %2$s de %3$s ao stock\nPrazo de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Transação que será executada:\n\nRemover %1$s %2$s de %3$s do stock\nLocalização: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Transação que será executada:\n\Marcar %1$s %2$s de %3$s como abertos(as)\nLocalização: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transação que será executada:\n\nTransferir %1$s %2$s de %3$s\nDa localização: %4$s\nPara localização: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -282,6 +285,8 @@
   <string name="msg_help_qu_purchase">Esta é a unidade de produto por deito usada ao adicionar o produto a uma lista de compras.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Se activo, a quantidade min. stock será agregada neste produto, isto significa que os sub-produtos nunca estarão \"em falta\", apenas este produto.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Se estiver activo, itens abertos serão considerados como em falta no cálculo da quantidade mínima em stock deste produto. </string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Este valor é usado nos botões \"consumo rápido/abrir\" na visão geral do stock (relacionado com o stock da unidade do produto).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -662,6 +667,8 @@
   <string name="property_last_used">Usado a</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Valor pago</string>
+  <string name="property_last_price_unit">Último preço (unidade) </string>
+  <string name="property_last_price_total">Último preço (total) </string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Prazo de validade médio</string>
   <string name="property_spoil_rate">Percentagem estragado</string>
@@ -810,7 +817,7 @@
   <string name="setting_language_info">Muito obrigado a todos os tradutores voluntários no Transifex!\nPor favor visite-nos no GitHub para descubrir como pode ajudar a tornar o Grocy Android no seu idioma.</string>
   <string name="setting_language_system">Pré-defenição do sistema: %1$s</string>
   <string name="setting_language_not_available">Não disponível</string>
-  <string name="setting_open_food_facts">Utilizar Open Food Facts</string>
+  <string name="setting_open_food_facts">Usar Open Food Facts e Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Obter detalhes dos códigos de barra</string>
   <string name="setting_choose_barcode_scanner">Escolher leitor de código de barras</string>
   <string name="setting_choose_barcode_scanner_description">Para leitor de código de barras com câmara</string>
@@ -849,6 +856,7 @@
   <string name="setting_default_amount_purchase">Quantidade de compra por defeito</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Quantidade de consumo por defeito</string>
+  <string name="setting_treat_opened_as_out_of_stock">Assumir aberto como sem stock</string>
   <string name="setting_purchased_date">Perguntar data de compra</string>
   <string name="setting_purchased_date_description">Na compra e na página de inventário</string>
   <string name="setting_use_quick_consume_amount">Usar a \"Quantidade de consumo rápido\" do produto</string>
