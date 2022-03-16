@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ public class ShoppingListEditFragment extends BaseFragment {
   private FragmentShoppingListEditBinding binding;
   private ShoppingListEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private ShoppingList startUpShoppingList;
 
   @Override
   public View onCreateView(
@@ -67,9 +69,11 @@ public class ShoppingListEditFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    startUpShoppingList = ShoppingListEditFragmentArgs
+        .fromBundle(requireArguments()).getShoppingList();
     viewModel = new ViewModelProvider(this, new ShoppingListEditViewModel
         .ShoppingListEditViewModelFactory(
-        activity.getApplication(), getStartupShoppingList()
+        activity.getApplication(), startUpShoppingList
     )).get(ShoppingListEditViewModel.class);
     binding.setFormData(viewModel.getFormData());
     binding.setViewModel(viewModel);
@@ -114,6 +118,13 @@ public class ShoppingListEditFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
+    if (startUpShoppingList == null && savedInstanceState == null) {
+      new Handler().postDelayed(
+          () -> activity.showKeyboard(binding.editTextName),
+          50
+      );
+    }
+
     updateUI(ShoppingListEditFragmentArgs.fromBundle(requireArguments())
         .getAnimateStart() && savedInstanceState == null);
   }
@@ -147,9 +158,7 @@ public class ShoppingListEditFragment extends BaseFragment {
   public void setUpBottomMenu() {
     MenuItem menuItemDelete;
     menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
-    if (menuItemDelete != null && getStartupShoppingList() != null
-        && getStartupShoppingList().getId() != 1
-    ) {
+    if (menuItemDelete != null && startUpShoppingList != null && startUpShoppingList.getId() != 1) {
       menuItemDelete.setVisible(true);
       menuItemDelete.setOnMenuItemClickListener(item -> {
         ((Animatable) menuItemDelete.getIcon()).start();
@@ -157,10 +166,6 @@ public class ShoppingListEditFragment extends BaseFragment {
         return true;
       });
     }
-  }
-
-  private ShoppingList getStartupShoppingList() {
-    return ShoppingListEditFragmentArgs.fromBundle(requireArguments()).getShoppingList();
   }
 
   @Override
