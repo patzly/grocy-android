@@ -34,12 +34,14 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
   public final static int ID_EXTRA_FIELD_CALORIES_UNIT = 2;
   public final static int ID_EXTRA_FIELD_CALORIES_TOTAL = 3;
   public final static int ID_EXTRA_FIELD_AVERAGE_PRICE = 4;
+  public final static int ID_EXTRA_FIELD_LAST_PRICE = 5;
 
   public final static String EXTRA_FIELD_NONE = "extra_field_none";
   public final static String EXTRA_FIELD_VALUE = "extra_field_value";
   public final static String EXTRA_FIELD_CALORIES_UNIT = "extra_field_calories_unit";
   public final static String EXTRA_FIELD_CALORIES_TOTAL = "extra_field_calories_total";
   public final static String EXTRA_FIELD_AVERAGE_PRICE = "extra_field_average_price";
+  public final static String EXTRA_FIELD_LAST_PRICE = "extra_field_last_price";
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
@@ -83,6 +85,9 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
       case EXTRA_FIELD_AVERAGE_PRICE:
         groupBy = R.string.property_price_average;
         break;
+      case EXTRA_FIELD_LAST_PRICE:
+        groupBy = R.string.property_last_price;
+        break;
       default:
         groupBy = R.string.subtitle_none;
         break;
@@ -102,6 +107,8 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
       extraField = EXTRA_FIELD_CALORIES_TOTAL;
     } else if (id == ID_EXTRA_FIELD_AVERAGE_PRICE) {
       extraField = EXTRA_FIELD_AVERAGE_PRICE;
+    } else if (id == ID_EXTRA_FIELD_LAST_PRICE) {
+      extraField = EXTRA_FIELD_LAST_PRICE;
     } else {
       extraField = EXTRA_FIELD_NONE;
     }
@@ -140,6 +147,12 @@ public class FilterChipLiveDataStockExtraField extends FilterChipLiveData {
         0,
         application.getString(R.string.property_price_average),
         extraField.equals(EXTRA_FIELD_AVERAGE_PRICE)
+    ));
+    menuItemDataList.add(new MenuItemData(
+        ID_EXTRA_FIELD_LAST_PRICE,
+        0,
+        application.getString(R.string.property_last_price),
+        extraField.equals(EXTRA_FIELD_LAST_PRICE)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(new MenuItemGroup(0, true, true));

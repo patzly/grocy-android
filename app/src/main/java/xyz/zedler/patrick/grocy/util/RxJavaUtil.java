@@ -49,8 +49,9 @@ public class RxJavaUtil {
     Objects.requireNonNull(source7, "source7 is null");
     Objects.requireNonNull(source8, "source8 is null");
     Objects.requireNonNull(source9, "source9 is null");
+    Objects.requireNonNull(source10, "source10 is null");
     Objects.requireNonNull(zipper, "zipper is null");
-    return Single.zipArray(toFunction(zipper), source1, source2, source3, source4, source5, source6, source7, source8, source9);
+    return Single.zipArray(toFunction(zipper), source1, source2, source3, source4, source5, source6, source7, source8, source9, source10);
   }
 
   public interface Function10<@NonNull T1, @NonNull T2, @NonNull T3, @NonNull T4, @NonNull T5, @NonNull T6, @NonNull T7, @NonNull T8, @NonNull T9, @NonNull T10, @NonNull R> {

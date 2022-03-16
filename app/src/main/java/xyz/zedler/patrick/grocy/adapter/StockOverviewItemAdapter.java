@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -61,6 +62,7 @@ public class StockOverviewItemAdapter extends
   private final ArrayList<String> shoppingListItemsProductIds;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final HashMap<Integer, String> productAveragePriceHashMap;
+  private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final PluralUtil pluralUtil;
   private final ArrayList<Integer> missingItemsProductIds;
   private final StockOverviewItemAdapterListener listener;
@@ -80,6 +82,7 @@ public class StockOverviewItemAdapter extends
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, String> productAveragePriceHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
@@ -97,6 +100,7 @@ public class StockOverviewItemAdapter extends
     this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.productAveragePriceHashMap = new HashMap<>(productAveragePriceHashMap);
+    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
@@ -425,6 +429,15 @@ public class StockOverviewItemAdapter extends
           holder.binding.extraField.setVisibility(View.GONE);
         }
         break;
+      case FilterChipLiveDataStockExtraField.EXTRA_FIELD_LAST_PRICE:
+        ProductLastPurchased p = productLastPurchasedHashMap.get(stockItem.getProductId());
+        if (p != null && NumUtil.isStringDouble(p.getPrice())) {
+          holder.binding.extraField.setText(NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())));
+          holder.binding.extraField.setVisibility(View.VISIBLE);
+        } else {
+          holder.binding.extraField.setVisibility(View.GONE);
+        }
+        break;
       default:
         holder.binding.extraField.setVisibility(View.GONE);
         break;
@@ -457,6 +470,7 @@ public class StockOverviewItemAdapter extends
       ArrayList<String> shoppingListItemsProductIds,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, String> productAveragePriceHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
@@ -478,6 +492,8 @@ public class StockOverviewItemAdapter extends
         quantityUnitHashMap,
         this.productAveragePriceHashMap,
         productAveragePriceHashMap,
+        this.productLastPurchasedHashMap,
+        productLastPurchasedHashMap,
         this.missingItemsProductIds,
         missingItemsProductIds,
         this.sortMode,
@@ -496,6 +512,10 @@ public class StockOverviewItemAdapter extends
     this.shoppingListItemsProductIds.addAll(shoppingListItemsProductIds);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.productAveragePriceHashMap.clear();
+    this.productAveragePriceHashMap.putAll(productAveragePriceHashMap);
+    this.productLastPurchasedHashMap.clear();
+    this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.missingItemsProductIds.clear();
     this.missingItemsProductIds.addAll(missingItemsProductIds);
     this.sortMode = sortMode;
@@ -515,6 +535,8 @@ public class StockOverviewItemAdapter extends
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
     HashMap<Integer, String> productAveragePriceHashMapOld;
     HashMap<Integer, String> productAveragePriceHashMapNew;
+    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld;
+    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
     ArrayList<Integer> missingProductIdsOld;
     ArrayList<Integer> missingProductIdsNew;
     String sortModeOld;
@@ -535,6 +557,8 @@ public class StockOverviewItemAdapter extends
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
         HashMap<Integer, String> productAveragePriceHashMapOld,
         HashMap<Integer, String> productAveragePriceHashMapNew,
+        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld,
+        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
         String sortModeOld,
@@ -554,6 +578,8 @@ public class StockOverviewItemAdapter extends
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
       this.productAveragePriceHashMapOld = productAveragePriceHashMapOld;
       this.productAveragePriceHashMapNew = productAveragePriceHashMapNew;
+      this.productLastPurchasedHashMapOld = productLastPurchasedHashMapOld;
+      this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
       this.missingProductIdsOld = missingProductIdsOld;
       this.missingProductIdsNew = missingProductIdsNew;
       this.sortModeOld = sortModeOld;
@@ -637,6 +663,15 @@ public class StockOverviewItemAdapter extends
           String priceNew = productAveragePriceHashMapNew.get(newItem.getProductId());
           if (priceOld == null && priceNew != null
               || priceOld != null && priceNew != null && !priceOld.equals(priceNew)) {
+            return false;
+          }
+        } else if (extraFieldNew.equals(FilterChipLiveDataStockExtraField.EXTRA_FIELD_LAST_PRICE)) {
+          ProductLastPurchased purchasedOld = productLastPurchasedHashMapOld
+              .get(oldItem.getProductId());
+          ProductLastPurchased purchasedNew = productLastPurchasedHashMapNew
+              .get(newItem.getProductId());
+          if (purchasedOld == null && purchasedNew != null
+              || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
             return false;
           }
         }

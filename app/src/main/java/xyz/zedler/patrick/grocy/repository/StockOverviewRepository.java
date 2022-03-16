@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -30,10 +29,12 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class StockOverviewRepository {
 
@@ -54,6 +55,7 @@ public class StockOverviewRepository {
     private final List<StockItem> stockItems;
     private final List<Product> products;
     private final List<ProductAveragePrice> productsAveragePrice;
+    private final List<ProductLastPurchased> productsLastPurchased;
     private final List<ProductBarcode> productBarcodes;
     private final List<ShoppingListItem> shoppingListItems;
     private final List<Location> locations;
@@ -65,6 +67,7 @@ public class StockOverviewRepository {
         List<StockItem> stockItems,
         List<Product> products,
         List<ProductAveragePrice> productsAveragePrice,
+        List<ProductLastPurchased> productsLastPurchased,
         List<ProductBarcode> productBarcodes,
         List<ShoppingListItem> shoppingListItems,
         List<Location> locations,
@@ -75,6 +78,7 @@ public class StockOverviewRepository {
       this.stockItems = stockItems;
       this.products = products;
       this.productsAveragePrice = productsAveragePrice;
+      this.productsLastPurchased = productsLastPurchased;
       this.productBarcodes = productBarcodes;
       this.shoppingListItems = shoppingListItems;
       this.locations = locations;
@@ -101,6 +105,10 @@ public class StockOverviewRepository {
       return productsAveragePrice;
     }
 
+    public List<ProductLastPurchased> getProductsLastPurchased() {
+      return productsLastPurchased;
+    }
+
     public List<ProductBarcode> getProductBarcodes() {
       return productBarcodes;
     }
@@ -119,13 +127,14 @@ public class StockOverviewRepository {
   }
 
   public void loadFromDatabase(StockOverviewDataListener listener) {
-    Single
+    RxJavaUtil
         .zip(
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.productGroupDao().getProductGroups(),
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.productDao().getProducts(),
             appDatabase.productAveragePriceDao().getProductsAveragePrice(),
+            appDatabase.productLastPurchasedDao().getProductsLastPurchased(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
             appDatabase.locationDao().getLocations(),

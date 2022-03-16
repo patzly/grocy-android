@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -96,6 +97,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, String> productAveragePriceHashMap;
+  private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
   private List<QuantityUnit> quantityUnits;
@@ -172,6 +174,8 @@ public class StockOverviewViewModel extends BaseViewModel {
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productAveragePriceHashMap = ArrayUtil
           .getProductAveragePriceHashMap(data.getProductsAveragePrice());
+      productLastPurchasedHashMap = ArrayUtil
+          .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
       this.productBarcodesTemp = data.getProductBarcodes();
       productBarcodeHashMap = new HashMap<>();
       for (ProductBarcode barcode : this.productBarcodesTemp) {
@@ -401,6 +405,11 @@ public class StockOverviewViewModel extends BaseViewModel {
             dbChangedTime,
             productsAveragePrice -> productAveragePriceHashMap = ArrayUtil
                 .getProductAveragePriceHashMap(productsAveragePrice),
+            true
+        ), dlHelper.updateProductsLastPurchased(
+            dbChangedTime,
+            productsLastPurchased -> productLastPurchasedHashMap = ArrayUtil
+                .getProductLastPurchasedHashMap(productsLastPurchased),
             true
         ),
         dlHelper.updateStockCurrentLocations(dbChangedTime, stockLocations -> {
@@ -775,6 +784,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public HashMap<Integer, String> getProductAveragePriceHashMap() {
     return productAveragePriceHashMap;
+  }
+
+  public HashMap<Integer, ProductLastPurchased> getProductLastPurchasedHashMap() {
+    return productLastPurchasedHashMap;
   }
 
   public ArrayList<String> getShoppingListItemsProductIds() {

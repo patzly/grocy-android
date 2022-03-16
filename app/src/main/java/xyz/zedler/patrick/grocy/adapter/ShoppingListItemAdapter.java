@@ -666,6 +666,8 @@ public class ShoppingListItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.productLastPurchasedHashMap.clear();
+    this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.shoppingListItemAmountsHashMap.clear();
     this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
