@@ -244,6 +244,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
+    displayItems();
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
