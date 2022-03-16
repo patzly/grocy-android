@@ -26,6 +26,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -100,6 +101,16 @@ public class ArrayUtil {
       hashMap.put(p.getId(), p);
     }
     return hashMap;
+  }
+
+  public static HashMap<String, ProductBarcode> getProductBarcodesHashMap(
+      List<ProductBarcode> productBarcodes
+  ) {
+    HashMap<String, ProductBarcode> productBarcodeHashMap = new HashMap<>();
+    for (ProductBarcode barcode : productBarcodes) {
+      productBarcodeHashMap.put(barcode.getBarcode().toLowerCase(), barcode);
+    }
+    return productBarcodeHashMap;
   }
 
   public static HashMap<Integer, Store> getStoresHashMap(List<Store> stores) {

@@ -91,16 +91,13 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   private List<StockItem> stockItems;
   private List<Product> products;
-  private List<ProductGroup> productGroups;
   private HashMap<Integer, ProductGroup> productGroupHashMap;
-  private List<ProductBarcode> productBarcodesTemp;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, String> productAveragePriceHashMap;
   private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
-  private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private ArrayList<StockItem> dueItemsTemp;
@@ -162,25 +159,16 @@ public class StockOverviewViewModel extends BaseViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-      this.quantityUnits = data.getQuantityUnits();
-      quantityUnitHashMap = new HashMap<>();
-      for (QuantityUnit quantityUnit : quantityUnits) {
-        quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
-      }
-      this.productGroups = data.getProductGroups();
-      productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups);
-      filterChipLiveDataProductGroup.setProductGroups(productGroups);
+      quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
+      productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
+      filterChipLiveDataProductGroup.setProductGroups(data.getProductGroups());
       this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productAveragePriceHashMap = ArrayUtil
           .getProductAveragePriceHashMap(data.getProductsAveragePrice());
       productLastPurchasedHashMap = ArrayUtil
           .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
-      this.productBarcodesTemp = data.getProductBarcodes();
-      productBarcodeHashMap = new HashMap<>();
-      for (ProductBarcode barcode : this.productBarcodesTemp) {
-        productBarcodeHashMap.put(barcode.getBarcode().toLowerCase(), barcode);
-      }
+      productBarcodeHashMap = ArrayUtil.getProductBarcodesHashMap(data.getProductBarcodes());
       int itemsDueCount = 0;
       int itemsOverdueCount = 0;
       int itemsExpiredCount = 0;
@@ -337,15 +325,10 @@ public class StockOverviewViewModel extends BaseViewModel {
 
     DownloadHelper.Queue queue = dlHelper.newQueue(onQueueEmptyListener, this::onDownloadError);
     queue.append(
-        dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
-          this.quantityUnits = quantityUnits;
-          quantityUnitHashMap = new HashMap<>();
-          for (QuantityUnit quantityUnit : quantityUnits) {
-            quantityUnitHashMap.put(quantityUnit.getId(), quantityUnit);
-          }
-        }),
-        dlHelper.updateProductGroups(dbChangedTime, groups -> {
-          this.productGroups = groups;
+        dlHelper.updateQuantityUnits(
+            dbChangedTime,
+            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
+        ), dlHelper.updateProductGroups(dbChangedTime, groups -> {
           productGroupHashMap = ArrayUtil.getProductGroupsHashMap(groups);
           filterChipLiveDataProductGroup.setProductGroups(groups);
         }),
@@ -369,13 +352,11 @@ public class StockOverviewViewModel extends BaseViewModel {
           for (Product product : products) {
             productHashMap.put(product.getId(), product);
           }
-        }), dlHelper.updateProductBarcodes(dbChangedTime, productBarcodes -> {
-          this.productBarcodesTemp = productBarcodes;
-          productBarcodeHashMap = new HashMap<>();
-          for (ProductBarcode barcode : productBarcodes) {
-            productBarcodeHashMap.put(barcode.getBarcode().toLowerCase(), barcode);
-          }
-        }), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
+        }), dlHelper.updateProductBarcodes(
+            dbChangedTime,
+            productBarcodes -> productBarcodeHashMap = ArrayUtil
+                .getProductBarcodesHashMap(productBarcodes)
+        ), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
           this.dueItemsTemp = due;
           this.overdueItemsTemp = overdue;
           this.expiredItemsTemp = expired;
