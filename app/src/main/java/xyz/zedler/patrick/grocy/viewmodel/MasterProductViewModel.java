@@ -115,11 +115,7 @@ public class MasterProductViewModel extends BaseViewModel {
     } else {
       Product product = new Product(sharedPrefs);
       if (args.getProductName() != null) {
-        try {
-          String productName = URLDecoder.decode(args.getProductName(), "UTF-8");
-          product.setName(productName);
-        } catch (Throwable ignore) {
-        }
+        product.setName(args.getProductName());
       } else {
         sendEvent(Event.FOCUS_INVALID_VIEWS);
       }

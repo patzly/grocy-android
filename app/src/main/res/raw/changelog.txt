@@ -11,6 +11,7 @@
 - Fixed: Unwanted linking between grouping option from stock & shopping list page
 - Fixed: Private demo test instances not working after app restart
 - Fixed: Different unit conversion behavior than on server in some cases (#490)
+- Fixed: Some special characters were removed from name of new product from barcode (#505)
 
 2.1.1:
 - New: Support for grocy server 3.2.0
