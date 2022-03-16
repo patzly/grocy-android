@@ -57,6 +57,7 @@ public class ArrayUtil {
       List<ProductLastPurchased> productsLastPurchased
   ) {
     HashMap<Integer, ProductLastPurchased> hashMap = new HashMap<>();
+    if (productsLastPurchased == null) return hashMap;
     for (ProductLastPurchased p : productsLastPurchased) {
       hashMap.put(p.getProductId(), p);
     }
