@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -36,31 +35,10 @@ public interface ShoppingListDao {
   LiveData<List<ShoppingList>> getAllLive();
 
   @Query("SELECT * FROM shopping_list_table")
-  List<ShoppingList> getAll();
-
-  @Query("SELECT * FROM shopping_list_table")
   Single<List<ShoppingList>> getShoppingLists();
 
-  @Query("SELECT * FROM shopping_list_table WHERE id IN (:shoppingListIds)")
-  List<ShoppingList> loadAllByIds(int[] shoppingListIds);
-
-  @Query("SELECT * FROM shopping_list_table WHERE name LIKE :name LIMIT 1")
-  ShoppingList findByName(String name);
-
-  @Query("SELECT COUNT(*) FROM shopping_list_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ShoppingList> shoppingLists);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ShoppingList shoppingList);
-
-  @Delete
-  void delete(ShoppingList shoppingList);
-
-  @Query("DELETE FROM shopping_list_table")
-  void deleteAll();
+  Single<List<Long>> insertShoppingLists(List<ShoppingList> shoppingLists);
 
   @Query("DELETE FROM shopping_list_table")
   Single<Integer> deleteShoppingLists();

@@ -35,25 +35,13 @@ public interface PendingProductBarcodeDao {
     @Query("SELECT * FROM pending_product_barcode_table")
     LiveData<List<PendingProductBarcode>> getAllLive();
 
-    @Query("SELECT * FROM pending_product_barcode_table")
-    List<PendingProductBarcode> getAll();
-
-    @Query("SELECT COUNT(*) FROM pending_product_barcode_table")
-    int count();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<PendingProductBarcode> productBarcodes);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(PendingProductBarcode productBarcode);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insertRx(PendingProductBarcode productBarcode);
+    Single<Long> insertProductBarcode(PendingProductBarcode productBarcode);
 
     @Delete
-    void delete(PendingProductBarcode productBarcode);
+    Single<Integer> deleteProductBarcode(PendingProductBarcode productBarcode);
 
     @Query("DELETE FROM pending_product_barcode_table")
-    void deleteAll();
+    Single<Integer> deleteProductBarcodes();
 
 }

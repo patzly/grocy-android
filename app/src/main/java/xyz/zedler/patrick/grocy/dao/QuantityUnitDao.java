@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 public interface QuantityUnitDao {
 
   @Query("SELECT * FROM quantity_unit_table")
-  LiveData<List<QuantityUnit>> getAllLive();
-
-  @Query("SELECT * FROM quantity_unit_table")
-  List<QuantityUnit> getAll();
-
-  @Query("SELECT * FROM quantity_unit_table")
   Single<List<QuantityUnit>> getQuantityUnits();
 
-  @Query("SELECT COUNT(*) FROM quantity_unit_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<QuantityUnit> quantityUnits);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(QuantityUnit quantityUnit);
-
-  @Delete
-  void delete(QuantityUnit quantityUnit);
-
-  @Query("DELETE FROM quantity_unit_table")
-  void deleteAll();
+  Single<List<Long>> insertQuantityUnits(List<QuantityUnit> quantityUnits);
 
   @Query("DELETE FROM quantity_unit_table")
   Single<Integer> deleteQuantityUnits();

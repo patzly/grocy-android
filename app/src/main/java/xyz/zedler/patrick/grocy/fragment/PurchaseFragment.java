@@ -213,8 +213,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     });
     viewModel.getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), b -> {});
 
-    //hideDisabledFeatures();
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -433,19 +431,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onBottomSheetDismissed() {
     clearInputFocusOrFocusNextInvalidView();
-  }
-
-  private void hideDisabledFeatures() {
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
-      binding.linearPurchasePrice.setVisibility(View.GONE);
-    }
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-      binding.linearPurchaseLocation.setVisibility(View.GONE);
-    }
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-      binding.linearDueDate.setVisibility(View.GONE);
-    }
   }
 
   private boolean onMenuItemClick(MenuItem item) {

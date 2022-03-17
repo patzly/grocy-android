@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.Store;
 public interface StoreDao {
 
   @Query("SELECT * FROM store_table")
-  LiveData<List<Store>> getAllLive();
-
-  @Query("SELECT * FROM store_table")
-  List<Store> getAll();
-
-  @Query("SELECT * FROM store_table")
   Single<List<Store>> getStores();
 
-  @Query("SELECT COUNT(*) FROM store_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<Store> stores);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(Store store);
-
-  @Delete
-  void delete(Store store);
-
-  @Query("DELETE FROM store_table")
-  void deleteAll();
+  Single<List<Long>> insertStores(List<Store> stores);
 
   @Query("DELETE FROM store_table")
   Single<Integer> deleteStores();

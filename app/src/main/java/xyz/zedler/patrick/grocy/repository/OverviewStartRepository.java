@@ -97,10 +97,11 @@ public class OverviewStartRepository {
       List<StockItem> stockItems,
       Runnable listener
   ) {
-    appDatabase
-        .stockItemDao().deleteStockItems()
+    Single.concat(
+        appDatabase.stockItemDao().deleteStockItems(),
+        appDatabase.stockItemDao().insertStockItems(stockItems)
+    )
         .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.stockItemDao().insertAll(stockItems))
         .observeOn(AndroidSchedulers.mainThread())
         .doFinally(listener::run)
         .subscribe();

@@ -144,7 +144,7 @@ public class ShoppingListRepository {
       Runnable onFinished,
       ShoppingListItem... shoppingListItems
   ) {
-    appDatabase.shoppingListItemDao().insertItems(shoppingListItems)
+    appDatabase.shoppingListItemDao().insertShoppingListItems(shoppingListItems)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doFinally(onFinished::run)
@@ -168,9 +168,11 @@ public class ShoppingListRepository {
   }
 
   public void updateShoppingLists(List<ShoppingList> shoppingLists) {
-    appDatabase.shoppingListDao().deleteShoppingLists()
+    Single.concat(
+        appDatabase.shoppingListDao().deleteShoppingLists(),
+        appDatabase.shoppingListDao().insertShoppingLists(shoppingLists)
+    )
         .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.shoppingListDao().insertAll(shoppingLists))
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe();
   }

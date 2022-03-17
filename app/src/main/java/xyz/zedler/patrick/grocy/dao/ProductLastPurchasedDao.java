@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 public interface ProductLastPurchasedDao {
 
   @Query("SELECT * FROM product_last_purchased_table")
-  LiveData<List<ProductLastPurchased>> getAllLive();
-
-  @Query("SELECT * FROM product_last_purchased_table")
-  List<ProductLastPurchased> getAll();
-
-  @Query("SELECT * FROM product_last_purchased_table")
   Single<List<ProductLastPurchased>> getProductsLastPurchased();
 
-  @Query("SELECT COUNT(*) FROM product_last_purchased_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ProductLastPurchased> productsLastPurchased);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ProductLastPurchased productLastPurchased);
-
-  @Delete
-  void delete(ProductLastPurchased productLastPurchased);
-
-  @Query("DELETE FROM product_last_purchased_table")
-  void deleteAll();
+  Single<List<Long>> insertProductsLastPurchased(List<ProductLastPurchased> productsLastPurchased);
 
   @Query("DELETE FROM product_last_purchased_table")
   Single<Integer> deleteProductsLastPurchased();

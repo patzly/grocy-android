@@ -123,7 +123,7 @@ public class PurchaseRepository {
   }
 
   public void insertPendingProduct(PendingProduct pendingProduct) {
-    appDatabase.pendingProductDao().insertRx(pendingProduct)
+    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
             .subscribeOn(Schedulers.io()).subscribe();
   }
 
@@ -132,12 +132,12 @@ public class PurchaseRepository {
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.pendingProductDao().insertRx(pendingProduct)
+    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
             .subscribeOn(Schedulers.io()).subscribe(onSuccess::onSuccess, e -> onError.run());
   }
 
   public void insertPendingProductBarcode(PendingProductBarcode barcode) {
-    appDatabase.pendingProductBarcodeDao().insertRx(barcode)
+    appDatabase.pendingProductBarcodeDao().insertProductBarcode(barcode)
             .subscribeOn(Schedulers.io()).subscribe();
   }
 

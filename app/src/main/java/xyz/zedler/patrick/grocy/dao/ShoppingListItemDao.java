@@ -19,13 +19,10 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -34,37 +31,16 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 public interface ShoppingListItemDao {
 
   @Query("SELECT * FROM shopping_list_item_table")
-  LiveData<List<ShoppingListItem>> getAllLive();
-
-  @Query("SELECT * FROM shopping_list_item_table")
-  List<ShoppingListItem> getAll();
-
-  @Query("SELECT * FROM shopping_list_item_table")
   Single<List<ShoppingListItem>> getShoppingListItems();
 
-  @Query("SELECT * FROM shopping_list_item_table WHERE id LIKE :id LIMIT 1")
-  ShoppingListItem findById(int id);
-
-  @Query("SELECT COUNT(*) FROM shopping_list_item_table")
-  int count();
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  Single<List<Long>> insertShoppingListItems(List<ShoppingListItem> shoppingListItems);
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ShoppingListItem> shoppingListItems);
+  Single<List<Long>> insertShoppingListItems(ShoppingListItem... shoppingListItems);
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(ShoppingListItem... shoppingListItems);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  Single<List<Long>> insertItems(ShoppingListItem... shoppingListItems);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ShoppingListItem shoppingListItem);
-
-  @Update
-  void update(ShoppingListItem shoppingListItem);
-
-  @Delete
-  void delete(ShoppingListItem shoppingListItem);
+  List<Long> insertAll(List<ShoppingListItem> shoppingListItems);
 
   @Query("DELETE FROM shopping_list_item_table")
   void deleteAll();

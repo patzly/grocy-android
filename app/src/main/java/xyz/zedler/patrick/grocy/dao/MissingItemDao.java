@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.MissingItem;
 public interface MissingItemDao {
 
   @Query("SELECT * FROM missing_item_table")
-  LiveData<List<MissingItem>> getAllLive();
-
-  @Query("SELECT * FROM missing_item_table")
-  List<MissingItem> getAll();
-
-  @Query("SELECT * FROM missing_item_table")
   Single<List<MissingItem>> getMissingItems();
 
-  @Query("SELECT COUNT(*) FROM missing_item_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<MissingItem> missingItems);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(MissingItem missingItem);
-
-  @Delete
-  void delete(MissingItem missingItem);
-
-  @Query("DELETE FROM missing_item_table")
-  void deleteAll();
+  Single<List<Long>> insertMissingItems(List<MissingItem> missingItems);
 
   @Query("DELETE FROM missing_item_table")
   Single<Integer> deleteMissingItems();

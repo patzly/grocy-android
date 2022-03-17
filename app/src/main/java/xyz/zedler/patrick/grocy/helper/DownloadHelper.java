@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -418,75 +419,6 @@ public class DownloadHelper {
     delete(url, uuidHelper, onResponse, onError);
   }
 
-  public QueueItem getObjects(
-      OnObjectsResponseListener onResponseListener,
-      OnErrorListener onErrorListener,
-      String grocyEntity
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(grocyEntity),
-            uuid,
-            response -> {
-              Type type;
-              //noinspection IfCanBeSwitch
-              if (grocyEntity
-                  .equals(GrocyApi.ENTITY.QUANTITY_UNITS)) { // Don't change to switch-case!
-                type = new TypeToken<List<QuantityUnit>>() {
-                }.getType();
-              } else if (grocyEntity.equals(GrocyApi.ENTITY.LOCATIONS)) {
-                type = new TypeToken<List<Location>>() {
-                }.getType();
-              } else if (grocyEntity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
-                type = new TypeToken<List<ProductGroup>>() {
-                }.getType();
-              } else if (grocyEntity.equals(GrocyApi.ENTITY.STORES)) {
-                type = new TypeToken<List<Store>>() {
-                }.getType();
-              } else if (grocyEntity.equals(GrocyApi.ENTITY.TASKS)) {
-                type = new TypeToken<List<Task>>() {
-                }.getType();
-              } else if (grocyEntity.equals(GrocyApi.ENTITY.TASK_CATEGORIES)) {
-                type = new TypeToken<List<TaskCategory>>() {
-                }.getType();
-              } else {
-                type = new TypeToken<List<Product>>() {
-                }.getType();
-              }
-              ArrayList<Object> objects = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download Objects: " + objects);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(objects);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
-  public QueueItem getObjects(OnObjectsResponseListener onResponseListener, String grocyEntity) {
-    return getObjects(onResponseListener, null, grocyEntity);
-  }
-
   public QueueItem getProductGroups(
       OnProductGroupsResponseListener onResponseListener,
       OnErrorListener onErrorListener
@@ -528,10 +460,6 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getProductGroups(OnProductGroupsResponseListener onResponseListener) {
-    return getProductGroups(onResponseListener, null);
-  }
-
   public QueueItem updateProductGroups(
       String dbChangedTime,
       OnProductGroupsResponseListener onResponseListener
@@ -557,10 +485,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download ProductGroups: " + productGroups);
                 }
-                appDatabase
-                    .productGroupDao().deleteProductGroups()
+                Single.concat(
+                    appDatabase.productGroupDao().deleteProductGroups(),
+                    appDatabase.productGroupDao().insertProductGroups(productGroups)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.productGroupDao().insertAll(productGroups))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -629,10 +558,6 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getQuantityUnits(OnQuantityUnitsResponseListener onResponseListener) {
-    return getQuantityUnits(onResponseListener, null);
-  }
-
   public QueueItem updateQuantityUnits(
       String dbChangedTime,
       OnQuantityUnitsResponseListener onResponseListener
@@ -658,10 +583,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download QuantityUnits: " + quantityUnits);
                 }
-                appDatabase
-                    .quantityUnitDao().deleteQuantityUnits()
+                Single.concat(
+                    appDatabase.quantityUnitDao().deleteQuantityUnits(),
+                    appDatabase.quantityUnitDao().insertQuantityUnits(quantityUnits)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.quantityUnitDao().insertAll(quantityUnits))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -687,55 +613,6 @@ public class DownloadHelper {
       }
       return null;
     }
-  }
-
-  public QueueItem getQuantityUnitConversions(
-      OnQuantityUnitConversionsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.QUANTITY_UNIT_CONVERSIONS),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<QuantityUnitConversion>>() {
-              }.getType();
-              ArrayList<QuantityUnitConversion> conversions
-                  = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download QuantityUnitConversions: "
-                    + conversions);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(conversions);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
-  public QueueItem getQuantityUnitConversions(
-      OnQuantityUnitConversionsResponseListener onResponseListener
-  ) {
-    return getQuantityUnitConversions(onResponseListener, null);
   }
 
   public QueueItem updateQuantityUnitConversions(
@@ -765,10 +642,11 @@ public class DownloadHelper {
                   Log.i(tag, "download QuantityUnitConversions: "
                       + conversions);
                 }
-                appDatabase
-                    .quantityUnitConversionDao().deleteConversions()
+                Single.concat(
+                    appDatabase.quantityUnitConversionDao().deleteConversions(),
+                    appDatabase.quantityUnitConversionDao().insertConversions(conversions)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.quantityUnitConversionDao().insertAll(conversions))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -837,10 +715,6 @@ public class DownloadHelper {
     };
   }
 
-  public QueueItem getLocations(OnLocationsResponseListener onResponseListener) {
-    return getLocations(onResponseListener, null);
-  }
-
   public QueueItem updateLocations(
       String dbChangedTime,
       OnLocationsResponseListener onResponseListener
@@ -866,10 +740,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download Locations: " + locations);
                 }
-                appDatabase
-                    .locationDao().deleteLocations()
+                Single.concat(
+                    appDatabase.locationDao().deleteLocations(),
+                    appDatabase.locationDao().insertLocations(locations)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.locationDao().insertAll(locations))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -897,47 +772,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getStockCurrentLocations(
-      OnStockLocationsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.STOCK_CURRENT_LOCATIONS),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<StockLocation>>() {
-              }.getType();
-              ArrayList<StockLocation> locations = gson.fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download StockCurrentLocations: " + locations);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(locations);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
   public QueueItem updateStockCurrentLocations(
       String dbChangedTime,
       OnStockLocationsResponseListener onResponseListener
@@ -963,10 +797,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download StockCurrentLocations: " + locations);
                 }
-                appDatabase
-                    .stockLocationDao().deleteStockLocations()
+                Single.concat(
+                    appDatabase.stockLocationDao().deleteStockLocations(),
+                    appDatabase.stockLocationDao().insertStockLocations(locations)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.stockLocationDao().insertAll(locations))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -994,51 +829,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getProducts(
-      OnProductsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.PRODUCTS),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<Product>>() {
-              }.getType();
-              ArrayList<Product> products = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download Products: " + products);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(products);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
-  public QueueItem getProducts(OnProductsResponseListener onResponseListener) {
-    return getProducts(onResponseListener, null);
-  }
-
   public QueueItem updateProducts(
       String dbChangedTime,
       OnProductsResponseListener onResponseListener
@@ -1064,10 +854,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download Products: " + products);
                 }
-                appDatabase
-                    .productDao().deleteProducts()
+                Single.concat(
+                    appDatabase.productDao().deleteProducts(),
+                    appDatabase.productDao().insertProducts(products)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.productDao().insertAll(products))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -1121,10 +912,12 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download ProductsLastPurchased: " + productsLastPurchased);
                 }
-                appDatabase
-                    .productLastPurchasedDao().deleteProductsLastPurchased()
+                Single.concat(
+                    appDatabase.productLastPurchasedDao().deleteProductsLastPurchased(),
+                    appDatabase.productLastPurchasedDao()
+                        .insertProductsLastPurchased(productsLastPurchased)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.productLastPurchasedDao().insertAll(productsLastPurchased))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -1185,10 +978,12 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download ProductsAveragePrice: " + productsAveragePrice);
                 }
-                appDatabase
-                    .productAveragePriceDao().deleteProductsAveragePrice()
+                Single.concat(
+                    appDatabase.productAveragePriceDao().deleteProductsAveragePrice(),
+                    appDatabase.productAveragePriceDao()
+                        .insertProductsAveragePrice(productsAveragePrice)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.productAveragePriceDao().insertAll(productsAveragePrice))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -1223,48 +1018,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getProductBarcodes(
-      OnProductBarcodesResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.PRODUCT_BARCODES),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<ProductBarcode>>() {
-              }.getType();
-              ArrayList<ProductBarcode> barcodes
-                  = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download Barcodes: " + barcodes);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(barcodes);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
   public QueueItem updateProductBarcodes(
       String dbChangedTime,
       OnProductBarcodesResponseListener onResponseListener
@@ -1291,10 +1044,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download Barcodes: " + barcodes);
                 }
-                appDatabase
-                    .productBarcodeDao().deleteProductBarcodes()
+                Single.concat(
+                    appDatabase.productBarcodeDao().deleteProductBarcodes(),
+                    appDatabase.productBarcodeDao().insertProductBarcodes(barcodes)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.productBarcodeDao().insertAll(barcodes))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -1585,61 +1339,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getMissingItems(
-      OnMissingItemsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getStockVolatile(),
-            uuid,
-            response -> {
-              if (debug) {
-                Log.i(tag, "download Volatile (only missing): success");
-              }
-              ArrayList<MissingItem> missingItems = new ArrayList<>();
-              try {
-                JSONObject jsonObject = new JSONObject(response);
-                // Parse fourth part of volatile array: missing products
-                missingItems = gson.fromJson(
-                    jsonObject.getJSONArray("missing_products").toString(),
-                    new TypeToken<List<MissingItem>>() {
-                    }.getType()
-                );
-                if (debug) {
-                  Log.i(tag, "download Volatile (only missing): missing = " + missingItems);
-                }
-              } catch (JSONException e) {
-                if (debug) {
-                  Log.e(tag, "download Volatile (only missing): " + e);
-                }
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(missingItems);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
   public QueueItem updateMissingItems(
       String dbChangedTime,
       OnMissingItemsResponseListener onResponseListener
@@ -1681,10 +1380,11 @@ public class DownloadHelper {
                   }
                 }
                 ArrayList<MissingItem> finalMissingItems = missingItems;
-                appDatabase
-                    .missingItemDao().deleteMissingItems()
+                Single.concat(
+                    appDatabase.missingItemDao().deleteMissingItems(),
+                    appDatabase.missingItemDao().insertMissingItems(missingItems)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.missingItemDao().insertAll(finalMissingItems))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -1859,53 +1559,6 @@ public class DownloadHelper {
     return getStockEntries(productId, onResponseListener, null);
   }
 
-  public QueueItem getShoppingListItems(
-      OnShoppingListItemsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LIST),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<ShoppingListItem>>() {
-              }.getType();
-              ArrayList<ShoppingListItem> shoppingListItems = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download ShoppingListItems: " + shoppingListItems);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(shoppingListItems);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
-  public QueueItem getShoppingListItems(
-      OnShoppingListItemsResponseListener onResponseListener
-  ) {
-    return getShoppingListItems(onResponseListener, null);
-  }
-
   public QueueItem updateShoppingListItems(
       String dbChangedTime,
       OnShoppingListItemsResponseListener onResponseListener
@@ -1931,10 +1584,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download ShoppingListItems: " + shoppingListItems);
                 }
-                appDatabase
-                    .shoppingListItemDao().deleteShoppingListItems()
+                Single.concat(
+                    appDatabase.shoppingListItemDao().deleteShoppingListItems(),
+                    appDatabase.shoppingListItemDao().insertShoppingListItems(shoppingListItems)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.shoppingListItemDao().insertAll(shoppingListItems))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -2043,51 +1697,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getShoppingLists(
-      OnShoppingListsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<ShoppingList>>() {
-              }.getType();
-              ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download ShoppingLists: " + shoppingLists);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(shoppingLists);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
-  public QueueItem getShoppingLists(OnShoppingListsResponseListener onResponseListener) {
-    return getShoppingLists(onResponseListener, null);
-  }
-
   public QueueItem updateShoppingLists(
       String dbChangedTime,
       OnShoppingListsResponseListener onResponseListener
@@ -2113,10 +1722,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download ShoppingLists: " + shoppingLists);
                 }
-                appDatabase
-                    .shoppingListDao().deleteShoppingLists()
+                Single.concat(
+                    appDatabase.shoppingListDao().deleteShoppingLists(),
+                    appDatabase.shoppingListDao().insertShoppingLists(shoppingLists)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.shoppingListDao().insertAll(shoppingLists))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -2144,51 +1754,6 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getStores(
-      OnStoresResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.STORES),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<Store>>() {
-              }.getType();
-              ArrayList<Store> stores = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download Stores: " + stores);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(stores);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
-  public QueueItem getStores(OnStoresResponseListener onResponseListener) {
-    return getStores(onResponseListener, null);
-  }
-
   public QueueItem updateStores(
       String dbChangedTime,
       OnStoresResponseListener onResponseListener
@@ -2214,10 +1779,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download Stores: " + stores);
                 }
-                appDatabase
-                    .storeDao().deleteStores()
+                Single.concat(
+                    appDatabase.storeDao().deleteStores(),
+                    appDatabase.storeDao().insertStores(stores)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.storeDao().insertAll(stores))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
@@ -2243,18 +1809,6 @@ public class DownloadHelper {
       }
       return null;
     }
-  }
-
-  public void deleteProduct(
-      int productId,
-      OnStringResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    delete(
-        grocyApi.getObject(GrocyApi.ENTITY.PRODUCTS, productId),
-        onResponseListener,
-        onErrorListener
-    );
   }
 
   public QueueItem editShoppingListItem(
@@ -2296,14 +1850,6 @@ public class DownloadHelper {
 
   public QueueItem editShoppingListItem(int itemId, JSONObject body) {
     return editShoppingListItem(itemId, body, null, null);
-  }
-
-  public QueueItem editShoppingListItem(
-      int itemId,
-      JSONObject body,
-      OnJSONResponseListener onResponseListener
-  ) {
-    return editShoppingListItem(itemId, body, onResponseListener, null);
   }
 
   public QueueItem deleteShoppingListItem(
@@ -2349,109 +1895,61 @@ public class DownloadHelper {
     return deleteShoppingListItem(itemId, null, null);
   }
 
-  public QueueItem getTasks(
-      OnTasksResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(GrocyApi.ENTITY.TASKS),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<Task>>() {
-              }.getType();
-              ArrayList<Task> tasks = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download Tasks: " + tasks);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(tasks);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
   public QueueItem updateTasks(
       String dbChangedTime,
       OnTasksResponseListener onResponseListener
   ) {
-    OnTasksResponseListener newOnResponseListener = tasks -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASKS, dbChangedTime);
-      editPrefs.apply();
-      onResponseListener.onResponse(tasks);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_TASKS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getTasks(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(ENTITY.TASKS),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<Task>>() {
+                }.getType();
+                ArrayList<Task> tasks = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Tasks: " + tasks);
+                }
+                Single.concat(
+                    appDatabase.taskDao().deleteTasks(),
+                    appDatabase.taskDao().insertTasks(tasks)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_TASKS, dbChangedTime).apply();
+                      onResponseListener.onResponse(tasks);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped Tasks download");
       }
       return null;
     }
-  }
-
-  public QueueItem getTaskCategories(
-      OnTaskCategoriesResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getObjects(ENTITY.TASK_CATEGORIES),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<TaskCategory>>() {
-              }.getType();
-              ArrayList<TaskCategory> taskCategories = new Gson().fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download Task categories: " + taskCategories);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(taskCategories);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
   }
 
   public QueueItem updateTaskCategories(
@@ -2479,10 +1977,11 @@ public class DownloadHelper {
                 if (debug) {
                   Log.i(tag, "download Task categories: " + taskCategories);
                 }
-                appDatabase
-                    .taskCategoryDao().deleteCategories()
+                Single.concat(
+                    appDatabase.taskCategoryDao().deleteCategories(),
+                    appDatabase.taskCategoryDao().insertCategories(taskCategories)
+                )
                     .subscribeOn(Schedulers.io())
-                    .doFinally(() -> appDatabase.taskCategoryDao().insertAll(taskCategories))
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()

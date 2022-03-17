@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
@@ -151,10 +152,11 @@ public class StockOverviewRepository {
       List<StockItem> stockItems,
       Runnable listener
   ) {
-    appDatabase
-        .stockItemDao().deleteStockItems()
+    Single.concat(
+        appDatabase.stockItemDao().deleteStockItems(),
+        appDatabase.stockItemDao().insertStockItems(stockItems)
+    )
         .subscribeOn(Schedulers.io())
-        .doFinally(() -> appDatabase.stockItemDao().insertAll(stockItems))
         .observeOn(AndroidSchedulers.mainThread())
         .doFinally(listener::run)
         .subscribe();

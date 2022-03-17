@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 public interface ProductAveragePriceDao {
 
   @Query("SELECT * FROM product_average_price_table")
-  LiveData<List<ProductAveragePrice>> getAllLive();
-
-  @Query("SELECT * FROM product_average_price_table")
-  List<ProductAveragePrice> getAll();
-
-  @Query("SELECT * FROM product_average_price_table")
   Single<List<ProductAveragePrice>> getProductsAveragePrice();
 
-  @Query("SELECT COUNT(*) FROM product_average_price_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ProductAveragePrice> productsAveragePrice);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ProductAveragePrice productAveragePrice);
-
-  @Delete
-  void delete(ProductAveragePrice productAveragePrice);
-
-  @Query("DELETE FROM product_average_price_table")
-  void deleteAll();
+  Single<List<Long>> insertProductsAveragePrice(List<ProductAveragePrice> productsAveragePrice);
 
   @Query("DELETE FROM product_average_price_table")
   Single<Integer> deleteProductsAveragePrice();

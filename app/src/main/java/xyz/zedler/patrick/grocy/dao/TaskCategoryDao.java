@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
 public interface TaskCategoryDao {
 
   @Query("SELECT * FROM task_category_table")
-  LiveData<List<TaskCategory>> getAllLive();
-
-  @Query("SELECT * FROM task_category_table")
-  List<TaskCategory> getAll();
-
-  @Query("SELECT * FROM task_category_table")
   Single<List<TaskCategory>> getTaskCategories();
 
-  @Query("SELECT COUNT(*) FROM task_category_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<TaskCategory> taskGroups);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(TaskCategory taskGroup);
-
-  @Delete
-  void delete(TaskCategory taskGroup);
-
-  @Query("DELETE FROM task_category_table")
-  void deleteAll();
+  Single<List<Long>> insertCategories(List<TaskCategory> taskGroups);
 
   @Query("DELETE FROM task_category_table")
   Single<Integer> deleteCategories();

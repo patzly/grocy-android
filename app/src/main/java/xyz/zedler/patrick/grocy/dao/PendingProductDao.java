@@ -35,25 +35,13 @@ public interface PendingProductDao {
     @Query("SELECT * FROM pending_product_table")
     LiveData<List<PendingProduct>> getAllLive();
 
-    @Query("SELECT * FROM pending_product_table")
-    List<PendingProduct> getAll();
-
-    @Query("SELECT COUNT(*) FROM pending_product_table")
-    int count();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<PendingProduct> products);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(PendingProduct product);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insertRx(PendingProduct product);
+    Single<Long> insertPendingProduct(PendingProduct product);
 
     @Delete
-    void delete(PendingProduct product);
+    Single<Integer> deletePendingProduct(PendingProduct product);
 
     @Query("DELETE FROM pending_product_table")
-    void deleteAll();
+    Single<Integer> deletePendingProducts();
 
 }

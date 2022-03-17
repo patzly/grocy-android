@@ -19,9 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,28 +31,10 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 public interface QuantityUnitConversionDao {
 
   @Query("SELECT * FROM quantity_unit_conversion_table")
-  LiveData<List<QuantityUnitConversion>> getAllLive();
-
-  @Query("SELECT * FROM quantity_unit_conversion_table")
-  List<QuantityUnitConversion> getAll();
-
-  @Query("SELECT * FROM quantity_unit_conversion_table")
   Single<List<QuantityUnitConversion>> getConversions();
 
-  @Query("SELECT COUNT(*) FROM quantity_unit_conversion_table")
-  int count();
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<QuantityUnitConversion> quantityUnitConversions);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(QuantityUnitConversion quantityUnitConversion);
-
-  @Delete
-  void delete(QuantityUnitConversion quantityUnitConversion);
-
-  @Query("DELETE FROM quantity_unit_conversion_table")
-  void deleteAll();
+  Single<List<Long>> insertConversions(List<QuantityUnitConversion> quantityUnitConversions);
 
   @Query("DELETE FROM quantity_unit_conversion_table")
   Single<Integer> deleteConversions();
