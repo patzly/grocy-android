@@ -90,7 +90,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.GONE,
           R.menu.menu_empty,
-          true,
           () -> {
           }
       );

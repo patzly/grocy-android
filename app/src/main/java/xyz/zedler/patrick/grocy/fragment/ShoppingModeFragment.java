@@ -214,8 +214,7 @@ public class ShoppingModeFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(ShoppingModeFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
-        && savedInstanceState == null);
+    updateUI();
   }
 
   @Override
@@ -253,13 +252,12 @@ public class ShoppingModeFragment extends BaseFragment implements
     timer.schedule(timerTask, 2000, seconds * 1000L);
   }
 
-  private void updateUI(boolean animated) {
+  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(null);
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.GONE,
         R.menu.menu_shopping_list,
-        animated,
         () -> {
         }
     );

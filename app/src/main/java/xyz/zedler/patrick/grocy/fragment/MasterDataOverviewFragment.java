@@ -203,18 +203,15 @@ public class MasterDataOverviewFragment extends BaseFragment {
     hideDisabledFeatures();
 
     // UPDATE UI
-    updateUI((getArguments() == null
-        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-        && savedInstanceState == null);
+    updateUI();
   }
 
-  private void updateUI(boolean animated) {
+  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(binding.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.GONE,
         R.menu.menu_empty,
-        animated,
         () -> {
         }
     );

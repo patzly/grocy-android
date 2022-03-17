@@ -139,7 +139,6 @@ public class OverviewStartFragment extends BaseFragment {
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.CENTER,
         R.menu.menu_empty,
-        animated,
         () -> {
         }
     );

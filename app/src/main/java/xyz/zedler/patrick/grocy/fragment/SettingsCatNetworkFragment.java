@@ -119,7 +119,6 @@ public class SettingsCatNetworkFragment extends BaseFragment {
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.GONE,
           R.menu.menu_empty,
-          false,
           () -> {
           }
       );

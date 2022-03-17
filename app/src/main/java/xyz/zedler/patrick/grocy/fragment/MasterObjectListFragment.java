@@ -274,10 +274,10 @@ public class MasterObjectListFragment extends BaseFragment
     }
 
     // UPDATE UI
-    updateUI(true);
+    updateUI();
   }
 
-  private void updateUI(boolean animated) {
+  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
@@ -285,14 +285,13 @@ public class MasterObjectListFragment extends BaseFragment
         !entity.equals(GrocyApi.ENTITY.PRODUCTS)
             ? R.menu.menu_master_items
             : R.menu.menu_master_products,
-        animated,
         this::setUpBottomMenu
     );
     activity.updateFab(
         R.drawable.ic_round_add_anim,
         R.string.action_add,
         Constants.FAB.TAG.ADD,
-        animated,
+        true,
         () -> {
           switch (entity) {
             case GrocyApi.ENTITY.QUANTITY_UNITS:

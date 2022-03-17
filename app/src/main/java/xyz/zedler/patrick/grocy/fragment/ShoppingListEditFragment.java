@@ -135,7 +135,6 @@ public class ShoppingListEditFragment extends BaseFragment {
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
         R.menu.menu_shopping_list_edit,
-        animated,
         this::setUpBottomMenu
     );
     activity.updateFab(

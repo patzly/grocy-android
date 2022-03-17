@@ -268,7 +268,6 @@ public class ShoppingListFragment extends BaseFragment implements
     activity.updateBottomAppBar(
         viewModel.isOffline() ? Constants.FAB.POSITION.GONE : Constants.FAB.POSITION.CENTER,
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
-        animated,
         this::setUpBottomMenu
     );
     activity.updateFab(
@@ -577,7 +576,6 @@ public class ShoppingListFragment extends BaseFragment implements
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.CENTER,
           R.menu.menu_shopping_list,
-          true,
           this::setUpBottomMenu
       );
     }

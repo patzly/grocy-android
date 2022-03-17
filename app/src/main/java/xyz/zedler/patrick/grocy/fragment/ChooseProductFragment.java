@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -187,7 +188,7 @@ public class ChooseProductFragment extends BaseFragment
     activity.updateBottomAppBar(
         POSITION.GONE,
         R.menu.menu_empty,
-        () -> {}
+        (OnMenuItemClickListener) null
     );
   }
 

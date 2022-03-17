@@ -32,7 +32,6 @@ import xyz.zedler.patrick.grocy.R;
 public class NetUtil {
 
   private ConnectivityManager cm;
-  private boolean isOrbotReadyNow;
 
   public NetUtil(Activity activity) {
     if (activity == null) {

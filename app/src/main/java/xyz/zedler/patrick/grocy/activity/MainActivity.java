@@ -318,15 +318,6 @@ public class MainActivity extends AppCompatActivity {
   public void updateBottomAppBar(
       int newFabPosition,
       @MenuRes int newMenuId,
-      boolean animated,
-      Runnable onMenuChanged
-  ) {
-    updateBottomAppBar(newFabPosition, newMenuId, onMenuChanged);
-  }
-
-  public void updateBottomAppBar(
-      int newFabPosition,
-      @MenuRes int newMenuId,
       Runnable onMenuChanged
   ) {
     int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
@@ -522,7 +513,7 @@ public class MainActivity extends AppCompatActivity {
     String tag = bottomSheet.toString();
     bottomSheet.show(fragmentManager, tag);
     if (debug) {
-      Log.i(TAG, "showBottomSheet: " + bottomSheet.toString());
+      Log.i(TAG, "showBottomSheet: " + bottomSheet);
     }
   }
 
@@ -586,6 +577,7 @@ public class MainActivity extends AppCompatActivity {
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED);
+    editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE);
     editPrefs.remove(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING);
