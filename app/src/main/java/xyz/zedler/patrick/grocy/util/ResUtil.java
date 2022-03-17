@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -34,6 +36,8 @@ import android.text.Spanned;
 import android.text.style.BulletSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,10 +45,15 @@ import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.BindingAdapter;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
+
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 
 public class ResUtil {
 
@@ -141,5 +150,61 @@ public class ResUtil {
       return bitmap;
     }
     return null;
+  }
+
+  @BindingAdapter("shoppingCardDrawable")
+  public static void setShoppingCardDrawable(ImageView view, List<PendingProduct> pendingProducts) {
+    int count = pendingProducts != null ? pendingProducts.size() : 0;
+    view.setImageDrawable(new BitmapDrawable(
+            view.getResources(),
+            getFromDrawableWithNumber(
+                    view.getContext(),
+                    R.drawable.ic_round_shopping_cart,
+                    count,
+                    7.3f,
+                    -1.5f,
+                    8
+            )
+    ));
+  }
+
+  public static Bitmap getFromDrawableWithNumber(
+          Context context,
+          @DrawableRes int resId,
+          int number,
+          float textSize,
+          float textOffsetX,
+          float textOffsetY
+  ) {
+    Bitmap bitmap = getBitmapFromDrawable(context, resId);
+    if(bitmap == null) return null;
+    // make mutable
+    bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+    Canvas canvas = new Canvas(bitmap);
+
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    paint.setColor(ContextCompat.getColor(context, R.color.icon));
+    paint.setTextSize(UnitUtil.dpToPx(context, textSize));
+    paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
+    paint.setLetterSpacing(0.1f);
+
+    Rect bounds = new Rect();
+    paint.getTextBounds(
+            String.valueOf(number),
+            0,
+            String.valueOf(number).length(),
+            bounds
+    );
+    int x = (bitmap.getWidth() - bounds.width()) / 2;
+    int y = (bitmap.getHeight() + bounds.height()) / 2;
+
+    canvas.drawText(
+            String.valueOf(number),
+            x + UnitUtil.dpToPx(context, textOffsetX),
+            y - UnitUtil.dpToPx(context, textOffsetY),
+            paint
+    );
+    return bitmap;
   }
 }

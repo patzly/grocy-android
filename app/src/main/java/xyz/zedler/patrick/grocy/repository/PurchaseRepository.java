@@ -26,6 +26,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -118,5 +120,28 @@ public class PurchaseRepository {
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
         .subscribe();
+  }
+
+  public void insertPendingProduct(PendingProduct pendingProduct) {
+    appDatabase.pendingProductDao().insertRx(pendingProduct)
+            .subscribeOn(Schedulers.io()).subscribe();
+  }
+
+  public void insertPendingProduct(
+          PendingProduct pendingProduct,
+          SuccessIdListener onSuccess,
+          Runnable onError
+  ) {
+    appDatabase.pendingProductDao().insertRx(pendingProduct)
+            .subscribeOn(Schedulers.io()).subscribe(onSuccess::onSuccess, e -> onError.run());
+  }
+
+  public void insertPendingProductBarcode(PendingProductBarcode barcode) {
+    appDatabase.pendingProductBarcodeDao().insertRx(barcode)
+            .subscribeOn(Schedulers.io()).subscribe();
+  }
+
+  public interface SuccessIdListener {
+    void onSuccess(Long id);
   }
 }

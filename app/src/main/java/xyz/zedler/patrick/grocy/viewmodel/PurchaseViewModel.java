@@ -26,6 +26,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,10 +39,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PendingProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -51,6 +54,8 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -95,10 +100,13 @@ public class PurchaseViewModel extends BaseViewModel {
   private List<ShoppingListItem> shoppingListItems;
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
+  private ArrayList<Integer> batchPendingProductIds;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> quickModeEnabled;
+  private final LiveData<List<PendingProduct>> pendingProductsLive;
+  private final LiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
 
   private Runnable queueEmptyAction;
 
@@ -113,6 +121,10 @@ public class PurchaseViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
+
+    AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
+    pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
+    pendingProductBarcodesLive = appDatabase.pendingProductBarcodeDao().getAllLive();
 
     if (args.getShoppingListItems() != null) {
       batchShoppingListItemIds = new ArrayList<>(args.getShoppingListItems().length);
@@ -534,6 +546,31 @@ public class PurchaseViewModel extends BaseViewModel {
     setProduct(null, null, currentItem);
   }
 
+  public void showPendingProductsBottomSheet() {
+    showBottomSheet(new PendingProductsBottomSheet());
+  }
+
+  public void fillWithPendingProduct() {
+    if (pendingProductsLive.getValue() == null) {
+      return;
+    }
+    if (formData.getBatchModeItemIndexLive().getValue() == null) {
+      return;
+    }
+    int index = formData.getBatchModeItemIndexLive().getValue();
+    if (index >= batchPendingProductIds.size()) {
+      return;
+    }
+    int currentItemId = batchPendingProductIds.get(index);
+    PendingProduct pendingProduct = PendingProduct.getFromId(pendingProductsLive, currentItemId);
+    if (pendingProduct == null) {
+      return;
+    }
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getProductName());
+    formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.getAmount()));
+  }
+
   public boolean batchModeNextItem() {  // also returns whether there was a next item
     if (batchShoppingListItemIds == null) {
       return false;
@@ -822,6 +859,23 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public LiveData<List<PendingProduct>> getPendingProductsLive() {
+    return pendingProductsLive;
+  }
+
+  public LiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
+    return pendingProductBarcodesLive;
+  }
+
+  public void setBatchPendingProductIds(ArrayList<Integer> batchPendingProductIds) {
+    ArrayList<Integer> ids = new ArrayList<>();
+    if (getPendingProductsLive().getValue() == null) return;
+    for (PendingProduct pendingProduct : getPendingProductsLive().getValue()) {
+      ids.add(pendingProduct.getId());
+    }
+    this.batchPendingProductIds = ids;
   }
 
   public boolean isQuickModeEnabled() {

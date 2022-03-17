@@ -469,7 +469,7 @@
   <string name="title_shopping_list_edit">Edit shopping list</string>
   <string name="title_shopping_list_new">New shopping list</string>
   <string name="title_shopping_mode">Shopping mode</string>
-  <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
+  <string name="title_batch_mode_shopping_list">Batch mode purchase/shopping list</string>
   <string name="title_product_cat_optional">Optional properties</string>
   <string name="title_product_cat_location">Default location</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->

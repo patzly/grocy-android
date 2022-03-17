@@ -54,6 +54,7 @@ public class FormDataPurchase {
   private final MutableLiveData<Integer> batchModeItemIndexLive;
   private final LiveData<String> batchModeTextLive;
   private final MutableLiveData<ShoppingListItem> shoppingListItemLive;
+  private final MutableLiveData<PendingProduct> pendingProductLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<ProductDetails> productDetailsLive;
@@ -115,6 +116,7 @@ public class FormDataPurchase {
         ) : null
     );
     shoppingListItemLive = new MutableLiveData<>();
+    pendingProductLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
     if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
@@ -267,6 +269,10 @@ public class FormDataPurchase {
 
   public MutableLiveData<ShoppingListItem> getShoppingListItemLive() {
     return shoppingListItemLive;
+  }
+
+  public MutableLiveData<PendingProduct> getPendingProductLive() {
+    return pendingProductLive;
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {

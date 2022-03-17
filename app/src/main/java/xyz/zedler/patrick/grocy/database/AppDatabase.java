@@ -25,6 +25,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
+import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
+import xyz.zedler.patrick.grocy.dao.PendingProductDao;
 import xyz.zedler.patrick.grocy.dao.ProductAveragePriceDao;
 import xyz.zedler.patrick.grocy.dao.ProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.ProductDao;
@@ -41,6 +43,8 @@ import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
 import xyz.zedler.patrick.grocy.dao.TaskDao;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -73,9 +77,11 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         Task.class,
         TaskCategory.class,
         ProductLastPurchased.class,
-        ProductAveragePrice.class
+        ProductAveragePrice.class,
+        PendingProduct.class,
+        PendingProductBarcode.class
     },
-    version = 23
+    version = 24
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -112,6 +118,10 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract ProductLastPurchasedDao productLastPurchasedDao();
 
   public abstract ProductAveragePriceDao productAveragePriceDao();
+
+  public abstract PendingProductDao pendingProductDao();
+
+  public abstract PendingProductBarcodeDao pendingProductBarcodeDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {
