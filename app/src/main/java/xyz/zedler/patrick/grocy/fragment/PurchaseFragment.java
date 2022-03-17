@@ -354,6 +354,13 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     viewModel.checkProductInput();
   }
 
+  public void clearFocusAndCheckProductInputExternal() {
+    clearInputFocus();
+    String input = viewModel.getFormData().getProductNameLive().getValue();
+    if (input == null || input.isEmpty()) return;
+    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductNameLive().getValue());
+  }
+
   public void focusProductInputIfNecessary() {
     if (!viewModel.isQuickModeEnabled() || viewModel.getFormData().isScannerVisible()) {
       return;

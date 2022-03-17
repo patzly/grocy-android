@@ -298,8 +298,8 @@
                   android:afterTextChanged="@{() -> formData.isProductNameValid()}"
                   app:productList="@{formData.productsLive}"
                   app:onNextClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
-                  app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInput()}"
-                  app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInput()}" />
+                  app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"
+                  app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}" />
 
               </com.google.android.material.textfield.TextInputLayout>
 
