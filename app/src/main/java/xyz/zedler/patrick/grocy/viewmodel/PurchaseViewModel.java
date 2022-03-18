@@ -577,7 +577,7 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     formData.getPendingProductLive().setValue(pendingProduct);
     formData.getProductNameLive().setValue(pendingProduct.getName());
-    formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.getAmount()));
+    //formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.get()));
   }
 
   public boolean batchModeNextItem() {  // also returns whether there was a next item

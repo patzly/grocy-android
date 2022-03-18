@@ -213,11 +213,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    viewModel.getFormData().getPendingProductLive().observe(getViewLifecycleOwner(), product -> {
-      if(product == null) return;
-      binding.linearBatchItem.name.setText(product.getName());
-      binding.linearBatchItem.amount.setText(NumUtil.trim(product.getAmount()));
-    });
     viewModel.getFormData().getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), p -> {});
     viewModel.getFormData().getPendingProductsLive().observe(getViewLifecycleOwner(), p -> {});
 

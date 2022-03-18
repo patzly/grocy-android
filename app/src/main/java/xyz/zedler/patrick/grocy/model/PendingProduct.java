@@ -38,22 +38,11 @@ public class PendingProduct extends Product {
     @NonNull
     private String name;
 
-    @ColumnInfo(name = "amount")
-    private double amount;
-
     @ColumnInfo(name = "name_is_from_off")
     private boolean nameIsFromOFF;
 
-    public PendingProduct(@NonNull String name, double amount, boolean nameIsFromOFF) {
-        this.name = name;
-        this.amount = amount;
-        this.nameIsFromOFF = nameIsFromOFF;
-    }
-
-    @Ignore
     public PendingProduct(@NonNull String name, boolean nameIsFromOFF) {
         this.name = name;
-        this.amount = 1;
         this.nameIsFromOFF = nameIsFromOFF;
     }
 
@@ -73,18 +62,6 @@ public class PendingProduct extends Product {
 
     public void setName(@NonNull String name) {
         this.name = name;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public void addAmount(double amount) {
-        this.amount += amount;
     }
 
     public boolean isNameIsFromOFF() {
@@ -132,6 +109,6 @@ public class PendingProduct extends Product {
     @NonNull
     @Override
     public String toString() {
-        return "PendingProduct(" + name + ": " + amount + ')';
+        return "PendingProduct(" + name + ')';
     }
 }

@@ -24,66 +24,54 @@ import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
 import java.util.List;
 
-@Entity(tableName = "pending_product_barcode_table")
-public class PendingProductBarcode {
+@Entity(tableName = "pending_purchase_table")
+public class PendingPurchase {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private long id;
+    private int id;
 
     @ColumnInfo(name = "pending_product_id")
-    private long pendingProductId;
-
-    @ColumnInfo(name = "barcode")
-    private String barcode;
-
-    @ColumnInfo(name = "qu_id")
-    private String quId;
+    private int pendingProductId;
 
     @ColumnInfo(name = "amount")
     private String amount;
 
+    @ColumnInfo(name = "price")
+    private String price;
+
+    @ColumnInfo(name = "purchased_date")
+    private String purchasedDate;
+
+    @ColumnInfo(name = "best_before_date")
+    private String bestBeforeDate;
+
     @ColumnInfo(name = "shopping_location_id")
     private String storeId;
 
-    @ColumnInfo(name = "last_price")
-    private String lastPrice;
+    @ColumnInfo(name = "location_id")
+    private String locationId;
 
-    public PendingProductBarcode() {
+    public PendingPurchase() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getPendingProductId() {
+    public int getPendingProductId() {
         return pendingProductId;
     }
 
-    public void setPendingProductId(long pendingProductId) {
+    public void setPendingProductId(int pendingProductId) {
         this.pendingProductId = pendingProductId;
-    }
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
-
-    public String getQuId() {
-        return quId;
-    }
-
-    public void setQuId(String quId) {
-        this.quId = quId;
     }
 
     public String getAmount() {
@@ -94,6 +82,30 @@ public class PendingProductBarcode {
         this.amount = amount;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getPurchasedDate() {
+        return purchasedDate;
+    }
+
+    public void setPurchasedDate(String purchasedDate) {
+        this.purchasedDate = purchasedDate;
+    }
+
+    public String getBestBeforeDate() {
+        return bestBeforeDate;
+    }
+
+    public void setBestBeforeDate(String bestBeforeDate) {
+        this.bestBeforeDate = bestBeforeDate;
+    }
+
     public String getStoreId() {
         return storeId;
     }
@@ -102,30 +114,17 @@ public class PendingProductBarcode {
         this.storeId = storeId;
     }
 
-    public String getLastPrice() {
-        return lastPrice;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public void setLastPrice(String lastPrice) {
-        this.lastPrice = lastPrice;
-    }
-
-    public static Long getPendingProductId(
-            LiveData<List<PendingProductBarcode>> barcodes,
-            String barcode
-    ) {
-        List<PendingProductBarcode> barcodesList = barcodes.getValue();
-        if (barcodesList == null || barcodesList.isEmpty() || barcode == null) return null;
-        for (PendingProductBarcode barcodeTemp : barcodesList) {
-            if (barcodeTemp.getBarcode().equals(barcode))
-                return barcodeTemp.getPendingProductId();
-        }
-        return null;
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "PendingProductBarcode(" + id + ", " + pendingProductId + ": " + barcode + ')';
+        return "PendingPurchase(" + pendingProductId + ')';
     }
 }
