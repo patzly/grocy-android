@@ -19,12 +19,11 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 
@@ -32,24 +31,12 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 public interface ProductGroupDao {
 
   @Query("SELECT * FROM product_group_table")
-  LiveData<List<ProductGroup>> getAllLive();
-
-  @Query("SELECT * FROM product_group_table")
-  List<ProductGroup> getAll();
-
-  @Query("SELECT COUNT(*) FROM product_group_table")
-  int count();
+  Single<List<ProductGroup>> getProductGroups();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ProductGroup> productGroups);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ProductGroup productGroup);
-
-  @Delete
-  void delete(ProductGroup productGroup);
+  Single<List<Long>> insertProductGroups(List<ProductGroup> productGroups);
 
   @Query("DELETE FROM product_group_table")
-  void deleteAll();
+  Single<Integer> deleteProductGroups();
 
 }

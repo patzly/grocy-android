@@ -1,3 +1,20 @@
+2.2.0:
+- New: 'Extra field' option on stock overview page for additional info
+- New: 'Extra field' option on shopping list page, can display last price with server v3.2.0 (#434)
+- New: Shopping mode now groups items like on shopping list page (#430)
+- New: Open Beauty Facts lookup as second online source (#257)
+- New: Product option "Treat opened as out of stock" is available for server v3.2.0
+- Improved: Open button on consume page is now checkbox
+- Improved: Product search on stock overview is now fuzzy search (#486)
+- Improved: Barcode lookup now also with external scanner if enabled (#496)
+- Fixed: Crash when opened master location or quantity unit page on F-Droid build (#503)
+- Fixed: App could show old data when page loading was interrupted (#409)
+- Fixed: Open action now works with quickmode (#500)
+- Fixed: Unwanted linking between grouping option from stock & shopping list page
+- Fixed: Private demo test instances not working after app restart
+- Fixed: Different unit conversion behavior than on server in some cases (#490)
+- Fixed: Some special characters were removed from name of new product from barcode (#505)
+
 2.1.1:
 - New: Support for grocy server 3.2.0
 - New: Login flow for Home Assistant contains scanner for long-lived access token QR code

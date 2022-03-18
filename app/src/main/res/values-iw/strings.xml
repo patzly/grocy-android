@@ -125,6 +125,10 @@
   <string name="msg_consumed_spoiled">נצרכו %1$s %2$s מתוך %3$s כמקולקלים</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">סמן %1$s %2$s מתוך %3$s כפתוחים</string>
+  <string name="msg_task_mark">סימון המשימה כהושלמה</string>
+  <string name="msg_task_completed">משימה סומנה כהושלמה</string>
+  <string name="msg_task_not_completed">סימון המשימה כלא הושלמה</string>
+  <string name="msg_task_undo">ביטול משימה</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -227,6 +231,8 @@
   <string name="msg_help_normal_login">יש לגעת בכרטיס זה אם יש לך את התוספת של grocy ל־Home Assistant.</string>
   <string name="msg_help_home_assistant_login_help_show">יש לגעת כאן כדי להציג הודעות עזרה.</string>
   <string name="msg_help_home_assistant_login_help_hide">יש לגעת כאן כדי להסתיר הודעות עזרה.</string>
+  <string name="msg_share">ממליצים לעיין ביישומון ה־Android הזה למיזם grocy המדהים: \nhttps://github.com/patzly/grocy-android</string>
+
   <string name="error_api_not_working">מפתח ה־API לא עובד</string>
   <string name="error_orbot_not_installed">Orbot לא מותקן</string>
   <string name="error_select_product">נא לבחור מוצר</string>
@@ -243,6 +249,9 @@
   <string name="error_empty_products">אין מוצרים</string>
   <string name="error_empty_qu">אין יחידות כמות</string>
   <string name="error_empty_stores">אין חנויות</string>
+  <string name="error_empty_tasks">אין משימות</string>
+  <string name="error_empty_task_categories">אין קטגוריות משימות</string>
+  <string name="error_empty_unit_conversions">אין המרות יחידות כמות</string>
   <string name="error_search">אין תוצאות חיפוש</string>
   <string name="error_search_sub">נא לנסות ביטויים אחרים</string>
   <string name="error_filter">אין מה להציג</string>
@@ -254,6 +263,7 @@
   <string name="error_invalid_amount">כמות שגויה</string>
   <string name="error_invalid_price">המחיר שגוי</string>
   <string name="error_invalid_factor">מקדם שגוי</string>
+  <string name="error_invalid_date_format">תצורת התאריך שגויה</string>
   <string name="error_api_qr_code">זה אינו קוד QR עם פרטי גישה ל־API של grocy</string>
   <string name="error_loading_qus">טעינת יחידות הכמות מהמוצר נכשלה</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -288,6 +298,7 @@
   <string name="error_failed_barcode_upload">לא ניתן להעלות ברקוד</string>
   <string name="error_wrong_grocycode_type">ה־grocycode מכיל סוג יישות שגוי</string>
   <string name="error_stock_entry_grocycode">לא נמצאה רשומת מלאי מ־grocycode</string>
+  <string name="error_permission">אין הרשאות לפעולה הזאת</string>
   <string name="error_undefined">אירעה שגיאה</string>
 
   <string name="title_overview">סקירה</string>
@@ -301,6 +312,7 @@
   <string name="title_product">מוצר</string>
   <string name="title_product_create">יצירת מוצר</string>
   <string name="title_product_edit">עריכת מוצר</string>
+  <string name="title_tasks">משימות</string>
   <string name="title_master_data">נתוני על</string>
   <string name="title_stock_entries">רשומות מלאי</string>
   <string name="title_shopping_list">רשימת קניות</string>
@@ -343,6 +355,12 @@
   <string name="title_list_entry">רשומה ברשימה</string>
   <string name="title_edit_list_entry">עריכת רשומה ברשימה</string>
   <string name="title_create_list_entry">יצירת רשומה ברשימה</string>
+  <string name="title_edit_barcode">עריכת ברקוד</string>
+  <string name="title_create_barcode">יצירת ברקוד</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">יצירת המרת יחידת כמות</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">יצירת המרת יחידת כמות</string>
   <string name="title_shopping_list_edit">עריכת רשימת קניות</string>
   <string name="title_shopping_list_new">רשימת קניות חדשה</string>
   <string name="title_shopping_mode">מצב קניות</string>
@@ -390,6 +408,8 @@
   <string name="subtitle_amount_compare">שווה ערך ל%1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">כלומר %1$s ל%2$s.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">משמעות הדבר היא שהכמות %1$s שקולה לכמות %2$s.</string>
   <string name="subtitle_product_hidden">המוצר מוסתר</string>
   <string name="subtitle_product_not_hidden">המוצר לא מוסתר</string>
   <string name="subtitle_product_not_on_server">המוצר אינו בשרת</string>
@@ -400,8 +420,15 @@
   <string name="subtitle_not_supported">לא נתמך</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">כמות: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">יחידת כמות: %1$s</string>
   <string name="subtitle_barcode">ברקוד: %1$s</string>
   <string name="subtitle_feature_disabled">היכולת מושבתת</string>
+  <string name="subtitle_date_from_input">תאריך מקלט:\n%1$s</string>
+  <string name="subtitle_product_default_location">מיקום, חנות</string>
+  <string name="subtitle_product_due_date">סוג, ימי ברירת מחדל (לאחר הפתיחה, הקפאה, הפשרה)</string>
+  <string name="subtitle_product_quantity_unit">מלאי, רכישת ברירת מחדל</string>
+
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
@@ -485,6 +512,11 @@
   <string name="property_qu_stock">יחידת כמות במלאי</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">גורם המרה מרכישה למלאי</string>
+  <!-- This string is part of a pair, there is also 'quantity unit to' -->
+  <string name="property_quantity_unit_from">מיחידת כמות</string>
+  <!-- This string is part of a pair, there is also 'quantity unit from' -->
+  <string name="property_quantity_unit_to">אל יחידת כמות</string>
+  <string name="property_factor">גורם</string>
   <string name="property_barcode">ברקוד</string>
   <string name="property_barcodes">ברקודים</string>
   <string name="property_days">ימים</string>
@@ -529,6 +561,7 @@
   <string name="property_price_history">היסטוריית מחירים</string>
   <string name="property_product_group">קבוצת מוצרים</string>
   <string name="property_product_groups">קבוצות מוצרים</string>
+  <string name="property_value">ערך</string>
   <string name="property_opened">נפתח</string>
   <string name="property_not_opened">לא נפתח</string>
   <string name="property_is_freezer">במקפיא</string>
@@ -557,7 +590,15 @@
   <string name="property_in_stock">במלאי: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
   <string name="property_sort_mode">מיון: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">קיבוץ לפי: %1$s</string>
   <string name="property_ungrouped">לא מקובץ</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">שדה נוסף: %1$s</string>
+  <string name="property_task_categories">קטגוריות משימות</string>
+  <string name="property_calories">קלוריות</string>
+  <string name="property_calories_unit">קלוריות (ליחידת מלאי)</string>
+
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->
@@ -682,6 +723,10 @@
   <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
   <string name="setting_choose_barcode_scanner">נא לבחור סורק ברקודים</string>
   <string name="setting_choose_barcode_scanner_description">לסריקת ברקודים עם המצלמה</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream">חיתוך תזרים המצלמה לתצורת הצגה מקדימה</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="setting_crop_stream_description">מונע מהסורק לזהות ברקודים מחוץ להצגה המקדימה, עשוי לא לעבוד במכשיר שלך!</string>
   <string name="setting_use_front_cam">להשתמש במצלמה הקדמית</string>
   <string name="setting_use_front_cam_description">לסריקת ברקודים</string>
   <string name="setting_use_2d_scanner_format">להשתמש בתצורת סריקה דו־ממדית של סורק הברקודים</string>
@@ -704,6 +749,9 @@
   <string name="setting_keep_screen_on_description">בזמן מצב קניות</string>
   <string name="setting_show_done_items">הצגת פריטים שהסתיימו</string>
   <string name="setting_show_done_items_description">למטה</string>
+  <string name="setting_smaller_font">להשתמש בגופן קטן יותר</string>
+  <string name="setting_smaller_font_description">כדי לראות יותר פריטים בו־זמנית</string>
+  <string name="setting_show_product_description">הצגת תיאור המוצר</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">ימים לתפוגה מתקרבת</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -732,6 +780,10 @@
   <string name="setting_expand_bottom_sheets_description">במצב אופקי</string>
   <string name="setting_speed_up_start">צמצום זמן הפעלת היישום</string>
   <string name="setting_speed_up_start_description">יש השפעה על מכשירים מהירים בלבד</string>
+  <string name="setting_date_keyboard_input">מילוי תאריכים עם המקלדת</string>
+  <string name="setting_date_keyboard_input_description">במקום גלגלי בחירת תאריך</string>
+  <string name="setting_date_keyboard_reverse">להשתמש בתבנית תאריך הפוכה בקלט</string>
+  <string name="setting_date_keyboard_reverse_description">DDMMYY במקום YYMMDD</string>
   <string name="setting_loading_circle">להציג גלגל טעינה לכל הבקשות</string>
   <string name="setting_loading_circle_description">חיוני לרשתות אטיות</string>
   <string name="setting_tor">להשתמש ב־Tor</string>
@@ -745,6 +797,8 @@
   <string name="setting_synchronized">האפשרות שלהלן מסונכרנת עם השרת שלך.</string>
   <string name="settings_synchronized">הגדרות אלו מסונכרנות מול השרת שלך.</string>
   <string name="setting_message_duration">הצגת זמן להודעות</string>
+  <string name="setting_message_duration_description">נוגע רק להודעות תנועה</string>
+
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://he.demo.grocy.info</string>

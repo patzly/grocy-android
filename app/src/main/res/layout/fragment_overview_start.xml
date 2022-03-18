@@ -130,8 +130,9 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@id/app_bar"
-      android:animateLayoutChanges="true"
       android:overScrollMode="never"
+      android:animateLayoutChanges="true"
+      app:transitionTypeChanging="@{true}"
       app:progressBackgroundColor="@{@color/surface}"
       app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
@@ -155,7 +156,7 @@
             android:paddingBottom="80dp"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
-            transitionTypeChanging="@{true}">
+            app:transitionTypeChanging="@{true}">
 
             <LinearLayout
               android:layout_width="match_parent"

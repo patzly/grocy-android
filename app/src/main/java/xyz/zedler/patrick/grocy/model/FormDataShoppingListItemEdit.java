@@ -367,7 +367,8 @@ public class FormDataShoppingListItemEdit {
   }
 
   public boolean isFormValid() {
-    boolean valid = isProductNameValid();
+    boolean valid = shoppingListLive.getValue() != null;
+    valid = isProductNameValid() && valid;
     valid = isAmountValid() && valid;
     valid = isQuantityUnitValid() && valid;
     return valid;
@@ -410,7 +411,7 @@ public class FormDataShoppingListItemEdit {
     if (product == null) {
       return productBarcode;
     }
-    productBarcode.setProductId(product.getId());
+    productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
     return productBarcode;
   }

@@ -54,6 +54,8 @@ public final class Constants {
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
     public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
 
+    public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
+    public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
@@ -66,6 +68,8 @@ public final class Constants {
     public final static String DB_LAST_TIME_QUANTITY_UNITS = "db_last_time_quantity_units";
     public final static String DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS = "db_last_time_quantity_unit_conversions";
     public final static String DB_LAST_TIME_PRODUCTS = "db_last_time_products";
+    public final static String DB_LAST_TIME_PRODUCTS_LAST_PURCHASED = "db_last_time_products_last_purchased";
+    public final static String DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE = "db_last_time_products_average_price";
     public final static String DB_LAST_TIME_PRODUCT_BARCODES = "db_last_time_product_barcodes";
     public final static String DB_LAST_TIME_VOLATILE = "db_last_time_volatile";
     public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
@@ -140,6 +144,7 @@ public final class Constants {
       public final static String PRODUCT_GROUP = "product_presets_product_group_id"; // used for pref sync, DO NOT EDIT VALUE
       public final static String QUANTITY_UNIT = "product_presets_qu_id"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DEFAULT_DUE_DAYS = "product_presets_default_due_days"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String TREAT_OPENED_OUT_OF_STOCK = "product_presets_treat_opened_as_out_of_stock"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DISPLAY_DOTS_IN_STOCK = "show_icon_on_stock_overview_page_when_product_is_on_shopping_list"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DUE_SOON_DAYS = "stock_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
       public final static String SHOW_PURCHASED_DATE = "show_purchased_date_on_purchase"; // used for pref sync, DO NOT EDIT VALUE
@@ -230,6 +235,7 @@ public final class Constants {
       public final static String DEFAULT_PURCHASE_AMOUNT = "1";
       public final static String DEFAULT_CONSUME_AMOUNT = "1";
       public final static boolean USE_QUICK_CONSUME_AMOUNT = false;
+      public final static int TREAT_OPENED_OUT_OF_STOCK = 1;
     }
 
     public final static class SHOPPING_MODE {
@@ -345,6 +351,7 @@ public final class Constants {
     public final static String SHOW_OFFLINE = "show_offline";
     public final static String BARCODE = "barcode";
     public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
+    public final static String PENDING_PRODUCT_ID = "pending_product_id";
   }
 
   public final static class FAB {

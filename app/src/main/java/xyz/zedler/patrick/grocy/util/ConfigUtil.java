@@ -176,6 +176,14 @@ public class ConfigUtil {
             jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
         ).apply();
       }
+      if (jsonObject.has(STOCK.TREAT_OPENED_OUT_OF_STOCK)) {
+        prefs.edit().putInt(
+            STOCK.TREAT_OPENED_OUT_OF_STOCK,
+            getBoolean(jsonObject, STOCK.TREAT_OPENED_OUT_OF_STOCK, true, prefs) ? 1 : 0
+        ).apply();
+      } else {
+        prefs.edit().putInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, -1).apply();
+      }
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadUserSettings: " + e);

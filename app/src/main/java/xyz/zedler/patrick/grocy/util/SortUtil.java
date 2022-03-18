@@ -171,7 +171,7 @@ public class SortUtil {
   }
 
   public static void sortLocationsByName(
-      Context context, ArrayList<Location> locations, boolean ascending
+      Context context, List<Location> locations, boolean ascending
   ) {
     if (locations == null) {
       return;
@@ -195,7 +195,7 @@ public class SortUtil {
 
   public static void sortProductGroupsByName(
       Context context,
-      ArrayList<ProductGroup> productGroups,
+      List<ProductGroup> productGroups,
       boolean ascending
   ) {
     if (productGroups == null || productGroups.isEmpty()) {

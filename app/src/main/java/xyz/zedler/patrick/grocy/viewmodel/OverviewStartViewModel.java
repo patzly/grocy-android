@@ -32,6 +32,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -60,9 +61,9 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private final MutableLiveData<ArrayList<StockItem>> stockItemsLive;
-  private final MutableLiveData<ArrayList<ShoppingListItem>> shoppingListItemsLive;
-  private final MutableLiveData<ArrayList<Product>> productsLive;
+  private final MutableLiveData<List<StockItem>> stockItemsLive;
+  private final MutableLiveData<List<ShoppingListItem>> shoppingListItemsLive;
+  private final MutableLiveData<List<Product>> productsLive;
   private final MutableLiveData<Integer> itemsDueNextCountLive;
   private final MutableLiveData<Integer> itemsOverdueCountLive;
   private final MutableLiveData<Integer> itemsExpiredCountLive;
@@ -81,7 +82,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private ArrayList<StockItem> overdueItemsTemp;
   private ArrayList<StockItem> expiredItemsTemp;
   private ArrayList<MissingItem> missingItemsTemp;
-  private ArrayList<ShoppingList> shoppingLists;
+  private List<ShoppingList> shoppingLists;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -243,54 +244,52 @@ public class OverviewStartViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase(
-        (stockItems, shoppingListItems, shoppingLists, products) -> {
-          this.shoppingLists = shoppingLists;
-          this.stockItemsLive.setValue(stockItems);
-          this.shoppingListItemsLive.setValue(shoppingListItems);
-          this.productsLive.setValue(products);
+    repository.loadFromDatabase(data -> {
+      this.shoppingLists = data.getShoppingLists();
+      this.stockItemsLive.setValue(data.getStockItems());
+      this.shoppingListItemsLive.setValue(data.getShoppingListItems());
+      this.productsLive.setValue(data.getProducts());
 
-          ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
-          for (ShoppingListItem item : shoppingListItems) {
-            if (!item.hasProduct()) {
-              continue;
-            }
-            shoppingListItemsProductIds.add(item.getProductIdInt());
-          }
+      ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
+      for (ShoppingListItem item : data.getShoppingListItems()) {
+        if (!item.hasProduct()) {
+          continue;
+        }
+        shoppingListItemsProductIds.add(item.getProductIdInt());
+      }
 
-          int itemsDueCount = 0;
-          int itemsOverdueCount = 0;
-          int itemsExpiredCount = 0;
-          int itemsMissingCount = 0;
-          int missingItemsOnShoppingListCount = 0;
-          for (StockItem stockItem : stockItems) {
-            if (stockItem.isItemDue()) {
-              itemsDueCount++;
-            }
-            if (stockItem.isItemOverdue()) {
-              itemsOverdueCount++;
-            }
-            if (stockItem.isItemExpired()) {
-              itemsExpiredCount++;
-            }
-            if (stockItem.isItemMissing()) {
-              itemsMissingCount++;
-              if (shoppingListItemsProductIds.contains(stockItem.getProductId())) {
-                missingItemsOnShoppingListCount++;
-              }
-            }
-          }
-          itemsDueNextCountLive.setValue(itemsDueCount);
-          itemsOverdueCountLive.setValue(itemsOverdueCount);
-          itemsExpiredCountLive.setValue(itemsExpiredCount);
-          itemsMissingCountLive.setValue(itemsMissingCount);
-          itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
-
-          if (downloadAfterLoading) {
-            downloadData();
+      int itemsDueCount = 0;
+      int itemsOverdueCount = 0;
+      int itemsExpiredCount = 0;
+      int itemsMissingCount = 0;
+      int missingItemsOnShoppingListCount = 0;
+      for (StockItem stockItem : data.getStockItems()) {
+        if (stockItem.isItemDue()) {
+          itemsDueCount++;
+        }
+        if (stockItem.isItemOverdue()) {
+          itemsOverdueCount++;
+        }
+        if (stockItem.isItemExpired()) {
+          itemsExpiredCount++;
+        }
+        if (stockItem.isItemMissing()) {
+          itemsMissingCount++;
+          if (shoppingListItemsProductIds.contains(stockItem.getProductId())) {
+            missingItemsOnShoppingListCount++;
           }
         }
-    );
+      }
+      itemsDueNextCountLive.setValue(itemsDueCount);
+      itemsOverdueCountLive.setValue(itemsOverdueCount);
+      itemsExpiredCountLive.setValue(itemsExpiredCount);
+      itemsMissingCountLive.setValue(itemsMissingCount);
+      itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
+
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -427,14 +426,9 @@ public class OverviewStartViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
+    repository.updateDatabase(stockItemsTemp, () -> {});
     infoFullscreenLive.setValue(null);
-    repository.updateDatabase(
-        stockItemsTemp,
-        this.shoppingListItemsLive.getValue(),
-        this.shoppingLists,
-        this.productsLive.getValue(),
-        () -> this.stockItemsLive.setValue(stockItemsTemp)
-    );
+    this.stockItemsLive.setValue(stockItemsTemp);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {

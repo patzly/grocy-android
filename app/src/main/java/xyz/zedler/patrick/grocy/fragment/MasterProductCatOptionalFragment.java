@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
@@ -249,11 +250,11 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void showProductGroupsBottomSheet() {
     Bundle bundle = new Bundle();
-    ArrayList<ProductGroup> productGroups = viewModel.getFormData()
+    List<ProductGroup> productGroups = viewModel.getFormData()
         .getProductGroupsLive().getValue();
     bundle.putParcelableArrayList(
         Constants.ARGUMENT.PRODUCT_GROUPS,
-        productGroups
+        productGroups != null ? new ArrayList<>(productGroups) : null
     );
     bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
 

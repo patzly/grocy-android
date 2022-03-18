@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -41,6 +42,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PendingProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -50,6 +52,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -81,19 +84,21 @@ public class PurchaseViewModel extends BaseViewModel {
   private final PurchaseRepository repository;
   private final FormDataPurchase formData;
 
-  private ArrayList<Product> products;
+  private List<Product> products;
   private HashMap<Integer, Product> productHashMap;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<PendingProduct> pendingProducts;
+  private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private ArrayList<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnitConversion> unitConversions;
   private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
-  private ArrayList<ProductBarcode> barcodes;
-  private ArrayList<Store> stores;
-  private ArrayList<Location> locations;
-  private ArrayList<ShoppingListItem> shoppingListItems;
+  private List<ProductBarcode> barcodes;
+  private List<Store> stores;
+  private List<Location> locations;
+  private List<ShoppingListItem> shoppingListItems;
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
+  private ArrayList<Integer> batchPendingProductIds;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -140,25 +145,27 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, qUs, conversions, stores,
-        locations, shoppingListItems) -> {
-      this.products = products;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      this.pendingProducts = data.getPendingProducts();
+      formData.getProductsLive().setValue(
+              appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
+      );
       productHashMap = ArrayUtil.getProductsHashMap(products);
-      this.barcodes = barcodes;
-      this.quantityUnits = qUs;
+      this.barcodes = data.getBarcodes();
+      this.quantityUnits = data.getQuantityUnits();
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-      this.unitConversions = conversions;
+      this.unitConversions = data.getQuantityUnitConversions();
       unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-      this.stores = stores;
-      this.locations = locations;
-      this.shoppingListItems = shoppingListItems;
+      this.stores = data.getStores();
+      this.locations = data.getLocations();
+      this.shoppingListItems = data.getShoppingListItems();
       shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       fillShoppingListItemAmountsHashMap();
       if (downloadAfterLoading) {
         downloadData();
       }
-    }, batchShoppingListItemIds != null);
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -171,12 +178,14 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> onQueueEmpty(true), this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(
+                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
+          );
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
           unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
@@ -192,13 +201,13 @@ public class PurchaseViewModel extends BaseViewModel {
         )
     );
     if (batchShoppingListItemIds != null) {
-      dlHelper.updateShoppingListItems(dbChangedTime, items -> {
+      dlHelper.updateShoppingListItems(dbChangedTime, (items) -> {
         this.shoppingListItems = items;
         shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       });
     }
     if (queue.isEmpty()) {
-      onQueueEmpty(false);
+      onQueueEmpty();
       return;
     }
 
@@ -222,12 +231,8 @@ public class PurchaseViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty(boolean offlineDataUpdated) {
+  private void onQueueEmpty() {
     fillShoppingListItemAmountsHashMap();
-    if (offlineDataUpdated) {
-      repository.updateDatabase(products, barcodes,
-          quantityUnits, unitConversions, stores, locations, shoppingListItems);
-    }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -382,6 +387,17 @@ public class PurchaseViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
   }
 
+  public void setPendingProduct(int pendingProductId) {
+    PendingProduct pendingProduct = PendingProduct
+            .getFromId(formData.getPendingProductsLive(), pendingProductId);
+    if (pendingProduct == null) return;
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getName());
+    formData.getAmountLive().setValue(NumUtil.trim(1));
+    formData.isFormValid();
+    sendEvent(Event.FOCUS_INVALID_VIEWS);
+  }
+
   private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
       Product product,
       Integer forcedQuId
@@ -409,6 +425,7 @@ public class PurchaseViewModel extends BaseViewModel {
         continue;
       }
       unitFactors.put(unit, conversion.getFactor());
+      quIdsInHashMap.add(unit.getId());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
@@ -449,7 +466,7 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(barcode)) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductId());
+          product = productHashMap.get(code.getProductIdInt());
         }
       }
     }
@@ -486,7 +503,7 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductId());
+          product = productHashMap.get(code.getProductIdInt());
         }
       }
       if (product != null) {
@@ -535,6 +552,32 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     formData.getShoppingListItemLive().setValue(currentItem);
     setProduct(null, null, currentItem);
+  }
+
+  public void showPendingProductsBottomSheet() {
+    showBottomSheet(new PendingProductsBottomSheet());
+  }
+
+  public void fillWithPendingProduct() {
+    if (formData.getPendingProductsLive().getValue() == null) {
+      return;
+    }
+    if (formData.getBatchModeItemIndexLive().getValue() == null) {
+      return;
+    }
+    int index = formData.getBatchModeItemIndexLive().getValue();
+    if (index >= batchPendingProductIds.size()) {
+      return;
+    }
+    int currentItemId = batchPendingProductIds.get(index);
+    PendingProduct pendingProduct = PendingProduct
+            .getFromId(formData.getPendingProductsLive(), currentItemId);
+    if (pendingProduct == null) {
+      return;
+    }
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getName());
+    //formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.get()));
   }
 
   public boolean batchModeNextItem() {  // also returns whether there was a next item
@@ -680,16 +723,6 @@ public class PurchaseViewModel extends BaseViewModel {
     return productHashMap;
   }
 
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-      if (product.isActive()) {
-        activeProductsOnly.add(product);
-      }
-    }
-    return activeProductsOnly;
-  }
-
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
   }
@@ -760,13 +793,15 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void showDueDateBottomSheet(boolean hasFocus) {
     ProductDetails productDetails = formData.getProductDetailsLive().getValue();
-    if (!hasFocus || !formData.isProductNameValid() || productDetails == null) {
+    if (!hasFocus || !formData.isProductNameValid()) {
       return;
     }
     Bundle bundle = new Bundle();
     bundle.putString(
         Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW,
-        String.valueOf(productDetails.getProduct().getDefaultDueDaysInt())
+        productDetails != null
+                ? String.valueOf(productDetails.getProduct().getDefaultDueDaysInt())
+                : String.valueOf(0)
     );
     bundle.putString(
         Constants.ARGUMENT.SELECTED_DATE,
@@ -781,7 +816,7 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, stores);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.STORES, new ArrayList<>(stores));
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
         formData.getStoreLive().getValue() != null
@@ -797,7 +832,7 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(
         Constants.ARGUMENT.SELECTED_ID,
         formData.getLocationLive().getValue() != null
@@ -835,6 +870,26 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public void setBatchPendingProductIds(ArrayList<Integer> batchPendingProductIds) {
+    ArrayList<Integer> ids = new ArrayList<>();
+    if (formData.getPendingProductsLive().getValue() == null) return;
+    for (PendingProduct pendingProduct : formData.getPendingProductsLive().getValue()) {
+      ids.add(pendingProduct.getId());
+    }
+    this.batchPendingProductIds = ids;
+  }
+
+  private ArrayList<Product> appendPendingProducts(
+          ArrayList<Product> products,
+          List<PendingProduct> pendingProducts
+  ) {
+    ArrayList<Product> newList = new ArrayList<>(products);
+    if (pendingProducts != null) {
+      newList.addAll(pendingProducts);
+    }
+    return newList;
   }
 
   public boolean isQuickModeEnabled() {

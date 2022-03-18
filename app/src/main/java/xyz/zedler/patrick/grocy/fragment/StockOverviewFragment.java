@@ -152,13 +152,16 @@ public class StockOverviewFragment extends BaseFragment implements
             items,
             viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getProductAveragePriceHashMap(),
+            viewModel.getProductLastPurchasedHashMap(),
             viewModel.getProductGroupHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getLocationHashMap(),
             viewModel.getProductIdsMissingStockItems(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
-            viewModel.getGroupingMode()
+            viewModel.getGroupingMode(),
+            viewModel.getExtraField()
         );
       } else {
         binding.recycler.setAdapter(
@@ -167,6 +170,8 @@ public class StockOverviewFragment extends BaseFragment implements
                 items,
                 viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getProductAveragePriceHashMap(),
+                viewModel.getProductLastPurchasedHashMap(),
                 viewModel.getProductGroupHashMap(),
                 viewModel.getProductHashMap(),
                 viewModel.getLocationHashMap(),
@@ -178,7 +183,8 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getCurrency(),
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
-                viewModel.getGroupingMode()
+                viewModel.getGroupingMode(),
+                viewModel.getExtraField()
             )
         );
         binding.recycler.scheduleLayoutAnimation();

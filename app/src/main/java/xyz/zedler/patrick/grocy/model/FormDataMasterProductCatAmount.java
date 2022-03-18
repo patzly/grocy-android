@@ -27,7 +27,7 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -43,6 +43,8 @@ public class FormDataMasterProductCatAmount {
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<String> minAmountLive;
   private final MutableLiveData<Boolean> accumulateMinAmount;
+  private final MutableLiveData<Boolean> treatOpenedAsOutOfStockVisible;
+  private final MutableLiveData<Boolean> treatOpenedAsOutOfStock;
   private final MutableLiveData<String> quickConsumeAmountLive;
   private final LiveData<String> quickConsumeAmountTitleLive;
   private final MutableLiveData<String> factorPurchaseToStockLive;
@@ -52,7 +54,6 @@ public class FormDataMasterProductCatAmount {
   private final LiveData<Boolean> tareWeightErrorLive;
   private final MutableLiveData<Boolean> disableStockCheckLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
-  private ArrayList<QuantityUnit> quantityUnits;
 
   private boolean filledWithProduct;
 
@@ -62,6 +63,8 @@ public class FormDataMasterProductCatAmount {
     quantityUnitLive = new MutableLiveData<>();
     minAmountLive = new MutableLiveData<>();
     accumulateMinAmount = new MutableLiveData<>(false);
+    treatOpenedAsOutOfStockVisible = new MutableLiveData<>(true);
+    treatOpenedAsOutOfStock = new MutableLiveData<>(false);
     quickConsumeAmountLive = new MutableLiveData<>();
     quickConsumeAmountTitleLive = Transformations.map(
         quantityUnitLive,
@@ -111,6 +114,14 @@ public class FormDataMasterProductCatAmount {
     return accumulateMinAmount;
   }
 
+  public MutableLiveData<Boolean> getTreatOpenedAsOutOfStockVisible() {
+    return treatOpenedAsOutOfStockVisible;
+  }
+
+  public MutableLiveData<Boolean> getTreatOpenedAsOutOfStock() {
+    return treatOpenedAsOutOfStock;
+  }
+
   public MutableLiveData<String> getQuickConsumeAmountLive() {
     return quickConsumeAmountLive;
   }
@@ -141,10 +152,6 @@ public class FormDataMasterProductCatAmount {
 
   public MutableLiveData<Boolean> getDisableStockCheckLive() {
     return disableStockCheckLive;
-  }
-
-  public void setQuantityUnits(ArrayList<QuantityUnit> quantityUnits) {
-    this.quantityUnits = quantityUnits;
   }
 
   public void setAmount(String input, Bundle argsBundle) {
@@ -195,7 +202,7 @@ public class FormDataMasterProductCatAmount {
     return number;
   }
 
-  private QuantityUnit getQuantityUnitFromId(ArrayList<QuantityUnit> quantityUnits, int id) {
+  private QuantityUnit getQuantityUnitFromId(List<QuantityUnit> quantityUnits, int id) {
     if (quantityUnits == null) {
       return null;
     }
@@ -233,6 +240,11 @@ public class FormDataMasterProductCatAmount {
     }
     product.setMinStockAmount(minAmountLive.getValue());
     product.setAccumulateSubProductsMinStockAmount(accumulateMinAmount.getValue());
+    product.setTreatOpenedAsOutOfStock(
+        treatOpenedAsOutOfStockVisible.getValue()
+            ? treatOpenedAsOutOfStock.getValue() ? "1" : "0"
+            : "-1"
+    );
     product.setQuickConsumeAmount(quickConsumeAmountLive.getValue());
     product.setQuFactorPurchaseToStock(factorPurchaseToStockLive.getValue());
     product.setEnableTareWeightHandling(enableTareWeightHandlingLive.getValue());
@@ -241,7 +253,7 @@ public class FormDataMasterProductCatAmount {
     return product;
   }
 
-  public void fillWithProductIfNecessary(Product product, ArrayList<QuantityUnit> quantityUnits) {
+  public void fillWithProductIfNecessary(Product product, List<QuantityUnit> quantityUnits) {
     if (filledWithProduct || product == null) {
       return;
     }
@@ -252,6 +264,10 @@ public class FormDataMasterProductCatAmount {
     String tareWeight = NumUtil.trim(product.getTareWeightDouble());
     minAmountLive.setValue(minAmount);
     accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
+    treatOpenedAsOutOfStockVisible.setValue(product.getTreatOpenedAsOutOfStock() != null
+        && !product.getTreatOpenedAsOutOfStock().isEmpty()
+        && !product.getTreatOpenedAsOutOfStock().equals("-1"));
+    treatOpenedAsOutOfStock.setValue(product.getTreatOpenedAsOutOfStockBoolean());
     quickConsumeAmountLive.setValue(quickAmount);
     factorPurchaseToStockLive.setValue(factor);
     enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());

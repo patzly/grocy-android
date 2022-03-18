@@ -20,7 +20,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/linear__container"
-  android:orientation="vertical"
+  android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:minHeight="64dp"
@@ -28,65 +28,82 @@
   android:focusable="true"
   android:background="@drawable/bg_list_item"
   android:padding="16dp"
-  android:gravity="center_vertical">
+  android:gravity="center_vertical"
+  android:weightSum="1">
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:layout_weight="1">
 
-    <TextView
-      android:id="@+id/text__name"
-      style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <TextView
+          android:id="@+id/text__name"
+          style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:singleLine="true" />
+
+      <View
+          android:id="@+id/view__on_shopping_list"
+          android:layout_width="5dp"
+          android:layout_height="5dp"
+          android:layout_gravity="center_vertical"
+          android:layout_marginTop="1dp"
+          android:layout_marginStart="6dp"
+          android:visibility="gone"
+          android:background="@drawable/shape_circle"
+          android:backgroundTint="@color/retro_blue_fg" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="20dp"
+        android:gravity="bottom">
+
+      <TextView
+          android:id="@+id/text__amount"
+          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear__days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="20dp"
+        android:gravity="bottom">
+
+      <TextView
+          android:id="@+id/text__days"
+          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="true" />
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <TextView
+      android:id="@+id/extra_field"
+      style="@style/Widget.Grocy.TextView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:singleLine="true" />
-
-    <View
-      android:id="@+id/view__on_shopping_list"
-      android:layout_width="5dp"
-      android:layout_height="5dp"
-      android:layout_gravity="center_vertical"
-      android:layout_marginTop="1dp"
-      android:layout_marginStart="6dp"
-      android:visibility="gone"
-      android:background="@drawable/shape_circle"
-      android:backgroundTint="@color/retro_blue_fg" />
-
-  </LinearLayout>
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:minHeight="20dp"
-    android:gravity="bottom">
-
-    <TextView
-      android:id="@+id/text__amount"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true" />
-
-  </LinearLayout>
-
-  <LinearLayout
-    android:id="@+id/linear__days"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:minHeight="20dp"
-    android:gravity="bottom">
-
-    <TextView
-      android:id="@+id/text__days"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true" />
-
-  </LinearLayout>
+      android:layout_marginStart="16dp"
+      android:visibility="gone"/>
 
 </LinearLayout>

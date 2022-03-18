@@ -19,39 +19,24 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.model.Task;
 
 @Dao
 public interface TaskDao {
 
   @Query("SELECT * FROM task_table")
-  LiveData<List<Task>> getAllLive();
-
-  @Query("SELECT * FROM task_table")
-  List<Task> getAll();
-
-  @Query("SELECT COUNT(*) FROM task_table")
-  int count();
+  Single<List<Task>> getTasks();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<Task> tasks);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(Task task);
-
-  @Delete
-  void delete(Task task);
+  Single<List<Long>> insertTasks(List<Task> tasks);
 
   @Query("DELETE FROM task_table")
-  void deleteAll();
+  Single<Integer> deleteTasks();
 
 }

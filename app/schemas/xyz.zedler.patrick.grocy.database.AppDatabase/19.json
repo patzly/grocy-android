@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 19,
-    "identityHash": "36bb6cc0db89426afdc40ff4e09652ee",
+    "identityHash": "d020adad9f04076139688a65bde682b3",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -106,7 +106,7 @@
       },
       {
         "tableName": "product_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_group_id` TEXT, `active` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `qu_id_purchase` TEXT, `qu_id_stock` TEXT, `qu_factor_purchase_to_stock` TEXT, `min_stock_amount` TEXT, `default_best_before_days` TEXT, `default_best_before_days_after_open` TEXT, `default_best_before_days_after_freezing` TEXT, `default_best_before_days_after_thawing` TEXT, `picture_file_name` TEXT, `enable_tare_weight_handling` TEXT, `tare_weight` TEXT, `not_check_stock_fulfillment_for_recipes` TEXT, `parent_product_id` TEXT, `calories` TEXT, `cumulate_min_stock_amount_of_sub_products` TEXT, `due_type` TEXT, `quick_consume_amount` TEXT, `hide_on_stock_overview` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_group_id` TEXT, `active` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `qu_id_purchase` TEXT, `qu_id_stock` TEXT, `qu_factor_purchase_to_stock` TEXT, `min_stock_amount` TEXT, `default_best_before_days` TEXT, `default_best_before_days_after_open` TEXT, `default_best_before_days_after_freezing` TEXT, `default_best_before_days_after_thawing` TEXT, `picture_file_name` TEXT, `enable_tare_weight_handling` TEXT, `tare_weight` TEXT, `not_check_stock_fulfillment_for_recipes` TEXT, `parent_product_id` TEXT, `calories` TEXT, `cumulate_min_stock_amount_of_sub_products` TEXT, `treat_opened_as_out_of_stock` TEXT, `due_type` TEXT, `quick_consume_amount` TEXT, `hide_on_stock_overview` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -237,6 +237,12 @@
           {
             "fieldPath": "accumulateSubProductsMinStockAmount",
             "columnName": "cumulate_min_stock_amount_of_sub_products",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "treatOpenedAsOutOfStock",
+            "columnName": "treat_opened_as_out_of_stock",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -822,7 +828,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '36bb6cc0db89426afdc40ff4e09652ee')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd020adad9f04076139688a65bde682b3')"
     ]
   }
 }

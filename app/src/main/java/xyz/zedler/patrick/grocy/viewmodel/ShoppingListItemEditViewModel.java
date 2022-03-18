@@ -32,6 +32,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -70,11 +71,11 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<ShoppingList> shoppingLists;
-  private ArrayList<Product> products;
-  private ArrayList<ProductBarcode> barcodes;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<QuantityUnitConversion> unitConversions;
+  private List<ShoppingList> shoppingLists;
+  private List<Product> products;
+  private List<ProductBarcode> barcodes;
+  private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> unitConversions;
 
   private DownloadHelper.Queue currentQueueLoading;
   private Runnable queueEmptyAction;
@@ -107,13 +108,13 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((shoppingLists, products, barcodes, qUs, conversions) -> {
-      this.shoppingLists = shoppingLists;
-      this.products = products;
-      this.barcodes = barcodes;
-      this.quantityUnits = qUs;
-      this.unitConversions = conversions;
-      formData.getProductsLive().setValue(getActiveProductsOnly(products));
+    repository.loadFromDatabase(data -> {
+      this.shoppingLists = data.getShoppingLists();
+      this.products = data.getProducts();
+      this.barcodes = data.getBarcodes();
+      this.quantityUnits = data.getQuantityUnits();
+      this.unitConversions = data.getQuantityUnitConversions();
+      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (!isActionEdit) {
         formData.getShoppingListLive().setValue(getLastShoppingList());
       }
@@ -138,7 +139,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> onQueueEmpty(true), this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
           this.shoppingLists = shoppingLists;
@@ -147,7 +148,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           }
         }), dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateProductBarcodes(
@@ -157,7 +158,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
         )
     );
     if (queue.isEmpty()) {
-      onQueueEmpty(false);
+      onQueueEmpty();
       return;
     }
 
@@ -180,13 +181,9 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty(boolean offlineDataUpdated) {
+  private void onQueueEmpty() {
     if (isOffline()) {
       setOfflineLive(false);
-    }
-    if (offlineDataUpdated) {
-      repository.updateDatabase(shoppingLists, products, barcodes,
-          quantityUnits, unitConversions, null);
     }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
@@ -428,16 +425,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       showBottomSheet(new InputProductBottomSheet(), bundle);
     }
     return product;
-  }
-
-  private ArrayList<Product> getActiveProductsOnly(ArrayList<Product> allProducts) {
-    ArrayList<Product> activeProductsOnly = new ArrayList<>();
-    for (Product product : allProducts) {
-      if (product.isActive()) {
-        activeProductsOnly.add(product);
-      }
-    }
-    return activeProductsOnly;
   }
 
   private QuantityUnit getQuantityUnit(int id) {

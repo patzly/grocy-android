@@ -20,246 +20,85 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
-import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.model.TaskCategory;
 
 public class MasterObjectListRepository {
 
   private final AppDatabase appDatabase;
-  private final String entity;
 
-  public MasterObjectListRepository(Application application, String entity) {
+  public MasterObjectListRepository(Application application) {
     this.appDatabase = AppDatabase.getAppDatabase(application);
-    this.entity = entity;
   }
 
   public interface DataListener {
-
-    void actionFinished(ArrayList<Object> objects);
+    void actionFinished(MasterObjectData data);
   }
 
-  public interface DataListenerProducts {
+  public static class MasterObjectData {
 
-    void actionFinished(
-        ArrayList<Object> objects,
-        ArrayList<ProductGroup> productGroups,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<Location> locations
-    );
-  }
+    private final List<Product> products;
+    private final List<ProductGroup> productGroups;
+    private final List<Store> stores;
+    private final List<Location> locations;
+    private final List<QuantityUnit> quantityUnits;
 
-  public interface DataUpdatedListener {
+    public MasterObjectData(
+        List<Product> products,
+        List<ProductGroup> productGroups,
+        List<Store> stores,
+        List<Location> locations,
+        List<QuantityUnit> quantityUnits
+    ) {
+      this.products = products;
+      this.productGroups = productGroups;
+      this.stores = stores;
+      this.locations = locations;
+      this.quantityUnits = quantityUnits;
+    }
 
-    void actionFinished();
-  }
+    public List<Product> getProducts() {
+      return products;
+    }
 
-  public interface ObjectsInsertedListener {
+    public List<ProductGroup> getProductGroups() {
+      return productGroups;
+    }
 
-    void actionFinished();
+    public List<Store> getStores() {
+      return stores;
+    }
+
+    public List<Location> getLocations() {
+      return locations;
+    }
+
+    public List<QuantityUnit> getQuantityUnits() {
+      return quantityUnits;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
-    new loadAsyncTask(appDatabase, entity, listener).execute();
-  }
-
-  public void loadFromDatabaseProducts(DataListenerProducts listener) {
-    new loadAsyncTask(appDatabase, entity, listener).execute();
-  }
-
-  private static class loadAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final String entity;
-    private final DataListener listener;
-    private final DataListenerProducts listenerProducts;
-
-    private ArrayList<Object> objects;
-    private ArrayList<ProductGroup> productGroups;
-    private ArrayList<QuantityUnit> quantityUnits;
-    private ArrayList<Location> locations;
-
-    loadAsyncTask(AppDatabase appDatabase, String entity, DataListener listener) {
-      this.appDatabase = appDatabase;
-      this.entity = entity;
-      this.listener = listener;
-      this.listenerProducts = null;
-    }
-
-    loadAsyncTask(AppDatabase appDatabase, String entity, DataListenerProducts listener) {
-      this.appDatabase = appDatabase;
-      this.entity = entity;
-      this.listener = null;
-      this.listenerProducts = listener;
-    }
-
-    @Override
-    protected final Void doInBackground(Void... params) {
-      switch (entity) {
-        case GrocyApi.ENTITY.PRODUCTS:
-          objects = new ArrayList<>(appDatabase.productDao().getAll());
-          break;
-        case GrocyApi.ENTITY.QUANTITY_UNITS:
-          objects = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-          break;
-        case GrocyApi.ENTITY.LOCATIONS:
-          objects = new ArrayList<>(appDatabase.locationDao().getAll());
-          break;
-        case GrocyApi.ENTITY.PRODUCT_GROUPS:
-          objects = new ArrayList<>(appDatabase.productGroupDao().getAll());
-          break;
-        case ENTITY.TASK_CATEGORIES:
-          objects = new ArrayList<>(appDatabase.taskCategoryDao().getAll());
-          break;
-        default: // STORES
-          objects = new ArrayList<>(appDatabase.storeDao().getAll());
-      }
-      if (listenerProducts != null) {
-        productGroups = new ArrayList<>(appDatabase.productGroupDao().getAll());
-        quantityUnits = new ArrayList<>(appDatabase.quantityUnitDao().getAll());
-        locations = new ArrayList<>(appDatabase.locationDao().getAll());
-      }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished(objects);
-      }
-      if (listenerProducts != null) {
-        listenerProducts.actionFinished(
-            objects, productGroups, quantityUnits, locations
-        );
-      }
-    }
-  }
-
-  public void updateDatabase(
-      ArrayList<Object> objects,
-      DataUpdatedListener listener
-  ) {
-    new updateAsyncTask(
-        appDatabase,
-        entity,
-        objects,
-        listener
-    ).execute();
-  }
-
-  public void updateDatabaseProducts(
-      ArrayList<Object> objects,
-      ArrayList<ProductGroup> productGroups,
-      ArrayList<QuantityUnit> quantityUnits,
-      ArrayList<Location> locations,
-      DataUpdatedListener listener
-  ) {
-    new updateAsyncTask(
-        appDatabase,
-        entity,
-        objects,
-        productGroups,
-        quantityUnits,
-        locations,
-        listener
-    ).execute();
-  }
-
-  private static class updateAsyncTask extends AsyncTask<Void, Void, Void> {
-
-    private final AppDatabase appDatabase;
-    private final String entity;
-    private final DataUpdatedListener listener;
-
-    private final List<Object> objects;
-    private final List<ProductGroup> productGroups;
-    private final List<QuantityUnit> quantityUnits;
-    private final List<Location> locations;
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        String entity,
-        ArrayList<Object> objects,
-        DataUpdatedListener listener
-    ) {
-      this.appDatabase = appDatabase;
-      this.entity = entity;
-      this.listener = listener;
-      this.objects = objects;
-      this.productGroups = null;
-      this.quantityUnits = null;
-      this.locations = null;
-    }
-
-    updateAsyncTask(
-        AppDatabase appDatabase,
-        String entity,
-        ArrayList<Object> objects,
-        ArrayList<ProductGroup> productGroups,
-        ArrayList<QuantityUnit> quantityUnits,
-        ArrayList<Location> locations,
-        DataUpdatedListener listener
-    ) {
-      this.appDatabase = appDatabase;
-      this.entity = entity;
-      this.listener = listener;
-      this.objects = objects;
-      this.productGroups = productGroups;
-      this.quantityUnits = quantityUnits;
-      this.locations = locations;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    protected final Void doInBackground(Void... params) {
-      switch (entity) {
-        case GrocyApi.ENTITY.PRODUCTS:
-          appDatabase.productDao().deleteAll();
-          appDatabase.productDao().insertAll((List<Product>) (Object) objects);
-          appDatabase.quantityUnitDao().deleteAll();
-          appDatabase.quantityUnitDao().insertAll(quantityUnits);
-          appDatabase.productGroupDao().deleteAll();
-          appDatabase.productGroupDao().insertAll(productGroups);
-          appDatabase.locationDao().deleteAll();
-          appDatabase.locationDao().insertAll(locations);
-          break;
-        case GrocyApi.ENTITY.QUANTITY_UNITS:
-          appDatabase.quantityUnitDao().deleteAll();
-          appDatabase.quantityUnitDao().insertAll((List<QuantityUnit>) (Object) objects);
-          break;
-        case GrocyApi.ENTITY.LOCATIONS:
-          appDatabase.locationDao().deleteAll();
-          appDatabase.locationDao().insertAll((List<Location>) (Object) objects);
-          break;
-        case GrocyApi.ENTITY.PRODUCT_GROUPS:
-          appDatabase.productGroupDao().deleteAll();
-          appDatabase.productGroupDao().insertAll((List<ProductGroup>) (Object) objects);
-          break;
-        case ENTITY.TASK_CATEGORIES:
-          appDatabase.taskCategoryDao().deleteAll();
-          appDatabase.taskCategoryDao().insertAll((List<TaskCategory>) (Object) objects);
-          break;
-        default: // STORES
-          appDatabase.storeDao().deleteAll();
-          appDatabase.storeDao().insertAll((List<Store>) (Object) objects);
-      }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      if (listener != null) {
-        listener.actionFinished();
-      }
-    }
+    Single
+        .zip(
+            appDatabase.productDao().getProducts(),
+            appDatabase.productGroupDao().getProductGroups(),
+            appDatabase.storeDao().getStores(),
+            appDatabase.locationDao().getLocations(),
+            appDatabase.quantityUnitDao().getQuantityUnits(),
+            MasterObjectData::new
+        )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(listener::actionFinished)
+        .subscribe();
   }
 }

@@ -30,14 +30,6 @@
     tools:ignore="AlwaysShowAction" />
 
   <item
-    android:id="@+id/action_open"
-    android:title="@string/action_open"
-    android:icon="@drawable/ic_round_open_menu"
-    app:showAsAction="always"
-    android:visible="false"
-    tools:ignore="AlwaysShowAction" />
-
-  <item
     android:id="@+id/action_clear_form"
     android:title="@string/action_clear_form"
     android:icon="@drawable/ic_round_cancel"

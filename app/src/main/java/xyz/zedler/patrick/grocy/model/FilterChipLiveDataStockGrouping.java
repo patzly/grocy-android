@@ -89,10 +89,10 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
         groupBy = R.string.property_due_date_next;
         break;
       case GROUPING_CALORIES_PER_STOCK:
-        groupBy = R.string.property_calories_per_unit;
+        groupBy = R.string.property_calories_unit;
         break;
       case GROUPING_CALORIES:
-        groupBy = R.string.property_calories;
+        groupBy = R.string.property_calories_total;
         break;
       case GROUPING_MIN_STOCK_AMOUNT:
         groupBy = R.string.property_amount_min_stock;
@@ -166,13 +166,13 @@ public class FilterChipLiveDataStockGrouping extends FilterChipLiveData {
     menuItemDataList.add(new MenuItemData(
         ID_GROUPING_CALORIES_PER_STOCK,
         0,
-        application.getString(R.string.property_calories_per_unit),
+        application.getString(R.string.property_calories_unit),
         groupingMode.equals(GROUPING_CALORIES_PER_STOCK)
     ));
     menuItemDataList.add(new MenuItemData(
         ID_GROUPING_CALORIES,
         0,
-        application.getString(R.string.property_calories),
+        application.getString(R.string.property_calories_total),
         groupingMode.equals(GROUPING_CALORIES)
     ));
     menuItemDataList.add(new MenuItemData(

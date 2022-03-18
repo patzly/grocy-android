@@ -19,12 +19,11 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.Location;
 
@@ -32,24 +31,12 @@ import xyz.zedler.patrick.grocy.model.Location;
 public interface LocationDao {
 
   @Query("SELECT * FROM location_table")
-  LiveData<List<Location>> getAllLive();
-
-  @Query("SELECT * FROM location_table")
-  List<Location> getAll();
-
-  @Query("SELECT COUNT(*) FROM location_table")
-  int count();
+  Single<List<Location>> getLocations();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<Location> locations);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(Location location);
-
-  @Delete
-  void delete(Location location);
+  Single<List<Long>> insertLocations(List<Location> locations);
 
   @Query("DELETE FROM location_table")
-  void deleteAll();
+  Single<Integer> deleteLocations();
 
 }

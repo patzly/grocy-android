@@ -1023,5 +1023,9 @@
       android:name="forbidCreateProduct"
       app:argType="boolean"
       android:defaultValue="false" />
+    <argument
+        android:name="pendingProductsActive"
+        app:argType="boolean"
+        android:defaultValue="false" />
   </fragment>
 </navigation>

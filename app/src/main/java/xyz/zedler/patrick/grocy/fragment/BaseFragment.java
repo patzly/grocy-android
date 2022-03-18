@@ -93,6 +93,9 @@ public class BaseFragment extends Fragment {
   public void clearFields() {
   }
 
+  public void addPendingProducts() {
+  }
+
   public void editObject(Object object) {
   }
 

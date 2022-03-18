@@ -147,6 +147,13 @@
     <item quantity="many">%1$d в запасах</item>
     <item quantity="other">%1$d в запасах</item>
   </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d вскрыт</item>
+    <item quantity="few">%1$d вскрыто</item>
+    <item quantity="many">%1$d вскрыто</item>
+    <item quantity="other">%1$d вскрыто</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">Использовано %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -250,8 +257,8 @@
   <string name="option_synced_error">Опция не была синхронизирована</string>
   <string name="msg_choose_product">Отсканированный вами штрихкод еще не связан с продуктом. Вы можете связать его с существующим продуктом или создать для него новый.</string>
   <string name="msg_product_name_off">Название продукта для штрихкода взято из Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Невозможно найти штрихкод на Open Food Facts.</string>
-  <string name="msg_product_name_off_empty">Штрихкод отсутствует в базе данных Open Food Facts.</string>
+  <string name="msg_product_name_lookup_error">Невозможно найти штрихкод на Open Food Facts.</string>
+  <string name="msg_product_name_lookup_empty">Штрихкод отсутствует в базе данных Open Food Facts.</string>
   <string name="msg_off_option_deactivated">Для автоматического предложения названия продукта вы можете активировать поиск по сервису Open Food Facts в настройках.</string>
   <string name="msg_create_new_product_filled">Создать новый продукт \"%1$s\"</string>
   <string name="msg_create_new_product">Создать новый продукт</string>
@@ -278,6 +285,7 @@
   <string name="msg_welcome_to_grocy">Добро пожаловать в Grocy Android! \n\nДля продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
   <string name="msg_choose_option_below">Пожалуйста, выберите один вариант снизу</string>
   <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
+  <string name="msg_qr_code_scan_token">Вы используете надстройку Grocy Home Assistant. Создайте долговечный токен доступа в настройках вашего профиля Home Assistant (последний раздел). Под полем токена нажмите на \"Сгенерировать QR-код\" и отсканируйте его здесь.</string>
   <string name="msg_port_connection_info_without_port">Приложение подключится к порту %1$s.\тЕсли вы хотите подключить его к другому порту, вы можете добавить порт к адресу.\nПример: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Приложение подключится к порту %1$s.</string>
   <string name="msg_not_implemented_yet">Скоро это будет реализовано. До тех пор используйте, пожалуйста, веб-интерфейс.</string>
@@ -334,6 +342,7 @@
   <string name="msg_help_home_assistant_login_help_show">Нажмите здесь, чтобы показать подсказки.</string>
   <string name="msg_help_home_assistant_login_help_hide">Нажмите здесь, чтобы скрыть подсказки.</string>
   <string name="msg_help_home_assistant_login_server">В поле ниже вы также можете ввести URL-адрес вашего облака Nabu Casa, если вы используете эту службу. Нажмите на эту карточку, чтобы перейти на сайт Nabu Casa.</string>
+  <string name="msg_help_home_assistant_login_token">Вы можете создать токен доступа с длительным сроком доступа в настройках вашего профиля Home Assistant (последний раздел). Нажмите здесь, чтобы открыть URL-адрес сверху.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Вернитесь назад или нажмите на эту карточку, чтобы отсканировать QR-код, который заполняет поля ниже.</string>
   <string name="msg_share">Привет! Я использую Grocy Android для эффективного управления домашним хозяйством. Присоединяйся!\nhttps://github.com/patzly/grocy-android</string>
 
@@ -369,6 +378,7 @@
   <string name="error_invalid_factor">Неверный фактор</string>
   <string name="error_invalid_date_format">Неверный формат даты</string>
   <string name="error_api_qr_code">QR-код без учетных данных Grocy API</string>
+  <string name="error_token_qr_code">Не QR-код с долговечным токеном доступа от Home Assistant</string>
   <string name="error_loading_qus">Не удалось загрузить единицы количества из продукта</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Не может быть равно %1$s</string>
@@ -529,8 +539,12 @@
   <string name="subtitle_barcode">Штрихкод: %1$s</string>
   <string name="subtitle_feature_disabled">Функция отключена</string>
   <string name="subtitle_date_from_input">Введенная дата:\n%1$s</string>
+  <string name="subtitle_product_amount">Мин. количество, Быстрое использование, Множитель, Вес тары</string>
+  <string name="subtitle_product_default_location">Место, Магазин</string>
   <string name="subtitle_product_due_date">Тип, Дни по умолчанию (после открытия, замораживания, оттаивания)</string>
   <string name="subtitle_product_optional_properties">Состояние, Родительский продукт, Описание, Группа продукта, Энергетическая ценность, Изображение</string>
+  <string name="subtitle_product_quantity_unit">В запасах, При покупках</string>
+
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
@@ -656,6 +670,11 @@
   <string name="property_qu_stock">Единица измерения запасов</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Коэффициент закупа к запасам</string>
+  <!-- This string is part of a pair, there is also 'quantity unit to' -->
+  <string name="property_quantity_unit_from">Из ед. измерения</string>
+  <!-- This string is part of a pair, there is also 'quantity unit from' -->
+  <string name="property_quantity_unit_to">К ед. измерения</string>
+  <string name="property_factor">Множитель</string>
   <string name="property_barcode">Штрихкод</string>
   <string name="property_barcodes">Штрихкоды</string>
   <string name="property_days">Дни</string>
@@ -738,7 +757,7 @@
   <string name="property_extra_field">Дополнительное поле: %1$s</string>
   <string name="property_task_categories">Категории задач</string>
   <string name="property_calories">Калории</string>
-  <string name="property_calories_per_unit">Калории (на единицу запаса)</string>
+  <string name="property_calories_unit">Калории (на единицу запаса)</string>
 
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>

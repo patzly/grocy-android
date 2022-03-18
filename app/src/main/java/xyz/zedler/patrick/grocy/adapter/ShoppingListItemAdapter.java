@@ -39,11 +39,13 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListItemBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
+import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListBottomNotes;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -60,18 +62,21 @@ public class ShoppingListItemAdapter extends
 
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
+  private final HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingListItemAdapterListener listener;
   private final PluralUtil pluralUtil;
   private String groupingMode;
+  private String extraField;
 
   public ShoppingListItemAdapter(
       Context context,
       ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, String> productNamesHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
@@ -79,15 +84,18 @@ public class ShoppingListItemAdapter extends
       ArrayList<Integer> missingProductIds,
       ShoppingListItemAdapterListener listener,
       String shoppingListNotes,
-      String groupingMode
+      String groupingMode,
+      String extraField
   ) {
     this.productHashMap = new HashMap<>(productHashMap);
+    this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
     this.groupingMode = groupingMode;
+    this.extraField = extraField;
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
         shoppingListNotes, groupingMode);
@@ -117,28 +125,8 @@ public class ShoppingListItemAdapter extends
     HashMap<String, ArrayList<ShoppingListItem>> shoppingListItemsGroupedHashMap = new HashMap<>();
     ArrayList<ShoppingListItem> ungroupedItems = new ArrayList<>();
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      String groupName = null;
-      if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
-          && shoppingListItem.hasProduct()) {
-        Product product = productHashMap.get(shoppingListItem.getProductIdInt());
-        Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
-            ? Integer.parseInt(product.getProductGroupId())
-            : null;
-        ProductGroup productGroup = productGroupId != null
-            ? productGroupHashMap.get(productGroupId)
-            : null;
-        groupName = productGroup != null ? productGroup.getName() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
-          && shoppingListItem.hasProduct()) {
-        Product product = productHashMap.get(shoppingListItem.getProductIdInt());
-        Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
-            ? Integer.parseInt(product.getStoreId())
-            : null;
-        Store store = storeId != null
-            ? storeHashMap.get(storeId)
-            : null;
-        groupName = store != null ? store.getName() : null;
-      }
+      String groupName = getGroupName(shoppingListItem, productHashMap, productGroupHashMap,
+          storeHashMap, groupingMode);
       if (groupName != null && !groupName.isEmpty()) {
         ArrayList<ShoppingListItem> itemsFromGroup = shoppingListItemsGroupedHashMap.get(groupName);
         if (itemsFromGroup == null) {
@@ -174,6 +162,38 @@ public class ShoppingListItemAdapter extends
         !ungroupedItems.isEmpty() || !groupsSorted.isEmpty()
     );
     return groupedListItems;
+  }
+
+  public static String getGroupName(
+      ShoppingListItem shoppingListItem,
+      HashMap<Integer, Product> productHashMap,
+      HashMap<Integer, ProductGroup> productGroupHashMap,
+      HashMap<Integer, Store> storeHashMap,
+      String groupingMode
+  ) {
+    String groupName = null;
+    if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP)
+        && shoppingListItem.hasProduct()) {
+      Product product = productHashMap.get(shoppingListItem.getProductIdInt());
+      Integer productGroupId = product != null && NumUtil.isStringInt(product.getProductGroupId())
+          ? Integer.parseInt(product.getProductGroupId())
+          : null;
+      ProductGroup productGroup = productGroupId != null
+          ? productGroupHashMap.get(productGroupId)
+          : null;
+      groupName = productGroup != null ? productGroup.getName() : null;
+    } else if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_STORE)
+        && shoppingListItem.hasProduct()) {
+      Product product = productHashMap.get(shoppingListItem.getProductIdInt());
+      Integer storeId = product != null && NumUtil.isStringInt(product.getStoreId())
+          ? Integer.parseInt(product.getStoreId())
+          : null;
+      Store store = storeId != null
+          ? storeHashMap.get(storeId)
+          : null;
+      groupName = store != null ? store.getName() : null;
+    }
+    return groupName;
   }
 
   private static void addBottomNotes(
@@ -434,6 +454,31 @@ public class ShoppingListItemAdapter extends
       }
     }
 
+    if (extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_UNIT)
+        || extraField.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)
+    ) {
+      ProductLastPurchased p = product != null
+          ? productLastPurchasedHashMap.get(product.getId()) : null;
+      if (p != null && p.getPrice() != null && !p.getPrice().isEmpty()) {
+        String price;
+        if (extraField
+            .equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
+          double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
+          price = NumUtil.isStringDouble(p.getPrice())
+              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount) : p.getPrice();
+        } else {
+          price = NumUtil.isStringDouble(p.getPrice())
+              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())) : p.getPrice();
+        }
+        binding.extraField.setText(price);
+        binding.extraField.setVisibility(View.VISIBLE);
+      } else {
+        binding.extraField.setVisibility(View.GONE);
+      }
+    } else {
+      binding.extraField.setVisibility(View.GONE);
+    }
+
     // CONTAINER
 
     binding.containerRow.setOnClickListener(
@@ -583,13 +628,15 @@ public class ShoppingListItemAdapter extends
       ArrayList<ShoppingListItem> shoppingListItems,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, String> productNamesHashMap,
+      HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Store> storeHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
       ArrayList<Integer> missingProductIds,
       String shoppingListNotes,
-      String groupingMode
+      String groupingMode,
+      String extraField
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
@@ -599,6 +646,8 @@ public class ShoppingListItemAdapter extends
         newGroupedListItems,
         this.productHashMap,
         productHashMap,
+        this.productLastPurchasedHashMap,
+        productLastPurchasedHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
         this.shoppingListItemAmountsHashMap,
@@ -606,7 +655,9 @@ public class ShoppingListItemAdapter extends
         this.missingProductIds,
         missingProductIds,
         this.groupingMode,
-        groupingMode
+        groupingMode,
+        this.extraField,
+        extraField
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
@@ -615,11 +666,14 @@ public class ShoppingListItemAdapter extends
     this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
+    this.productLastPurchasedHashMap.clear();
+    this.productLastPurchasedHashMap.putAll(productLastPurchasedHashMap);
     this.shoppingListItemAmountsHashMap.clear();
     this.shoppingListItemAmountsHashMap.putAll(shoppingListItemAmountsHashMap);
     this.missingProductIds.clear();
     this.missingProductIds.addAll(missingProductIds);
     this.groupingMode = groupingMode;
+    this.extraField = extraField;
     diffResult.dispatchUpdatesTo(this);
   }
 
@@ -629,6 +683,8 @@ public class ShoppingListItemAdapter extends
     ArrayList<GroupedListItem> newItems;
     HashMap<Integer, Product> productHashMapOld;
     HashMap<Integer, Product> productHashMapNew;
+    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld;
+    HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
     HashMap<Integer, Double> shoppingListItemAmountsHashMapOld;
@@ -637,12 +693,16 @@ public class ShoppingListItemAdapter extends
     ArrayList<Integer> missingProductIdsNew;
     String groupingModeOld;
     String groupingModeNew;
+    String extraFieldOld;
+    String extraFieldNew;
 
     public DiffCallback(
         ArrayList<GroupedListItem> oldItems,
         ArrayList<GroupedListItem> newItems,
         HashMap<Integer, Product> productHashMapOld,
         HashMap<Integer, Product> productHashMapNew,
+        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapOld,
+        HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMapNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
         HashMap<Integer, Double> shoppingListItemAmountsHashMapOld,
@@ -650,12 +710,16 @@ public class ShoppingListItemAdapter extends
         ArrayList<Integer> missingProductIdsOld,
         ArrayList<Integer> missingProductIdsNew,
         String groupingModeOld,
-        String groupingModeNew
+        String groupingModeNew,
+        String extraFieldOld,
+        String extraFieldNew
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
       this.productHashMapOld = productHashMapOld;
       this.productHashMapNew = productHashMapNew;
+      this.productLastPurchasedHashMapOld = productLastPurchasedHashMapOld;
+      this.productLastPurchasedHashMapNew = productLastPurchasedHashMapNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
       this.shoppingListItemAmountsHashMapOld = shoppingListItemAmountsHashMapOld;
@@ -664,6 +728,8 @@ public class ShoppingListItemAdapter extends
       this.missingProductIdsNew = missingProductIdsNew;
       this.groupingModeOld = groupingModeOld;
       this.groupingModeNew = groupingModeNew;
+      this.extraFieldOld = extraFieldOld;
+      this.extraFieldNew = extraFieldNew;
     }
 
     @Override
@@ -698,7 +764,7 @@ public class ShoppingListItemAdapter extends
       if (oldItemType != newItemType) {
         return false;
       }
-      if (!groupingModeOld.equals(groupingModeNew)) {
+      if (!groupingModeOld.equals(groupingModeNew) || !extraFieldOld.equals(extraFieldNew)) {
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
@@ -733,6 +799,18 @@ public class ShoppingListItemAdapter extends
             productIdOld != null ? missingProductIdsOld.contains(productIdOld) : null;
         Boolean missingNew =
             productIdNew != null ? missingProductIdsNew.contains(productIdNew) : null;
+
+        if (extraFieldNew.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_UNIT)
+            || extraFieldNew.equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
+          ProductLastPurchased purchasedOld = productIdOld != null
+              ? productLastPurchasedHashMapOld.get(productIdOld) : null;
+          ProductLastPurchased purchasedNew = productIdNew != null
+              ? productLastPurchasedHashMapNew.get(productIdNew) : null;
+          if (purchasedOld == null && purchasedNew != null
+              || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
+            return false;
+          }
+        }
 
         if (productOld == null && productNew != null
             || productOld != null && productNew != null && productOld.getId() != productNew.getId()

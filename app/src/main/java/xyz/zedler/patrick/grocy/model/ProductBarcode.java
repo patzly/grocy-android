@@ -43,7 +43,7 @@ public class ProductBarcode implements Parcelable {
 
   @ColumnInfo(name = "product_id")
   @SerializedName("product_id")
-  private int productId;
+  private String productId;
 
   @ColumnInfo(name = "barcode")
   @SerializedName("barcode")
@@ -79,7 +79,7 @@ public class ProductBarcode implements Parcelable {
   @Ignore
   public ProductBarcode(Parcel parcel) {
     id = parcel.readInt();
-    productId = parcel.readInt();
+    productId = parcel.readString();
     barcode = parcel.readString();
     quId = parcel.readString();
     amount = parcel.readString();
@@ -92,7 +92,7 @@ public class ProductBarcode implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeInt(id);
-    dest.writeInt(productId);
+    dest.writeString(productId);
     dest.writeString(barcode);
     dest.writeString(quId);
     dest.writeString(amount);
@@ -123,12 +123,20 @@ public class ProductBarcode implements Parcelable {
     this.id = id;
   }
 
-  public int getProductId() {
+  public String getProductId() {
     return productId;
   }
 
-  public void setProductId(int productId) {
+  public int getProductIdInt() {
+    return NumUtil.isStringInt(productId) ? Integer.parseInt(productId) : -1;
+  }
+
+  public void setProductId(String productId) {
     this.productId = productId;
+  }
+
+  public void setProductIdInt(int productId) {
+    this.productId = String.valueOf(productId);
   }
 
   public String getBarcode() {
@@ -266,7 +274,7 @@ public class ProductBarcode implements Parcelable {
       Object amount = productBarcode.getAmount() != null
           && !productBarcode.getAmount().isEmpty()
           ? productBarcode.getAmount() : JSONObject.NULL;
-      json.put("product_id", productBarcode.getProductId());
+      json.put("product_id", productBarcode.getProductIdInt());
       json.put("barcode", productBarcode.getBarcode());
       json.put("qu_id", quId);
       json.put("amount", amount);

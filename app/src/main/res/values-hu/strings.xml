@@ -218,8 +218,8 @@
   <string name="option_synced_error">Nem sikerült szinkronizálni a beállítást</string>
   <string name="msg_choose_product">A beolvasott vonalkód még nem tartozik termékhez. Hozzárendelheted létező termékhez vagy létrehozhatsz újat is hozzá.</string>
   <string name="msg_product_name_off">A vonalkoódhoz tartozó termék neve az Open Food Facts adatbázisából származik.</string>
-  <string name="msg_product_name_off_error">Nem sikerült lekérdezni a vonalkódot az Open Food Facts adatbázisából.</string>
-  <string name="msg_product_name_off_empty">A vonalkód nem szerepel az Open Food Facts adatbázisában.</string>
+  <string name="msg_product_name_lookup_error">Nem sikerült lekérdezni a vonalkódot az Open Food Facts adatbázisából.</string>
+  <string name="msg_product_name_lookup_empty">A vonalkód nem szerepel az Open Food Facts adatbázisában.</string>
   <string name="msg_off_option_deactivated">Automatikus terméknév javaslatért bekapcsolhatod a beállításokban az Open Food Facts adatbázis keresést.</string>
   <string name="msg_create_new_product_filled">Új termék létrehozása \"%1$s\"</string>
   <string name="msg_create_new_product">Új termék létrehozása</string>

@@ -21,44 +21,39 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
-import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataShoppingListGrouping;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class ShoppingModeViewModel extends AndroidViewModel {
+public class ShoppingModeViewModel extends BaseViewModel {
 
   private static final String TAG = ShoppingModeViewModel.class.getSimpleName();
   private static final int DEFAULT_SHOPPING_LIST_ID = 1;
@@ -66,28 +61,27 @@ public class ShoppingModeViewModel extends AndroidViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final EventHandler eventHandler;
   private final ShoppingListRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Integer> selectedShoppingListIdLive;
   private final MutableLiveData<Boolean> offlineLive;
-  private final MutableLiveData<ArrayList<GroupedListItem>> filteredGroupedListItemsLive;
+  private final MutableLiveData<ArrayList<ShoppingListItem>> filteredShoppingListItemsLive;
 
-  private ArrayList<ShoppingListItem> shoppingListItems;
-  private ArrayList<ShoppingList> shoppingLists;
-  private ArrayList<ProductGroup> productGroups;
-  private ArrayList<QuantityUnit> quantityUnits;
+  private List<ShoppingListItem> shoppingListItems;
+  private List<ShoppingList> shoppingLists;
+  private HashMap<Integer, ProductGroup> productGroupHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private ArrayList<QuantityUnitConversion> unitConversions;
   private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
-  private ArrayList<Product> products;
-  private ArrayList<Store> stores;
+  private HashMap<Integer, Store> storeHashMap;
   private HashMap<Integer, Product> productHashMap;
-  private ArrayList<MissingItem> missingItems;
+  private HashMap<Integer, String> productNamesHashMap;
   private ArrayList<Integer> missingProductIds;
+
+  private ArrayList<ShoppingListItem> itemsToSyncTemp;
+  private HashMap<Integer, ShoppingListItem> serverItemHashMapTemp;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -101,13 +95,12 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    eventHandler = new EventHandler();
     repository = new ShoppingListRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     selectedShoppingListIdLive = new MutableLiveData<>(1);
-    filteredGroupedListItemsLive = new MutableLiveData<>();
+    filteredShoppingListItemsLive = new MutableLiveData<>();
 
     int lastId = sharedPrefs.getInt(Constants.PREF.SHOPPING_LIST_LAST_ID, 1);
     if (lastId != DEFAULT_SHOPPING_LIST_ID
@@ -121,67 +114,47 @@ public class ShoppingModeViewModel extends AndroidViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase(
-        (shoppingListItems, shoppingLists, productGroups, quantityUnits, unitConversions, products, stores, missingItems) -> {
-          this.shoppingListItems = shoppingListItems;
-          this.shoppingLists = shoppingLists;
-          this.productGroups = productGroups;
-          this.quantityUnits = quantityUnits;
-          quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-          this.unitConversions = unitConversions;
-          unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-          this.products = products;
-          productHashMap = ArrayUtil.getProductsHashMap(products);
-          this.stores = stores;
-          this.missingItems = missingItems;
-          missingProductIds = ArrayUtil.getMissingProductsIds(missingItems);
-          fillShoppingListItemAmountsHashMap();
-          updateFilteredShoppingListItems();
-          if (downloadAfterLoading) {
-            downloadData();
-          }
-        }
-    );
+    repository.loadFromDatabase(data -> {
+      this.shoppingListItems = data.getShoppingListItems();
+      this.shoppingLists = data.getShoppingLists();
+      productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
+      quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
+      unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(data.getUnitConversions());
+      productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
+      productNamesHashMap = ArrayUtil.getProductNamesHashMap(data.getProducts());
+      storeHashMap = ArrayUtil.getStoresHashMap(data.getStores());
+      missingProductIds = ArrayUtil.getMissingProductsIds(data.getMissingItems());
+      fillShoppingListItemAmountsHashMap();
+      updateFilteredShoppingListItems();
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   public void updateFilteredShoppingListItems() {
-    filteredGroupedListItemsLive.setValue(
-        ShoppingListHelper.groupItemsShoppingMode(
-            getApplication(),
-            getFilteredShoppingListItems(),
-            this.productHashMap,
-            getProductNamesHashMap(),
-            this.productGroups,
-            this.shoppingLists,
-            getSelectedShoppingListId(),
-            sharedPrefs.getBoolean(
-                Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
-                Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
-            )
-        )
-    );
-    selectedShoppingListIdLive.setValue(selectedShoppingListIdLive.getValue());
-  }
-
-  @Nullable
-  public ArrayList<ShoppingListItem> getFilteredShoppingListItems() {
     if (this.shoppingListItems == null) {
-      return null;
+      return;
     }
-
     ArrayList<ShoppingListItem> filteredShoppingListItems = new ArrayList<>();
-
-    for (ShoppingListItem shoppingListItem : this.shoppingListItems) {
-      if (shoppingListItem.getShoppingListIdInt() != getSelectedShoppingListId()) {
+    for (ShoppingListItem item : this.shoppingListItems) {
+      if (item.getShoppingListIdInt() != getSelectedShoppingListId()) {
         continue;
       }
-      filteredShoppingListItems.add(shoppingListItem);
+      filteredShoppingListItems.add(item);
     }
-    return filteredShoppingListItems;
+    filteredShoppingListItemsLive.setValue(filteredShoppingListItems);
+    selectedShoppingListIdLive.setValue(selectedShoppingListIdLive.getValue());
+
+    if (filteredShoppingListItems.isEmpty()) {
+      infoFullscreenLive.setValue(new InfoFullscreen(InfoFullscreen.INFO_EMPTY_SHOPPING_LIST));
+    } else {
+      infoFullscreenLive.setValue(null);
+    }
   }
 
-  public MutableLiveData<ArrayList<GroupedListItem>> getFilteredGroupedListItemsLive() {
-    return filteredGroupedListItemsLive;
+  public MutableLiveData<ArrayList<ShoppingListItem>> getFilteredShoppingListItemsLive() {
+    return filteredShoppingListItemsLive;
   }
 
   public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
@@ -209,30 +182,33 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateShoppingListItems(
-            dbChangedTime, shoppingListItems -> this.shoppingListItems = shoppingListItems
+            dbChangedTime,
+            (shoppingListItems, itemsToSync, serverItemsHashMap) -> {
+              this.shoppingListItems = shoppingListItems;
+              this.itemsToSyncTemp = itemsToSync;
+              this.serverItemHashMapTemp = serverItemsHashMap;
+            }
         ), dlHelper.updateShoppingLists(
             dbChangedTime, shoppingLists -> this.shoppingLists = shoppingLists
         ), dlHelper.updateProductGroups(
-            dbChangedTime, productGroups -> this.productGroups = productGroups
+            dbChangedTime,
+            productGroups -> productGroupHashMap = ArrayUtil.getProductGroupsHashMap(productGroups)
         ), dlHelper.updateQuantityUnits(
-            dbChangedTime, quantityUnits -> {
-              this.quantityUnits = quantityUnits;
-              quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
-            }
+            dbChangedTime,
+            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
         ), dlHelper.updateQuantityUnitConversions(
-            dbChangedTime, unitConversions -> {
-              this.unitConversions = unitConversions;
-              unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-            }
+            dbChangedTime,
+            unitConversions -> unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions)
         ), dlHelper.updateProducts(dbChangedTime, products -> {
-          this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
-        }), dlHelper.updateStores(dbChangedTime, stores -> {
-          this.stores = stores;
-        }), dlHelper.updateMissingItems(dbChangedTime, missing -> {
-          this.missingItems = missing;
-          missingProductIds = ArrayUtil.getMissingProductsIds(missingItems);
-        })
+          productNamesHashMap = ArrayUtil.getProductNamesHashMap(products);
+        }), dlHelper.updateStores(
+            dbChangedTime,
+            stores -> storeHashMap = ArrayUtil.getStoresHashMap(stores)
+        ), dlHelper.updateMissingItems(
+            dbChangedTime,
+            missing -> missingProductIds = ArrayUtil.getMissingProductsIds(missing)
+        )
     );
 
     if (queue.isEmpty()) {
@@ -263,67 +239,50 @@ public class ShoppingModeViewModel extends AndroidViewModel {
   }
 
   private void onQueueEmpty() {
-    repository.updateDatabase(
-        this.shoppingListItems,
-        this.shoppingLists,
-        this.productGroups,
-        this.quantityUnits,
-        this.unitConversions,
-        this.products,
-        this.stores,
-        this.missingItems,
-        (itemsToSync, serverItemHashMap) -> {
-          Log.i(TAG, "onQueueEmpty: itemsToSync: " + itemsToSync.size());
-          if (itemsToSync.isEmpty()) {
-            tidyUpItems(itemsChanged -> {
-              if (itemsChanged) {
-                downloadData();
-              } else {
-                fillShoppingListItemAmountsHashMap();
-                updateFilteredShoppingListItems();
-              }
-            });
-            return;
-          }
-          DownloadHelper.OnQueueEmptyListener emptyListener = () -> {
-            ArrayList<ShoppingListItem> itemsToUpdate = new ArrayList<>();
-            for (ShoppingListItem itemToSync : itemsToSync) {
-              int itemId = itemToSync.getId();
-              ShoppingListItem itemToUpdate = serverItemHashMap.get(itemId);
-              if (itemToUpdate == null) {
-                continue;
-              }
-              itemToUpdate.setDone(itemToSync.getDoneInt());
-              itemsToUpdate.add(itemToUpdate);
-            }
-            repository.insertShoppingListItems(
-                () -> {
-                  showMessage(getString(R.string.msg_synced));
-                  loadFromDatabase(true);
-                },
-                itemsToUpdate.toArray(new ShoppingListItem[0])
-            );
-          };
-          DownloadHelper.OnErrorListener errorListener = error -> {
-            showMessage(getString(R.string.msg_failed_to_sync));
-            downloadData();
-          };
-          DownloadHelper.Queue queue = dlHelper.newQueue(emptyListener, errorListener);
-          for (ShoppingListItem itemToSync : itemsToSync) {
-            JSONObject body = new JSONObject();
-            try {
-              body.put("done", itemToSync.getDoneInt());
-            } catch (JSONException e) {
-              if (debug) {
-                Log.e(TAG, "syncItems: " + e);
-              }
-            }
-            queue.append(dlHelper.editShoppingListItem(itemToSync.getId(), body));
-          }
-          currentQueueLoading = queue;
-          queue.start();
+    if (itemsToSyncTemp == null || itemsToSyncTemp.isEmpty() || serverItemHashMapTemp == null) {
+      fillShoppingListItemAmountsHashMap();
+      updateFilteredShoppingListItems();
+      return;
+    }
+    DownloadHelper.OnQueueEmptyListener emptyListener = () -> {
+      ArrayList<ShoppingListItem> itemsToUpdate = new ArrayList<>();
+      for (ShoppingListItem itemToSync : itemsToSyncTemp) {
+        int itemId = itemToSync.getId();
+        ShoppingListItem itemToUpdate = serverItemHashMapTemp.get(itemId);
+        if (itemToUpdate == null) {
+          continue;
         }
-    );
+        itemToUpdate.setDone(itemToSync.getDoneInt());
+        itemsToUpdate.add(itemToUpdate);
+      }
+      repository.insertShoppingListItems(
+          () -> {
+            itemsToSyncTemp = null;
+            serverItemHashMapTemp = null;
+            showMessage(getString(R.string.msg_synced));
+            loadFromDatabase(true);
+          },
+          itemsToUpdate.toArray(new ShoppingListItem[0])
+      );
+    };
+    DownloadHelper.OnErrorListener errorListener = error -> {
+      showMessage(getString(R.string.msg_failed_to_sync));
+      downloadData();
+    };
+    DownloadHelper.Queue queue = dlHelper.newQueue(emptyListener, errorListener);
+    for (ShoppingListItem itemToSync : itemsToSyncTemp) {
+      JSONObject body = new JSONObject();
+      try {
+        body.put("done", itemToSync.getDoneInt());
+      } catch (JSONException e) {
+        if (debug) {
+          Log.e(TAG, "syncItems: " + e);
+        }
+      }
+      queue.append(dlHelper.editShoppingListItem(itemToSync.getId(), body));
+    }
+    currentQueueLoading = queue;
+    queue.start();
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -334,58 +293,6 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     if (!isOffline()) {
       setOfflineLive(true);
     }
-  }
-
-  private void tidyUpItems(OnTidyUpFinishedListener onFinished) {
-    // Tidy up lost shopping list items, which have deleted shopping lists
-    // as an id – else they will never show up on any shopping list
-    ArrayList<Integer> listIds = new ArrayList<>();
-    if (isFeatureEnabled(Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS)) {
-      for (ShoppingList shoppingList : shoppingLists) {
-        listIds.add(shoppingList.getId());
-      }
-      if (listIds.isEmpty()) {
-        if (onFinished != null) {
-          onFinished.run(false);
-        }
-        return;  // possible if download error happened
-      }
-    } else {
-      listIds.add(1);  // id of first and single shopping list
-    }
-
-    DownloadHelper.Queue queue = dlHelper.newQueue(
-        () -> {
-          if (onFinished != null) {
-            onFinished.run(true);
-          }
-        },
-        error -> {
-          if (onFinished != null) {
-            onFinished.run(true);
-          }
-        }
-    );
-    for (ShoppingListItem listItem : shoppingListItems) {
-      if (listIds.contains(listItem.getShoppingListIdInt())) {
-        continue;
-      }
-      if (debug) {
-        Log.i(TAG, "tidyUpItems: " + listItem);
-      }
-      queue.append(dlHelper.deleteShoppingListItem(listItem.getId()));
-    }
-    if (queue.getSize() == 0) {
-      onFinished.run(false);
-      return;
-    }
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  private interface OnTidyUpFinishedListener {
-
-    void run(boolean itemsChanged);
   }
 
   public int getSelectedShoppingListId() {
@@ -446,7 +353,11 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
   private void updateDoneStatus(ShoppingListItem shoppingListItem) {
     repository.insertShoppingListItems(
-        () -> loadFromDatabase(false),
+        () -> {
+          sharedPrefs.edit()
+              .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null).apply();
+          loadFromDatabase(false);
+        },
         shoppingListItem
     );
   }
@@ -501,34 +412,18 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     return getShoppingListFromId(getSelectedShoppingListId());
   }
 
-  @Nullable
-  public ShoppingListItem getShoppingListItemAtPos(int position) { // from current GroupedListItems
-    ArrayList<GroupedListItem> groupedListItems = filteredGroupedListItemsLive.getValue();
-    if (groupedListItems == null) {
-      return null;
+  public String getShoppingListNotes() {
+    for (ShoppingList s : shoppingLists) {
+      if (s.getId() == getSelectedShoppingListId()) {
+        return s.getNotes();
+      }
     }
-    if (position > groupedListItems.size() - 1) {
-      return null;
-    }
-    return (ShoppingListItem) groupedListItems.get(position);
-  }
-
-  public boolean isDataLoaded() {
-    return shoppingLists != null && shoppingListItems != null
-        && productGroups != null && quantityUnits != null;
+    return null;
   }
 
   @Nullable
-  public ArrayList<ShoppingList> getShoppingLists() {
+  public List<ShoppingList> getShoppingLists() {
     return shoppingLists;
-  }
-
-  public ArrayList<QuantityUnit> getQuantityUnits() {
-    return this.quantityUnits;
-  }
-
-  public QuantityUnit getQuantityUnitFromId(int id) {
-    return quantityUnitHashMap.get(id);
   }
 
   private void fillShoppingListItemAmountsHashMap() {
@@ -555,19 +450,25 @@ public class ShoppingModeViewModel extends AndroidViewModel {
     return productHashMap;
   }
 
+  public HashMap<Integer, String> getProductNamesHashMap() {
+    return productNamesHashMap;
+  }
+
+  public HashMap<Integer, ProductGroup> getProductGroupHashMap() {
+    return productGroupHashMap;
+  }
+
+  public HashMap<Integer, Store> getStoreHashMap() {
+    return storeHashMap;
+  }
+
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
   }
 
-  public HashMap<Integer, String> getProductNamesHashMap() {
-    if (products == null) {
-      return null;
-    }
-    HashMap<Integer, String> productNamesHashMap = new HashMap<>();
-    for (Product product : products) {
-      productNamesHashMap.put(product.getId(), product.getName());
-    }
-    return productNamesHashMap;
+  public String getGroupingMode() {
+    return sharedPrefs.getString(PREF.SHOPPING_LIST_GROUPING_MODE,
+        FilterChipLiveDataShoppingListGrouping.GROUPING_PRODUCT_GROUP);
   }
 
   @NonNull
@@ -595,57 +496,6 @@ public class ShoppingModeViewModel extends AndroidViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
-  }
-
-  private void showErrorMessage() {
-    showMessage(getString(R.string.error_undefined));
-  }
-
-  private void showMessage(@NonNull String message) {
-    showSnackbar(new SnackbarMessage(message));
-  }
-
-  private void showSnackbar(@NonNull SnackbarMessage snackbarMessage) {
-    eventHandler.setValue(snackbarMessage);
-  }
-
-  private void sendEvent(int type) {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return type;
-      }
-    });
-  }
-
-  private void sendEvent(int type, Bundle bundle) {
-    eventHandler.setValue(new Event() {
-      @Override
-      public int getType() {
-        return type;
-      }
-
-      @Override
-      public Bundle getBundle() {
-        return bundle;
-      }
-    });
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
-  }
-
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
-  }
-
-  private String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
   }
 
   @Override

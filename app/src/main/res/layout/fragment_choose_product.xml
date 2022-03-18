@@ -265,6 +265,24 @@
                 android:text="@string/category_new_product" />
 
               <LinearLayout
+                  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:onClick="@{() -> fragment.createNewPendingProduct()}"
+                  app:clickUtil="@{clickUtil}">
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                      style="@style/Widget.Grocy.TextView.ListItem.Title"
+                      android:text="@{viewModel.createPendingProductTextLive}"
+                      android:maxLines="3"/>
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

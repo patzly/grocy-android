@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -49,7 +50,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBotto
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -64,6 +64,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class ShoppingListFragment extends BaseFragment implements
@@ -171,13 +172,15 @@ public class ShoppingListFragment extends BaseFragment implements
             items,
             viewModel.getProductHashMap(),
             viewModel.getProductNamesHashMap(),
+            viewModel.getProductLastPurchasedHashMap(),
             viewModel.getQuantityUnitHashMap(),
             viewModel.getProductGroupHashMap(),
             viewModel.getStoreHashMap(),
             viewModel.getShoppingListItemAmountsHashMap(),
             viewModel.getMissingProductIds(),
             viewModel.getShoppingListNotes(),
-            viewModel.getGroupingMode()
+            viewModel.getGroupingMode(),
+            viewModel.getExtraField()
         );
       } else {
         binding.recycler.setAdapter(
@@ -186,6 +189,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 items,
                 viewModel.getProductHashMap(),
                 viewModel.getProductNamesHashMap(),
+                viewModel.getProductLastPurchasedHashMap(),
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductGroupHashMap(),
                 viewModel.getStoreHashMap(),
@@ -193,7 +197,8 @@ public class ShoppingListFragment extends BaseFragment implements
                 viewModel.getMissingProductIds(),
                 this,
                 viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode()
+                viewModel.getGroupingMode(),
+                viewModel.getExtraField()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -263,7 +268,6 @@ public class ShoppingListFragment extends BaseFragment implements
     activity.updateBottomAppBar(
         viewModel.isOffline() ? Constants.FAB.POSITION.GONE : Constants.FAB.POSITION.CENTER,
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
-        animated,
         this::setUpBottomMenu
     );
     activity.updateFab(
@@ -292,11 +296,29 @@ public class ShoppingListFragment extends BaseFragment implements
     if (shoppingList == null) {
       return;
     }
-    ShoppingListHelper.changeAppBarTitle(
+    changeAppBarTitle(
         binding.textShoppingListTitle,
         binding.buttonShoppingListLists,
         shoppingList
     );
+  }
+
+  public static void changeAppBarTitle(
+      TextView textTitle,
+      ActionButton buttonLists,
+      ShoppingList shoppingList
+  ) {
+    // change app bar title to shopping list name
+    if (textTitle.getText().toString().equals(shoppingList.getName())) {
+      return;
+    }
+    textTitle.animate().alpha(0).withEndAction(() -> {
+      textTitle.setText(shoppingList.getName());
+      textTitle.animate().alpha(1).setDuration(150).start();
+    }).setDuration(150).start();
+    buttonLists.animate().alpha(0).withEndAction(
+        () -> buttonLists.animate().alpha(1).setDuration(150).start()
+    ).setDuration(150).start();
   }
 
   @Override
@@ -554,7 +576,6 @@ public class ShoppingListFragment extends BaseFragment implements
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.CENTER,
           R.menu.menu_shopping_list,
-          true,
           this::setUpBottomMenu
       );
     }

@@ -142,8 +142,10 @@
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"
                   android:inputType="text|textCapSentences"
+                  android:imeOptions="actionDone"
                   android:afterTextChanged="@{() -> formData.isNameValid()}"
-                  app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}" />
+                  app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}"
+                  app:onDoneClickInSoftKeyboard="@{() -> viewModel.saveShoppingList()}"/>
 
               </com.google.android.material.textfield.TextInputLayout>
 

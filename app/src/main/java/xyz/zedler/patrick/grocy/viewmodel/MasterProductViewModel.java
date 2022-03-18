@@ -32,6 +32,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -64,7 +65,7 @@ public class MasterProductViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final ConnectivityLiveData isOnlineLive;
 
-  private ArrayList<Product> products;
+  private List<Product> products;
 
   private DownloadHelper.Queue currentQueueLoading;
   private DownloadHelper.QueueItem extraQueueItem;
@@ -114,11 +115,7 @@ public class MasterProductViewModel extends BaseViewModel {
     } else {
       Product product = new Product(sharedPrefs);
       if (args.getProductName() != null) {
-        try {
-          String productName = URLDecoder.decode(args.getProductName(), "UTF-8");
-          product.setName(productName);
-        } catch (Throwable ignore) {
-        }
+        product.setName(args.getProductName());
       } else {
         sendEvent(Event.FOCUS_INVALID_VIEWS);
       }
@@ -153,9 +150,9 @@ public class MasterProductViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadProductsFromDatabase(products -> {
-      this.products = products;
-      formData.getProductNamesLive().setValue(getProductNames(products));
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      formData.getProductNamesLive().setValue(getProductNames(this.products));
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -176,7 +173,7 @@ public class MasterProductViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
@@ -205,11 +202,6 @@ public class MasterProductViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty() {
-    repository.updateDatabase(products, () -> {
-    });
-  }
-
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
@@ -217,7 +209,7 @@ public class MasterProductViewModel extends BaseViewModel {
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  private ArrayList<String> getProductNames(ArrayList<Product> products) {
+  private ArrayList<String> getProductNames(List<Product> products) {
     ArrayList<String> names = new ArrayList<>();
     for (Product product : products) {
       names.add(product.getName());
@@ -340,13 +332,6 @@ public class MasterProductViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
-  }
-
-  public boolean isFeatureEnabled(String pref) {
-    if (pref == null) {
-      return true;
-    }
-    return sharedPrefs.getBoolean(pref, true);
   }
 
   public boolean getBeginnerModeEnabled() {

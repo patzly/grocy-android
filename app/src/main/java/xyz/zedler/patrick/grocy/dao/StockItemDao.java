@@ -19,12 +19,11 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import java.util.ArrayList;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.StockItem;
 
@@ -32,21 +31,12 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 public interface StockItemDao {
 
   @Query("SELECT * FROM stock_item_table")
-  LiveData<List<StockItem>> getAllLive();
-
-  @Query("SELECT * FROM stock_item_table")
-  List<StockItem> getAll();
-
-  @Query("SELECT COUNT(*) FROM stock_item_table")
-  int count();
+  Single<List<StockItem>> getStockItems();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(ArrayList<StockItem> stockItems);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(StockItem... stockItems);
+  Single<List<Long>> insertStockItems(List<StockItem> stockItems);
 
   @Query("DELETE FROM stock_item_table")
-  void deleteAll();
+  Single<Integer> deleteStockItems();
 
 }

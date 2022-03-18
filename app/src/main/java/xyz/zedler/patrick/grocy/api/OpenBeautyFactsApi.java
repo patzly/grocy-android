@@ -17,27 +17,31 @@
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.view;
+package xyz.zedler.patrick.grocy.api;
 
 import android.content.Context;
-import android.util.AttributeSet;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import xyz.zedler.patrick.grocy.R;
 
-public class SwipeRefreshLayoutCustom extends SwipeRefreshLayout {
+public class OpenBeautyFactsApi {
 
-  public SwipeRefreshLayoutCustom(@NonNull Context context) {
-    super(context);
+  private final static String TAG = OpenBeautyFactsApi.class.getSimpleName();
+
+  public static String getUserAgent(Context context) {
+    return "Grocy Android - v"
+        + context.getString(R.string.versionName) + " - "
+        + context.getString(R.string.url_github);
   }
 
-  public SwipeRefreshLayoutCustom(@NonNull Context context, @Nullable AttributeSet attrs) {
-    super(context, attrs);
+  private static String getUrl(String command) {
+    return "https://world.openbeautyfacts.org/api/v0/" + command;
   }
 
-  @Override
-  public boolean canChildScrollUp() {
-    return super.canChildScrollUp();
-  }
+  // PRODUCT
 
+  /**
+   * Returns a product json
+   */
+  public static String getProduct(String barcode) {
+    return getUrl("product/" + barcode + ".json");
+  }
 }

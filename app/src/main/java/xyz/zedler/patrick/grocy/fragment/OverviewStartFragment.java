@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,9 +123,6 @@ public class OverviewStartFragment extends BaseFragment {
       return false;
     });
 
-    // for offline info in app bar
-    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -143,7 +139,6 @@ public class OverviewStartFragment extends BaseFragment {
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.CENTER,
         R.menu.menu_empty,
-        animated,
         () -> {
         }
     );

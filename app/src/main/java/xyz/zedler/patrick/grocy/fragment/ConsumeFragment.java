@@ -49,7 +49,6 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ConsumeViewModel;
@@ -174,21 +173,6 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    viewModel.getFormData().getProductDetailsLive().observe(
-        getViewLifecycleOwner(),
-        productDetails -> {
-          MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_open);
-            if (productDetails != null && productDetails.getProduct()
-                .getEnableTareWeightHandlingBoolean() || menuItem == null
-                || !viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)) {
-                return;
-            }
-          menuItem.setVisible(productDetails != null);
-        }
-    );
-
-    //hideDisabledFeatures();
-
     if (savedInstanceState == null) {
         viewModel.loadFromDatabase(true);
     }
@@ -218,7 +202,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
           } else if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
           } else {
-            viewModel.consumeProduct(false);
+            viewModel.consumeProduct();
           }
         }
     );
@@ -326,6 +310,13 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
     viewModel.checkProductInput();
   }
 
+  public void clearFocusAndCheckProductInputExternal() {
+    clearInputFocus();
+    String input = viewModel.getFormData().getProductNameLive().getValue();
+    if (input == null || input.isEmpty()) return;
+    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductNameLive().getValue());
+  }
+
   public void focusProductInputIfNecessary() {
       if (!viewModel.isQuickModeEnabled() || viewModel.getFormData().isScannerVisible()) {
           return;
@@ -369,7 +360,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
 
   @Override
   public void startTransaction() {
-    viewModel.consumeProduct(false);
+    viewModel.consumeProduct();
   }
 
   @Override
@@ -380,12 +371,6 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onBottomSheetDismissed() {
     clearInputFocusOrFocusNextInvalidView();
-  }
-
-  private void hideDisabledFeatures() {
-        /*if(!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-            binding.linearPurchaseLocation.setVisibility(View.GONE);
-        }*/
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -405,13 +390,6 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       clearInputFocus();
       viewModel.getFormData().clearForm();
       embeddedFragmentScanner.startScannerIfVisible();
-      return true;
-    } else if (item.getItemId() == R.id.action_open) {
-      if (viewModel.isQuickModeEnabled()) {
-        focusNextInvalidView();
-      } else {
-        viewModel.consumeProduct(true);
-      }
       return true;
     }
     return false;

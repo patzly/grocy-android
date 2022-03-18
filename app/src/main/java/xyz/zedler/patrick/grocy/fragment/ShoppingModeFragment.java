@@ -44,7 +44,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
-import xyz.zedler.patrick.grocy.helper.ShoppingListHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -142,7 +141,7 @@ public class ShoppingModeFragment extends BaseFragment implements
         getViewLifecycleOwner(), this::changeAppBarTitle
     );
 
-    viewModel.getFilteredGroupedListItemsLive().observe(getViewLifecycleOwner(), items -> {
+    viewModel.getFilteredShoppingListItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) {
         return;
       }
@@ -154,23 +153,34 @@ public class ShoppingModeFragment extends BaseFragment implements
       }
       if (binding.recycler.getAdapter() instanceof ShoppingModeItemAdapter) {
         ((ShoppingModeItemAdapter) binding.recycler.getAdapter()).updateData(
+            requireContext(),
             items,
             viewModel.getProductHashMap(),
+            viewModel.getProductNamesHashMap(),
             viewModel.getQuantityUnitHashMap(),
+            viewModel.getProductGroupHashMap(),
+            viewModel.getStoreHashMap(),
             viewModel.getShoppingListItemAmountsHashMap(),
-            viewModel.getMissingProductIds()
+            viewModel.getMissingProductIds(),
+            viewModel.getShoppingListNotes(),
+            viewModel.getGroupingMode()
         );
       } else {
         binding.recycler.setAdapter(
             new ShoppingModeItemAdapter(
-                activity,
+                requireContext(),
                 (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
                 viewModel.getProductHashMap(),
+                viewModel.getProductNamesHashMap(),
                 viewModel.getQuantityUnitHashMap(),
+                viewModel.getProductGroupHashMap(),
+                viewModel.getStoreHashMap(),
                 viewModel.getShoppingListItemAmountsHashMap(),
                 viewModel.getMissingProductIds(),
                 this,
+                viewModel.getShoppingListNotes(),
+                viewModel.getGroupingMode(),
                 sharedPrefs.getBoolean(
                     SHOPPING_MODE.USE_SMALLER_FONT,
                     SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
@@ -178,6 +188,10 @@ public class ShoppingModeFragment extends BaseFragment implements
                 sharedPrefs.getBoolean(
                     SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
                     SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
+                ),
+                sharedPrefs.getBoolean(
+                    Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
+                    Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
                 )
             )
         );
@@ -200,8 +214,7 @@ public class ShoppingModeFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(ShoppingModeFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
-        && savedInstanceState == null);
+    updateUI();
   }
 
   @Override
@@ -239,13 +252,12 @@ public class ShoppingModeFragment extends BaseFragment implements
     timer.schedule(timerTask, 2000, seconds * 1000L);
   }
 
-  private void updateUI(boolean animated) {
+  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(null);
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.GONE,
         R.menu.menu_shopping_list,
-        animated,
         () -> {
         }
     );
@@ -261,7 +273,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (shoppingList == null) {
       return;
     }
-    ShoppingListHelper.changeAppBarTitle(
+    ShoppingListFragment.changeAppBarTitle(
         binding.textShoppingListTitle,
         binding.buttonShoppingListLists,
         shoppingList

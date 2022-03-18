@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -77,11 +78,11 @@ public class TransferViewModel extends BaseViewModel {
   private final TransferRepository repository;
   private final FormDataTransfer formData;
 
-  private ArrayList<Product> products;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<QuantityUnitConversion> unitConversions;
-  private ArrayList<ProductBarcode> barcodes;
-  private ArrayList<Location> locations;
+  private List<Product> products;
+  private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> unitConversions;
+  private List<ProductBarcode> barcodes;
+  private List<Location> locations;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -121,12 +122,12 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products, barcodes, locations, qUs, conversions) -> {
-      this.products = products;
-      this.barcodes = barcodes;
-      this.locations = locations;
-      this.quantityUnits = qUs;
-      this.unitConversions = conversions;
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
+      this.barcodes = data.getBarcodes();
+      this.locations = data.getLocations();
+      this.quantityUnits = data.getQuantityUnits();
+      this.unitConversions = data.getQuantityUnitConversions();
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
@@ -187,9 +188,6 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    repository.updateDatabase(products, barcodes, locations,
-        quantityUnits, unitConversions, () -> {
-        });
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -329,6 +327,7 @@ public class TransferViewModel extends BaseViewModel {
         continue;
       }
       unitFactors.put(unit, conversion.getFactor());
+      quIdsInHashMap.add(unit.getId());
     }
     formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
@@ -366,7 +365,7 @@ public class TransferViewModel extends BaseViewModel {
     for (ProductBarcode code : barcodes) {
       if (code.getBarcode().equals(barcode)) {
         productBarcode = code;
-        product = Product.getProductFromId(products, code.getProductId());
+        product = Product.getProductFromId(products, code.getProductIdInt());
       }
     }
     if (product != null) {
@@ -402,7 +401,7 @@ public class TransferViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = Product.getProductFromId(products, code.getProductId());
+          product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
       if (product != null) {
@@ -611,7 +610,7 @@ public class TransferViewModel extends BaseViewModel {
     Location currentToLocation = formData.getToLocationLive().getValue();
     int selectedId = currentToLocation != null ? currentToLocation.getId() : -1;
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, locations);
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>());
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
     bundle.putString(ARGUMENT.TITLE, getString(R.string.title_location_to));
     showBottomSheet(new LocationsBottomSheet(), bundle);

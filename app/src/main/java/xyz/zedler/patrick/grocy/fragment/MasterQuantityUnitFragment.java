@@ -192,7 +192,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
         R.menu.menu_master_item_edit,
-        animated,
         this::setUpBottomMenu
     );
     activity.updateFab(

@@ -19,12 +19,11 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 
@@ -32,24 +31,12 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 public interface ProductBarcodeDao {
 
   @Query("SELECT * FROM product_barcode_table")
-  LiveData<List<ProductBarcode>> getAllLive();
-
-  @Query("SELECT * FROM product_barcode_table")
-  List<ProductBarcode> getAll();
-
-  @Query("SELECT COUNT(*) FROM product_barcode_table")
-  int count();
+  Single<List<ProductBarcode>> getProductBarcodes();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ProductBarcode> productBarcodes);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ProductBarcode productBarcode);
-
-  @Delete
-  void delete(ProductBarcode productBarcode);
+  Single<List<Long>> insertProductBarcodes(List<ProductBarcode> productBarcodes);
 
   @Query("DELETE FROM product_barcode_table")
-  void deleteAll();
+  Single<Integer> deleteProductBarcodes();
 
 }

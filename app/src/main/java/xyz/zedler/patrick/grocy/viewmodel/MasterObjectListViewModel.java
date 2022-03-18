@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -69,11 +70,11 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Object>> displayedItemsLive;
 
-  private ArrayList<Object> objects;
-  private ArrayList<ProductGroup> productGroups;
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<Location> locations;
-  private ArrayList<TaskCategory> taskCategories;
+  private List objects;
+  private List<ProductGroup> productGroups;
+  private List<QuantityUnit> quantityUnits;
+  private List<Location> locations;
+  private List<TaskCategory> taskCategories;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
@@ -92,7 +93,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new MasterObjectListRepository(application, entity);
+    repository = new MasterObjectListRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -105,26 +106,33 @@ public class MasterObjectListViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    if (!entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      repository.loadFromDatabase(objects -> {
-        this.objects = objects;
-        displayItems();
-        if (downloadAfterLoading) {
-          downloadData();
-        }
-      });
-    } else {
-      repository.loadFromDatabaseProducts((objects, productGroups, quantityUnits, locations) -> {
-        this.objects = objects;
-        this.productGroups = productGroups;
-        this.quantityUnits = quantityUnits;
-        this.locations = locations;
-        displayItems();
-        if (downloadAfterLoading) {
-          downloadData();
-        }
-      });
-    }
+    repository.loadFromDatabase(data -> {
+      switch (entity) {
+        case ENTITY.PRODUCTS:
+          this.objects = data.getProducts();
+          this.productGroups = data.getProductGroups();
+          this.quantityUnits = data.getQuantityUnits();
+          this.locations = data.getLocations();
+          break;
+        case ENTITY.PRODUCT_GROUPS:
+          this.objects = data.getProductGroups();
+          break;
+        case ENTITY.LOCATIONS:
+          this.objects = data.getLocations();
+          break;
+        case ENTITY.QUANTITY_UNITS:
+          this.objects = data.getQuantityUnits();
+          break;
+        default:
+          this.objects = data.getStores();
+          break;
+      }
+
+      displayItems();
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   @SuppressWarnings("unchecked")
@@ -147,15 +155,12 @@ public class MasterObjectListViewModel extends BaseViewModel {
 
     DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     if (entity.equals(GrocyApi.ENTITY.STORES)) {
-      queue.append(dlHelper.updateStores(
-          dbChangedTime,
-          stores -> objects = (ArrayList<Object>) (Object) stores)
-      );
+      queue.append(dlHelper.updateStores(dbChangedTime, stores -> objects = stores));
     }
     if ((entity.equals(GrocyApi.ENTITY.LOCATIONS) || entity.equals(GrocyApi.ENTITY.PRODUCTS))) {
       queue.append(dlHelper.updateLocations(dbChangedTime, locations -> {
         if (entity.equals(GrocyApi.ENTITY.LOCATIONS)) {
-          objects = (ArrayList<Object>) (Object) locations;
+          objects = locations;
         } else {
           this.locations = locations;
         }
@@ -165,7 +170,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         .equals(GrocyApi.ENTITY.PRODUCTS))) {
       queue.append(dlHelper.updateProductGroups(dbChangedTime, productGroups -> {
         if (entity.equals(GrocyApi.ENTITY.PRODUCT_GROUPS)) {
-          objects = (ArrayList<Object>) (Object) productGroups;
+          objects = productGroups;
         } else {
           this.productGroups = productGroups;
         }
@@ -175,7 +180,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         .equals(GrocyApi.ENTITY.PRODUCTS))) {
       queue.append(dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
         if (entity.equals(GrocyApi.ENTITY.QUANTITY_UNITS)) {
-          objects = (ArrayList<Object>) (Object) quantityUnits;
+          objects = quantityUnits;
         } else {
           this.quantityUnits = quantityUnits;
         }
@@ -190,7 +195,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
       queue.append(dlHelper.updateProducts(
           dbChangedTime,
-          products -> objects = (ArrayList<Object>) (Object) products)
+          products -> objects = products)
       );
     }
 
@@ -239,13 +244,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    if (!entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      repository.updateDatabase(objects, this::displayItems);
-    } else {
-      repository.updateDatabaseProducts(
-          objects, productGroups, quantityUnits, locations, this::displayItems
-      );
-    }
+    displayItems();
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -369,15 +368,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
   }
 
   @Nullable
-  private Object getDisplayedItem(int position) {
-    ArrayList<Object> displayedItems = displayedItemsLive.getValue();
-    if (displayedItems == null || position + 1 > displayedItems.size()) {
-      return null;
-    }
-    return displayedItems.get(position);
-  }
-
-  @Nullable
   private Location getLocation(int id) {
     if (locations == null) {
       return null;
@@ -417,7 +407,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   }
 
   @Nullable
-  public ArrayList<ProductGroup> getProductGroups() {
+  public List<ProductGroup> getProductGroups() {
     return productGroups;
   }
 

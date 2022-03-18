@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -117,7 +118,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     if (args.getShoppingListItems() != null) {
       binding.containerBatchMode.setVisibility(View.VISIBLE);
-      binding.linearPurchaseShoppingListItem.containerRow.setBackground(
+      binding.linearBatchItem.containerRow.setBackground(
           ContextCompat.getDrawable(activity, R.drawable.bg_list_item_visible_ripple)
       );
     }
@@ -163,10 +164,16 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
         navigate(PurchaseFragmentDirections
-            .actionPurchaseFragmentToChooseProductFragment(barcode));
+            .actionPurchaseFragmentToChooseProductFragment(barcode)
+            .setPendingProductsActive(viewModel.isQuickModeEnabled()));
       }
     });
 
+    String barcode = (String) getFromThisDestinationNow(ARGUMENT.BARCODE);
+    if (barcode != null) {
+      removeForThisDestination(Constants.ARGUMENT.BARCODE);
+      viewModel.addBarcodeToExistingProduct(barcode);
+    }
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
@@ -181,10 +188,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
           productId, null, null
       ));
     }
-    String barcode = (String) getFromThisDestinationNow(ARGUMENT.BARCODE);
-    if (barcode != null) {
-      removeForThisDestination(Constants.ARGUMENT.BARCODE);
-      viewModel.addBarcodeToExistingProduct(barcode);
+    Integer pendingProductId = (Integer) getFromThisDestinationNow(ARGUMENT.PENDING_PRODUCT_ID);
+    if (pendingProductId != null) {
+      removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
+      viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId));
     }
 
     pluralUtil = new PluralUtil(activity);
@@ -193,7 +200,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       ShoppingListItemAdapter.fillShoppingListItem(
           requireContext(),
           item,
-          binding.linearPurchaseShoppingListItem,
+          binding.linearBatchItem,
           viewModel.getProductHashMap(),
           viewModel.getQuantityUnitHashMap(),
           viewModel.getShoppingListItemAmountsHashMap(),
@@ -211,7 +218,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    //hideDisabledFeatures();
+    viewModel.getFormData().getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), p -> {});
+    viewModel.getFormData().getPendingProductsLive().observe(getViewLifecycleOwner(), p -> {});
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -230,7 +238,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
         args.getShoppingListItems() != null
-            ? R.menu.menu_purchase_shopping_list
+            ? R.menu.menu_purchase_batch
             : R.menu.menu_purchase,
         this::onMenuItemClick
     );
@@ -330,6 +338,13 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     }
   }
 
+  @Override
+  public void addPendingProducts() {
+    viewModel.setBatchPendingProductIds(null);
+    viewModel.getFormData().getBatchModeItemIndexLive().setValue(0);
+    viewModel.fillWithPendingProduct();
+  }
+
   public void clearAmountFieldAndFocusIt() {
     binding.editTextAmount.setText("");
     activity.showKeyboard(binding.editTextAmount);
@@ -346,17 +361,25 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
-    Product product = (Product) adapterView.getItemAtPosition(pos);
     clearInputFocus();
-    if (product == null) {
-      return;
+    Object object = adapterView.getItemAtPosition(pos);
+    if (object instanceof PendingProduct) {
+      viewModel.setPendingProduct(((PendingProduct) object).getId());
+    } else if (object instanceof Product) {
+      viewModel.setProduct(((Product) object).getId(), null, null);
     }
-    viewModel.setProduct(product.getId(), null, null);
   }
 
   public void clearFocusAndCheckProductInput() {
     clearInputFocus();
     viewModel.checkProductInput();
+  }
+
+  public void clearFocusAndCheckProductInputExternal() {
+    clearInputFocus();
+    String input = viewModel.getFormData().getProductNameLive().getValue();
+    if (input == null || input.isEmpty()) return;
+    viewModel.onBarcodeRecognized(viewModel.getFormData().getProductNameLive().getValue());
   }
 
   public void focusProductInputIfNecessary() {
@@ -417,19 +440,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onBottomSheetDismissed() {
     clearInputFocusOrFocusNextInvalidView();
-  }
-
-  private void hideDisabledFeatures() {
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      binding.linearPurchaseTotalPrice.setVisibility(View.GONE);
-      binding.linearPurchasePrice.setVisibility(View.GONE);
-    }
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-      binding.linearPurchaseLocation.setVisibility(View.GONE);
-    }
-    if (!viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
-      binding.linearDueDate.setVisibility(View.GONE);
-    }
   }
 
   private boolean onMenuItemClick(MenuItem item) {

@@ -37,6 +37,8 @@ public class GrocyApi {
   public final static class ENTITY {
 
     public final static String PRODUCTS = "products";
+    public final static String PRODUCTS_LAST_PURCHASED = "products_last_purchased";
+    public final static String PRODUCTS_AVERAGE_PRICE = "products_average_price";
     public final static String PRODUCT_BARCODES = "product_barcodes";
     public final static String LOCATIONS = "locations";
     public final static String STOCK_CURRENT_LOCATIONS = "stock_current_locations";

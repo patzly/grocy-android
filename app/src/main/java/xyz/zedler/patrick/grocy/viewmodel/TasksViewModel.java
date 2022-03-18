@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
@@ -44,6 +45,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -66,8 +68,8 @@ public class TasksViewModel extends BaseViewModel {
   private final FilterChipLiveDataTasksStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
 
-  private ArrayList<Task> tasks;
-  private ArrayList<TaskCategory> taskCategories;
+  private List<Task> tasks;
+  private List<TaskCategory> taskCategories;
   private HashMap<Integer, Task> taskHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
@@ -109,10 +111,9 @@ public class TasksViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase(
-        (taskCategories, tasks) -> {
-          this.taskCategories = taskCategories;
-          this.tasks = tasks;
+    repository.loadFromDatabase(data -> {
+          this.taskCategories = data.getTaskGroups();
+          this.tasks = data.getTasks();
           taskHashMap = new HashMap<>();
           for (Task task : tasks) {
             taskHashMap.put(task.getId(), task);
@@ -156,7 +157,7 @@ public class TasksViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::updateFilteredTasks, this::onDownloadError);
     queue.append(
         dlHelper.updateTaskCategories(
             dbChangedTime,
@@ -171,7 +172,7 @@ public class TasksViewModel extends BaseViewModel {
     );
 
     if (queue.isEmpty()) {
-      onQueueEmpty();
+      updateFilteredTasks();
       return;
     }
 
@@ -186,16 +187,9 @@ public class TasksViewModel extends BaseViewModel {
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASKS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    repository.updateDatabase(
-        this.taskCategories,
-        this.tasks,
-        this::updateFilteredTasks
-    );
   }
 
   private void onDownloadError(@Nullable VolleyError error) {

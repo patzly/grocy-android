@@ -73,6 +73,8 @@ public class FormDataConsume {
   private final MutableLiveData<StockLocation> stockLocationLive;
   private final LiveData<String> stockLocationNameLive;
   private final MutableLiveData<Boolean> spoiledLive;
+  private final MutableLiveData<Boolean> openVisibilityLive;
+  private final MutableLiveData<Boolean> openLive;
   private final MutableLiveData<Boolean> useSpecificLive;
   private ArrayList<StockEntry> stockEntries;
   private final MutableLiveData<StockEntry> specificStockEntryLive;
@@ -158,6 +160,8 @@ public class FormDataConsume {
         location -> location != null ? location.getLocationName() : null
     );
     spoiledLive = new MutableLiveData<>(false);
+    openVisibilityLive = new MutableLiveData<>(true);
+    openLive = new MutableLiveData<>(false);
     useSpecificLive = new MutableLiveData<>(false);
     specificStockEntryLive = new MutableLiveData<>();
   }
@@ -361,6 +365,14 @@ public class FormDataConsume {
     return spoiledLive;
   }
 
+  public MutableLiveData<Boolean> getOpenVisibilityLive() {
+    return openVisibilityLive;
+  }
+
+  public MutableLiveData<Boolean> getOpenLive() {
+    return openLive;
+  }
+
   public MutableLiveData<Boolean> getUseSpecificLive() {
     return useSpecificLive;
   }
@@ -529,7 +541,8 @@ public class FormDataConsume {
 
   public String getConfirmationText() {
     ProductDetails productDetails = productDetailsLive.getValue();
-    assert productDetails != null && amountStockLive.getValue() != null;
+    assert productDetails != null && amountStockLive.getValue() != null
+        && openLive.getValue() != null;
     double amountRemoved = Double.parseDouble(amountStockLive.getValue());
     if (isTareWeightEnabled()) {
       amountRemoved = productDetails.getStockAmount();
@@ -546,7 +559,9 @@ public class FormDataConsume {
       stockLocationName = getString(R.string.subtitle_feature_disabled);
     }
     return application.getString(
-        R.string.msg_quick_mode_confirm_consume,
+        openLive.getValue()
+            ? R.string.msg_quick_mode_confirm_open
+            : R.string.msg_quick_mode_confirm_consume,
         NumUtil.trim(amountRemoved),
         pluralUtil.getQuantityUnitPlural(qU, amountRemoved),
         productDetails.getProduct().getName(),
@@ -597,7 +612,7 @@ public class FormDataConsume {
     Product product = productDetailsLive.getValue().getProduct();
 
     ProductBarcode productBarcode = new ProductBarcode();
-    productBarcode.setProductId(product.getId());
+    productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
     return productBarcode;
   }
@@ -613,6 +628,8 @@ public class FormDataConsume {
     consumeExactAmountLive.setValue(false);
     stockLocationLive.setValue(null);
     spoiledLive.setValue(false);
+    openVisibilityLive.setValue(true);
+    openLive.setValue(false);
     useSpecificLive.setValue(false);
     specificStockEntryLive.setValue(null);
     new Handler().postDelayed(() -> {

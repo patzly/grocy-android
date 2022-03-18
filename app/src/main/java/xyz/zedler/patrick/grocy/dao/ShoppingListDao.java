@@ -21,10 +21,10 @@ package xyz.zedler.patrick.grocy.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.rxjava3.core.Single;
 import java.util.List;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 
@@ -35,27 +35,12 @@ public interface ShoppingListDao {
   LiveData<List<ShoppingList>> getAllLive();
 
   @Query("SELECT * FROM shopping_list_table")
-  List<ShoppingList> getAll();
-
-  @Query("SELECT * FROM shopping_list_table WHERE id IN (:shoppingListIds)")
-  List<ShoppingList> loadAllByIds(int[] shoppingListIds);
-
-  @Query("SELECT * FROM shopping_list_table WHERE name LIKE :name LIMIT 1")
-  ShoppingList findByName(String name);
-
-  @Query("SELECT COUNT(*) FROM shopping_list_table")
-  int count();
+  Single<List<ShoppingList>> getShoppingLists();
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertAll(List<ShoppingList> shoppingLists);
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ShoppingList shoppingList);
-
-  @Delete
-  void delete(ShoppingList shoppingList);
+  Single<List<Long>> insertShoppingLists(List<ShoppingList> shoppingLists);
 
   @Query("DELETE FROM shopping_list_table")
-  void deleteAll();
+  Single<Integer> deleteShoppingLists();
 
 }

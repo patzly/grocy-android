@@ -24,11 +24,11 @@ import android.text.Html;
 import android.text.Spanned;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -38,13 +38,13 @@ public class FormDataMasterProductCatOptional {
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isActiveLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
-  private final MutableLiveData<ArrayList<Product>> productsLive;
+  private final MutableLiveData<List<Product>> productsLive;
   private final MutableLiveData<Product> parentProductLive;
   private final MutableLiveData<String> parentProductNameLive;
   private final MutableLiveData<Boolean> parentProductEnabled;
   private final MutableLiveData<Integer> parentProductNameErrorLive;
   private final MutableLiveData<Spanned> descriptionLive;
-  private final MutableLiveData<ArrayList<ProductGroup>> productGroupsLive;
+  private final MutableLiveData<List<ProductGroup>> productGroupsLive;
   private final MutableLiveData<ProductGroup> productGroupLive;
   private final LiveData<String> productGroupNameLive;
   private final MutableLiveData<String> energyLive;
@@ -53,7 +53,6 @@ public class FormDataMasterProductCatOptional {
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
-  private boolean torchOn = false;
 
   public FormDataMasterProductCatOptional(Application application, boolean beginnerMode) {
     this.application = application;
@@ -99,7 +98,7 @@ public class FormDataMasterProductCatOptional {
     isActiveLive.setValue(isActiveLive.getValue() == null || !isActiveLive.getValue());
   }
 
-  public MutableLiveData<ArrayList<Product>> getProductsLive() {
+  public MutableLiveData<List<Product>> getProductsLive() {
     return productsLive;
   }
 
@@ -123,7 +122,7 @@ public class FormDataMasterProductCatOptional {
     return descriptionLive;
   }
 
-  public MutableLiveData<ArrayList<ProductGroup>> getProductGroupsLive() {
+  public MutableLiveData<List<ProductGroup>> getProductGroupsLive() {
     return productGroupsLive;
   }
 
@@ -160,14 +159,6 @@ public class FormDataMasterProductCatOptional {
 
   public void toggleScannerVisibility() {
     scannerVisibilityLive.setValue(!isScannerVisible());
-  }
-
-  public boolean isTorchOn() {
-    return torchOn;
-  }
-
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
   }
 
   public MutableLiveData<Product> getProductLive() {
@@ -273,7 +264,7 @@ public class FormDataMasterProductCatOptional {
     isActiveLive.setValue(product.isActive());
     parentProductLive.setValue(getProductFromId(product.getParentProductId()));
 
-    ArrayList<Product> products = productsLive.getValue();
+    List<Product> products = productsLive.getValue();
     if (products != null) {
       for (Product productTemp : products) {
         if (NumUtil.isStringInt(productTemp.getParentProductId())
@@ -289,9 +280,5 @@ public class FormDataMasterProductCatOptional {
     energyLive.setValue(product.getCalories());
     neverShowOnStockLive.setValue(product.getHideOnStockOverviewInt() == 1);
     filledWithProduct = true;
-  }
-
-  private String getString(@StringRes int res) {
-    return application.getString(res);
   }
 }

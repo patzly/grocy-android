@@ -32,11 +32,17 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+
+import me.xdrop.fuzzywuzzy.Applicable;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.ToStringFunction;
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.repository.ChooseProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -54,18 +60,23 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> offlineLive;
-  private final MutableLiveData<ArrayList<Product>> displayedItemsLive;
+  private final MutableLiveData<List<Product>> displayedItemsLive;
   private final MutableLiveData<String> productNameLive;
   private final MutableLiveData<String> offHelpText;
   private final MutableLiveData<String> createProductTextLive;
+  private final MutableLiveData<String> createPendingProductTextLive;
   private final MutableLiveData<Boolean> forbidCreateProductLive;
   private final MutableLiveData<String> productNameHelperTextLive;
   private final MutableLiveData<String> existingProductsCategoryTextLive;
 
   private final String barcode;
-  private ArrayList<Product> products;
+  private List<Product> products;
   private final HashMap<String, Product> productHashMap;
-  private boolean forbidCreateProductInitial;
+  private List<PendingProduct> pendingProducts;
+  private final HashMap<String, PendingProduct> pendingProductHashMap;
+  private final boolean forbidCreateProductInitial;
+  private final boolean pendingProductsActive;
+  private String nameFromOnlineSource;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -73,7 +84,8 @@ public class ChooseProductViewModel extends BaseViewModel {
   public ChooseProductViewModel(
       @NonNull Application application,
       String barcode,
-      boolean forbidCreateProduct
+      boolean forbidCreateProduct,
+      boolean pendingProductsActive
   ) {
     super(application);
 
@@ -90,6 +102,9 @@ public class ChooseProductViewModel extends BaseViewModel {
     productNameLive = new MutableLiveData<>();
     offHelpText = new MutableLiveData<>();
     createProductTextLive = new MutableLiveData<>(getString(R.string.msg_create_new_product));
+    createPendingProductTextLive = new MutableLiveData<>(
+            getString(R.string.msg_create_new_pending_product)
+    );
     forbidCreateProductLive = new MutableLiveData<>(forbidCreateProduct);
     productNameHelperTextLive = new MutableLiveData<>(
         application.getString(R.string.subtitle_barcode, barcode)
@@ -98,18 +113,25 @@ public class ChooseProductViewModel extends BaseViewModel {
         getString(R.string.category_existing_products)
     );
     forbidCreateProductInitial = forbidCreateProduct;
+    this.pendingProductsActive = pendingProductsActive;
 
     this.barcode = barcode;
     products = new ArrayList<>();
     productHashMap = new HashMap<>();
+    pendingProductHashMap = new HashMap<>();
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((products) -> {
-      this.products = products;
+    repository.loadFromDatabase(data -> {
+      this.products = data.getProducts();
       productHashMap.clear();
       for (Product product : products) {
         productHashMap.put(product.getName().toLowerCase(), product);
+      }
+      this.pendingProducts = data.getPendingProducts();
+      pendingProductHashMap.clear();
+      for (PendingProduct pendingProduct : this.pendingProducts) {
+        pendingProductHashMap.put(pendingProduct.getName().toLowerCase(), pendingProduct);
       }
       displayItems();
       if (downloadAfterLoading) {
@@ -169,9 +191,8 @@ public class ChooseProductViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateDatabase(
-        products, this::displayItems
-    );
+    displayItems();
+
     boolean productNameFilled = productNameLive.getValue() != null
         && !productNameLive.getValue().isEmpty();
     if(isOpenFoodFactsEnabled() && !productNameFilled) {
@@ -180,16 +201,44 @@ public class ChooseProductViewModel extends BaseViewModel {
           productName -> {
             if (productName != null && !productName.isEmpty()) {
               productNameLive.setValue(productName);
+              nameFromOnlineSource = productName;
               offHelpText.setValue(getString(R.string.msg_product_name_off));
             } else {
-              offHelpText.setValue(getString(R.string.msg_product_name_off_empty));
-              sendEvent(Event.FOCUS_INVALID_VIEWS);
+              dlHelper.getOpenBeautyFactsProductName(
+                  barcode,
+                  productName1 -> {
+                    if (productName1 != null && !productName1.isEmpty()) {
+                      productNameLive.setValue(productName1);
+                      nameFromOnlineSource = productName1;
+                      offHelpText.setValue(getString(R.string.msg_product_name_obf));
+                    } else {
+                      offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
+                      sendEvent(Event.FOCUS_INVALID_VIEWS);
+                    }
+                  },
+                  error1 -> {
+                    offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
+                    sendEvent(Event.FOCUS_INVALID_VIEWS);
+                  }
+              );
             }
           },
-          error-> {
-            offHelpText.setValue(getString(R.string.msg_product_name_off_error));
-            sendEvent(Event.FOCUS_INVALID_VIEWS);
-          }
+          error -> dlHelper.getOpenBeautyFactsProductName(
+              barcode,
+              productName -> {
+                if (productName != null && !productName.isEmpty()) {
+                  productNameLive.setValue(productName);
+                  offHelpText.setValue(getString(R.string.msg_product_name_obf));
+                } else {
+                  offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
+                  sendEvent(Event.FOCUS_INVALID_VIEWS);
+                }
+              },
+              error1 -> {
+                offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
+                sendEvent(Event.FOCUS_INVALID_VIEWS);
+              }
+          )
       );
     } else if (!productNameFilled) {
       sendEvent(Event.FOCUS_INVALID_VIEWS);
@@ -220,25 +269,51 @@ public class ChooseProductViewModel extends BaseViewModel {
       return;
     }
 
-    ArrayList<Product> suggestions = new ArrayList<>(productHashMap.keySet().size());
-    List<ExtractedResult> results = FuzzySearch.extractSorted(
-        productName.toLowerCase(),
-        productHashMap.keySet(),
-        20
+    ArrayList<Product> allProducts = new ArrayList<>();
+    allProducts.addAll(products);
+    allProducts.addAll(pendingProducts);
+    ArrayList<Product> suggestions = new ArrayList<>(allProducts.size());
+    List<BoundExtractedResult<Product>> results = FuzzySearch.extractSorted(
+            productName.toLowerCase(),
+            allProducts,
+            Product::getName,
+            20
     );
-    for (ExtractedResult result : results) {
-      suggestions.add(productHashMap.get(result.getString()));
+    for (BoundExtractedResult<Product> result : results) {
+      suggestions.add(result.getReferent());
     }
 
     displayedItemsLive.setValue(suggestions);
     createProductTextLive.setValue(
         getApplication().getString(R.string.msg_create_new_product_filled, productName)
     );
+    if (pendingProductsActive) {
+      createPendingProductTextLive.setValue(
+          getApplication().getString(R.string.msg_create_new_pending_product_filled, productName)
+      );
+    }
     if (!forbidCreateProductInitial) {
-      forbidCreateProductLive.setValue(productHashMap.containsKey(productName.toLowerCase()));
+      forbidCreateProductLive.setValue(
+              productHashMap.containsKey(productName.toLowerCase())
+                      || pendingProductHashMap.containsKey(productName.toLowerCase())
+      );
     }
     existingProductsCategoryTextLive.setValue(
         getString(R.string.category_existing_products_similar)
+    );
+  }
+
+  public void createPendingProduct(ChooseProductRepository.CreatePendingProductListener listener) {
+    String name = productNameLive.getValue();
+    if (name == null || name.trim().isEmpty()) {
+      showMessage("Product name is required");
+      return;
+    }
+    PendingProduct pendingProduct = new PendingProduct(name, name.equals(nameFromOnlineSource));
+    repository.createPendingProduct(
+            pendingProduct,
+            listener,
+            () -> showMessage("Could not create temporary product")
     );
   }
 
@@ -256,7 +331,7 @@ public class ChooseProductViewModel extends BaseViewModel {
   }
 
   @NonNull
-  public MutableLiveData<ArrayList<Product>> getDisplayedItemsLive() {
+  public MutableLiveData<List<Product>> getDisplayedItemsLive() {
     return displayedItemsLive;
   }
 
@@ -280,6 +355,10 @@ public class ChooseProductViewModel extends BaseViewModel {
     return createProductTextLive;
   }
 
+  public MutableLiveData<String> getCreatePendingProductTextLive() {
+    return createPendingProductTextLive;
+  }
+
   public MutableLiveData<Boolean> getForbidCreateProductLive() {
     return forbidCreateProductLive;
   }
@@ -290,6 +369,10 @@ public class ChooseProductViewModel extends BaseViewModel {
 
   public MutableLiveData<String> getExistingProductsCategoryTextLive() {
     return existingProductsCategoryTextLive;
+  }
+
+  public boolean isPendingProductsActive() {
+    return pendingProductsActive;
   }
 
   @NonNull
@@ -319,22 +402,27 @@ public class ChooseProductViewModel extends BaseViewModel {
     private final Application application;
     private final String barcode;
     private final boolean forbidCreateProduct;
+    private final boolean pendingProductsActive;
 
     public ChooseProductViewModelFactory(
         Application application,
         String barcode,
-        boolean forbidCreateProduct
+        boolean forbidCreateProduct,
+        boolean pendingProductsActive
     ) {
       this.application = application;
       this.barcode = barcode;
       this.forbidCreateProduct = forbidCreateProduct;
+      this.pendingProductsActive = pendingProductsActive;
     }
 
     @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-      return (T) new ChooseProductViewModel(application, barcode, forbidCreateProduct);
+      return (T) new ChooseProductViewModel(
+              application, barcode, forbidCreateProduct, pendingProductsActive
+      );
     }
   }
 }

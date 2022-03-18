@@ -232,6 +232,34 @@
 
         </LinearLayout>
 
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchTreatOpened.setChecked(!switchTreatOpened.isChecked())}"
+          android:visibility="@{viewModel.hasServerNewOptionTreatOpenedAsOutOfStock() ? View.VISIBLE : View.GONE}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_open"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_treat_opened_as_out_of_stock" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_treat_opened"
+            style="@style/Widget.Grocy.Switch"
+            android:onCheckedChanged="@{(view, checked) -> viewModel.setTreatOpenedAsOutOfStockEnabled(checked)}"
+            initialChecked="@{viewModel.treatOpenedAsOutOfStockEnabled}"/>
+
+        </LinearLayout>
+
         <TextView
           style="@style/Widget.Grocy.TextView.Category"
           android:text="@string/title_stock_overview" />

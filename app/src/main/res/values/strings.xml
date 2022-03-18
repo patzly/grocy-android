@@ -236,15 +236,20 @@
   <string name="option_synced_error">Option could not be synced</string>
   <string name="msg_choose_product">The barcode you\'ve scanned is not linked to a product yet. You can link it to an existing one or create a new product for it.</string>
   <string name="msg_product_name_off">Product name for barcode is from Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Barcode could not be looked up on Open Food Facts.</string>
-  <string name="msg_product_name_off_empty">Barcode is not in Open Food Facts database.</string>
+  <string name="msg_product_name_obf">Product name for barcode is from Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">Barcode could not be looked up on Open Food Facts or Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_empty">Barcode is not in Open Food Facts or Open Beauty Facts database.</string>
   <string name="msg_off_option_deactivated">For automatic suggestion of a product name you can activate Open Food Facts look up in the settings.</string>
   <string name="msg_create_new_product_filled">Create new product \"%1$s\"</string>
   <string name="msg_create_new_product">Create new product</string>
+  <string name="msg_create_new_pending_product_filled">Create new temporary product \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Create new temporary product</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Transaction which will be executed:\n\nAdd %1$s %2$s of %3$s to stock\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Transaction which will be executed:\n\nRemove %1$s %2$s of %3$s from stock\nLocation: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Transaction which will be executed:\n\Mark %1$s %2$s of %3$s as opened\nLocation: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transaction which will be executed:\n\nTransfer %1$s %2$s of %3$s\nFrom Location: %4$s\nTo Location: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -290,6 +295,8 @@
   <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">If enabled, the min. stock amount of sub products will be accumulated into this product, means the sub product will never be \"missing\", only this product.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">When enabled, opened items will be counted as missing for calculating if this product is below its minimum stock amount.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">This amount is used for the \"quick consume/open buttons\" on the stock overview page (related to quantity unit stock).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -464,7 +471,7 @@
   <string name="title_shopping_list_edit">Edit shopping list</string>
   <string name="title_shopping_list_new">New shopping list</string>
   <string name="title_shopping_mode">Shopping mode</string>
-  <string name="title_batch_mode_shopping_list">Shopping list batch mode</string>
+  <string name="title_batch_mode_shopping_list">Batch mode shopping list</string>
   <string name="title_product_cat_optional">Optional properties</string>
   <string name="title_product_cat_location">Default location</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -618,6 +625,7 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Amount in %1$s</string>
   <string name="property_price">Price</string>
+  <string name="property_price_average">Average price</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Price per %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
@@ -675,6 +683,8 @@
   <string name="property_last_used">Last used</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Last price</string>
+  <string name="property_last_price_unit">Last price (unit)</string>
+  <string name="property_last_price_total">Last price (total)</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>
@@ -719,7 +729,8 @@
   <string name="property_extra_field">Extra field: %1$s</string>
   <string name="property_task_categories">Task categories</string>
   <string name="property_calories">Calories</string>
-  <string name="property_calories_per_unit">Calories (per stock unit)</string>
+  <string name="property_calories_unit">Calories (unit)</string>
+  <string name="property_calories_total">Calories (total)</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -823,7 +834,7 @@
   <string name="setting_language_info">Many thanks to all the volunteer translators at Transifex!\nPlease visit us on GitHub to learn how you can help make Grocy Android available for your language.</string>
   <string name="setting_language_system">System default: %1$s</string>
   <string name="setting_language_not_available">Not available</string>
-  <string name="setting_open_food_facts">Use Open Food Facts</string>
+  <string name="setting_open_food_facts">Use Open Food Facts and Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Get info from barcodes</string>
   <string name="setting_choose_barcode_scanner">Choose barcode scanner</string>
   <string name="setting_choose_barcode_scanner_description">For camera barcode scanning</string>
@@ -862,6 +873,7 @@
   <string name="setting_default_amount_purchase">Default amount for purchase</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Default amount for consume</string>
+  <string name="setting_treat_opened_as_out_of_stock">Treat opened as out of stock</string>
   <string name="setting_purchased_date">Ask for purchased date</string>
   <string name="setting_purchased_date_description">On purchase and inventory page</string>
   <string name="setting_use_quick_consume_amount">Use the product\'s \"Quick consume amount\"</string>

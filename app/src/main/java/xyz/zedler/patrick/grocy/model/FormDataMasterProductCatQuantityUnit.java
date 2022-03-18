@@ -26,7 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import java.util.ArrayList;
+import java.util.List;
 
 public class FormDataMasterProductCatQuantityUnit {
 
@@ -36,7 +36,7 @@ public class FormDataMasterProductCatQuantityUnit {
 
   private final Application application;
   private final MutableLiveData<Boolean> displayHelpLive;
-  private final MutableLiveData<ArrayList<QuantityUnit>> quantityUnitsLive;
+  private final MutableLiveData<List<QuantityUnit>> quantityUnitsLive;
   private final MutableLiveData<QuantityUnit> quStockLive;
   private final LiveData<String> quStockNameLive;
   private final LiveData<Boolean> quStockErrorLive;
@@ -44,7 +44,6 @@ public class FormDataMasterProductCatQuantityUnit {
   private final LiveData<String> quPurchaseNameLive;
   private final LiveData<Boolean> quPurchaseErrorLive;
 
-  private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
 
   public FormDataMasterProductCatQuantityUnit(Application application, boolean beginnerMode) {
@@ -66,7 +65,6 @@ public class FormDataMasterProductCatQuantityUnit {
     //noinspection Convert2MethodRef
     quPurchaseErrorLive = Transformations.map(quPurchaseLive, qu -> qu == null);
 
-    productLive = new MutableLiveData<>();
     filledWithProduct = false;
   }
 
@@ -79,7 +77,7 @@ public class FormDataMasterProductCatQuantityUnit {
     displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
-  public MutableLiveData<ArrayList<QuantityUnit>> getQuantityUnitsLive() {
+  public MutableLiveData<List<QuantityUnit>> getQuantityUnitsLive() {
     return quantityUnitsLive;
   }
 

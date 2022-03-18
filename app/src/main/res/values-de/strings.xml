@@ -119,13 +119,13 @@
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
-    <item quantity="one">%1$d abgelaufen</item>
-    <item quantity="other">%1$d abgelaufen</item>
+    <item quantity="one">%1$d überfällig</item>
+    <item quantity="other">%1$d überfällig</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
-    <item quantity="one">%1$d verdorben</item>
-    <item quantity="other">%1$d verdorben</item>
+    <item quantity="one">%1$d abgelaufen</item>
+    <item quantity="other">%1$d abgelaufen</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -175,8 +175,8 @@
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
-    <item quantity="one">%1$d abgelaufen</item>
-    <item quantity="other">%1$d abgelaufen</item>
+    <item quantity="one">%1$d überfällig</item>
+    <item quantity="other">%1$d überfällig</item>
   </plurals>
   <string name="msg_task_mark">Aufgabe als erledigt markieren</string>
   <string name="msg_task_completed">Aufgabe als erledigt markiert</string>
@@ -229,8 +229,9 @@
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
   <string name="msg_choose_product">Der von Ihnen gescannte Barcode ist noch nicht mit einem Produkt verknüpft. Sie können ihn mit einem vorhandenen verknüpfen oder ein neues Produkt erstellen.</string>
   <string name="msg_product_name_off">Produktname für Barcode stammt von Open Food Facts.</string>
-  <string name="msg_product_name_off_error">Barcode konnte nicht auf Open Food Facts nachgeschaut werden.</string>
-  <string name="msg_product_name_off_empty">Barcode ist nicht in der Open Food Facts Datenbank.</string>
+  <string name="msg_product_name_obf">Produktname für Barcode stammt von Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">Barcode konnte nicht auf Open Food Facts oder Open Beauty Facts nachgeschaut werden.</string>
+  <string name="msg_product_name_lookup_empty">Barcode ist nicht in der Open Food Facts oder Open Beauty Facts Datenbank.</string>
   <string name="msg_off_option_deactivated">Sie können Open Food Facts in den Einstellungen aktivieren, damit automatisch ein Produktname vorgeschlagen wird.</string>
   <string name="msg_create_new_product_filled">Neues Produkt \"%1$s\" erstellen</string>
   <string name="msg_create_new_product">Neues Produkt erstellen</string>
@@ -238,11 +239,13 @@
   <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s aus dem Bestand entfernen\nStandort: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s als geöffnet markieren\nStandort: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s umlagern\nVon Standort: %4$s\nNach Standort: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">Folgende Transaktion wird ausgeführt:\n\nBestandsmenge von %1$s zu %2$s %3$s ändern\nFür hinzugefügte Einträge gilt:\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
-  <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nUnterstützte Server-Versionen:\n%2$s\nWenn Sie diese Warnung ignorieren, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nSie wurden gewarnt!</string>
+  <string name="msg_compatibility">Diese App-Version ist nicht kompatibel mit der Server-Version von Grocy.\n\nAktuelle Server-Version: %1$s\n\nUnterstützte Server-Versionen:\n%2$s\nWenn die aktuelle Version eine höhere Hauptversionsnummer (erste Ziffer) hat als die unterstützten Versionen und Sie ignorieren diese Warnung, können Daten verloren gehen (unwahrscheinlich) und Abstürze auftreten (wahrscheinlich).\nWenn es nur eine kleine Abweichung gibt (z.B. letzte Ziffer höher), können Sie diese Warnung wahrscheinlich ignorieren.</string>
   <string name="msg_logout">Nichts auf Ihrem Server wird geändert. Sie werden zur Anmeldeseite weitergeleitet.</string>
   <string name="msg_logout_demo">Sie verwenden den öffentlichen Demo-Server <u>https://grocy.info</u>.\n\n<b>Keine Ihrer Änderungen werden dort dauerhaft gespeichert!\nSie bleiben öffentlich, bis sie der Server automatisch überschreibt (einmal täglich).</b>\n\nAuf der Anmeldeoberfläche können Sie Ihre eigene Server-Adresse eingeben.</string>
   <string name="msg_logout_demo_short">Öffentlicher Demo-Server. Für Details tippen.</string>
@@ -257,7 +260,7 @@
   <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
   <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
-  <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
+  <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
   <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
@@ -282,6 +285,8 @@
   <string name="msg_help_qu_purchase">Dies ist die Standardmengeneinheit, die beim Hinzufügen dieses Produkts zum Einkaufszettel verwendet wird.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Wenn aktiviert, werden die Mindestbestände von untergeordneten Produkten aufsummiert, heißt das untergeordnete Produkt wird nie \"fehlen\", nur dieses.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Wenn aktiviert, werden geöffnete Bestandseinträge für die Ermittlung des Mindestbestands als bereits verbraucht betrachtet.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Diese Menge wird für die \"Schnell-Verbrauch/Öffnen\"-Buttons auf der Bestandsübersicht benutzt (bezieht sich auf die Bestandsmengeneinheit)</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -539,13 +544,13 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
-    <item quantity="one">%1$d Produkt ist abgelaufen.</item>
-    <item quantity="other">%1$d Produkte sind abgelaufen.</item>
+    <item quantity="one">%1$d Produkt ist überfällig.</item>
+    <item quantity="other">%1$d Produkte sind überfällig.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="one">%1$d Produkt ist verdorben.</item>
-    <item quantity="other">%1$d Produkte sind verdorben.</item>
+    <item quantity="one">%1$d Produkt ist abgelaufen.</item>
+    <item quantity="other">%1$d Produkte sind abgelaufen.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
@@ -604,6 +609,7 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Menge in %1$s</string>
   <string name="property_price">Preis</string>
+  <string name="property_price_average">Durchschnittlicher Preis</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Preis pro %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
@@ -661,6 +667,8 @@
   <string name="property_last_used">Zuletzt benutzt</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Letzter Preis</string>
+  <string name="property_last_price_unit">Letzter Preis (Einheit)</string>
+  <string name="property_last_price_total">Letzter Preis (gesamt)</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Durchschnittliche Haltbarkeit</string>
   <string name="property_spoil_rate">Verderblichkeitsrate</string>
@@ -705,7 +713,8 @@
   <string name="property_extra_field">Extrafeld: %1$s</string>
   <string name="property_task_categories">Aufgabenkategorien</string>
   <string name="property_calories">Kalorien</string>
-  <string name="property_calories_per_unit">Kalorien (pro Bestandseinheit)</string>
+  <string name="property_calories_unit">Kalorien (Einheit)</string>
+  <string name="property_calories_total">Kalorien (gesamt)</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>
@@ -809,7 +818,7 @@
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
   <string name="setting_language_system">Systemvorgabe: %1$s</string>
   <string name="setting_language_not_available">Nicht verfügbar</string>
-  <string name="setting_open_food_facts">Open Food Facts benutzen</string>
+  <string name="setting_open_food_facts">Open Food Facts und Open Beauty Facts benutzen</string>
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
   <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
   <string name="setting_choose_barcode_scanner_description">Für Barcode-Scannen mit der Kamera</string>
@@ -848,6 +857,7 @@
   <string name="setting_default_amount_purchase">Standardmenge für Einkauf</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Standardmenge für Verbrauch</string>
+  <string name="setting_treat_opened_as_out_of_stock">Geöffnete als nicht vorrätig behandeln</string>
   <string name="setting_purchased_date">Nach Einkaufsdatum fragen</string>
   <string name="setting_purchased_date_description">Auf der Einkauf- und Inventur-Seite</string>
   <string name="setting_use_quick_consume_amount">Die Schnell-Verbrauchs-Menge des Produkts verwenden</string>

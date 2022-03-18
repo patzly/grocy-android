@@ -252,8 +252,8 @@
                   android:afterTextChanged="@{() -> formData.isProductNameValid()}"
                   app:productList="@{formData.productsLive}"
                   app:onNextClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
-                  app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInput()}"
-                  app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInput()}" />
+                  app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"
+                  app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}" />
 
               </com.google.android.material.textfield.TextInputLayout>
 
@@ -470,6 +470,31 @@
                 android:id="@+id/checkbox_spoiled"
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.spoiledLive}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              android:onClick="@{() -> checkboxOpen.setChecked(!checkboxOpen.isChecked())}"
+              android:visibility="@{formData.openVisibilityLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}">
+
+              <ImageView
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_open"
+                tools:ignore="ContentDescription" />
+
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  android:text="@string/action_open" />
+
+              </LinearLayout>
+
+              <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_open"
+                style="@style/Widget.Grocy.Switch"
+                android:checked="@={formData.openLive}" />
 
             </LinearLayout>
 

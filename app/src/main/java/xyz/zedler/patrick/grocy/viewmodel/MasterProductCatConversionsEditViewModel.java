@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -42,7 +43,7 @@ import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatConversionsEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
-import xyz.zedler.patrick.grocy.repository.MasterProductCatConversionsEditRepository;
+import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -56,7 +57,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final MasterProductCatConversionsEditRepository repository;
+  private final MasterProductRepository repository;
   private final FormDataMasterProductCatConversionsEdit formData;
   private final MasterProductCatConversionsEditFragmentArgs args;
 
@@ -64,8 +65,8 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private ArrayList<QuantityUnit> quantityUnits;
-  private ArrayList<QuantityUnitConversion> unitConversions;
+  private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> unitConversions;
 
   private DownloadHelper.Queue currentQueueLoading;
   private Runnable queueEmptyAction;
@@ -84,7 +85,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    repository = new MasterProductCatConversionsEditRepository(application);
+    repository = new MasterProductRepository(application);
     formData = new FormDataMasterProductCatConversionsEdit(application, startupArgs.getProduct());
     args = startupArgs;
     isActionEdit = startupArgs.getConversion() != null;
@@ -98,9 +99,9 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadFromDatabase((qUs, conversions) -> {
-      this.quantityUnits = qUs;
-      this.unitConversions = conversions;
+    repository.loadFromDatabase(data -> {
+      this.quantityUnits = data.getQuantityUnits();
+      this.unitConversions = data.getConversions();
       fillWithConversionIfNecessary();
       if (downloadAfterLoading) {
         downloadData();
@@ -122,7 +123,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> onQueueEmpty(true), this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
@@ -131,7 +132,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
         )
     );
     if (queue.isEmpty()) {
-      onQueueEmpty(false);
+      onQueueEmpty();
       return;
     }
 
@@ -151,12 +152,9 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     downloadData();
   }
 
-  private void onQueueEmpty(boolean offlineDataUpdated) {
+  private void onQueueEmpty() {
     if (isOffline()) {
       setOfflineLive(false);
-    }
-    if (offlineDataUpdated) {
-      repository.updateDatabase(quantityUnits, unitConversions, null);
     }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
@@ -230,10 +228,10 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
   }
 
   public void showQuantityUnitsBottomSheet(boolean from) {
-    ArrayList<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
+    List<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
     if (quantityUnits == null) return;
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
     bundle.putBoolean(QUANTITY_UNIT_IS_FROM, from);
     QuantityUnit quantityUnit;
     if (from) {
