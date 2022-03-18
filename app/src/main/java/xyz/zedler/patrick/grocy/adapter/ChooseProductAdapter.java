@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 
 public class ChooseProductAdapter extends
@@ -58,14 +60,16 @@ public class ChooseProductAdapter extends
 
   public static class ItemViewHolder extends ViewHolder {
 
-    private final LinearLayout linearLayoutItemContainer;
-    private final TextView textViewName;
+    private final LinearLayout container;
+    private final TextView name;
+    private final ImageView imagePending;
 
     public ItemViewHolder(View view) {
       super(view);
 
-      linearLayoutItemContainer = view.findViewById(R.id.linear_master_item_container);
-      textViewName = view.findViewById(R.id.text_master_item_name);
+      container = view.findViewById(R.id.container);
+      name = view.findViewById(R.id.name);
+      imagePending = view.findViewById(R.id.image_pending);
     }
   }
 
@@ -74,7 +78,7 @@ public class ChooseProductAdapter extends
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return new ItemViewHolder(
         LayoutInflater.from(parent.getContext()).inflate(
-            R.layout.row_master_item,
+            R.layout.row_choose_product_item,
             parent,
             false
         )
@@ -88,10 +92,17 @@ public class ChooseProductAdapter extends
     Product product = products.get(holder.getAdapterPosition());
 
     // NAME
-    holder.textViewName.setText(product.getName());
+    holder.name.setText(product.getName());
+
+    // ICON
+    if (product instanceof PendingProduct) {
+      holder.imagePending.setVisibility(View.VISIBLE);
+    } else {
+      holder.imagePending.setVisibility(View.GONE);
+    }
 
     // CONTAINER
-    holder.linearLayoutItemContainer.setOnClickListener(
+    holder.container.setOnClickListener(
         view -> listener.onItemRowClicked(product)
     );
   }

@@ -31,10 +31,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
@@ -54,6 +56,8 @@ public class FormDataPurchase {
   private final MutableLiveData<Integer> batchModeItemIndexLive;
   private final LiveData<String> batchModeTextLive;
   private final MutableLiveData<ShoppingListItem> shoppingListItemLive;
+  private final LiveData<List<PendingProduct>> pendingProductsLive;
+  private final LiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
   private final MutableLiveData<PendingProduct> pendingProductLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
@@ -100,6 +104,9 @@ public class FormDataPurchase {
       PurchaseFragmentArgs args
   ) {
     DateUtil dateUtil = new DateUtil(application);
+    AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
+    pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
+    pendingProductBarcodesLive = appDatabase.pendingProductBarcodeDao().getAllLive();
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
@@ -257,6 +264,14 @@ public class FormDataPurchase {
   public void toggleDisplayHelpLive() {
     assert displayHelpLive.getValue() != null;
     displayHelpLive.setValue(!displayHelpLive.getValue());
+  }
+
+  public LiveData<List<PendingProduct>> getPendingProductsLive() {
+    return pendingProductsLive;
+  }
+
+  public LiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
+    return pendingProductBarcodesLive;
   }
 
   public MutableLiveData<Integer> getBatchModeItemIndexLive() {
@@ -623,7 +638,7 @@ public class FormDataPurchase {
 
   public boolean isProductNameValid() {
     if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
-      if (productDetailsLive.getValue() != null) {
+      if (productDetailsLive.getValue() != null || pendingProductLive.getValue() != null) {
         clearForm();
         return false;
       }
@@ -633,13 +648,17 @@ public class FormDataPurchase {
       productNameErrorLive.setValue(R.string.error_empty);
       return false;
     }
-    if (productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()) {
+    if (productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()
+            && pendingProductLive.getValue() == null) {
       productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
     if (productDetailsLive.getValue() != null && !productNameLive.getValue().isEmpty()
         && !productDetailsLive.getValue().getProduct().getName()
-        .equals(productNameLive.getValue())
+        .equals(productNameLive.getValue()) || pendingProductLive.getValue() != null
+            && !productNameLive.getValue().isEmpty()
+            && !pendingProductLive.getValue().getName()
+            .equals(productNameLive.getValue())
     ) {
       productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
@@ -728,14 +747,18 @@ public class FormDataPurchase {
   }
 
   public String getConfirmationText() {
-    assert productDetailsLive.getValue() != null && amountStockLive.getValue() != null;
-    double amountAdded = Double.parseDouble(amountStockLive.getValue());
-    if (isTareWeightEnabled()) {
-      amountAdded -= productDetailsLive.getValue().getStockAmount();
-      amountAdded -= productDetailsLive.getValue().getProduct().getTareWeightDouble();
+    ProductDetails details = productDetailsLive.getValue();
+    assert details != null || pendingProductLive.getValue() != null;
+    assert NumUtil.isStringDouble(amountStockLive.getValue())
+            || NumUtil.isStringDouble(amountLive.getValue());
+    double amountAdded = amountStockLive.getValue() != null
+            ? Double.parseDouble(amountStockLive.getValue())
+            : Double.parseDouble(amountLive.getValue());
+    if (details != null && isTareWeightEnabled()) {
+      amountAdded -= details.getStockAmount();
+      amountAdded -= details.getProduct().getTareWeightDouble();
     }
     QuantityUnit qU = quantityUnitLive.getValue();
-    ProductDetails details = productDetailsLive.getValue();
     String price = getString(R.string.subtitle_feature_disabled);
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       price = priceLive.getValue();
@@ -748,7 +771,7 @@ public class FormDataPurchase {
         price = getString(R.string.subtitle_empty);
       }
     }
-    assert qU != null && details != null;
+
     String store = storeNameLive.getValue();
     if (!isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       store = getString(R.string.subtitle_feature_disabled);
@@ -759,8 +782,8 @@ public class FormDataPurchase {
     return application.getString(
         R.string.msg_quick_mode_confirm_purchase,
         NumUtil.trim(amountAdded),
-        pluralUtil.getQuantityUnitPlural(qU, amountAdded),
-        details.getProduct().getName(),
+        qU != null ? pluralUtil.getQuantityUnitPlural(qU, amountAdded) : "",
+        details != null ? details.getProduct().getName() : pendingProductLive.getValue().getName(),
         dueDateTextLive.getValue(),
         price,
         store,
@@ -834,6 +857,7 @@ public class FormDataPurchase {
     quantityUnitLive.setValue(null);
     quantityUnitsFactorsLive.setValue(null);
     productDetailsLive.setValue(null);
+    pendingProductLive.setValue(null);
     productNameLive.setValue(null);
     purchasedDateLive.setValue(null);
     dueDateLive.setValue(null);

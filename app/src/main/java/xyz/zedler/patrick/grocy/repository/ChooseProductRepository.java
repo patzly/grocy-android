@@ -21,9 +21,12 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 
 public class ChooseProductRepository {
@@ -41,21 +44,51 @@ public class ChooseProductRepository {
   public static class ChooseProductData {
 
     private final List<Product> products;
+    private final List<PendingProduct> pendingProducts;
 
-    public ChooseProductData(List<Product> products) {
+    public ChooseProductData(
+            List<Product> products,
+            List<PendingProduct> pendingProducts
+    ) {
       this.products = products;
+      this.pendingProducts = pendingProducts;
     }
 
     public List<Product> getProducts() {
       return products;
     }
+
+    public List<PendingProduct> getPendingProducts() {
+      return pendingProducts;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
-    appDatabase.productDao().getProducts()
+    Single.zip(
+        appDatabase.productDao().getProducts(),
+        appDatabase.pendingProductDao().getPendingProducts(),
+        ChooseProductData::new
+    )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnSuccess(products -> listener.actionFinished(new ChooseProductData(products)))
+        .doOnSuccess(listener::actionFinished)
         .subscribe();
+  }
+
+  public void createPendingProduct(
+          PendingProduct pendingProduct,
+          CreatePendingProductListener successListener,
+          Runnable errorListener
+  ) {
+    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess(successListener::onSuccess)
+            .doOnError(throwable -> errorListener.run())
+            .subscribe();
+  }
+
+  public interface CreatePendingProductListener {
+    void onSuccess(long pendingProductId);
   }
 }

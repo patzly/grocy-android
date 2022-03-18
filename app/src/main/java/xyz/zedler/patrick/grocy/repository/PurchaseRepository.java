@@ -50,6 +50,7 @@ public class PurchaseRepository {
   public static class PurchaseData {
 
     private final List<Product> products;
+    private final List<PendingProduct> pendingProducts;
     private final List<ProductBarcode> barcodes;
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> quantityUnitConversions;
@@ -59,6 +60,7 @@ public class PurchaseRepository {
 
     public PurchaseData(
         List<Product> products,
+        List<PendingProduct> pendingProducts,
         List<ProductBarcode> barcodes,
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversion> quantityUnitConversions,
@@ -67,6 +69,7 @@ public class PurchaseRepository {
         List<ShoppingListItem> shoppingListItems
     ) {
       this.products = products;
+      this.pendingProducts = pendingProducts;
       this.barcodes = barcodes;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
@@ -77,6 +80,10 @@ public class PurchaseRepository {
 
     public List<Product> getProducts() {
       return products;
+    }
+
+    public List<PendingProduct> getPendingProducts() {
+      return pendingProducts;
     }
 
     public List<ProductBarcode> getBarcodes() {
@@ -108,6 +115,7 @@ public class PurchaseRepository {
     Single
         .zip(
             appDatabase.productDao().getProducts(),
+            appDatabase.pendingProductDao().getPendingProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),

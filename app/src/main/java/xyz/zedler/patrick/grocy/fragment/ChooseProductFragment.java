@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentChooseProductBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -88,6 +89,8 @@ public class ChooseProductFragment extends BaseFragment
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     boolean forbidCreateProduct = ChooseProductFragmentArgs.fromBundle(requireArguments())
         .getForbidCreateProduct();
+    boolean pendingProductsActive = ChooseProductFragmentArgs.fromBundle(requireArguments())
+            .getPendingProductsActive();
     Object newProductId = getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
     if (newProductId != null) {  // if user created a new product and navigates back to this fragment this is the new productId
       setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
@@ -97,8 +100,9 @@ public class ChooseProductFragment extends BaseFragment
     }
 
     viewModel = new ViewModelProvider(this, new ChooseProductViewModel
-        .ChooseProductViewModelFactory(activity.getApplication(), barcode, forbidCreateProduct)
-    ).get(ChooseProductViewModel.class);
+        .ChooseProductViewModelFactory(
+                activity.getApplication(), barcode, forbidCreateProduct, pendingProductsActive
+    )).get(ChooseProductViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
 
     binding.setFragment(this);
@@ -203,7 +207,11 @@ public class ChooseProductFragment extends BaseFragment
     if (clickUtil.isDisabled()) {
       return;
     }
-    setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+    if (product instanceof PendingProduct) {
+      setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, product.getId());
+    } else {
+      setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+    }
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     setForPreviousDestination(ARGUMENT.BARCODE, barcode);
     activity.navigateUp();
@@ -214,6 +222,16 @@ public class ChooseProductFragment extends BaseFragment
         new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
             .setProductName(viewModel.getProductNameLive().getValue())
             .build().toBundle());
+  }
+
+  public void createNewPendingProduct() {
+    activity.hideKeyboard();
+    viewModel.createPendingProduct(id -> {
+      setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, (int) id);
+      String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
+      setForPreviousDestination(ARGUMENT.BARCODE, barcode);
+      activity.navigateUp();
+    });
   }
 
   @Override

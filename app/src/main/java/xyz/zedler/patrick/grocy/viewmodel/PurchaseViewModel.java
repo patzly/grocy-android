@@ -26,7 +26,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,7 +38,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
@@ -55,7 +53,6 @@ import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
-import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -89,6 +86,7 @@ public class PurchaseViewModel extends BaseViewModel {
 
   private List<Product> products;
   private HashMap<Integer, Product> productHashMap;
+  private List<PendingProduct> pendingProducts;
   private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private List<QuantityUnitConversion> unitConversions;
@@ -105,8 +103,6 @@ public class PurchaseViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> quickModeEnabled;
-  private final LiveData<List<PendingProduct>> pendingProductsLive;
-  private final LiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
 
   private Runnable queueEmptyAction;
 
@@ -121,10 +117,6 @@ public class PurchaseViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new PurchaseRepository(application);
     formData = new FormDataPurchase(application, sharedPrefs, args);
-
-    AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
-    pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
-    pendingProductBarcodesLive = appDatabase.pendingProductBarcodeDao().getAllLive();
 
     if (args.getShoppingListItems() != null) {
       batchShoppingListItemIds = new ArrayList<>(args.getShoppingListItems().length);
@@ -155,7 +147,10 @@ public class PurchaseViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.products = data.getProducts();
-      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+      this.pendingProducts = data.getPendingProducts();
+      formData.getProductsLive().setValue(
+              appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
+      );
       productHashMap = ArrayUtil.getProductsHashMap(products);
       this.barcodes = data.getBarcodes();
       this.quantityUnits = data.getQuantityUnits();
@@ -188,7 +183,9 @@ public class PurchaseViewModel extends BaseViewModel {
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
-          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(
+                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
+          );
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
           unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
@@ -390,6 +387,17 @@ public class PurchaseViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
   }
 
+  public void setPendingProduct(int pendingProductId) {
+    PendingProduct pendingProduct = PendingProduct
+            .getFromId(formData.getPendingProductsLive(), pendingProductId);
+    if (pendingProduct == null) return;
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getName());
+    formData.getAmountLive().setValue(NumUtil.trim(1));
+    formData.isFormValid();
+    sendEvent(Event.FOCUS_INVALID_VIEWS);
+  }
+
   private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
       Product product,
       Integer forcedQuId
@@ -551,7 +559,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void fillWithPendingProduct() {
-    if (pendingProductsLive.getValue() == null) {
+    if (formData.getPendingProductsLive().getValue() == null) {
       return;
     }
     if (formData.getBatchModeItemIndexLive().getValue() == null) {
@@ -562,12 +570,13 @@ public class PurchaseViewModel extends BaseViewModel {
       return;
     }
     int currentItemId = batchPendingProductIds.get(index);
-    PendingProduct pendingProduct = PendingProduct.getFromId(pendingProductsLive, currentItemId);
+    PendingProduct pendingProduct = PendingProduct
+            .getFromId(formData.getPendingProductsLive(), currentItemId);
     if (pendingProduct == null) {
       return;
     }
     formData.getPendingProductLive().setValue(pendingProduct);
-    formData.getProductNameLive().setValue(pendingProduct.getProductName());
+    formData.getProductNameLive().setValue(pendingProduct.getName());
     formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.getAmount()));
   }
 
@@ -784,13 +793,15 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void showDueDateBottomSheet(boolean hasFocus) {
     ProductDetails productDetails = formData.getProductDetailsLive().getValue();
-    if (!hasFocus || !formData.isProductNameValid() || productDetails == null) {
+    if (!hasFocus || !formData.isProductNameValid()) {
       return;
     }
     Bundle bundle = new Bundle();
     bundle.putString(
         Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW,
-        String.valueOf(productDetails.getProduct().getDefaultDueDaysInt())
+        productDetails != null
+                ? String.valueOf(productDetails.getProduct().getDefaultDueDaysInt())
+                : String.valueOf(0)
     );
     bundle.putString(
         Constants.ARGUMENT.SELECTED_DATE,
@@ -861,21 +872,24 @@ public class PurchaseViewModel extends BaseViewModel {
     this.queueEmptyAction = queueEmptyAction;
   }
 
-  public LiveData<List<PendingProduct>> getPendingProductsLive() {
-    return pendingProductsLive;
-  }
-
-  public LiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
-    return pendingProductBarcodesLive;
-  }
-
   public void setBatchPendingProductIds(ArrayList<Integer> batchPendingProductIds) {
     ArrayList<Integer> ids = new ArrayList<>();
-    if (getPendingProductsLive().getValue() == null) return;
-    for (PendingProduct pendingProduct : getPendingProductsLive().getValue()) {
+    if (formData.getPendingProductsLive().getValue() == null) return;
+    for (PendingProduct pendingProduct : formData.getPendingProductsLive().getValue()) {
       ids.add(pendingProduct.getId());
     }
     this.batchPendingProductIds = ids;
+  }
+
+  private ArrayList<Product> appendPendingProducts(
+          ArrayList<Product> products,
+          List<PendingProduct> pendingProducts
+  ) {
+    ArrayList<Product> newList = new ArrayList<>(products);
+    if (pendingProducts != null) {
+      newList.addAll(pendingProducts);
+    }
+    return newList;
   }
 
   public boolean isQuickModeEnabled() {

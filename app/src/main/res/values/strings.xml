@@ -242,6 +242,8 @@
   <string name="msg_off_option_deactivated">For automatic suggestion of a product name you can activate Open Food Facts look up in the settings.</string>
   <string name="msg_create_new_product_filled">Create new product \"%1$s\"</string>
   <string name="msg_create_new_product">Create new product</string>
+  <string name="msg_create_new_pending_product_filled">Create new temporary product \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Create new temporary product</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Transaction which will be executed:\n\nAdd %1$s %2$s of %3$s to stock\nDue date: %4$s\nPrice: %5$s\nStore: %6$s\nLocation: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -469,7 +471,7 @@
   <string name="title_shopping_list_edit">Edit shopping list</string>
   <string name="title_shopping_list_new">New shopping list</string>
   <string name="title_shopping_mode">Shopping mode</string>
-  <string name="title_batch_mode_shopping_list">Batch mode purchase/shopping list</string>
+  <string name="title_batch_mode_shopping_list">Batch mode shopping list</string>
   <string name="title_product_cat_optional">Optional properties</string>
   <string name="title_product_cat_location">Default location</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->

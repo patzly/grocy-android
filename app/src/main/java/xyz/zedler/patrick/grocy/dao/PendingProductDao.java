@@ -35,6 +35,9 @@ public interface PendingProductDao {
     @Query("SELECT * FROM pending_product_table")
     LiveData<List<PendingProduct>> getAllLive();
 
+    @Query("SELECT * FROM pending_product_table")
+    Single<List<PendingProduct>> getPendingProducts();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insertPendingProduct(PendingProduct product);
 

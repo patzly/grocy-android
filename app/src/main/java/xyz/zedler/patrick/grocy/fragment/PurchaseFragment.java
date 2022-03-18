@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -158,10 +159,16 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
         navigate(PurchaseFragmentDirections
-            .actionPurchaseFragmentToChooseProductFragment(barcode));
+            .actionPurchaseFragmentToChooseProductFragment(barcode)
+            .setPendingProductsActive(viewModel.isQuickModeEnabled()));
       }
     });
 
+    String barcode = (String) getFromThisDestinationNow(ARGUMENT.BARCODE);
+    if (barcode != null) {
+      removeForThisDestination(Constants.ARGUMENT.BARCODE);
+      viewModel.addBarcodeToExistingProduct(barcode);
+    }
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
@@ -176,10 +183,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
           productId, null, null
       ));
     }
-    String barcode = (String) getFromThisDestinationNow(ARGUMENT.BARCODE);
-    if (barcode != null) {
-      removeForThisDestination(Constants.ARGUMENT.BARCODE);
-      viewModel.addBarcodeToExistingProduct(barcode);
+    Integer pendingProductId = (Integer) getFromThisDestinationNow(ARGUMENT.PENDING_PRODUCT_ID);
+    if (pendingProductId != null) {
+      removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
+      viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId));
     }
 
     pluralUtil = new PluralUtil(activity);
@@ -208,10 +215,11 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     viewModel.getFormData().getPendingProductLive().observe(getViewLifecycleOwner(), product -> {
       if(product == null) return;
-      binding.linearBatchItem.name.setText(product.getProductName());
+      binding.linearBatchItem.name.setText(product.getName());
       binding.linearBatchItem.amount.setText(NumUtil.trim(product.getAmount()));
     });
-    viewModel.getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), b -> {});
+    viewModel.getFormData().getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), p -> {});
+    viewModel.getFormData().getPendingProductsLive().observe(getViewLifecycleOwner(), p -> {});
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -353,12 +361,13 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
-    Product product = (Product) adapterView.getItemAtPosition(pos);
     clearInputFocus();
-    if (product == null) {
-      return;
+    Object object = adapterView.getItemAtPosition(pos);
+    if (object instanceof PendingProduct) {
+      viewModel.setPendingProduct(((PendingProduct) object).getId());
+    } else if (object instanceof Product) {
+      viewModel.setProduct(((Product) object).getId(), null, null);
     }
-    viewModel.setProduct(product.getId(), null, null);
   }
 
   public void clearFocusAndCheckProductInput() {

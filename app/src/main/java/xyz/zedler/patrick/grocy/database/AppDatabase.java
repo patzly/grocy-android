@@ -81,7 +81,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         PendingProduct.class,
         PendingProductBarcode.class
     },
-    version = 24
+    version = 25
 )
 public abstract class AppDatabase extends RoomDatabase {
 

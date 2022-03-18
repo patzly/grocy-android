@@ -28,15 +28,15 @@ import androidx.room.PrimaryKey;
 import java.util.List;
 
 @Entity(tableName = "pending_product_table")
-public class PendingProduct {
+public class PendingProduct extends Product {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 
-    @ColumnInfo(name = "product_name")
+    @ColumnInfo(name = "name")
     @NonNull
-    private String productName;
+    private String name;
 
     @ColumnInfo(name = "amount")
     private double amount;
@@ -44,15 +44,15 @@ public class PendingProduct {
     @ColumnInfo(name = "name_is_from_off")
     private boolean nameIsFromOFF;
 
-    public PendingProduct(@NonNull String productName, double amount, boolean nameIsFromOFF) {
-        this.productName = productName;
+    public PendingProduct(@NonNull String name, double amount, boolean nameIsFromOFF) {
+        this.name = name;
         this.amount = amount;
         this.nameIsFromOFF = nameIsFromOFF;
     }
 
     @Ignore
-    public PendingProduct(@NonNull String productName, boolean nameIsFromOFF) {
-        this.productName = productName;
+    public PendingProduct(@NonNull String name, boolean nameIsFromOFF) {
+        this.name = name;
         this.amount = 1;
         this.nameIsFromOFF = nameIsFromOFF;
     }
@@ -66,12 +66,13 @@ public class PendingProduct {
     }
 
     @NonNull
-    public String getProductName() {
-        return productName;
+    @Override
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(@NonNull String productName) {
-        this.productName = productName;
+    public void setName(@NonNull String name) {
+        this.name = name;
     }
 
     public double getAmount() {
@@ -115,7 +116,7 @@ public class PendingProduct {
     ) {
         if (pendingProducts.getValue() == null || productName == null) return null;
         for (PendingProduct product : pendingProducts.getValue()) {
-            if (product.getProductName().equals(productName)) return product;
+            if (product.getName().equals(productName)) return product;
         }
         return null;
     }
@@ -131,6 +132,6 @@ public class PendingProduct {
     @NonNull
     @Override
     public String toString() {
-        return "PendingProduct(" + productName + ": " + amount + ')';
+        return "PendingProduct(" + name + ": " + amount + ')';
     }
 }
