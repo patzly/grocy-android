@@ -59,6 +59,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   private final BarcodeListener barcodeListener;
   private final DecoratedBarcodeView barcodeView;
   private final ZXingScanCaptureManager capture;
+  private boolean supressNextScanStart = false;
 
   public EmbeddedFragmentScannerZXing(
       Fragment fragment,
@@ -146,13 +147,26 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     );
   }
 
+  @Override
   public void setScannerVisibilityLive(LiveData<Boolean> scannerVisibilityLive) {
+    setScannerVisibilityLive(scannerVisibilityLive, false);
+  }
+
+  public void setScannerVisibilityLive(
+      LiveData<Boolean> scannerVisibilityLive,
+      boolean supressNextScanStart
+  ) {
+    this.supressNextScanStart = supressNextScanStart;
     if (scannerVisibilityLive.hasObservers()) {
       scannerVisibilityLive.removeObservers(fragment.getViewLifecycleOwner());
     }
     scannerVisibilityLive.observe(fragment.getViewLifecycleOwner(), visible -> {
       isScannerVisible = visible;
       if (visible) {
+        if (this.supressNextScanStart) {
+          this.supressNextScanStart = false;
+          return;
+        }
         startScannerIfVisible();
       } else {
         stopScanner();

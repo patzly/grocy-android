@@ -67,6 +67,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private PluralUtil pluralUtil;
+  private Boolean backFromChooseProductPage;
 
   @Override
   public View onCreateView(
@@ -203,8 +204,14 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       );
     });
 
+    backFromChooseProductPage = (Boolean)
+        getFromThisDestinationNow(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
+    if (backFromChooseProductPage != null) {
+      removeForThisDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE);
+    }
     embeddedFragmentScanner.setScannerVisibilityLive(
-        viewModel.getFormData().getScannerVisibilityLive()
+        viewModel.getFormData().getScannerVisibilityLive(),
+        backFromChooseProductPage != null ? backFromChooseProductPage : false
     );
 
     // following lines are necessary because no observers are set in Views
@@ -258,6 +265,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onResume() {
     super.onResume();
+    if (backFromChooseProductPage != null && backFromChooseProductPage) {
+      backFromChooseProductPage = false;
+      return;
+    }
     embeddedFragmentScanner.onResume();
   }
 

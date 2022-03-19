@@ -345,6 +345,7 @@ public final class Constants {
     public final static String BARCODE = "barcode";
     public final static String DISPLAY_EMPTY_OPTION = "display_empty_option";
     public final static String PENDING_PRODUCT_ID = "pending_product_id";
+    public final static String BACK_FROM_CHOOSE_PRODUCT_PAGE = "back_from_choose_product_page";
   }
 
   public final static class FAB {

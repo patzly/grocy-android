@@ -34,6 +34,11 @@ public abstract class EmbeddedFragmentScanner {
 
   public abstract void setScannerVisibilityLive(LiveData<Boolean> scannerVisibilityLive);
 
+  public abstract void setScannerVisibilityLive(
+      LiveData<Boolean> scannerVisibilityLive,
+      boolean supressNextScanStart
+  );
+
   public abstract void onResume();
 
   public abstract void onPause();

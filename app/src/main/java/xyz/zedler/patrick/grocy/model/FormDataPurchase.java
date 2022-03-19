@@ -751,6 +751,7 @@ public class FormDataPurchase {
     assert details != null || pendingProductLive.getValue() != null;
     assert NumUtil.isStringDouble(amountStockLive.getValue())
             || NumUtil.isStringDouble(amountLive.getValue());
+    assert amountLive.getValue() != null;
     double amountAdded = amountStockLive.getValue() != null
             ? Double.parseDouble(amountStockLive.getValue())
             : Double.parseDouble(amountLive.getValue());
