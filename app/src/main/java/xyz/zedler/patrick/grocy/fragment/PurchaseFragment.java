@@ -220,9 +220,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
 
-    viewModel.getFormData().getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), p -> {});
-    viewModel.getFormData().getPendingProductsLive().observe(getViewLifecycleOwner(), p -> {});
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -342,13 +339,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     if (viewModel.getFormData().isScannerVisible()) {
       clearInputFocus();
     }
-  }
-
-  @Override
-  public void addPendingProducts() {
-    viewModel.setBatchPendingProductIds(null);
-    viewModel.getFormData().getBatchModeItemIndexLive().setValue(0);
-    viewModel.fillWithPendingProduct();
   }
 
   public void clearAmountFieldAndFocusIt() {

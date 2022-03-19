@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
+import xyz.zedler.patrick.grocy.model.PendingPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -132,21 +133,42 @@ public class PurchaseRepository {
 
   public void insertPendingProduct(PendingProduct pendingProduct) {
     appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
-            .subscribeOn(Schedulers.io()).subscribe();
+        .subscribeOn(Schedulers.io()).subscribe();
   }
 
-  public void insertPendingProduct(
-          PendingProduct pendingProduct,
+  public void insertPendingPurchase(
+          PendingPurchase pendingPurchase,
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
-            .subscribeOn(Schedulers.io()).subscribe(onSuccess::onSuccess, e -> onError.run());
+    appDatabase.pendingPurchaseDao().insertPendingPurchase(pendingPurchase)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(onSuccess::onSuccess)
+        .doOnError(e -> onError.run())
+        .subscribe();
   }
 
-  public void insertPendingProductBarcode(PendingProductBarcode barcode) {
-    appDatabase.pendingProductBarcodeDao().insertProductBarcode(barcode)
-            .subscribeOn(Schedulers.io()).subscribe();
+  public void deletePendingPurchase(
+      long id,
+      Runnable onSuccess,
+      Runnable onError
+  ) {
+    appDatabase.pendingPurchaseDao().deletePendingPurchase(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(i -> onSuccess.run())
+        .doOnError(e -> onError.run())
+        .subscribe();
+  }
+
+  public void insertPendingProductBarcode(PendingProductBarcode barcode, Runnable onFinished) {
+    appDatabase.pendingProductBarcodeDao()
+        .insertProductBarcode(barcode)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(onFinished::run)
+        .subscribe();
   }
 
   public interface SuccessIdListener {

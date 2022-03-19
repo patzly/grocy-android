@@ -37,7 +37,6 @@ import android.text.style.BulletSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,14 +45,12 @@ import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BindingAdapter;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingPurchase;
 
 public class ResUtil {
 
@@ -153,8 +150,11 @@ public class ResUtil {
   }
 
   @BindingAdapter("shoppingCardDrawable")
-  public static void setShoppingCardDrawable(ImageView view, List<PendingProduct> pendingProducts) {
-    int count = pendingProducts != null ? pendingProducts.size() : 0;
+  public static void setShoppingCardDrawable(
+      ImageView view,
+      List<PendingPurchase> pendingPurchases
+  ) {
+    int count = pendingPurchases != null ? pendingPurchases.size() : 0;
     view.setImageDrawable(new BitmapDrawable(
             view.getResources(),
             getFromDrawableWithNumber(

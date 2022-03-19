@@ -65,7 +65,6 @@ public class PendingProductsBottomSheet extends BaseBottomSheet {
     }
 
     public void startWorkflow() {
-        activity.getCurrentFragment().addPendingProducts();
         dismiss();
     }
 

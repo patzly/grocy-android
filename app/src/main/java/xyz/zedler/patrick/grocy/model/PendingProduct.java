@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import java.util.List;
 
@@ -98,9 +97,9 @@ public class PendingProduct extends Product {
         return null;
     }
 
-    public static PendingProduct getFromId(LiveData<List<PendingProduct>> pendingProducts, int id) {
-        if (pendingProducts.getValue() == null) return null;
-        for (PendingProduct product : pendingProducts.getValue()) {
+    public static PendingProduct getFromId(List<PendingProduct> pendingProducts, int id) {
+        if (pendingProducts == null) return null;
+        for (PendingProduct product : pendingProducts) {
             if (product.getId() == id) return product;
         }
         return null;

@@ -25,11 +25,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-import java.util.List;
-
 import io.reactivex.rxjava3.core.Single;
-import xyz.zedler.patrick.grocy.model.PendingProduct;
+import java.util.List;
 import xyz.zedler.patrick.grocy.model.PendingPurchase;
 
 @Dao
@@ -42,10 +39,13 @@ public interface PendingPurchaseDao {
     Single<List<PendingPurchase>> getPendingPurchases();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insertPendingPurchase(PendingPurchase product);
+    Single<Long> insertPendingPurchase(PendingPurchase pendingPurchase);
 
     @Delete
-    Single<Integer> deletePendingPurchase(PendingPurchase product);
+    Single<Integer> deletePendingPurchase(PendingPurchase pendingPurchase);
+
+    @Query("DELETE FROM pending_purchase_table WHERE id = :id")
+    Single<Integer> deletePendingPurchase(long id);
 
     @Query("DELETE FROM pending_purchase_table")
     Single<Integer> deletePendingPurchases();
