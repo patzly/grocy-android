@@ -97,6 +97,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final MainActivity activity;
   private final BarcodeListener barcodeListener;
   private final boolean cropImageToPreviewRect;
+  private boolean supressNextScanStart = false;
 
   public EmbeddedFragmentScannerMLKit(
       Fragment fragment,
@@ -195,13 +196,26 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
   }
 
+  @Override
   public void setScannerVisibilityLive(LiveData<Boolean> scannerVisibilityLive) {
+    setScannerVisibilityLive(scannerVisibilityLive, false);
+  }
+
+  public void setScannerVisibilityLive(
+      LiveData<Boolean> scannerVisibilityLive,
+      boolean supressNextScanStart
+  ) {
+    this.supressNextScanStart = supressNextScanStart;
     if (scannerVisibilityLive.hasObservers()) {
       scannerVisibilityLive.removeObservers(fragment.getViewLifecycleOwner());
     }
     scannerVisibilityLive.observe(fragment.getViewLifecycleOwner(), visible -> {
       isScannerVisible = visible;
       if (visible) {
+        if (this.supressNextScanStart) {
+          this.supressNextScanStart = false;
+          return;
+        }
         processCameraProvider.observe(
             fragment.getViewLifecycleOwner(),
             provider -> {
