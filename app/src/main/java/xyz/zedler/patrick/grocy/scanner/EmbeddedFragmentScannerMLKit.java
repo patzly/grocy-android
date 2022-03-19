@@ -54,6 +54,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
+import androidx.lifecycle.ViewModelProvider.Factory;
 import com.google.android.material.card.MaterialCardView;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
@@ -184,7 +185,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
           }
         });
 
-    processCameraProvider = new ViewModelProvider(fragment, AndroidViewModelFactory
+    processCameraProvider = new ViewModelProvider(fragment, (Factory) AndroidViewModelFactory
         .getInstance(fragment.requireActivity().getApplication()))
         .get(CameraXViewModel.class)
         .getProcessCameraProvider();
@@ -212,14 +213,14 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     scannerVisibilityLive.observe(fragment.getViewLifecycleOwner(), visible -> {
       isScannerVisible = visible;
       if (visible) {
-        if (this.supressNextScanStart) {
-          this.supressNextScanStart = false;
-          return;
-        }
         processCameraProvider.observe(
             fragment.getViewLifecycleOwner(),
             provider -> {
               cameraProvider = provider;
+              if (this.supressNextScanStart) {
+                this.supressNextScanStart = false;
+                return;
+              }
               startScannerIfVisible();
             });
       } else {
