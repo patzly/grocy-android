@@ -95,6 +95,7 @@ public class ChooseProductFragment extends BaseFragment
     if (newProductId != null) {  // if user created a new product and navigates back to this fragment this is the new productId
       setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
       setForPreviousDestination(ARGUMENT.BARCODE, barcode);
+      setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
       activity.navigateUp();
       return;
     }
@@ -214,6 +215,7 @@ public class ChooseProductFragment extends BaseFragment
     }
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     setForPreviousDestination(ARGUMENT.BARCODE, barcode);
+    setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
     activity.navigateUp();
   }
 
@@ -230,8 +232,15 @@ public class ChooseProductFragment extends BaseFragment
       setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, (int) id);
       String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
       setForPreviousDestination(ARGUMENT.BARCODE, barcode);
+      setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
       activity.navigateUp();
     });
+  }
+
+  @Override
+  public boolean onBackPressed() {
+    setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
+    return false;
   }
 
   @Override

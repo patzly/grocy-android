@@ -118,6 +118,14 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
   }
 
   @Override
+  public void setScannerVisibilityLive(
+      LiveData<Boolean> scannerVisibilityLive,
+      boolean supressNextScanStart
+  ) {
+    embeddedFragmentScanner.setScannerVisibilityLive(scannerVisibilityLive, supressNextScanStart);
+  }
+
+  @Override
   public void onResume() {
     embeddedFragmentScanner.onResume();
   }
