@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 26,
-    "identityHash": "4e3b612860af1f33adc3685e7a37203f",
+    "identityHash": "af175e9e55a468a09a02b353d26694dd",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -1084,7 +1084,7 @@
       },
       {
         "tableName": "pending_product_barcode_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pending_product_id` INTEGER NOT NULL, `barcode` TEXT, `qu_id` TEXT, `amount` TEXT, `shopping_location_id` TEXT, `last_price` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pending_product_id` INTEGER NOT NULL, `barcode` TEXT, `qu_id` TEXT, `amount` TEXT, `shopping_location_id` TEXT, `last_price` TEXT, `product_id` TEXT, `note` TEXT, `row_created_timestamp` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1125,6 +1125,24 @@
           {
             "fieldPath": "lastPrice",
             "columnName": "last_price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -1204,7 +1222,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4e3b612860af1f33adc3685e7a37203f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'af175e9e55a468a09a02b353d26694dd')"
     ]
   }
 }

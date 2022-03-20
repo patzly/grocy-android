@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PendingProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -599,10 +598,6 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     formData.getShoppingListItemLive().setValue(currentItem);
     setProduct(null, null, currentItem);
-  }
-
-  public void showPendingProductsBottomSheet() {
-    showBottomSheet(new PendingProductsBottomSheet());
   }
 
   public boolean batchModeNextItem() {  // also returns whether there was a next item

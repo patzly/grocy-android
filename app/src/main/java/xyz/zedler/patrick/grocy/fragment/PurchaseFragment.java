@@ -366,6 +366,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     }
   }
 
+  public void navigateToPendingProductsPage() {
+    navigate(PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment());
+  }
+
   public void clearFocusAndCheckProductInput() {
     clearInputFocus();
     viewModel.checkProductInput();

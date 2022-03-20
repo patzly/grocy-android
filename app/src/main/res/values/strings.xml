@@ -437,6 +437,8 @@
   <string name="title_external_barcode_input">External scanner</string>
   <string name="title_confirmation">Confirmation</string>
   <string name="title_choose_product">Choose product</string>
+  <string name="title_pending_products">Pending products</string>
+  <string name="title_pending_purchases">Pending purchases</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
