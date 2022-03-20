@@ -53,6 +53,7 @@ public class PurchaseRepository {
     private final List<Product> products;
     private final List<PendingProduct> pendingProducts;
     private final List<ProductBarcode> barcodes;
+    private final List<PendingProductBarcode> pendingProductBarcodes;
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> quantityUnitConversions;
     private final List<Store> stores;
@@ -63,6 +64,7 @@ public class PurchaseRepository {
         List<Product> products,
         List<PendingProduct> pendingProducts,
         List<ProductBarcode> barcodes,
+        List<PendingProductBarcode> pendingProductBarcodes,
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversion> quantityUnitConversions,
         List<Store> stores,
@@ -72,6 +74,7 @@ public class PurchaseRepository {
       this.products = products;
       this.pendingProducts = pendingProducts;
       this.barcodes = barcodes;
+      this.pendingProductBarcodes = pendingProductBarcodes;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
       this.stores = stores;
@@ -89,6 +92,10 @@ public class PurchaseRepository {
 
     public List<ProductBarcode> getBarcodes() {
       return barcodes;
+    }
+
+    public List<PendingProductBarcode> getPendingProductBarcodes() {
+      return pendingProductBarcodes;
     }
 
     public List<QuantityUnit> getQuantityUnits() {
@@ -118,6 +125,7 @@ public class PurchaseRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.pendingProductDao().getPendingProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),
             appDatabase.storeDao().getStores(),

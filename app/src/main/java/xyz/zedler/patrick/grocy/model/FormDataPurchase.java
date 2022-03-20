@@ -776,6 +776,13 @@ public class FormDataPurchase {
       store = getString(R.string.subtitle_none_selected);
     }
 
+    String location = locationNameLive.getValue();
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      location = getString(R.string.subtitle_feature_disabled);
+    } else if (location == null) {
+      location = getString(R.string.subtitle_none_selected);
+    }
+
     return application.getString(
         R.string.msg_quick_mode_confirm_purchase,
         NumUtil.trim(amountAdded),
@@ -784,7 +791,7 @@ public class FormDataPurchase {
         dueDateTextLive.getValue(),
         price,
         store,
-        locationNameLive.getValue()
+        location
     );
   }
 

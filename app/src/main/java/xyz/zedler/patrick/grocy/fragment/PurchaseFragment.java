@@ -187,7 +187,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     Integer pendingProductId = (Integer) getFromThisDestinationNow(ARGUMENT.PENDING_PRODUCT_ID);
     if (pendingProductId != null) {
       removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId));
+      viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId, null));
     }
 
     pluralUtil = new PluralUtil(activity);
@@ -360,7 +360,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     clearInputFocus();
     Object object = adapterView.getItemAtPosition(pos);
     if (object instanceof PendingProduct) {
-      viewModel.setPendingProduct(((PendingProduct) object).getId());
+      viewModel.setPendingProduct(((PendingProduct) object).getId(), null);
     } else if (object instanceof Product) {
       viewModel.setProduct(((Product) object).getId(), null, null);
     }

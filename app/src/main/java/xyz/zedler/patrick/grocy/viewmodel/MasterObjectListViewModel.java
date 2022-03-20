@@ -135,7 +135,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
     });
   }
 
-  @SuppressWarnings("unchecked")
   public void downloadData(@Nullable String dbChangedTime) {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
@@ -273,7 +272,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
       }
     } else {
-      searchedItems = new ArrayList<>(objects);
+      searchedItems = new ArrayList<Object>(objects);
     }
 
     // filter items

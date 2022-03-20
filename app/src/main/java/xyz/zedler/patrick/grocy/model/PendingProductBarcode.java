@@ -25,16 +25,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import java.util.List;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "pending_product_barcode_table")
-public class PendingProductBarcode {
+public class PendingProductBarcode extends ProductBarcode {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private long id;
+    private int id;
 
     @ColumnInfo(name = "pending_product_id")
-    private long pendingProductId;
+    private int pendingProductId;
 
     @ColumnInfo(name = "barcode")
     private String barcode;
@@ -54,22 +55,28 @@ public class PendingProductBarcode {
     public PendingProductBarcode() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getPendingProductId() {
+    public int getPendingProductId() {
         return pendingProductId;
     }
 
-    public void setPendingProductId(long pendingProductId) {
+    @Override
+    public int getProductIdInt() {
+        return pendingProductId;
+    }
+
+    public void setPendingProductId(int pendingProductId) {
         this.pendingProductId = pendingProductId;
     }
 
+    @Override
     public String getBarcode() {
         return barcode;
     }
@@ -78,22 +85,49 @@ public class PendingProductBarcode {
         this.barcode = barcode;
     }
 
+    @Override
     public String getQuId() {
         return quId;
+    }
+
+    @Override
+    public int getQuIdInt() {
+        return hasQuId() ? Integer.parseInt(quId) : -1;
     }
 
     public void setQuId(String quId) {
         this.quId = quId;
     }
 
+    @Override
+    public boolean hasQuId() {
+        return NumUtil.isStringInt(quId);
+    }
+
+    @Override
+    public boolean hasAmount() {
+        return NumUtil.isStringDouble(amount);
+    }
+
     public String getAmount() {
         return amount;
+    }
+
+    @Override
+    public double getAmountDouble() {
+        return hasAmount() ? Double.parseDouble(amount) : 0;
     }
 
     public void setAmount(String amount) {
         this.amount = amount;
     }
 
+    @Override
+    public boolean hasStoreId() {
+        return NumUtil.isStringInt(storeId);
+    }
+
+    @Override
     public String getStoreId() {
         return storeId;
     }
@@ -102,6 +136,7 @@ public class PendingProductBarcode {
         this.storeId = storeId;
     }
 
+    @Override
     public String getLastPrice() {
         return lastPrice;
     }
@@ -110,7 +145,7 @@ public class PendingProductBarcode {
         this.lastPrice = lastPrice;
     }
 
-    public static Long getPendingProductId(
+    public static Integer getPendingProductId(
             LiveData<List<PendingProductBarcode>> barcodes,
             String barcode
     ) {

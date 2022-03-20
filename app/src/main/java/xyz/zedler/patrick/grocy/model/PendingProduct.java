@@ -78,7 +78,7 @@ public class PendingProduct extends Product {
     ) {
         if (pendingProducts.getValue() == null || barcodes.getValue() == null) return null;
         if (barcode == null) return null;
-        Long pendingProductId = PendingProductBarcode.getPendingProductId(barcodes, barcode);
+        Integer pendingProductId = PendingProductBarcode.getPendingProductId(barcodes, barcode);
         if (pendingProductId == null) return null;
         for (PendingProduct product : pendingProducts.getValue()) {
             if (product.getId() == pendingProductId) return product;
