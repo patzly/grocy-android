@@ -20,15 +20,12 @@
 package xyz.zedler.patrick.grocy.model;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-
 @Entity(tableName = "pending_purchase_table")
-public class PendingPurchase {
+public class PendingPurchase extends GroupedListItem {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

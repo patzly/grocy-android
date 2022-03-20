@@ -27,24 +27,33 @@ public abstract class GroupedListItem {
 
   public static final String CONTEXT_SHOPPING_LIST = "shopping_list";
   public static final String CONTEXT_STOCK_OVERVIEW = "stock_overview";
+  public static final String CONTEXT_PENDING_PURCHASES = "pending_purchases";
 
   public static int getType(GroupedListItem groupedListItem, String context) {
-    if (context.equals(CONTEXT_SHOPPING_LIST)) {
-      if (groupedListItem instanceof ShoppingListItem) {
-        return GroupedListItem.TYPE_ENTRY;
-      } else if (groupedListItem instanceof GroupHeader || groupedListItem instanceof ProductGroup) {
-        return GroupedListItem.TYPE_HEADER;
-      } else {
-        return GroupedListItem.TYPE_BOTTOM_NOTES;
-      }
-    } else if (context.equals(CONTEXT_STOCK_OVERVIEW)) {
-      if (groupedListItem instanceof StockItem) {
-        return GroupedListItem.TYPE_ENTRY;
-      } else {
-        return GroupedListItem.TYPE_HEADER;
-      }
-    } else {
-      return TYPE_ENTRY;
+    switch (context) {
+      case CONTEXT_SHOPPING_LIST:
+        if (groupedListItem instanceof ShoppingListItem) {
+          return GroupedListItem.TYPE_ENTRY;
+        } else if (groupedListItem instanceof GroupHeader
+            || groupedListItem instanceof ProductGroup) {
+          return GroupedListItem.TYPE_HEADER;
+        } else {
+          return GroupedListItem.TYPE_BOTTOM_NOTES;
+        }
+      case CONTEXT_STOCK_OVERVIEW:
+        if (groupedListItem instanceof StockItem) {
+          return GroupedListItem.TYPE_ENTRY;
+        } else {
+          return GroupedListItem.TYPE_HEADER;
+        }
+      case CONTEXT_PENDING_PURCHASES:
+        if (groupedListItem instanceof PendingPurchase) {
+          return GroupedListItem.TYPE_ENTRY;
+        } else {
+          return GroupedListItem.TYPE_HEADER;
+        }
+      default:
+        return TYPE_ENTRY;
     }
   }
 

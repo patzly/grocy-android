@@ -33,13 +33,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.ChooseProductAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.adapter.PendingPurchaseAdapter;
+import xyz.zedler.patrick.grocy.adapter.PendingPurchaseAdapter.PendingPurchaseAdapterListener;
 import xyz.zedler.patrick.grocy.databinding.FragmentPendingPurchasesBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.PendingProduct;
-import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.PendingPurchasesViewModel;
 
 public class PendingPurchasesFragment extends BaseFragment
-    implements ChooseProductAdapter.ChooseProductAdapterListener {
+    implements PendingPurchaseAdapterListener {
 
   private final static String TAG = PendingPurchasesFragment.class.getSimpleName();
 
@@ -101,16 +101,14 @@ public class PendingPurchasesFragment extends BaseFragment
     );
     binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
-    viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), products -> {
-      if (products == null) {
+    viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), items -> {
+      if (items == null) {
         return;
       }
-      if (binding.recycler.getAdapter() instanceof ChooseProductAdapter) {
-        ((ChooseProductAdapter) binding.recycler.getAdapter()).updateData(products);
+      if (binding.recycler.getAdapter() instanceof PendingPurchaseAdapter) {
+        ((PendingPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
       } else {
-        binding.recycler.setAdapter(new ChooseProductAdapter(
-            products, this
-        ));
+        binding.recycler.setAdapter(new PendingPurchaseAdapter(items, this));
         binding.recycler.scheduleLayoutAnimation();
       }
     });
@@ -158,19 +156,11 @@ public class PendingPurchasesFragment extends BaseFragment
   }
 
   @Override
-  public void onItemRowClicked(Product product) {
+  public void onItemRowClicked(GroupedListItem item) {
     if (clickUtil.isDisabled()) {
       return;
     }
-    if (product instanceof PendingProduct) {
-      setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, product.getId());
-    } else {
-      setForPreviousDestination(ARGUMENT.PRODUCT_ID, product.getId());
-    }
-    String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
-    setForPreviousDestination(ARGUMENT.BARCODE, barcode);
-    setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-    activity.navigateUp();
+
   }
 
   @Override

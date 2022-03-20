@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "product_table")
-public class Product implements Parcelable {
+public class Product extends GroupedListItem implements Parcelable {
 
   @PrimaryKey
   @ColumnInfo(name = "id")

@@ -26,6 +26,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
+import xyz.zedler.patrick.grocy.model.PendingPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 
 public class PendingPurchasesRepository {
@@ -44,13 +46,19 @@ public class PendingPurchasesRepository {
 
     private final List<Product> products;
     private final List<PendingProduct> pendingProducts;
+    private final List<PendingProductBarcode> pendingProductBarcodes;
+    private final List<PendingPurchase> pendingPurchases;
 
     public ChooseProductData(
-            List<Product> products,
-            List<PendingProduct> pendingProducts
+        List<Product> products,
+        List<PendingProduct> pendingProducts,
+        List<PendingProductBarcode> pendingProductBarcodes,
+        List<PendingPurchase> pendingPurchases
     ) {
       this.products = products;
       this.pendingProducts = pendingProducts;
+      this.pendingProductBarcodes = pendingProductBarcodes;
+      this.pendingPurchases = pendingPurchases;
     }
 
     public List<Product> getProducts() {
@@ -60,34 +68,27 @@ public class PendingPurchasesRepository {
     public List<PendingProduct> getPendingProducts() {
       return pendingProducts;
     }
+
+    public List<PendingProductBarcode> getPendingProductBarcodes() {
+      return pendingProductBarcodes;
+    }
+
+    public List<PendingPurchase> getPendingPurchases() {
+      return pendingPurchases;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
     Single.zip(
         appDatabase.productDao().getProducts(),
         appDatabase.pendingProductDao().getPendingProducts(),
+        appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
+        appDatabase.pendingPurchaseDao().getPendingPurchases(),
         ChooseProductData::new
     )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
         .subscribe();
-  }
-
-  public void createPendingProduct(
-          PendingProduct pendingProduct,
-          CreatePendingProductListener successListener,
-          Runnable errorListener
-  ) {
-    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess(successListener::onSuccess)
-            .doOnError(throwable -> errorListener.run())
-            .subscribe();
-  }
-
-  public interface CreatePendingProductListener {
-    void onSuccess(long pendingProductId);
   }
 }

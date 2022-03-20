@@ -32,7 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
+import xyz.zedler.patrick.grocy.model.PendingPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.repository.PendingPurchasesRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -49,13 +52,15 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<Boolean> offlineLive;
-  private final MutableLiveData<List<Product>> displayedItemsLive;
+  private final MutableLiveData<List<GroupedListItem>> displayedItemsLive;
 
   private List<Product> products;
   private final HashMap<String, Product> productHashMap;
   private List<PendingProduct> pendingProducts;
   private final HashMap<String, PendingProduct> pendingProductHashMap;
-  private String nameFromOnlineSource;
+  private List<PendingProductBarcode> pendingProductBarcodes;
+  private List<PendingPurchase> pendingPurchases;
+  private final HashMap<Integer, List<PendingPurchase>> pendingPurchasesHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -74,9 +79,9 @@ public class PendingPurchasesViewModel extends BaseViewModel {
     offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
 
-    products = new ArrayList<>();
     productHashMap = new HashMap<>();
     pendingProductHashMap = new HashMap<>();
+    pendingPurchasesHashMap = new HashMap<>();
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -90,6 +95,18 @@ public class PendingPurchasesViewModel extends BaseViewModel {
       pendingProductHashMap.clear();
       for (PendingProduct pendingProduct : this.pendingProducts) {
         pendingProductHashMap.put(pendingProduct.getName().toLowerCase(), pendingProduct);
+      }
+      this.pendingProductBarcodes = data.getPendingProductBarcodes();
+      this.pendingPurchases = data.getPendingPurchases();
+      pendingPurchasesHashMap.clear();
+      for (PendingPurchase pendingPurchase : this.pendingPurchases) {
+        List<PendingPurchase> tempPurchases
+            = pendingPurchasesHashMap.get(pendingPurchase.getPendingProductId());
+        if (tempPurchases == null) {
+          tempPurchases = new ArrayList<>();
+        }
+        tempPurchases.add(pendingPurchase);
+        pendingPurchasesHashMap.put(pendingPurchase.getPendingProductId(), tempPurchases);
       }
       displayItems();
       if (downloadAfterLoading) {
@@ -163,7 +180,16 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   }
 
   public void displayItems() {
-
+    ArrayList<GroupedListItem> items = new ArrayList<>();
+    for (PendingProduct pendingProduct : pendingProducts) {
+      items.add(pendingProduct);
+      List<PendingPurchase> pendingPurchases
+          = pendingPurchasesHashMap.get(pendingProduct.getId());
+      if (pendingPurchases != null) {
+        items.addAll(pendingPurchases);
+      }
+    }
+    displayedItemsLive.setValue(items);
   }
 
   @NonNull
@@ -180,7 +206,7 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   }
 
   @NonNull
-  public MutableLiveData<List<Product>> getDisplayedItemsLive() {
+  public MutableLiveData<List<GroupedListItem>> getDisplayedItemsLive() {
     return displayedItemsLive;
   }
 
