@@ -237,7 +237,8 @@
                 android:hint="@string/property_product_name"
                 app:helperTextEnabled="true"
                 app:helperText="@{viewModel.productNameHelperTextLive}"
-                app:endIconMode="clear_text">
+                app:endIconMode="clear_text"
+                app:errorText="@{viewModel.productNameErrorLive}" >
 
                 <com.google.android.material.textfield.TextInputEditText
                   android:id="@+id/edit_text_product"
@@ -265,11 +266,12 @@
                 android:text="@string/category_new_product" />
 
               <LinearLayout
-                  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:onClick="@{() -> fragment.createNewPendingProduct()}"
-                  app:clickUtil="@{clickUtil}">
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> fragment.createNewPendingProduct()}"
+                android:visibility="@{viewModel.pendingProductsActive ? View.VISIBLE : View.GONE}"
+                app:clickUtil="@{clickUtil}">
 
                 <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 

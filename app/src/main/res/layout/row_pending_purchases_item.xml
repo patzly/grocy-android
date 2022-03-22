@@ -67,9 +67,9 @@
       </LinearLayout>
 
       <TextView
+        android:id="@+id/barcodes"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Barcodes" />
+        android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
@@ -78,6 +78,7 @@
       android:layout_width="24dp"
       android:layout_marginStart="16dp"
       android:clickable="false"
+      android:layout_gravity="center_vertical"
       android:src="@drawable/ic_round_chevron_right"
       tools:ignore="ContentDescription" />
 

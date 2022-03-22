@@ -649,6 +649,7 @@
   <string name="property_factor">Factor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
+  <string name="property_barcodes_insert">Barcodes: %1$s</string>
   <string name="property_days">Days</string>
   <string name="property_purchased_date">Purchased date</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->

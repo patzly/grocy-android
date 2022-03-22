@@ -108,7 +108,11 @@ public class PendingPurchasesFragment extends BaseFragment
       if (binding.recycler.getAdapter() instanceof PendingPurchaseAdapter) {
         ((PendingPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
       } else {
-        binding.recycler.setAdapter(new PendingPurchaseAdapter(items, this));
+        binding.recycler.setAdapter(new PendingPurchaseAdapter(
+            items,
+            viewModel.getPendingProductBarcodeHashMap(),
+            this
+        ));
         binding.recycler.scheduleLayoutAnimation();
       }
     });

@@ -24,13 +24,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowPendingPurchasesItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.PendingPurchase;
 
 public class PendingPurchaseAdapter extends
@@ -40,13 +42,16 @@ public class PendingPurchaseAdapter extends
   private final static boolean DEBUG = false;
 
   private final ArrayList<GroupedListItem> groupedListItems;
+  private final HashMap<Integer, List<PendingProductBarcode>> pendingProductBarcodeHashMap;
   private final PendingPurchaseAdapterListener listener;
 
   public PendingPurchaseAdapter(
       List<GroupedListItem> groupedListItems,
+      HashMap<Integer, List<PendingProductBarcode>> pendingProductBarcodeHashMap,
       PendingPurchaseAdapterListener listener
   ) {
     this.groupedListItems = new ArrayList<>(groupedListItems);
+    this.pendingProductBarcodeHashMap = pendingProductBarcodeHashMap;
     this.listener = listener;
   }
 
@@ -97,9 +102,24 @@ public class PendingPurchaseAdapter extends
       holder.binding.textPurchase.setText("Purchase: " + pendingPurchase.getId());
       holder.binding.containerPurchase.setVisibility(View.VISIBLE);
       holder.binding.containerProduct.setVisibility(View.GONE);
+
     } else {
       PendingProduct pendingProduct = (PendingProduct) item;
       holder.binding.nameProduct.setText(pendingProduct.getName());
+      List<PendingProductBarcode> barcodesList = pendingProductBarcodeHashMap
+          .get(pendingProduct.getId());
+      if (barcodesList != null) {
+        StringBuilder barcodes = new StringBuilder();
+        for (PendingProductBarcode barcode : barcodesList) {
+          barcodes.append(barcode.getBarcode()).append(" ");
+        }
+        holder.binding.barcodes.setText(
+            holder.binding.barcodes.getContext()
+                .getString(R.string.property_barcodes_insert, barcodes.toString()));
+        holder.binding.barcodes.setVisibility(View.VISIBLE);
+      } else {
+        holder.binding.barcodes.setVisibility(View.GONE);
+      }
       holder.binding.containerPurchase.setVisibility(View.GONE);
       holder.binding.containerProduct.setVisibility(View.VISIBLE);
     }
@@ -120,78 +140,8 @@ public class PendingPurchaseAdapter extends
   }
 
   public void updateData(List<GroupedListItem> newList) {
-
-    PendingPurchaseAdapter.DiffCallback diffCallback = new PendingPurchaseAdapter.DiffCallback(
-        this.groupedListItems,
-        newList
-    );
-    DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newList);
-    diffResult.dispatchUpdatesTo(this);
-  }
-
-  static class DiffCallback extends DiffUtil.Callback {
-
-    List<GroupedListItem> oldItems;
-    List<GroupedListItem> newItems;
-
-    public DiffCallback(
-        List<GroupedListItem> oldItems,
-        List<GroupedListItem> newItems
-    ) {
-      this.newItems = newItems;
-      this.oldItems = oldItems;
-    }
-
-    @Override
-    public int getOldListSize() {
-      return oldItems.size();
-    }
-
-    @Override
-    public int getNewListSize() {
-      return newItems.size();
-    }
-
-    @Override
-    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-      return compare(oldItemPosition, newItemPosition, false);
-    }
-
-    @Override
-    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-      return compare(oldItemPosition, newItemPosition, true);
-    }
-
-    private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-      int oldItemType = GroupedListItem.getType(
-          oldItems.get(oldItemPos),
-          GroupedListItem.CONTEXT_PENDING_PURCHASES
-      );
-      int newItemType = GroupedListItem.getType(
-          newItems.get(newItemPos),
-          GroupedListItem.CONTEXT_PENDING_PURCHASES
-      );
-      if (oldItemType != newItemType) {
-        return false;
-      }
-
-      if (oldItemType == GroupedListItem.TYPE_ENTRY) {
-        PendingPurchase newItem = (PendingPurchase) newItems.get(newItemPos);
-        PendingPurchase oldItem = (PendingPurchase) oldItems.get(oldItemPos);
-        if (!compareContent) {
-          return newItem.getId() == oldItem.getId();
-        }
-        return newItem.equals(oldItem);
-      } else {
-        PendingProduct newProduct = (PendingProduct) newItems.get(newItemPos);
-        PendingProduct oldProduct = (PendingProduct) oldItems.get(oldItemPos);
-        if (!compareContent) {
-          return newProduct.getId() == oldProduct.getId();
-        }
-        return newProduct.equals(oldProduct);
-      }
-    }
+    notifyDataSetChanged();
   }
 }

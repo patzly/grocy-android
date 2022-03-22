@@ -227,7 +227,6 @@ public class ChooseProductFragment extends BaseFragment
   }
 
   public void createNewPendingProduct() {
-    activity.hideKeyboard();
     viewModel.createPendingProduct(id -> {
       setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, (int) id);
       String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();

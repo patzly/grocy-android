@@ -59,6 +59,7 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   private List<PendingProduct> pendingProducts;
   private final HashMap<String, PendingProduct> pendingProductHashMap;
   private List<PendingProductBarcode> pendingProductBarcodes;
+  private final HashMap<Integer, List<PendingProductBarcode>> pendingProductBarcodeHashMap;
   private List<PendingPurchase> pendingPurchases;
   private final HashMap<Integer, List<PendingPurchase>> pendingPurchasesHashMap;
 
@@ -81,6 +82,7 @@ public class PendingPurchasesViewModel extends BaseViewModel {
 
     productHashMap = new HashMap<>();
     pendingProductHashMap = new HashMap<>();
+    pendingProductBarcodeHashMap = new HashMap<>();
     pendingPurchasesHashMap = new HashMap<>();
   }
 
@@ -97,6 +99,16 @@ public class PendingPurchasesViewModel extends BaseViewModel {
         pendingProductHashMap.put(pendingProduct.getName().toLowerCase(), pendingProduct);
       }
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
+      pendingProductBarcodeHashMap.clear();
+      for (PendingProductBarcode barcode : this.pendingProductBarcodes) {
+        List<PendingProductBarcode> tempBarcodes
+            = pendingProductBarcodeHashMap.get(barcode.getPendingProductId());
+        if (tempBarcodes == null) {
+          tempBarcodes = new ArrayList<>();
+        }
+        tempBarcodes.add(barcode);
+        pendingProductBarcodeHashMap.put(barcode.getPendingProductId(), tempBarcodes);
+      }
       this.pendingPurchases = data.getPendingPurchases();
       pendingPurchasesHashMap.clear();
       for (PendingPurchase pendingPurchase : this.pendingPurchases) {
@@ -208,6 +220,10 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<List<GroupedListItem>> getDisplayedItemsLive() {
     return displayedItemsLive;
+  }
+
+  public HashMap<Integer, List<PendingProductBarcode>> getPendingProductBarcodeHashMap() {
+    return pendingProductBarcodeHashMap;
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
