@@ -227,6 +227,9 @@
   <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
   <string name="option_synced_success">Option synchronisée avec succès</string>
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
+  <string name="msg_stored_purchases">Les achats qui n\'ont pas encore été transférés sur le serveur sont affichés ici. Ils ont été enregistrés avec des produits temporaires dans cette application afin que vous puissiez scanner votre achat plus rapidement en mode rapide et ne pas avoir à créer immédiatement de nouveaux produits dans la base de données.</string>
+  <string name="msg_stored_purchases_product_offline">Appuyez sur le produit et remplissez les données requises. Après cela, le produit sera affiché ici comme en ligne et les achats stockés pourront être envoyés au serveur.</string>
+  <string name="msg_stored_purchases_product_online">Appuyez ici pour envoyer les achats stockés pour ce produit au serveur.</string>
   <string name="msg_choose_product">Le code-barres que vous avez scanné n\'est pas encore lié à un produit. Vous pouvez le lier à un produit existant ou créer un nouveau produit associé.</string>
   <string name="msg_product_name_off">Le nom du produit pour le code-barres provient d\'Open Food Facts.</string>
   <string name="msg_product_name_obf">Le nom du produit pour le code-barres provient d\'Open Beauty Facts.</string>
@@ -430,7 +433,7 @@
   <string name="title_confirmation">Confirmation</string>
   <string name="title_choose_product">Choisir un produit</string>
   <string name="title_pending_products">Produits en attente</string>
-  <string name="title_stored_purchases">Achats en attente</string>
+  <string name="title_stored_purchases">Achats stockés</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
