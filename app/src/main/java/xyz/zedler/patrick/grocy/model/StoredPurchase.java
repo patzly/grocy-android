@@ -24,8 +24,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "pending_purchase_table")
-public class PendingPurchase extends GroupedListItem {
+@Entity(tableName = "stored_purchase_table")
+public class StoredPurchase extends GroupedListItem {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -52,7 +52,7 @@ public class PendingPurchase extends GroupedListItem {
     @ColumnInfo(name = "location_id")
     private String locationId;
 
-    public PendingPurchase() {
+    public StoredPurchase() {
     }
 
     public int getId() {
@@ -122,6 +122,6 @@ public class PendingPurchase extends GroupedListItem {
     @NonNull
     @Override
     public String toString() {
-        return "PendingPurchase(" + pendingProductId + ')';
+        return "StoredPurchase(" + pendingProductId + ')';
     }
 }

@@ -430,7 +430,7 @@
   <string name="title_confirmation">Confirmation</string>
   <string name="title_choose_product">Choisir un produit</string>
   <string name="title_pending_products">Produits en attente</string>
-  <string name="title_pending_purchases">Achats en attente</string>
+  <string name="title_stored_purchases">Achats en attente</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>

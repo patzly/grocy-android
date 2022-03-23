@@ -17,24 +17,26 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/bg_list_item"
-    android:padding="16dp"
-    android:gravity="center_vertical">
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/container"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:background="@drawable/bg_list_item"
+  android:gravity="center_vertical">
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:id="@+id/container_product"
+    android:padding="16dp"
     android:weightSum="1">
 
     <LinearLayout
@@ -64,6 +66,15 @@
             android:visibility="visible"
             tools:ignore="ContentDescription" />
 
+        <ImageView
+          android:id="@+id/image_online"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_marginStart="16dp"
+          android:src="@drawable/ic_round_cloud_done_outline"
+          android:visibility="gone"
+          tools:ignore="ContentDescription" />
+
       </LinearLayout>
 
       <TextView
@@ -91,7 +102,9 @@
     android:id="@+id/container_purchase"
     android:visibility="gone"
     android:paddingStart="32dp"
-    android:paddingEnd="0dp">
+    android:paddingEnd="0dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
     <TextView
       android:id="@+id/text_purchase"
@@ -99,6 +112,35 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical|start"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/container_info"
+    android:visibility="gone"
+    android:paddingStart="32dp"
+    android:paddingEnd="16dp"
+    android:paddingVertical="8dp">
+
+    <com.google.android.material.card.MaterialCardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:contentPadding="16dp"
+      app:cardElevation="0dp"
+      app:cardCornerRadius="12dp"
+      app:cardBackgroundColor="@color/on_background_variant">
+
+      <TextView
+        android:id="@+id/text_info"
+        style="@style/Widget.Grocy.TextView.Paragraph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_stored_purchases" />
+
+    </com.google.android.material.card.MaterialCardView>
 
   </LinearLayout>
 

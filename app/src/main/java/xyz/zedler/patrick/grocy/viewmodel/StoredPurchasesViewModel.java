@@ -35,15 +35,17 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.PendingProductInfo;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.PendingPurchasesRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class PendingPurchasesViewModel extends BaseViewModel {
+public class StoredPurchasesViewModel extends BaseViewModel {
 
-  private static final String TAG = PendingPurchasesViewModel.class.getSimpleName();
+  private static final String TAG = StoredPurchasesViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -59,14 +61,14 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   private List<PendingProduct> pendingProducts;
   private final HashMap<String, PendingProduct> pendingProductHashMap;
   private List<PendingProductBarcode> pendingProductBarcodes;
-  private final HashMap<Integer, List<PendingProductBarcode>> pendingProductBarcodeHashMap;
-  private List<PendingPurchase> pendingPurchases;
-  private final HashMap<Integer, List<PendingPurchase>> pendingPurchasesHashMap;
+  private final HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap;
+  private List<StoredPurchase> pendingPurchases;
+  private final HashMap<Integer, List<StoredPurchase>> pendingPurchasesHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
 
-  public PendingPurchasesViewModel(@NonNull Application application) {
+  public StoredPurchasesViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -82,7 +84,7 @@ public class PendingPurchasesViewModel extends BaseViewModel {
 
     productHashMap = new HashMap<>();
     pendingProductHashMap = new HashMap<>();
-    pendingProductBarcodeHashMap = new HashMap<>();
+    productBarcodeHashMap = new HashMap<>();
     pendingPurchasesHashMap = new HashMap<>();
   }
 
@@ -91,28 +93,37 @@ public class PendingPurchasesViewModel extends BaseViewModel {
       this.products = data.getProducts();
       productHashMap.clear();
       for (Product product : products) {
-        productHashMap.put(product.getName().toLowerCase(), product);
+        productHashMap.put(product.getName(), product);
       }
       this.pendingProducts = data.getPendingProducts();
       pendingProductHashMap.clear();
       for (PendingProduct pendingProduct : this.pendingProducts) {
-        pendingProductHashMap.put(pendingProduct.getName().toLowerCase(), pendingProduct);
+        pendingProductHashMap.put(pendingProduct.getName(), pendingProduct);
       }
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
-      pendingProductBarcodeHashMap.clear();
-      for (PendingProductBarcode barcode : this.pendingProductBarcodes) {
-        List<PendingProductBarcode> tempBarcodes
-            = pendingProductBarcodeHashMap.get(barcode.getPendingProductId());
+      productBarcodeHashMap.clear();
+      for (ProductBarcode barcode : data.getProductBarcodes()) {
+        List<ProductBarcode> tempBarcodes
+            = productBarcodeHashMap.get(barcode.getProductIdInt());
         if (tempBarcodes == null) {
           tempBarcodes = new ArrayList<>();
         }
         tempBarcodes.add(barcode);
-        pendingProductBarcodeHashMap.put(barcode.getPendingProductId(), tempBarcodes);
+        productBarcodeHashMap.put(barcode.getProductIdInt(), tempBarcodes);
+      }
+      for (PendingProductBarcode barcode : this.pendingProductBarcodes) {
+        List<ProductBarcode> tempBarcodes
+            = productBarcodeHashMap.get(barcode.getPendingProductId());
+        if (tempBarcodes == null) {
+          tempBarcodes = new ArrayList<>();
+        }
+        tempBarcodes.add(barcode);
+        productBarcodeHashMap.put(barcode.getPendingProductId(), tempBarcodes);
       }
       this.pendingPurchases = data.getPendingPurchases();
       pendingPurchasesHashMap.clear();
-      for (PendingPurchase pendingPurchase : this.pendingPurchases) {
-        List<PendingPurchase> tempPurchases
+      for (StoredPurchase pendingPurchase : this.pendingPurchases) {
+        List<StoredPurchase> tempPurchases
             = pendingPurchasesHashMap.get(pendingPurchase.getPendingProductId());
         if (tempPurchases == null) {
           tempPurchases = new ArrayList<>();
@@ -149,7 +160,7 @@ public class PendingPurchasesViewModel extends BaseViewModel {
       this.products = products;
       productHashMap.clear();
       for (Product product : products) {
-        productHashMap.put(product.getName().toLowerCase(), product);
+        productHashMap.put(product.getName(), product);
       }
     }));
 
@@ -194,8 +205,15 @@ public class PendingPurchasesViewModel extends BaseViewModel {
   public void displayItems() {
     ArrayList<GroupedListItem> items = new ArrayList<>();
     for (PendingProduct pendingProduct : pendingProducts) {
-      items.add(pendingProduct);
-      List<PendingPurchase> pendingPurchases
+      Product productOnline = productHashMap.get(pendingProduct.getName());
+      if (productOnline == null) {
+        items.add(pendingProduct);
+        items.add(new PendingProductInfo(pendingProduct));
+      } else {
+        items.add(productOnline);
+        items.add(new PendingProductInfo(productOnline));
+      }
+      List<StoredPurchase> pendingPurchases
           = pendingPurchasesHashMap.get(pendingProduct.getId());
       if (pendingPurchases != null) {
         items.addAll(pendingPurchases);
@@ -222,8 +240,8 @@ public class PendingPurchasesViewModel extends BaseViewModel {
     return displayedItemsLive;
   }
 
-  public HashMap<Integer, List<PendingProductBarcode>> getPendingProductBarcodeHashMap() {
-    return pendingProductBarcodeHashMap;
+  public HashMap<Integer, List<ProductBarcode>> getProductBarcodeHashMap() {
+    return productBarcodeHashMap;
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {

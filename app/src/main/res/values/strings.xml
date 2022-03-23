@@ -234,6 +234,9 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
+  <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
+  <string name="msg_stored_purchases_product_online">Tap here to send the stored purchases for this product to the server.</string>
   <string name="msg_choose_product">The barcode you\'ve scanned is not linked to a product yet. You can link it to an existing one or create a new product for it.</string>
   <string name="msg_product_name_off">Product name for barcode is from Open Food Facts.</string>
   <string name="msg_product_name_obf">Product name for barcode is from Open Beauty Facts.</string>
@@ -438,7 +441,7 @@
   <string name="title_confirmation">Confirmation</string>
   <string name="title_choose_product">Choose product</string>
   <string name="title_pending_products">Pending products</string>
-  <string name="title_pending_purchases">Pending purchases</string>
+  <string name="title_stored_purchases">Stored purchases</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>

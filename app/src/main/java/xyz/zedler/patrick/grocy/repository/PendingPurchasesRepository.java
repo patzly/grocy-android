@@ -27,7 +27,8 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 
 public class PendingPurchasesRepository {
@@ -45,17 +46,20 @@ public class PendingPurchasesRepository {
   public static class ChooseProductData {
 
     private final List<Product> products;
+    private final List<ProductBarcode> productBarcodes;
     private final List<PendingProduct> pendingProducts;
     private final List<PendingProductBarcode> pendingProductBarcodes;
-    private final List<PendingPurchase> pendingPurchases;
+    private final List<StoredPurchase> pendingPurchases;
 
     public ChooseProductData(
         List<Product> products,
+        List<ProductBarcode> productBarcodes,
         List<PendingProduct> pendingProducts,
         List<PendingProductBarcode> pendingProductBarcodes,
-        List<PendingPurchase> pendingPurchases
+        List<StoredPurchase> pendingPurchases
     ) {
       this.products = products;
+      this.productBarcodes = productBarcodes;
       this.pendingProducts = pendingProducts;
       this.pendingProductBarcodes = pendingProductBarcodes;
       this.pendingPurchases = pendingPurchases;
@@ -63,6 +67,10 @@ public class PendingPurchasesRepository {
 
     public List<Product> getProducts() {
       return products;
+    }
+
+    public List<ProductBarcode> getProductBarcodes() {
+      return productBarcodes;
     }
 
     public List<PendingProduct> getPendingProducts() {
@@ -73,7 +81,7 @@ public class PendingPurchasesRepository {
       return pendingProductBarcodes;
     }
 
-    public List<PendingPurchase> getPendingPurchases() {
+    public List<StoredPurchase> getPendingPurchases() {
       return pendingPurchases;
     }
   }
@@ -81,9 +89,10 @@ public class PendingPurchasesRepository {
   public void loadFromDatabase(DataListener listener) {
     Single.zip(
         appDatabase.productDao().getProducts(),
+        appDatabase.productBarcodeDao().getProductBarcodes(),
         appDatabase.pendingProductDao().getPendingProducts(),
         appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
-        appDatabase.pendingPurchaseDao().getPendingPurchases(),
+        appDatabase.pendingPurchaseDao().getStoredPurchases(),
         ChooseProductData::new
     )
         .subscribeOn(Schedulers.io())

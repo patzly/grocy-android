@@ -56,7 +56,8 @@ public class FormDataPurchase {
   private final MutableLiveData<Integer> batchModeItemIndexLive;
   private final LiveData<String> batchModeTextLive;
   private final MutableLiveData<ShoppingListItem> shoppingListItemLive;
-  private final LiveData<List<PendingPurchase>> pendingPurchasesLive;
+  private final LiveData<List<StoredPurchase>> pendingPurchasesLive;
+  private final LiveData<List<PendingProduct>> pendingProductsLive;
   private final MutableLiveData<PendingProduct> pendingProductLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
@@ -105,6 +106,7 @@ public class FormDataPurchase {
     DateUtil dateUtil = new DateUtil(application);
     AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
     pendingPurchasesLive = appDatabase.pendingPurchaseDao().getAllLive();
+    pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
@@ -264,8 +266,12 @@ public class FormDataPurchase {
     displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
-  public LiveData<List<PendingPurchase>> getPendingPurchasesLive() {
+  public LiveData<List<StoredPurchase>> getPendingPurchasesLive() {
     return pendingPurchasesLive;
+  }
+
+  public LiveData<List<PendingProduct>> getPendingProductsLive() {
+    return pendingProductsLive;
   }
 
   public MutableLiveData<Integer> getBatchModeItemIndexLive() {
@@ -872,14 +878,14 @@ public class FormDataPurchase {
     return productBarcode;
   }
 
-  public PendingPurchase fillPendingPurchase() {
+  public StoredPurchase fillPendingPurchase() {
     if (!isFormValid()) {
       return null;
     }
     assert pendingProductLive.getValue() != null;
     PendingProduct product = pendingProductLive.getValue();
 
-    PendingPurchase pendingPurchase = new PendingPurchase();
+    StoredPurchase pendingPurchase = new StoredPurchase();
     pendingPurchase.setPendingProductId(product.getId());
     pendingPurchase.setAmount(amountLive.getValue());
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {

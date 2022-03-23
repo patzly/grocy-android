@@ -53,7 +53,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -722,7 +722,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void purchasePendingProduct() {
-    PendingPurchase productPurchase = formData.fillPendingPurchase();
+    StoredPurchase productPurchase = formData.fillPendingPurchase();
     repository.insertPendingPurchase(productPurchase, id -> {
       SnackbarMessage snackbarMessage = new SnackbarMessage(
           formData.getTransactionSuccessMsg(NumUtil.isStringDouble(productPurchase.getAmount())

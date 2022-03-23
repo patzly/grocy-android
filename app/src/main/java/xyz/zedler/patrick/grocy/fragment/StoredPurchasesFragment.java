@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.PendingPurchaseAdapter;
 import xyz.zedler.patrick.grocy.adapter.PendingPurchaseAdapter.PendingPurchaseAdapterListener;
-import xyz.zedler.patrick.grocy.databinding.FragmentPendingPurchasesBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentStoredPurchasesBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -44,17 +44,17 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
-import xyz.zedler.patrick.grocy.viewmodel.PendingPurchasesViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
 
-public class PendingPurchasesFragment extends BaseFragment
+public class StoredPurchasesFragment extends BaseFragment
     implements PendingPurchaseAdapterListener {
 
-  private final static String TAG = PendingPurchasesFragment.class.getSimpleName();
+  private final static String TAG = StoredPurchasesFragment.class.getSimpleName();
 
   private MainActivity activity;
   private ClickUtil clickUtil;
-  private FragmentPendingPurchasesBinding binding;
-  private PendingPurchasesViewModel viewModel;
+  private FragmentStoredPurchasesBinding binding;
+  private StoredPurchasesViewModel viewModel;
 
   @Override
   public View onCreateView(
@@ -62,7 +62,7 @@ public class PendingPurchasesFragment extends BaseFragment
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentPendingPurchasesBinding.inflate(inflater, container, false);
+    binding = FragmentStoredPurchasesBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
@@ -80,7 +80,7 @@ public class PendingPurchasesFragment extends BaseFragment
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
-    viewModel = new ViewModelProvider(this).get(PendingPurchasesViewModel.class);
+    viewModel = new ViewModelProvider(this).get(StoredPurchasesViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
 
     binding.setFragment(this);
@@ -110,7 +110,7 @@ public class PendingPurchasesFragment extends BaseFragment
       } else {
         binding.recycler.setAdapter(new PendingPurchaseAdapter(
             items,
-            viewModel.getPendingProductBarcodeHashMap(),
+            viewModel.getProductBarcodeHashMap(),
             this
         ));
         binding.recycler.scheduleLayoutAnimation();

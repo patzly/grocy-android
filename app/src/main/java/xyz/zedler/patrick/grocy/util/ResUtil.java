@@ -50,7 +50,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 
 public class ResUtil {
 
@@ -152,7 +152,7 @@ public class ResUtil {
   @BindingAdapter("shoppingCardDrawable")
   public static void setShoppingCardDrawable(
       ImageView view,
-      List<PendingPurchase> pendingPurchases
+      List<StoredPurchase> pendingPurchases
   ) {
     int count = pendingPurchases != null ? pendingPurchases.size() : 0;
     view.setImageDrawable(new BitmapDrawable(

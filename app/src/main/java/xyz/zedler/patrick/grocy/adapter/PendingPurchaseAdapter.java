@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +33,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowPendingPurchasesItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
-import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.PendingProductInfo;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 
 public class PendingPurchaseAdapter extends
     RecyclerView.Adapter<PendingPurchaseAdapter.ViewHolder> {
@@ -42,16 +45,16 @@ public class PendingPurchaseAdapter extends
   private final static boolean DEBUG = false;
 
   private final ArrayList<GroupedListItem> groupedListItems;
-  private final HashMap<Integer, List<PendingProductBarcode>> pendingProductBarcodeHashMap;
+  private final HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap;
   private final PendingPurchaseAdapterListener listener;
 
   public PendingPurchaseAdapter(
       List<GroupedListItem> groupedListItems,
-      HashMap<Integer, List<PendingProductBarcode>> pendingProductBarcodeHashMap,
+      HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap,
       PendingPurchaseAdapterListener listener
   ) {
     this.groupedListItems = new ArrayList<>(groupedListItems);
-    this.pendingProductBarcodeHashMap = pendingProductBarcodeHashMap;
+    this.productBarcodeHashMap = productBarcodeHashMap;
     this.listener = listener;
   }
 
@@ -96,21 +99,34 @@ public class PendingPurchaseAdapter extends
     GroupedListItem item = groupedListItems.get(position);
     PendingPurchaseViewHolder holder = (PendingPurchaseViewHolder) viewHolder;
 
-    if (GroupedListItem.getType(item, GroupedListItem.CONTEXT_PENDING_PURCHASES)
+    if (GroupedListItem.getType(item, GroupedListItem.CONTEXT_STORED_PURCHASES)
         == GroupedListItem.TYPE_ENTRY) {
-      PendingPurchase pendingPurchase = (PendingPurchase) item;
+      StoredPurchase pendingPurchase = (StoredPurchase) item;
       holder.binding.textPurchase.setText("Purchase: " + pendingPurchase.getId());
       holder.binding.containerPurchase.setVisibility(View.VISIBLE);
       holder.binding.containerProduct.setVisibility(View.GONE);
+      holder.binding.containerInfo.setVisibility(View.GONE);
 
-    } else {
-      PendingProduct pendingProduct = (PendingProduct) item;
-      holder.binding.nameProduct.setText(pendingProduct.getName());
-      List<PendingProductBarcode> barcodesList = pendingProductBarcodeHashMap
-          .get(pendingProduct.getId());
+    } else if (GroupedListItem.getType(item, GroupedListItem.CONTEXT_STORED_PURCHASES)
+        == GroupedListItem.TYPE_HEADER) {
+      List<ProductBarcode> barcodesList;
+      if (item instanceof PendingProduct) {
+        PendingProduct pendingProduct = (PendingProduct) item;
+        barcodesList = productBarcodeHashMap.get(pendingProduct.getId());
+        holder.binding.nameProduct.setText(pendingProduct.getName());
+        holder.binding.imagePending.setVisibility(View.VISIBLE);
+        holder.binding.imageOnline.setVisibility(View.GONE);
+      } else { // instance of Product
+        Product product = (Product) item;
+        barcodesList = productBarcodeHashMap.get(product.getId());
+        holder.binding.nameProduct.setText(product.getName());
+        holder.binding.imagePending.setVisibility(View.GONE);
+        holder.binding.imageOnline.setVisibility(View.VISIBLE);
+      }
+
       if (barcodesList != null) {
         StringBuilder barcodes = new StringBuilder();
-        for (PendingProductBarcode barcode : barcodesList) {
+        for (ProductBarcode barcode : barcodesList) {
           barcodes.append(barcode.getBarcode()).append(" ");
         }
         holder.binding.barcodes.setText(
@@ -121,12 +137,36 @@ public class PendingPurchaseAdapter extends
         holder.binding.barcodes.setVisibility(View.GONE);
       }
       holder.binding.containerPurchase.setVisibility(View.GONE);
+      holder.binding.containerInfo.setVisibility(View.GONE);
       holder.binding.containerProduct.setVisibility(View.VISIBLE);
+
+    } else { // GroupedListItem.TYPE_INFO
+      PendingProductInfo pendingProductInfo = (PendingProductInfo) item;
+      if (pendingProductInfo.getProduct() instanceof PendingProduct) {
+        holder.binding.textInfo.setText(holder.binding.textInfo.getContext()
+            .getString(R.string.msg_stored_purchases_product_offline));
+      } else {
+        holder.binding.textInfo.setText(holder.binding.textInfo.getContext()
+            .getString(R.string.msg_stored_purchases_product_online));
+      }
+      holder.binding.containerPurchase.setVisibility(View.GONE);
+      holder.binding.containerInfo.setVisibility(View.VISIBLE);
+      holder.binding.containerProduct.setVisibility(View.GONE);
     }
 
-    holder.binding.container.setOnClickListener(
-        view -> listener.onItemRowClicked(item)
-    );
+    if (GroupedListItem.getType(item, GroupedListItem.CONTEXT_STORED_PURCHASES)
+        == GroupedListItem.TYPE_INFO) {
+      holder.binding.container.setClickable(false);
+      holder.binding.container.setFocusable(false);
+      holder.binding.container.setBackground(null);
+    } else {
+      holder.binding.container.setClickable(true);
+      holder.binding.container.setFocusable(true);
+      holder.binding.container.setBackground(AppCompatResources
+          .getDrawable(holder.binding.container.getContext(), R.drawable.bg_list_item));
+    }
+
+    holder.binding.container.setOnClickListener(view -> listener.onItemRowClicked(item));
   }
 
   @Override

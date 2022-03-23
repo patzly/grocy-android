@@ -24,10 +24,11 @@ public abstract class GroupedListItem {
   public static final int TYPE_HEADER = 0;
   public static final int TYPE_ENTRY = 1;
   public static final int TYPE_BOTTOM_NOTES = 2;
+  public static final int TYPE_INFO = 3;
 
   public static final String CONTEXT_SHOPPING_LIST = "shopping_list";
   public static final String CONTEXT_STOCK_OVERVIEW = "stock_overview";
-  public static final String CONTEXT_PENDING_PURCHASES = "pending_purchases";
+  public static final String CONTEXT_STORED_PURCHASES = "stored_purchases";
 
   public static int getType(GroupedListItem groupedListItem, String context) {
     switch (context) {
@@ -46,9 +47,11 @@ public abstract class GroupedListItem {
         } else {
           return GroupedListItem.TYPE_HEADER;
         }
-      case CONTEXT_PENDING_PURCHASES:
-        if (groupedListItem instanceof PendingPurchase) {
+      case CONTEXT_STORED_PURCHASES:
+        if (groupedListItem instanceof StoredPurchase) {
           return GroupedListItem.TYPE_ENTRY;
+        } else if (groupedListItem instanceof PendingProductInfo) {
+          return GroupedListItem.TYPE_INFO;
         } else {
           return GroupedListItem.TYPE_HEADER;
         }

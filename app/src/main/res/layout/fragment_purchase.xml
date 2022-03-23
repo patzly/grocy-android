@@ -107,10 +107,10 @@
               android:background="?attr/actionBarItemBackground"
               android:clickable="true"
               android:gravity="center"
-              android:contentDescription="@string/title_pending_purchases"
+              android:contentDescription="@string/title_stored_purchases"
               android:tooltipText="Pending products"
               android:focusable="true"
-              android:visibility="@{viewModel.quickModeEnabled || formData.pendingPurchasesLive.size() > 0 ? View.VISIBLE : View.GONE}"
+              android:visibility="@{viewModel.quickModeEnabled || formData.pendingPurchasesLive.size() > 0 || formData.pendingProductsLive.size() > 0 ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateToPendingProductsPage()}"
               tools:targetApi="o">
 

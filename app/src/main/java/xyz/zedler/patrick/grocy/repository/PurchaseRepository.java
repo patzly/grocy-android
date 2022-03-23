@@ -28,7 +28,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -145,11 +145,11 @@ public class PurchaseRepository {
   }
 
   public void insertPendingPurchase(
-          PendingPurchase pendingPurchase,
+          StoredPurchase pendingPurchase,
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.pendingPurchaseDao().insertPendingPurchase(pendingPurchase)
+    appDatabase.pendingPurchaseDao().insertStoredPurchase(pendingPurchase)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(onSuccess::onSuccess)
@@ -162,7 +162,7 @@ public class PurchaseRepository {
       Runnable onSuccess,
       Runnable onError
   ) {
-    appDatabase.pendingPurchaseDao().deletePendingPurchase(id)
+    appDatabase.pendingPurchaseDao().deleteStoredPurchase(id)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(i -> onSuccess.run())

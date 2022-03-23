@@ -68,7 +68,7 @@
       app:popExitAnim="@anim/slide_out_down"/>
     <action
       android:id="@+id/action_purchaseFragment_to_pendingPurchasesFragment"
-      app:destination="@id/pendingPurchasesFragment"
+      app:destination="@id/storedPurchasesFragment"
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
@@ -1019,8 +1019,8 @@
         android:defaultValue="false" />
   </fragment>
   <fragment
-    android:id="@+id/pendingPurchasesFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.PendingPurchasesFragment"
-    android:label="PendingProductsFragment"
-    tools:layout="@layout/fragment_pending_purchases"/>
+    android:id="@+id/storedPurchasesFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.StoredPurchasesFragment"
+    android:label="StoredProductsFragment"
+    tools:layout="@layout/fragment_stored_purchases"/>
 </navigation>
