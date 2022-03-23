@@ -229,15 +229,20 @@
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
   <string name="msg_choose_product">Le code-barres que vous avez scanné n\'est pas encore lié à un produit. Vous pouvez le lier à un produit existant ou créer un nouveau produit associé.</string>
   <string name="msg_product_name_off">Le nom du produit pour le code-barres provient d\'Open Food Facts.</string>
+  <string name="msg_product_name_obf">Le nom du produit pour le code-barres provient d\'Open Beauty Facts.</string>
   <string name="msg_product_name_lookup_error">Le code-barres n\'a pas pu être recherché sur Open Food Facts.</string>
   <string name="msg_product_name_lookup_empty">Le code-barres n\'est pas dans la base de données d\'Open Food Facts.</string>
   <string name="msg_off_option_deactivated">Pour la suggestion automatique d\'un nom de produit, vous pouvez activer la recherche Open Food Facts dans les paramètres.</string>
   <string name="msg_create_new_product_filled">Créer un nouveau produit \"%1$s\"</string>
   <string name="msg_create_new_product">Créer un nouveau produit</string>
+  <string name="msg_create_new_pending_product_filled">Créer un nouveau produit temporaire \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Créer un nouveau produit temporaire</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Opération qui sera exécutée :\n\nAjouter %1$s %2$s de %3$s au stock\nDate de péremption : %4$s\nPrix : %5$s\nMagasin : %6$s\nEmplacement : %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Opération qui sera exécutée :\n\nRetirer %1$s %2$s de %3$s du stock\nEmplacement : %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Transaction qui sera exécutée :\n\Marquer %1$s %2$s de %3$s comme ouvert\nEmplacement : %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Opération qui sera exécutée :\n\nTransférer %1$s %2$s de %3$s\nDe l\'emplacement : %4$s\nÀ l\'emplacement : %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -257,6 +262,7 @@
   <string name="msg_welcome_to_grocy">Bienvenue sur Grocy Android !\n\nPour utiliser grocy de manière productive vous avez besoin de votre propre serveur ou de l\'add-on pour Home Assistant.\nSi vous voulez seulement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Merci de choisir une des options ci-dessous.</string>
   <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site web grocy et allez sur la page \"Clefs API\". Cliquez sur \"Ajouter\", puis cliquez sur la petite icône avec un code QR et scannez le code QR.</string>
+  <string name="msg_qr_code_scan_token">Vous utilisez le module complémentaire Grocy Home Assistant. Créez un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Sous le champ du jeton, cliquez sur \"Générer le QR code\" et scannez-le ici.</string>
   <string name="msg_port_connection_info_without_port">L\'application se connectera au port %1$s.\nSi vous souhaitez qu\'elle se connecte à un autre port, vous pouvez en ajouter un à l\'URL.\nExemple : http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">L\'application se connectera au port %1$s.</string>
   <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
@@ -281,6 +287,8 @@
   <string name="msg_help_qu_purchase">Ceci est le format par défaut utilisé lorsqu\'un produit est ajouté à la liste de courses.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Si activé, la quantité de stock minimale des sous-produits sera inclue à ce produit. Cela signifie que les sous produits ne seront jamais \"manquant\", seulement ce produit le sera.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Lorsque activé, les articles ouverts seront comptabilisés comme manquants pour déterminer si ce produit est en dessous de son stock minimum.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Cette quantité est utilisée pour les boutons \"Consommation/Ouverture rapide\" sur la page d\'aperçu du stock (lié au format du stock).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -313,6 +321,7 @@
   <string name="msg_help_home_assistant_login_help_show">Appuyez ici pour afficher les messages d\'aide.</string>
   <string name="msg_help_home_assistant_login_help_hide">Appuyez ici pour cacher les messages d\'aide.</string>
   <string name="msg_help_home_assistant_login_server">Dans le champ ci-dessous, vous pouvez saisir l\'URL de votre instance Nabu Casa, si vous utilisez ce service. Appuyer ici pour consulter le site de Nabu Casa.</string>
+  <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Appuyez ici pour ouvrir l\'URL ci-dessus.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
   <string name="msg_share">Découvrez ce client Android pour l\'excellent projet grocy : \nhttps://github.com/patzly/grocy-android</string>
 
@@ -348,6 +357,7 @@
   <string name="error_invalid_factor">Facteur invalide</string>
   <string name="error_invalid_date_format">Format de date invalide</string>
   <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
+  <string name="error_token_qr_code">Ce n\'est pas un QR code avec un jeton d\'accès de longue durée provenant de Home Assistant.</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Ne peut pas être égal à %1$s</string>
@@ -419,6 +429,8 @@
   <string name="title_external_barcode_input">Scanner externe</string>
   <string name="title_confirmation">Confirmation</string>
   <string name="title_choose_product">Choisir un produit</string>
+  <string name="title_pending_products">Produits en attente</string>
+  <string name="title_pending_purchases">Achats en attente</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
@@ -601,6 +613,7 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Quantité en %1$s</string>
   <string name="property_price">Prix</string>
+  <string name="property_price_average">Prix ​​moyen</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Prix par %1$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
@@ -622,6 +635,7 @@
   <string name="property_factor">Facteur</string>
   <string name="property_barcode">Code-barres</string>
   <string name="property_barcodes">Codes-barres</string>
+  <string name="property_barcodes_insert">Codes-barres : %1$s</string>
   <string name="property_days">Jours</string>
   <string name="property_purchased_date">Date d\'achat</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -658,6 +672,8 @@
   <string name="property_last_used">Dernière utilisation</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Dernier prix</string>
+  <string name="property_last_price_unit">Dernier prix (par unité)</string>
+  <string name="property_last_price_total">Dernier prix (total)</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Durée de conservation moyenne</string>
   <string name="property_spoil_rate">Taux de péremption</string>
@@ -703,6 +719,7 @@
   <string name="property_task_categories">Catégories de tâches</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (par unité)</string>
+  <string name="property_calories_total">Calories (total)</string>
 
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
@@ -845,6 +862,7 @@
   <string name="setting_default_amount_purchase">Montant par défaut pour l\'achat</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Montant par défaut pour consommer</string>
+  <string name="setting_treat_opened_as_out_of_stock">Considérer ouvert comme en rupture de stock</string>
   <string name="setting_purchased_date">Demander la date d\'achat</string>
   <string name="setting_purchased_date_description">Sur les pages d\'achat et d\'inventaire</string>
   <string name="setting_use_quick_consume_amount">Utiliser le paramètre \"Quantité en consommation rapide\" du produit</string>
