@@ -34,14 +34,18 @@ import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.adapter.PendingPurchaseAdapter;
-import xyz.zedler.patrick.grocy.adapter.PendingPurchaseAdapter.PendingPurchaseAdapterListener;
+import xyz.zedler.patrick.grocy.adapter.StoredPurchaseAdapter;
+import xyz.zedler.patrick.grocy.adapter.StoredPurchaseAdapter.PendingPurchaseAdapterListener;
 import xyz.zedler.patrick.grocy.databinding.FragmentStoredPurchasesBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
+import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
@@ -105,10 +109,10 @@ public class StoredPurchasesFragment extends BaseFragment
       if (items == null) {
         return;
       }
-      if (binding.recycler.getAdapter() instanceof PendingPurchaseAdapter) {
-        ((PendingPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
+      if (binding.recycler.getAdapter() instanceof StoredPurchaseAdapter) {
+        ((StoredPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
       } else {
-        binding.recycler.setAdapter(new PendingPurchaseAdapter(
+        binding.recycler.setAdapter(new StoredPurchaseAdapter(
             items,
             viewModel.getProductBarcodeHashMap(),
             this
@@ -125,10 +129,20 @@ public class StoredPurchasesFragment extends BaseFragment
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-      } else if (event.getType() == Event.FOCUS_INVALID_VIEWS) {
-
       }
     });
+
+    Integer pendingProductId = (Integer) getFromThisDestinationNow(ARGUMENT.PENDING_PRODUCT_ID);
+    Integer productId = (Integer) getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
+    if (pendingProductId != null && productId != null) {
+      // after user created product the saved state args contain old pending product id and new
+      // product id.
+      removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
+      removeForThisDestination(ARGUMENT.PRODUCT_ID);
+      viewModel.setQueueEmptyAction(() -> {
+        viewModel.setPendingProductNameToOnlineProductName(pendingProductId, productId);
+      });
+    }
 
     // INITIALIZE VIEWS
 
@@ -163,6 +177,19 @@ public class StoredPurchasesFragment extends BaseFragment
   public void onItemRowClicked(GroupedListItem item) {
     if (clickUtil.isDisabled()) {
       return;
+    }
+    if (item instanceof PendingProduct) {
+      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+          new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+              .setProductName(((PendingProduct) item).getName())
+              .setPendingProductId(String.valueOf(((PendingProduct) item).getId()))
+              .build().toBundle());
+    } else if (item instanceof Product) {
+      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+          new MasterProductFragmentArgs.Builder(ACTION.EDIT)
+              .setProductId(String.valueOf(((Product) item).getId()))
+              .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))
+              .build().toBundle());
     }
 
   }

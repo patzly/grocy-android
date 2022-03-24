@@ -147,6 +147,9 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("hide_on_stock_overview")
   private String hideOnStockOverview;
 
+  @Ignore
+  private Integer pendingProductId;
+
   public Product() {
   }  // for Room
 
@@ -588,6 +591,14 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setHideOnStockOverviewBoolean(boolean hideOnStockOverview) {
     this.hideOnStockOverview = hideOnStockOverview ? "1" : "0";
+  }
+
+  public Integer getPendingProductId() {
+    return pendingProductId;
+  }
+
+  public void setPendingProductId(Integer pendingProductId) {
+    this.pendingProductId = pendingProductId;
   }
 
   public static JSONObject getJsonFromProduct(Product product, boolean debug, String TAG) {

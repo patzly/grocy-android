@@ -38,17 +38,17 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 
-public class PendingPurchaseAdapter extends
-    RecyclerView.Adapter<PendingPurchaseAdapter.ViewHolder> {
+public class StoredPurchaseAdapter extends
+    RecyclerView.Adapter<StoredPurchaseAdapter.ViewHolder> {
 
-  private final static String TAG = PendingPurchaseAdapter.class.getSimpleName();
+  private final static String TAG = StoredPurchaseAdapter.class.getSimpleName();
   private final static boolean DEBUG = false;
 
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap;
   private final PendingPurchaseAdapterListener listener;
 
-  public PendingPurchaseAdapter(
+  public StoredPurchaseAdapter(
       List<GroupedListItem> groupedListItems,
       HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap,
       PendingPurchaseAdapterListener listener
@@ -118,7 +118,7 @@ public class PendingPurchaseAdapter extends
         holder.binding.imageOnline.setVisibility(View.GONE);
       } else { // instance of Product
         Product product = (Product) item;
-        barcodesList = productBarcodeHashMap.get(product.getId());
+        barcodesList = productBarcodeHashMap.get(product.getPendingProductId());
         holder.binding.nameProduct.setText(product.getName());
         holder.binding.imagePending.setVisibility(View.GONE);
         holder.binding.imageOnline.setVisibility(View.VISIBLE);

@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
@@ -59,7 +58,6 @@ public class MasterProductViewModel extends BaseViewModel {
   private final GrocyApi grocyApi;
   private final MasterProductRepository repository;
   private final FormDataMasterProduct formData;
-  private final MasterProductFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -71,6 +69,7 @@ public class MasterProductViewModel extends BaseViewModel {
   private DownloadHelper.QueueItem extraQueueItem;
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
+  private final String pendingProductId;
 
   public MasterProductViewModel(
       @NonNull Application application,
@@ -86,19 +85,19 @@ public class MasterProductViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProduct(application, getBeginnerModeEnabled());
-    args = startupArgs;
     actionEditLive = new MutableLiveData<>();
     actionEditLive.setValue(startupArgs.getAction().equals(Constants.ACTION.EDIT));
+    pendingProductId = startupArgs.getPendingProductId();
 
     infoFullscreenLive = new MutableLiveData<>();
     isOnlineLive = new ConnectivityLiveData(application);
 
     if (isActionEdit()) {
-      if (args.getProduct() != null) {
-        setCurrentProduct(args.getProduct());
+      if (startupArgs.getProduct() != null) {
+        setCurrentProduct(startupArgs.getProduct());
       } else {
-        assert args.getProductId() != null;
-        int productId = Integer.parseInt(args.getProductId());
+        assert startupArgs.getProductId() != null;
+        int productId = Integer.parseInt(startupArgs.getProductId());
         extraQueueItem = dlHelper.getProductDetails(productId, productDetails -> {
           extraQueueItem = null;
           setCurrentProduct(productDetails.getProduct());
@@ -107,15 +106,15 @@ public class MasterProductViewModel extends BaseViewModel {
           }
         });
       }
-    } else if (args.getProduct() != null) {  // on clone
-      Product product = args.getProduct();
+    } else if (startupArgs.getProduct() != null) {  // on clone
+      Product product = startupArgs.getProduct();
       product.setName(null);
       sendEvent(Event.FOCUS_INVALID_VIEWS);
       setCurrentProduct(product);
     } else {
       Product product = new Product(sharedPrefs);
-      if (args.getProductName() != null) {
-        product.setName(args.getProductName());
+      if (startupArgs.getProductName() != null) {
+        product.setName(startupArgs.getProductName());
       } else {
         sendEvent(Event.FOCUS_INVALID_VIEWS);
       }
@@ -310,6 +309,10 @@ public class MasterProductViewModel extends BaseViewModel {
       }
     }
     return null;
+  }
+
+  public String getPendingProductId() {
+    return pendingProductId;
   }
 
   private boolean isOffline() {

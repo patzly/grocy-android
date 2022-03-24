@@ -38,6 +38,8 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
 
 public class MasterProductFragment extends BaseFragment {
@@ -137,6 +139,12 @@ public class MasterProductFragment extends BaseFragment {
       } else if (event.getType() == Event.SET_PRODUCT_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.PRODUCT_ID);
         setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, id);
+        if (NumUtil.isStringInt(viewModel.getPendingProductId())) {
+          setForPreviousDestination(
+              ARGUMENT.PENDING_PRODUCT_ID,
+              Integer.parseInt(viewModel.getPendingProductId())
+          );
+        }
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());

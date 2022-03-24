@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.model.PendingProductInfo;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
-import xyz.zedler.patrick.grocy.repository.PendingPurchasesRepository;
+import xyz.zedler.patrick.grocy.repository.StoredPurchasesRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -49,7 +49,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
-  private final PendingPurchasesRepository repository;
+  private final StoredPurchasesRepository repository;
 
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isLoadingLive;
@@ -65,6 +65,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   private List<StoredPurchase> pendingPurchases;
   private final HashMap<Integer, List<StoredPurchase>> pendingPurchasesHashMap;
 
+  private Runnable queueEmptyAction;
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
 
@@ -77,7 +78,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
     displayHelpLive = new MutableLiveData<>(false);
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
-    repository = new PendingPurchasesRepository(application);
+    repository = new StoredPurchasesRepository(application);
 
     offlineLive = new MutableLiveData<>(false);
     displayedItemsLive = new MutableLiveData<>();
@@ -90,27 +91,20 @@ public class StoredPurchasesViewModel extends BaseViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-      this.products = data.getProducts();
-      productHashMap.clear();
-      for (Product product : products) {
-        productHashMap.put(product.getName(), product);
-      }
       this.pendingProducts = data.getPendingProducts();
       pendingProductHashMap.clear();
       for (PendingProduct pendingProduct : this.pendingProducts) {
         pendingProductHashMap.put(pendingProduct.getName(), pendingProduct);
       }
+      this.products = data.getProducts();
+      productHashMap.clear();
+      for (Product product : products) {
+        PendingProduct pendingProduct = pendingProductHashMap.get(product.getName());
+        if (pendingProduct != null) product.setPendingProductId(pendingProduct.getId());
+        productHashMap.put(product.getName(), product);
+      }
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
       productBarcodeHashMap.clear();
-      for (ProductBarcode barcode : data.getProductBarcodes()) {
-        List<ProductBarcode> tempBarcodes
-            = productBarcodeHashMap.get(barcode.getProductIdInt());
-        if (tempBarcodes == null) {
-          tempBarcodes = new ArrayList<>();
-        }
-        tempBarcodes.add(barcode);
-        productBarcodeHashMap.put(barcode.getProductIdInt(), tempBarcodes);
-      }
       for (PendingProductBarcode barcode : this.pendingProductBarcodes) {
         List<ProductBarcode> tempBarcodes
             = productBarcodeHashMap.get(barcode.getPendingProductId());
@@ -160,6 +154,8 @@ public class StoredPurchasesViewModel extends BaseViewModel {
       this.products = products;
       productHashMap.clear();
       for (Product product : products) {
+        PendingProduct pendingProduct = pendingProductHashMap.get(product.getName());
+        if (pendingProduct != null) product.setPendingProductId(pendingProduct.getId());
         productHashMap.put(product.getName(), product);
       }
     }));
@@ -188,6 +184,10 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   private void onQueueEmpty() {
     if (isOffline()) {
       setOfflineLive(false);
+    }
+    if (queueEmptyAction != null) {
+      queueEmptyAction.run();
+      queueEmptyAction = null;
     }
     displayItems();
   }
@@ -220,6 +220,24 @@ public class StoredPurchasesViewModel extends BaseViewModel {
       }
     }
     displayedItemsLive.setValue(items);
+  }
+
+  public void setPendingProductNameToOnlineProductName(int pendingProductId, int productId) {
+    PendingProduct pendingProduct = PendingProduct.getFromId(pendingProducts, pendingProductId);
+    Product product = Product.getProductFromId(products, productId);
+    if (pendingProduct == null || product == null) return;
+    pendingProduct.setName(product.getName());
+    repository.insertPendingProduct(
+        pendingProduct,
+        id -> loadFromDatabase(false),
+        () -> {
+          showErrorMessage();
+          displayItems();
+        });
+  }
+
+  public PendingProduct getPendingProductFromName(String name) {
+    return PendingProduct.getFromName(pendingProducts, name);
   }
 
   @NonNull
@@ -259,6 +277,10 @@ public class StoredPurchasesViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
+  }
+
+  public void setQueueEmptyAction(Runnable queueEmptyAction) {
+    this.queueEmptyAction = queueEmptyAction;
   }
 
   public boolean isFeatureEnabled(String pref) {

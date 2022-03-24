@@ -87,11 +87,11 @@ public class PendingProduct extends Product {
     }
 
     public static PendingProduct getFromName(
-            LiveData<List<PendingProduct>> pendingProducts,
+            List<PendingProduct> pendingProducts,
             String productName
     ) {
-        if (pendingProducts.getValue() == null || productName == null) return null;
-        for (PendingProduct product : pendingProducts.getValue()) {
+        if (pendingProducts == null || productName == null) return null;
+        for (PendingProduct product : pendingProducts) {
             if (product.getName().equals(productName)) return product;
         }
         return null;

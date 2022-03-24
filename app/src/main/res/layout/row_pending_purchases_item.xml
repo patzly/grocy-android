@@ -100,11 +100,13 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:id="@+id/container_purchase"
-    android:visibility="gone"
-    android:paddingStart="32dp"
+    android:visibility="visible"
+    android:paddingStart="40dp"
     android:paddingEnd="0dp"
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
+
+
 
     <TextView
       android:id="@+id/text_purchase"
@@ -121,7 +123,7 @@
     android:orientation="horizontal"
     android:id="@+id/container_info"
     android:visibility="gone"
-    android:paddingStart="32dp"
+    android:paddingStart="40dp"
     android:paddingEnd="16dp"
     android:paddingVertical="8dp">
 

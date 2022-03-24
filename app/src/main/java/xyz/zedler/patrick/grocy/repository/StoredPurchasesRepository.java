@@ -27,39 +27,36 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
-import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
+import xyz.zedler.patrick.grocy.repository.PurchaseRepository.SuccessIdListener;
 
-public class PendingPurchasesRepository {
+public class StoredPurchasesRepository {
 
   private final AppDatabase appDatabase;
 
-  public PendingPurchasesRepository(Application application) {
+  public StoredPurchasesRepository(Application application) {
     this.appDatabase = AppDatabase.getAppDatabase(application);
   }
 
   public interface DataListener {
-    void actionFinished(ChooseProductData data);
+    void actionFinished(StoredPurchasesData data);
   }
 
-  public static class ChooseProductData {
+  public static class StoredPurchasesData {
 
     private final List<Product> products;
-    private final List<ProductBarcode> productBarcodes;
     private final List<PendingProduct> pendingProducts;
     private final List<PendingProductBarcode> pendingProductBarcodes;
     private final List<StoredPurchase> pendingPurchases;
 
-    public ChooseProductData(
+    public StoredPurchasesData(
         List<Product> products,
-        List<ProductBarcode> productBarcodes,
         List<PendingProduct> pendingProducts,
         List<PendingProductBarcode> pendingProductBarcodes,
         List<StoredPurchase> pendingPurchases
     ) {
       this.products = products;
-      this.productBarcodes = productBarcodes;
       this.pendingProducts = pendingProducts;
       this.pendingProductBarcodes = pendingProductBarcodes;
       this.pendingPurchases = pendingPurchases;
@@ -67,10 +64,6 @@ public class PendingPurchasesRepository {
 
     public List<Product> getProducts() {
       return products;
-    }
-
-    public List<ProductBarcode> getProductBarcodes() {
-      return productBarcodes;
     }
 
     public List<PendingProduct> getPendingProducts() {
@@ -89,15 +82,27 @@ public class PendingPurchasesRepository {
   public void loadFromDatabase(DataListener listener) {
     Single.zip(
         appDatabase.productDao().getProducts(),
-        appDatabase.productBarcodeDao().getProductBarcodes(),
         appDatabase.pendingProductDao().getPendingProducts(),
         appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
         appDatabase.pendingPurchaseDao().getStoredPurchases(),
-        ChooseProductData::new
+        StoredPurchasesData::new
     )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
+        .subscribe();
+  }
+
+  public void insertPendingProduct(
+      PendingProduct pendingProduct,
+      SuccessIdListener onSuccess,
+      Runnable onError
+  ) {
+    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(onSuccess::onSuccess)
+        .doOnError(e -> onError.run())
         .subscribe();
   }
 }
