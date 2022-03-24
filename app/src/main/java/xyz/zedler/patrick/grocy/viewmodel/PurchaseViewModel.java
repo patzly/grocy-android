@@ -936,9 +936,16 @@ public class PurchaseViewModel extends BaseViewModel {
           ArrayList<Product> products,
           List<PendingProduct> pendingProducts
   ) {
+    ArrayList<String> productStrings = new ArrayList<>();
+    for (Product product : products) {
+      productStrings.add(product.getName());
+    }
     ArrayList<Product> newList = new ArrayList<>(products);
     if (pendingProducts != null) {
-      newList.addAll(pendingProducts);
+      for (PendingProduct pendingProduct : pendingProducts) {
+        if (productStrings.contains(pendingProduct.getName())) continue;
+        newList.add(pendingProduct);
+      }
     }
     return newList;
   }
@@ -947,9 +954,14 @@ public class PurchaseViewModel extends BaseViewModel {
       List<ProductBarcode> productBarcodes,
       List<PendingProductBarcode> pendingProductBarcodes
   ) {
+    ArrayList<String> barcodeStrings = new ArrayList<>();
+    for (ProductBarcode productBarcode : productBarcodes) {
+      barcodeStrings.add(productBarcode.getBarcode());
+    }
     ArrayList<ProductBarcode> newList = new ArrayList<>(productBarcodes);
-    if (pendingProductBarcodes != null) {
-      newList.addAll(pendingProductBarcodes);
+    for (PendingProductBarcode pendingProductBarcode : pendingProductBarcodes) {
+      if (barcodeStrings.contains(pendingProductBarcode.getBarcode())) continue;
+      newList.add(pendingProductBarcode);
     }
     return newList;
   }
