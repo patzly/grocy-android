@@ -211,12 +211,6 @@ public class StoredPurchasesFragment extends BaseFragment
   }
 
   @Override
-  public boolean onBackPressed() {
-    setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-    return false;
-  }
-
-  @Override
   public void updateConnectivity(boolean online) {
     if (!online == viewModel.isOffline()) {
       return;
