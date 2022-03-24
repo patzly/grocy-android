@@ -69,6 +69,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<Integer> itemsExpiredCountLive;
   private final MutableLiveData<Integer> itemsMissingCountLive;
   private final MutableLiveData<Integer> itemsMissingShoppingListCountLive;
+  private final MutableLiveData<Boolean> storedPurchasesOnDevice;
   private final LiveData<String> stockDescriptionTextLive;
   private final LiveData<String> stockDescriptionDueNextTextLive;
   private final LiveData<String> stockDescriptionOverdueTextLive;
@@ -105,6 +106,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     itemsExpiredCountLive = new MutableLiveData<>();
     itemsMissingCountLive = new MutableLiveData<>();
     itemsMissingShoppingListCountLive = new MutableLiveData<>();
+    storedPurchasesOnDevice = new MutableLiveData<>(false);
     shoppingListItemsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
 
@@ -249,6 +251,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.stockItemsLive.setValue(data.getStockItems());
       this.shoppingListItemsLive.setValue(data.getShoppingListItems());
       this.productsLive.setValue(data.getProducts());
+      this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
 
       ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
       for (ShoppingListItem item : data.getShoppingListItems()) {
@@ -497,6 +500,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public LiveData<String> getMasterDataDescriptionTextLive() {
     return masterDataDescriptionTextLive;
+  }
+
+  public MutableLiveData<Boolean> getStoredPurchasesOnDevice() {
+    return storedPurchasesOnDevice;
   }
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {

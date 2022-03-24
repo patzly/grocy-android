@@ -428,6 +428,24 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Filled"
+              android:visibility="@{viewModel.storedPurchasesOnDevice ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
+              android:layout_marginBottom="8dp"
+              android:layout_marginHorizontal="16dp"
+              app:clickUtil="@{clickUtil}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/retro_red_fg"
+                android:fontFamily="@font/jost_medium"
+                android:text="@string/msg_stored_purchases_overview" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
               style="@style/Widget.Grocy.Card"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"

@@ -1030,7 +1030,11 @@
   </fragment>
   <fragment
     android:id="@+id/storedPurchasesFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.StoredPurchasesFragment"
     android:label="StoredProductsFragment"
-    tools:layout="@layout/fragment_stored_purchases"/>
+    android:name="xyz.zedler.patrick.grocy.fragment.StoredPurchasesFragment"
+    tools:layout="@layout/fragment_stored_purchases">
+    <deepLink
+      android:id="@+id/deepLink14"
+      app:uri="@string/deep_link_storedPurchasesFragment" />
+  </fragment>
 </navigation>

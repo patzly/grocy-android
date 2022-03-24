@@ -126,7 +126,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
   public abstract PendingProductBarcodeDao pendingProductBarcodeDao();
 
-  public abstract StoredPurchaseDao pendingPurchaseDao();
+  public abstract StoredPurchaseDao storedPurchaseDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

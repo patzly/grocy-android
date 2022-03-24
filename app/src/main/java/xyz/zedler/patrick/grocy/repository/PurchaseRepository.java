@@ -149,7 +149,7 @@ public class PurchaseRepository {
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.pendingPurchaseDao().insertStoredPurchase(pendingPurchase)
+    appDatabase.storedPurchaseDao().insertStoredPurchase(pendingPurchase)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(onSuccess::onSuccess)
@@ -162,7 +162,7 @@ public class PurchaseRepository {
       Runnable onSuccess,
       Runnable onError
   ) {
-    appDatabase.pendingPurchaseDao().deleteStoredPurchase(id)
+    appDatabase.storedPurchaseDao().deleteStoredPurchase(id)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(i -> onSuccess.run())

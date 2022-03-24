@@ -105,7 +105,7 @@ public class FormDataPurchase {
   ) {
     DateUtil dateUtil = new DateUtil(application);
     AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
-    pendingPurchasesLive = appDatabase.pendingPurchaseDao().getAllLive();
+    pendingPurchasesLive = appDatabase.storedPurchaseDao().getAllLive();
     pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
     this.application = application;
     this.sharedPrefs = sharedPrefs;

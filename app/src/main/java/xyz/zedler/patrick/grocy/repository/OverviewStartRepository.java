@@ -29,6 +29,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 
 public class OverviewStartRepository {
 
@@ -48,17 +49,20 @@ public class OverviewStartRepository {
     private final List<ShoppingListItem> shoppingListItems;
     private final List<ShoppingList> shoppingLists;
     private final List<Product> products;
+    private final List<StoredPurchase> storedPurchases;
 
     public OverviewStartData(
         List<StockItem> stockItems,
         List<ShoppingListItem> shoppingListItems,
         List<ShoppingList> shoppingLists,
-        List<Product> products
+        List<Product> products,
+        List<StoredPurchase> storedPurchases
     ) {
       this.stockItems = stockItems;
       this.shoppingListItems = shoppingListItems;
       this.shoppingLists = shoppingLists;
       this.products = products;
+      this.storedPurchases = storedPurchases;
     }
 
     public List<StockItem> getStockItems() {
@@ -76,6 +80,10 @@ public class OverviewStartRepository {
     public List<Product> getProducts() {
       return products;
     }
+
+    public List<StoredPurchase> getStoredPurchases() {
+      return storedPurchases;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
@@ -85,6 +93,7 @@ public class OverviewStartRepository {
             appDatabase.shoppingListItemDao().getShoppingListItems(),
             appDatabase.shoppingListDao().getShoppingLists(),
             appDatabase.productDao().getProducts(),
+            appDatabase.storedPurchaseDao().getStoredPurchases(),
             OverviewStartData::new
         )
         .subscribeOn(Schedulers.io())
