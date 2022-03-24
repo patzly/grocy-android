@@ -26,6 +26,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -50,6 +51,7 @@ public class MasterProductRepository {
     private final List<Product> products;
     private final List<ProductGroup> productGroups;
     private final List<ProductBarcode> barcodes;
+    private final List<PendingProductBarcode> pendingProductBarcodes;
     private final List<Store> stores;
     private final List<Location> locations;
     private final List<QuantityUnit> quantityUnits;
@@ -59,6 +61,7 @@ public class MasterProductRepository {
         List<Product> products,
         List<ProductGroup> productGroups,
         List<ProductBarcode> barcodes,
+        List<PendingProductBarcode> pendingProductBarcodes,
         List<Store> stores,
         List<Location> locations,
         List<QuantityUnit> quantityUnits,
@@ -67,6 +70,7 @@ public class MasterProductRepository {
       this.products = products;
       this.productGroups = productGroups;
       this.barcodes = barcodes;
+      this.pendingProductBarcodes = pendingProductBarcodes;
       this.stores = stores;
       this.locations = locations;
       this.quantityUnits = quantityUnits;
@@ -83,6 +87,10 @@ public class MasterProductRepository {
 
     public List<ProductBarcode> getBarcodes() {
       return barcodes;
+    }
+
+    public List<PendingProductBarcode> getPendingProductBarcodes() {
+      return pendingProductBarcodes;
     }
 
     public List<Store> getStores() {
@@ -108,6 +116,7 @@ public class MasterProductRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.productGroupDao().getProductGroups(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
             appDatabase.storeDao().getStores(),
             appDatabase.locationDao().getLocations(),
             appDatabase.quantityUnitDao().getQuantityUnits(),

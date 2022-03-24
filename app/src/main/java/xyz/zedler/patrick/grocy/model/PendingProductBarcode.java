@@ -109,6 +109,7 @@ public class PendingProductBarcode extends ProductBarcode {
         return NumUtil.isStringDouble(amount);
     }
 
+    @Override
     public String getAmount() {
         return amount;
     }

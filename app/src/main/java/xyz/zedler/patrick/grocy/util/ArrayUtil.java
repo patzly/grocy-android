@@ -159,4 +159,15 @@ public class ArrayUtil {
     }
     return hashMap;
   }
+
+  public static boolean contains(String[] array, String value) {
+    if (array != null) {
+      for (String i : array) {
+        if (i != null && i.equals(value)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

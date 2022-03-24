@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowPendingPurchasesItemBinding;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.PendingProductInfo;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -45,12 +46,12 @@ public class StoredPurchaseAdapter extends
   private final static boolean DEBUG = false;
 
   private final ArrayList<GroupedListItem> groupedListItems;
-  private final HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap;
+  private final HashMap<Integer, List<PendingProductBarcode>> productBarcodeHashMap;
   private final PendingPurchaseAdapterListener listener;
 
   public StoredPurchaseAdapter(
       List<GroupedListItem> groupedListItems,
-      HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap,
+      HashMap<Integer, List<PendingProductBarcode>> productBarcodeHashMap,
       PendingPurchaseAdapterListener listener
   ) {
     this.groupedListItems = new ArrayList<>(groupedListItems);
@@ -109,7 +110,7 @@ public class StoredPurchaseAdapter extends
 
     } else if (GroupedListItem.getType(item, GroupedListItem.CONTEXT_STORED_PURCHASES)
         == GroupedListItem.TYPE_HEADER) {
-      List<ProductBarcode> barcodesList;
+      List<PendingProductBarcode> barcodesList = null;
       if (item instanceof PendingProduct) {
         PendingProduct pendingProduct = (PendingProduct) item;
         barcodesList = productBarcodeHashMap.get(pendingProduct.getId());
@@ -118,7 +119,6 @@ public class StoredPurchaseAdapter extends
         holder.binding.imageOnline.setVisibility(View.GONE);
       } else { // instance of Product
         Product product = (Product) item;
-        barcodesList = productBarcodeHashMap.get(product.getPendingProductId());
         holder.binding.nameProduct.setText(product.getName());
         holder.binding.imagePending.setVisibility(View.GONE);
         holder.binding.imageOnline.setVisibility(View.VISIBLE);

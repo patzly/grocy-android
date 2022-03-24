@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.PendingProductInfo;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.StoredPurchasesRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -61,7 +60,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   private List<PendingProduct> pendingProducts;
   private final HashMap<String, PendingProduct> pendingProductHashMap;
   private List<PendingProductBarcode> pendingProductBarcodes;
-  private final HashMap<Integer, List<ProductBarcode>> productBarcodeHashMap;
+  private final HashMap<Integer, List<PendingProductBarcode>> productBarcodeHashMap;
   private List<StoredPurchase> pendingPurchases;
   private final HashMap<Integer, List<StoredPurchase>> pendingPurchasesHashMap;
 
@@ -106,7 +105,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
       productBarcodeHashMap.clear();
       for (PendingProductBarcode barcode : this.pendingProductBarcodes) {
-        List<ProductBarcode> tempBarcodes
+        List<PendingProductBarcode> tempBarcodes
             = productBarcodeHashMap.get(barcode.getPendingProductId());
         if (tempBarcodes == null) {
           tempBarcodes = new ArrayList<>();
@@ -236,10 +235,6 @@ public class StoredPurchasesViewModel extends BaseViewModel {
         });
   }
 
-  public PendingProduct getPendingProductFromName(String name) {
-    return PendingProduct.getFromName(pendingProducts, name);
-  }
-
   @NonNull
   public MutableLiveData<Boolean> getOfflineLive() {
     return offlineLive;
@@ -258,7 +253,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
     return displayedItemsLive;
   }
 
-  public HashMap<Integer, List<ProductBarcode>> getProductBarcodeHashMap() {
+  public HashMap<Integer, List<PendingProductBarcode>> getProductBarcodeHashMap() {
     return productBarcodeHashMap;
   }
 

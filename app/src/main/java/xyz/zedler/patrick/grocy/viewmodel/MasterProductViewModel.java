@@ -42,8 +42,11 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProduct;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -59,6 +62,7 @@ public class MasterProductViewModel extends BaseViewModel {
   private final MasterProductRepository repository;
   private final FormDataMasterProduct formData;
 
+  private final MutableLiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final ConnectivityLiveData isOnlineLive;
@@ -69,7 +73,7 @@ public class MasterProductViewModel extends BaseViewModel {
   private DownloadHelper.QueueItem extraQueueItem;
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
-  private final String pendingProductId;
+  private final MasterProductFragmentArgs args;
 
   public MasterProductViewModel(
       @NonNull Application application,
@@ -80,24 +84,25 @@ public class MasterProductViewModel extends BaseViewModel {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
 
+    args = startupArgs;
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
     repository = new MasterProductRepository(application);
     formData = new FormDataMasterProduct(application, getBeginnerModeEnabled());
     actionEditLive = new MutableLiveData<>();
-    actionEditLive.setValue(startupArgs.getAction().equals(Constants.ACTION.EDIT));
-    pendingProductId = startupArgs.getPendingProductId();
+    actionEditLive.setValue(args.getAction().equals(Constants.ACTION.EDIT));
 
+    pendingProductBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
     isOnlineLive = new ConnectivityLiveData(application);
 
     if (isActionEdit()) {
-      if (startupArgs.getProduct() != null) {
-        setCurrentProduct(startupArgs.getProduct());
+      if (args.getProduct() != null) {
+        setCurrentProduct(args.getProduct());
       } else {
-        assert startupArgs.getProductId() != null;
-        int productId = Integer.parseInt(startupArgs.getProductId());
+        assert args.getProductId() != null;
+        int productId = Integer.parseInt(args.getProductId());
         extraQueueItem = dlHelper.getProductDetails(productId, productDetails -> {
           extraQueueItem = null;
           setCurrentProduct(productDetails.getProduct());
@@ -106,15 +111,15 @@ public class MasterProductViewModel extends BaseViewModel {
           }
         });
       }
-    } else if (startupArgs.getProduct() != null) {  // on clone
-      Product product = startupArgs.getProduct();
+    } else if (args.getProduct() != null) {  // on clone
+      Product product = args.getProduct();
       product.setName(null);
       sendEvent(Event.FOCUS_INVALID_VIEWS);
       setCurrentProduct(product);
     } else {
       Product product = new Product(sharedPrefs);
-      if (startupArgs.getProductName() != null) {
-        product.setName(startupArgs.getProductName());
+      if (args.getProductName() != null) {
+        product.setName(args.getProductName());
       } else {
         sendEvent(Event.FOCUS_INVALID_VIEWS);
       }
@@ -152,6 +157,19 @@ public class MasterProductViewModel extends BaseViewModel {
     repository.loadFromDatabase(data -> {
       this.products = data.getProducts();
       formData.getProductNamesLive().setValue(getProductNames(this.products));
+      if (args.getPendingProductBarcodes() != null) {
+        ArrayList<PendingProductBarcode> filteredBarcodes = new ArrayList<>();
+        String[] barcodeIds = args.getPendingProductBarcodes().split(",");
+        for (PendingProductBarcode barcode : data.getPendingProductBarcodes()) {
+          if (ArrayUtil.contains(barcodeIds, String.valueOf(barcode.getId()))) {
+            filteredBarcodes.add(barcode);
+          }
+        }
+        if (!filteredBarcodes.isEmpty()) {
+          this.pendingProductBarcodesLive.setValue(filteredBarcodes);
+        }
+        removeBarcodesWhichExistOnline(data.getBarcodes());
+      }
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -177,7 +195,7 @@ public class MasterProductViewModel extends BaseViewModel {
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
           formData.getProductNamesLive().setValue(getProductNames(products));
-        })
+        }), dlHelper.updateProductBarcodes(dbChangedTime, this::removeBarcodesWhichExistOnline)
     );
     if (extraQueueItem != null) {
       queue.append(extraQueueItem);
@@ -197,6 +215,7 @@ public class MasterProductViewModel extends BaseViewModel {
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.apply();
     downloadData();
   }
@@ -265,11 +284,14 @@ public class MasterProductViewModel extends BaseViewModel {
                 bundle.putInt(Constants.ARGUMENT.PRODUCT_ID, objectId);
                 sendEvent(Event.SET_PRODUCT_ID, bundle);
               }
-              sendEvent(Event.NAVIGATE_UP);
+              uploadBarcodesIfNecessary(objectId, () -> sendEvent(Event.NAVIGATE_UP));
             } else {
-              actionEditLive.setValue(true);
-              product.setId(objectId);
-              setCurrentProduct(product);
+              int finalObjectId = objectId;
+              uploadBarcodesIfNecessary(objectId, () -> {
+                actionEditLive.setValue(true);
+                product.setId(finalObjectId);
+                setCurrentProduct(product);
+              });
             }
           },
           error -> {
@@ -280,6 +302,33 @@ public class MasterProductViewModel extends BaseViewModel {
           }
       );
     }
+  }
+
+  private void uploadBarcodesIfNecessary(int productId, Runnable onFinished) {
+    List<PendingProductBarcode> pendingProductBarcodes = pendingProductBarcodesLive.getValue();
+    if (pendingProductBarcodes == null || pendingProductBarcodes.isEmpty() || productId < 0) {
+      onFinished.run();
+      return;
+    }
+    DownloadHelper.Queue queue = dlHelper.newQueue(
+        () -> {
+          pendingProductBarcodesLive.setValue(null);
+          onFinished.run();
+        }, error -> onFinished.run()
+    );
+    for (PendingProductBarcode pendingProductBarcode : pendingProductBarcodes) {
+      pendingProductBarcode.setPendingProductId(productId);
+      queue.append(dlHelper.addProductBarcode(
+          pendingProductBarcode.getJsonFromProductBarcode(debug, TAG),
+          null, null
+      ));
+    }
+    if (queue.getSize() == 0) {
+      onFinished.run();
+      return;
+    }
+    currentQueueLoading = queue;
+    queue.start();
   }
 
   public void deleteProductSafely() {
@@ -311,8 +360,26 @@ public class MasterProductViewModel extends BaseViewModel {
     return null;
   }
 
-  public String getPendingProductId() {
-    return pendingProductId;
+  public MutableLiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
+    return pendingProductBarcodesLive;
+  }
+
+  private void removeBarcodesWhichExistOnline(List<ProductBarcode> productBarcodes) {
+    if (pendingProductBarcodesLive.getValue() == null) return;
+    ArrayList<String> barcodeStrings = new ArrayList<>();
+    for (ProductBarcode barcode : productBarcodes) {
+      barcodeStrings.add(barcode.getBarcode());
+    }
+    ArrayList<PendingProductBarcode> filteredBarcodes = new ArrayList<>();
+    for (PendingProductBarcode pendingProductBarcode : pendingProductBarcodesLive.getValue()) {
+      if (barcodeStrings.contains(pendingProductBarcode.getBarcode())) continue;
+      filteredBarcodes.add(pendingProductBarcode);
+    }
+    if (filteredBarcodes.isEmpty()) {
+      pendingProductBarcodesLive.setValue(null);
+    } else {
+      pendingProductBarcodesLive.setValue(filteredBarcodes);
+    }
   }
 
   private boolean isOffline() {

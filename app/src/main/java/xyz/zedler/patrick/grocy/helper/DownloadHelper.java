@@ -2332,7 +2332,7 @@ public class DownloadHelper {
 
   public class Queue {
 
-    private final ArrayList<QueueItem> queueItems;
+    private final ArrayList<BaseQueueItem> queueItems;
     private final OnQueueEmptyListener onQueueEmptyListener;
     private final OnErrorListener onErrorListener;
     private final String uuidQueue;
@@ -2348,8 +2348,8 @@ public class DownloadHelper {
       isRunning = false;
     }
 
-    public Queue append(QueueItem... queueItems) {
-      for (QueueItem queueItem : queueItems) {
+    public Queue append(BaseQueueItem... queueItems) {
+      for (BaseQueueItem queueItem : queueItems) {
         if (queueItem == null) {
           continue;
         }
@@ -2372,24 +2372,44 @@ public class DownloadHelper {
         return;
       }
       while (!queueItems.isEmpty()) {
-        QueueItem queueItem = queueItems.remove(0);
-        queueItem.perform(response -> {
-          queueSize--;
-          if (queueSize > 0) {
-            return;
-          }
-          isRunning = false;
-          if (onQueueEmptyListener != null) {
-            onQueueEmptyListener.execute();
-          }
-          reset(false);
-        }, error -> {
-          isRunning = false;
-          if (onErrorListener != null) {
-            onErrorListener.onError(error);
-          }
-          reset(true);
-        }, uuidQueue);
+        BaseQueueItem queueItem = queueItems.remove(0);
+        if (queueItem instanceof QueueItem) {
+          ((QueueItem) queueItem).perform(response -> {
+            queueSize--;
+            if (queueSize > 0) {
+              return;
+            }
+            isRunning = false;
+            if (onQueueEmptyListener != null) {
+              onQueueEmptyListener.execute();
+            }
+            reset(false);
+          }, error -> {
+            isRunning = false;
+            if (onErrorListener != null) {
+              onErrorListener.onError(error);
+            }
+            reset(true);
+          }, uuidQueue);
+        } else {
+          ((QueueItemJson) queueItem).perform(response -> {
+            queueSize--;
+            if (queueSize > 0) {
+              return;
+            }
+            isRunning = false;
+            if (onQueueEmptyListener != null) {
+              onQueueEmptyListener.execute();
+            }
+            reset(false);
+          }, error -> {
+            isRunning = false;
+            if (onErrorListener != null) {
+              onErrorListener.onError(error);
+            }
+            reset(true);
+          }, uuidQueue);
+        }
       }
     }
 
@@ -2449,11 +2469,6 @@ public class DownloadHelper {
       // UUID is for cancelling the requests; should be uuidHelper from above
       perform(null, null, uuid);
     }
-  }
-
-  public interface OnObjectsResponseListener {
-
-    void onResponse(ArrayList<Object> objects);
   }
 
   public interface OnProductGroupsResponseListener {

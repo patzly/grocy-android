@@ -525,6 +525,7 @@
   <string name="subtitle_product_hidden">Product is hidden</string>
   <string name="subtitle_product_not_hidden">Product is not hidden</string>
   <string name="subtitle_product_not_on_server">Product is not on server</string>
+  <string name="subtitle_barcodes_will_be_added">There are stored barcodes, which are added to the product with the save operation.</string>
   <string name="subtitle_unknown">Unknown</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Supported</string>

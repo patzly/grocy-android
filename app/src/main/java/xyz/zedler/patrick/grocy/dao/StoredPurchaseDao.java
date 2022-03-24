@@ -30,7 +30,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 
 @Dao
-public interface PendingPurchaseDao {
+public interface StoredPurchaseDao {
 
     @Query("SELECT * FROM stored_purchase_table")
     LiveData<List<StoredPurchase>> getAllLive();

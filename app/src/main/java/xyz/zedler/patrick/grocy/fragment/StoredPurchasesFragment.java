@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -41,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -179,10 +181,24 @@ public class StoredPurchasesFragment extends BaseFragment
       return;
     }
     if (item instanceof PendingProduct) {
+      String barcodeIds = null;
+      List<PendingProductBarcode> barcodes = viewModel.getProductBarcodeHashMap()
+          .get(((PendingProduct) item).getId());
+      if (barcodes != null) {
+        StringBuilder arrayString = new StringBuilder();
+        for (int i=0; i<barcodes.size(); i++) {
+          arrayString.append(barcodes.get(i).getId());
+          if (i < barcodes.size() - 1) {
+            arrayString.append(",");
+          }
+        }
+        barcodeIds = arrayString.toString();
+      }
       navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
               .setProductName(((PendingProduct) item).getName())
               .setPendingProductId(String.valueOf(((PendingProduct) item).getId()))
+              .setPendingProductBarcodes(barcodeIds)
               .build().toBundle());
     } else if (item instanceof Product) {
       navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,

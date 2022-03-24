@@ -139,10 +139,10 @@ public class MasterProductFragment extends BaseFragment {
       } else if (event.getType() == Event.SET_PRODUCT_ID) {
         int id = event.getBundle().getInt(Constants.ARGUMENT.PRODUCT_ID);
         setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, id);
-        if (NumUtil.isStringInt(viewModel.getPendingProductId())) {
+        if (NumUtil.isStringInt(args.getPendingProductId())) {
           setForPreviousDestination(
               ARGUMENT.PENDING_PRODUCT_ID,
-              Integer.parseInt(viewModel.getPendingProductId())
+              Integer.parseInt(args.getPendingProductId())
           );
         }
       } else if (event.getType() == Event.BOTTOM_SHEET) {

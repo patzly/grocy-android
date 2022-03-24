@@ -401,6 +401,11 @@
                   android:text="@string/subtitle_product_not_on_server"
                   android:visibility="@{viewModel.actionEditLive ? View.GONE : View.VISIBLE}" />
 
+                <TextView
+                  style="@style/Widget.Grocy.TextView.ListItem.Description"
+                  android:text="@string/subtitle_barcodes_will_be_added"
+                  android:visibility="@{viewModel.pendingProductBarcodesLive != null ? View.VISIBLE : View.GONE}" />
+
               </LinearLayout>
 
               <ImageView
