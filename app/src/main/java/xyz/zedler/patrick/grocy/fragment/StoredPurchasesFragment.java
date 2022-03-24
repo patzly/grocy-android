@@ -20,8 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,33 +31,36 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.ChooseProductAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.databinding.FragmentChooseProductBinding;
+import xyz.zedler.patrick.grocy.adapter.StoredPurchaseAdapter;
+import xyz.zedler.patrick.grocy.adapter.StoredPurchaseAdapter.PendingPurchaseAdapterListener;
+import xyz.zedler.patrick.grocy.databinding.FragmentStoredPurchasesBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
-import xyz.zedler.patrick.grocy.viewmodel.ChooseProductViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
 
-public class ChooseProductFragment extends BaseFragment
-    implements ChooseProductAdapter.ChooseProductAdapterListener {
+public class StoredPurchasesFragment extends BaseFragment
+    implements PendingPurchaseAdapterListener {
 
-  private final static String TAG = ChooseProductFragment.class.getSimpleName();
+  private final static String TAG = StoredPurchasesFragment.class.getSimpleName();
 
   private MainActivity activity;
   private ClickUtil clickUtil;
-  private FragmentChooseProductBinding binding;
-  private ChooseProductViewModel viewModel;
+  private FragmentStoredPurchasesBinding binding;
+  private StoredPurchasesViewModel viewModel;
 
   @Override
   public View onCreateView(
@@ -67,7 +68,7 @@ public class ChooseProductFragment extends BaseFragment
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentChooseProductBinding.inflate(inflater, container, false);
+    binding = FragmentStoredPurchasesBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
@@ -85,25 +86,7 @@ public class ChooseProductFragment extends BaseFragment
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
-
-    String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
-    boolean forbidCreateProduct = ChooseProductFragmentArgs.fromBundle(requireArguments())
-        .getForbidCreateProduct();
-    boolean pendingProductsActive = ChooseProductFragmentArgs.fromBundle(requireArguments())
-            .getPendingProductsActive();
-    Object newProductId = getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
-    if (newProductId != null) {  // if user created a new product and navigates back to this fragment this is the new productId
-      setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, newProductId);
-      setForPreviousDestination(ARGUMENT.BARCODE, barcode);
-      setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-      activity.navigateUp();
-      return;
-    }
-
-    viewModel = new ViewModelProvider(this, new ChooseProductViewModel
-        .ChooseProductViewModelFactory(
-                activity.getApplication(), barcode, forbidCreateProduct, pendingProductsActive
-    )).get(ChooseProductViewModel.class);
+    viewModel = new ViewModelProvider(this).get(StoredPurchasesViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
 
     binding.setFragment(this);
@@ -124,15 +107,17 @@ public class ChooseProductFragment extends BaseFragment
     );
     binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
-    viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), products -> {
-      if (products == null) {
+    viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), items -> {
+      if (items == null) {
         return;
       }
-      if (binding.recycler.getAdapter() instanceof ChooseProductAdapter) {
-        ((ChooseProductAdapter) binding.recycler.getAdapter()).updateData(products);
+      if (binding.recycler.getAdapter() instanceof StoredPurchaseAdapter) {
+        ((StoredPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
       } else {
-        binding.recycler.setAdapter(new ChooseProductAdapter(
-            products, this
+        binding.recycler.setAdapter(new StoredPurchaseAdapter(
+            items,
+            viewModel.getProductBarcodeHashMap(),
+            this
         ));
         binding.recycler.scheduleLayoutAnimation();
       }
@@ -146,10 +131,20 @@ public class ChooseProductFragment extends BaseFragment
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-      } else if (event.getType() == Event.FOCUS_INVALID_VIEWS) {
-        activity.showKeyboard(binding.editTextProduct);
       }
     });
+
+    Integer pendingProductId = (Integer) getFromThisDestinationNow(ARGUMENT.PENDING_PRODUCT_ID);
+    Integer productId = (Integer) getFromThisDestinationNow(ARGUMENT.PRODUCT_ID);
+    if (pendingProductId != null && productId != null) {
+      // after user created product the saved state args contain old pending product id and new
+      // product id.
+      removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
+      removeForThisDestination(ARGUMENT.PRODUCT_ID);
+      viewModel.setQueueEmptyAction(() -> {
+        viewModel.setPendingProductNameToOnlineProductName(pendingProductId, productId);
+      });
+    }
 
     // INITIALIZE VIEWS
 
@@ -160,28 +155,6 @@ public class ChooseProductFragment extends BaseFragment
     );
     binding.recycler.setItemAnimator(new DefaultItemAnimator());
     binding.recycler.setAdapter(new MasterPlaceholderAdapter());
-
-    binding.editTextProduct.addTextChangedListener(
-        new TextWatcher() {
-          @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-          @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-          private Timer timer = new Timer();
-          @Override
-          public void afterTextChanged(final Editable s) {
-            timer.cancel();
-            timer = new Timer();
-            timer.schedule(
-                new TimerTask() {
-                  @Override
-                  public void run() {
-                    activity.runOnUiThread(() -> viewModel.displayItems());
-                  }
-                },
-                500
-            );
-          }
-        }
-    );
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -199,47 +172,42 @@ public class ChooseProductFragment extends BaseFragment
 
   public void clearInputFocus() {
     activity.hideKeyboard();
-    binding.editTextProduct.clearFocus();
     binding.dummyFocusView.requestFocus();
   }
 
   @Override
-  public void onItemRowClicked(Product product) {
+  public void onItemRowClicked(GroupedListItem item) {
     if (clickUtil.isDisabled()) {
       return;
     }
-    if (product instanceof PendingProduct) {
-      setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, product.getId());
-    } else {
-      setForPreviousDestination(Constants.ARGUMENT.PRODUCT_ID, product.getId());
+    if (item instanceof PendingProduct) {
+      String barcodeIds = null;
+      List<PendingProductBarcode> barcodes = viewModel.getProductBarcodeHashMap()
+          .get(((PendingProduct) item).getId());
+      if (barcodes != null) {
+        StringBuilder arrayString = new StringBuilder();
+        for (int i=0; i<barcodes.size(); i++) {
+          arrayString.append(barcodes.get(i).getId());
+          if (i < barcodes.size() - 1) {
+            arrayString.append(",");
+          }
+        }
+        barcodeIds = arrayString.toString();
+      }
+      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+          new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
+              .setProductName(((PendingProduct) item).getName())
+              .setPendingProductId(String.valueOf(((PendingProduct) item).getId()))
+              .setPendingProductBarcodes(barcodeIds)
+              .build().toBundle());
+    } else if (item instanceof Product) {
+      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+          new MasterProductFragmentArgs.Builder(ACTION.EDIT)
+              .setProductId(String.valueOf(((Product) item).getId()))
+              .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))
+              .build().toBundle());
     }
-    String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
-    setForPreviousDestination(ARGUMENT.BARCODE, barcode);
-    setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-    activity.navigateUp();
-  }
 
-  public void createNewProduct() {
-    navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
-        new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
-            .setProductName(viewModel.getProductNameLive().getValue())
-            .build().toBundle());
-  }
-
-  public void createNewPendingProduct() {
-    viewModel.createPendingProduct(id -> {
-      setForPreviousDestination(ARGUMENT.PENDING_PRODUCT_ID, (int) id);
-      String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
-      setForPreviousDestination(ARGUMENT.BARCODE, barcode);
-      setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-      activity.navigateUp();
-    });
-  }
-
-  @Override
-  public boolean onBackPressed() {
-    setForPreviousDestination(ARGUMENT.BACK_FROM_CHOOSE_PRODUCT_PAGE, true);
-    return false;
   }
 
   @Override

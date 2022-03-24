@@ -20,15 +20,12 @@
 package xyz.zedler.patrick.grocy.model;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-
-@Entity(tableName = "pending_purchase_table")
-public class PendingPurchase {
+@Entity(tableName = "stored_purchase_table")
+public class StoredPurchase extends GroupedListItem {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -55,7 +52,7 @@ public class PendingPurchase {
     @ColumnInfo(name = "location_id")
     private String locationId;
 
-    public PendingPurchase() {
+    public StoredPurchase() {
     }
 
     public int getId() {
@@ -125,6 +122,6 @@ public class PendingPurchase {
     @NonNull
     @Override
     public String toString() {
-        return "PendingPurchase(" + pendingProductId + ')';
+        return "StoredPurchase(" + pendingProductId + ')';
     }
 }

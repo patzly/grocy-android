@@ -35,6 +35,9 @@ public interface PendingProductBarcodeDao {
     @Query("SELECT * FROM pending_product_barcode_table")
     LiveData<List<PendingProductBarcode>> getAllLive();
 
+    @Query("SELECT * FROM pending_product_barcode_table")
+    Single<List<PendingProductBarcode>> getProductBarcodes();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insertProductBarcode(PendingProductBarcode productBarcode);
 

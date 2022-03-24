@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "product_table")
-public class Product implements Parcelable {
+public class Product extends GroupedListItem implements Parcelable {
 
   @PrimaryKey
   @ColumnInfo(name = "id")
@@ -146,6 +146,9 @@ public class Product implements Parcelable {
   @ColumnInfo(name = "hide_on_stock_overview")
   @SerializedName("hide_on_stock_overview")
   private String hideOnStockOverview;
+
+  @Ignore
+  private Integer pendingProductId;
 
   public Product() {
   }  // for Room
@@ -588,6 +591,14 @@ public class Product implements Parcelable {
 
   public void setHideOnStockOverviewBoolean(boolean hideOnStockOverview) {
     this.hideOnStockOverview = hideOnStockOverview ? "1" : "0";
+  }
+
+  public Integer getPendingProductId() {
+    return pendingProductId;
+  }
+
+  public void setPendingProductId(Integer pendingProductId) {
+    this.pendingProductId = pendingProductId;
   }
 
   public static JSONObject getJsonFromProduct(Product product, boolean debug, String TAG) {

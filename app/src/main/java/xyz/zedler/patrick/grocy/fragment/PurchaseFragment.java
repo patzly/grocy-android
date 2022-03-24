@@ -192,7 +192,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     Integer pendingProductId = (Integer) getFromThisDestinationNow(ARGUMENT.PENDING_PRODUCT_ID);
     if (pendingProductId != null) {
       removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId));
+      viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId, null));
     }
 
     pluralUtil = new PluralUtil(activity);
@@ -224,9 +224,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     });
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
-
-    viewModel.getFormData().getPendingProductBarcodesLive().observe(getViewLifecycleOwner(), p -> {});
-    viewModel.getFormData().getPendingProductsLive().observe(getViewLifecycleOwner(), p -> {});
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -349,13 +346,6 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     }
   }
 
-  @Override
-  public void addPendingProducts() {
-    viewModel.setBatchPendingProductIds(null);
-    viewModel.getFormData().getBatchModeItemIndexLive().setValue(0);
-    viewModel.fillWithPendingProduct();
-  }
-
   public void clearAmountFieldAndFocusIt() {
     binding.editTextAmount.setText("");
     activity.showKeyboard(binding.editTextAmount);
@@ -375,10 +365,14 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     clearInputFocus();
     Object object = adapterView.getItemAtPosition(pos);
     if (object instanceof PendingProduct) {
-      viewModel.setPendingProduct(((PendingProduct) object).getId());
+      viewModel.setPendingProduct(((PendingProduct) object).getId(), null);
     } else if (object instanceof Product) {
       viewModel.setProduct(((Product) object).getId(), null, null);
     }
+  }
+
+  public void navigateToPendingProductsPage() {
+    navigate(PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment());
   }
 
   public void clearFocusAndCheckProductInput() {

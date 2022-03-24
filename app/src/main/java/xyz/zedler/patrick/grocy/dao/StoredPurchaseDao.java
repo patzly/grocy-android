@@ -25,29 +25,29 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-import java.util.List;
-
 import io.reactivex.rxjava3.core.Single;
-import xyz.zedler.patrick.grocy.model.PendingProduct;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import java.util.List;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 
 @Dao
-public interface PendingPurchaseDao {
+public interface StoredPurchaseDao {
 
-    @Query("SELECT * FROM pending_purchase_table")
-    LiveData<List<PendingPurchase>> getAllLive();
+    @Query("SELECT * FROM stored_purchase_table")
+    LiveData<List<StoredPurchase>> getAllLive();
 
-    @Query("SELECT * FROM pending_purchase_table")
-    Single<List<PendingPurchase>> getPendingPurchases();
+    @Query("SELECT * FROM stored_purchase_table")
+    Single<List<StoredPurchase>> getStoredPurchases();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insertPendingPurchase(PendingPurchase product);
+    Single<Long> insertStoredPurchase(StoredPurchase pendingPurchase);
 
     @Delete
-    Single<Integer> deletePendingPurchase(PendingPurchase product);
+    Single<Integer> deleteStoredPurchase(StoredPurchase pendingPurchase);
 
-    @Query("DELETE FROM pending_purchase_table")
-    Single<Integer> deletePendingPurchases();
+    @Query("DELETE FROM stored_purchase_table WHERE id = :id")
+    Single<Integer> deleteStoredPurchase(long id);
+
+    @Query("DELETE FROM stored_purchase_table")
+    Single<Integer> deleteStoredPurchases();
 
 }

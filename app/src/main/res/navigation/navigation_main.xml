@@ -66,6 +66,12 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
+    <action
+      android:id="@+id/action_purchaseFragment_to_pendingPurchasesFragment"
+      app:destination="@id/storedPurchasesFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/consumeFragment"
@@ -855,6 +861,16 @@
         app:argType="string"
         app:nullable="true"
         android:defaultValue="@null" />
+      <argument
+        android:name="pendingProductId"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="pendingProductBarcodes"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
     </fragment>
     <fragment
       android:id="@+id/masterProductCatOptionalFragment"
@@ -1028,4 +1044,9 @@
         app:argType="boolean"
         android:defaultValue="false" />
   </fragment>
+  <fragment
+    android:id="@+id/storedPurchasesFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.StoredPurchasesFragment"
+    android:label="StoredProductsFragment"
+    tools:layout="@layout/fragment_stored_purchases"/>
 </navigation>

@@ -107,11 +107,11 @@
               android:background="?attr/actionBarItemBackground"
               android:clickable="true"
               android:gravity="center"
-              android:contentDescription="Pending products"
+              android:contentDescription="@string/title_stored_purchases"
               android:tooltipText="Pending products"
               android:focusable="true"
-              android:visibility="@{viewModel.quickModeEnabled ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> viewModel.showPendingProductsBottomSheet()}"
+              android:visibility="@{viewModel.quickModeEnabled || formData.pendingPurchasesLive.size() > 0 || formData.pendingProductsLive.size() > 0 ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.navigateToPendingProductsPage()}"
               tools:targetApi="o">
 
             <ImageView
@@ -119,7 +119,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
-                app:shoppingCardDrawable="@{formData.pendingProductsLive}" />
+                app:shoppingCardDrawable="@{formData.pendingPurchasesLive}" />
 
           </FrameLayout>
 

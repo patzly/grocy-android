@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PendingProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -53,6 +52,8 @@ import xyz.zedler.patrick.grocy.model.FormDataPurchase;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
+import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -93,12 +94,12 @@ public class PurchaseViewModel extends BaseViewModel {
   private HashMap<Integer, ArrayList<QuantityUnitConversion>> unitConversionHashMap;
   private HashMap<Integer, Double> shoppingListItemAmountsHashMap;
   private List<ProductBarcode> barcodes;
+  private List<PendingProductBarcode> pendingProductBarcodes;
   private List<Store> stores;
   private List<Location> locations;
   private List<ShoppingListItem> shoppingListItems;
   private HashMap<Integer, ShoppingListItem> shoppingListItemHashMap;
   private ArrayList<Integer> batchShoppingListItemIds;
-  private ArrayList<Integer> batchPendingProductIds;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -152,7 +153,8 @@ public class PurchaseViewModel extends BaseViewModel {
               appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
       );
       productHashMap = ArrayUtil.getProductsHashMap(products);
-      this.barcodes = data.getBarcodes();
+      this.pendingProductBarcodes = data.getPendingProductBarcodes();
+      this.barcodes = appendPendingProductBarcodes(data.getBarcodes(), pendingProductBarcodes);
       this.quantityUnits = data.getQuantityUnits();
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
       this.unitConversions = data.getQuantityUnitConversions();
@@ -189,8 +191,10 @@ public class PurchaseViewModel extends BaseViewModel {
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
           unitConversionHashMap = ArrayUtil.getUnitConversionsHashMap(unitConversions);
-        }), dlHelper.updateProductBarcodes(
-            dbChangedTime, barcodes -> this.barcodes = barcodes
+        }), dlHelper.updateProductBarcodes(dbChangedTime,
+            barcodes -> this.barcodes = appendPendingProductBarcodes(
+                barcodes, pendingProductBarcodes
+            )
         ), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
           this.quantityUnits = quantityUnits;
           quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits);
@@ -387,13 +391,46 @@ public class PurchaseViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
   }
 
-  public void setPendingProduct(int pendingProductId) {
-    PendingProduct pendingProduct = PendingProduct
-            .getFromId(formData.getPendingProductsLive(), pendingProductId);
+  public void setPendingProduct(int pendingProductId, PendingProductBarcode barcode) {
+    PendingProduct pendingProduct = PendingProduct.getFromId(pendingProducts, pendingProductId);
     if (pendingProduct == null) return;
     formData.getPendingProductLive().setValue(pendingProduct);
     formData.getProductNameLive().setValue(pendingProduct.getName());
-    formData.getAmountLive().setValue(NumUtil.trim(1));
+
+    // amount
+    formData.getAmountLive().setValue(
+        barcode == null || barcode.getAmount() == null
+            ? NumUtil.trim(1) : barcode.getAmount()
+    );
+
+    // purchased date
+    if (formData.getPurchasedDateEnabled()) {
+      formData.getPurchasedDateLive().setValue(DateUtil.getDateStringToday());
+    }
+
+    // price
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      String lastPrice = null;
+      if (barcode != null && barcode.hasLastPrice()) {
+        // if barcode contains last price, take this
+        lastPrice = barcode.getLastPrice();
+      }
+      if (lastPrice != null && !lastPrice.isEmpty()) {
+        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+      }
+      formData.getPriceLive().setValue(lastPrice);
+    }
+
+    // store
+    String storeId = null;
+    if (barcode != null && barcode.hasStoreId()) {
+      // if barcode contains store, take this
+      storeId = barcode.getStoreId();
+    }
+    Store store = NumUtil.isStringInt(storeId) ? getStore(Integer.parseInt(storeId)) : null;
+    formData.getStoreLive().setValue(store);
+    formData.getShowStoreSection().setValue(store != null || !stores.isEmpty());
+
     formData.isFormValid();
     sendEvent(Event.FOCUS_INVALID_VIEWS);
   }
@@ -466,7 +503,12 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(barcode)) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductIdInt());
+          if (code instanceof PendingProductBarcode) {
+            setPendingProduct(code.getProductIdInt(), (PendingProductBarcode) code);
+            return;
+          } else {
+            product = productHashMap.get(code.getProductIdInt());
+          }
         }
       }
     }
@@ -503,7 +545,11 @@ public class PurchaseViewModel extends BaseViewModel {
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
           productBarcode = code;
-          product = productHashMap.get(code.getProductIdInt());
+          if (code instanceof PendingProductBarcode) {
+            product = PendingProduct.getFromId(pendingProducts, code.getProductIdInt());
+          } else {
+            product = productHashMap.get(code.getProductIdInt());
+          }
         }
       }
       if (product != null) {
@@ -554,32 +600,6 @@ public class PurchaseViewModel extends BaseViewModel {
     setProduct(null, null, currentItem);
   }
 
-  public void showPendingProductsBottomSheet() {
-    showBottomSheet(new PendingProductsBottomSheet());
-  }
-
-  public void fillWithPendingProduct() {
-    if (formData.getPendingProductsLive().getValue() == null) {
-      return;
-    }
-    if (formData.getBatchModeItemIndexLive().getValue() == null) {
-      return;
-    }
-    int index = formData.getBatchModeItemIndexLive().getValue();
-    if (index >= batchPendingProductIds.size()) {
-      return;
-    }
-    int currentItemId = batchPendingProductIds.get(index);
-    PendingProduct pendingProduct = PendingProduct
-            .getFromId(formData.getPendingProductsLive(), currentItemId);
-    if (pendingProduct == null) {
-      return;
-    }
-    formData.getPendingProductLive().setValue(pendingProduct);
-    formData.getProductNameLive().setValue(pendingProduct.getName());
-    //formData.getAmountLive().setValue(NumUtil.trim(pendingProduct.get()));
-  }
-
   public boolean batchModeNextItem() {  // also returns whether there was a next item
     if (batchShoppingListItemIds == null) {
       return false;
@@ -603,6 +623,10 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     if (formData.getBarcodeLive().getValue() != null) {
       uploadProductBarcode(this::purchaseProduct);
+      return;
+    }
+    if (formData.getPendingProductLive().getValue() != null) {
+      purchasePendingProduct();
       return;
     }
 
@@ -682,6 +706,10 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void uploadProductBarcode(Runnable onSuccess) {
+    if (formData.getPendingProductLive() != null) {
+      storePendingProductBarcode(onSuccess);
+      return;
+    }
     ProductBarcode productBarcode = formData.fillProductBarcode();
     JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
     dlHelper.addProductBarcode(body, () -> {
@@ -691,6 +719,38 @@ public class PurchaseViewModel extends BaseViewModel {
         onSuccess.run();
       }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
+  }
+
+  private void purchasePendingProduct() {
+    StoredPurchase productPurchase = formData.fillPendingPurchase();
+    repository.insertPendingPurchase(productPurchase, id -> {
+      SnackbarMessage snackbarMessage = new SnackbarMessage(
+          formData.getTransactionSuccessMsg(NumUtil.isStringDouble(productPurchase.getAmount())
+              ? Double.parseDouble(productPurchase.getAmount()) : 0)
+      );
+      snackbarMessage.setAction(
+          getString(R.string.action_undo),
+          v -> repository.deletePendingPurchase(
+              id,
+              () -> showMessage(getString(R.string.msg_undone_transaction)),
+              this::showErrorMessage
+          )
+      );
+      snackbarMessage.setDurationSecs(sharedPrefs.getInt(
+          Constants.SETTINGS.BEHAVIOR.MESSAGE_DURATION,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.MESSAGE_DURATION)
+      );
+      showSnackbar(snackbarMessage);
+      sendEvent(Event.TRANSACTION_SUCCESS);
+    }, this::showErrorMessage);
+  }
+
+  private void storePendingProductBarcode(Runnable onSuccess) {
+    PendingProductBarcode productBarcode = formData.fillPendingProductBarcode();
+    formData.getBarcodeLive().setValue(null);
+    barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
+    pendingProductBarcodes.add(productBarcode);
+    repository.insertPendingProductBarcode(productBarcode, onSuccess);
   }
 
   private void deleteShoppingListItem(int itemId, @NonNull Runnable onFinish) {
@@ -872,22 +932,36 @@ public class PurchaseViewModel extends BaseViewModel {
     this.queueEmptyAction = queueEmptyAction;
   }
 
-  public void setBatchPendingProductIds(ArrayList<Integer> batchPendingProductIds) {
-    ArrayList<Integer> ids = new ArrayList<>();
-    if (formData.getPendingProductsLive().getValue() == null) return;
-    for (PendingProduct pendingProduct : formData.getPendingProductsLive().getValue()) {
-      ids.add(pendingProduct.getId());
-    }
-    this.batchPendingProductIds = ids;
-  }
-
   private ArrayList<Product> appendPendingProducts(
           ArrayList<Product> products,
           List<PendingProduct> pendingProducts
   ) {
+    ArrayList<String> productStrings = new ArrayList<>();
+    for (Product product : products) {
+      productStrings.add(product.getName());
+    }
     ArrayList<Product> newList = new ArrayList<>(products);
     if (pendingProducts != null) {
-      newList.addAll(pendingProducts);
+      for (PendingProduct pendingProduct : pendingProducts) {
+        if (productStrings.contains(pendingProduct.getName())) continue;
+        newList.add(pendingProduct);
+      }
+    }
+    return newList;
+  }
+
+  private ArrayList<ProductBarcode> appendPendingProductBarcodes(
+      List<ProductBarcode> productBarcodes,
+      List<PendingProductBarcode> pendingProductBarcodes
+  ) {
+    ArrayList<String> barcodeStrings = new ArrayList<>();
+    for (ProductBarcode productBarcode : productBarcodes) {
+      barcodeStrings.add(productBarcode.getBarcode());
+    }
+    ArrayList<ProductBarcode> newList = new ArrayList<>(productBarcodes);
+    for (PendingProductBarcode pendingProductBarcode : pendingProductBarcodes) {
+      if (barcodeStrings.contains(pendingProductBarcode.getBarcode())) continue;
+      newList.add(pendingProductBarcode);
     }
     return newList;
   }

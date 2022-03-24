@@ -56,8 +56,8 @@ public class FormDataPurchase {
   private final MutableLiveData<Integer> batchModeItemIndexLive;
   private final LiveData<String> batchModeTextLive;
   private final MutableLiveData<ShoppingListItem> shoppingListItemLive;
+  private final LiveData<List<StoredPurchase>> pendingPurchasesLive;
   private final LiveData<List<PendingProduct>> pendingProductsLive;
-  private final LiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
   private final MutableLiveData<PendingProduct> pendingProductLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
@@ -105,8 +105,8 @@ public class FormDataPurchase {
   ) {
     DateUtil dateUtil = new DateUtil(application);
     AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
+    pendingPurchasesLive = appDatabase.pendingPurchaseDao().getAllLive();
     pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
-    pendingProductBarcodesLive = appDatabase.pendingProductBarcodeDao().getAllLive();
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     currency = sharedPrefs.getString(Constants.PREF.CURRENCY, "");
@@ -266,12 +266,12 @@ public class FormDataPurchase {
     displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
-  public LiveData<List<PendingProduct>> getPendingProductsLive() {
-    return pendingProductsLive;
+  public LiveData<List<StoredPurchase>> getPendingPurchasesLive() {
+    return pendingPurchasesLive;
   }
 
-  public LiveData<List<PendingProductBarcode>> getPendingProductBarcodesLive() {
-    return pendingProductBarcodesLive;
+  public LiveData<List<PendingProduct>> getPendingProductsLive() {
+    return pendingProductsLive;
   }
 
   public MutableLiveData<Integer> getBatchModeItemIndexLive() {
@@ -459,12 +459,15 @@ public class FormDataPurchase {
 
   public String getTransactionSuccessMsg(double amountPurchased) {
     QuantityUnit stock = quantityUnitStockLive.getValue();
-    assert stock != null && productDetailsLive.getValue() != null;
+    String productDetailsName = productDetailsLive.getValue() != null
+        ? productDetailsLive.getValue().getProduct().getName() : "";
+    String pendingProductName = pendingProductLive.getValue() != null
+        ? pendingProductLive.getValue().getName() : null;
     return application.getString(
         R.string.msg_purchased,
         NumUtil.trim(amountPurchased),
-        pluralUtil.getQuantityUnitPlural(stock, amountPurchased),
-        productDetailsLive.getValue().getProduct().getName()
+        stock != null ? pluralUtil.getQuantityUnitPlural(stock, amountPurchased) : "",
+        pendingProductName != null ? pendingProductName : productDetailsName
     );
   }
 
@@ -507,7 +510,6 @@ public class FormDataPurchase {
     HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
     String amountString = amountLive.getValue();
     String priceString = priceLive.getValue();
-    boolean isTotalPrice = isTotalPriceLive.getValue();
 
     if (!NumUtil.isStringDouble(priceString) || !NumUtil.isStringDouble(amountString)) {
       return null;
@@ -532,7 +534,7 @@ public class FormDataPurchase {
     } else {
       priceMultiplied = price * (double) currentFactor;
     }
-    if (isTotalPrice) {
+    if (isTotalPriceLive.getValue() != null && isTotalPriceLive.getValue()) {
       priceMultiplied /= amount;
     }
     return NumUtil.trimPrice(priceMultiplied);
@@ -557,7 +559,7 @@ public class FormDataPurchase {
   private String getPriceHelpText() {
     QuantityUnit current = quantityUnitLive.getValue();
     QuantityUnit stock = quantityUnitStockLive.getValue();
-    if (current == null || stock == null
+    if (current == null || stock == null || isTotalPriceLive.getValue() == null
         || current.getId() == stock.getId() && !isTotalPriceLive.getValue()) {
       return " ";
     }
@@ -780,6 +782,13 @@ public class FormDataPurchase {
       store = getString(R.string.subtitle_none_selected);
     }
 
+    String location = locationNameLive.getValue();
+    if (!isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      location = getString(R.string.subtitle_feature_disabled);
+    } else if (location == null) {
+      location = getString(R.string.subtitle_none_selected);
+    }
+
     return application.getString(
         R.string.msg_quick_mode_confirm_purchase,
         NumUtil.trim(amountAdded),
@@ -788,7 +797,7 @@ public class FormDataPurchase {
         dueDateTextLive.getValue(),
         price,
         store,
-        locationNameLive.getValue()
+        location
     );
   }
 
@@ -849,6 +858,60 @@ public class FormDataPurchase {
       productBarcode.setStoreId(String.valueOf(store.getId()));
     }
     return productBarcode;
+  }
+
+  public PendingProductBarcode fillPendingProductBarcode() {
+    if (!isFormValid()) {
+      return null;
+    }
+    assert pendingProductLive.getValue() != null;
+    String barcode = barcodeLive.getValue();
+    PendingProduct product = pendingProductLive.getValue();
+    Store store = storeLive.getValue();
+
+    PendingProductBarcode productBarcode = new PendingProductBarcode();
+    productBarcode.setPendingProductId(product.getId());
+    productBarcode.setBarcode(barcode);
+    if (store != null && isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      productBarcode.setStoreId(String.valueOf(store.getId()));
+    }
+    return productBarcode;
+  }
+
+  public StoredPurchase fillPendingPurchase() {
+    if (!isFormValid()) {
+      return null;
+    }
+    assert pendingProductLive.getValue() != null;
+    PendingProduct product = pendingProductLive.getValue();
+
+    StoredPurchase pendingPurchase = new StoredPurchase();
+    pendingPurchase.setPendingProductId(product.getId());
+    pendingPurchase.setAmount(amountLive.getValue());
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      if (NumUtil.isStringDouble(priceStockLive.getValue())) {
+        pendingPurchase.setPrice(priceStockLive.getValue());
+      }
+      Store store = storeLive.getValue();
+      String storeId = store != null ? String.valueOf(store.getId()) : null;
+      if (storeId != null) {
+        pendingPurchase.setStoreId(storeId);
+      }
+    }
+    String purchasedDate = purchasedDateLive.getValue();
+    if (getPurchasedDateEnabled() && purchasedDate != null) {
+      pendingPurchase.setPurchasedDate(purchasedDate);
+    }
+    Location location = locationLive.getValue();
+    if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
+      pendingPurchase.setLocationId(String.valueOf(location.getId()));
+    }
+    String dueDate = dueDateLive.getValue();
+    if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
+      dueDate = Constants.DATE.NEVER_OVERDUE;
+    }
+    pendingPurchase.setBestBeforeDate(dueDate);
+    return pendingPurchase;
   }
 
   public void clearForm() {

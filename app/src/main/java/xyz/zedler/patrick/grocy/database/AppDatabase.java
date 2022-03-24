@@ -27,7 +27,7 @@ import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductDao;
-import xyz.zedler.patrick.grocy.dao.PendingPurchaseDao;
+import xyz.zedler.patrick.grocy.dao.StoredPurchaseDao;
 import xyz.zedler.patrick.grocy.dao.ProductAveragePriceDao;
 import xyz.zedler.patrick.grocy.dao.ProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.ProductDao;
@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.PendingPurchase;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -82,9 +82,9 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         ProductAveragePrice.class,
         PendingProduct.class,
         PendingProductBarcode.class,
-        PendingPurchase.class
+        StoredPurchase.class
     },
-    version = 26
+    version = 28
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -126,7 +126,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
   public abstract PendingProductBarcodeDao pendingProductBarcodeDao();
 
-  public abstract PendingPurchaseDao pendingPurchaseDao();
+  public abstract StoredPurchaseDao pendingPurchaseDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

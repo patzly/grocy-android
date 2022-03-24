@@ -28,6 +28,7 @@ import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -52,6 +53,7 @@ public class PurchaseRepository {
     private final List<Product> products;
     private final List<PendingProduct> pendingProducts;
     private final List<ProductBarcode> barcodes;
+    private final List<PendingProductBarcode> pendingProductBarcodes;
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> quantityUnitConversions;
     private final List<Store> stores;
@@ -62,6 +64,7 @@ public class PurchaseRepository {
         List<Product> products,
         List<PendingProduct> pendingProducts,
         List<ProductBarcode> barcodes,
+        List<PendingProductBarcode> pendingProductBarcodes,
         List<QuantityUnit> quantityUnits,
         List<QuantityUnitConversion> quantityUnitConversions,
         List<Store> stores,
@@ -71,6 +74,7 @@ public class PurchaseRepository {
       this.products = products;
       this.pendingProducts = pendingProducts;
       this.barcodes = barcodes;
+      this.pendingProductBarcodes = pendingProductBarcodes;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
       this.stores = stores;
@@ -88,6 +92,10 @@ public class PurchaseRepository {
 
     public List<ProductBarcode> getBarcodes() {
       return barcodes;
+    }
+
+    public List<PendingProductBarcode> getPendingProductBarcodes() {
+      return pendingProductBarcodes;
     }
 
     public List<QuantityUnit> getQuantityUnits() {
@@ -117,6 +125,7 @@ public class PurchaseRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.pendingProductDao().getPendingProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),
             appDatabase.storeDao().getStores(),
@@ -132,21 +141,42 @@ public class PurchaseRepository {
 
   public void insertPendingProduct(PendingProduct pendingProduct) {
     appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
-            .subscribeOn(Schedulers.io()).subscribe();
+        .subscribeOn(Schedulers.io()).subscribe();
   }
 
-  public void insertPendingProduct(
-          PendingProduct pendingProduct,
+  public void insertPendingPurchase(
+          StoredPurchase pendingPurchase,
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.pendingProductDao().insertPendingProduct(pendingProduct)
-            .subscribeOn(Schedulers.io()).subscribe(onSuccess::onSuccess, e -> onError.run());
+    appDatabase.pendingPurchaseDao().insertStoredPurchase(pendingPurchase)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(onSuccess::onSuccess)
+        .doOnError(e -> onError.run())
+        .subscribe();
   }
 
-  public void insertPendingProductBarcode(PendingProductBarcode barcode) {
-    appDatabase.pendingProductBarcodeDao().insertProductBarcode(barcode)
-            .subscribeOn(Schedulers.io()).subscribe();
+  public void deletePendingPurchase(
+      long id,
+      Runnable onSuccess,
+      Runnable onError
+  ) {
+    appDatabase.pendingPurchaseDao().deleteStoredPurchase(id)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnSuccess(i -> onSuccess.run())
+        .doOnError(e -> onError.run())
+        .subscribe();
+  }
+
+  public void insertPendingProductBarcode(PendingProductBarcode barcode, Runnable onFinished) {
+    appDatabase.pendingProductBarcodeDao()
+        .insertProductBarcode(barcode)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .doFinally(onFinished::run)
+        .subscribe();
   }
 
   public interface SuccessIdListener {

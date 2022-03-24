@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import java.util.List;
 
@@ -79,7 +78,7 @@ public class PendingProduct extends Product {
     ) {
         if (pendingProducts.getValue() == null || barcodes.getValue() == null) return null;
         if (barcode == null) return null;
-        Long pendingProductId = PendingProductBarcode.getPendingProductId(barcodes, barcode);
+        Integer pendingProductId = PendingProductBarcode.getPendingProductId(barcodes, barcode);
         if (pendingProductId == null) return null;
         for (PendingProduct product : pendingProducts.getValue()) {
             if (product.getId() == pendingProductId) return product;
@@ -88,19 +87,19 @@ public class PendingProduct extends Product {
     }
 
     public static PendingProduct getFromName(
-            LiveData<List<PendingProduct>> pendingProducts,
+            List<PendingProduct> pendingProducts,
             String productName
     ) {
-        if (pendingProducts.getValue() == null || productName == null) return null;
-        for (PendingProduct product : pendingProducts.getValue()) {
+        if (pendingProducts == null || productName == null) return null;
+        for (PendingProduct product : pendingProducts) {
             if (product.getName().equals(productName)) return product;
         }
         return null;
     }
 
-    public static PendingProduct getFromId(LiveData<List<PendingProduct>> pendingProducts, int id) {
-        if (pendingProducts.getValue() == null) return null;
-        for (PendingProduct product : pendingProducts.getValue()) {
+    public static PendingProduct getFromId(List<PendingProduct> pendingProducts, int id) {
+        if (pendingProducts == null) return null;
+        for (PendingProduct product : pendingProducts) {
             if (product.getId() == id) return product;
         }
         return null;

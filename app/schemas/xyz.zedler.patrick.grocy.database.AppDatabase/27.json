@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 26,
-    "identityHash": "af175e9e55a468a09a02b353d26694dd",
+    "version": 27,
+    "identityHash": "5ab54fbb5e333ff5ef1ca1335a480984",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -1157,7 +1157,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "pending_purchase_table",
+        "tableName": "stored_purchase_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `pending_product_id` INTEGER NOT NULL, `amount` TEXT, `price` TEXT, `purchased_date` TEXT, `best_before_date` TEXT, `shopping_location_id` TEXT, `location_id` TEXT)",
         "fields": [
           {
@@ -1222,7 +1222,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'af175e9e55a468a09a02b353d26694dd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5ab54fbb5e333ff5ef1ca1335a480984')"
     ]
   }
 }
