@@ -202,16 +202,20 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   }
 
   public void displayItems() {
+    boolean firstElement = true;
     ArrayList<GroupedListItem> items = new ArrayList<>();
     for (PendingProduct pendingProduct : pendingProducts) {
       Product productOnline = productHashMap.get(pendingProduct.getName());
       if (productOnline == null) {
+        if (!firstElement) pendingProduct.setDisplayDivider(true);
         items.add(pendingProduct);
         items.add(new PendingProductInfo(pendingProduct));
       } else {
+        if (!firstElement) productOnline.setDisplayDivider(true);
         items.add(productOnline);
         items.add(new PendingProductInfo(productOnline));
       }
+      firstElement = false;
       List<StoredPurchase> pendingPurchases
           = pendingPurchasesHashMap.get(pendingProduct.getId());
       if (pendingPurchases != null) {

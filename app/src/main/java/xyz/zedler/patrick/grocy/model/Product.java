@@ -150,6 +150,9 @@ public class Product extends GroupedListItem implements Parcelable {
   @Ignore
   private Integer pendingProductId;
 
+  @Ignore
+  private boolean displayDivider;
+
   public Product() {
   }  // for Room
 
@@ -599,6 +602,14 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setPendingProductId(Integer pendingProductId) {
     this.pendingProductId = pendingProductId;
+  }
+
+  public boolean isDisplayDivider() {
+    return displayDivider;
+  }
+
+  public void setDisplayDivider(boolean displayDivider) {
+    this.displayDivider = displayDivider;
   }
 
   public static JSONObject getJsonFromProduct(Product product, boolean debug, String TAG) {

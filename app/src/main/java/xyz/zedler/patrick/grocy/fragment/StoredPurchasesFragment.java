@@ -115,6 +115,7 @@ public class StoredPurchasesFragment extends BaseFragment
         ((StoredPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
       } else {
         binding.recycler.setAdapter(new StoredPurchaseAdapter(
+            requireContext(),
             items,
             viewModel.getProductBarcodeHashMap(),
             this

@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants.DATE;
 
 public class DateUtil {
 
@@ -132,6 +133,9 @@ public class DateUtil {
   public String getLocalizedDate(String dateString, int format) {
     if (dateString == null || dateString.isEmpty()) {
       return context.getString(R.string.date_unknown);
+    }
+    if (dateString.equals(DATE.NEVER_OVERDUE)) {
+      return context.getString(R.string.subtitle_never_overdue);
     }
     Date date = null;
     try {
