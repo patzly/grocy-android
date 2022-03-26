@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.util.List;
 
 @Entity(tableName = "stored_purchase_table")
 public class StoredPurchase extends GroupedListItem {
@@ -117,6 +118,15 @@ public class StoredPurchase extends GroupedListItem {
 
     public void setLocationId(String locationId) {
         this.locationId = locationId;
+    }
+
+    public static StoredPurchase getFromId(List<StoredPurchase> storedPurchases, int id) {
+        for (StoredPurchase storedPurchase : storedPurchases) {
+            if (storedPurchase.getId() == id) {
+                return storedPurchase;
+            }
+        }
+        return null;
     }
 
     @NonNull

@@ -105,6 +105,8 @@ public class PurchaseViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> quickModeEnabled;
 
+  private Integer storedPurchaseId;
+  private StoredPurchase storedPurchase;
   private Runnable queueEmptyAction;
 
   public PurchaseViewModel(@NonNull Application application, PurchaseFragmentArgs args) {
@@ -124,6 +126,9 @@ public class PurchaseViewModel extends BaseViewModel {
       for (int i : args.getShoppingListItems()) {
         batchShoppingListItemIds.add(i);
       }
+    }
+    if (NumUtil.isStringInt(args.getStoredPurchaseId())) {
+      storedPurchaseId = Integer.parseInt(args.getStoredPurchaseId());
     }
 
     infoFullscreenLive = new MutableLiveData<>();
@@ -164,6 +169,9 @@ public class PurchaseViewModel extends BaseViewModel {
       this.shoppingListItems = data.getShoppingListItems();
       shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       fillShoppingListItemAmountsHashMap();
+      if (storedPurchaseId != null) {
+        storedPurchase = StoredPurchase.getFromId(data.getStoredPurchases(), storedPurchaseId);
+      }
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -964,6 +972,10 @@ public class PurchaseViewModel extends BaseViewModel {
       newList.add(pendingProductBarcode);
     }
     return newList;
+  }
+
+  public boolean hasStoredPurchase() {
+    return storedPurchaseId != null;
   }
 
   public boolean isQuickModeEnabled() {

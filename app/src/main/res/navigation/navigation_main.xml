@@ -72,6 +72,11 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
+    <argument
+      android:name="storedPurchaseId"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </fragment>
   <fragment
     android:id="@+id/consumeFragment"
@@ -1024,9 +1029,9 @@
       app:argType="boolean"
       android:defaultValue="false" />
     <argument
-        android:name="pendingProductsActive"
-        app:argType="boolean"
-        android:defaultValue="false" />
+      android:name="pendingProductsActive"
+      app:argType="boolean"
+      android:defaultValue="false" />
   </fragment>
   <fragment
     android:id="@+id/storedPurchasesFragment"
@@ -1036,5 +1041,12 @@
     <deepLink
       android:id="@+id/deepLink14"
       app:uri="@string/deep_link_storedPurchasesFragment" />
+    <action
+      android:id="@+id/action_storedPurchasesFragment_to_purchaseFragment"
+      app:destination="@id/purchaseFragment"
+      app:enterAnim="@anim/slide_from_end"
+      app:exitAnim="@anim/slide_to_start"
+      app:popEnterAnim="@anim/slide_from_start"
+      app:popExitAnim="@anim/slide_to_end" />
   </fragment>
 </navigation>
