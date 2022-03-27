@@ -143,7 +143,14 @@ public class PurchaseViewModel extends BaseViewModel {
     } else {
       quickModeStart = false;
     }
+    if (hasStoredPurchase()) {
+      quickModeStart = false;
+    }
     quickModeEnabled = new MutableLiveData<>(quickModeStart);
+
+    if (hasStoredPurchase()) {
+      setQueueEmptyAction(() -> setStoredPurchase(storedPurchase));
+    }
   }
 
   public FormDataPurchase getFormData() {
@@ -441,6 +448,41 @@ public class PurchaseViewModel extends BaseViewModel {
 
     formData.isFormValid();
     sendEvent(Event.FOCUS_INVALID_VIEWS);
+  }
+
+  private void setStoredPurchase(StoredPurchase storedPurchase) {
+    PendingProduct pendingProduct = PendingProduct
+        .getFromId(pendingProducts, storedPurchase.getPendingProductId());
+    if (pendingProduct == null) return;
+
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getName());
+
+    // amount
+    formData.getAmountLive().setValue(storedPurchase.getAmount());
+
+    // purchased date
+    if (formData.getPurchasedDateEnabled()) {
+      formData.getPurchasedDateLive().setValue(storedPurchase.getPurchasedDate());
+    }
+
+    // due date
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING)) {
+      formData.getDueDateLive().setValue(storedPurchase.getBestBeforeDate());
+    }
+
+    // price
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      formData.getPriceLive().setValue(storedPurchase.getPrice());
+    }
+
+    // store
+    String storeId = storedPurchase.getStoreId();
+    Store store = NumUtil.isStringInt(storeId) ? getStore(Integer.parseInt(storeId)) : null;
+    formData.getStoreLive().setValue(store);
+    formData.getShowStoreSection().setValue(store != null || !stores.isEmpty());
+
+    formData.isFormValid();
   }
 
   private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set

@@ -97,6 +97,7 @@ public class FormDataPurchase {
   private final LiveData<String> locationNameLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
+  private boolean noScanner = false;
 
   public FormDataPurchase(
       Application application,
@@ -124,14 +125,16 @@ public class FormDataPurchase {
     );
     shoppingListItemLive = new MutableLiveData<>();
     pendingProductLive = new MutableLiveData<>();
-    scannerVisibilityLive = new MutableLiveData<>(false);
-    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
-    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
+    boolean scannerVisibilityStart;
+    if (!getExternalScannerEnabled() || !args.getCloseWhenFinished()
+        || args.getStoredPurchaseId() != null) {
+      scannerVisibilityStart = false;
+    } else if (args.getStartWithScanner() || getCameraScannerWasVisibleLastTime()) {
+      scannerVisibilityStart = true;
+    } else {
+      scannerVisibilityStart = false;
     }
+    scannerVisibilityLive = new MutableLiveData<>(scannerVisibilityStart);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
     isTareWeightEnabledLive = Transformations.map(
@@ -255,6 +258,7 @@ public class FormDataPurchase {
         location -> location != null ? location.getName() : null
     );
     pluralUtil = new PluralUtil(application);
+    noScanner = args.getStoredPurchaseId() != null;
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -636,6 +640,10 @@ public class FormDataPurchase {
 
   public void setCurrentProductFlowInterrupted(boolean currentProductFlowInterrupted) {
     this.currentProductFlowInterrupted = currentProductFlowInterrupted;
+  }
+
+  public boolean isNoScanner() {
+    return noScanner;
   }
 
   public boolean isProductNameValid() {

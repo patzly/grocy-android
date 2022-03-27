@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
@@ -188,6 +189,15 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     if (pendingProductId != null) {
       removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
       viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId, null));
+    }
+
+    if (viewModel.hasStoredPurchase()) {
+      binding.textInputPurchaseProduct.setEndIconMode(TextInputLayout.END_ICON_CLEAR_TEXT);
+    } else {
+      binding.textInputPurchaseProduct.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+      binding.textInputPurchaseProduct.setEndIconDrawable(R.drawable.ic_round_barcode_scan);
+      binding.textInputPurchaseProduct.setEndIconContentDescription(R.string.action_scan);
+      binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> toggleScannerVisibility());
     }
 
     pluralUtil = new PluralUtil(activity);
