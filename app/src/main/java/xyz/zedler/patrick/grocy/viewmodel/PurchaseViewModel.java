@@ -671,6 +671,10 @@ public class PurchaseViewModel extends BaseViewModel {
       showMessage(R.string.error_missing_information);
       return;
     }
+    if (storedPurchase != null) {
+      overwriteStoredPurchase();
+      return;
+    }
     if (formData.getBarcodeLive().getValue() != null) {
       uploadProductBarcode(this::purchaseProduct);
       return;
@@ -801,6 +805,10 @@ public class PurchaseViewModel extends BaseViewModel {
     barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
     pendingProductBarcodes.add(productBarcode);
     repository.insertPendingProductBarcode(productBarcode, onSuccess);
+  }
+
+  private void overwriteStoredPurchase() {
+    sendEvent(Event.TRANSACTION_SUCCESS);
   }
 
   private void deleteShoppingListItem(int itemId, @NonNull Runnable onFinish) {
@@ -1032,6 +1040,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public boolean toggleQuickModeEnabled() {
+    if (hasStoredPurchase()) return false;
     quickModeEnabled.setValue(!isQuickModeEnabled());
     sendEvent(isQuickModeEnabled() ? Event.QUICK_MODE_ENABLED : Event.QUICK_MODE_DISABLED);
     sharedPrefs.edit()

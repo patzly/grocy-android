@@ -135,7 +135,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
-        if (args.getShoppingListItems() != null) {
+        if (viewModel.hasStoredPurchase()) {
+          activity.navigateUp();
+        } else if (args.getShoppingListItems() != null) {
           clearInputFocus();
           viewModel.getFormData().clearForm();
           boolean nextItemValid = viewModel.batchModeNextItem();
@@ -252,7 +254,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_local_grocery_store,
+        viewModel.hasStoredPurchase() ? R.drawable.ic_round_save
+            : R.drawable.ic_round_local_grocery_store,
         R.string.action_purchase,
         Constants.FAB.TAG.PURCHASE,
         animated,
@@ -455,6 +458,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_product_overview) {
       ViewUtil.startIcon(item);
+      if (viewModel.getFormData().getPendingProductLive() != null) {
+        viewModel.showMessage(R.string.subtitle_product_not_on_server);
+        return false;
+      }
       if (!viewModel.getFormData().isProductNameValid()) {
         return false;
       }
