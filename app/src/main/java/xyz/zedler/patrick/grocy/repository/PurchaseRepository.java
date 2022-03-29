@@ -152,12 +152,12 @@ public class PurchaseRepository {
         .subscribeOn(Schedulers.io()).subscribe();
   }
 
-  public void insertPendingPurchase(
-          StoredPurchase pendingPurchase,
+  public void insertStoredPurchase(
+          StoredPurchase storedPurchase,
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.storedPurchaseDao().insertStoredPurchase(pendingPurchase)
+    appDatabase.storedPurchaseDao().insertStoredPurchase(storedPurchase)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(onSuccess::onSuccess)
@@ -165,11 +165,7 @@ public class PurchaseRepository {
         .subscribe();
   }
 
-  public void deletePendingPurchase(
-      long id,
-      Runnable onSuccess,
-      Runnable onError
-  ) {
+  public void deleteStoredPurchase(long id, Runnable onSuccess, Runnable onError) {
     appDatabase.storedPurchaseDao().deleteStoredPurchase(id)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

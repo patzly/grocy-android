@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -886,40 +887,42 @@ public class FormDataPurchase {
     return productBarcode;
   }
 
-  public StoredPurchase fillPendingPurchase() {
+  public StoredPurchase fillStoredPurchase(@Nullable StoredPurchase storedPurchase) {
     if (!isFormValid()) {
       return null;
     }
     assert pendingProductLive.getValue() != null;
     PendingProduct product = pendingProductLive.getValue();
 
-    StoredPurchase pendingPurchase = new StoredPurchase();
-    pendingPurchase.setPendingProductId(product.getId());
-    pendingPurchase.setAmount(amountLive.getValue());
+    if (storedPurchase == null) {
+      storedPurchase = new StoredPurchase();
+    }
+    storedPurchase.setPendingProductId(product.getId());
+    storedPurchase.setAmount(amountLive.getValue());
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       if (NumUtil.isStringDouble(priceStockLive.getValue())) {
-        pendingPurchase.setPrice(priceStockLive.getValue());
+        storedPurchase.setPrice(priceStockLive.getValue());
       }
       Store store = storeLive.getValue();
       String storeId = store != null ? String.valueOf(store.getId()) : null;
       if (storeId != null) {
-        pendingPurchase.setStoreId(storeId);
+        storedPurchase.setStoreId(storeId);
       }
     }
     String purchasedDate = purchasedDateLive.getValue();
     if (getPurchasedDateEnabled() && purchasedDate != null) {
-      pendingPurchase.setPurchasedDate(purchasedDate);
+      storedPurchase.setPurchasedDate(purchasedDate);
     }
     Location location = locationLive.getValue();
     if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
-      pendingPurchase.setLocationId(String.valueOf(location.getId()));
+      storedPurchase.setLocationId(String.valueOf(location.getId()));
     }
     String dueDate = dueDateLive.getValue();
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
       dueDate = Constants.DATE.NEVER_OVERDUE;
     }
-    pendingPurchase.setBestBeforeDate(dueDate);
-    return pendingPurchase;
+    storedPurchase.setBestBeforeDate(dueDate);
+    return storedPurchase;
   }
 
   public void clearForm() {

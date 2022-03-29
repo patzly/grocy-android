@@ -116,50 +116,67 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
+      android:orientation="horizontal"
       android:id="@+id/container_purchase"
-      android:visibility="gone"
+      android:visibility="visible"
       android:paddingStart="48dp"
       android:paddingEnd="0dp"
       android:paddingVertical="8dp">
 
-      <TextView
-        android:id="@+id/text_purchase_amount"
-        style="@style/Widget.Grocy.TextView.Paragraph"
-        android:layout_width="wrap_content"
+      <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"/>
+        android:orientation="vertical"
+        android:layout_weight="1">
 
-      <TextView
-        android:id="@+id/text_purchase_date"
-        style="@style/Widget.Grocy.TextView.Paragraph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"/>
+        <TextView
+          android:id="@+id/text_purchase_amount"
+          style="@style/Widget.Grocy.TextView.Paragraph"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|start"/>
 
-      <TextView
-        android:id="@+id/text_purchase_price"
-        style="@style/Widget.Grocy.TextView.Paragraph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:visibility="gone"/>
+        <TextView
+          android:id="@+id/text_purchase_date"
+          style="@style/Widget.Grocy.TextView.Paragraph"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|start"/>
 
-      <TextView
-        android:id="@+id/text_purchase_store"
-        style="@style/Widget.Grocy.TextView.Paragraph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:visibility="gone"/>
+        <TextView
+          android:id="@+id/text_purchase_price"
+          style="@style/Widget.Grocy.TextView.Paragraph"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|start"
+          android:visibility="gone"/>
 
-      <TextView
-        android:id="@+id/text_purchase_location"
-        style="@style/Widget.Grocy.TextView.Paragraph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:visibility="gone"/>
+        <TextView
+          android:id="@+id/text_purchase_store"
+          style="@style/Widget.Grocy.TextView.Paragraph"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|start"
+          android:visibility="gone"/>
+
+        <TextView
+          android:id="@+id/text_purchase_location"
+          style="@style/Widget.Grocy.TextView.Paragraph"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|start"
+          android:visibility="gone"/>
+
+      </LinearLayout>
+
+      <ImageView
+        android:layout_height="24dp"
+        android:layout_width="24dp"
+        android:layout_marginHorizontal="16dp"
+        android:clickable="false"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_round_chevron_right"
+        tools:ignore="ContentDescription" />
 
     </LinearLayout>
 

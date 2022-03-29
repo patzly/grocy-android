@@ -776,15 +776,15 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void purchasePendingProduct() {
-    StoredPurchase productPurchase = formData.fillPendingPurchase();
-    repository.insertPendingPurchase(productPurchase, id -> {
+    StoredPurchase productPurchase = formData.fillStoredPurchase(null);
+    repository.insertStoredPurchase(productPurchase, id -> {
       SnackbarMessage snackbarMessage = new SnackbarMessage(
           formData.getTransactionSuccessMsg(NumUtil.isStringDouble(productPurchase.getAmount())
               ? Double.parseDouble(productPurchase.getAmount()) : 0)
       );
       snackbarMessage.setAction(
           getString(R.string.action_undo),
-          v -> repository.deletePendingPurchase(
+          v -> repository.deleteStoredPurchase(
               id,
               () -> showMessage(getString(R.string.msg_undone_transaction)),
               this::showErrorMessage
@@ -808,7 +808,12 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void overwriteStoredPurchase() {
-    sendEvent(Event.TRANSACTION_SUCCESS);
+    StoredPurchase storedPurchase = formData.fillStoredPurchase(this.storedPurchase);
+    repository.insertStoredPurchase(
+        storedPurchase,
+        id -> sendEvent(Event.TRANSACTION_SUCCESS),
+        this::showErrorMessage
+    );
   }
 
   private void deleteShoppingListItem(int itemId, @NonNull Runnable onFinish) {
