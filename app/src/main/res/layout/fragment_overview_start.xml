@@ -640,7 +640,7 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
-              android:visibility="gone"
+              android:visibility="visible"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_tasksFragment)}"
               app:clickUtil="@{clickUtil}">
 

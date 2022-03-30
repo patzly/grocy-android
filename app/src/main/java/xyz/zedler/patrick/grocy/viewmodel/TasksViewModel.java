@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -60,6 +60,7 @@ public class TasksViewModel extends BaseViewModel {
   private final GrocyApi grocyApi;
   private final TasksRepository repository;
   private final PluralUtil pluralUtil;
+  private final DateUtil dateUtil;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -77,6 +78,9 @@ public class TasksViewModel extends BaseViewModel {
   private String sortMode;
   private int tasksNotDoneCount;
   private int tasksDoneCount;
+  private int tasksDueTodayCount;
+  private int tasksDueSoonCount;
+  private int tasksOverdueCount;
   private boolean sortAscending;
   private final boolean debug;
 
@@ -91,6 +95,7 @@ public class TasksViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new TasksRepository(application);
     pluralUtil = new PluralUtil(application);
+    dateUtil = new DateUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -121,17 +126,30 @@ public class TasksViewModel extends BaseViewModel {
 
           tasksDoneCount = 0;
           tasksNotDoneCount = 0;
+          tasksDueTodayCount = 0;
+          tasksDueSoonCount = 0;
+          tasksOverdueCount = 0;
           for (Task task : tasks) {
             if (task.isDone()) {
               tasksDoneCount++;
             } else {
               tasksNotDoneCount++;
             }
+            int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+            if (daysFromNow < 0) {
+              tasksOverdueCount++;
+            }
+            if (daysFromNow == 0) {
+              tasksDueTodayCount++;
+            }
+            if (daysFromNow <= 5) {
+              tasksDueSoonCount++;
+            }
           }
 
           filterChipLiveDataStatus
-              .setDueSoonCount(0)
-              .setOverdueCount(0)
+              .setDueSoonCount(tasksDueSoonCount)
+              .setOverdueCount(tasksOverdueCount)
               .emitCounts();
 
           updateFilteredTasks();
@@ -168,6 +186,36 @@ public class TasksViewModel extends BaseViewModel {
           for (Task task : tasks) {
             taskHashMap.put(task.getId(), task);
           }
+
+          tasksDoneCount = 0;
+          tasksNotDoneCount = 0;
+          tasksDueTodayCount = 0;
+          tasksDueSoonCount = 0;
+          tasksOverdueCount = 0;
+          for (Task task : tasks) {
+            if (task.isDone()) {
+              tasksDoneCount++;
+            } else {
+              tasksNotDoneCount++;
+            }
+            int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+            if (daysFromNow < 0) {
+              tasksOverdueCount++;
+            }
+            if (daysFromNow == 0) {
+              tasksDueTodayCount++;
+            }
+            if (daysFromNow <= 5) {
+              tasksDueSoonCount++;
+            }
+          }
+
+          filterChipLiveDataStatus
+              .setDueSoonCount(tasksDueSoonCount)
+              .setOverdueCount(tasksOverdueCount)
+              .emitCounts();
+
+          updateFilteredTasks();
         })
     );
 
@@ -328,7 +376,7 @@ public class TasksViewModel extends BaseViewModel {
     return tasksNotDoneCount;
   }
 
-  public int getTasksDueCount() {
+  public int getTasksDueSoonCount() {
     // TODO
     return 0;
   }
