@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
@@ -194,7 +193,6 @@ public class TasksFragment extends BaseFragment implements
               || position >= displayedItems.size()) {
             return;
           }
-          Task task = displayedItems.get(position);
           underlayButtons.add(new UnderlayButton(
               R.drawable.ic_round_done,
               pos -> {
@@ -202,10 +200,7 @@ public class TasksFragment extends BaseFragment implements
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                viewModel.performAction(
-                    ACTION.UNDO,
-                    displayedItems.get(pos)
-                );
+                viewModel.changeTaskDoneStatus(displayedItems.get(pos));
               }
           ));
         }

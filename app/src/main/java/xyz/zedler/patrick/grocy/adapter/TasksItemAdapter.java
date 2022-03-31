@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,18 @@ public class TasksItemAdapter extends
     // NAME
 
     holder.binding.title.setText(task.getName());
+
+    if (task.isDone()) {
+      holder.binding.title.setPaintFlags(
+          holder.binding.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+      );
+      holder.binding.title.setAlpha(0.6f);
+    } else {
+      holder.binding.title.setPaintFlags(
+          holder.binding.title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
+      );
+      holder.binding.title.setAlpha(1.0f);
+    }
 
     // CONTAINER
 

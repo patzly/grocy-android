@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,6 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
@@ -285,26 +283,13 @@ public class TasksViewModel extends BaseViewModel {
     filteredTasksLive.setValue(filteredTasks);
   }
 
-  public void performAction(String action, Task task) {
-    switch (action) {
-      case Constants.ACTION.COMPLETE:
-        markTask(task, true);
-        break;
-      case Constants.ACTION.UNDO:
-        markTask(task, false);
-        break;
-    }
-  }
-
-  private void markTask(Task task, boolean completed) {
-    // TODO Not just the done_time?
-    LocalDateTime done_time = LocalDateTime.now();
+  public void changeTaskDoneStatus(Task task) {
     JSONObject body = new JSONObject();
     try {
-      body.put("done_time", done_time);
+      body.put("done_time", dateUtil.getCurrentDateWithTimeStr());
     } catch (JSONException e) {
       if (debug) {
-        if (completed) {
+        if (!task.isDone()) {
           Log.e(TAG, "completeTask: " + e);
         } else {
           Log.e(TAG, "undoTask: " + e);
@@ -312,29 +297,16 @@ public class TasksViewModel extends BaseViewModel {
       }
     }
     dlHelper.postWithArray(
-        completed ? grocyApi.completeTask(task.getId()) : grocyApi.undoTask(task.getId()),
+        !task.isDone() ? grocyApi.completeTask(task.getId()) : grocyApi.undoTask(task.getId()),
         body,
         response -> {
-          String transactionId = null;
-          try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
-          } catch (JSONException e) {
-            if (completed) {
-              Log.e(TAG, "completeTask: " + e);
-            } else {
-              Log.e(TAG, "undoTask: " + e);
-            }
-          }
-
           String msg = getApplication().getString(
-              completed ? R.string.msg_task_completed : R.string.msg_task_undo, task.getName()
+              !task.isDone() ? R.string.msg_task_completed : R.string.msg_task_undo
           );
-          SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
-
+          showMessage(msg);
           downloadData();
-          showSnackbar(snackbarMsg);
-          if (completed) {
+
+          if (!task.isDone()) {
             Log.i(
                 TAG, "completeTask: completed " + task.getName()
             );
@@ -345,7 +317,7 @@ public class TasksViewModel extends BaseViewModel {
         error -> {
           showErrorMessage(error);
           if (debug) {
-            if (completed) {
+            if (!task.isDone()) {
               Log.i(TAG, "completeTask: " + error);
             } else {
               Log.i(TAG, "undoTask: " + error);
