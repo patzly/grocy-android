@@ -43,18 +43,21 @@ public class TasksItemAdapter extends
   private final PluralUtil pluralUtil;
   private final TasksItemAdapterListener listener;
   private String sortMode;
+  private boolean sortAscending;
 
   public TasksItemAdapter(
       Context context,
       ArrayList<Task> tasks,
       TasksItemAdapterListener listener,
-      String sortMode
+      String sortMode,
+      boolean sortAscending
   ) {
     this.context = context;
     this.tasks = new ArrayList<>(tasks);
     this.pluralUtil = new PluralUtil(context);
     this.listener = listener;
     this.sortMode = sortMode;
+    this.sortAscending = sortAscending;
   }
 
   @Override
@@ -122,14 +125,17 @@ public class TasksItemAdapter extends
 
   public void updateData(
       ArrayList<Task> newList,
-      String sortMode
+      String sortMode,
+      boolean sortAscending
   ) {
 
     TasksItemAdapter.DiffCallback diffCallback = new TasksItemAdapter.DiffCallback(
         this.tasks,
         newList,
         this.sortMode,
-        sortMode
+        sortMode,
+        this.sortAscending,
+        sortAscending
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.tasks.clear();
@@ -144,17 +150,23 @@ public class TasksItemAdapter extends
     ArrayList<Task> newItems;
     String sortModeOld;
     String sortModeNew;
+    boolean sortAscendingOld;
+    boolean sortAscendingNew;
 
     public DiffCallback(
         ArrayList<Task> oldItems,
         ArrayList<Task> newItems,
         String sortModeOld,
-        String sortModeNew
+        String sortModeNew,
+        boolean sortAscendingOld,
+        boolean sortAscendingNew
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
+      this.sortAscendingOld = sortAscendingOld;
+      this.sortAscendingNew = sortAscendingNew;
     }
 
     @Override
@@ -180,12 +192,16 @@ public class TasksItemAdapter extends
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
       Task newItem = newItems.get(newItemPos);
       Task oldItem = oldItems.get(oldItemPos);
-      if (!compareContent) {
-        return newItem.getId() == oldItem.getId();
-      }
 
       if (!sortModeOld.equals(sortModeNew)) {
         return false;
+      }
+      if (sortAscendingOld != sortAscendingNew) {
+        return false;
+      }
+
+      if (!compareContent) {
+        return newItem.getId() == oldItem.getId();
       }
 
       return newItem.equals(oldItem);

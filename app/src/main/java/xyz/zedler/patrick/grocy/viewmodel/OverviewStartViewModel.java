@@ -529,10 +529,6 @@ public class OverviewStartViewModel extends BaseViewModel {
     return server != null && server.contains("grocy.info");
   }
 
-  public boolean getIsStockDisabled() {
-    return !sharedPrefs.getBoolean(PREF.FEATURE_STOCK, true);
-  }
-
   @Override
   protected void onCleared() {
     dlHelper.destroy();

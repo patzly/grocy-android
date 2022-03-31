@@ -75,13 +75,11 @@ public class TasksViewModel extends BaseViewModel {
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private String sortMode;
   private int tasksNotDoneCount;
   private int tasksDoneCount;
   private int tasksDueTodayCount;
   private int tasksDueSoonCount;
   private int tasksOverdueCount;
-  private boolean sortAscending;
   private final boolean debug;
 
   public TasksViewModel(@NonNull Application application) {
@@ -111,8 +109,6 @@ public class TasksViewModel extends BaseViewModel {
     );
     tasksDoneCount = 0;
     tasksNotDoneCount = 0;
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
@@ -142,12 +138,13 @@ public class TasksViewModel extends BaseViewModel {
             if (daysFromNow == 0) {
               tasksDueTodayCount++;
             }
-            if (daysFromNow <= 5) {
+            if (daysFromNow >= 0 && daysFromNow <= 5) {
               tasksDueSoonCount++;
             }
           }
 
           filterChipLiveDataStatus
+              .setDueTodayCount(tasksDueTodayCount)
               .setDueSoonCount(tasksDueSoonCount)
               .setOverdueCount(tasksOverdueCount)
               .emitCounts();
@@ -205,12 +202,13 @@ public class TasksViewModel extends BaseViewModel {
             if (daysFromNow == 0) {
               tasksDueTodayCount++;
             }
-            if (daysFromNow <= 5) {
+            if (daysFromNow >= 0 && daysFromNow <= 5) {
               tasksDueSoonCount++;
             }
           }
 
           filterChipLiveDataStatus
+              .setDueTodayCount(tasksDueTodayCount)
               .setDueSoonCount(tasksDueSoonCount)
               .setOverdueCount(tasksOverdueCount)
               .emitCounts();
@@ -262,16 +260,26 @@ public class TasksViewModel extends BaseViewModel {
       if (!searchContainsItem) {
         continue;
       }
-
-
-
+      if (!filterChipLiveDataStatus.isShowDoneTasks() && task.isDone()) {
+        continue;
+      }
+      int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_OVERDUE
+          && daysFromNow >= 0
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_TODAY
+          && daysFromNow != 0
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_SOON
+          && !(daysFromNow >= 0 && daysFromNow <= 5)) {
+        continue;
+      }
       filteredTasks.add(task);
     }
 
-    switch (sortMode) {
-      case SORT_NAME:
-        SortUtil.sortTasksByName(getApplication(), filteredTasks, sortAscending);
-        break;
+    boolean sortAscending = filterChipLiveDataSort.isSortAscending();
+    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
+      SortUtil.sortTasksByDueDate(filteredTasks, sortAscending);
+    } else {
+      SortUtil.sortTasksByName(getApplication(), filteredTasks, sortAscending);
     }
 
     filteredTasksLive.setValue(filteredTasks);
@@ -368,47 +376,17 @@ public class TasksViewModel extends BaseViewModel {
     return () -> filterChipLiveDataSort;
   }
 
-  public int getTasksDoneCount() {
-    return tasksDoneCount;
-  }
-
-  public int getTasksNotDoneCount() {
-    return tasksNotDoneCount;
-  }
-
-  public int getTasksDueSoonCount() {
-    // TODO
-    return 0;
-  }
-
-  public int getTasksOverdueCount(){
-    // TODO
-    return 0;
-  }
-
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
     updateFilteredTasks();
   }
 
   public String getSortMode() {
-    return sortMode;
-  }
-
-  public void setSortMode(String sortMode) {
-    this.sortMode = sortMode;
-    sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
-    updateFilteredTasks();
+    return filterChipLiveDataSort.getSortMode();
   }
 
   public boolean isSortAscending() {
-    return sortAscending;
-  }
-
-  public void setSortAscending(boolean sortAscending) {
-    this.sortAscending = sortAscending;
-    sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
-    updateFilteredTasks();
+    return filterChipLiveDataSort.isSortAscending();
   }
 
   public HashMap<Integer, Task> getTaskHashMap() {

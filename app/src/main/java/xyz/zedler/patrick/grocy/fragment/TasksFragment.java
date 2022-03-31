@@ -152,7 +152,8 @@ public class TasksFragment extends BaseFragment implements
       if (binding.recycler.getAdapter() instanceof TasksItemAdapter) {
         ((TasksItemAdapter) binding.recycler.getAdapter()).updateData(
             items,
-            viewModel.getSortMode()
+            viewModel.getSortMode(),
+            viewModel.isSortAscending()
         );
       } else {
         binding.recycler.setAdapter(
@@ -160,7 +161,8 @@ public class TasksFragment extends BaseFragment implements
                 requireContext(),
                 items,
                 this,
-                viewModel.getSortMode()
+                viewModel.getSortMode(),
+                viewModel.isSortAscending()
             )
         );
       }
