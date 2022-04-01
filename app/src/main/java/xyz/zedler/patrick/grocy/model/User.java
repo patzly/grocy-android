@@ -1,0 +1,168 @@
+package xyz.zedler.patrick.grocy.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import com.google.gson.annotations.SerializedName;
+import java.util.Objects;
+
+@Entity(tableName = "user_table")
+public class User  implements Parcelable {
+  @PrimaryKey
+  @ColumnInfo(name = "id")
+  @SerializedName("id")
+  private int id;
+
+  @ColumnInfo(name = "username")
+  @SerializedName("username")
+  private String userName;
+
+  @ColumnInfo(name = "first_name")
+  @SerializedName("first_name")
+  private String firstName;
+
+  @ColumnInfo(name = "last_name")
+  @SerializedName("last_name")
+  private String lastName;
+
+  @ColumnInfo(name = "display_name")
+  @SerializedName("display_name")
+  private String displayName;
+
+  @ColumnInfo(name = "picture_file_name")
+  @SerializedName("picture_file_name")
+  private String pictureFileName;
+
+  @ColumnInfo(name = "row_created_timestamp")
+  @SerializedName("row_created_timestamp")
+  private String rowCreatedFilestamp;
+
+  public User() {
+  }  // for Room
+
+  public User(Parcel parcel) {
+    id = parcel.readInt();
+    userName = parcel.readString();
+    firstName = parcel.readString();
+    lastName = parcel.readString();
+    displayName = parcel.readString();
+    pictureFileName = parcel.readString();
+    rowCreatedFilestamp = parcel.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(id);
+    dest.writeString(userName);
+    dest.writeString(firstName);
+    dest.writeString(lastName);
+    dest.writeString(displayName);
+    dest.writeString(pictureFileName);
+    dest.writeString(rowCreatedFilestamp);
+  }
+
+  public static final Creator<User> CREATOR = new Creator<User>() {
+
+    @Override
+    public User createFromParcel(Parcel in) {
+      return new User(in);
+    }
+
+    @Override
+    public User[] newArray(int size) {
+      return new User[size];
+    }
+  };
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  public String getPictureFileName() {
+    return pictureFileName;
+  }
+
+  public void setPictureFileName(String pictureFileName) {
+    this.pictureFileName = pictureFileName;
+  }
+
+  public String getRowCreatedFilestamp() {
+    return rowCreatedFilestamp;
+  }
+
+  public void setRowCreatedFilestamp(String rowCreatedFilestamp) {
+    this.rowCreatedFilestamp = rowCreatedFilestamp;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User) o;
+    return id == user.id && Objects.equals(userName, user.userName) && Objects
+        .equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName)
+        && Objects.equals(displayName, user.displayName) && Objects
+        .equals(pictureFileName, user.pictureFileName) && Objects
+        .equals(rowCreatedFilestamp, user.rowCreatedFilestamp);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects
+        .hash(id, userName, firstName, lastName, displayName, pictureFileName, rowCreatedFilestamp);
+  }
+
+  @NonNull
+  @Override
+  public String toString() {
+    return "User(" + userName + ')';
+  }
+}

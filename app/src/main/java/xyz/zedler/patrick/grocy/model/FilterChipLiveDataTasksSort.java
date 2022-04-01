@@ -45,8 +45,8 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    sortMode = sharedPrefs.getString(PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(PREF.STOCK_SORT_ASCENDING, true);
+    sortMode = sharedPrefs.getString(PREF.TASKS_SORT_MODE, SORT_NAME);
+    sortAscending = sharedPrefs.getBoolean(PREF.TASKS_SORT_ASCENDING, true);
     setFilterText();
     setItems();
     if (clickListener != null) {
@@ -81,14 +81,14 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
     if (id == ID_SORT_NAME) {
       sortMode = SORT_NAME;
       setFilterText();
-      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.TASKS_SORT_MODE, sortMode).apply();
     } else if (id == ID_SORT_DUE_DATE) {
       sortMode = SORT_DUE_DATE;
       setFilterText();
-      sharedPrefs.edit().putString(PREF.STOCK_SORT_MODE, sortMode).apply();
+      sharedPrefs.edit().putString(PREF.TASKS_SORT_MODE, sortMode).apply();
     } else if (id == ID_ASCENDING) {
       sortAscending = !sortAscending;
-      sharedPrefs.edit().putBoolean(PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
+      sharedPrefs.edit().putBoolean(PREF.TASKS_SORT_ASCENDING, sortAscending).apply();
     }
   }
 

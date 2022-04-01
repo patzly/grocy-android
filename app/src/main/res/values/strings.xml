@@ -512,6 +512,7 @@
   <string name="subtitle_empty">Empty</string>
   <string name="subtitle_done">Done</string>
   <string name="subtitle_undone">Undone</string>
+  <string name="subtitle_uncategorized">Uncategorized</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Never overdue</string>
   <string name="subtitle_selected">Selected</string>

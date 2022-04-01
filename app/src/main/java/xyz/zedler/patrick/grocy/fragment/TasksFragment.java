@@ -19,8 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -141,6 +141,8 @@ public class TasksFragment extends BaseFragment implements
         InfoFullscreen info;
         if (viewModel.isSearchActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
+        } else if (viewModel.getFilterChipLiveDataStatus().getData().isActive()) {
+          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
         } else {
           info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_TASKS);
         }
@@ -151,6 +153,8 @@ public class TasksFragment extends BaseFragment implements
       if (binding.recycler.getAdapter() instanceof TasksItemAdapter) {
         ((TasksItemAdapter) binding.recycler.getAdapter()).updateData(
             items,
+            viewModel.getTaskCategoriesHashMap(),
+            viewModel.getUsersHashMap(),
             viewModel.getSortMode(),
             viewModel.isSortAscending()
         );
@@ -159,6 +163,8 @@ public class TasksFragment extends BaseFragment implements
             new TasksItemAdapter(
                 requireContext(),
                 items,
+                viewModel.getTaskCategoriesHashMap(),
+                viewModel.getUsersHashMap(),
                 this,
                 viewModel.getSortMode(),
                 viewModel.isSortAscending()
@@ -200,7 +206,8 @@ public class TasksFragment extends BaseFragment implements
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                viewModel.changeTaskDoneStatus(displayedItems.get(pos));
+                new Handler().postDelayed(() -> viewModel
+                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
               }
           ));
         }
@@ -314,10 +321,6 @@ public class TasksFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void lockOrUnlockRotation() {
-    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
   }
 
   private void showMessage(String msg) {

@@ -27,6 +27,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 
 public class TasksRepository {
 
@@ -45,13 +46,16 @@ public class TasksRepository {
 
     private final List<TaskCategory> taskGroups;
     private final List<Task> tasks;
+    private final List<User> users;
 
     public TasksData(
         List<TaskCategory> taskGroups,
-        List<Task> tasks
+        List<Task> tasks,
+        List<User> users
     ) {
       this.taskGroups = taskGroups;
       this.tasks = tasks;
+      this.users = users;
     }
 
     public List<TaskCategory> getTaskGroups() {
@@ -61,6 +65,10 @@ public class TasksRepository {
     public List<Task> getTasks() {
       return tasks;
     }
+
+    public List<User> getUsers() {
+      return users;
+    }
   }
 
   public void loadFromDatabase(TasksDataListener listener) {
@@ -68,6 +76,7 @@ public class TasksRepository {
         .zip(
             appDatabase.taskCategoryDao().getTaskCategories(),
             appDatabase.taskDao().getTasks(),
+            appDatabase.userDao().getUsers(),
             TasksData::new
         )
         .subscribeOn(Schedulers.io())

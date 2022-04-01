@@ -67,6 +67,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -1160,6 +1161,63 @@ public class DownloadHelper {
         );
       }
     };
+  }
+
+  public QueueItem updateUsers(
+      String dbChangedTime,
+      OnUsersResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        Constants.PREF.DB_LAST_TIME_USERS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getUsers(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<User>>() {
+                }.getType();
+                ArrayList<User> users = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Users: " + users);
+                }
+                Single.concat(
+                    appDatabase.userDao().deleteUsers(),
+                    appDatabase.userDao().insertUsers(users)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_USERS, dbChangedTime).apply();
+                      onResponseListener.onResponse(users);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Users download");
+      }
+      return null;
+    }
   }
 
   public QueueItem getStockItems(
@@ -2583,6 +2641,11 @@ public class DownloadHelper {
   public interface OnTaskCategoriesResponseListener {
 
     void onResponse(ArrayList<TaskCategory> taskCategories);
+  }
+
+  public interface OnUsersResponseListener {
+
+    void onResponse(ArrayList<User> users);
   }
 
   public interface OnStringResponseListener {

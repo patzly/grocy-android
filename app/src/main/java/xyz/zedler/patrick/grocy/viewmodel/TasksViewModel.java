@@ -41,8 +41,10 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -69,12 +71,11 @@ public class TasksViewModel extends BaseViewModel {
 
   private List<Task> tasks;
   private List<TaskCategory> taskCategories;
-  private HashMap<Integer, Task> taskHashMap;
+  private HashMap<Integer, TaskCategory> taskCategoriesHashMap;
+  private HashMap<Integer, User> usersHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private int tasksNotDoneCount;
-  private int tasksDoneCount;
   private int tasksDueTodayCount;
   private int tasksDueSoonCount;
   private int tasksOverdueCount;
@@ -105,54 +106,42 @@ public class TasksViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredTasks
     );
-    tasksDoneCount = 0;
-    tasksNotDoneCount = 0;
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-          this.taskCategories = data.getTaskGroups();
-          this.tasks = data.getTasks();
-          taskHashMap = new HashMap<>();
-          for (Task task : tasks) {
-            taskHashMap.put(task.getId(), task);
-          }
+      tasks = data.getTasks();
+      taskCategories = data.getTaskGroups();
+      taskCategoriesHashMap = ArrayUtil.getTaskCategoriesHashMap(data.getTaskGroups());
+      usersHashMap = ArrayUtil.getUsersHashMap(data.getUsers());
 
-          tasksDoneCount = 0;
-          tasksNotDoneCount = 0;
-          tasksDueTodayCount = 0;
-          tasksDueSoonCount = 0;
-          tasksOverdueCount = 0;
-          for (Task task : tasks) {
-            if (task.isDone()) {
-              tasksDoneCount++;
-            } else {
-              tasksNotDoneCount++;
-            }
-            int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
-            if (daysFromNow < 0) {
-              tasksOverdueCount++;
-            }
-            if (daysFromNow == 0) {
-              tasksDueTodayCount++;
-            }
-            if (daysFromNow >= 0 && daysFromNow <= 5) {
-              tasksDueSoonCount++;
-            }
-          }
-
-          filterChipLiveDataStatus
-              .setDueTodayCount(tasksDueTodayCount)
-              .setDueSoonCount(tasksDueSoonCount)
-              .setOverdueCount(tasksOverdueCount)
-              .emitCounts();
-
-          updateFilteredTasks();
-          if (downloadAfterLoading) {
-            downloadData();
-          }
+      tasksDueTodayCount = 0;
+      tasksDueSoonCount = 0;
+      tasksOverdueCount = 0;
+      for (Task task : data.getTasks()) {
+        int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+        if (daysFromNow < 0) {
+          tasksOverdueCount++;
         }
-    );
+        if (daysFromNow == 0) {
+          tasksDueTodayCount++;
+        }
+        if (daysFromNow >= 0 && daysFromNow <= 5) {
+          tasksDueSoonCount++;
+        }
+      }
+
+      filterChipLiveDataStatus
+          .setDueTodayCount(tasksDueTodayCount)
+          .setDueSoonCount(tasksDueSoonCount)
+          .setOverdueCount(tasksOverdueCount)
+          .emitCounts();
+
+      updateFilteredTasks();
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -172,27 +161,16 @@ public class TasksViewModel extends BaseViewModel {
 
     DownloadHelper.Queue queue = dlHelper.newQueue(this::updateFilteredTasks, this::onDownloadError);
     queue.append(
-        dlHelper.updateTaskCategories(
-            dbChangedTime,
-            taskCategories -> this.taskCategories = taskCategories
-        ), dlHelper.updateTasks(dbChangedTime, tasks -> {
+        dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
+          this.taskCategories = taskCategories;
+          taskCategoriesHashMap = ArrayUtil.getTaskCategoriesHashMap(taskCategories);
+        }), dlHelper.updateTasks(dbChangedTime, tasks -> {
           this.tasks = tasks;
-          taskHashMap = new HashMap<>();
-          for (Task task : tasks) {
-            taskHashMap.put(task.getId(), task);
-          }
 
-          tasksDoneCount = 0;
-          tasksNotDoneCount = 0;
           tasksDueTodayCount = 0;
           tasksDueSoonCount = 0;
           tasksOverdueCount = 0;
           for (Task task : tasks) {
-            if (task.isDone()) {
-              tasksDoneCount++;
-            } else {
-              tasksNotDoneCount++;
-            }
             int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
             if (daysFromNow < 0) {
               tasksOverdueCount++;
@@ -212,7 +190,10 @@ public class TasksViewModel extends BaseViewModel {
               .emitCounts();
 
           updateFilteredTasks();
-        })
+        }), dlHelper.updateUsers(
+            dbChangedTime,
+            users -> usersHashMap = ArrayUtil.getUsersHashMap(users)
+        )
     );
 
     if (queue.isEmpty()) {
@@ -230,8 +211,9 @@ public class TasksViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASKS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -250,7 +232,6 @@ public class TasksViewModel extends BaseViewModel {
     ArrayList<Task> filteredTasks = new ArrayList<>();
 
     for (Task task : this.tasks) {
-
       boolean searchContainsItem = true;
       if (searchInput != null && !searchInput.isEmpty()) {
         searchContainsItem = task.getName().toLowerCase().contains(searchInput);
@@ -283,7 +264,9 @@ public class TasksViewModel extends BaseViewModel {
     filteredTasksLive.setValue(filteredTasks);
   }
 
-  public void changeTaskDoneStatus(Task task) {
+  public void changeTaskDoneStatus(int taskId) {
+    Task task = Task.getTaskFromId(tasks, taskId);
+    if (task == null) return;
     JSONObject body = new JSONObject();
     try {
       body.put("done_time", dateUtil.getCurrentDateWithTimeStr());
@@ -301,7 +284,7 @@ public class TasksViewModel extends BaseViewModel {
         body,
         response -> {
           String msg = getApplication().getString(
-              !task.isDone() ? R.string.msg_task_completed : R.string.msg_task_undo
+              !task.isDone() ? R.string.msg_task_completed : R.string.msg_task_not_completed
           );
           showMessage(msg);
           downloadData();
@@ -361,8 +344,12 @@ public class TasksViewModel extends BaseViewModel {
     return filterChipLiveDataSort.isSortAscending();
   }
 
-  public HashMap<Integer, Task> getTaskHashMap() {
-    return taskHashMap;
+  public HashMap<Integer, TaskCategory> getTaskCategoriesHashMap() {
+    return taskCategoriesHashMap;
+  }
+
+  public HashMap<Integer, User> getUsersHashMap() {
+    return usersHashMap;
   }
 
   @NonNull

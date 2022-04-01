@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.dao.StockLocationDao;
 import xyz.zedler.patrick.grocy.dao.StoreDao;
 import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
 import xyz.zedler.patrick.grocy.dao.TaskDao;
+import xyz.zedler.patrick.grocy.dao.UserDao;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
@@ -61,6 +62,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 
 @Database(
     entities = {
@@ -82,9 +84,10 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
         ProductAveragePrice.class,
         PendingProduct.class,
         PendingProductBarcode.class,
-        StoredPurchase.class
+        StoredPurchase.class,
+        User.class
     },
-    version = 28
+    version = 29
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -127,6 +130,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract PendingProductBarcodeDao pendingProductBarcodeDao();
 
   public abstract StoredPurchaseDao storedPurchaseDao();
+
+  public abstract UserDao userDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

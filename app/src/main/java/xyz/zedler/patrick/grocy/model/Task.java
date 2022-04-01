@@ -29,6 +29,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +66,10 @@ public class Task implements Parcelable {
   @SerializedName("category_id")
   private String categoryId;
 
+  @ColumnInfo(name = "assigned_to_user_id")
+  @SerializedName("assigned_to_user_id")
+  private String assignedToUserId;
+
   @Ignore
   @SerializedName("category")
   private TaskCategory category;
@@ -82,6 +87,7 @@ public class Task implements Parcelable {
     doneTimeStamp = parcel.readString();
     categoryId = parcel.readString();
     category = parcel.readParcelable(TaskCategory.class.getClassLoader());
+    assignedToUserId = parcel.readString();
   }
 
   @Override
@@ -94,6 +100,7 @@ public class Task implements Parcelable {
     dest.writeString(doneTimeStamp);
     dest.writeString(categoryId);
     dest.writeParcelable(category, 0);
+    dest.writeString(assignedToUserId);
   }
 
   public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -185,6 +192,14 @@ public class Task implements Parcelable {
     this.category = category;
   }
 
+  public String getAssignedToUserId() {
+    return assignedToUserId;
+  }
+
+  public void setAssignedToUserId(String assignedToUserId) {
+    this.assignedToUserId = assignedToUserId;
+  }
+
   public static JSONObject getJsonFromTask(Task task, boolean debug, String TAG) {
     JSONObject json = new JSONObject();
     try {
@@ -213,7 +228,7 @@ public class Task implements Parcelable {
     return getJsonFromTask(this, debug, TAG);
   }
 
-  public static Task getTaskFromId(ArrayList<Task> tasks, int id) {
+  public static Task getTaskFromId(List<Task> tasks, int id) {
     for (Task task : tasks) {
       if (task.getId() == id) {
         return task;
@@ -263,13 +278,15 @@ public class Task implements Parcelable {
         Objects.equals(done, task.done) &&
         Objects.equals(doneTimeStamp, task.doneTimeStamp) &&
         Objects.equals(categoryId, task.categoryId) &&
-        Objects.equals(category, task.category);
+        Objects.equals(category, task.category) &&
+        Objects.equals(assignedToUserId, task.assignedToUserId);
   }
 
   @Override
   public int hashCode() {
     return Objects
-        .hash(id, name, description, dueDate, done, doneTimeStamp, categoryId, category);
+        .hash(id, name, description, dueDate, done, doneTimeStamp, categoryId, category,
+            assignedToUserId);
   }
 
   @NonNull

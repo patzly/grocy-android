@@ -22,15 +22,24 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.HashMap;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowTaskItemBinding;
 import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class TasksItemAdapter extends
@@ -41,6 +50,8 @@ public class TasksItemAdapter extends
 
   private Context context;
   private final ArrayList<Task> tasks;
+  private final HashMap<Integer, TaskCategory> taskCategoriesHashMap;
+  private final HashMap<Integer, User> usersHashMap;
   private final PluralUtil pluralUtil;
   private final TasksItemAdapterListener listener;
   private String sortMode;
@@ -49,12 +60,16 @@ public class TasksItemAdapter extends
   public TasksItemAdapter(
       Context context,
       ArrayList<Task> tasks,
+      HashMap<Integer, TaskCategory> taskCategories,
+      HashMap<Integer, User> usersHashMap,
       TasksItemAdapterListener listener,
       String sortMode,
       boolean sortAscending
   ) {
     this.context = context;
     this.tasks = new ArrayList<>(tasks);
+    this.taskCategoriesHashMap = new HashMap<>(taskCategories);
+    this.usersHashMap = new HashMap<>(usersHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.listener = listener;
     this.sortMode = sortMode;
@@ -119,6 +134,75 @@ public class TasksItemAdapter extends
       holder.binding.title.setAlpha(1.0f);
     }
 
+    // BEST BEFORE
+
+    String date = task.getDueDate();
+    Integer days = null;
+    boolean colorDays = false;
+    if (date != null) {
+      days = DateUtil.getDaysFromNow(date);
+    }
+
+    if (days != null && !task.isDone()) {
+      holder.binding.days.setVisibility(View.VISIBLE);
+      holder.binding.days.setText(new DateUtil(context).getHumanForDaysFromNow(date));
+      if (days <= 5) {
+        colorDays = true;
+      }
+    } else {
+      holder.binding.days.setVisibility(View.GONE);
+    }
+
+    if (colorDays) {
+      holder.binding.days.setTypeface(
+          ResourcesCompat.getFont(context, R.font.jost_medium)
+      );
+      @ColorRes int color;
+      if (days < 0) {
+        color = R.color.retro_red_fg;
+      } else if (days == 0) {
+        color = R.color.retro_blue_fg;
+      } else {
+        color = R.color.retro_yellow;
+      }
+      holder.binding.days.setTextColor(ContextCompat.getColor(context, color));
+    } else {
+      holder.binding.days.setTypeface(
+          ResourcesCompat.getFont(context, R.font.jost_book)
+      );
+      holder.binding.days.setTextColor(
+          ContextCompat.getColor(context, R.color.on_background_secondary)
+      );
+    }
+
+    // CATEGORY
+
+    TaskCategory category = task.getCategoryId() != null
+        ? taskCategoriesHashMap.get(Integer.parseInt(task.getCategoryId())) : null;
+    if (task.isDone()) {
+      holder.binding.category.setVisibility(View.GONE);
+    } else if (category != null) {
+      holder.binding.category.setText(category.getName());
+      holder.binding.category.setTypeface(null, Typeface.NORMAL);
+      holder.binding.category.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.category.setText(holder.binding.category.getContext()
+          .getString(R.string.subtitle_uncategorized));
+      holder.binding.category.setTypeface(null, Typeface.ITALIC);
+      holder.binding.category.setVisibility(View.VISIBLE);
+    }
+
+    // USER
+
+    User user = task.getAssignedToUserId() != null
+        ? usersHashMap.get(Integer.parseInt(task.getAssignedToUserId())) : null;
+    if (user != null && !task.isDone()) {
+      holder.binding.user.setText(user.getDisplayName());
+      holder.binding.user.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.user.setVisibility(View.GONE);
+    }
+
     // CONTAINER
 
     holder.binding.linearContainer.setOnClickListener(
@@ -138,6 +222,8 @@ public class TasksItemAdapter extends
 
   public void updateData(
       ArrayList<Task> newList,
+      HashMap<Integer, TaskCategory> taskCategoriesHashMap,
+      HashMap<Integer, User> usersHashMap,
       String sortMode,
       boolean sortAscending
   ) {
@@ -145,6 +231,10 @@ public class TasksItemAdapter extends
     TasksItemAdapter.DiffCallback diffCallback = new TasksItemAdapter.DiffCallback(
         this.tasks,
         newList,
+        this.taskCategoriesHashMap,
+        taskCategoriesHashMap,
+        this.usersHashMap,
+        usersHashMap,
         this.sortMode,
         sortMode,
         this.sortAscending,
@@ -153,6 +243,10 @@ public class TasksItemAdapter extends
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.tasks.clear();
     this.tasks.addAll(newList);
+    this.taskCategoriesHashMap.clear();
+    this.taskCategoriesHashMap.putAll(taskCategoriesHashMap);
+    this.usersHashMap.clear();
+    this.usersHashMap.putAll(usersHashMap);
     this.sortMode = sortMode;
     diffResult.dispatchUpdatesTo(this);
   }
@@ -161,6 +255,10 @@ public class TasksItemAdapter extends
 
     ArrayList<Task> oldItems;
     ArrayList<Task> newItems;
+    HashMap<Integer, TaskCategory> taskCategoriesHashMapOld;
+    HashMap<Integer, TaskCategory> taskCategoriesHashMapNew;
+    HashMap<Integer, User> usersHashMapOld;
+    HashMap<Integer, User> usersHashMapNew;
     String sortModeOld;
     String sortModeNew;
     boolean sortAscendingOld;
@@ -169,6 +267,10 @@ public class TasksItemAdapter extends
     public DiffCallback(
         ArrayList<Task> oldItems,
         ArrayList<Task> newItems,
+        HashMap<Integer, TaskCategory> taskCategoriesHashMapOld,
+        HashMap<Integer, TaskCategory> taskCategoriesHashMapNew,
+        HashMap<Integer, User> usersHashMapOld,
+        HashMap<Integer, User> usersHashMapNew,
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
@@ -176,6 +278,10 @@ public class TasksItemAdapter extends
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
+      this.taskCategoriesHashMapOld = taskCategoriesHashMapOld;
+      this.taskCategoriesHashMapNew = taskCategoriesHashMapNew;
+      this.usersHashMapOld = usersHashMapOld;
+      this.usersHashMapNew = usersHashMapNew;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
@@ -210,6 +316,26 @@ public class TasksItemAdapter extends
         return false;
       }
       if (sortAscendingOld != sortAscendingNew) {
+        return false;
+      }
+
+      TaskCategory taskCategoryOld = oldItem.getCategoryId() != null
+          ? taskCategoriesHashMapOld.get(Integer.parseInt(oldItem.getCategoryId())) : null;
+      TaskCategory taskCategoryNew = newItem.getCategoryId() != null
+          ? taskCategoriesHashMapNew.get(Integer.parseInt(newItem.getCategoryId())) : null;
+      if (taskCategoryOld == null && taskCategoryNew != null
+          || taskCategoryOld != null && taskCategoryNew == null
+          || taskCategoryOld != null && !taskCategoryOld.equals(taskCategoryNew)) {
+        return false;
+      }
+
+      User userOld = oldItem.getAssignedToUserId() != null
+          ? usersHashMapOld.get(Integer.parseInt(oldItem.getAssignedToUserId())) : null;
+      User userNew = newItem.getAssignedToUserId() != null
+          ? usersHashMapNew.get(Integer.parseInt(newItem.getAssignedToUserId())) : null;
+      if (userOld == null && userNew != null
+          || userOld != null && userNew == null
+          || userOld != null && !userOld.equals(userNew)) {
         return false;
       }
 

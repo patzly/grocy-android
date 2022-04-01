@@ -53,10 +53,12 @@ public final class Constants {
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
     public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
-
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
     public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
+    public final static String TASKS_SORT_MODE = "tasks_sort_mode";
+    public final static String TASKS_SORT_ASCENDING = "tasks_sort_ascending";
+    public final static String TASKS_SHOW_DONE = "tasks_show_done";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
     public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
@@ -75,6 +77,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
     public final static String DB_LAST_TIME_TASKS = "db_last_time_tasks";
     public final static String DB_LAST_TIME_TASK_CATEGORIES = "db_last_time_task_categories";
+    public final static String DB_LAST_TIME_USERS = "db_last_time_users";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";

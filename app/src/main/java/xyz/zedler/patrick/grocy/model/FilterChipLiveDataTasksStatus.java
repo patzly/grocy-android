@@ -20,10 +20,13 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
+import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class FilterChipLiveDataTasksStatus extends FilterChipLiveData {
 
@@ -34,13 +37,17 @@ public class FilterChipLiveDataTasksStatus extends FilterChipLiveData {
   public final static int STATUS_DONE = 4;
 
   private final Application application;
+  private final SharedPreferences sharedPrefs;
   private int dueTodayCount = 0;
   private int dueSoonCount = 0;
   private int overdueCount = 0;
-  private boolean showDoneTasks = false;
+  private boolean showDoneTasks;
 
   public FilterChipLiveDataTasksStatus(Application application, Runnable clickListener) {
     this.application = application;
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    showDoneTasks = sharedPrefs.getBoolean(PREF.TASKS_SHOW_DONE, false);
+
     setStatus(STATUS_ALL, null);
     if (clickListener != null) {
       setMenuItemClickListener(item -> {
@@ -62,6 +69,7 @@ public class FilterChipLiveDataTasksStatus extends FilterChipLiveData {
       setText(application.getString(R.string.property_status));
     } else if (status == STATUS_DONE) {
       showDoneTasks = !showDoneTasks;
+      sharedPrefs.edit().putBoolean(PREF.TASKS_SHOW_DONE, showDoneTasks).apply();
       emitCounts();
       return this;
     } else {
