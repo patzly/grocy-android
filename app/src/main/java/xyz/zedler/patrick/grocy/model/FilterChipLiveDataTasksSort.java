@@ -45,7 +45,7 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
     setItemIdChecked(-1);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
-    sortMode = sharedPrefs.getString(PREF.TASKS_SORT_MODE, SORT_NAME);
+    sortMode = sharedPrefs.getString(PREF.TASKS_SORT_MODE, SORT_DUE_DATE);
     sortAscending = sharedPrefs.getBoolean(PREF.TASKS_SORT_ASCENDING, true);
     setFilterText();
     setItems();

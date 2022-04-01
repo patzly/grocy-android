@@ -389,6 +389,11 @@
         app:argType="string"
         app:nullable="true"
         android:defaultValue="@null" />
+      <argument
+        android:name="serverURL"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
     </fragment>
     <fragment
       android:id="@+id/loginApiFormFragment"
@@ -414,6 +419,11 @@
         android:defaultValue="@null" />
       <argument
         android:name="homeAssistantToken"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
+      <argument
+        android:name="serverUrl"
         app:argType="string"
         app:nullable="true"
         android:defaultValue="@null" />

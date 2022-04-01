@@ -16,6 +16,7 @@
 - Fixed: Private demo test instances not working after app restart
 - Fixed: Different unit conversion behavior than on server in some cases (#490)
 - Fixed: Some special characters were removed from name of new product from barcode (#505)
+- Fixed: Home Assistant login now works with add-on version 0.17.0 using QR codes (#509)
 
 2.1.1:
 - New: Support for grocy server 3.2.0

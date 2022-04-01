@@ -43,6 +43,7 @@ public class LoginApiFormFragment extends BaseFragment {
   private FragmentLoginApiFormBinding binding;
   private MainActivity activity;
   private LoginApiFormViewModel viewModel;
+  private LoginApiFormFragmentArgs args;
 
   @Override
   public View onCreateView(
@@ -63,7 +64,7 @@ public class LoginApiFormFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    LoginApiFormFragmentArgs args = LoginApiFormFragmentArgs.fromBundle(requireArguments());
+    args = LoginApiFormFragmentArgs.fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new LoginApiFormViewModel
         .LoginApiFormViewModelFactory(activity.getApplication(), args)
     ).get(LoginApiFormViewModel.class);
@@ -147,6 +148,16 @@ public class LoginApiFormFragment extends BaseFragment {
 
   public void showFeedbackBottomSheet() {
     activity.showBottomSheet(new FeedbackBottomSheet());
+  }
+
+  @Override
+  void onEnterAnimationEnd() {
+    if (!viewModel.isAutoProceedDoneWasDone() && args.getServerUrl() != null
+        && args.getGrocyApiKey() != null && args.getGrocyIngressProxyId() != null
+        && args.getHomeAssistantToken() != null && viewModel.getFormData().isFormValid()) {
+      viewModel.setAutoProceedDoneWasDone(true);
+      proceedWithLogin();
+    }
   }
 
   @Override

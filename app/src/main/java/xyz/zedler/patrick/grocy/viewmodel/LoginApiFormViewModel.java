@@ -20,34 +20,35 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
 import xyz.zedler.patrick.grocy.model.FormDataLoginApiForm;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class LoginApiFormViewModel extends BaseViewModel {
 
   private static final String TAG = LoginApiFormViewModel.class.getSimpleName();
 
-  private final SharedPreferences sharedPrefs;
   private final FormDataLoginApiForm formData;
-
-  private final boolean debug;
+  private boolean autoProceedDoneWasDone = false;
 
   public LoginApiFormViewModel(@NonNull Application application, LoginApiFormFragmentArgs args) {
     super(application);
 
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
-    debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     formData = new FormDataLoginApiForm(application, args);
   }
 
   public FormDataLoginApiForm getFormData() {
     return formData;
+  }
+
+  public boolean isAutoProceedDoneWasDone() {
+    return autoProceedDoneWasDone;
+  }
+
+  public void setAutoProceedDoneWasDone(boolean autoProceedDoneWasDone) {
+    this.autoProceedDoneWasDone = autoProceedDoneWasDone;
   }
 
   public static class LoginApiFormViewModelFactory implements ViewModelProvider.Factory {
