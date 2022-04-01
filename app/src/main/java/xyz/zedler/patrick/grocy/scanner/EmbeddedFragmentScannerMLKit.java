@@ -99,6 +99,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final BarcodeListener barcodeListener;
   private final boolean cropImageToPreviewRect;
   private boolean supressNextScanStart = false;
+  private boolean qrCodeFormat;
 
   public EmbeddedFragmentScannerMLKit(
       Fragment fragment,
@@ -111,6 +112,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     this.fragment = fragment;
     this.activity = (MainActivity) fragment.requireActivity();
     this.barcodeListener = barcodeListener;
+    this.qrCodeFormat = qrCodeFormat;
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
     cropImageToPreviewRect = sharedPrefs.getBoolean(
@@ -489,6 +491,9 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
             break;
         }
       }
+    }
+    if (qrCodeFormat && !enabledBarcodeFormats.contains(Barcode.FORMAT_QR_CODE)) {
+      enabledBarcodeFormats.add(Barcode.FORMAT_QR_CODE);
     }
     return enabledBarcodeFormats;
   }
