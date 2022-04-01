@@ -111,6 +111,7 @@
   <string name="action_share">Partager</string>
   <string name="action_share_description">Parlez à vos amis de Grocy Android</string>
   <string name="action_no_filter">Pas de filtre</string>
+  <string name="action_show_done_tasks">Afficher les tâches terminées</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -172,6 +173,11 @@
   <plurals name="msg_due_tasks">
     <item quantity="one">%1$d à faire prochainement</item>
     <item quantity="other">%1$d à faire prochainement</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d à faire aujourd\'hui</item>
+    <item quantity="other">%1$d à faire aujourd\'hui</item>
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
