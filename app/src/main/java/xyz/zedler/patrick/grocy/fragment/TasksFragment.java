@@ -19,8 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
@@ -142,6 +141,8 @@ public class TasksFragment extends BaseFragment implements
         InfoFullscreen info;
         if (viewModel.isSearchActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
+        } else if (viewModel.getFilterChipLiveDataStatus().getData().isActive()) {
+          info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
         } else {
           info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_TASKS);
         }
@@ -152,15 +153,21 @@ public class TasksFragment extends BaseFragment implements
       if (binding.recycler.getAdapter() instanceof TasksItemAdapter) {
         ((TasksItemAdapter) binding.recycler.getAdapter()).updateData(
             items,
-            viewModel.getSortMode()
+            viewModel.getTaskCategoriesHashMap(),
+            viewModel.getUsersHashMap(),
+            viewModel.getSortMode(),
+            viewModel.isSortAscending()
         );
       } else {
         binding.recycler.setAdapter(
             new TasksItemAdapter(
                 requireContext(),
                 items,
+                viewModel.getTaskCategoriesHashMap(),
+                viewModel.getUsersHashMap(),
                 this,
-                viewModel.getSortMode()
+                viewModel.getSortMode(),
+                viewModel.isSortAscending()
             )
         );
       }
@@ -192,7 +199,6 @@ public class TasksFragment extends BaseFragment implements
               || position >= displayedItems.size()) {
             return;
           }
-          Task task = displayedItems.get(position);
           underlayButtons.add(new UnderlayButton(
               R.drawable.ic_round_done,
               pos -> {
@@ -200,10 +206,8 @@ public class TasksFragment extends BaseFragment implements
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                viewModel.performAction(
-                    ACTION.UNDO,
-                    displayedItems.get(pos)
-                );
+                new Handler().postDelayed(() -> viewModel
+                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
               }
           ));
         }
@@ -317,10 +321,6 @@ public class TasksFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void lockOrUnlockRotation() {
-    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
   }
 
   private void showMessage(String msg) {

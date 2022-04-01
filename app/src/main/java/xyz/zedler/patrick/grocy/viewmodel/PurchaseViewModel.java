@@ -105,6 +105,8 @@ public class PurchaseViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> quickModeEnabled;
 
+  private Integer storedPurchaseId;
+  private StoredPurchase storedPurchase;
   private Runnable queueEmptyAction;
 
   public PurchaseViewModel(@NonNull Application application, PurchaseFragmentArgs args) {
@@ -125,6 +127,9 @@ public class PurchaseViewModel extends BaseViewModel {
         batchShoppingListItemIds.add(i);
       }
     }
+    if (NumUtil.isStringInt(args.getStoredPurchaseId())) {
+      storedPurchaseId = Integer.parseInt(args.getStoredPurchaseId());
+    }
 
     infoFullscreenLive = new MutableLiveData<>();
     boolean quickModeStart;
@@ -138,7 +143,14 @@ public class PurchaseViewModel extends BaseViewModel {
     } else {
       quickModeStart = false;
     }
+    if (hasStoredPurchase()) {
+      quickModeStart = false;
+    }
     quickModeEnabled = new MutableLiveData<>(quickModeStart);
+
+    if (hasStoredPurchase()) {
+      setQueueEmptyAction(() -> setStoredPurchase(storedPurchase));
+    }
   }
 
   public FormDataPurchase getFormData() {
@@ -164,6 +176,9 @@ public class PurchaseViewModel extends BaseViewModel {
       this.shoppingListItems = data.getShoppingListItems();
       shoppingListItemHashMap = ArrayUtil.getShoppingListItemHashMap(shoppingListItems);
       fillShoppingListItemAmountsHashMap();
+      if (storedPurchaseId != null) {
+        storedPurchase = StoredPurchase.getFromId(data.getStoredPurchases(), storedPurchaseId);
+      }
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -435,6 +450,41 @@ public class PurchaseViewModel extends BaseViewModel {
     sendEvent(Event.FOCUS_INVALID_VIEWS);
   }
 
+  private void setStoredPurchase(StoredPurchase storedPurchase) {
+    PendingProduct pendingProduct = PendingProduct
+        .getFromId(pendingProducts, storedPurchase.getPendingProductId());
+    if (pendingProduct == null) return;
+
+    formData.getPendingProductLive().setValue(pendingProduct);
+    formData.getProductNameLive().setValue(pendingProduct.getName());
+
+    // amount
+    formData.getAmountLive().setValue(storedPurchase.getAmount());
+
+    // purchased date
+    if (formData.getPurchasedDateEnabled()) {
+      formData.getPurchasedDateLive().setValue(storedPurchase.getPurchasedDate());
+    }
+
+    // due date
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING)) {
+      formData.getDueDateLive().setValue(storedPurchase.getBestBeforeDate());
+    }
+
+    // price
+    if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+      formData.getPriceLive().setValue(storedPurchase.getPrice());
+    }
+
+    // store
+    String storeId = storedPurchase.getStoreId();
+    Store store = NumUtil.isStringInt(storeId) ? getStore(Integer.parseInt(storeId)) : null;
+    formData.getStoreLive().setValue(store);
+    formData.getShowStoreSection().setValue(store != null || !stores.isEmpty());
+
+    formData.isFormValid();
+  }
+
   private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
       Product product,
       Integer forcedQuId
@@ -621,6 +671,10 @@ public class PurchaseViewModel extends BaseViewModel {
       showMessage(R.string.error_missing_information);
       return;
     }
+    if (storedPurchase != null) {
+      overwriteStoredPurchase();
+      return;
+    }
     if (formData.getBarcodeLive().getValue() != null) {
       uploadProductBarcode(this::purchaseProduct);
       return;
@@ -722,15 +776,15 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void purchasePendingProduct() {
-    StoredPurchase productPurchase = formData.fillPendingPurchase();
-    repository.insertPendingPurchase(productPurchase, id -> {
+    StoredPurchase productPurchase = formData.fillStoredPurchase(null);
+    repository.insertStoredPurchase(productPurchase, id -> {
       SnackbarMessage snackbarMessage = new SnackbarMessage(
           formData.getTransactionSuccessMsg(NumUtil.isStringDouble(productPurchase.getAmount())
               ? Double.parseDouble(productPurchase.getAmount()) : 0)
       );
       snackbarMessage.setAction(
           getString(R.string.action_undo),
-          v -> repository.deletePendingPurchase(
+          v -> repository.deleteStoredPurchase(
               id,
               () -> showMessage(getString(R.string.msg_undone_transaction)),
               this::showErrorMessage
@@ -751,6 +805,15 @@ public class PurchaseViewModel extends BaseViewModel {
     barcodes.add(productBarcode); // add to list so it will be found on next scan without reload
     pendingProductBarcodes.add(productBarcode);
     repository.insertPendingProductBarcode(productBarcode, onSuccess);
+  }
+
+  private void overwriteStoredPurchase() {
+    StoredPurchase storedPurchase = formData.fillStoredPurchase(this.storedPurchase);
+    repository.insertStoredPurchase(
+        storedPurchase,
+        id -> sendEvent(Event.TRANSACTION_SUCCESS),
+        this::showErrorMessage
+    );
   }
 
   private void deleteShoppingListItem(int itemId, @NonNull Runnable onFinish) {
@@ -966,6 +1029,10 @@ public class PurchaseViewModel extends BaseViewModel {
     return newList;
   }
 
+  public boolean hasStoredPurchase() {
+    return storedPurchaseId != null;
+  }
+
   public boolean isQuickModeEnabled() {
     if (quickModeEnabled.getValue() == null) {
       return false;
@@ -978,6 +1045,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public boolean toggleQuickModeEnabled() {
+    if (hasStoredPurchase()) return false;
     quickModeEnabled.setValue(!isQuickModeEnabled());
     sendEvent(isQuickModeEnabled() ? Event.QUICK_MODE_ENABLED : Event.QUICK_MODE_DISABLED);
     sharedPrefs.edit()

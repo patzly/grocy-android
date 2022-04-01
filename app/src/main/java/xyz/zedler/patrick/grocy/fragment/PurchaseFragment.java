@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
@@ -139,7 +140,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
-        if (args.getShoppingListItems() != null) {
+        if (viewModel.hasStoredPurchase()) {
+          activity.navigateUp();
+        } else if (args.getShoppingListItems() != null) {
           clearInputFocus();
           viewModel.getFormData().clearForm();
           boolean nextItemValid = viewModel.batchModeNextItem();
@@ -195,6 +198,15 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       viewModel.setQueueEmptyAction(() -> viewModel.setPendingProduct(pendingProductId, null));
     }
 
+    if (viewModel.hasStoredPurchase()) {
+      binding.textInputPurchaseProduct.setEndIconMode(TextInputLayout.END_ICON_CLEAR_TEXT);
+    } else {
+      binding.textInputPurchaseProduct.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+      binding.textInputPurchaseProduct.setEndIconDrawable(R.drawable.ic_round_barcode_scan);
+      binding.textInputPurchaseProduct.setEndIconContentDescription(R.string.action_scan);
+      binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> toggleScannerVisibility());
+    }
+
     pluralUtil = new PluralUtil(activity);
     viewModel.getFormData().getShoppingListItemLive().observe(getViewLifecycleOwner(), item -> {
       if(args.getShoppingListItems() == null || item == null) return;
@@ -247,7 +259,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         this::onMenuItemClick
     );
     activity.updateFab(
-        R.drawable.ic_round_local_grocery_store,
+        viewModel.hasStoredPurchase() ? R.drawable.ic_round_save
+            : R.drawable.ic_round_local_grocery_store,
         R.string.action_purchase,
         Constants.FAB.TAG.PURCHASE,
         animated,
@@ -450,6 +463,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_product_overview) {
       ViewUtil.startIcon(item);
+      if (viewModel.getFormData().getPendingProductLive() != null) {
+        viewModel.showMessage(R.string.subtitle_product_not_on_server);
+        return false;
+      }
       if (!viewModel.getFormData().isProductNameValid()) {
         return false;
       }

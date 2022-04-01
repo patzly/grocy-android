@@ -21,20 +21,20 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
+import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class PurchaseRepository {
 
@@ -59,6 +59,7 @@ public class PurchaseRepository {
     private final List<Store> stores;
     private final List<Location> locations;
     private final List<ShoppingListItem> shoppingListItems;
+    private final List<StoredPurchase> storedPurchases;
 
     public PurchaseData(
         List<Product> products,
@@ -69,7 +70,8 @@ public class PurchaseRepository {
         List<QuantityUnitConversion> quantityUnitConversions,
         List<Store> stores,
         List<Location> locations,
-        List<ShoppingListItem> shoppingListItems
+        List<ShoppingListItem> shoppingListItems,
+        List<StoredPurchase> storedPurchases
     ) {
       this.products = products;
       this.pendingProducts = pendingProducts;
@@ -80,6 +82,7 @@ public class PurchaseRepository {
       this.stores = stores;
       this.locations = locations;
       this.shoppingListItems = shoppingListItems;
+      this.storedPurchases = storedPurchases;
     }
 
     public List<Product> getProducts() {
@@ -117,10 +120,14 @@ public class PurchaseRepository {
     public List<ShoppingListItem> getShoppingListItems() {
       return shoppingListItems;
     }
+
+    public List<StoredPurchase> getStoredPurchases() {
+      return storedPurchases;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
-    Single
+    RxJavaUtil
         .zip(
             appDatabase.productDao().getProducts(),
             appDatabase.pendingProductDao().getPendingProducts(),
@@ -131,6 +138,7 @@ public class PurchaseRepository {
             appDatabase.storeDao().getStores(),
             appDatabase.locationDao().getLocations(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
+            appDatabase.storedPurchaseDao().getStoredPurchases(),
             PurchaseData::new
         )
         .subscribeOn(Schedulers.io())
@@ -144,12 +152,12 @@ public class PurchaseRepository {
         .subscribeOn(Schedulers.io()).subscribe();
   }
 
-  public void insertPendingPurchase(
-          StoredPurchase pendingPurchase,
+  public void insertStoredPurchase(
+          StoredPurchase storedPurchase,
           SuccessIdListener onSuccess,
           Runnable onError
   ) {
-    appDatabase.pendingPurchaseDao().insertStoredPurchase(pendingPurchase)
+    appDatabase.storedPurchaseDao().insertStoredPurchase(storedPurchase)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(onSuccess::onSuccess)
@@ -157,12 +165,8 @@ public class PurchaseRepository {
         .subscribe();
   }
 
-  public void deletePendingPurchase(
-      long id,
-      Runnable onSuccess,
-      Runnable onError
-  ) {
-    appDatabase.pendingPurchaseDao().deleteStoredPurchase(id)
+  public void deleteStoredPurchase(long id, Runnable onSuccess, Runnable onError) {
+    appDatabase.storedPurchaseDao().deleteStoredPurchase(id)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(i -> onSuccess.run())

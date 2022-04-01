@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +39,13 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.TasksRepository;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -60,6 +60,7 @@ public class TasksViewModel extends BaseViewModel {
   private final GrocyApi grocyApi;
   private final TasksRepository repository;
   private final PluralUtil pluralUtil;
+  private final DateUtil dateUtil;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -70,14 +71,14 @@ public class TasksViewModel extends BaseViewModel {
 
   private List<Task> tasks;
   private List<TaskCategory> taskCategories;
-  private HashMap<Integer, Task> taskHashMap;
+  private HashMap<Integer, TaskCategory> taskCategoriesHashMap;
+  private HashMap<Integer, User> usersHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
-  private String sortMode;
-  private int tasksNotDoneCount;
-  private int tasksDoneCount;
-  private boolean sortAscending;
+  private int tasksDueTodayCount;
+  private int tasksDueSoonCount;
+  private int tasksOverdueCount;
   private final boolean debug;
 
   public TasksViewModel(@NonNull Application application) {
@@ -91,6 +92,7 @@ public class TasksViewModel extends BaseViewModel {
     grocyApi = new GrocyApi(getApplication());
     repository = new TasksRepository(application);
     pluralUtil = new PluralUtil(application);
+    dateUtil = new DateUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -104,42 +106,42 @@ public class TasksViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredTasks
     );
-    tasksDoneCount = 0;
-    tasksNotDoneCount = 0;
-    sortMode = sharedPrefs.getString(Constants.PREF.STOCK_SORT_MODE, SORT_NAME);
-    sortAscending = sharedPrefs.getBoolean(Constants.PREF.STOCK_SORT_ASCENDING, true);
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-          this.taskCategories = data.getTaskGroups();
-          this.tasks = data.getTasks();
-          taskHashMap = new HashMap<>();
-          for (Task task : tasks) {
-            taskHashMap.put(task.getId(), task);
-          }
+      tasks = data.getTasks();
+      taskCategories = data.getTaskGroups();
+      taskCategoriesHashMap = ArrayUtil.getTaskCategoriesHashMap(data.getTaskGroups());
+      usersHashMap = ArrayUtil.getUsersHashMap(data.getUsers());
 
-          tasksDoneCount = 0;
-          tasksNotDoneCount = 0;
-          for (Task task : tasks) {
-            if (task.isDone()) {
-              tasksDoneCount++;
-            } else {
-              tasksNotDoneCount++;
-            }
-          }
-
-          filterChipLiveDataStatus
-              .setDueSoonCount(0)
-              .setOverdueCount(0)
-              .emitCounts();
-
-          updateFilteredTasks();
-          if (downloadAfterLoading) {
-            downloadData();
-          }
+      tasksDueTodayCount = 0;
+      tasksDueSoonCount = 0;
+      tasksOverdueCount = 0;
+      for (Task task : data.getTasks()) {
+        int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+        if (daysFromNow < 0) {
+          tasksOverdueCount++;
         }
-    );
+        if (daysFromNow == 0) {
+          tasksDueTodayCount++;
+        }
+        if (daysFromNow >= 0 && daysFromNow <= 5) {
+          tasksDueSoonCount++;
+        }
+      }
+
+      filterChipLiveDataStatus
+          .setDueTodayCount(tasksDueTodayCount)
+          .setDueSoonCount(tasksDueSoonCount)
+          .setOverdueCount(tasksOverdueCount)
+          .emitCounts();
+
+      updateFilteredTasks();
+      if (downloadAfterLoading) {
+        downloadData();
+      }
+    });
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
@@ -159,16 +161,39 @@ public class TasksViewModel extends BaseViewModel {
 
     DownloadHelper.Queue queue = dlHelper.newQueue(this::updateFilteredTasks, this::onDownloadError);
     queue.append(
-        dlHelper.updateTaskCategories(
-            dbChangedTime,
-            taskCategories -> this.taskCategories = taskCategories
-        ), dlHelper.updateTasks(dbChangedTime, tasks -> {
+        dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
+          this.taskCategories = taskCategories;
+          taskCategoriesHashMap = ArrayUtil.getTaskCategoriesHashMap(taskCategories);
+        }), dlHelper.updateTasks(dbChangedTime, tasks -> {
           this.tasks = tasks;
-          taskHashMap = new HashMap<>();
+
+          tasksDueTodayCount = 0;
+          tasksDueSoonCount = 0;
+          tasksOverdueCount = 0;
           for (Task task : tasks) {
-            taskHashMap.put(task.getId(), task);
+            int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+            if (daysFromNow < 0) {
+              tasksOverdueCount++;
+            }
+            if (daysFromNow == 0) {
+              tasksDueTodayCount++;
+            }
+            if (daysFromNow >= 0 && daysFromNow <= 5) {
+              tasksDueSoonCount++;
+            }
           }
-        })
+
+          filterChipLiveDataStatus
+              .setDueTodayCount(tasksDueTodayCount)
+              .setDueSoonCount(tasksDueSoonCount)
+              .setOverdueCount(tasksOverdueCount)
+              .emitCounts();
+
+          updateFilteredTasks();
+        }), dlHelper.updateUsers(
+            dbChangedTime,
+            users -> usersHashMap = ArrayUtil.getUsersHashMap(users)
+        )
     );
 
     if (queue.isEmpty()) {
@@ -186,8 +211,9 @@ public class TasksViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASKS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -206,7 +232,6 @@ public class TasksViewModel extends BaseViewModel {
     ArrayList<Task> filteredTasks = new ArrayList<>();
 
     for (Task task : this.tasks) {
-
       boolean searchContainsItem = true;
       if (searchInput != null && !searchInput.isEmpty()) {
         searchContainsItem = task.getName().toLowerCase().contains(searchInput);
@@ -214,41 +239,40 @@ public class TasksViewModel extends BaseViewModel {
       if (!searchContainsItem) {
         continue;
       }
-
-
-
+      if (!filterChipLiveDataStatus.isShowDoneTasks() && task.isDone()) {
+        continue;
+      }
+      int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
+      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_OVERDUE
+          && daysFromNow >= 0
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_TODAY
+          && daysFromNow != 0
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_SOON
+          && !(daysFromNow >= 0 && daysFromNow <= 5)) {
+        continue;
+      }
       filteredTasks.add(task);
     }
 
-    switch (sortMode) {
-      case SORT_NAME:
-        SortUtil.sortTasksByName(getApplication(), filteredTasks, sortAscending);
-        break;
+    boolean sortAscending = filterChipLiveDataSort.isSortAscending();
+    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
+      SortUtil.sortTasksByDueDate(filteredTasks, sortAscending);
+    } else {
+      SortUtil.sortTasksByName(getApplication(), filteredTasks, sortAscending);
     }
 
     filteredTasksLive.setValue(filteredTasks);
   }
 
-  public void performAction(String action, Task task) {
-    switch (action) {
-      case Constants.ACTION.COMPLETE:
-        markTask(task, true);
-        break;
-      case Constants.ACTION.UNDO:
-        markTask(task, false);
-        break;
-    }
-  }
-
-  private void markTask(Task task, boolean completed) {
-    // TODO Not just the done_time?
-    LocalDateTime done_time = LocalDateTime.now();
+  public void changeTaskDoneStatus(int taskId) {
+    Task task = Task.getTaskFromId(tasks, taskId);
+    if (task == null) return;
     JSONObject body = new JSONObject();
     try {
-      body.put("done_time", done_time);
+      body.put("done_time", dateUtil.getCurrentDateWithTimeStr());
     } catch (JSONException e) {
       if (debug) {
-        if (completed) {
+        if (!task.isDone()) {
           Log.e(TAG, "completeTask: " + e);
         } else {
           Log.e(TAG, "undoTask: " + e);
@@ -256,29 +280,16 @@ public class TasksViewModel extends BaseViewModel {
       }
     }
     dlHelper.postWithArray(
-        completed ? grocyApi.completeTask(task.getId()) : grocyApi.undoTask(task.getId()),
+        !task.isDone() ? grocyApi.completeTask(task.getId()) : grocyApi.undoTask(task.getId()),
         body,
         response -> {
-          String transactionId = null;
-          try {
-            transactionId = response.getJSONObject(0)
-                .getString("transaction_id");
-          } catch (JSONException e) {
-            if (completed) {
-              Log.e(TAG, "completeTask: " + e);
-            } else {
-              Log.e(TAG, "undoTask: " + e);
-            }
-          }
-
           String msg = getApplication().getString(
-              completed ? R.string.msg_task_completed : R.string.msg_task_undo, task.getName()
+              !task.isDone() ? R.string.msg_task_completed : R.string.msg_task_not_completed
           );
-          SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
-
+          showMessage(msg);
           downloadData();
-          showSnackbar(snackbarMsg);
-          if (completed) {
+
+          if (!task.isDone()) {
             Log.i(
                 TAG, "completeTask: completed " + task.getName()
             );
@@ -289,7 +300,7 @@ public class TasksViewModel extends BaseViewModel {
         error -> {
           showErrorMessage(error);
           if (debug) {
-            if (completed) {
+            if (!task.isDone()) {
               Log.i(TAG, "completeTask: " + error);
             } else {
               Log.i(TAG, "undoTask: " + error);
@@ -320,51 +331,25 @@ public class TasksViewModel extends BaseViewModel {
     return () -> filterChipLiveDataSort;
   }
 
-  public int getTasksDoneCount() {
-    return tasksDoneCount;
-  }
-
-  public int getTasksNotDoneCount() {
-    return tasksNotDoneCount;
-  }
-
-  public int getTasksDueCount() {
-    // TODO
-    return 0;
-  }
-
-  public int getTasksOverdueCount(){
-    // TODO
-    return 0;
-  }
-
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
     updateFilteredTasks();
   }
 
   public String getSortMode() {
-    return sortMode;
-  }
-
-  public void setSortMode(String sortMode) {
-    this.sortMode = sortMode;
-    sharedPrefs.edit().putString(Constants.PREF.STOCK_SORT_MODE, sortMode).apply();
-    updateFilteredTasks();
+    return filterChipLiveDataSort.getSortMode();
   }
 
   public boolean isSortAscending() {
-    return sortAscending;
+    return filterChipLiveDataSort.isSortAscending();
   }
 
-  public void setSortAscending(boolean sortAscending) {
-    this.sortAscending = sortAscending;
-    sharedPrefs.edit().putBoolean(Constants.PREF.STOCK_SORT_ASCENDING, sortAscending).apply();
-    updateFilteredTasks();
+  public HashMap<Integer, TaskCategory> getTaskCategoriesHashMap() {
+    return taskCategoriesHashMap;
   }
 
-  public HashMap<Integer, Task> getTaskHashMap() {
-    return taskHashMap;
+  public HashMap<Integer, User> getUsersHashMap() {
+    return usersHashMap;
   }
 
   @NonNull

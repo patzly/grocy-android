@@ -36,5 +36,6 @@
   <string name="deep_link_aboutFragment" translatable="false">grocy://aboutFragment</string>
   <string name="deep_link_masterProductFragment" translatable="false">grocy://masterProductFragment?action={action}&amp;productName={productName}&amp;productId={productId}&amp;pendingProductId={pendingProductId}&amp;pendingProductBarcodes={pendingProductBarcodes}</string>
   <string name="deep_link_masterDataOverviewFragment" translatable="false">grocy://masterDataOverviewFragment</string>
+  <string name="deep_link_storedPurchasesFragment" translatable="false">grocy://storedPurchasesFragment</string>
 
 </resources>

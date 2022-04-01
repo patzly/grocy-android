@@ -125,6 +125,27 @@ public class SortUtil {
     ));
   }
 
+  public static void sortTasksByDueDate(List<Task> tasks, boolean ascending) {
+    if (tasks == null || tasks.isEmpty()) {
+      return;
+    }
+    Collections.sort(
+        tasks,
+        (item1, item2) -> {
+          String bbd1 = (ascending ? item1 : item2).getDueDate();
+          String bbd2 = (ascending ? item2 : item1).getDueDate();
+          if (bbd1 == null && bbd2 == null) {
+            return 0;
+          } else if (bbd1 == null) {
+            return -1; // or 1 when items without BBD should be last
+          } else if (bbd2 == null) {
+            return 1; // or -1 when items without BBD should be last
+          }
+          return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
+        }
+    );
+  }
+
   public static void sortTaskCategoriesByName(
       Context context,
       ArrayList<TaskCategory> taskCategories,

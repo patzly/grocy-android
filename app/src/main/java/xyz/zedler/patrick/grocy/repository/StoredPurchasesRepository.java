@@ -84,7 +84,7 @@ public class StoredPurchasesRepository {
         appDatabase.productDao().getProducts(),
         appDatabase.pendingProductDao().getPendingProducts(),
         appDatabase.pendingProductBarcodeDao().getProductBarcodes(),
-        appDatabase.pendingPurchaseDao().getStoredPurchases(),
+        appDatabase.storedPurchaseDao().getStoredPurchases(),
         StoredPurchasesData::new
     )
         .subscribeOn(Schedulers.io())

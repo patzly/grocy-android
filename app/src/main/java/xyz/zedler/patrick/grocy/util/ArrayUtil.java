@@ -33,6 +33,9 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 
 public class ArrayUtil {
 
@@ -143,6 +146,32 @@ public class ArrayUtil {
         hashMap.put(unitConversion.getProductId(), unitConversionArrayList);
       }
       unitConversionArrayList.add(unitConversion);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, Task> getTasksHashMap(List<Task> tasks) {
+    HashMap<Integer, Task> hashMap = new HashMap<>();
+    for (Task t : tasks) {
+      hashMap.put(t.getId(), t);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, TaskCategory> getTaskCategoriesHashMap(
+      List<TaskCategory> taskCategories
+  ) {
+    HashMap<Integer, TaskCategory> hashMap = new HashMap<>();
+    for (TaskCategory t : taskCategories) {
+      hashMap.put(t.getId(), t);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, User> getUsersHashMap(List<User> users) {
+    HashMap<Integer, User> hashMap = new HashMap<>();
+    for (User u : users) {
+      hashMap.put(u.getId(), u);
     }
     return hashMap;
   }

@@ -165,7 +165,7 @@
               android:paddingStart="@dimen/main_side_margin"
               android:paddingEnd="@dimen/main_side_margin"
               android:clipToPadding="false"
-              android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance || viewModel.isStockDisabled ? View.VISIBLE : View.GONE}">
+              android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance || !viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK) ? View.VISIBLE : View.GONE}">
 
               <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.Grocy.Card.Filled"
@@ -201,7 +201,7 @@
 
               <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.Grocy.Card.Filled"
-                android:visibility="@{viewModel.isStockDisabled ? View.VISIBLE : View.GONE}"
+                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK) ? View.GONE : View.VISIBLE}"
                 android:layout_marginBottom="8dp">
 
                 <TextView
@@ -428,6 +428,24 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Filled"
+              android:visibility="@{viewModel.storedPurchasesOnDevice ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
+              android:layout_marginBottom="8dp"
+              android:layout_marginHorizontal="16dp"
+              app:clickUtil="@{clickUtil}">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/retro_red_fg"
+                android:fontFamily="@font/jost_medium"
+                android:text="@string/msg_stored_purchases_overview" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
               style="@style/Widget.Grocy.Card"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
@@ -622,7 +640,7 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
-              android:visibility="gone"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_tasksFragment)}"
               app:clickUtil="@{clickUtil}">
 
@@ -650,7 +668,7 @@
             <View
               android:layout_width="70dp"
               android:layout_height="1dp"
-              android:visibility="gone"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) ? View.VISIBLE : View.GONE}"
               android:background="@color/stroke_secondary"
               android:layout_gravity="center_horizontal"
               android:layout_marginBottom="16dp"

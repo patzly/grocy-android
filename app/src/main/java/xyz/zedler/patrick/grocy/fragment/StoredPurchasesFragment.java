@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
@@ -115,6 +116,7 @@ public class StoredPurchasesFragment extends BaseFragment
         ((StoredPurchaseAdapter) binding.recycler.getAdapter()).updateData(items);
       } else {
         binding.recycler.setAdapter(new StoredPurchaseAdapter(
+            requireContext(),
             items,
             viewModel.getProductBarcodeHashMap(),
             this
@@ -206,6 +208,9 @@ public class StoredPurchasesFragment extends BaseFragment
               .setProductId(String.valueOf(((Product) item).getId()))
               .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))
               .build().toBundle());
+    } else if (item instanceof StoredPurchase) {
+      navigate(StoredPurchasesFragmentDirections.actionStoredPurchasesFragmentToPurchaseFragment()
+          .setStoredPurchaseId(String.valueOf(((StoredPurchase) item).getId())));
     }
 
   }

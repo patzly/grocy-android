@@ -177,6 +177,17 @@ public class OverviewStartFragment extends BaseFragment {
     }
   }
 
+  public void navigateToStoredPurchases() {
+    if (viewModel.getBeginnerModeEnabled()) {
+      Bundle bundle = new SettingsFragmentArgs.Builder()
+          .setShowCategory(Constants.SETTINGS.SERVER.class.getSimpleName())
+          .build().toBundle();
+      navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
+    } else {
+      navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+    }
+  }
+
   public void startLogoAnimation() {
     if (clickUtil.isDisabled()) {
       return;

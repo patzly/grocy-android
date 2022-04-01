@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -97,6 +98,7 @@ public class FormDataPurchase {
   private final LiveData<String> locationNameLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
+  private boolean noScanner = false;
 
   public FormDataPurchase(
       Application application,
@@ -105,7 +107,7 @@ public class FormDataPurchase {
   ) {
     DateUtil dateUtil = new DateUtil(application);
     AppDatabase appDatabase = AppDatabase.getAppDatabase(application);
-    pendingPurchasesLive = appDatabase.pendingPurchaseDao().getAllLive();
+    pendingPurchasesLive = appDatabase.storedPurchaseDao().getAllLive();
     pendingProductsLive = appDatabase.pendingProductDao().getAllLive();
     this.application = application;
     this.sharedPrefs = sharedPrefs;
@@ -124,14 +126,16 @@ public class FormDataPurchase {
     );
     shoppingListItemLive = new MutableLiveData<>();
     pendingProductLive = new MutableLiveData<>();
-    scannerVisibilityLive = new MutableLiveData<>(false);
-    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
-    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
-        .getCloseWhenFinished()) {
-      scannerVisibilityLive.setValue(true);
+    boolean scannerVisibilityStart;
+    if (!getExternalScannerEnabled() || !args.getCloseWhenFinished()
+        || args.getStoredPurchaseId() != null) {
+      scannerVisibilityStart = false;
+    } else if (args.getStartWithScanner() || getCameraScannerWasVisibleLastTime()) {
+      scannerVisibilityStart = true;
+    } else {
+      scannerVisibilityStart = false;
     }
+    scannerVisibilityLive = new MutableLiveData<>(scannerVisibilityStart);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
     isTareWeightEnabledLive = Transformations.map(
@@ -255,6 +259,7 @@ public class FormDataPurchase {
         location -> location != null ? location.getName() : null
     );
     pluralUtil = new PluralUtil(application);
+    noScanner = args.getStoredPurchaseId() != null;
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -638,6 +643,10 @@ public class FormDataPurchase {
     this.currentProductFlowInterrupted = currentProductFlowInterrupted;
   }
 
+  public boolean isNoScanner() {
+    return noScanner;
+  }
+
   public boolean isProductNameValid() {
     if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
       if (productDetailsLive.getValue() != null || pendingProductLive.getValue() != null) {
@@ -878,40 +887,42 @@ public class FormDataPurchase {
     return productBarcode;
   }
 
-  public StoredPurchase fillPendingPurchase() {
+  public StoredPurchase fillStoredPurchase(@Nullable StoredPurchase storedPurchase) {
     if (!isFormValid()) {
       return null;
     }
     assert pendingProductLive.getValue() != null;
     PendingProduct product = pendingProductLive.getValue();
 
-    StoredPurchase pendingPurchase = new StoredPurchase();
-    pendingPurchase.setPendingProductId(product.getId());
-    pendingPurchase.setAmount(amountLive.getValue());
+    if (storedPurchase == null) {
+      storedPurchase = new StoredPurchase();
+    }
+    storedPurchase.setPendingProductId(product.getId());
+    storedPurchase.setAmount(amountLive.getValue());
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       if (NumUtil.isStringDouble(priceStockLive.getValue())) {
-        pendingPurchase.setPrice(priceStockLive.getValue());
+        storedPurchase.setPrice(priceStockLive.getValue());
       }
       Store store = storeLive.getValue();
       String storeId = store != null ? String.valueOf(store.getId()) : null;
       if (storeId != null) {
-        pendingPurchase.setStoreId(storeId);
+        storedPurchase.setStoreId(storeId);
       }
     }
     String purchasedDate = purchasedDateLive.getValue();
     if (getPurchasedDateEnabled() && purchasedDate != null) {
-      pendingPurchase.setPurchasedDate(purchasedDate);
+      storedPurchase.setPurchasedDate(purchasedDate);
     }
     Location location = locationLive.getValue();
     if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
-      pendingPurchase.setLocationId(String.valueOf(location.getId()));
+      storedPurchase.setLocationId(String.valueOf(location.getId()));
     }
     String dueDate = dueDateLive.getValue();
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
       dueDate = Constants.DATE.NEVER_OVERDUE;
     }
-    pendingPurchase.setBestBeforeDate(dueDate);
-    return pendingPurchase;
+    storedPurchase.setBestBeforeDate(dueDate);
+    return storedPurchase;
   }
 
   public void clearForm() {

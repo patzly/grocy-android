@@ -62,6 +62,9 @@ public class FormDataLoginApiForm {
     httpRadioButtonCheckedLive = new MutableLiveData<>(false);
     httpsRadioButtonCheckedLive = new MutableLiveData<>(false);
     serverUrlLive = new MutableLiveData<>();
+    if (args.getServerUrl() != null) {
+      serverUrlLive.setValue(args.getServerUrl());
+    }
     serverUrlErrorLive = new MutableLiveData<>();
     serverUrlValidLive = Transformations.map(
         serverUrlLive,
@@ -70,6 +73,7 @@ public class FormDataLoginApiForm {
     serverUrlPortInfoLive = Transformations.map(
         serverUrlLive,
         serverUrl -> {
+          if (serverUrl == null) return null;
           int port;
           boolean hasPortInUrl = false;
           try {
@@ -104,12 +108,14 @@ public class FormDataLoginApiForm {
     apiKeyLive = new MutableLiveData<>(args.getGrocyApiKey());
     apiKeyErrorLive = new MutableLiveData<>();
 
-    if (sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null) != null) {
+    if ((serverUrlLive.getValue() == null || serverUrlLive.getValue().isEmpty())
+        && sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null) != null) {
       serverUrlLive.setValue(
           sharedPrefsPrivate.getString(Constants.PREF.SERVER_URL, null)
       );
     }
-    if (sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null) != null) {
+    if ((apiKeyLive.getValue() == null || apiKeyLive.getValue().isEmpty())
+        && sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null) != null) {
       apiKeyLive.setValue(
           sharedPrefsPrivate.getString(Constants.PREF.API_KEY, null)
       );

@@ -1,7 +1,6 @@
 # TODO
 
 ## upcoming changelog lines:
-- New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
 
 ## Android 12 and Material You
 

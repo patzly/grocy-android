@@ -118,6 +118,7 @@
   <string name="action_share">Share</string>
   <string name="action_share_description">Tell your friends about Grocy Android</string>
   <string name="action_no_filter">No filter</string>
+  <string name="action_show_done_tasks">Show done tasks</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -180,6 +181,11 @@
     <item quantity="one">%1$d due soon</item>
     <item quantity="other">%1$d due soon</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d due today</item>
+    <item quantity="other">%1$d due today</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d overdue</item>
@@ -234,6 +240,7 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
   <string name="msg_stored_purchases_product_online">Tap here to send the stored purchases for this product to the server.</string>
@@ -505,6 +512,7 @@
   <string name="subtitle_empty">Empty</string>
   <string name="subtitle_done">Done</string>
   <string name="subtitle_undone">Undone</string>
+  <string name="subtitle_uncategorized">Uncategorized</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Never overdue</string>
   <string name="subtitle_selected">Selected</string>
@@ -664,6 +672,8 @@
   <string name="property_due_type_expiration">Expiration date</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Due date</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Due date: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Next due date</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->

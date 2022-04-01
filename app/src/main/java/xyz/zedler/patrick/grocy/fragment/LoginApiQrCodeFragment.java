@@ -116,8 +116,14 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       String apiURL = resultSplit[0];
       String serverURL = apiURL.replaceAll("/api$", "");
       String ingressProxyId = null;
-      if (serverURL.startsWith("/api/hassio_ingress/")) {
-        ingressProxyId = serverURL.replace("/api/hassio_ingress/", "");
+      String serverURLHomeAssistant = null;
+      if (serverURL.contains("/api/hassio_ingress/")) {
+        String[] serverURLAndIngressProxyId = serverURL.split("/api/hassio_ingress/");
+        serverURLHomeAssistant = serverURLAndIngressProxyId[0];
+        if (serverURLHomeAssistant != null && serverURLHomeAssistant.isEmpty()) {
+          serverURLHomeAssistant = null;
+        }
+        ingressProxyId = serverURLAndIngressProxyId[1];
       }
       String apiKey = resultSplit[1];
 
@@ -127,6 +133,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       } else { // grocy home assistant add-on used
         navigate(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentSelf()
+            .setServerURL(serverURLHomeAssistant)
             .setGrocyIngressProxyId(ingressProxyId)
             .setGrocyApiKey(apiKey));
       }
@@ -139,6 +146,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       }
       navigate(LoginApiQrCodeFragmentDirections
           .actionLoginApiQrCodeFragmentToLoginApiFormFragment()
+          .setServerUrl(args.getServerURL())
           .setGrocyIngressProxyId(args.getGrocyIngressProxyId())
           .setGrocyApiKey(args.getGrocyApiKey())
           .setHomeAssistantToken(rawValue));
