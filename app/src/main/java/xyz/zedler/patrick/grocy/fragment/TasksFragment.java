@@ -41,14 +41,19 @@ import xyz.zedler.patrick.grocy.adapter.TasksItemAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentTasksBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
 
@@ -276,13 +281,27 @@ public class TasksFragment extends BaseFragment implements
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    showTaskOverview(task);
+    Bundle bundle = new Bundle();
+    bundle.putParcelable(ARGUMENT.TASK, task);
+    TaskCategory category = NumUtil.isStringInt(task.getCategoryId())
+        ? viewModel.getTaskCategoriesHashMap().get(Integer.parseInt(task.getCategoryId())) : null;
+    String categoryText = category != null ? category.getName()
+        : getString(R.string.subtitle_uncategorized);
+    bundle.putString(ARGUMENT.TASK_CATEGORY, categoryText);
+    User user = NumUtil.isStringInt(task.getAssignedToUserId())
+        ? viewModel.getUsersHashMap().get(Integer.parseInt(task.getAssignedToUserId())) : null;
+    bundle.putString(ARGUMENT.USER, user != null ? user.getDisplayName() : null);
+    activity.showBottomSheet(new TaskEntryBottomSheet(), bundle);
   }
 
-  private void showTaskOverview(Task task) {
-    if (task == null) {
-      return;
-    }
+  @Override
+  public void toggleDoneStatus(Task task) {
+    viewModel.changeTaskDoneStatus(task.getId());
+  }
+
+  @Override
+  public void deleteTask(Task task) {
+    viewModel.deleteTask(task.getId());
   }
 
   @Override

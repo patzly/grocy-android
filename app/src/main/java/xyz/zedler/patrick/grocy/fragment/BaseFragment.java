@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Task;
 
 @SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
@@ -121,6 +122,15 @@ public class BaseFragment extends Fragment {
   }
 
   public void editItem(ShoppingListItem shoppingListItem) {
+  }
+
+  public void toggleDoneStatus(Task task) {
+  }
+
+  public void deleteTask(Task task) {
+  }
+
+  public void editTask(Task task) {
   }
 
   @Nullable

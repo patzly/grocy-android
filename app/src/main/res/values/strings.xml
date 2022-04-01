@@ -424,6 +424,7 @@
   <string name="title_product_create">Create product</string>
   <string name="title_product_edit">Edit product</string>
   <string name="title_tasks">Tasks</string>
+  <string name="title_task_entry">Task entry</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_shopping_list">Shopping list</string>
@@ -748,6 +749,8 @@
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (unit)</string>
   <string name="property_calories_total">Calories (total)</string>
+  <string name="property_category">Category</string>
+  <string name="property_assigned_to">Assigned to</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

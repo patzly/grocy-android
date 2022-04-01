@@ -40,6 +40,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.net.URLEncoder;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 /**
@@ -186,5 +187,9 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
 
   Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {
     return getUriWithArgs(getString(uri), args);
+  }
+
+  void showMessage(@StringRes int msg) {
+    ((MainActivity) requireActivity()).showMessage(msg);
   }
 }
