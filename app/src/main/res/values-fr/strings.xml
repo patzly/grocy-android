@@ -737,7 +737,6 @@
   <string name="property_calories_total">Calories (total)</string>
   <string name="property_category">Catégorie</string>
   <string name="property_assigned_to">Assigné à</string>
-
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
   <!-- This means the 'time' context -->
