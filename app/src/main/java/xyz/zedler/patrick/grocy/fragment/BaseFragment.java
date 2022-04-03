@@ -54,6 +54,9 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 
 @SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
@@ -123,6 +126,15 @@ public class BaseFragment extends Fragment {
   public void editItem(ShoppingListItem shoppingListItem) {
   }
 
+  public void toggleDoneStatus(Task task) {
+  }
+
+  public void deleteTask(Task task) {
+  }
+
+  public void editTask(Task task) {
+  }
+
   @Nullable
   public MutableLiveData<Integer> getSelectedShoppingListIdLive() {
     return null;
@@ -159,6 +171,12 @@ public class BaseFragment extends Fragment {
   }
 
   public void selectStore(Store store) {
+  }
+
+  public void selectTaskCategory(TaskCategory taskCategory) {
+  }
+
+  public void selectUser(User user) {
   }
 
   public void setLanguage(Language language) {

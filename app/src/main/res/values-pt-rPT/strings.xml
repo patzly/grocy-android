@@ -111,7 +111,6 @@
   <string name="action_share">Partilhar</string>
   <string name="action_share_description">Partilha o Grocy Android com os teus amigos</string>
   <string name="action_no_filter">Sem filtro</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d a expirar</item>
@@ -428,7 +427,6 @@
   <string name="title_external_barcode_input">Scanner externo</string>
   <string name="title_confirmation">Confirmação</string>
   <string name="title_choose_product">Escolha um produto</string>
-
   <string name="title_spoiled">Expirado</string>
   <string name="title_use_specific">Usar item de stock específico</string>
   <string name="title_specific">Item de stock específico</string>
@@ -714,7 +712,6 @@
   <string name="property_task_categories">Categorias das tarefas</string>
   <string name="property_calories">Calorias</string>
   <string name="property_calories_unit">Calorias (por unidade de stock)</string>
-
   <string name="date_today">Hoje</string>
   <string name="date_unknown">Desconhecido</string>
   <!-- This means the 'time' context -->

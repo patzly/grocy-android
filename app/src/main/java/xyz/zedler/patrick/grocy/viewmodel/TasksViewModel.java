@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
@@ -307,6 +308,14 @@ public class TasksViewModel extends BaseViewModel {
             }
           }
         }
+    );
+  }
+
+  public void deleteTask(int taskId) {
+    dlHelper.delete(
+        grocyApi.getObject(ENTITY.TASKS, taskId),
+        response -> downloadData(),
+        this::showErrorMessage
     );
   }
 

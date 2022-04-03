@@ -277,7 +277,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
-              android:gravity="center_vertical">
+              android:gravity="center_vertical"
+              android:layout_marginBottom="8dp">
 
               <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
@@ -349,13 +350,12 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:background="@null"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
               android:paddingTop="0dp"
-              android:paddingBottom="0dp"
-              android:paddingStart="0dp"
-              android:paddingEnd="0dp"
-              android:layout_marginStart="72dp">
+              android:paddingBottom="6dp"
+              android:paddingStart="72dp"
+              android:paddingEnd="0dp">
 
               <com.google.android.material.radiobutton.MaterialRadioButton
                 style="@style/Widget.Grocy.RadioButton"
@@ -363,7 +363,8 @@
                 android:layout_height="match_parent"
                 android:paddingEnd="8dp"
                 android:paddingStart="0dp"
-                android:text="@string/property_note_singleline"
+                android:minHeight="0dp"
+                android:text="@string/property_singleline"
                 android:checked="@{!formData.useMultilineNoteLive}"
                 android:onClick="@{() -> formData.setUseMultilineNoteLive(false)}"/>
 
@@ -373,7 +374,8 @@
                 android:layout_height="match_parent"
                 android:paddingEnd="6dp"
                 android:paddingStart="0dp"
-                android:text="@string/property_note_multiline"
+                android:minHeight="0dp"
+                android:text="@string/property_multiline"
                 android:checked="@{formData.useMultilineNoteLive}"
                 android:onClick="@{() -> formData.setUseMultilineNoteLive(true)}"/>
 

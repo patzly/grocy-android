@@ -76,6 +76,9 @@ public class MasterDeleteBottomSheet extends BaseBottomSheet {
       case GrocyApi.ENTITY.PRODUCT_GROUPS:
         entityStrId = R.string.property_product_group;
         break;
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        entityStrId = R.string.property_task_category;
+        break;
       default: // STORES
         entityStrId = R.string.property_store;
     }

@@ -111,6 +111,7 @@
   <string name="action_share">Teilen</string>
   <string name="action_share_description">Erzählen Sie Ihren Freunden von Grocy Android</string>
   <string name="action_no_filter">Nicht filtern</string>
+  <string name="action_show_done_tasks">Erledigte Aufgaben anzeigen</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -173,6 +174,11 @@
     <item quantity="one">%1$d bald fällig</item>
     <item quantity="other">%1$d bald fällig</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d steht heute an</item>
+    <item quantity="other">%1$d stehen heute an</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d überfällig</item>
@@ -227,6 +233,10 @@
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
+  <string name="msg_stored_purchases_overview">Es gibt Einkäufe auf dem Gerät, welche noch nicht auf den Server übertragen wurden. Hier tippen für Details.</string>
+  <string name="msg_stored_purchases">Einkäufe, welche noch nicht auf den Server übertragen wurden, werden hier angezeigt. Sie wurden zusammen mit temporären Produkten in dieser App gespeichert, damit Sie Ihren Einkauf schneller im Schnellmodus erfassen konnten und Produkte nicht gleich in den Stammdaten erstellen mussten.</string>
+  <string name="msg_stored_purchases_product_offline">Tippen Sie auf das Produkt und füllen Sie benötigte Daten aus. Danach wird das Produkt hier als online angezeigt und die gespeicherten Einkäufe können an den Server gesendet werden.</string>
+  <string name="msg_stored_purchases_product_online">Hier tippen, um die gespeicherten Einkäufe für dieses Produkt an den Server zu senden.</string>
   <string name="msg_choose_product">Der von Ihnen gescannte Barcode ist noch nicht mit einem Produkt verknüpft. Sie können ihn mit einem vorhandenen verknüpfen oder ein neues Produkt erstellen.</string>
   <string name="msg_product_name_off">Produktname für Barcode stammt von Open Food Facts.</string>
   <string name="msg_product_name_obf">Produktname für Barcode stammt von Open Beauty Facts.</string>
@@ -235,6 +245,8 @@
   <string name="msg_off_option_deactivated">Sie können Open Food Facts in den Einstellungen aktivieren, damit automatisch ein Produktname vorgeschlagen wird.</string>
   <string name="msg_create_new_product_filled">Neues Produkt \"%1$s\" erstellen</string>
   <string name="msg_create_new_product">Neues Produkt erstellen</string>
+  <string name="msg_create_new_pending_product_filled">Neues temporäres Produkt \"%1$s\" erstellen</string>
+  <string name="msg_create_new_pending_product">Neues temporäres Produkt erstellen</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Folgende Transaktion wird ausgeführt:\n\n%1$s %2$s %3$s zum Bestand hinzufügen\nFälligkeitsdatum: %4$s\nPreis: %5$s\nGeschäft: %6$s\nStandort: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -404,6 +416,7 @@
   <string name="title_product_create">Produkt erstellen</string>
   <string name="title_product_edit">Produkt bearbeiten</string>
   <string name="title_tasks">Aufgaben</string>
+  <string name="title_task_entry">Aufgabe</string>
   <string name="title_master_data">Stammdaten</string>
   <string name="title_stock_entries">Bestandseinträge</string>
   <string name="title_shopping_list">Einkaufszettel</string>
@@ -427,6 +440,8 @@
   <string name="title_external_barcode_input">Externer Scanner</string>
   <string name="title_confirmation">Bestätigung</string>
   <string name="title_choose_product">Produkt auswählen</string>
+  <string name="title_pending_products">Anstehende Produkte</string>
+  <string name="title_stored_purchases">Gespeicherte Einkäufe</string>
 
   <string name="title_spoiled">Verdorben</string>
   <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
@@ -484,6 +499,7 @@
   <string name="subtitle_empty">Leer</string>
   <string name="subtitle_done">Erledigt</string>
   <string name="subtitle_undone">Unerledigt</string>
+  <string name="subtitle_uncategorized">Nicht kategorisiert</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Nie überfällig</string>
   <string name="subtitle_selected">Ausgewählt</string>
@@ -504,6 +520,7 @@
   <string name="subtitle_product_hidden">Produkt ist versteckt</string>
   <string name="subtitle_product_not_hidden">Produkt ist nicht versteckt</string>
   <string name="subtitle_product_not_on_server">Produkt ist nicht auf dem Server</string>
+  <string name="subtitle_barcodes_will_be_added">Es gibt gespeicherte Barcodes, diese werden mit dem Speichervorgang zum Produkt hinzugefügt.</string>
   <string name="subtitle_unknown">Unbekannt</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Unterstützt</string>
@@ -583,6 +600,16 @@
     <item quantity="other">%1$d Einträge sind auf Ihrer Einkaufsliste.</item>
   </plurals>
   <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d Aufgabe ist zu erledigen.</item>
+    <item quantity="other">%1$d Aufgaben sind zu erledigen.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">Ihnen ist %1$d Aufgabe zugewiesen.</item>
+    <item quantity="other">Ihnen sind %1$d Aufgaben zugewiesen.</item>
+  </plurals>
+  <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Ihre Datenbank enthält ein Produkt.</item>
     <item quantity="other">Ihre Datenbank enthält %1$d Produkte.</item>
@@ -631,6 +658,7 @@
   <string name="property_factor">Faktor</string>
   <string name="property_barcode">Barcode</string>
   <string name="property_barcodes">Barcodes</string>
+  <string name="property_barcodes_insert">Barcodes: %1$s</string>
   <string name="property_days">Tage</string>
   <string name="property_purchased_date">Einkaufsdatum</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -641,6 +669,8 @@
   <string name="property_due_type_expiration">Verbrauchsdatum</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Fälligkeitsdatum</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Fälligkeitsdatum: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Nächstes Fälligkeitsdatum</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -702,6 +732,10 @@
   <string name="property_picture">Bild</string>
   <string name="property_note_singleline">Einzeilige Notiz</string>
   <string name="property_note_multiline">Mehrzeilige Notiz</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Einzeilig</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Mehrzeilig</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">Im Bestand: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
@@ -711,10 +745,14 @@
   <string name="property_ungrouped">Ungruppiert</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Extrafeld: %1$s</string>
+  <string name="property_task_category">Aufgabenkategorie</string>
   <string name="property_task_categories">Aufgabenkategorien</string>
   <string name="property_calories">Kalorien</string>
   <string name="property_calories_unit">Kalorien (Einheit)</string>
   <string name="property_calories_total">Kalorien (gesamt)</string>
+  <string name="property_category">Kategorie</string>
+  <string name="property_assigned_to">Zugewiesen an</string>
+  <string name="property_users">Benutzer</string>
 
   <string name="date_today">Heute</string>
   <string name="date_unknown">Unbekannt</string>

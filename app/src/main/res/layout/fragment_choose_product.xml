@@ -270,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.createNewPendingProduct()}"
-                android:visibility="@{viewModel.pendingProductsActive ? View.VISIBLE : View.GONE}"
+                android:visibility="gone"
                 app:clickUtil="@{clickUtil}">
 
                 <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">

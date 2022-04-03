@@ -47,10 +47,8 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
@@ -74,7 +72,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private List<ProductGroup> productGroups;
   private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
-  private List<TaskCategory> taskCategories;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
@@ -122,6 +119,9 @@ public class MasterObjectListViewModel extends BaseViewModel {
           break;
         case ENTITY.QUANTITY_UNITS:
           this.objects = data.getQuantityUnits();
+          break;
+        case ENTITY.TASK_CATEGORIES:
+          this.objects = data.getTaskCategories();
           break;
         default:
           this.objects = data.getStores();
@@ -188,7 +188,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if ((entity.equals(ENTITY.TASK_CATEGORIES))) {
       queue.append(dlHelper.updateTaskCategories(
           dbChangedTime,
-          taskCategories -> this.taskCategories = taskCategories
+          taskCategories -> this.objects = taskCategories
       ));
     }
     if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
@@ -225,8 +225,8 @@ public class MasterObjectListViewModel extends BaseViewModel {
       case GrocyApi.ENTITY.QUANTITY_UNITS:
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
         break;
-      case ENTITY.TASK_CATEGORIES:
-        editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        editPrefs.putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
         break;
       default:  // products
         editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);

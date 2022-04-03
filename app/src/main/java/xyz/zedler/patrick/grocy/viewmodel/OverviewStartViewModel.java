@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
@@ -41,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
@@ -64,6 +66,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<List<StockItem>> stockItemsLive;
   private final MutableLiveData<List<ShoppingListItem>> shoppingListItemsLive;
   private final MutableLiveData<List<Product>> productsLive;
+  private final MutableLiveData<List<Task>> tasksLive;
   private final MutableLiveData<Integer> itemsDueNextCountLive;
   private final MutableLiveData<Integer> itemsOverdueCountLive;
   private final MutableLiveData<Integer> itemsExpiredCountLive;
@@ -77,7 +80,10 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final LiveData<String> stockDescriptionMissingTextLive;
   private final LiveData<String> stockDescriptionMissingShoppingListTextLive;
   private final LiveData<String> shoppingListDescriptionTextLive;
+  private final LiveData<String> tasksDescriptionTextLive;
+  private final MediatorLiveData<String> tasksUserDescriptionTextLive;
   private final LiveData<String> masterDataDescriptionTextLive;
+  private final MutableLiveData<Integer> currentUserIdLive;
   private ArrayList<StockItem> stockItemsTemp;
   private ArrayList<StockItem> dueItemsTemp;
   private ArrayList<StockItem> overdueItemsTemp;
@@ -109,6 +115,8 @@ public class OverviewStartViewModel extends BaseViewModel {
     storedPurchasesOnDevice = new MutableLiveData<>(false);
     shoppingListItemsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
+    tasksLive = new MutableLiveData<>();
+    currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
 
     stockDescriptionTextLive = Transformations.map(
         stockItemsLive,
@@ -231,6 +239,36 @@ public class OverviewStartViewModel extends BaseViewModel {
           }
         }
     );
+    tasksDescriptionTextLive = Transformations.map(
+        tasksLive,
+        tasks -> {
+          if (tasks == null) {
+            return null;
+          }
+          int undoneTasksCount = Task.getUndoneTasksCount(tasks);
+          return getResources().getQuantityString(
+              R.plurals.description_overview_tasks, undoneTasksCount, undoneTasksCount
+          );
+        }
+    );
+    tasksUserDescriptionTextLive = new MediatorLiveData<>();
+    tasksUserDescriptionTextLive.addSource(tasksLive, tasks -> {
+      if (tasks == null) return;
+      int currentUserId = currentUserIdLive.getValue() != null ? currentUserIdLive.getValue() : 1;
+      int assignedTasksCount = Task
+          .getAssignedTasksCount(Task.getUndoneTasksOnly(tasks), currentUserId);
+      tasksUserDescriptionTextLive.setValue(getResources().getQuantityString(
+          R.plurals.description_overview_tasks_user, assignedTasksCount, assignedTasksCount
+      ));
+    });
+    tasksUserDescriptionTextLive.addSource(currentUserIdLive, id -> {
+      if (id == null || tasksLive.getValue() == null) return;
+      int assignedTasksCount = Task
+          .getAssignedTasksCount(Task.getUndoneTasksOnly(tasksLive.getValue()), id);
+      tasksUserDescriptionTextLive.setValue(getResources().getQuantityString(
+          R.plurals.description_overview_tasks_user, assignedTasksCount, assignedTasksCount
+      ));
+    });
     masterDataDescriptionTextLive = Transformations.map(
         productsLive,
         products -> {
@@ -252,6 +290,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.shoppingListItemsLive.setValue(data.getShoppingListItems());
       this.productsLive.setValue(data.getProducts());
       this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
+      this.tasksLive.setValue(data.getTasks());
 
       ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
       for (ShoppingListItem item : data.getShoppingListItems()) {
@@ -401,7 +440,17 @@ public class OverviewStartViewModel extends BaseViewModel {
           itemsExpiredCountLive.setValue(expired.size());
           this.missingItemsTemp = missing;
           itemsMissingCountLive.setValue(missing.size());
-        }));
+        }),
+        dlHelper.updateTasks(dbChangedTime, this.tasksLive::setValue)
+    );
+    if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
+      queue.append(dlHelper.getCurrentUserId(id -> {
+        if (id != -1) {
+          sharedPrefs.edit().putInt(PREF.CURRENT_USER_ID, id).apply();
+          currentUserIdLive.setValue(id);
+        }
+      }));
+    }
     if (queue.isEmpty()) {
       return;
     }
@@ -416,11 +465,12 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -496,6 +546,14 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public LiveData<String> getShoppingListDescriptionTextLive() {
     return shoppingListDescriptionTextLive;
+  }
+
+  public LiveData<String> getTasksDescriptionTextLive() {
+    return tasksDescriptionTextLive;
+  }
+
+  public LiveData<String> getTasksUserDescriptionTextLive() {
+    return tasksUserDescriptionTextLive;
   }
 
   public LiveData<String> getMasterDataDescriptionTextLive() {

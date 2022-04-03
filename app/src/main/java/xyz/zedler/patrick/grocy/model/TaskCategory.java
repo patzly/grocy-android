@@ -2,15 +2,13 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
+import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "task_category_table")
@@ -114,6 +112,15 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
 
   public void setDisplayDivider(boolean display) {
     displayDivider = display ? 1 : 0;
+  }
+
+  public static TaskCategory getTaskCategoryFromId(List<TaskCategory> taskCategories, int id) {
+    for (TaskCategory taskCategory : taskCategories) {
+      if (taskCategory.getId() == id) {
+        return taskCategory;
+      }
+    }
+    return null;
   }
 
   @Override

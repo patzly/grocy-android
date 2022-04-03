@@ -22,9 +22,8 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,38 +32,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
-import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
-import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
+import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 
-public class ShoppingListsBottomSheet extends BaseBottomSheet
-    implements ShoppingListAdapter.ShoppingListAdapterListener {
+public class TaskEntryBottomSheet extends BaseBottomSheet {
 
-  private final static int DELETE_CONFIRMATION_DURATION = 2000;
-  private final static String TAG = ShoppingListsBottomSheet.class.getSimpleName();
+  private final static int DELETE_CONFIRMATION_DURATION = 1000;
+  private final static String TAG = TaskEntryBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
-
+  private FragmentBottomsheetTaskEntryBinding binding;
   private ProgressBar progressConfirm;
   private ValueAnimator confirmProgressAnimator;
+  private Task task;
 
   @NonNull
   @Override
@@ -78,84 +68,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_list_selection, container, false
-    );
-
-    activity = (MainActivity) requireActivity();
-
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    boolean multipleListsFeature = sharedPrefs.getBoolean(
-        Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
-    );
-
-    MutableLiveData<Integer> selectedIdLive = activity.getCurrentFragment()
-        .getSelectedShoppingListIdLive();
-    if (selectedIdLive == null) {
-      dismiss();
-      return view;
-    }
-
-    ShoppingListRepository repository = new ShoppingListRepository(activity.getApplication());
-
-    TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
-    textViewTitle.setText(activity.getString(R.string.property_shopping_lists));
-
-    RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
-    recyclerView.setLayoutManager(
-        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-    );
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(new ShoppingPlaceholderAdapter());
-
-    repository.getShoppingListsLive().observe(getViewLifecycleOwner(), shoppingLists -> {
-      if (shoppingLists == null) {
-        return;
-      }
-      if (recyclerView.getAdapter() == null
-          || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
-      ) {
-        recyclerView.setAdapter(new ShoppingListAdapter(
-            shoppingLists,
-            selectedIdLive.getValue(),
-            this,
-            activity.getCurrentFragment() instanceof ShoppingListFragment
-                && activity.isOnline()
-        ));
-      } else {
-        ((ShoppingListAdapter) recyclerView.getAdapter()).updateData(
-            shoppingLists,
-            selectedIdLive.getValue()
-        );
-      }
-    });
-
-    selectedIdLive.observe(getViewLifecycleOwner(), selectedId -> {
-      if (recyclerView.getAdapter() == null
-          || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
-      ) {
-        return;
-      }
-      ((ShoppingListAdapter) recyclerView.getAdapter()).updateSelectedId(
-          selectedIdLive.getValue()
-      );
-    });
-
-    ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
-    if (activity.isOnline() && multipleListsFeature
-        && activity.getCurrentFragment() instanceof ShoppingListFragment
-    ) {
-      buttonNew.setVisibility(View.VISIBLE);
-      buttonNew.setOnClickListener(v -> {
-        dismiss();
-        navigate(ShoppingListFragmentDirections
-            .actionShoppingListFragmentToShoppingListEditFragment());
-      });
-    }
-
-    progressConfirm = view.findViewById(R.id.progress_confirmation);
-
-    return view;
+    binding = FragmentBottomsheetTaskEntryBinding.inflate(inflater, container, false);
+    return binding.getRoot();
   }
 
   @Override
@@ -167,42 +81,80 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
     super.onDestroyView();
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   @Override
-  public void onItemRowClicked(ShoppingList shoppingList) {
-    activity.getCurrentFragment().selectShoppingList(shoppingList);
-    dismiss();
-  }
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-  @Override
-  public void onClickEdit(ShoppingList shoppingList) {
-    if (!activity.isOnline()) {
-      showMessage(R.string.error_offline);
+    activity = (MainActivity) getActivity();
+    assert activity != null;
+
+    Bundle bundle = getArguments();
+    task = bundle != null ? bundle.getParcelable(ARGUMENT.TASK) : null;
+    if (bundle == null || task == null) {
+      dismiss();
       return;
     }
-    dismiss();
-    navigate(ShoppingListFragmentDirections
-        .actionShoppingListFragmentToShoppingListEditFragment()
-        .setShoppingList(shoppingList));
+
+    DateUtil dateUtil = new DateUtil(activity);
+
+    binding.name.setText(getString(R.string.property_name), task.getName());
+    if (task.getDescription() == null || task.getDescription().trim().isEmpty()) {
+      binding.cardDescription.setVisibility(View.GONE);
+    } else {
+      binding.cardDescription.setText(task.getDescription());
+    }
+    if (task.getDueDate() != null && !task.getDueDate().isEmpty()) {
+      binding.date.setText(
+          getString(R.string.property_due_date),
+          dateUtil.getLocalizedDate(task.getDueDate()),
+          dateUtil.getHumanForDaysFromNow(task.getDueDate())
+      );
+    } else {
+      binding.date.setText(
+          getString(R.string.property_due_date),
+          getString(R.string.subtitle_none_selected)
+      );
+    }
+    binding.category.setText(
+        getString(R.string.property_category),
+        bundle.getString(ARGUMENT.TASK_CATEGORY)
+    );
+    binding.assignedTo.setText(
+        getString(R.string.property_assigned_to),
+        bundle.getString(ARGUMENT.USER) != null ? bundle.getString(ARGUMENT.USER)
+            : getString(R.string.subtitle_none_selected)
+    );
+
+    binding.toolbar.setOnMenuItemClickListener(item -> {
+      if (item.getItemId() == R.id.action_toggle_done) {
+        activity.getCurrentFragment().toggleDoneStatus(task);
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_edit) {
+        activity.getCurrentFragment().editTask(task);
+        dismiss();
+        return true;
+      }
+      return false;
+    });
+    binding.delete.setOnTouchListener((v, event) -> {
+      onTouchDelete(v, event);
+      return true;
+    });
+    progressConfirm = binding.progressConfirmation;
   }
 
-  @Override
-  public void onTouchDelete(View view, MotionEvent event, ShoppingList shoppingList) {
+  public void onTouchDelete(View view, MotionEvent event) {
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-      if (!activity.isOnline()) {
-        showMessage(R.string.error_offline);
-        return;
-      }
-      showAndStartProgress(view, shoppingList);
+      showAndStartProgress(view);
     } else if (event.getAction() == MotionEvent.ACTION_UP
         || event.getAction() == MotionEvent.ACTION_CANCEL) {
-      if (!activity.isOnline()) {
-        return;
-      }
       hideAndStopProgress();
     }
   }
 
-  private void showAndStartProgress(View buttonView, ShoppingList shoppingList) {
+  private void showAndStartProgress(View buttonView) {
     assert getView() != null;
     TransitionManager.beginDelayedTransition((ViewGroup) getView());
     progressConfirm.setVisibility(View.VISIBLE);
@@ -231,7 +183,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
           progressConfirm.setVisibility(View.GONE);
           ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
           ((Animatable) buttonImage.getDrawable()).start();
-          activity.getCurrentFragment().deleteShoppingList(shoppingList);
+          activity.getCurrentFragment().deleteTask(task);
+          dismiss();
           return;
         }
         confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
@@ -262,12 +215,6 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
     if (progressConfirm.getProgress() != 100) {
       Toast.makeText(requireContext(), R.string.msg_press_hold_confirm, Toast.LENGTH_LONG).show();
     }
-  }
-
-  @Override
-  public void onDismiss(@NonNull DialogInterface dialog) {
-    activity.getCurrentFragment().onBottomSheetDismissed();
-    super.onDismiss(dialog);
   }
 
   @NonNull

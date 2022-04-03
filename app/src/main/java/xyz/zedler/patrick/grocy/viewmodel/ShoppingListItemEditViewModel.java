@@ -118,7 +118,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       if (!isActionEdit) {
         formData.getShoppingListLive().setValue(getLastShoppingList());
       }
-      fillWithSoppingListItemIfNecessary();
+      fillWithShoppingListItemIfNecessary();
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -190,7 +190,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       queueEmptyAction = null;
       return;
     }
-    fillWithSoppingListItemIfNecessary();
+    fillWithShoppingListItemIfNecessary();
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -257,7 +257,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
   }
 
-  private void fillWithSoppingListItemIfNecessary() {
+  private void fillWithShoppingListItemIfNecessary() {
     if (!isActionEdit || formData.isFilledWithShoppingListItem()) {
       return;
     }

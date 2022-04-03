@@ -111,7 +111,6 @@
   <string name="action_share">Поделиться</string>
   <string name="action_share_description">Расскажите своим друзьям о Grocy Android</string>
   <string name="action_no_filter">Без фильтра</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d скоро испортится</item>
@@ -450,7 +449,6 @@
   <string name="title_external_barcode_input">Внешний сканер</string>
   <string name="title_confirmation">Подтверждение</string>
   <string name="title_choose_product">Выбрать продукт</string>
-
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
   <string name="title_specific">Конкретный продукт в запасах</string>
@@ -758,7 +756,6 @@
   <string name="property_task_categories">Категории задач</string>
   <string name="property_calories">Калории</string>
   <string name="property_calories_unit">Калории (на единицу запаса)</string>
-
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->

@@ -110,7 +110,7 @@
               android:contentDescription="@string/title_stored_purchases"
               android:tooltipText="Pending products"
               android:focusable="true"
-              android:visibility="@{!viewModel.quickModeEnabled &amp;&amp; formData.pendingPurchasesLive.size() &lt;= 0 &amp;&amp; formData.pendingProductsLive.size() &lt;= 0 || viewModel.hasStoredPurchase() ? View.GONE : View.VISIBLE}"
+              android:visibility="gone"
               android:onClick="@{() -> fragment.navigateToPendingProductsPage()}"
               tools:targetApi="o">
 

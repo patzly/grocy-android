@@ -597,6 +597,7 @@ public class MainActivity extends AppCompatActivity {
     editPrefs.remove(PREF.API_KEY);
     editPrefs.remove(PREF.SHOPPING_LIST_LAST_ID);
     editPrefs.remove(PREF.GROCY_VERSION);
+    editPrefs.remove(PREF.CURRENT_USER_ID);
     editPrefs.apply();
     new Handler().postDelayed(() -> RestartUtil.restartApp(this), 1000);
   }

@@ -416,6 +416,7 @@
   <string name="title_product_create">Créer produit</string>
   <string name="title_product_edit">Modifier produit</string>
   <string name="title_tasks">Tâches</string>
+  <string name="title_task_entry">Saisie de tâche</string>
   <string name="title_master_data">Données de base</string>
   <string name="title_stock_entries">Entrées de stock</string>
   <string name="title_shopping_list">Liste de courses</string>
@@ -457,9 +458,9 @@
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">Prix de %1$s</string>
   <string name="title_stock_entry_no_specific">Aucune entrée spécifique</string>
-  <string name="title_list_entry">Entrée de liste</string>
-  <string name="title_edit_list_entry">Modifier l\'entrée de liste</string>
-  <string name="title_create_list_entry">Créer une entrée de liste</string>
+  <string name="title_list_entry">Liste d\'articles</string>
+  <string name="title_edit_list_entry">Modifier la liste d\'articles</string>
+  <string name="title_create_list_entry">Créer une liste d\'articles</string>
   <string name="title_edit_barcode">Modifier le code-barres</string>
   <string name="title_create_barcode">Créer un code-barres</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -498,6 +499,7 @@
   <string name="subtitle_empty">Vide</string>
   <string name="subtitle_done">Terminé</string>
   <string name="subtitle_undone">Non terminé</string>
+  <string name="subtitle_uncategorized">Non classé</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Pas de date de péremption</string>
   <string name="subtitle_selected">Sélectionné</string>
@@ -733,7 +735,8 @@
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (par unité)</string>
   <string name="property_calories_total">Calories (total)</string>
-
+  <string name="property_category">Catégorie</string>
+  <string name="property_assigned_to">Assigné à</string>
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
   <!-- This means the 'time' context -->

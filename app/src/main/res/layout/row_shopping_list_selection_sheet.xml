@@ -47,18 +47,6 @@
       tools:ignore="ContentDescription"
       android:layout_gravity="center" />
 
-    <ProgressBar
-      android:id="@+id/progress_confirmation"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:indeterminateOnly="false"
-      android:indeterminate="false"
-      android:max="100"
-      android:progress="50"
-      android:progressDrawable="@drawable/progress_bar_circular"
-      android:layout_margin="16dp"
-      android:visibility="gone" />
-
   </FrameLayout>
 
   <TextView

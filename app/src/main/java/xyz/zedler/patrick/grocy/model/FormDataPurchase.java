@@ -126,16 +126,14 @@ public class FormDataPurchase {
     );
     shoppingListItemLive = new MutableLiveData<>();
     pendingProductLive = new MutableLiveData<>();
-    boolean scannerVisibilityStart;
-    if (!getExternalScannerEnabled() || !args.getCloseWhenFinished()
-        || args.getStoredPurchaseId() != null) {
-      scannerVisibilityStart = false;
-    } else if (args.getStartWithScanner() || getCameraScannerWasVisibleLastTime()) {
-      scannerVisibilityStart = true;
-    } else {
-      scannerVisibilityStart = false;
+    scannerVisibilityLive = new MutableLiveData<>(false);
+    if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
+        .getCloseWhenFinished() && args.getStoredPurchaseId() == null) {
+      scannerVisibilityLive.setValue(true);
+    } else if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
+        .getCloseWhenFinished() && args.getStoredPurchaseId() == null) {
+      scannerVisibilityLive.setValue(true);
     }
-    scannerVisibilityLive = new MutableLiveData<>(scannerVisibilityStart);
     productsLive = new MutableLiveData<>(new ArrayList<>());
     productDetailsLive = new MutableLiveData<>();
     isTareWeightEnabledLive = Transformations.map(

@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.DATE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
@@ -273,6 +274,9 @@ public class DateBottomSheet extends BaseBottomSheet {
       binding.linearNeverExpires.setOnClickListener(
           v -> binding.checkboxNeverExpires.setChecked(!binding.checkboxNeverExpires.isChecked())
       );
+      if (!args.getBoolean(ARGUMENT.SHOW_OPTION_NEVER_EXPIRES, true)) {
+        binding.linearNeverExpires.setVisibility(View.GONE);
+      }
     } else if (args.getInt(DATE_TYPE) == PURCHASED_DATE) {
       binding.linearNeverExpires.setVisibility(View.GONE);
       binding.title.setText(R.string.property_purchased_date);

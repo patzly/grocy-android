@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "task_table")
 public class Task implements Parcelable {
@@ -70,10 +71,6 @@ public class Task implements Parcelable {
   @SerializedName("assigned_to_user_id")
   private String assignedToUserId;
 
-  @Ignore
-  @SerializedName("category")
-  private TaskCategory category;
-
   public Task() {
   }  // for Room
 
@@ -86,7 +83,6 @@ public class Task implements Parcelable {
     done = parcel.readInt();
     doneTimeStamp = parcel.readString();
     categoryId = parcel.readString();
-    category = parcel.readParcelable(TaskCategory.class.getClassLoader());
     assignedToUserId = parcel.readString();
   }
 
@@ -99,7 +95,6 @@ public class Task implements Parcelable {
     dest.writeInt(done);
     dest.writeString(doneTimeStamp);
     dest.writeString(categoryId);
-    dest.writeParcelable(category, 0);
     dest.writeString(assignedToUserId);
   }
 
@@ -152,10 +147,6 @@ public class Task implements Parcelable {
     return done;
   }
 
-//  public boolean isActive() {
-//    return NumUtil.isStringInt(active) && Integer.parseInt(active) == 1;
-//  }
-
   public boolean isDone() {
     return done == 1;
   }
@@ -184,14 +175,6 @@ public class Task implements Parcelable {
     this.categoryId = categoryId;
   }
 
-  public TaskCategory getCategory() {
-    return category;
-  }
-
-  public void setCategory(TaskCategory category) {
-    this.category = category;
-  }
-
   public String getAssignedToUserId() {
     return assignedToUserId;
   }
@@ -204,28 +187,24 @@ public class Task implements Parcelable {
     JSONObject json = new JSONObject();
     try {
       Object name = task.name;
-      Object description = task.description != null ? task.description : JSONObject.NULL;
-      Object dueDate = task.dueDate;
-      Object done = task.done;
-      Object doneTimeStamp = task.doneTimeStamp;
-      Object categoryId = task.categoryId;
+      Object description = task.description != null ? task.description : "";
+      Object dueDate = task.dueDate != null ? task.dueDate : "";
+      Object done = task.done != null ? String.valueOf(task.done) : "0";
+      Object categoryId = task.categoryId != null ? task.categoryId : "";
+      Object assignedToUserId = task.assignedToUserId != null ? task.assignedToUserId : "";
 
       json.put("name", name);
       json.put("description", description);
       json.put("due_date", dueDate);
       json.put("done", done);
-      json.put("done_time_stamp", doneTimeStamp);
       json.put("category_id", categoryId);
+      json.put("assigned_to_user_id", assignedToUserId);
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "getJsonFromTask: " + e);
       }
     }
     return json;
-  }
-
-  public JSONObject getJsonFromTask(boolean debug, String TAG) {
-    return getJsonFromTask(this, debug, TAG);
   }
 
   public static Task getTaskFromId(List<Task> tasks, int id) {
@@ -237,24 +216,35 @@ public class Task implements Parcelable {
     return null;
   }
 
-  public static Task getTaskFromName(ArrayList<Task> tasks, String name) {
-    if (name == null || name.isEmpty()) return null;
-    for (Task task : tasks) {
-      if (task.getName() != null && task.getName().equals(name)) {
-        return task;
-      }
-    }
-    return null;
-  }
-
-  public static ArrayList<Task> getDoneTasksOnly(ArrayList<Task> allTasks) {
+  public static ArrayList<Task> getUndoneTasksOnly(List<Task> allTasks) {
     ArrayList<Task> activeTasksOnly = new ArrayList<>();
     for (Task task : allTasks) {
-      if (task.isDone()) {
+      if (!task.isDone()) {
         activeTasksOnly.add(task);
       }
     }
     return activeTasksOnly;
+  }
+
+  public static int getUndoneTasksCount(List<Task> allTasks) {
+    int undoneTasks = 0;
+    for (Task task : allTasks) {
+      if (!task.isDone()) {
+        undoneTasks++;
+      }
+    }
+    return undoneTasks;
+  }
+
+  public static int getAssignedTasksCount(List<Task> tasks, int userId) {
+    int assignedTasks = 0;
+    for (Task task : tasks) {
+      if (NumUtil.isStringInt(task.getAssignedToUserId())
+          && Integer.parseInt(task.getAssignedToUserId()) == userId) {
+        assignedTasks++;
+      }
+    }
+    return assignedTasks;
   }
 
   @Override
@@ -278,15 +268,13 @@ public class Task implements Parcelable {
         Objects.equals(done, task.done) &&
         Objects.equals(doneTimeStamp, task.doneTimeStamp) &&
         Objects.equals(categoryId, task.categoryId) &&
-        Objects.equals(category, task.category) &&
         Objects.equals(assignedToUserId, task.assignedToUserId);
   }
 
   @Override
   public int hashCode() {
     return Objects
-        .hash(id, name, description, dueDate, done, doneTimeStamp, categoryId, category,
-            assignedToUserId);
+        .hash(id, name, description, dueDate, done, doneTimeStamp, categoryId, assignedToUserId);
   }
 
   @NonNull

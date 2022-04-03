@@ -17,33 +17,21 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<LinearLayout
+<menu
+  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:orientation="vertical">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <TextView
-    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet.Center"
-    android:text="@string/info_changelog"/>
+  <item
+    android:id="@+id/action_toggle_done"
+    android:title="@string/action_toggle_done"
+    android:icon="@drawable/ic_round_done"
+    app:showAsAction="always" />
 
-  <View
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp" />
+  <item
+    android:id="@+id/action_edit"
+    android:title="@string/action_edit"
+    android:icon="@drawable/ic_round_edit"
+    app:showAsAction="always" />
 
-  <androidx.core.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:scrollbars="vertical">
-
-    <TextView
-      android:id="@+id/text_changelog"
-      style="@style/Widget.Grocy.TextView.Paragraph.Fix"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="16dp" />
-
-  </androidx.core.widget.NestedScrollView>
-
-</LinearLayout>
+</menu>
