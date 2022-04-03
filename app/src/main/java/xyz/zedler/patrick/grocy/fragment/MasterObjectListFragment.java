@@ -59,6 +59,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
@@ -315,6 +316,8 @@ public class MasterObjectListFragment extends BaseFragment
                   .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
               break;
             case ENTITY.TASK_CATEGORIES:
+              navigate(MasterObjectListFragmentDirections
+                  .actionMasterObjectListFragmentToMasterTaskCategoryFragment());
               break;
           }
         }
@@ -410,6 +413,11 @@ public class MasterObjectListFragment extends BaseFragment
         navigate(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterStoreFragment()
             .setStore((Store) object));
+        break;
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        navigate(MasterObjectListFragmentDirections
+            .actionMasterObjectListFragmentToMasterTaskCategoryFragment()
+            .setTaskCategory((TaskCategory) object));
         break;
       case GrocyApi.ENTITY.PRODUCTS:
         viewModel.showProductBottomSheet((Product) object);

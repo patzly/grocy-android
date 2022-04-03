@@ -746,6 +746,12 @@
         app:enterAnim="@anim/slide_in_up"
         app:exitAnim="@anim/slide_no"
         app:popExitAnim="@anim/slide_out_down" />
+      <action
+        android:id="@+id/action_masterObjectListFragment_to_masterTaskCategoryFragment"
+        app:destination="@id/masterTaskCategoryFragment"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/slide_no"
+        app:popExitAnim="@anim/slide_out_down"/>
     </fragment>
     <fragment
       android:id="@+id/masterLocationFragment"
@@ -1014,6 +1020,17 @@
       <argument
         android:name="product"
         app:argType="xyz.zedler.patrick.grocy.model.Product" />
+    </fragment>
+    <fragment
+      android:id="@+id/masterTaskCategoryFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.MasterTaskCategoryFragment"
+      android:label="MasterTaskCategoryFragment"
+      tools:layout="@layout/fragment_master_task_category">
+      <argument
+        android:name="taskCategory"
+        app:argType="xyz.zedler.patrick.grocy.model.TaskCategory"
+        app:nullable="true"
+        android:defaultValue="@null" />
     </fragment>
   </navigation>
   <fragment
