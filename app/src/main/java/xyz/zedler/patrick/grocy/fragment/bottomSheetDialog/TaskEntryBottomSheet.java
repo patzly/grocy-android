@@ -99,11 +99,23 @@ public class TaskEntryBottomSheet extends BaseBottomSheet {
     DateUtil dateUtil = new DateUtil(activity);
 
     binding.name.setText(getString(R.string.property_name), task.getName());
-    binding.date.setText(
-        getString(R.string.property_due_date),
-        dateUtil.getLocalizedDate(task.getDueDate()),
-        dateUtil.getHumanForDaysFromNow(task.getDueDate())
-    );
+    if (task.getDescription() == null || task.getDescription().trim().isEmpty()) {
+      binding.cardDescription.setVisibility(View.GONE);
+    } else {
+      binding.cardDescription.setText(task.getDescription());
+    }
+    if (task.getDueDate() != null && !task.getDueDate().isEmpty()) {
+      binding.date.setText(
+          getString(R.string.property_due_date),
+          dateUtil.getLocalizedDate(task.getDueDate()),
+          dateUtil.getHumanForDaysFromNow(task.getDueDate())
+      );
+    } else {
+      binding.date.setText(
+          getString(R.string.property_due_date),
+          getString(R.string.subtitle_none_selected)
+      );
+    }
     binding.category.setText(
         getString(R.string.property_category),
         bundle.getString(ARGUMENT.TASK_CATEGORY)
@@ -111,7 +123,7 @@ public class TaskEntryBottomSheet extends BaseBottomSheet {
     binding.assignedTo.setText(
         getString(R.string.property_assigned_to),
         bundle.getString(ARGUMENT.USER) != null ? bundle.getString(ARGUMENT.USER)
-            : getString(R.string.subtitle_none)
+            : getString(R.string.subtitle_none_selected)
     );
 
     binding.toolbar.setOnMenuItemClickListener(item -> {

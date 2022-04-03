@@ -93,6 +93,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+      <xyz.zedler.patrick.grocy.view.ExpandableCard
+        android:id="@+id/card_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginVertical="8dp" />
+
       <xyz.zedler.patrick.grocy.view.ListItem
         android:id="@+id/date"
         android:layout_width="match_parent"
