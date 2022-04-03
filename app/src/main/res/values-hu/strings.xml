@@ -109,7 +109,6 @@
   <string name="action_share">Megosztás</string>
   <string name="action_share_description">Mesélj a barátaidnak a Grocy Androidról</string>
   <string name="action_no_filter">Nincs szűrő</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d hamarosan lejár</item>
@@ -406,7 +405,6 @@
   <string name="title_external_barcode_input">Külső vonalkódolvasó</string>
   <string name="title_confirmation">Megerősítés</string>
   <string name="title_choose_product">Termék kiválasztás</string>
-
   <string name="title_spoiled">Megromlott</string>
   <string name="title_use_specific">Megadott készletelem használata</string>
   <string name="title_specific">Megadott készletelem</string>
