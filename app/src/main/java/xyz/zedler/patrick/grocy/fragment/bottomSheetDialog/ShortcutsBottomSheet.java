@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 
@@ -97,10 +98,14 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         setCheckBoxChecked(R.id.purchase);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.CONSUME)) {
         setCheckBoxChecked(R.id.consume);
-      } else if (shortcutInfo.getId().equals(ShortcutUtil.INVENTORY)) {
-        setCheckBoxChecked(R.id.inventory);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.TRANSFER)) {
         setCheckBoxChecked(R.id.transfer);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.INVENTORY)) {
+        setCheckBoxChecked(R.id.inventory);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.TASKS)) {
+        setCheckBoxChecked(R.id.tasks);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.ADD_TASK)) {
+        setCheckBoxChecked(R.id.task_add);
       }
     }
 
@@ -166,6 +171,16 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         shortcutInfos.add(ShortcutUtil.createShortcutInventory(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.transfer) {
         shortcutInfos.add(ShortcutUtil.createShortcutTransfer(context, checkBox.getText()));
+      } else if (checkBox.getId() == R.id.tasks) {
+        shortcutInfos.add(ShortcutUtil.createShortcutTasks(context, checkBox.getText()));
+      } else if (checkBox.getId() == R.id.task_add) {
+        Uri uriWithArgs = getUriWithArgs(R.string.deep_link_taskEntryEditFragment,
+            new TaskEntryEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                .build().toBundle()
+        );
+        shortcutInfos.add(ShortcutUtil.createShortcutTaskAdd(
+            context, uriWithArgs, checkBox.getText()
+        ));
       }
     }
 
