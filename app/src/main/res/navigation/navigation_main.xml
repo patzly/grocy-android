@@ -283,6 +283,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_stockOverviewFragment"
       app:destination="@id/stockOverviewFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_tasksFragment"
+      app:destination="@id/tasksFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"

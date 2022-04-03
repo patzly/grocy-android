@@ -176,6 +176,32 @@
 
       </LinearLayout>
 
+      <LinearLayout
+        android:id="@+id/container_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View style="@style/Widget.Grocy.Divider" />
+
+        <LinearLayout
+          android:id="@+id/linear_drawer_tasks"
+          style="@style/Widget.Grocy.LinearLayout.Drawer">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.Drawer"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_checklist" />
+
+          <TextView
+            android:id="@+id/text_drawer_tasks"
+            style="@style/Widget.Grocy.TextView.DrawerItem"
+            android:text="@string/title_tasks" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
       <View style="@style/Widget.Grocy.Divider" />
 
       <LinearLayout
