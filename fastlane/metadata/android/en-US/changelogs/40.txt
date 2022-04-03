@@ -1,0 +1,6 @@
+Update your grocy server to benefit from the latest changes.
+New:
+- View and manage tasks (thanks @mcbloch for the initial work)
+- 'Extra field' option on stock overview and shopping list page
+- Product option "Treat opened as out of stock" for server v3.2.0
+Full changelog is available in the app.
