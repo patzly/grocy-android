@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.util;
 
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
@@ -43,6 +42,8 @@ public class ObjectUtil {
         return ((Store) object).getId();
       case GrocyApi.ENTITY.PRODUCTS:
         return ((Product) object).getId();
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        return ((TaskCategory) object).getId();
       default:
         return -1;
     }
@@ -61,7 +62,7 @@ public class ObjectUtil {
         return ((Store) object).getName();
       case GrocyApi.ENTITY.PRODUCTS:
         return ((Product) object).getName();
-      case ENTITY.TASK_CATEGORIES:
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
         return ((TaskCategory) object).getName();
       default:
         return null;
@@ -81,6 +82,8 @@ public class ObjectUtil {
         return ((Store) object).getDescription();
       case GrocyApi.ENTITY.PRODUCTS:
         return ((Product) object).getDescription();
+      case GrocyApi.ENTITY.TASK_CATEGORIES:
+        return ((TaskCategory) object).getDescription();
       default:
         return null;
     }

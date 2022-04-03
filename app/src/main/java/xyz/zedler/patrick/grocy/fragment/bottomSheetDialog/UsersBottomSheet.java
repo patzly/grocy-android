@@ -32,22 +32,21 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
+import xyz.zedler.patrick.grocy.adapter.UserAdapter;
+import xyz.zedler.patrick.grocy.adapter.UserAdapter.UserAdapterListener;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class StoresBottomSheet extends BaseBottomSheet
-    implements StoreAdapter.StoreAdapterListener {
+public class UsersBottomSheet extends BaseBottomSheet
+    implements UserAdapterListener {
 
-  private final static String TAG = StoresBottomSheet.class.getSimpleName();
+  private final static String TAG = UsersBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
   private FragmentBottomsheetListSelectionBinding binding;
-  private ArrayList<Store> stores;
 
   @NonNull
   @Override
@@ -74,28 +73,29 @@ public class StoresBottomSheet extends BaseBottomSheet
     activity = (MainActivity) requireActivity();
     Bundle bundle = requireArguments();
 
-    ArrayList<Store> storesArg = bundle.getParcelableArrayList(Constants.ARGUMENT.STORES);
-    assert storesArg != null;
-    stores = new ArrayList<>(storesArg);
+    ArrayList<User> usersArg = bundle
+        .getParcelableArrayList(ARGUMENT.USERS);
+    assert usersArg != null;
+    ArrayList<User> users = new ArrayList<>(usersArg);
 
-    SortUtil.sortStoresByName(requireContext(), stores, true);
+    SortUtil.sortUsersByName(requireContext(), users, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
-      stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
+      users.add(0, new User(-1, getString(R.string.subtitle_none_selected)));
     }
-    int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
-    binding.textListSelectionTitle.setText(activity.getString(R.string.property_stores));
+    binding.textListSelectionTitle.setText(activity.getString(R.string.property_users));
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
     binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
-    binding.recyclerListSelection.setAdapter(new StoreAdapter(stores, selected, this));;
+    binding.recyclerListSelection.setAdapter(new UserAdapter(users, selected, this));;
   }
 
   @Override
-  public void onItemRowClicked(int position) {
+  public void onItemRowClicked(User user) {
     BaseFragment currentFragment = activity.getCurrentFragment();
-    currentFragment.selectStore(stores.get(position));
+    currentFragment.selectUser(user);
     dismiss();
   }
 

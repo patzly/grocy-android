@@ -68,7 +68,7 @@ public class DateUtil {
   }
 
   public static int getDaysFromNow(String dateString) {
-    if (dateString == null) {
+    if (dateString == null || dateString.isEmpty()) {
       return 0;
     }
     Date date = null;

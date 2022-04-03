@@ -31,34 +31,37 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.databinding.RowTaskItemBinding;
+import xyz.zedler.patrick.grocy.databinding.RowTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class TasksItemAdapter extends
-    RecyclerView.Adapter<TasksItemAdapter.ViewHolder> {
+public class TaskEntryAdapter extends
+    RecyclerView.Adapter<TaskEntryAdapter.ViewHolder> {
 
-  private final static String TAG = TasksItemAdapter.class.getSimpleName();
+  private final static String TAG = TaskEntryAdapter.class.getSimpleName();
   private final static boolean DEBUG = false;
 
   private Context context;
+  private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<Task> tasks;
   private final HashMap<Integer, TaskCategory> taskCategoriesHashMap;
   private final HashMap<Integer, User> usersHashMap;
-  private final PluralUtil pluralUtil;
   private final TasksItemAdapterListener listener;
   private String sortMode;
   private boolean sortAscending;
 
-  public TasksItemAdapter(
+  public TaskEntryAdapter(
       Context context,
+      LinearLayoutManager linearLayoutManager,
       ArrayList<Task> tasks,
       HashMap<Integer, TaskCategory> taskCategories,
       HashMap<Integer, User> usersHashMap,
@@ -67,10 +70,10 @@ public class TasksItemAdapter extends
       boolean sortAscending
   ) {
     this.context = context;
+    this.linearLayoutManager = linearLayoutManager;
     this.tasks = new ArrayList<>(tasks);
     this.taskCategoriesHashMap = new HashMap<>(taskCategories);
     this.usersHashMap = new HashMap<>(usersHashMap);
-    this.pluralUtil = new PluralUtil(context);
     this.listener = listener;
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
@@ -91,9 +94,9 @@ public class TasksItemAdapter extends
 
   public static class TaskViewHolder extends ViewHolder {
 
-    private final RowTaskItemBinding binding;
+    private final RowTaskEntryBinding binding;
 
-    public TaskViewHolder(RowTaskItemBinding binding) {
+    public TaskViewHolder(RowTaskEntryBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -102,7 +105,7 @@ public class TasksItemAdapter extends
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new TaskViewHolder(RowTaskItemBinding.inflate(
+    return new TaskViewHolder(RowTaskEntryBinding.inflate(
         LayoutInflater.from(parent.getContext()),
         parent,
         false
@@ -134,12 +137,12 @@ public class TasksItemAdapter extends
       holder.binding.title.setAlpha(1.0f);
     }
 
-    // BEST BEFORE
+    // DUE DATE
 
     String date = task.getDueDate();
     Integer days = null;
     boolean colorDays = false;
-    if (date != null) {
+    if (date != null && !date.isEmpty()) {
       days = DateUtil.getDaysFromNow(date);
     }
 
@@ -177,24 +180,24 @@ public class TasksItemAdapter extends
 
     // CATEGORY
 
-    TaskCategory category = task.getCategoryId() != null
+    TaskCategory category = NumUtil.isStringInt(task.getCategoryId())
         ? taskCategoriesHashMap.get(Integer.parseInt(task.getCategoryId())) : null;
     if (task.isDone()) {
       holder.binding.category.setVisibility(View.GONE);
     } else if (category != null) {
       holder.binding.category.setText(category.getName());
-      holder.binding.category.setTypeface(null, Typeface.NORMAL);
+      holder.binding.category.setTypeface(holder.binding.category.getTypeface(), Typeface.NORMAL);
       holder.binding.category.setVisibility(View.VISIBLE);
     } else {
       holder.binding.category.setText(holder.binding.category.getContext()
           .getString(R.string.subtitle_uncategorized));
-      holder.binding.category.setTypeface(null, Typeface.ITALIC);
+      holder.binding.category.setTypeface(holder.binding.category.getTypeface(), Typeface.ITALIC);
       holder.binding.category.setVisibility(View.VISIBLE);
     }
 
     // USER
 
-    User user = task.getAssignedToUserId() != null
+    User user = NumUtil.isStringInt(task.getAssignedToUserId())
         ? usersHashMap.get(Integer.parseInt(task.getAssignedToUserId())) : null;
     if (user != null && !task.isDone()) {
       holder.binding.user.setText(user.getDisplayName());
@@ -228,7 +231,7 @@ public class TasksItemAdapter extends
       boolean sortAscending
   ) {
 
-    TasksItemAdapter.DiffCallback diffCallback = new TasksItemAdapter.DiffCallback(
+    TaskEntryAdapter.DiffCallback diffCallback = new TaskEntryAdapter.DiffCallback(
         this.tasks,
         newList,
         this.taskCategoriesHashMap,
@@ -248,7 +251,8 @@ public class TasksItemAdapter extends
     this.usersHashMap.clear();
     this.usersHashMap.putAll(usersHashMap);
     this.sortMode = sortMode;
-    diffResult.dispatchUpdatesTo(this);
+    this.sortAscending = sortAscending;
+    diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
   static class DiffCallback extends DiffUtil.Callback {
@@ -319,9 +323,9 @@ public class TasksItemAdapter extends
         return false;
       }
 
-      TaskCategory taskCategoryOld = oldItem.getCategoryId() != null
+      TaskCategory taskCategoryOld = NumUtil.isStringInt(oldItem.getCategoryId())
           ? taskCategoriesHashMapOld.get(Integer.parseInt(oldItem.getCategoryId())) : null;
-      TaskCategory taskCategoryNew = newItem.getCategoryId() != null
+      TaskCategory taskCategoryNew = NumUtil.isStringInt(newItem.getCategoryId())
           ? taskCategoriesHashMapNew.get(Integer.parseInt(newItem.getCategoryId())) : null;
       if (taskCategoryOld == null && taskCategoryNew != null
           || taskCategoryOld != null && taskCategoryNew == null
@@ -329,9 +333,9 @@ public class TasksItemAdapter extends
         return false;
       }
 
-      User userOld = oldItem.getAssignedToUserId() != null
+      User userOld = NumUtil.isStringInt(oldItem.getAssignedToUserId())
           ? usersHashMapOld.get(Integer.parseInt(oldItem.getAssignedToUserId())) : null;
-      User userNew = newItem.getAssignedToUserId() != null
+      User userNew = NumUtil.isStringInt(newItem.getAssignedToUserId())
           ? usersHashMapNew.get(Integer.parseInt(newItem.getAssignedToUserId())) : null;
       if (userOld == null && userNew != null
           || userOld != null && userNew == null
@@ -344,6 +348,61 @@ public class TasksItemAdapter extends
       }
 
       return newItem.equals(oldItem);
+    }
+  }
+
+  /**
+   * Custom ListUpdateCallback that prevents RecyclerView from scrolling down if top item is moved.
+   */
+  public static final class AdapterListUpdateCallback implements ListUpdateCallback {
+
+    @NonNull
+    private final TaskEntryAdapter mAdapter;
+    private final LinearLayoutManager linearLayoutManager;
+
+    public AdapterListUpdateCallback(
+        @NonNull TaskEntryAdapter adapter,
+        LinearLayoutManager linearLayoutManager
+    ) {
+      this.mAdapter = adapter;
+      this.linearLayoutManager = linearLayoutManager;
+    }
+
+    @Override
+    public void onInserted(int position, int count) {
+      mAdapter.notifyItemRangeInserted(position, count);
+    }
+
+    @Override
+    public void onRemoved(int position, int count) {
+      mAdapter.notifyItemRangeRemoved(position, count);
+    }
+
+    @Override
+    public void onMoved(int fromPosition, int toPosition) {
+      // workaround for https://github.com/patzly/grocy-android/issues/439
+      // figure out the position of the first visible item
+      int firstPos = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+      int offsetTop = 0;
+      if(firstPos >= 0) {
+        View firstView = linearLayoutManager.findViewByPosition(firstPos);
+        if (firstView != null) {
+          offsetTop = linearLayoutManager.getDecoratedTop(firstView)
+              - linearLayoutManager.getTopDecorationHeight(firstView);
+        }
+      }
+
+      mAdapter.notifyItemMoved(fromPosition, toPosition);
+
+      // reapply the saved position
+      if(firstPos >= 0) {
+        linearLayoutManager.scrollToPositionWithOffset(firstPos, offsetTop);
+      }
+    }
+
+    @Override
+    public void onChanged(int position, int count, Object payload) {
+      mAdapter.notifyItemRangeChanged(position, count, payload);
     }
   }
 }

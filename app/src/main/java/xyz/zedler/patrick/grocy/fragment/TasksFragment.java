@@ -37,7 +37,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.adapter.TasksItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentTasksBinding;
@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -58,7 +59,7 @@ import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
 
 public class TasksFragment extends BaseFragment implements
-    TasksItemAdapter.TasksItemAdapterListener {
+    TaskEntryAdapter.TasksItemAdapterListener {
 
   private final static String TAG = TasksFragment.class.getSimpleName();
 
@@ -155,8 +156,8 @@ public class TasksFragment extends BaseFragment implements
       } else {
         viewModel.getInfoFullscreenLive().setValue(null);
       }
-      if (binding.recycler.getAdapter() instanceof TasksItemAdapter) {
-        ((TasksItemAdapter) binding.recycler.getAdapter()).updateData(
+      if (binding.recycler.getAdapter() instanceof TaskEntryAdapter) {
+        ((TaskEntryAdapter) binding.recycler.getAdapter()).updateData(
             items,
             viewModel.getTaskCategoriesHashMap(),
             viewModel.getUsersHashMap(),
@@ -165,8 +166,9 @@ public class TasksFragment extends BaseFragment implements
         );
       } else {
         binding.recycler.setAdapter(
-            new TasksItemAdapter(
+            new TaskEntryAdapter(
                 requireContext(),
+                (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
                 viewModel.getTaskCategoriesHashMap(),
                 viewModel.getUsersHashMap(),
@@ -242,7 +244,8 @@ public class TasksFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         animated,
-        () -> {}
+        () -> navigate(TasksFragmentDirections
+            .actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE))
     );
   }
 
@@ -297,6 +300,12 @@ public class TasksFragment extends BaseFragment implements
   @Override
   public void toggleDoneStatus(Task task) {
     viewModel.changeTaskDoneStatus(task.getId());
+  }
+
+  @Override
+  public void editTask(Task task) {
+    navigate(TasksFragmentDirections
+        .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT).setTaskEntry(task));
   }
 
   @Override

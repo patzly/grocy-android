@@ -736,6 +736,10 @@
   <string name="property_picture">Picture</string>
   <string name="property_note_singleline">Single-line note</string>
   <string name="property_note_multiline">Multi-line note</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Single-line</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Multi-line</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">In stock: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
@@ -751,6 +755,7 @@
   <string name="property_calories_total">Calories (total)</string>
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
+  <string name="property_users">Users</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

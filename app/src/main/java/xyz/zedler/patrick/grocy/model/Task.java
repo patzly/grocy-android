@@ -152,10 +152,6 @@ public class Task implements Parcelable {
     return done;
   }
 
-//  public boolean isActive() {
-//    return NumUtil.isStringInt(active) && Integer.parseInt(active) == 1;
-//  }
-
   public boolean isDone() {
     return done == 1;
   }
@@ -204,18 +200,18 @@ public class Task implements Parcelable {
     JSONObject json = new JSONObject();
     try {
       Object name = task.name;
-      Object description = task.description != null ? task.description : JSONObject.NULL;
-      Object dueDate = task.dueDate;
-      Object done = task.done;
-      Object doneTimeStamp = task.doneTimeStamp;
-      Object categoryId = task.categoryId;
+      Object description = task.description != null ? task.description : "";
+      Object dueDate = task.dueDate != null ? task.dueDate : "";
+      Object done = task.done != null ? String.valueOf(task.done) : "0";
+      Object categoryId = task.categoryId != null ? task.categoryId : "";
+      Object assignedToUserId = task.assignedToUserId != null ? task.assignedToUserId : "";
 
       json.put("name", name);
       json.put("description", description);
       json.put("due_date", dueDate);
       json.put("done", done);
-      json.put("done_time_stamp", doneTimeStamp);
       json.put("category_id", categoryId);
+      json.put("assigned_to_user_id", assignedToUserId);
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "getJsonFromTask: " + e);

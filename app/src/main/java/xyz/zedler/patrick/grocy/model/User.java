@@ -5,8 +5,10 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "user_table")
@@ -42,6 +44,12 @@ public class User  implements Parcelable {
 
   public User() {
   }  // for Room
+
+  @Ignore
+  public User(int id, String displayName) {
+    this.id = id;
+    this.displayName = displayName;
+  }
 
   public User(Parcel parcel) {
     id = parcel.readInt();
@@ -131,6 +139,15 @@ public class User  implements Parcelable {
 
   public void setRowCreatedFilestamp(String rowCreatedFilestamp) {
     this.rowCreatedFilestamp = rowCreatedFilestamp;
+  }
+
+  public static User getUserFromId(List<User> users, int id) {
+    for (User user : users) {
+      if (user.getId() == id) {
+        return user;
+      }
+    }
+    return null;
   }
 
   @Override

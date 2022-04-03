@@ -55,6 +55,8 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 
 @SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
@@ -169,6 +171,12 @@ public class BaseFragment extends Fragment {
   }
 
   public void selectStore(Store store) {
+  }
+
+  public void selectTaskCategory(TaskCategory taskCategory) {
+  }
+
+  public void selectUser(User user) {
   }
 
   public void setLanguage(Language language) {

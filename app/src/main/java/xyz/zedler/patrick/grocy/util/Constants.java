@@ -310,6 +310,7 @@ public final class Constants {
     public final static String STORES = "stores";
     public final static String TASK = "task";
     public final static String TASK_CATEGORY = "task_category";
+    public final static String TASK_CATEGORIES = "task_categories";
     public final static String SHOPPING_LIST = "shopping_list";
     public final static String PRODUCT_GROUP = "product_group";
     public final static String PRODUCT_GROUPS = "product_groups";
@@ -351,6 +352,8 @@ public final class Constants {
     public final static String PENDING_PRODUCT_ID = "pending_product_id";
     public final static String BACK_FROM_CHOOSE_PRODUCT_PAGE = "back_from_choose_product_page";
     public final static String USER = "user";
+    public final static String USERS = "users";
+    public final static String SHOW_OPTION_NEVER_EXPIRES = "show_option_never_expires";
   }
 
   public final static class FAB {

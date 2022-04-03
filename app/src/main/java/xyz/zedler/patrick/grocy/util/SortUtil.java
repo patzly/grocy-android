@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.User;
 
 public class SortUtil {
 
@@ -134,11 +135,12 @@ public class SortUtil {
         (item1, item2) -> {
           String bbd1 = (ascending ? item1 : item2).getDueDate();
           String bbd2 = (ascending ? item2 : item1).getDueDate();
-          if (bbd1 == null && bbd2 == null) {
+          if (bbd1 == null && bbd2 == null
+              || bbd1 != null && bbd1.isEmpty() && bbd2 != null && bbd2.isEmpty()) {
             return 0;
-          } else if (bbd1 == null) {
+          } else if (bbd1 == null || bbd1.isEmpty()) {
             return -1; // or 1 when items without BBD should be last
-          } else if (bbd2 == null) {
+          } else if (bbd2 == null || bbd2.isEmpty()) {
             return 1; // or -1 when items without BBD should be last
           }
           return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
@@ -158,6 +160,21 @@ public class SortUtil {
     Collections.sort(taskCategories, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
+    ));
+  }
+
+  public static void sortUsersByName(
+      Context context,
+      ArrayList<User> users,
+      boolean ascending
+  ) {
+    if (users == null || users.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(users, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).getDisplayName().toLowerCase(),
+        (ascending ? item2 : item1).getDisplayName().toLowerCase()
     ));
   }
 

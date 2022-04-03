@@ -193,6 +193,12 @@
     <deepLink
       android:id="@+id/deepLink13"
       app:uri="@string/deep_link_tasksFragment" />
+    <action
+      android:id="@+id/action_tasksFragment_to_taskEntryEditFragment"
+      app:destination="@id/taskEntryEditFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <dialog
     android:id="@+id/productOverviewBottomSheetDialogFragment"
@@ -1058,5 +1064,19 @@
       app:exitAnim="@anim/slide_to_start"
       app:popEnterAnim="@anim/slide_from_start"
       app:popExitAnim="@anim/slide_to_end" />
+  </fragment>
+  <fragment
+    android:id="@+id/taskEntryEditFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragment"
+    android:label="TaskEntryEditFragment"
+    tools:layout="@layout/fragment_task_entry_edit">
+    <argument
+      android:name="action"
+      app:argType="string" />
+    <argument
+      android:name="taskEntry"
+      app:argType="xyz.zedler.patrick.grocy.model.Task"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </fragment>
 </navigation>
