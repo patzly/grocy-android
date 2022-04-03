@@ -614,6 +614,16 @@
     <item quantity="other">%1$d items are on your shopping list.</item>
   </plurals>
   <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d task is to be completed.</item>
+    <item quantity="other">%1$d tasks are to be completed.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">You are assigned %1$d task.</item>
+    <item quantity="other">You are assigned %1$d tasks.</item>
+  </plurals>
+  <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Your database contains %1$d product.</item>
     <item quantity="other">Your database contains %1$d products.</item>

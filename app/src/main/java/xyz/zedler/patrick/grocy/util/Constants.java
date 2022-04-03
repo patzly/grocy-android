@@ -37,6 +37,7 @@ public final class Constants {
     public final static String CURRENCY = "currency";
     public final static String GROCY_VERSION = "grocy_version";
     public final static String CREDENTIALS = "credentials";
+    public final static String CURRENT_USER_ID = "current_user_id";
 
     public final static String FEATURE_STOCK = "feature_stock";
     public final static String FEATURE_SHOPPING_LIST = "feature_shopping_list";

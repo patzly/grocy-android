@@ -659,7 +659,13 @@
                   style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="@{viewModel.shoppingListDescriptionTextLive}" />
+                  android:text="@{viewModel.tasksDescriptionTextLive}" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@{viewModel.tasksUserDescriptionTextLive}" />
 
               </LinearLayout>
 

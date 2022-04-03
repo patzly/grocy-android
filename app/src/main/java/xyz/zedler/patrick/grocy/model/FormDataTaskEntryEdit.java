@@ -183,6 +183,7 @@ public class FormDataTaskEntryEdit {
     descriptionLive.setValue(null);
     dueDateLive.setValue(null);
     taskCategoryLive.setValue(null);
+    userLive.setValue(null);
     new Handler().postDelayed(() -> nameErrorLive.setValue(null), 50);
   }
 

@@ -143,6 +143,13 @@ public class GrocyApi {
   }
 
   /**
+   * Returns the currently authenticated user
+   */
+  public String getUser() {
+    return getUrl("/user");
+  }
+
+  /**
    * Returns all settings of the currently logged in user
    */
   public String getUserSettings() {

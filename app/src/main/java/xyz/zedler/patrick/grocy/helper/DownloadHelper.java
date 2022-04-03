@@ -2067,6 +2067,41 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem getCurrentUserId(OnIntegerResponseListener onResponseListener) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getUser(),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<User>>() {
+              }.getType();
+              ArrayList<User> users = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "get currentUserId: " + response);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(users.size() == 1 ? users.get(0).getId() : -1);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
   public QueueItem getSystemInfo(
       OnStringResponseListener onResponseListener,
       OnErrorListener onErrorListener
@@ -2651,6 +2686,11 @@ public class DownloadHelper {
   public interface OnStringResponseListener {
 
     void onResponse(String response);
+  }
+
+  public interface OnIntegerResponseListener {
+
+    void onResponse(int response);
   }
 
   public interface OnJSONResponseListener {

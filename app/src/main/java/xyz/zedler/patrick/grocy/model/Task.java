@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "task_table")
 public class Task implements Parcelable {
@@ -243,14 +244,35 @@ public class Task implements Parcelable {
     return null;
   }
 
-  public static ArrayList<Task> getDoneTasksOnly(ArrayList<Task> allTasks) {
+  public static ArrayList<Task> getUndoneTasksOnly(List<Task> allTasks) {
     ArrayList<Task> activeTasksOnly = new ArrayList<>();
     for (Task task : allTasks) {
-      if (task.isDone()) {
+      if (!task.isDone()) {
         activeTasksOnly.add(task);
       }
     }
     return activeTasksOnly;
+  }
+
+  public static int getUndoneTasksCount(List<Task> allTasks) {
+    int undoneTasks = 0;
+    for (Task task : allTasks) {
+      if (!task.isDone()) {
+        undoneTasks++;
+      }
+    }
+    return undoneTasks;
+  }
+
+  public static int getAssignedTasksCount(List<Task> tasks, int userId) {
+    int assignedTasks = 0;
+    for (Task task : tasks) {
+      if (NumUtil.isStringInt(task.getAssignedToUserId())
+          && Integer.parseInt(task.getAssignedToUserId()) == userId) {
+        assignedTasks++;
+      }
+    }
+    return assignedTasks;
   }
 
   @Override
