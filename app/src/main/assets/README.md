@@ -1,6 +1,7 @@
 # TODO
 
 ## upcoming changelog lines:
+- New: Purchase page quick mode has now the ability to create products later (#411)
 
 ## Android 12 and Material You
 
