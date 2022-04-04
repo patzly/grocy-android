@@ -54,6 +54,7 @@ public class GrocyApi {
     public final static String MEAL_PLAN = "meal_plan";
     public final static String TASKS = "tasks";
     public final static String TASK_CATEGORIES = "task_categories";
+    public final static String CHORES = "chores";
   }
 
   public GrocyApi(Application application) {

@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -2067,6 +2068,63 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem updateChores(
+      String dbChangedTime,
+      OnChoresResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_CHORES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(ENTITY.CHORES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<Chore>>() {
+                }.getType();
+                ArrayList<Chore> chores = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Chores: " + chores);
+                }
+                Single.concat(
+                    appDatabase.choreDao().deleteChores(),
+                    appDatabase.choreDao().insertChores(chores)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_CHORES, dbChangedTime).apply();
+                      onResponseListener.onResponse(chores);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Chores download");
+      }
+      return null;
+    }
+  }
+
   public QueueItem getCurrentUserId(OnIntegerResponseListener onResponseListener) {
     return new QueueItem() {
       @Override
@@ -2676,6 +2734,11 @@ public class DownloadHelper {
   public interface OnTaskCategoriesResponseListener {
 
     void onResponse(ArrayList<TaskCategory> taskCategories);
+  }
+
+  public interface OnChoresResponseListener {
+
+    void onResponse(ArrayList<Chore> tasks);
   }
 
   public interface OnUsersResponseListener {

@@ -23,6 +23,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import xyz.zedler.patrick.grocy.dao.ChoreDao;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
@@ -43,6 +44,7 @@ import xyz.zedler.patrick.grocy.dao.StoreDao;
 import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
 import xyz.zedler.patrick.grocy.dao.TaskDao;
 import xyz.zedler.patrick.grocy.dao.UserDao;
+import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
@@ -85,9 +87,10 @@ import xyz.zedler.patrick.grocy.model.User;
         PendingProduct.class,
         PendingProductBarcode.class,
         StoredPurchase.class,
-        User.class
+        User.class,
+        Chore.class
     },
-    version = 29
+    version = 30
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -132,6 +135,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract StoredPurchaseDao storedPurchaseDao();
 
   public abstract UserDao userDao();
+
+  public abstract ChoreDao choreDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {
