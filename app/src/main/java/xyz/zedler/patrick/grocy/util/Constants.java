@@ -49,6 +49,8 @@ public final class Constants {
     public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
     public final static String FEATURE_RECIPES = "feature_recipes";
     public final static String FEATURE_TASKS = "feature_tasks";
+    public final static String FEATURE_CHORES = "feature_chores";
+    public final static String FEATURE_CHORES_ASSIGNMENTS = "feature_chores_assignments";
 
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";

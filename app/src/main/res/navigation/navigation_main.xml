@@ -286,6 +286,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_tasksFragment"
       app:destination="@id/tasksFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_choresFragment"
+      app:destination="@id/choresFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
@@ -1101,5 +1104,14 @@
     <deepLink
       android:id="@+id/deepLink15"
       app:uri="@string/deep_link_taskEntryEditFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/choresFragment"
+    android:label="ChoresFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ChoresFragment"
+    tools:layout="@layout/fragment_chores">
+    <deepLink
+      android:id="@+id/deepLink16"
+      app:uri="@string/deep_link_choresFragment" />
   </fragment>
 </navigation>

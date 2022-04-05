@@ -451,6 +451,7 @@
   <string name="title_choose_product">Choose product</string>
   <string name="title_pending_products">Pending products</string>
   <string name="title_stored_purchases">Stored purchases</string>
+  <string name="title_chores">Chores</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
