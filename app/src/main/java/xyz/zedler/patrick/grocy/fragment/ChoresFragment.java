@@ -206,7 +206,19 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
             return;
           }
           underlayButtons.add(new UnderlayButton(
-              R.drawable.ic_round_done,
+              R.drawable.ic_round_play_arrow,
+              pos -> {
+                if (pos >= displayedItems.size()) {
+                  return;
+                }
+                swipeBehavior.recoverLatestSwipedItem();
+                new Handler().postDelayed(() -> viewModel
+                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
+              }
+          ));
+          // TODO: only with !manual scheduling
+          underlayButtons.add(new UnderlayButton(
+              R.drawable.ic_round_skip_next,
               pos -> {
                 if (pos >= displayedItems.size()) {
                   return;
