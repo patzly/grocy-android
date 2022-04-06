@@ -297,4 +297,13 @@ public class GrocyApi {
   public String undoTask(int taskId) {
     return getUrl("/tasks/" + taskId + "/undo");
   }
+
+  // CHORES
+
+  /**
+   * Returns all chores incl. the next estimated execution time per chore
+   */
+  public String getChores() {
+    return getUrl("/chores");
+  }
 }

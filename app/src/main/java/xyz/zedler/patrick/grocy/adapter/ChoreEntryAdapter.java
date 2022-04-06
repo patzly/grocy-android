@@ -21,8 +21,6 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowChoreEntryBinding;
-import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.model.TaskCategory;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -52,8 +49,7 @@ public class ChoreEntryAdapter extends
 
   private Context context;
   private final LinearLayoutManager linearLayoutManager;
-  private final ArrayList<Task> tasks;
-  private final HashMap<Integer, TaskCategory> taskCategoriesHashMap;
+  private final ArrayList<ChoreEntry> choreEntries;
   private final HashMap<Integer, User> usersHashMap;
   private final ChoreEntryAdapterListener listener;
   private String sortMode;
@@ -62,8 +58,7 @@ public class ChoreEntryAdapter extends
   public ChoreEntryAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<Task> tasks,
-      HashMap<Integer, TaskCategory> taskCategories,
+      ArrayList<ChoreEntry> choreEntries,
       HashMap<Integer, User> usersHashMap,
       ChoreEntryAdapterListener listener,
       String sortMode,
@@ -71,8 +66,7 @@ public class ChoreEntryAdapter extends
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
-    this.tasks = new ArrayList<>(tasks);
-    this.taskCategoriesHashMap = new HashMap<>(taskCategories);
+    this.choreEntries = new ArrayList<>(choreEntries);
     this.usersHashMap = new HashMap<>(usersHashMap);
     this.listener = listener;
     this.sortMode = sortMode;
@@ -118,37 +112,25 @@ public class ChoreEntryAdapter extends
 
     int position = viewHolder.getAdapterPosition();
 
-    Task task = tasks.get(position);
+    ChoreEntry choreEntry = choreEntries.get(position);
     TaskViewHolder holder = (TaskViewHolder) viewHolder;
 
     // NAME
 
-    holder.binding.title.setText(task.getName());
-
-    if (task.isDone()) {
-      holder.binding.title.setPaintFlags(
-          holder.binding.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
-      );
-      holder.binding.title.setAlpha(0.6f);
-    } else {
-      holder.binding.title.setPaintFlags(
-          holder.binding.title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
-      );
-      holder.binding.title.setAlpha(1.0f);
-    }
+    holder.binding.title.setText(choreEntry.getChoreName());
 
     // DUE DATE
 
-    String date = task.getDueDate();
+    String date = choreEntry.getNextEstimatedExecutionTime();
     Integer days = null;
     boolean colorDays = false;
     if (date != null && !date.isEmpty()) {
-      days = DateUtil.getDaysFromNow(date);
+      days = DateUtil.getDaysFromNowWithTime(date);
     }
 
-    if (days != null && !task.isDone()) {
+    if (days != null) {
       holder.binding.days.setVisibility(View.VISIBLE);
-      holder.binding.days.setText(new DateUtil(context).getHumanForDaysFromNow(date));
+      holder.binding.days.setText(new DateUtil(context).getHumanForDaysFromNow(date, true));
       if (days <= 5) {
         colorDays = true;
       }
@@ -178,28 +160,11 @@ public class ChoreEntryAdapter extends
       );
     }
 
-    // CATEGORY
-
-    TaskCategory category = NumUtil.isStringInt(task.getCategoryId())
-        ? taskCategoriesHashMap.get(Integer.parseInt(task.getCategoryId())) : null;
-    if (task.isDone()) {
-      holder.binding.category.setVisibility(View.GONE);
-    } else if (category != null) {
-      holder.binding.category.setText(category.getName());
-      holder.binding.category.setTypeface(holder.binding.category.getTypeface(), Typeface.NORMAL);
-      holder.binding.category.setVisibility(View.VISIBLE);
-    } else {
-      holder.binding.category.setText(holder.binding.category.getContext()
-          .getString(R.string.subtitle_uncategorized));
-      holder.binding.category.setTypeface(holder.binding.category.getTypeface(), Typeface.ITALIC);
-      holder.binding.category.setVisibility(View.VISIBLE);
-    }
-
     // USER
 
-    User user = NumUtil.isStringInt(task.getAssignedToUserId())
-        ? usersHashMap.get(Integer.parseInt(task.getAssignedToUserId())) : null;
-    if (user != null && !task.isDone()) {
+    User user = NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+        ? usersHashMap.get(Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) : null;
+    if (user != null) {
       holder.binding.user.setText(user.getDisplayName());
       holder.binding.user.setVisibility(View.VISIBLE);
     } else {
@@ -209,33 +174,30 @@ public class ChoreEntryAdapter extends
     // CONTAINER
 
     holder.binding.linearContainer.setOnClickListener(
-        view -> listener.onItemRowClicked(task)
+        view -> listener.onItemRowClicked(choreEntry)
     );
   }
 
   @Override
   public int getItemCount() {
-    return tasks.size();
+    return choreEntries.size();
   }
 
   public interface ChoreEntryAdapterListener {
 
-    void onItemRowClicked(Task task);
+    void onItemRowClicked(ChoreEntry choreEntry);
   }
 
   public void updateData(
-      ArrayList<Task> newList,
-      HashMap<Integer, TaskCategory> taskCategoriesHashMap,
+      ArrayList<ChoreEntry> newList,
       HashMap<Integer, User> usersHashMap,
       String sortMode,
       boolean sortAscending
   ) {
 
     ChoreEntryAdapter.DiffCallback diffCallback = new ChoreEntryAdapter.DiffCallback(
-        this.tasks,
+        this.choreEntries,
         newList,
-        this.taskCategoriesHashMap,
-        taskCategoriesHashMap,
         this.usersHashMap,
         usersHashMap,
         this.sortMode,
@@ -244,10 +206,8 @@ public class ChoreEntryAdapter extends
         sortAscending
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-    this.tasks.clear();
-    this.tasks.addAll(newList);
-    this.taskCategoriesHashMap.clear();
-    this.taskCategoriesHashMap.putAll(taskCategoriesHashMap);
+    this.choreEntries.clear();
+    this.choreEntries.addAll(newList);
     this.usersHashMap.clear();
     this.usersHashMap.putAll(usersHashMap);
     this.sortMode = sortMode;
@@ -257,10 +217,8 @@ public class ChoreEntryAdapter extends
 
   static class DiffCallback extends DiffUtil.Callback {
 
-    ArrayList<Task> oldItems;
-    ArrayList<Task> newItems;
-    HashMap<Integer, TaskCategory> taskCategoriesHashMapOld;
-    HashMap<Integer, TaskCategory> taskCategoriesHashMapNew;
+    ArrayList<ChoreEntry> oldItems;
+    ArrayList<ChoreEntry> newItems;
     HashMap<Integer, User> usersHashMapOld;
     HashMap<Integer, User> usersHashMapNew;
     String sortModeOld;
@@ -269,10 +227,8 @@ public class ChoreEntryAdapter extends
     boolean sortAscendingNew;
 
     public DiffCallback(
-        ArrayList<Task> oldItems,
-        ArrayList<Task> newItems,
-        HashMap<Integer, TaskCategory> taskCategoriesHashMapOld,
-        HashMap<Integer, TaskCategory> taskCategoriesHashMapNew,
+        ArrayList<ChoreEntry> oldItems,
+        ArrayList<ChoreEntry> newItems,
         HashMap<Integer, User> usersHashMapOld,
         HashMap<Integer, User> usersHashMapNew,
         String sortModeOld,
@@ -282,8 +238,6 @@ public class ChoreEntryAdapter extends
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
-      this.taskCategoriesHashMapOld = taskCategoriesHashMapOld;
-      this.taskCategoriesHashMapNew = taskCategoriesHashMapNew;
       this.usersHashMapOld = usersHashMapOld;
       this.usersHashMapNew = usersHashMapNew;
       this.sortModeOld = sortModeOld;
@@ -313,8 +267,8 @@ public class ChoreEntryAdapter extends
     }
 
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
-      Task newItem = newItems.get(newItemPos);
-      Task oldItem = oldItems.get(oldItemPos);
+      ChoreEntry newItem = newItems.get(newItemPos);
+      ChoreEntry oldItem = oldItems.get(oldItemPos);
 
       if (!sortModeOld.equals(sortModeNew)) {
         return false;
@@ -323,20 +277,10 @@ public class ChoreEntryAdapter extends
         return false;
       }
 
-      TaskCategory taskCategoryOld = NumUtil.isStringInt(oldItem.getCategoryId())
-          ? taskCategoriesHashMapOld.get(Integer.parseInt(oldItem.getCategoryId())) : null;
-      TaskCategory taskCategoryNew = NumUtil.isStringInt(newItem.getCategoryId())
-          ? taskCategoriesHashMapNew.get(Integer.parseInt(newItem.getCategoryId())) : null;
-      if (taskCategoryOld == null && taskCategoryNew != null
-          || taskCategoryOld != null && taskCategoryNew == null
-          || taskCategoryOld != null && !taskCategoryOld.equals(taskCategoryNew)) {
-        return false;
-      }
-
-      User userOld = NumUtil.isStringInt(oldItem.getAssignedToUserId())
-          ? usersHashMapOld.get(Integer.parseInt(oldItem.getAssignedToUserId())) : null;
-      User userNew = NumUtil.isStringInt(newItem.getAssignedToUserId())
-          ? usersHashMapNew.get(Integer.parseInt(newItem.getAssignedToUserId())) : null;
+      User userOld = NumUtil.isStringInt(oldItem.getNextExecutionAssignedToUserId())
+          ? usersHashMapOld.get(Integer.parseInt(oldItem.getNextExecutionAssignedToUserId())) : null;
+      User userNew = NumUtil.isStringInt(newItem.getNextExecutionAssignedToUserId())
+          ? usersHashMapNew.get(Integer.parseInt(newItem.getNextExecutionAssignedToUserId())) : null;
       if (userOld == null && userNew != null
           || userOld != null && userNew == null
           || userOld != null && !userOld.equals(userNew)) {

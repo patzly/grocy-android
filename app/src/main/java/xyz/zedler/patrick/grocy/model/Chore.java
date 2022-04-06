@@ -305,7 +305,7 @@ public class Chore implements Parcelable {
 
     } catch (JSONException e) {
       if (debug) {
-        Log.e(TAG, "getJsonFromTask: " + e);
+        Log.e(TAG, "getJsonFromChore: " + e);
       }
     }
     return json;

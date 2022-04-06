@@ -54,13 +54,6 @@
       android:singleLine="true" />
 
     <TextView
-      android:id="@+id/category"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true" />
-
-    <TextView
       android:id="@+id/user"
       style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="match_parent"

@@ -81,6 +81,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_TASKS = "db_last_time_tasks";
     public final static String DB_LAST_TIME_TASK_CATEGORIES = "db_last_time_task_categories";
     public final static String DB_LAST_TIME_CHORES = "db_last_time_chores";
+    public final static String DB_LAST_TIME_CHORE_ENTRIES = "db_last_time_chore_entries";
     public final static String DB_LAST_TIME_USERS = "db_last_time_users";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
@@ -280,6 +281,7 @@ public final class Constants {
   public final static class DATE {
 
     public final static String NEVER_OVERDUE = "2999-12-31";
+    public final static String NEVER_OVERDUE_WITH_TIME = "2999-12-31 23:59";
   }
 
   public final static class ACTION {

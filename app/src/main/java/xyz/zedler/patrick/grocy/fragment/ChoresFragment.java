@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,19 +41,13 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentChoresBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ChoresViewModel;
 
@@ -138,7 +131,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getFilteredTasksLive().observe(getViewLifecycleOwner(), items -> {
+    viewModel.getFilteredChoreEntriesLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) {
         return;
       }
@@ -158,7 +151,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       if (binding.recycler.getAdapter() instanceof ChoreEntryAdapter) {
         ((ChoreEntryAdapter) binding.recycler.getAdapter()).updateData(
             items,
-            viewModel.getTaskCategoriesHashMap(),
             viewModel.getUsersHashMap(),
             viewModel.getSortMode(),
             viewModel.isSortAscending()
@@ -169,7 +161,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                 requireContext(),
                 (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
-                viewModel.getTaskCategoriesHashMap(),
                 viewModel.getUsersHashMap(),
                 this,
                 viewModel.getSortMode(),
@@ -199,8 +190,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
             List<UnderlayButton> underlayButtons
         ) {
           int position = viewHolder.getAdapterPosition();
-          ArrayList<Task> displayedItems = viewModel.getFilteredTasksLive()
-              .getValue();
+          ArrayList<ChoreEntry> displayedItems = viewModel.getFilteredChoreEntriesLive().getValue();
           if (displayedItems == null || position < 0
               || position >= displayedItems.size()) {
             return;
@@ -212,8 +202,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> viewModel
-                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
               }
           ));
           // TODO: only with !manual scheduling
@@ -224,8 +212,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> viewModel
-                    .changeTaskDoneStatus(displayedItems.get(pos).getId()), 100);
               }
           ));
         }
@@ -259,14 +245,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     }
   }
 
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
-      return true;
-    }
-    return false;
-  }
-
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_search) {
       ViewUtil.startIcon(item);
@@ -277,17 +255,17 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   }
 
   @Override
-  public void onItemRowClicked(Task task) {
+  public void onItemRowClicked(ChoreEntry choreEntry) {
     if (clickUtil.isDisabled()) {
       return;
     }
-    if (task == null) {
+    if (choreEntry == null) {
       return;
     }
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    Bundle bundle = new Bundle();
+    /*Bundle bundle = new Bundle();
     bundle.putParcelable(ARGUMENT.TASK, task);
     TaskCategory category = NumUtil.isStringInt(task.getCategoryId())
         ? viewModel.getTaskCategoriesHashMap().get(Integer.parseInt(task.getCategoryId())) : null;
@@ -297,23 +275,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     User user = NumUtil.isStringInt(task.getAssignedToUserId())
         ? viewModel.getUsersHashMap().get(Integer.parseInt(task.getAssignedToUserId())) : null;
     bundle.putString(ARGUMENT.USER, user != null ? user.getDisplayName() : null);
-    activity.showBottomSheet(new TaskEntryBottomSheet(), bundle);
-  }
-
-  @Override
-  public void toggleDoneStatus(Task task) {
-    viewModel.changeTaskDoneStatus(task.getId());
-  }
-
-  @Override
-  public void editTask(Task task) {
-    navigate(TasksFragmentDirections
-        .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT).setTaskEntry(task));
-  }
-
-  @Override
-  public void deleteTask(Task task) {
-    viewModel.deleteTask(task.getId());
+    activity.showBottomSheet(new TaskEntryBottomSheet(), bundle);*/
   }
 
   @Override
