@@ -51,12 +51,16 @@ public class DateUtil {
   }
 
   public static Date getDate(String dateString) {
+    return getDate(dateString, false);
+  }
+
+  public static Date getDate(String dateString, boolean withTime) {
     if (dateString == null) {
       return null;
     }
     Date date = null;
     try {
-      date = DATE_FORMAT.parse(dateString);
+      date = withTime ? DATE_FORMAT_WITH_TIME.parse(dateString) : DATE_FORMAT.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getDate: ");
     }

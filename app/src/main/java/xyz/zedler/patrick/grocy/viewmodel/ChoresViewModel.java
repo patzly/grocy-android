@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class ChoresViewModel extends BaseViewModel {
 
@@ -125,7 +126,7 @@ public class ChoresViewModel extends BaseViewModel {
           choresDueTodayCount++;
         }
         if (daysFromNow >= 0 && daysFromNow <= 5) {
-          choresAssignedCount++;
+          choresDueSoonCount++;
         }
       }
 
@@ -180,7 +181,7 @@ public class ChoresViewModel extends BaseViewModel {
               choresDueTodayCount++;
             }
             if (daysFromNow >= 0 && daysFromNow <= 5) {
-              choresAssignedCount++;
+              choresDueSoonCount++;
             }
           }
 
@@ -257,11 +258,11 @@ public class ChoresViewModel extends BaseViewModel {
     }
 
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
-    /*if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
-      SortUtil.sortTasksByDueDate(filteredTasks, sortAscending);
+    if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
+      SortUtil.sortChoreEntriesByNextExecution(filteredChoreEntries, sortAscending);
     } else {
-      SortUtil.sortTasksByName(getApplication(), filteredTasks, sortAscending);
-    }*/
+      SortUtil.sortChoreEntriesByName(getApplication(), filteredChoreEntries, sortAscending);
+    }
 
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
   }
