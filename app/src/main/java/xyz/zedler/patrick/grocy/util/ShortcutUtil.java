@@ -43,6 +43,8 @@ public class ShortcutUtil {
   public final static String CONSUME = "shortcut_consume";
   public final static String INVENTORY = "shortcut_inventory";
   public final static String TRANSFER = "shortcut_transfer";
+  public final static String TASKS = "shortcut_tasks";
+  public final static String ADD_TASK = "shortcut_add_task";
 
   @RequiresApi(api = Build.VERSION_CODES.N_MR1)
   public static List<ShortcutInfo> getDynamicShortcuts(Context context) {
@@ -83,11 +85,27 @@ public class ShortcutUtil {
         newShortcutInfos.add(createShortcutConsume(
             context, context.getString(R.string.title_consume)
         ));
+      } else if (shortcutInfo.getId().equals(TRANSFER)) {
+        newShortcutInfos.add(createShortcutTransfer(
+            context, context.getString(R.string.title_transfer)
+        ));
+      } else if (shortcutInfo.getId().equals(INVENTORY)) {
+        newShortcutInfos.add(createShortcutInventory(
+            context, context.getString(R.string.title_inventory)
+        ));
+      } else if (shortcutInfo.getId().equals(TASKS)) {
+        newShortcutInfos.add(createShortcutTasks(
+            context, context.getString(R.string.title_tasks)
+        ));
+      } else if (shortcutInfo.getId().equals(ADD_TASK)) {
+        newShortcutInfos.add(createShortcutTasks(
+            context, context.getString(R.string.title_task_add)
+        ));
       }
     }
     List<String> shortcutIdsSorted = Arrays.asList(
         STOCK_OVERVIEW, SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
-        SHOPPING_MODE, PURCHASE, CONSUME
+        SHOPPING_MODE, PURCHASE, CONSUME, TRANSFER, INVENTORY, TASKS, ADD_TASK
     );
     shortcutManager.removeAllDynamicShortcuts();
     newShortcutInfos = SortUtil.sortShortcutsById(newShortcutInfos, shortcutIdsSorted);
@@ -178,6 +196,27 @@ public class ShortcutUtil {
     return new ShortcutInfo.Builder(context, TRANSFER)
         .setShortLabel(label)
         .setIcon(Icon.createWithResource(context, R.mipmap.ic_transfer))
+        .setIntent(intent).build();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutTasks(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_tasksFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, TASKS)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_tasks))
+        .setIntent(intent).build();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutTaskAdd(Context context, Uri uri, CharSequence label) {
+    Intent intent = getIntent(context, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, ADD_TASK)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_task_add))
         .setIntent(intent).build();
   }
 

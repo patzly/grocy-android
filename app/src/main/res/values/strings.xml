@@ -425,6 +425,7 @@
   <string name="title_product_edit">Edit product</string>
   <string name="title_tasks">Tasks</string>
   <string name="title_task_entry">Task entry</string>
+  <string name="title_task_add">Add task</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_shopping_list">Shopping list</string>

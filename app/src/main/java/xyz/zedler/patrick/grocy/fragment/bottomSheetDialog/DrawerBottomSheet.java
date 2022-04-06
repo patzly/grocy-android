@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.SettingsFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
+import xyz.zedler.patrick.grocy.fragment.TasksFragment;
 import xyz.zedler.patrick.grocy.fragment.TransferFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -94,6 +95,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         binding.linearDrawerPurchase,
         binding.linearDrawerTransfer,
         binding.linearDrawerInventory,
+        binding.linearDrawerTasks,
         binding.linearDrawerMasterData,
         binding.linearDrawerSettings,
         binding.linearDrawerFeedback,
@@ -113,6 +115,8 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       select(binding.linearDrawerTransfer, null, true);
     } else if (currentFragment instanceof InventoryFragment) {
       select(binding.linearDrawerInventory, null, true);
+    } else if (currentFragment instanceof TasksFragment) {
+      select(binding.linearDrawerTasks, binding.textDrawerTasks, false);
     } else if (currentFragment instanceof MasterObjectListFragment) {
       select(binding.linearDrawerMasterData, binding.textDrawerMasterData, false);
     } else if (currentFragment instanceof SettingsFragment) {
@@ -153,6 +157,9 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
     } else if (v.getId() == R.id.linear_drawer_inventory) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToInventoryFragment());
+    } else if (v.getId() == R.id.linear_drawer_tasks) {
+      navigateCustom(DrawerBottomSheetDirections
+          .actionDrawerBottomSheetDialogFragmentToTasksFragment());
     } else if (v.getId() == R.id.linear_drawer_master_data) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());
@@ -217,9 +224,11 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       binding.linearDrawerTransfer.setVisibility(View.GONE);
       binding.transactionsContainer.setWeightSum(75f);
     }
+    if (!isFeatureEnabled(PREF.FEATURE_TASKS)) {
+      binding.containerTasks.setVisibility(View.GONE);
+    }
   }
 
-  @SuppressWarnings("SameParameterValue")
   private boolean isFeatureEnabled(String pref) {
     if (pref == null) {
       return true;

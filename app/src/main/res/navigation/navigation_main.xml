@@ -283,6 +283,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_stockOverviewFragment"
       app:destination="@id/stockOverviewFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_tasksFragment"
+      app:destination="@id/tasksFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
@@ -1100,16 +1103,19 @@
   </fragment>
   <fragment
     android:id="@+id/taskEntryEditFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragment"
     android:label="TaskEntryEditFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragment"
     tools:layout="@layout/fragment_task_entry_edit">
     <argument
       android:name="action"
       app:argType="string" />
     <argument
+      android:defaultValue="@null"
       android:name="taskEntry"
       app:argType="xyz.zedler.patrick.grocy.model.Task"
-      app:nullable="true"
-      android:defaultValue="@null" />
+      app:nullable="true" />
+    <deepLink
+      android:id="@+id/deepLink15"
+      app:uri="@string/deep_link_taskEntryEditFragment" />
   </fragment>
 </navigation>

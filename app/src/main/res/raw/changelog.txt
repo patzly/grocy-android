@@ -8,9 +8,10 @@
 - Improved: Open button on consume page is now checkbox
 - Improved: Product search on stock overview is now fuzzy search (#486)
 - Improved: Barcode lookup now also with external scanner if enabled (#496)
+- Improved: Some shortcuts were not working, also added new shortcuts for tasks
 - Fixed: Crash when opened master location or quantity unit page on F-Droid build (#503)
 - Fixed: App could show old data when page loading was interrupted (#409)
-- Fixed: Open action now works with quickmode (#500)
+- Fixed: Open action now works with quick mode (#500)
 - Fixed: Unwanted linking between grouping option from stock & shopping list page
 - Fixed: Private demo test instances not working after app restart
 - Fixed: Different unit conversion behavior than on server in some cases (#490)

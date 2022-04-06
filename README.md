@@ -28,7 +28,7 @@ iOS client for grocy: [Grocy-SwiftUI](https://github.com/supergeorg/Grocy-SwiftU
 * Shopping lists with offline support
 * In-store shopping mode (big UI elements)
 * Fast barcode scanning
-* OpenFoodFacts implementation
+* OpenFoodFacts/OpenBeautyFacts implementation
 * Master data editing
 * Dark mode
 * No ads or analytics
