@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowChoreEntryBinding;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.util.Constants.DATE;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
@@ -124,7 +125,7 @@ public class ChoreEntryAdapter extends
     String date = choreEntry.getNextEstimatedExecutionTime();
     Integer days = null;
     boolean colorDays = false;
-    if (date != null && !date.isEmpty()) {
+    if (date != null && !date.isEmpty() && !date.equals(DATE.NEVER_OVERDUE_WITH_TIME)) {
       days = DateUtil.getDaysFromNowWithTime(date);
     }
 
