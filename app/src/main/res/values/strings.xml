@@ -615,6 +615,26 @@
     <item quantity="one">%1$d item is on your shopping list.</item>
     <item quantity="other">%1$d items are on your shopping list.</item>
   </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d chore is due to be done within the next %2$d days.</item>
+    <item quantity="other">%1$d chores are due to be done within the next %2$d days.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d chore is overdue to be done.</item>
+    <item quantity="other">%1$d chores are overdue to be done.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d chore is due to be done today.</item>
+    <item quantity="other">%1$d chores are due to be done today.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d chore is assigned to you.</item>
+    <item quantity="other">%1$d chores are assigned to you.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
     <item quantity="one">%1$d task is to be completed.</item>

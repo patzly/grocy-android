@@ -655,17 +655,165 @@
                   android:layout_height="wrap_content"
                   android:text="@string/title_chores" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.Paragraph"
+                <LinearLayout
+                  android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="@{viewModel.tasksDescriptionTextLive}" />
+                  android:gravity="top"
+                  android:visibility="@{viewModel.choresDescriptionOverdueTextLive != null ? View.VISIBLE : View.GONE}">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TooDeepLayout">
+
+                    <View
+                      android:layout_width="4dp"
+                      android:layout_height="4dp"
+                      android:layout_marginStart="6dp"
+                      android:layout_marginEnd="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="@drawable/shape_circle"
+                      android:backgroundTint="@color/on_background" />
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="E"
+                      android:visibility="invisible"
+                      tools:ignore="HardcodedText" />
+
+                  </FrameLayout>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.choresDescriptionOverdueTextLive}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                  android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="@{viewModel.tasksUserDescriptionTextLive}" />
+                  android:gravity="top"
+                  android:visibility="@{viewModel.choresDescriptionDueTodayTextLive != null ? View.VISIBLE : View.GONE}">
+
+                  <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TooDeepLayout">
+
+                    <View
+                      android:layout_width="4dp"
+                      android:layout_height="4dp"
+                      android:layout_marginStart="6dp"
+                      android:layout_marginEnd="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="@drawable/shape_circle"
+                      android:backgroundTint="@color/on_background" />
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="E"
+                      android:visibility="invisible"
+                      tools:ignore="HardcodedText" />
+
+                  </FrameLayout>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.choresDescriptionDueTodayTextLive}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="top"
+                  android:visibility="@{viewModel.choresDescriptionDueSoonTextLive != null ? View.VISIBLE : View.GONE}">
+
+                  <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TooDeepLayout">
+
+                    <View
+                      android:layout_width="4dp"
+                      android:layout_height="4dp"
+                      android:layout_marginStart="6dp"
+                      android:layout_marginEnd="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="@drawable/shape_circle"
+                      android:backgroundTint="@color/on_background" />
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="E"
+                      android:visibility="invisible"
+                      tools:ignore="HardcodedText" />
+
+                  </FrameLayout>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.choresDescriptionDueSoonTextLive}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="top"
+                  android:visibility="@{viewModel.choresDescriptionAssignedTextLive != null ? View.VISIBLE : View.GONE}">
+
+                  <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TooDeepLayout">
+
+                    <View
+                      android:layout_width="4dp"
+                      android:layout_height="4dp"
+                      android:layout_marginStart="6dp"
+                      android:layout_marginEnd="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="@drawable/shape_circle"
+                      android:backgroundTint="@color/on_background" />
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="E"
+                      android:visibility="invisible"
+                      tools:ignore="HardcodedText" />
+
+                  </FrameLayout>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.choresDescriptionAssignedTextLive}" />
+
+                </LinearLayout>
 
               </LinearLayout>
 

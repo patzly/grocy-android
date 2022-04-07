@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.repository.ChoresRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -61,6 +62,7 @@ public class ChoresViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<ChoreEntry>> filteredChoreEntriesLive;
+  private final MutableLiveData<Integer> currentUserIdLive;
   private final FilterChipLiveDataTasksStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
 
@@ -91,6 +93,7 @@ public class ChoresViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     filteredChoreEntriesLive = new MutableLiveData<>();
+    currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
 
     filterChipLiveDataStatus = new FilterChipLiveDataTasksStatus(
         getApplication(),
@@ -113,6 +116,11 @@ public class ChoresViewModel extends BaseViewModel {
       choresOverdueCount = 0;
       choresAssignedCount = 0;
       for (ChoreEntry choreEntry : data.getChoreEntries()) {
+        if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+            && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+            == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+          choresAssignedCount++;
+        }
         if (choreEntry.getNextEstimatedExecutionTime() == null
             || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
           continue;
@@ -134,6 +142,7 @@ public class ChoresViewModel extends BaseViewModel {
           .setDueTodayCount(choresDueTodayCount)
           .setDueSoonCount(choresDueSoonCount)
           .setOverdueCount(choresOverdueCount)
+          //.set TODO
           .emitCounts();
 
       updateFilteredChoreEntries();
@@ -168,6 +177,11 @@ public class ChoresViewModel extends BaseViewModel {
           choresOverdueCount = 0;
           choresAssignedCount = 0;
           for (ChoreEntry choreEntry : choreEntries) {
+            if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+                && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+                == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+              choresAssignedCount++;
+            }
             if (choreEntry.getNextEstimatedExecutionTime() == null
                 || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
               continue;
@@ -189,6 +203,7 @@ public class ChoresViewModel extends BaseViewModel {
               .setDueTodayCount(choresDueTodayCount)
               .setDueSoonCount(choresDueSoonCount)
               .setOverdueCount(choresOverdueCount)
+              //.set TODO
               .emitCounts();
 
           updateFilteredChoreEntries();
@@ -200,6 +215,26 @@ public class ChoresViewModel extends BaseViewModel {
             users -> usersHashMap = ArrayUtil.getUsersHashMap(users)
         )
     );
+    if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
+      queue.append(dlHelper.getCurrentUserId(id -> {
+        if (id != -1) {
+          sharedPrefs.edit().putInt(PREF.CURRENT_USER_ID, id).apply();
+          currentUserIdLive.setValue(id);
+
+          choresAssignedCount = 0;
+          for (ChoreEntry choreEntry : choreEntries) {
+            if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+                && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+                == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+              choresAssignedCount++;
+            }
+          }
+          filterChipLiveDataStatus
+              //.set TODO
+              .emitCounts();
+        }
+      }));
+    }
 
     if (queue.isEmpty()) {
       updateFilteredChoreEntries();
@@ -245,15 +280,18 @@ public class ChoresViewModel extends BaseViewModel {
         continue;
       }
 
-      /*int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getStartDate());
+      int daysFromNow = DateUtil.getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_OVERDUE
           && daysFromNow >= 0
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_TODAY
           && daysFromNow != 0
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataTasksStatus.STATUS_DUE_SOON
           && !(daysFromNow >= 0 && daysFromNow <= 5)) {
-        continue;
-      }*/
+        if (choreEntry.getNextEstimatedExecutionTime() != null
+            && !choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
+          continue;
+        }
+      }
       filteredChoreEntries.add(choreEntry);
     }
 
