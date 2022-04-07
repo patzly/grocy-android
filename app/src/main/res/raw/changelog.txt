@@ -9,6 +9,7 @@
 - Improved: Product search on stock overview is now fuzzy search (#486)
 - Improved: Barcode lookup now also with external scanner if enabled (#496)
 - Improved: Some shortcuts were not working, also added new shortcuts for tasks
+- Improved: (not F-Droid) Cropping option for MlKit scanner frame should work better
 - Fixed: Crash when opened master location or quantity unit page on F-Droid build (#503)
 - Fixed: App could show old data when page loading was interrupted (#409)
 - Fixed: Open action now works with quick mode (#500)

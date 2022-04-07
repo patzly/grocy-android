@@ -223,7 +223,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     }
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive(),
-        backFromChooseProductPage != null ? backFromChooseProductPage : false
+        backFromChooseProductPage != null
+            && viewModel.getFormData().getProductDetailsLive().getValue() != null
+            ? backFromChooseProductPage : false
     );
 
     // following lines are necessary because no observers are set in Views
@@ -275,7 +277,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onResume() {
     super.onResume();
-    if (backFromChooseProductPage != null && backFromChooseProductPage) {
+    if (backFromChooseProductPage != null && backFromChooseProductPage
+        && viewModel.getFormData().getProductDetailsLive().getValue() != null) {
       backFromChooseProductPage = false;
       return;
     }
