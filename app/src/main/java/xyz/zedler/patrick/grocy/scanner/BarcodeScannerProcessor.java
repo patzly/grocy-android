@@ -19,7 +19,6 @@ package xyz.zedler.patrick.grocy.scanner;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -42,11 +41,10 @@ public class BarcodeScannerProcessor extends VisionProcessorBase<List<Barcode>> 
   private final BarcodeScanner barcodeScanner;
 
   public BarcodeScannerProcessor(
-      Context context,
       BarcodeScannerOptions options,
       boolean cropImageToPreviewRect
   ) {
-    super(context, cropImageToPreviewRect);
+    super(cropImageToPreviewRect);
     barcodeScanner = BarcodeScanning.getClient(options);
   }
 

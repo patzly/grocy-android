@@ -305,11 +305,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     }
 
     try {
-      imageProcessor = new BarcodeScannerProcessor(
-          fragment.getContext(),
-          barcodeScannerOptions,
-          cropImageToPreviewRect
-      ) {
+      imageProcessor = new BarcodeScannerProcessor(barcodeScannerOptions, cropImageToPreviewRect) {
         @Override
         protected void onSuccess(@NonNull List<Barcode> barcodes,
             @NonNull GraphicOverlay graphicOverlay) {
