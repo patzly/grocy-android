@@ -357,6 +357,17 @@ public class SortUtil {
     shoppingListItems.addAll(itemsWithoutProduct);
   }
 
+  public static void sortUsersByName(Context context, List<User> users, boolean ascending) {
+    if (users == null || users.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(users, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).getUserName().toLowerCase(),
+        (ascending ? item2 : item1).getUserName().toLowerCase()
+    ));
+  }
+
   public static void sortLanguagesByName(List<Language> languages) {
     if (languages == null) {
       return;

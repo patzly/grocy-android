@@ -191,6 +191,11 @@
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d assigned</item>
+    <item quantity="other">%1$d assigned</item>
+  </plurals>
   <string name="msg_task_mark">Mark task as completed</string>
   <string name="msg_task_completed">Marked task as completed</string>
   <string name="msg_task_not_completed">Marked task as not completed</string>
@@ -741,6 +746,7 @@
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
+  <string name="property_assignment">Assignment</string>
   <string name="property_value">Value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>

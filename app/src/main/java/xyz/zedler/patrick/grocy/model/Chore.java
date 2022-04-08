@@ -104,6 +104,14 @@ public class Chore implements Parcelable {
   @SerializedName("start_date")
   private String startDate;
 
+  @ColumnInfo(name = "rescheduled_date")
+  @SerializedName("rescheduled_date")
+  private String rescheduledDate;
+
+  @ColumnInfo(name = "rescheduled_next_execution_assigned_to_user_id")
+  @SerializedName("rescheduled_next_execution_assigned_to_user_id")
+  private String rescheduledNextExecutionAssignedToUserId;
+
   public Chore() {
   }  // for Room
 
@@ -126,6 +134,8 @@ public class Chore implements Parcelable {
     periodInterval = parcel.readString();
     active = parcel.readString();
     startDate = parcel.readString();
+    rescheduledDate = parcel.readString();
+    rescheduledNextExecutionAssignedToUserId = parcel.readString();
   }
 
   @Override
@@ -147,6 +157,8 @@ public class Chore implements Parcelable {
     dest.writeString(periodInterval);
     dest.writeString(active);
     dest.writeString(startDate);
+    dest.writeString(rescheduledDate);
+    dest.writeString(rescheduledNextExecutionAssignedToUserId);
   }
 
   public static final Creator<Chore> CREATOR = new Creator<Chore>() {
@@ -298,6 +310,23 @@ public class Chore implements Parcelable {
     this.startDate = startDate;
   }
 
+  public String getRescheduledDate() {
+    return rescheduledDate;
+  }
+
+  public void setRescheduledDate(String rescheduledDate) {
+    this.rescheduledDate = rescheduledDate;
+  }
+
+  public String getRescheduledNextExecutionAssignedToUserId() {
+    return rescheduledNextExecutionAssignedToUserId;
+  }
+
+  public void setRescheduledNextExecutionAssignedToUserId(
+      String rescheduledNextExecutionAssignedToUserId) {
+    this.rescheduledNextExecutionAssignedToUserId = rescheduledNextExecutionAssignedToUserId;
+  }
+
   public static JSONObject getJsonFromChore(Chore chore, boolean debug, String TAG) {
     JSONObject json = new JSONObject();
     try {
@@ -339,7 +368,10 @@ public class Chore implements Parcelable {
         && Objects.equals(productId, chore.productId) && Objects
         .equals(productAmount, chore.productAmount) && Objects
         .equals(periodInterval, chore.periodInterval) && Objects
-        .equals(active, chore.active) && Objects.equals(startDate, chore.startDate);
+        .equals(active, chore.active) && Objects.equals(startDate, chore.startDate)
+        && Objects.equals(rescheduledDate, chore.rescheduledDate) && Objects
+        .equals(rescheduledNextExecutionAssignedToUserId,
+            chore.rescheduledNextExecutionAssignedToUserId);
   }
 
   @Override
@@ -347,7 +379,8 @@ public class Chore implements Parcelable {
     return Objects
         .hash(id, name, description, periodType, periodDays, periodConfig, trackDateOnly, rollover,
             assignmentType, assignmentConfig, nextExecutionAssignedToUserId,
-            consumeProductOnExecution, productId, productAmount, periodInterval, active, startDate);
+            consumeProductOnExecution, productId, productAmount, periodInterval, active, startDate,
+            rescheduledDate, rescheduledNextExecutionAssignedToUserId);
   }
 
   @NonNull
