@@ -314,6 +314,7 @@ public final class Constants {
     public final static String LOCATIONS = "locations";
     public final static String STORE = "store";
     public final static String STORES = "stores";
+    public final static String CHORE = "chore";
     public final static String TASK = "task";
     public final static String TASK_CATEGORY = "task_category";
     public final static String TASK_CATEGORIES = "task_categories";

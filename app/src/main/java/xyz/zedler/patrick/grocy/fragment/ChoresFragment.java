@@ -41,12 +41,15 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentChoresBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChoreEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ChoresViewModel;
@@ -204,16 +207,17 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                 swipeBehavior.recoverLatestSwipedItem();
               }
           ));
-          // TODO: only with !manual scheduling
-          underlayButtons.add(new UnderlayButton(
-              R.drawable.ic_round_skip_next,
-              pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
+          if (!viewModel.hasManualScheduling(displayedItems.get(position).getChoreId())) {
+            underlayButtons.add(new UnderlayButton(
+                R.drawable.ic_round_skip_next,
+                pos -> {
+                  if (pos >= displayedItems.size()) {
+                    return;
+                  }
+                  swipeBehavior.recoverLatestSwipedItem();
                 }
-                swipeBehavior.recoverLatestSwipedItem();
-              }
-          ));
+            ));
+          }
         }
       };
     }
@@ -259,23 +263,16 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     if (clickUtil.isDisabled()) {
       return;
     }
-    if (choreEntry == null) {
+    Chore chore = Chore.getFromId(viewModel.getChores(), choreEntry.getChoreId());
+    if (chore == null) {
       return;
     }
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    /*Bundle bundle = new Bundle();
-    bundle.putParcelable(ARGUMENT.TASK, task);
-    TaskCategory category = NumUtil.isStringInt(task.getCategoryId())
-        ? viewModel.getTaskCategoriesHashMap().get(Integer.parseInt(task.getCategoryId())) : null;
-    String categoryText = category != null ? category.getName()
-        : getString(R.string.subtitle_uncategorized);
-    bundle.putString(ARGUMENT.TASK_CATEGORY, categoryText);
-    User user = NumUtil.isStringInt(task.getAssignedToUserId())
-        ? viewModel.getUsersHashMap().get(Integer.parseInt(task.getAssignedToUserId())) : null;
-    bundle.putString(ARGUMENT.USER, user != null ? user.getDisplayName() : null);
-    activity.showBottomSheet(new TaskEntryBottomSheet(), bundle);*/
+    Bundle bundle = new Bundle();
+    bundle.putParcelable(ARGUMENT.CHORE, chore);
+    activity.showBottomSheet(new ChoreEntryBottomSheet(), bundle);
   }
 
   @Override

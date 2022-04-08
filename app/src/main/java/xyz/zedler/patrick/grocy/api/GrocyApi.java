@@ -306,4 +306,11 @@ public class GrocyApi {
   public String getChores() {
     return getUrl("/chores");
   }
+
+  /**
+   * Returns details of the given chore
+   */
+  public String getChores(int choreId) {
+    return getUrl("/chores/" + choreId);
+  }
 }

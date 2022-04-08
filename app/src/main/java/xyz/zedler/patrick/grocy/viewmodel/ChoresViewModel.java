@@ -327,6 +327,16 @@ public class ChoresViewModel extends BaseViewModel {
     return usersHashMap;
   }
 
+  public List<Chore> getChores() {
+    return chores;
+  }
+
+  public boolean hasManualScheduling(int choreId) {
+    Chore chore = Chore.getFromId(chores, choreId);
+    if (chore == null) return true;
+    return chore.getPeriodType().equals(Chore.PERIOD_TYPE_MANUALLY);
+  }
+
   @NonNull
   public MutableLiveData<Boolean> getOfflineLive() {
     return offlineLive;

@@ -119,6 +119,8 @@
   <string name="action_share_description">Tell your friends about Grocy Android</string>
   <string name="action_no_filter">No filter</string>
   <string name="action_show_done_tasks">Show done tasks</string>
+  <string name="action_track_chore_execution">Track chore execution</string>
+  <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -457,6 +459,7 @@
   <string name="title_pending_products">Pending products</string>
   <string name="title_stored_purchases">Stored purchases</string>
   <string name="title_chores">Chores</string>
+  <string name="title_chore">Chore</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>

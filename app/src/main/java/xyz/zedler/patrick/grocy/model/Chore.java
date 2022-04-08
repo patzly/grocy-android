@@ -28,12 +28,17 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "chore_table")
 public class Chore implements Parcelable {
+
+  public final static String PERIOD_TYPE_HOURLY = "hourly";
+  public final static String PERIOD_TYPE_WEEKLY = "weekly";
+  public final static String PERIOD_TYPE_MANUALLY = "manually";
 
   @PrimaryKey
   @ColumnInfo(name = "id")
@@ -325,6 +330,15 @@ public class Chore implements Parcelable {
   public void setRescheduledNextExecutionAssignedToUserId(
       String rescheduledNextExecutionAssignedToUserId) {
     this.rescheduledNextExecutionAssignedToUserId = rescheduledNextExecutionAssignedToUserId;
+  }
+
+  public static Chore getFromId(List<Chore> chores, int choreId) {
+    for (Chore chore : chores) {
+      if (chore.getId() == choreId) {
+        return chore;
+      }
+    }
+    return null;
   }
 
   public static JSONObject getJsonFromChore(Chore chore, boolean debug, String TAG) {
