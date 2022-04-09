@@ -60,7 +60,16 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:singleLine="true"
-      android:text="@string/subtitle_default_location"
+      android:text="@string/property_location_default"
+      android:visibility="gone" />
+
+    <TextView
+      android:id="@+id/text_default_consume"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:text="@string/property_location_consume_default"
       android:visibility="gone" />
 
     <TextView

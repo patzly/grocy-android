@@ -434,7 +434,6 @@
   <string name="subtitle_amount_opened">(%1$s otvorené)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Kde %1$s je v zásobe</string>
-  <string name="subtitle_default_location">Predvolené umiestnenie</string>
   <string name="subtitle_none_selected">Žiadny výber</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">Žiadne</string>

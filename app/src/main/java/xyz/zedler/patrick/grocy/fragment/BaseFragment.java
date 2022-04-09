@@ -176,6 +176,9 @@ public class BaseFragment extends Fragment {
   public void selectLocation(Location location) {
   }
 
+  public void selectLocation(Location location, Bundle argsBundle) {
+  }
+
   public void selectStore(Store store) {
   }
 

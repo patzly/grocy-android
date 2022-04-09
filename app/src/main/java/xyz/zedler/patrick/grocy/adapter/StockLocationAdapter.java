@@ -69,6 +69,7 @@ public class StockLocationAdapter
 
     private final LinearLayout linearLayoutContainer;
     private final TextView textDefault;
+    private final TextView textDefaultConsume;
     private final TextView textViewName;
     private final TextView textViewAmount;
     private final ImageView imageViewSelected;
@@ -78,6 +79,7 @@ public class StockLocationAdapter
 
       linearLayoutContainer = view.findViewById(R.id.linear_container);
       textDefault = view.findViewById(R.id.text_default);
+      textDefaultConsume = view.findViewById(R.id.text_default_consume);
       textViewName = view.findViewById(R.id.text_name);
       textViewAmount = view.findViewById(R.id.text_amount);
       imageViewSelected = view.findViewById(R.id.image_selected);
@@ -112,6 +114,16 @@ public class StockLocationAdapter
 
     if (stockLocation.getLocationId() == productDetails.getLocation().getId()) {
       holder.textDefault.setVisibility(View.VISIBLE);
+    } else {
+      holder.textDefault.setVisibility(View.GONE);
+    }
+
+    if (NumUtil.isStringInt(productDetails.getProduct().getDefaultConsumeLocationId())
+        && stockLocation.getLocationId() ==
+        Integer.parseInt(productDetails.getProduct().getDefaultConsumeLocationId())) {
+      holder.textDefaultConsume.setVisibility(View.VISIBLE);
+    } else {
+      holder.textDefaultConsume.setVisibility(View.GONE);
     }
 
     // AMOUNT
