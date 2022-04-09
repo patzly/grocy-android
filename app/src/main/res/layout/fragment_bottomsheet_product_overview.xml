@@ -183,6 +183,12 @@
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
         android:id="@+id/item_last_purchased"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -196,6 +202,12 @@
 
       <xyz.zedler.patrick.grocy.view.ListItem
         android:id="@+id/item_last_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/item_average_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />

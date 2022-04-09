@@ -324,9 +324,9 @@ public class StockOverviewItemAdapter extends
 
     // AMOUNT
 
-    QuantityUnit quantityUnit = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
+    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
     holder.binding.textAmount.setText(
-        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnit)
+        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnitStock)
     );
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
       holder.binding.textAmount.setTypeface(
@@ -391,56 +391,74 @@ public class StockOverviewItemAdapter extends
       );
     }
 
+    double factorPurchaseToStock = stockItem.getProduct().getQuFactorPurchaseToStockDouble();
+    String extraFieldText = null;
+    String extraFieldSubtitleText = null;
     switch (extraField) {
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_VALUE:
         if (NumUtil.isStringDouble(stockItem.getValue())) {
-          holder.binding.extraField.setText(NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue())));
-          holder.binding.extraField.setVisibility(View.VISIBLE);
-        } else {
-          holder.binding.extraField.setVisibility(View.GONE);
+          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue()));
+        }
+        if (currency != null && !currency.isEmpty()) {
+          extraFieldSubtitleText = currency;
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_UNIT:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
-          holder.binding.extraField.setText(stockItem.getProduct().getCalories());
-          holder.binding.extraField.setVisibility(View.VISIBLE);
-        } else {
-          holder.binding.extraField.setVisibility(View.GONE);
+          extraFieldText = stockItem.getProduct().getCalories();
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_TOTAL:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
-          holder.binding.extraField.setText(
-                  NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
-                          * stockItem.getAmountDouble())
-          );
-          holder.binding.extraField.setVisibility(View.VISIBLE);
-        } else {
-          holder.binding.extraField.setVisibility(View.GONE);
+          extraFieldText = NumUtil.trim(Double.parseDouble(stockItem.getProduct()
+              .getCalories()) * stockItem.getAmountDouble());
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:
-        if (productAveragePriceHashMap.get(stockItem.getProductId()) != null) {
-          holder.binding.extraField.setText(
-              productAveragePriceHashMap.get(stockItem.getProductId())
-          );
-          holder.binding.extraField.setVisibility(View.VISIBLE);
-        } else {
-          holder.binding.extraField.setVisibility(View.GONE);
+        String avg = productAveragePriceHashMap.get(stockItem.getProductId());
+        if (NumUtil.isStringDouble(avg)) {
+          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(avg) * factorPurchaseToStock);
+          QuantityUnit quantityUnitPurchase = quantityUnitHashMap
+              .get(stockItem.getProduct().getQuIdPurchaseInt());
+          if (quantityUnitPurchase != null && quantityUnitStock != null
+              && quantityUnitStock.getId() != quantityUnitPurchase.getId()) {
+            extraFieldSubtitleText = holder.binding.extraFieldSubtitle.getContext().getString(
+                R.string.property_price_unit_insert, currency, quantityUnitPurchase.getName()
+            );
+          } else {
+            extraFieldSubtitleText = currency;
+          }
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_LAST_PRICE:
         ProductLastPurchased p = productLastPurchasedHashMap.get(stockItem.getProductId());
         if (p != null && NumUtil.isStringDouble(p.getPrice())) {
-          holder.binding.extraField.setText(NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())));
-          holder.binding.extraField.setVisibility(View.VISIBLE);
-        } else {
-          holder.binding.extraField.setVisibility(View.GONE);
+          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())
+              * factorPurchaseToStock);
+          QuantityUnit quantityUnitPurchase = quantityUnitHashMap
+              .get(stockItem.getProduct().getQuIdPurchaseInt());
+          if (quantityUnitPurchase != null && quantityUnitStock != null
+              && quantityUnitStock.getId() != quantityUnitPurchase.getId()) {
+            extraFieldSubtitleText = holder.binding.extraFieldSubtitle.getContext().getString(
+                R.string.property_price_unit_insert, currency, quantityUnitPurchase.getName()
+            );
+          } else {
+            extraFieldSubtitleText = currency;
+          }
         }
         break;
-      default:
-        holder.binding.extraField.setVisibility(View.GONE);
-        break;
+    }
+    if (extraFieldText != null) {
+      holder.binding.extraField.setText(extraFieldText);
+      holder.binding.extraFieldContainer.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.extraFieldContainer.setVisibility(View.GONE);
+    }
+    if (extraFieldSubtitleText != null) {
+      holder.binding.extraFieldSubtitle.setText(extraFieldSubtitleText);
+      holder.binding.extraFieldSubtitle.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
     }
 
     // CONTAINER

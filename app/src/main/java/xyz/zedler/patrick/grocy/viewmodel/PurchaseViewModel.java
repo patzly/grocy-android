@@ -760,7 +760,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void uploadProductBarcode(Runnable onSuccess) {
-    if (formData.getPendingProductLive() != null) {
+    if (formData.getPendingProductLive().getValue() != null) {
       storePendingProductBarcode(onSuccess);
       return;
     }

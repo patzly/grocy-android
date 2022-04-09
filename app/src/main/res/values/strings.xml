@@ -685,6 +685,8 @@
   <string name="property_price_average">Average price</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Price per %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s per %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Price in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -753,6 +755,7 @@
   <string name="property_product_groups">Product groups</string>
   <string name="property_assignment">Assignment</string>
   <string name="property_value">Value</string>
+  <string name="property_stock_value">Stock value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
