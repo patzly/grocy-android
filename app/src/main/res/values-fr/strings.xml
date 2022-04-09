@@ -112,6 +112,8 @@
   <string name="action_share_description">Parlez à vos amis de Grocy Android</string>
   <string name="action_no_filter">Pas de filtre</string>
   <string name="action_show_done_tasks">Afficher les tâches terminées</string>
+  <string name="action_track_chore_execution">Suivre l\'exécution des corvées</string>
+  <string name="action_skip_next_chore_schedule">Sauter le prochain horaire de corvée</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -183,6 +185,11 @@
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d en retard</item>
     <item quantity="other">%1$d en retard</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d attribué</item>
+    <item quantity="other">%1$d attribués</item>
   </plurals>
   <string name="msg_task_mark">Marquer la tâche comme terminée</string>
   <string name="msg_task_completed">Tâche marquée comme terminée</string>
@@ -417,6 +424,7 @@
   <string name="title_product_edit">Modifier produit</string>
   <string name="title_tasks">Tâches</string>
   <string name="title_task_entry">Saisie de tâche</string>
+  <string name="title_task_add">Ajouter une tâche</string>
   <string name="title_master_data">Données de base</string>
   <string name="title_stock_entries">Entrées de stock</string>
   <string name="title_shopping_list">Liste de courses</string>
@@ -442,6 +450,8 @@
   <string name="title_choose_product">Choisir un produit</string>
   <string name="title_pending_products">Produits en attente</string>
   <string name="title_stored_purchases">Achats stockés</string>
+  <string name="title_chores">Corvées</string>
+  <string name="title_chore">Corvée</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
@@ -599,6 +609,36 @@
     <item quantity="one">%1$d article est dans votre liste de courses.</item>
     <item quantity="other">%1$d articles sont dans votre liste de course.</item>
   </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d corvée doit être faite dans les %2$d prochains jours.</item>
+    <item quantity="other">%1$d corvées doivent être faites dans les %2$d prochains jours.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d corvée est en retard.</item>
+    <item quantity="other">%1$d corvées sont en retard.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d corvée doit être faite aujourd\'hui.</item>
+    <item quantity="other">%1$d corvées doivent être faites aujourd\'hui.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d tâche vous est attribuée.</item>
+    <item quantity="other">%1$d tâches vous sont attribuées.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d tâche est à accomplir.</item>
+    <item quantity="other">%1$d tâches sont à accomplir.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">%1$d tâche vous est attribuée.</item>
+    <item quantity="other">%1$d tâches vous sont attribuées.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Votre base de données contient %1$d produit.</item>
@@ -695,6 +735,7 @@
   <string name="property_price_history">Historique des prix</string>
   <string name="property_product_group">Groupe de produits</string>
   <string name="property_product_groups">Groupes de produits</string>
+  <string name="property_assignment">Attribution</string>
   <string name="property_value">Valeur</string>
   <string name="property_opened">ouvert</string>
   <string name="property_not_opened">pas ouvert</string>
@@ -722,6 +763,10 @@
   <string name="property_picture">Image</string>
   <string name="property_note_singleline">Note sur une ligne</string>
   <string name="property_note_multiline">Note multi-lignes</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Une seule ligne</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Multiligne</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">En stock : %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
@@ -731,12 +776,15 @@
   <string name="property_ungrouped">Non groupé</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Champ supplémentaire : %1$s</string>
+  <string name="property_task_category">Catégorie de tâche</string>
   <string name="property_task_categories">Catégories de tâches</string>
   <string name="property_calories">Calories</string>
   <string name="property_calories_unit">Calories (par unité)</string>
   <string name="property_calories_total">Calories (total)</string>
   <string name="property_category">Catégorie</string>
   <string name="property_assigned_to">Assigné à</string>
+  <string name="property_users">Utilisateurs</string>
+
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
   <!-- This means the 'time' context -->
