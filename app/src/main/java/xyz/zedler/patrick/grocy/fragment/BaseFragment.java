@@ -126,6 +126,12 @@ public class BaseFragment extends Fragment {
   public void editItem(ShoppingListItem shoppingListItem) {
   }
 
+  public void trackChoreExecution(int choreId) {
+  }
+
+  public void skipNextChoreSchedule(int choreId) {
+  }
+
   public void toggleDoneStatus(Task task) {
   }
 

@@ -49,6 +49,8 @@ public final class Constants {
     public final static String FEATURE_MULTIPLE_SHOPPING_LISTS = "feature_multiple_shopping_lists";
     public final static String FEATURE_RECIPES = "feature_recipes";
     public final static String FEATURE_TASKS = "feature_tasks";
+    public final static String FEATURE_CHORES = "feature_chores";
+    public final static String FEATURE_CHORES_ASSIGNMENTS = "feature_chores_assignments";
 
     public final static String STOCK_SORT_MODE = "stock_sort_mode";
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
@@ -78,6 +80,8 @@ public final class Constants {
     public final static String DB_LAST_TIME_VOLATILE_MISSING = "db_last_time_volatile_missing";
     public final static String DB_LAST_TIME_TASKS = "db_last_time_tasks";
     public final static String DB_LAST_TIME_TASK_CATEGORIES = "db_last_time_task_categories";
+    public final static String DB_LAST_TIME_CHORES = "db_last_time_chores";
+    public final static String DB_LAST_TIME_CHORE_ENTRIES = "db_last_time_chore_entries";
     public final static String DB_LAST_TIME_USERS = "db_last_time_users";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
@@ -277,6 +281,7 @@ public final class Constants {
   public final static class DATE {
 
     public final static String NEVER_OVERDUE = "2999-12-31";
+    public final static String NEVER_OVERDUE_WITH_TIME = "2999-12-31 23:59:59";
   }
 
   public final static class ACTION {
@@ -309,6 +314,7 @@ public final class Constants {
     public final static String LOCATIONS = "locations";
     public final static String STORE = "store";
     public final static String STORES = "stores";
+    public final static String CHORE = "chore";
     public final static String TASK = "task";
     public final static String TASK_CATEGORY = "task_category";
     public final static String TASK_CATEGORIES = "task_categories";

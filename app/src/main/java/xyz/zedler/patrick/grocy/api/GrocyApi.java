@@ -54,6 +54,7 @@ public class GrocyApi {
     public final static String MEAL_PLAN = "meal_plan";
     public final static String TASKS = "tasks";
     public final static String TASK_CATEGORIES = "task_categories";
+    public final static String CHORES = "chores";
   }
 
   public GrocyApi(Application application) {
@@ -295,5 +296,21 @@ public class GrocyApi {
    */
   public String undoTask(int taskId) {
     return getUrl("/tasks/" + taskId + "/undo");
+  }
+
+  // CHORES
+
+  /**
+   * Returns all chores incl. the next estimated execution time per chore
+   */
+  public String getChores() {
+    return getUrl("/chores");
+  }
+
+  /**
+   * Returns details of the given chore
+   */
+  public String getChores(int choreId) {
+    return getUrl("/chores/" + choreId);
   }
 }

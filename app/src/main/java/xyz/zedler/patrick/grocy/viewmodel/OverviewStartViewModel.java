@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
@@ -36,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -67,6 +68,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<List<ShoppingListItem>> shoppingListItemsLive;
   private final MutableLiveData<List<Product>> productsLive;
   private final MutableLiveData<List<Task>> tasksLive;
+  private final MutableLiveData<List<ChoreEntry>> choreEntriesLive;
   private final MutableLiveData<Integer> itemsDueNextCountLive;
   private final MutableLiveData<Integer> itemsOverdueCountLive;
   private final MutableLiveData<Integer> itemsExpiredCountLive;
@@ -80,8 +82,16 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final LiveData<String> stockDescriptionMissingTextLive;
   private final LiveData<String> stockDescriptionMissingShoppingListTextLive;
   private final LiveData<String> shoppingListDescriptionTextLive;
+  private final MutableLiveData<Integer> choresDueSoonCountLive;
+  private final MutableLiveData<Integer> choresOverdueCountLive;
+  private final MutableLiveData<Integer> choresDueTodayCountLive;
+  private final MutableLiveData<Integer> choresAssignedCountLive;
+  private final LiveData<String> choresDescriptionDueSoonTextLive;
+  private final LiveData<String> choresDescriptionOverdueTextLive;
+  private final LiveData<String> choresDescriptionDueTodayTextLive;
+  private final LiveData<String> choresDescriptionAssignedTextLive;
   private final LiveData<String> tasksDescriptionTextLive;
-  private final MediatorLiveData<String> tasksUserDescriptionTextLive;
+  private final LiveData<String> tasksUserDescriptionTextLive;
   private final LiveData<String> masterDataDescriptionTextLive;
   private final MutableLiveData<Integer> currentUserIdLive;
   private ArrayList<StockItem> stockItemsTemp;
@@ -115,6 +125,11 @@ public class OverviewStartViewModel extends BaseViewModel {
     storedPurchasesOnDevice = new MutableLiveData<>(false);
     shoppingListItemsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
+    choresDueTodayCountLive = new MutableLiveData<>();
+    choresDueSoonCountLive = new MutableLiveData<>();
+    choresAssignedCountLive = new MutableLiveData<>();
+    choresOverdueCountLive = new MutableLiveData<>();
+    choreEntriesLive = new MutableLiveData<>();
     tasksLive = new MutableLiveData<>();
     currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
 
@@ -239,6 +254,64 @@ public class OverviewStartViewModel extends BaseViewModel {
           }
         }
     );
+    choresDescriptionDueSoonTextLive = Transformations.map(
+        choresDueSoonCountLive,
+        count -> {
+          if (count == null || count == 0) {
+            return null;
+          }
+          String days = sharedPrefs.getString(
+              STOCK.DUE_SOON_DAYS,
+              SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+          );
+          int daysInt;
+          if (NumUtil.isStringInt(days)) {
+            daysInt = Integer.parseInt(days);
+          } else {
+            daysInt = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+          }
+          return getResources().getQuantityString(
+              R.plurals.description_overview_chores_due_soon,
+              count, count, daysInt
+          );
+        }
+    );
+    choresDescriptionOverdueTextLive = Transformations.map(
+        choresOverdueCountLive,
+        count -> {
+          if (count == null || count == 0) {
+            return null;
+          }
+          return getResources().getQuantityString(
+              R.plurals.description_overview_chores_overdue,
+              count, count
+          );
+        }
+    );
+    choresDescriptionDueTodayTextLive = Transformations.map(
+        choresDueTodayCountLive,
+        count -> {
+          if (count == null || count == 0) {
+            return null;
+          }
+          return getResources().getQuantityString(
+              R.plurals.description_overview_chores_due_today,
+              count, count
+          );
+        }
+    );
+    choresDescriptionAssignedTextLive = Transformations.map(
+        choresAssignedCountLive,
+        count -> {
+          if (count == null || count == 0) {
+            return null;
+          }
+          return getResources().getQuantityString(
+              R.plurals.description_overview_chores_assigned,
+              count, count
+          );
+        }
+    );
     tasksDescriptionTextLive = Transformations.map(
         tasksLive,
         tasks -> {
@@ -251,24 +324,18 @@ public class OverviewStartViewModel extends BaseViewModel {
           );
         }
     );
-    tasksUserDescriptionTextLive = new MediatorLiveData<>();
-    tasksUserDescriptionTextLive.addSource(tasksLive, tasks -> {
-      if (tasks == null) return;
-      int currentUserId = currentUserIdLive.getValue() != null ? currentUserIdLive.getValue() : 1;
-      int assignedTasksCount = Task
-          .getAssignedTasksCount(Task.getUndoneTasksOnly(tasks), currentUserId);
-      tasksUserDescriptionTextLive.setValue(getResources().getQuantityString(
-          R.plurals.description_overview_tasks_user, assignedTasksCount, assignedTasksCount
-      ));
-    });
-    tasksUserDescriptionTextLive.addSource(currentUserIdLive, id -> {
-      if (id == null || tasksLive.getValue() == null) return;
-      int assignedTasksCount = Task
-          .getAssignedTasksCount(Task.getUndoneTasksOnly(tasksLive.getValue()), id);
-      tasksUserDescriptionTextLive.setValue(getResources().getQuantityString(
-          R.plurals.description_overview_tasks_user, assignedTasksCount, assignedTasksCount
-      ));
-    });
+    tasksUserDescriptionTextLive = Transformations.map(
+        tasksLive,
+        tasks -> {
+          if (tasks == null) return null;
+          int currentUserId = currentUserIdLive.getValue() != null ? currentUserIdLive.getValue() : 1;
+          int assignedTasksCount = Task
+              .getAssignedTasksCount(Task.getUndoneTasksOnly(tasks), currentUserId);
+          return getResources().getQuantityString(
+              R.plurals.description_overview_tasks_user, assignedTasksCount, assignedTasksCount
+          );
+        }
+    );
     masterDataDescriptionTextLive = Transformations.map(
         productsLive,
         products -> {
@@ -290,6 +357,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.shoppingListItemsLive.setValue(data.getShoppingListItems());
       this.productsLive.setValue(data.getProducts());
       this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
+      this.choreEntriesLive.setValue(data.getChoreEntries());
       this.tasksLive.setValue(data.getTasks());
 
       ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
@@ -327,6 +395,37 @@ public class OverviewStartViewModel extends BaseViewModel {
       itemsExpiredCountLive.setValue(itemsExpiredCount);
       itemsMissingCountLive.setValue(itemsMissingCount);
       itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
+
+      int choresDueTodayCount = 0;
+      int choresDueSoonCount = 0;
+      int choresOverdueCount = 0;
+      int choresAssignedCount = 0;
+      for (ChoreEntry choreEntry : data.getChoreEntries()) {
+        if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+            && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+            == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+          choresAssignedCount++;
+        }
+        if (choreEntry.getNextEstimatedExecutionTime() == null
+            || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
+          continue;
+        }
+        int daysFromNow = DateUtil
+            .getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
+        if (daysFromNow < 0) {
+          choresOverdueCount++;
+        }
+        if (daysFromNow == 0) {
+          choresDueTodayCount++;
+        }
+        if (daysFromNow >= 0 && daysFromNow <= 5) {
+          choresDueSoonCount++;
+        }
+      }
+      choresAssignedCountLive.setValue(choresAssignedCount);
+      choresOverdueCountLive.setValue(choresOverdueCount);
+      choresDueSoonCountLive.setValue(choresDueSoonCount);
+      choresDueTodayCountLive.setValue(choresDueTodayCount);
 
       if (downloadAfterLoading) {
         downloadData();
@@ -441,6 +540,39 @@ public class OverviewStartViewModel extends BaseViewModel {
           this.missingItemsTemp = missing;
           itemsMissingCountLive.setValue(missing.size());
         }),
+        dlHelper.updateChoreEntries(dbChangedTime, choreEntries -> {
+          this.choreEntriesLive.setValue(choreEntries);
+          int choresDueTodayCount = 0;
+          int choresDueSoonCount = 0;
+          int choresOverdueCount = 0;
+          int choresAssignedCount = 0;
+          for (ChoreEntry choreEntry : choreEntries) {
+            if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+                && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+                == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+              choresAssignedCount++;
+            }
+            if (choreEntry.getNextEstimatedExecutionTime() == null
+                || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
+              continue;
+            }
+            int daysFromNow = DateUtil
+                .getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
+            if (daysFromNow < 0) {
+              choresOverdueCount++;
+            }
+            if (daysFromNow == 0) {
+              choresDueTodayCount++;
+            }
+            if (daysFromNow >= 0 && daysFromNow <= 5) {
+              choresDueSoonCount++;
+            }
+          }
+          choresAssignedCountLive.setValue(choresAssignedCount);
+          choresOverdueCountLive.setValue(choresOverdueCount);
+          choresDueSoonCountLive.setValue(choresDueSoonCount);
+          choresDueTodayCountLive.setValue(choresDueTodayCount);
+        }),
         dlHelper.updateTasks(dbChangedTime, this.tasksLive::setValue)
     );
     if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
@@ -448,6 +580,18 @@ public class OverviewStartViewModel extends BaseViewModel {
         if (id != -1) {
           sharedPrefs.edit().putInt(PREF.CURRENT_USER_ID, id).apply();
           currentUserIdLive.setValue(id);
+          tasksLive.setValue(tasksLive.getValue());  // update descriptions above
+          if (this.choreEntriesLive.getValue() != null) {
+            int choresAssignedCount = 0;
+            for (ChoreEntry choreEntry : this.choreEntriesLive.getValue()) {
+              if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+                  && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+                  == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+                choresAssignedCount++;
+              }
+            }
+            choresAssignedCountLive.setValue(choresAssignedCount);
+          }
         }
       }));
     }
@@ -471,6 +615,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
     editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, null);
     editPrefs.apply();
     downloadData();
   }
@@ -546,6 +691,22 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public LiveData<String> getShoppingListDescriptionTextLive() {
     return shoppingListDescriptionTextLive;
+  }
+
+  public LiveData<String> getChoresDescriptionAssignedTextLive() {
+    return choresDescriptionAssignedTextLive;
+  }
+
+  public LiveData<String> getChoresDescriptionDueSoonTextLive() {
+    return choresDescriptionDueSoonTextLive;
+  }
+
+  public LiveData<String> getChoresDescriptionDueTodayTextLive() {
+    return choresDescriptionDueTodayTextLive;
+  }
+
+  public LiveData<String> getChoresDescriptionOverdueTextLive() {
+    return choresDescriptionOverdueTextLive;
   }
 
   public LiveData<String> getTasksDescriptionTextLive() {

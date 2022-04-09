@@ -87,39 +87,36 @@ public class ConfigUtil {
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_PRICE_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_PRICE_TRACKING"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRICE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_LOCATION_TRACKING"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_LOCATION_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_BBD_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_OPENED_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING"
-              )
-          ).putBoolean(
-          PREF.FEATURE_TASKS,
-          jsonObject.getBoolean(
-              "FEATURE_FLAG_TASKS"
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
           )
-      ).apply();
+          .putBoolean(
+              PREF.FEATURE_TASKS,
+              jsonObject.getBoolean("FEATURE_FLAG_TASKS")
+          )
+          .putBoolean(
+              PREF.FEATURE_CHORES,
+              jsonObject.getBoolean("FEATURE_FLAG_CHORES")
+          )
+          .putBoolean(
+              PREF.FEATURE_CHORES_ASSIGNMENTS,
+              jsonObject.getBoolean("FEATURE_FLAG_CHORES_ASSIGNMENTS")
+          ).apply();
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
         prefs.edit().putBoolean(
             Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
@@ -210,9 +207,9 @@ public class ConfigUtil {
         return false;
       } else if (settingValue instanceof String && NumUtil.isStringInt((String) settingValue)) {
         return Integer.parseInt((String) settingValue) == 1;
-      } else if (settingValue instanceof String && ((String) settingValue).equals("false")) {
+      } else if (settingValue instanceof String && settingValue.equals("false")) {
         return false;
-      } else if (settingValue instanceof String && ((String) settingValue).equals("true")) {
+      } else if (settingValue instanceof String && settingValue.equals("true")) {
         return true;
       } else {
         return prefs.getBoolean(settingKey, settingDefault);

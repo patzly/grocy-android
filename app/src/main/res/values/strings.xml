@@ -119,6 +119,8 @@
   <string name="action_share_description">Tell your friends about Grocy Android</string>
   <string name="action_no_filter">No filter</string>
   <string name="action_show_done_tasks">Show done tasks</string>
+  <string name="action_track_chore_execution">Track chore execution</string>
+  <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -190,6 +192,11 @@
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d assigned</item>
+    <item quantity="other">%1$d assigned</item>
   </plurals>
   <string name="msg_task_mark">Mark task as completed</string>
   <string name="msg_task_completed">Marked task as completed</string>
@@ -451,6 +458,8 @@
   <string name="title_choose_product">Choose product</string>
   <string name="title_pending_products">Pending products</string>
   <string name="title_stored_purchases">Stored purchases</string>
+  <string name="title_chores">Chores</string>
+  <string name="title_chore">Chore</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -614,6 +623,26 @@
     <item quantity="one">%1$d item is on your shopping list.</item>
     <item quantity="other">%1$d items are on your shopping list.</item>
   </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d chore is due to be done within the next %2$d days.</item>
+    <item quantity="other">%1$d chores are due to be done within the next %2$d days.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d chore is overdue to be done.</item>
+    <item quantity="other">%1$d chores are overdue to be done.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d chore is due to be done today.</item>
+    <item quantity="other">%1$d chores are due to be done today.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d chore is assigned to you.</item>
+    <item quantity="other">%1$d chores are assigned to you.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
     <item quantity="one">%1$d task is to be completed.</item>
@@ -720,6 +749,7 @@
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
+  <string name="property_assignment">Assignment</string>
   <string name="property_value">Value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
