@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 33,
-    "identityHash": "3cdfc3f6a55aa770601f4201c53bce17",
+    "identityHash": "4dd23033816dc40a7a61b01ec932e123",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -1487,12 +1487,80 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_id` INTEGER NOT NULL, `type` TEXT, `picture_file_name` TEXT, `base_servings` INTEGER NOT NULL, `desired_servings` INTEGER NOT NULL, `not_check_shoppinglist` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pictureFileName",
+            "columnName": "picture_file_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "baseServings",
+            "columnName": "base_servings",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "desiredServings",
+            "columnName": "desired_servings",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notCheckShoppingList",
+            "columnName": "not_check_shoppinglist",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3cdfc3f6a55aa770601f4201c53bce17')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4dd23033816dc40a7a61b01ec932e123')"
     ]
   }
 }
