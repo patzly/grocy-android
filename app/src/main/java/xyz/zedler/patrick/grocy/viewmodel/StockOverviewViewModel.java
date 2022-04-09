@@ -473,7 +473,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         continue;
       }
 
-      if (item.getProduct().getHideOnStockOverviewInt() == 1) {
+      if (item.getProduct().getHideOnStockOverviewBoolean()) {
         continue;
       }
 

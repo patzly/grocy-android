@@ -132,7 +132,7 @@ public class InventoryViewModel extends BaseViewModel {
       this.unitConversions = data.getQuantityUnitConversions();
       this.stores = data.getStores();
       this.locations = data.getLocations();
-      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
         if (downloadAfterLoading) {
             downloadData();
         }
@@ -153,7 +153,7 @@ public class InventoryViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
         }), dlHelper.updateQuantityUnitConversions(
             dbChangedTime, conversions -> this.unitConversions = conversions
         ), dlHelper.updateProductBarcodes(

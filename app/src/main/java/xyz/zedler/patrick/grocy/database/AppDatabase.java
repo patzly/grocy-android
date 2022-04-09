@@ -93,7 +93,7 @@ import xyz.zedler.patrick.grocy.model.User;
         Chore.class,
         ChoreEntry.class
     },
-    version = 32
+    version = 33
 )
 public abstract class AppDatabase extends RoomDatabase {
 

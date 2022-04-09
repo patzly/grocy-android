@@ -148,6 +148,14 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("hide_on_stock_overview")
   private String hideOnStockOverview;
 
+  @ColumnInfo(name = "no_own_stock")
+  @SerializedName("no_own_stock")
+  private String noOwnStock;
+
+  @ColumnInfo(name = "default_consume_location_id")
+  @SerializedName("default_consume_location_id")
+  private String defaultConsumeLocationId;
+
   @Ignore
   private Integer pendingProductId;
 
@@ -208,6 +216,8 @@ public class Product extends GroupedListItem implements Parcelable {
     defaultDueDaysAfterThawing = "0";
     quickConsumeAmount = "1";
     hideOnStockOverview = "0";
+    noOwnStock = "0";
+    defaultConsumeLocationId = null;
   }
 
   @Ignore
@@ -238,6 +248,8 @@ public class Product extends GroupedListItem implements Parcelable {
     dueDateType = parcel.readString();
     quickConsumeAmount = parcel.readString();
     hideOnStockOverview = parcel.readString();
+    noOwnStock = parcel.readString();
+    defaultConsumeLocationId = parcel.readString();
   }
 
   @Override
@@ -268,6 +280,8 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(dueDateType);
     dest.writeString(quickConsumeAmount);
     dest.writeString(hideOnStockOverview);
+    dest.writeString(noOwnStock);
+    dest.writeString(defaultConsumeLocationId);
   }
 
   public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -585,8 +599,8 @@ public class Product extends GroupedListItem implements Parcelable {
     return hideOnStockOverview;
   }
 
-  public int getHideOnStockOverviewInt() {
-    return NumUtil.isStringInt(hideOnStockOverview) ? Integer.parseInt(hideOnStockOverview) : 0;
+  public boolean getHideOnStockOverviewBoolean() {
+    return NumUtil.isStringInt(hideOnStockOverview) && Integer.parseInt(hideOnStockOverview) == 1;
   }
 
   public void setHideOnStockOverview(String hideOnStockOverview) {
@@ -595,6 +609,30 @@ public class Product extends GroupedListItem implements Parcelable {
 
   public void setHideOnStockOverviewBoolean(boolean hideOnStockOverview) {
     this.hideOnStockOverview = hideOnStockOverview ? "1" : "0";
+  }
+
+  public String getNoOwnStock() {
+    return noOwnStock;
+  }
+
+  public boolean getNoOwnStockBoolean() {
+    return NumUtil.isStringInt(noOwnStock) && Integer.parseInt(noOwnStock) == 1;
+  }
+
+  public void setNoOwnStock(String noOwnStock) {
+    this.noOwnStock = noOwnStock;
+  }
+
+  public void setNoOwnStockBoolean(boolean noOwnStock) {
+    this.noOwnStock = noOwnStock ? "1" : "0";
+  }
+
+  public String getDefaultConsumeLocationId() {
+    return defaultConsumeLocationId;
+  }
+
+  public void setDefaultConsumeLocationId(String defaultConsumeLocationId) {
+    this.defaultConsumeLocationId = defaultConsumeLocationId;
   }
 
   public Integer getPendingProductId() {
@@ -642,6 +680,9 @@ public class Product extends GroupedListItem implements Parcelable {
       String dueType = product.dueDateType;
       String quickConsume = product.quickConsumeAmount;
       String hideOnStock = product.hideOnStockOverview;
+      String noOwnStock = product.noOwnStock;
+      Object defaultConsumeLocationId = product.defaultConsumeLocationId != null
+          ? product.defaultConsumeLocationId : JSONObject.NULL;
 
       json.put("name", name);
       json.put("description", description);
@@ -670,6 +711,12 @@ public class Product extends GroupedListItem implements Parcelable {
       json.put("due_type", dueType);
       json.put("quick_consume_amount", quickConsume);
       json.put("hide_on_stock_overview", hideOnStock);
+      if (noOwnStock != null && VersionUtil.isGrocyServerMin330(prefs)) {
+        json.put("no_own_stock", noOwnStock);
+      }
+      if (VersionUtil.isGrocyServerMin330(prefs)) {
+        json.put("default_consume_location_id", defaultConsumeLocationId);
+      }
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "getJsonFromProduct: " + e);
@@ -724,6 +771,16 @@ public class Product extends GroupedListItem implements Parcelable {
     return activeProductsOnly;
   }
 
+  public static ArrayList<Product> getActiveAndStockEnabledProductsOnly(List<Product> allProducts) {
+    ArrayList<Product> activeProductsOnly = new ArrayList<>();
+    for (Product product : allProducts) {
+      if (product.isActive() && !product.getNoOwnStockBoolean()) {
+        activeProductsOnly.add(product);
+      }
+    }
+    return activeProductsOnly;
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -738,37 +795,33 @@ public class Product extends GroupedListItem implements Parcelable {
       return false;
     }
     Product product = (Product) o;
-    return Objects.equals(id, product.id) &&
-        Objects.equals(name, product.name) &&
-        Objects.equals(description, product.description) &&
-        Objects.equals(productGroupId, product.productGroupId) &&
-        Objects.equals(active, product.active) &&
-        Objects.equals(locationId, product.locationId) &&
-        Objects.equals(storeId, product.storeId) &&
-        Objects.equals(quIdPurchase, product.quIdPurchase) &&
-        Objects.equals(quIdStock, product.quIdStock) &&
-        Objects.equals(quFactorPurchaseToStock, product.quFactorPurchaseToStock) &&
-        Objects.equals(minStockAmount, product.minStockAmount) &&
-        Objects.equals(defaultDueDays, product.defaultDueDays) &&
-        Objects.equals(defaultDueDaysAfterOpen, product.defaultDueDaysAfterOpen) &&
-        Objects.equals(defaultDueDaysAfterFreezing, product.defaultDueDaysAfterFreezing) &&
-        Objects.equals(defaultDueDaysAfterThawing, product.defaultDueDaysAfterThawing) &&
-        Objects.equals(pictureFileName, product.pictureFileName) &&
-        Objects.equals(enableTareWeightHandling, product.enableTareWeightHandling) &&
-        Objects.equals(tareWeight, product.tareWeight) &&
-        Objects
-            .equals(notCheckStockFulfillmentForRecipes, product.notCheckStockFulfillmentForRecipes)
-        &&
-        Objects.equals(parentProductId, product.parentProductId) &&
-        Objects.equals(calories, product.calories) &&
-        Objects
-            .equals(accumulateSubProductsMinStockAmount,
-                product.accumulateSubProductsMinStockAmount)
-        &&
-        Objects.equals(treatOpenedAsOutOfStock, product.treatOpenedAsOutOfStock) &&
-        Objects.equals(dueDateType, product.dueDateType) &&
-        Objects.equals(quickConsumeAmount, product.quickConsumeAmount) &&
-        Objects.equals(hideOnStockOverview, product.hideOnStockOverview);
+    return id == product.id && displayDivider == product.displayDivider && Objects
+        .equals(name, product.name) && Objects.equals(description, product.description)
+        && Objects.equals(productGroupId, product.productGroupId) && Objects
+        .equals(active, product.active) && Objects.equals(locationId, product.locationId)
+        && Objects.equals(storeId, product.storeId) && Objects
+        .equals(quIdPurchase, product.quIdPurchase) && Objects
+        .equals(quIdStock, product.quIdStock) && Objects
+        .equals(quFactorPurchaseToStock, product.quFactorPurchaseToStock) && Objects
+        .equals(minStockAmount, product.minStockAmount) && Objects
+        .equals(defaultDueDays, product.defaultDueDays) && Objects
+        .equals(defaultDueDaysAfterOpen, product.defaultDueDaysAfterOpen) && Objects
+        .equals(defaultDueDaysAfterFreezing, product.defaultDueDaysAfterFreezing) && Objects
+        .equals(defaultDueDaysAfterThawing, product.defaultDueDaysAfterThawing) && Objects
+        .equals(pictureFileName, product.pictureFileName) && Objects
+        .equals(enableTareWeightHandling, product.enableTareWeightHandling) && Objects
+        .equals(tareWeight, product.tareWeight) && Objects
+        .equals(notCheckStockFulfillmentForRecipes, product.notCheckStockFulfillmentForRecipes)
+        && Objects.equals(parentProductId, product.parentProductId) && Objects
+        .equals(calories, product.calories) && Objects
+        .equals(accumulateSubProductsMinStockAmount, product.accumulateSubProductsMinStockAmount)
+        && Objects.equals(treatOpenedAsOutOfStock, product.treatOpenedAsOutOfStock)
+        && Objects.equals(dueDateType, product.dueDateType) && Objects
+        .equals(quickConsumeAmount, product.quickConsumeAmount) && Objects
+        .equals(hideOnStockOverview, product.hideOnStockOverview) && Objects
+        .equals(noOwnStock, product.noOwnStock) && Objects
+        .equals(defaultConsumeLocationId, product.defaultConsumeLocationId) && Objects
+        .equals(pendingProductId, product.pendingProductId);
   }
 
   @Override
@@ -780,7 +833,8 @@ public class Product extends GroupedListItem implements Parcelable {
             pictureFileName, enableTareWeightHandling, tareWeight,
             notCheckStockFulfillmentForRecipes,
             parentProductId, calories, accumulateSubProductsMinStockAmount, treatOpenedAsOutOfStock,
-            dueDateType, quickConsumeAmount, hideOnStockOverview);
+            dueDateType, quickConsumeAmount, hideOnStockOverview, noOwnStock,
+            defaultConsumeLocationId, pendingProductId, displayDivider);
   }
 
   @NonNull
