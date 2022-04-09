@@ -20,10 +20,6 @@
 <resources>
 
   <string-array name="compatible_grocy_versions" translatable="false">
-    <item>3.0.0</item>
-    <item>3.0.1</item>
-    <item>3.1.1</item>
-    <item>3.1.2</item>
     <item>3.1.3</item>
     <item>3.2.0</item>
     <item>3.3.0</item>

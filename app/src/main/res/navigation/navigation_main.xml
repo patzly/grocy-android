@@ -216,7 +216,7 @@
       app:argType="xyz.zedler.patrick.grocy.model.StockItem"
       app:nullable="true" />
     <argument
-      android:name="quantityUnit"
+      android:name="quantityUnitStock"
       android:defaultValue="@null"
       app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
       app:nullable="true" />
@@ -253,6 +253,11 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down" />
+    <argument
+      android:name="quantityUnitPurchase"
+      app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </dialog>
   <dialog
     android:id="@+id/drawerBottomSheetDialogFragment"
@@ -589,13 +594,6 @@
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
       <action
-        android:id="@+id/action_settingsFragment_to_settingsCatStockFragment"
-        app:destination="@id/settingsCatStockFragment"
-        app:enterAnim="@anim/slide_from_end"
-        app:exitAnim="@anim/slide_to_start"
-        app:popEnterAnim="@anim/slide_from_start"
-        app:popExitAnim="@anim/slide_to_end" />
-      <action
         android:id="@+id/action_settingsFragment_to_settingsCatShoppingModeFragment"
         app:destination="@id/settingsCatShoppingModeFragment"
         app:enterAnim="@anim/slide_from_end"
@@ -616,6 +614,13 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
+      <action
+        android:id="@+id/action_settingsFragment_to_settingsCatUserSettingsFragment"
+        app:destination="@id/settingsCatUserSettingsFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
     <fragment
       android:id="@+id/logFragment"
@@ -690,6 +695,19 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
+    </fragment>
+    <fragment
+      android:id="@+id/settingsCatUserSettingsFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatUserSettingsFragment"
+      android:label="SettingsCatUserSettingsFragment"
+      tools:layout="@layout/fragment_settings_cat_user_settings">
+      <action
+        android:id="@+id/action_settingsCatUserSettingsFragment_to_settingsCatStockFragment"
+        app:destination="@id/settingsCatStockFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
   </navigation>
   <navigation

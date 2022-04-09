@@ -26,6 +26,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_current_location_table")
@@ -145,6 +146,15 @@ public class StockLocation implements Parcelable {
 
   public void setIsFreezer(String isFreezer) {
     this.isFreezer = isFreezer;
+  }
+
+  public static StockLocation getFromId(List<StockLocation> locations, int locationId) {
+    for (StockLocation stockLocation : locations) {
+      if (stockLocation.getLocationId() == locationId) {
+        return stockLocation;
+      }
+    }
+    return null;
   }
 
   @Override

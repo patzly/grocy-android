@@ -25,9 +25,18 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class VersionUtil {
 
+  public final static String SERVER_3_2_0 = "3.2.0";
   public final static String SERVER_3_3_0 = "3.3.0";
 
-  public static boolean isGrocyThisOrHigher(SharedPreferences prefs, @NonNull String version) {
+  public static boolean isGrocyServerMin320(SharedPreferences prefs) {
+    return isGrocyThisVersionOrHigher(prefs, SERVER_3_2_0);
+  }
+
+  public static boolean isGrocyServerMin330(SharedPreferences prefs) {
+    return isGrocyThisVersionOrHigher(prefs, SERVER_3_3_0);
+  }
+
+  public static boolean isGrocyThisVersionOrHigher(SharedPreferences prefs, @NonNull String version) {
     String current = prefs.getString(PREF.GROCY_VERSION, null);
     if (current == null) return true;
     try {

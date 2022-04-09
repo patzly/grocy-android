@@ -461,7 +461,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_product_overview) {
       ViewUtil.startIcon(item);
-      if (viewModel.getFormData().getPendingProductLive() != null) {
+      if (viewModel.getFormData().getPendingProductLive().getValue() != null) {
         viewModel.showMessage(R.string.subtitle_product_not_on_server);
         return false;
       }

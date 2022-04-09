@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
@@ -628,24 +629,24 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public boolean hasServerNewOptionTreatOpenedAsOutOfStock() {
-    return sharedPrefs.getInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, -1) != -1;
+    return VersionUtil.isGrocyServerMin320(sharedPrefs);
   }
 
   public boolean getTreatOpenedAsOutOfStockEnabled() {
     if (!hasServerNewOptionTreatOpenedAsOutOfStock()) {
       return false;
     }
-    return sharedPrefs.getInt(
+    return sharedPrefs.getBoolean(
         STOCK.TREAT_OPENED_OUT_OF_STOCK,
         Constants.SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK
-    ) == 1;
+    );
   }
 
   public void setTreatOpenedAsOutOfStockEnabled(boolean enabled) {
     if (!hasServerNewOptionTreatOpenedAsOutOfStock()) {
       return;
     }
-    sharedPrefs.edit().putInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled ? 1 : 0).apply();
+    sharedPrefs.edit().putBoolean(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled).apply();
     dlHelper.uploadSetting(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled, this::showMessage);
   }
 

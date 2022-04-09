@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.text.Html;
 import android.text.Spanned;
 import androidx.annotation.NonNull;
@@ -31,10 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class FormDataMasterProductCatOptional {
 
   private final Application application;
+  private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<Boolean> isActiveLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
@@ -49,13 +52,19 @@ public class FormDataMasterProductCatOptional {
   private final LiveData<String> productGroupNameLive;
   private final MutableLiveData<String> energyLive;
   private final MutableLiveData<Boolean> neverShowOnStockLive;
+  private final MutableLiveData<Boolean> noOwnStockLive;
 
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
 
-  public FormDataMasterProductCatOptional(Application application, boolean beginnerMode) {
+  public FormDataMasterProductCatOptional(
+      Application application,
+      SharedPreferences sharedPrefs,
+      boolean beginnerMode
+  ) {
     this.application = application;
+    this.sharedPrefs = sharedPrefs;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     isActiveLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
@@ -76,6 +85,7 @@ public class FormDataMasterProductCatOptional {
     );
     energyLive = new MutableLiveData<>();
     neverShowOnStockLive = new MutableLiveData<>();
+    noOwnStockLive = new MutableLiveData<>();
 
     productLive = new MutableLiveData<>();
     filledWithProduct = false;
@@ -146,6 +156,20 @@ public class FormDataMasterProductCatOptional {
     neverShowOnStockLive.setValue(
         neverShowOnStockLive.getValue() == null || !neverShowOnStockLive.getValue()
     );
+  }
+
+  public MutableLiveData<Boolean> getNoOwnStockLive() {
+    return noOwnStockLive;
+  }
+
+  public void toggleNoOwnStockLive() {
+    noOwnStockLive.setValue(
+        noOwnStockLive.getValue() == null || !noOwnStockLive.getValue()
+    );
+  }
+
+  public boolean getNoOwnStockVisible() {
+    return VersionUtil.isGrocyServerMin330(sharedPrefs);
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -244,6 +268,7 @@ public class FormDataMasterProductCatOptional {
     }
     assert isActiveLive.getValue() != null;
     assert neverShowOnStockLive.getValue() != null;
+    assert noOwnStockLive.getValue() != null;
     ProductGroup pGroup = productGroupLive.getValue();
     product.setActive(isActiveLive.getValue());
     product.setParentProductId(parentProductLive.getValue() != null
@@ -253,6 +278,7 @@ public class FormDataMasterProductCatOptional {
     product.setProductGroupId(pGroup != null ? String.valueOf(pGroup.getId()) : null);
     product.setCalories(energyLive.getValue());
     product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
+    product.setNoOwnStockBoolean(noOwnStockLive.getValue());
     return product;
   }
 
@@ -278,7 +304,8 @@ public class FormDataMasterProductCatOptional {
         ? Html.fromHtml(product.getDescription()) : null);
     productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
     energyLive.setValue(product.getCalories());
-    neverShowOnStockLive.setValue(product.getHideOnStockOverviewInt() == 1);
+    neverShowOnStockLive.setValue(product.getHideOnStockOverviewBoolean());
+    noOwnStockLive.setValue(product.getNoOwnStockBoolean());
     filledWithProduct = true;
   }
 }

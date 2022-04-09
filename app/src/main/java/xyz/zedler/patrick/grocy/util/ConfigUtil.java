@@ -169,20 +169,16 @@ public class ConfigUtil {
           STOCK.USE_QUICK_CONSUME_AMOUNT,
           getBoolean(jsonObject, STOCK.USE_QUICK_CONSUME_AMOUNT,
               SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT, prefs)
+      ).putBoolean(
+          STOCK.TREAT_OPENED_OUT_OF_STOCK,
+          getBoolean(jsonObject, STOCK.TREAT_OPENED_OUT_OF_STOCK,
+              SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK, prefs)
       ).apply();
       if (jsonObject.has(STOCK.DEFAULT_DUE_DAYS)) {
         prefs.edit().putInt(
             STOCK.DEFAULT_DUE_DAYS,
             jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
         ).apply();
-      }
-      if (jsonObject.has(STOCK.TREAT_OPENED_OUT_OF_STOCK)) {
-        prefs.edit().putInt(
-            STOCK.TREAT_OPENED_OUT_OF_STOCK,
-            getBoolean(jsonObject, STOCK.TREAT_OPENED_OUT_OF_STOCK, true, prefs) ? 1 : 0
-        ).apply();
-      } else {
-        prefs.edit().putInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, -1).apply();
       }
     } catch (JSONException e) {
       if (debug) {
@@ -220,7 +216,11 @@ public class ConfigUtil {
     } catch (JSONException e) {
       Log.e(TAG, "downloadUserSettings: getBoolean: settingKey="
           + settingKey + " Exception:" + e);
-      return prefs.getBoolean(settingKey, settingDefault);
+      try {
+        return prefs.getBoolean(settingKey, settingDefault);
+      } catch (ClassCastException e1) {
+        return settingDefault;
+      }
     }
   }
 

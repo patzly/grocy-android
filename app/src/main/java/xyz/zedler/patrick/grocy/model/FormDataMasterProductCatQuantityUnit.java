@@ -120,18 +120,6 @@ public class FormDataMasterProductCatQuantityUnit {
     }
   }
 
-  private QuantityUnit getQuantityUnitFromId(int id) {
-    if (quantityUnitsLive.getValue() == null || id == -1) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnitsLive.getValue()) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
-  }
-
   public static boolean isFormInvalid(@Nullable Product product) {
     if (product == null) {
       return true;
@@ -153,8 +141,8 @@ public class FormDataMasterProductCatQuantityUnit {
       return;
     }
 
-    quStockLive.setValue(getQuantityUnitFromId(product.getQuIdStockInt()));
-    quPurchaseLive.setValue(getQuantityUnitFromId(product.getQuIdPurchaseInt()));
+    quStockLive.setValue(QuantityUnit.getFromId(quantityUnitsLive.getValue(), product.getQuIdStockInt()));
+    quPurchaseLive.setValue(QuantityUnit.getFromId(quantityUnitsLive.getValue(), product.getQuIdPurchaseInt()));
     filledWithProduct = true;
   }
 }

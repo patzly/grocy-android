@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import androidx.lifecycle.Transformations;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class FormDataMasterProductCatAmount {
 
@@ -40,10 +42,10 @@ public class FormDataMasterProductCatAmount {
   public static final int TARE_WEIGHT = 6;
 
   private final Application application;
+  private final SharedPreferences sharedPrefs;
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<String> minAmountLive;
   private final MutableLiveData<Boolean> accumulateMinAmount;
-  private final MutableLiveData<Boolean> treatOpenedAsOutOfStockVisible;
   private final MutableLiveData<Boolean> treatOpenedAsOutOfStock;
   private final MutableLiveData<String> quickConsumeAmountLive;
   private final LiveData<String> quickConsumeAmountTitleLive;
@@ -57,13 +59,17 @@ public class FormDataMasterProductCatAmount {
 
   private boolean filledWithProduct;
 
-  public FormDataMasterProductCatAmount(Application application, boolean beginnerMode) {
+  public FormDataMasterProductCatAmount(
+      Application application,
+      SharedPreferences sharedPrefs,
+      boolean beginnerMode
+  ) {
     this.application = application;
+    this.sharedPrefs = sharedPrefs;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     quantityUnitLive = new MutableLiveData<>();
     minAmountLive = new MutableLiveData<>();
     accumulateMinAmount = new MutableLiveData<>(false);
-    treatOpenedAsOutOfStockVisible = new MutableLiveData<>(true);
     treatOpenedAsOutOfStock = new MutableLiveData<>(false);
     quickConsumeAmountLive = new MutableLiveData<>();
     quickConsumeAmountTitleLive = Transformations.map(
@@ -114,8 +120,8 @@ public class FormDataMasterProductCatAmount {
     return accumulateMinAmount;
   }
 
-  public MutableLiveData<Boolean> getTreatOpenedAsOutOfStockVisible() {
-    return treatOpenedAsOutOfStockVisible;
+  public boolean getTreatOpenedAsOutOfStockVisible() {
+    return VersionUtil.isGrocyServerMin320(sharedPrefs);
   }
 
   public MutableLiveData<Boolean> getTreatOpenedAsOutOfStock() {
@@ -202,18 +208,6 @@ public class FormDataMasterProductCatAmount {
     return number;
   }
 
-  private QuantityUnit getQuantityUnitFromId(List<QuantityUnit> quantityUnits, int id) {
-    if (quantityUnits == null) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
-  }
-
   public boolean isFormValid() {
     boolean valid = true;
         /*boolean valid = isProductNameValid();
@@ -240,11 +234,11 @@ public class FormDataMasterProductCatAmount {
     }
     product.setMinStockAmount(minAmountLive.getValue());
     product.setAccumulateSubProductsMinStockAmount(accumulateMinAmount.getValue());
-    product.setTreatOpenedAsOutOfStock(
-        treatOpenedAsOutOfStockVisible.getValue()
-            ? treatOpenedAsOutOfStock.getValue() ? "1" : "0"
-            : "-1"
-    );
+    if (VersionUtil.isGrocyServerMin320(sharedPrefs)) {
+      boolean treatOpened = treatOpenedAsOutOfStock.getValue() != null
+          ? treatOpenedAsOutOfStock.getValue() : true;
+      product.setTreatOpenedAsOutOfStock(treatOpened ? "1" : "0");
+    }
     product.setQuickConsumeAmount(quickConsumeAmountLive.getValue());
     product.setQuFactorPurchaseToStock(factorPurchaseToStockLive.getValue());
     product.setEnableTareWeightHandling(enableTareWeightHandlingLive.getValue());
@@ -264,16 +258,13 @@ public class FormDataMasterProductCatAmount {
     String tareWeight = NumUtil.trim(product.getTareWeightDouble());
     minAmountLive.setValue(minAmount);
     accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
-    treatOpenedAsOutOfStockVisible.setValue(product.getTreatOpenedAsOutOfStock() != null
-        && !product.getTreatOpenedAsOutOfStock().isEmpty()
-        && !product.getTreatOpenedAsOutOfStock().equals("-1"));
     treatOpenedAsOutOfStock.setValue(product.getTreatOpenedAsOutOfStockBoolean());
     quickConsumeAmountLive.setValue(quickAmount);
     factorPurchaseToStockLive.setValue(factor);
     enableTareWeightHandlingLive.setValue(product.getEnableTareWeightHandlingBoolean());
     tareWeightLive.setValue(tareWeight);
     disableStockCheckLive.setValue(product.getNotCheckStockFulfillmentForRecipesBoolean());
-    quantityUnitLive.setValue(getQuantityUnitFromId(quantityUnits, product.getQuIdStockInt()));
+    quantityUnitLive.setValue(QuantityUnit.getFromId(quantityUnits, product.getQuIdStockInt()));
     filledWithProduct = true;
   }
 

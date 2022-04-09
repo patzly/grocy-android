@@ -77,7 +77,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
   private StockItem stockItem;
   private ProductDetails productDetails;
   private Product product;
-  private QuantityUnit quantityUnit;
+  private QuantityUnit quantityUnitStock;
+  private QuantityUnit quantityUnitPurchase;
   private PluralUtil pluralUtil;
   private Location location;
   private DownloadHelper dlHelper;
@@ -120,7 +121,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       stockItem = new StockItem(productDetails);
     } else if (args.getStockItem() != null) {
       stockItem = args.getStockItem();
-      quantityUnit = args.getQuantityUnit();
+      quantityUnitStock = args.getQuantityUnitStock();
+      quantityUnitPurchase = args.getQuantityUnitPurchase();
       location = args.getLocation();
       product = stockItem.getProduct();
     }
@@ -265,14 +267,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
       binding.buttonConsume.setTooltipText(
           activity.getString(
               R.string.action_consume_one,
-              quantityUnit.getName(),
+              quantityUnitStock.getName(),
               product.getName()
           )
       );
       binding.buttonOpen.setTooltipText(
           activity.getString(
               R.string.action_open_one,
-              quantityUnit.getName(),
+              quantityUnitStock.getName(),
               product.getName()
           )
       );
@@ -295,10 +297,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         stockItem = new StockItem(productDetails);
         refreshButtonStates(true);
         refreshItems();
-        loadPriceHistory();
+        loadPriceHistory((float) details.getProduct().getQuFactorPurchaseToStockDouble());
       }).perform(dlHelper.getUuid());
     } else if (activity.isOnline() && hasDetails()) {
-      loadPriceHistory();
+      loadPriceHistory((float) productDetails.getProduct().getQuFactorPurchaseToStockDouble());
     }
 
     hideDisabledFeatures();
@@ -316,14 +318,17 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     // quantity unit refresh for an up-to-date value (productDetails has it in it)
     if (hasDetails()) {
-      quantityUnit = productDetails.getQuantityUnitStock();
+      quantityUnitStock = productDetails.getQuantityUnitStock();
+      quantityUnitPurchase = productDetails.getQuantityUnitPurchase();
     }
 
     // AMOUNT
     StringBuilder amountNormal = new StringBuilder();
     StringBuilder amountAggregated = new StringBuilder();
-    AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem, quantityUnit);
-    AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem, quantityUnit);
+    AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem,
+        quantityUnitStock);
+    AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem,
+        quantityUnitStock);
     binding.itemAmount.setText(
         activity.getString(R.string.property_amount),
         amountNormal.toString(),
@@ -363,6 +368,16 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     }
 
     if (hasDetails()) {
+      // VALUE
+      if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)
+          && NumUtil.isStringDouble(productDetails.getStockValue())) {
+        binding.itemValue.setText(
+            activity.getString(R.string.property_stock_value),
+            NumUtil.trimPrice(Double.parseDouble(productDetails.getStockValue()))
+                + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
+        );
+      }
+
       // LAST PURCHASED
       String lastPurchased = productDetails.getLastPurchased();
       binding.itemLastPurchased.setText(
@@ -387,15 +402,49 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
               : null
       );
 
+      boolean quantityUnitsAreNotEqual = quantityUnitStock.getId() != quantityUnitPurchase.getId();
+
       // LAST PRICE
       String lastPrice = productDetails.getLastPrice();
       if (NumUtil.isStringDouble(lastPrice) && isFeatureEnabled(
           Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
         binding.itemLastPrice.setText(
             activity.getString(R.string.property_last_price),
-            NumUtil.trimPrice(Double.parseDouble(lastPrice))
+            activity.getString(
+                R.string.property_price_unit_insert,
+                NumUtil.trimPrice(Double.parseDouble(lastPrice)
+                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble())
                 + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
-            null
+                quantityUnitPurchase.getName()
+            ),
+            quantityUnitsAreNotEqual ? activity.getString(
+                R.string.property_price_unit_insert,
+                NumUtil.trimPrice(Double.parseDouble(lastPrice))
+                    + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
+                quantityUnitStock.getName()
+            ) : null
+        );
+      }
+
+      // LAST PRICE
+      String averagePrice = productDetails.getAvgPrice();
+      if (NumUtil.isStringDouble(averagePrice) && isFeatureEnabled(
+          Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+        binding.itemAveragePrice.setText(
+            activity.getString(R.string.property_price_average),
+            activity.getString(
+                R.string.property_price_unit_insert,
+                NumUtil.trimPrice(Double.parseDouble(averagePrice)
+                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble())
+                    + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
+                quantityUnitPurchase.getName()
+            ),
+            quantityUnitsAreNotEqual ? activity.getString(
+                R.string.property_price_unit_insert,
+                NumUtil.trimPrice(Double.parseDouble(averagePrice))
+                    + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
+                quantityUnitStock.getName()
+            ) : null
         );
       }
 
@@ -420,7 +469,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
     }
   }
 
-  private void loadPriceHistory() {
+  private void loadPriceHistory(float factorPurchaseToStock) {
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       return;
     }
@@ -463,7 +512,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
             assert curveList != null;
             curveList.add(new BezierCurveChart.Point(
                 dates.indexOf(date),
-                (float) priceHistoryEntry.getPrice()
+                (float) priceHistoryEntry.getPrice() * factorPurchaseToStock
             ));
           }
           binding.itemPriceHistory.init(curveLists, dates);

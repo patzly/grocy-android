@@ -296,6 +296,8 @@
   <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">This product cannot have a parent product because it is already used as a parent product in another product.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">When enabled, the corresponding product can\'t have own stock, means it will not be selectable on purchase (useful for parent products which are just used as a summary/total view of the sub products).</string>
   <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
   <string name="msg_help_default_due_days_format">You can long press on an item below to enter a date instead of a number.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -562,6 +564,7 @@
   <string name="subtitle_product_due_date">Type, Default days (after opened, freezing, thawing)</string>
   <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
+  <string name="subtitle_synced_with_server">Synced with server</string>
   <!-- %1$s and %2$s are numbers -->
   <string name="subtitle_recipe_servings">%1$s / %2$s serving(s)</string>
 
@@ -685,6 +688,8 @@
   <string name="property_price_average">Average price</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Price per %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s per %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Price in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -753,6 +758,7 @@
   <string name="property_product_groups">Product groups</string>
   <string name="property_assignment">Assignment</string>
   <string name="property_value">Value</string>
+  <string name="property_stock_value">Stock value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
@@ -761,6 +767,8 @@
   <string name="property_active">Active</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Never show on stock overview</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Disable own stock</string>
   <string name="property_number">Number</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Enable tare weight handling</string>
@@ -876,6 +884,7 @@
   <string name="category_general">General</string>
   <string name="category_stock">Stock</string>
   <string name="category_server">Server</string>
+  <string name="category_user_settings">User settings</string>
   <string name="category_scanner">Scanner</string>
   <string name="category_scanner_camera">Camera scanner</string>
   <string name="category_scanner_external">External scanner</string>
@@ -1032,6 +1041,5 @@
   <string name="url_netcipher" translatable="false">https://github.com/guardianproject/NetCipher</string>
   <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
-  <string name="title_recipes">Recipes</string>
 
 </resources>

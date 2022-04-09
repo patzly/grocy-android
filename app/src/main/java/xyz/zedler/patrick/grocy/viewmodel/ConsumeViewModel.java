@@ -250,7 +250,7 @@ public class ConsumeViewModel extends BaseViewModel {
       // stock location
       if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
         ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-        StockLocation stockLocation = getStockLocation(
+        StockLocation stockLocation = StockLocation.getFromId(
             stockLocations,
             product.getLocationIdInt()
         );
@@ -311,8 +311,8 @@ public class ConsumeViewModel extends BaseViewModel {
       Product product,
       ProductBarcode barcode
   ) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
+    QuantityUnit stock = QuantityUnit.getFromId(quantityUnits, product.getQuIdStockInt());
+    QuantityUnit purchase = QuantityUnit.getFromId(quantityUnits, product.getQuIdPurchaseInt());
 
     if (stock == null || purchase == null) {
       throw new IllegalArgumentException(getString(R.string.error_loading_qus));
@@ -329,7 +329,7 @@ public class ConsumeViewModel extends BaseViewModel {
       if (product.getId() != conversion.getProductId()) {
         continue;
       }
-      QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
+      QuantityUnit unit = QuantityUnit.getFromId(quantityUnits, conversion.getToQuId());
       if (unit == null || quIdsInHashMap.contains(unit.getId())) {
         continue;
       }
@@ -340,7 +340,7 @@ public class ConsumeViewModel extends BaseViewModel {
 
     QuantityUnit barcodeUnit = null;
     if (barcode != null && barcode.hasQuId()) {
-      barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
+      barcodeUnit = QuantityUnit.getFromId(quantityUnits, barcode.getQuIdInt());
     }
     if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
       formData.getQuantityUnitLive().setValue(barcodeUnit);
@@ -528,24 +528,6 @@ public class ConsumeViewModel extends BaseViewModel {
         onSuccess.run();
       }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
-  }
-
-  private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
-    for (StockLocation stockLocation : locations) {
-      if (stockLocation.getLocationId() == locationId) {
-        return stockLocation;
-      }
-    }
-    return null;
   }
 
   public void showInputProductBottomSheet(@NonNull String input) {

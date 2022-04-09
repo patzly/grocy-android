@@ -237,7 +237,7 @@ public final class Constants {
       public final static String DEFAULT_PURCHASE_AMOUNT = "1";
       public final static String DEFAULT_CONSUME_AMOUNT = "1";
       public final static boolean USE_QUICK_CONSUME_AMOUNT = false;
-      public final static int TREAT_OPENED_OUT_OF_STOCK = 1;
+      public final static boolean TREAT_OPENED_OUT_OF_STOCK = true;
     }
 
     public final static class SHOPPING_MODE {

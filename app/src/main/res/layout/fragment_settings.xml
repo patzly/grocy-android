@@ -140,6 +140,40 @@
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatUserSettingsFragment())}"
+          app:clickUtil="@{clickUtil}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_cloud_sync"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/category_user_settings" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/subtitle_synced_with_server" />
+
+          </LinearLayout>
+
+          <ImageView
+            android:layout_height="24dp"
+            android:layout_width="24dp"
+            android:layout_marginStart="16dp"
+            android:clickable="false"
+            android:src="@drawable/ic_round_chevron_right"
+            tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -246,34 +280,6 @@
               android:text="@string/category_scanner" />
 
           </LinearLayout>
-
-          <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
-            android:layout_marginStart="16dp"
-            android:clickable="false"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatStockFragment())}"
-          app:clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_kitchen"
-            tools:ignore="ContentDescription" />
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/category_stock" />
 
           <ImageView
             android:layout_height="24dp"
