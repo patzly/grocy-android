@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +28,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatUserSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class SettingsFragment extends BaseFragment {
+public class SettingsCatUserSettingsFragment extends BaseFragment {
 
-  private final static String TAG = SettingsFragment.class.getSimpleName();
+  private final static String TAG = SettingsCatUserSettingsFragment.class.getSimpleName();
 
-  private FragmentSettingsBinding binding;
+  private FragmentSettingsCatUserSettingsBinding binding;
   private MainActivity activity;
-  private SettingsFragmentArgs args;
 
   @Override
   public View onCreateView(
@@ -47,9 +45,8 @@ public class SettingsFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentSettingsBinding.inflate(inflater, container, false);
+    binding = FragmentSettingsCatUserSettingsBinding.inflate(inflater, container, false);
     activity = (MainActivity) requireActivity();
-    args = SettingsFragmentArgs.fromBundle(requireArguments());
     binding.setFragment(this);
     binding.setActivity(activity);
     binding.setClickUtil(new ClickUtil());
@@ -71,38 +68,16 @@ public class SettingsFragment extends BaseFragment {
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.GONE,
           R.menu.menu_empty,
-          () -> {
-          }
+          () -> {}
       );
       activity.binding.fabMain.hide();
     }
+
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
-  }
-
-  public boolean shouldNavigateToBehavior() {
-    return args.getShowCategory() != null
-        && args.getShowCategory().equals(Constants.SETTINGS.BEHAVIOR.class.getSimpleName());
-  }
-
-  public boolean shouldNavigateToServer() {
-    return args.getShowCategory() != null
-        && args.getShowCategory().equals(Constants.SETTINGS.SERVER.class.getSimpleName());
   }
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary, () -> {
-      if (shouldNavigateToBehavior()) {
-        setArguments(new SettingsFragmentArgs.Builder(args)
-            .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
-            .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
-      } else if (shouldNavigateToServer()) {
-        setArguments(new SettingsFragmentArgs.Builder(args)
-            .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
-            .actionSettingsFragmentToSettingsCatServerFragment()), 200);
-      }
-    });
+    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

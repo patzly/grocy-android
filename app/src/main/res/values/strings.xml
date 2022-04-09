@@ -564,6 +564,7 @@
   <string name="subtitle_product_due_date">Type, Default days (after opened, freezing, thawing)</string>
   <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
+  <string name="subtitle_synced_with_server">Synced with server</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -881,6 +882,7 @@
   <string name="category_general">General</string>
   <string name="category_stock">Stock</string>
   <string name="category_server">Server</string>
+  <string name="category_user_settings">User settings</string>
   <string name="category_scanner">Scanner</string>
   <string name="category_scanner_camera">Camera scanner</string>
   <string name="category_scanner_external">External scanner</string>
