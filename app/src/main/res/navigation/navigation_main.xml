@@ -289,6 +289,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_choresFragment"
       app:destination="@id/choresFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_recipesFragment"
+      app:destination="@id/recipesFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
@@ -1113,5 +1116,14 @@
     <deepLink
       android:id="@+id/deepLink16"
       app:uri="@string/deep_link_choresFragment" />
+  </fragment>
+  <fragment
+      android:id="@+id/recipesFragment"
+      android:label="recipesFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipesFragment"
+      tools:layout="@layout/fragment_recipes">
+    <deepLink
+        android:id="@+id/deepLink16"
+        app:uri="@string/deep_link_recipesFragment" />
   </fragment>
 </navigation>

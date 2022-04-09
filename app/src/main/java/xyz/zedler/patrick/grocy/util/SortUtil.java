@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
@@ -395,5 +396,13 @@ public class SortUtil {
     return sorted;
   }
 
-
+  public static void sortRecipesByName(Context context, List<Recipe> recipes, boolean ascending) {
+    if (recipes == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(recipes, (item1, item2) -> Collator.getInstance(locale).compare(
+            (ascending ? item1 : item2).getName().toLowerCase(),
+            (ascending ? item2 : item1).getName().toLowerCase()));
+  }
 }

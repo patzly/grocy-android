@@ -83,6 +83,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_CHORES = "db_last_time_chores";
     public final static String DB_LAST_TIME_CHORE_ENTRIES = "db_last_time_chore_entries";
     public final static String DB_LAST_TIME_USERS = "db_last_time_users";
+    public final static String DB_LAST_TIME_RECIPES = "db_last_time_recipes";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -361,6 +362,7 @@ public final class Constants {
     public final static String USER = "user";
     public final static String USERS = "users";
     public final static String SHOW_OPTION_NEVER_EXPIRES = "show_option_never_expires";
+    public final static String RECIPE = "recipe";
   }
 
   public final static class FAB {

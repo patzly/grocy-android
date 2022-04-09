@@ -562,6 +562,8 @@
   <string name="subtitle_product_due_date">Type, Default days (after opened, freezing, thawing)</string>
   <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_recipe_servings">%1$s / %2$s serving(s)</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -1030,5 +1032,6 @@
   <string name="url_netcipher" translatable="false">https://github.com/guardianproject/NetCipher</string>
   <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+  <string name="title_recipes">Recipes</string>
 
 </resources>

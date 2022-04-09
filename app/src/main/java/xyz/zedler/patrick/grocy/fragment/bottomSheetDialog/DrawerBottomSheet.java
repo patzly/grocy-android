@@ -45,6 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.InventoryFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
 import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
+import xyz.zedler.patrick.grocy.fragment.RecipesFragment;
 import xyz.zedler.patrick.grocy.fragment.SettingsFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
@@ -98,6 +99,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         binding.linearDrawerInventory,
         binding.linearDrawerChores,
         binding.linearDrawerTasks,
+        binding.linearDrawerRecipes,
         binding.linearDrawerMasterData,
         binding.linearDrawerSettings,
         binding.linearDrawerFeedback,
@@ -121,6 +123,8 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       select(binding.linearDrawerChores, binding.textDrawerChores, false);
     } else if (currentFragment instanceof TasksFragment) {
       select(binding.linearDrawerTasks, binding.textDrawerTasks, false);
+    } else if (currentFragment instanceof RecipesFragment) {
+      select(binding.linearDrawerRecipes, binding.textDrawerRecipes, false);
     } else if (currentFragment instanceof MasterObjectListFragment) {
       select(binding.linearDrawerMasterData, binding.textDrawerMasterData, false);
     } else if (currentFragment instanceof SettingsFragment) {
@@ -181,6 +185,9 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
         activity.showMessage(R.string.error_no_browser);
       }
       dismiss();
+    } else if (v.getId() == R.id.linear_drawer_recipes) {
+      navigateCustom(DrawerBottomSheetDirections
+              .actionDrawerBottomSheetDialogFragmentToRecipesFragment());
     }
   }
 

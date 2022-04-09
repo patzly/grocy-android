@@ -61,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -2183,6 +2184,63 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem updateRecipes(
+          String dbChangedTime,
+          OnRecipesResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+            PREF.DB_LAST_TIME_RECIPES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+                @Nullable OnStringResponseListener responseListener,
+                @Nullable OnErrorListener errorListener,
+                @Nullable String uuid
+        ) {
+          get(
+                  grocyApi.getRecipes(),
+                  uuid,
+                  response -> {
+                    Type type = new TypeToken<List<Recipe>>() {
+                    }.getType();
+                    ArrayList<Recipe> recipes = new Gson().fromJson(response, type);
+                    if (debug) {
+                      Log.i(tag, "download Recipes: " + recipes);
+                    }
+                    Single.concat(
+                            appDatabase.recipeDao().deleteRecipes(),
+                            appDatabase.recipeDao().insertRecipes(recipes)
+                    )
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                              sharedPrefs.edit()
+                                      .putString(PREF.DB_LAST_TIME_RECIPES, dbChangedTime).apply();
+                              onResponseListener.onResponse(recipes);
+                              if (responseListener != null) {
+                                responseListener.onResponse(response);
+                              }
+                            })
+                            .subscribe();
+                  },
+                  error -> {
+                    if (errorListener != null) {
+                      errorListener.onError(error);
+                    }
+                  }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Recipes download");
+      }
+      return null;
+    }
+  }
+
   public QueueItem getCurrentUserId(OnIntegerResponseListener onResponseListener) {
     return new QueueItem() {
       @Override
@@ -2802,6 +2860,11 @@ public class DownloadHelper {
   public interface OnChoreEntriesResponseListener {
 
     void onResponse(ArrayList<ChoreEntry> choreEntries);
+  }
+
+  public interface OnRecipesResponseListener {
+
+    void onResponse(ArrayList<Recipe> recipes);
   }
 
   public interface OnUsersResponseListener {

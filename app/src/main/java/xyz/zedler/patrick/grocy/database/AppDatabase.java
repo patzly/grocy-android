@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
 import xyz.zedler.patrick.grocy.dao.ProductLastPurchasedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
+import xyz.zedler.patrick.grocy.dao.RecipeDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.dao.StockItemDao;
@@ -51,6 +52,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
@@ -91,9 +93,10 @@ import xyz.zedler.patrick.grocy.model.User;
         StoredPurchase.class,
         User.class,
         Chore.class,
-        ChoreEntry.class
+        ChoreEntry.class,
+        Recipe.class
     },
-    version = 32
+    version = 33
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -142,6 +145,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract ChoreDao choreDao();
 
   public abstract ChoreEntryDao choreEntryDao();
+
+  public abstract RecipeDao recipeDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

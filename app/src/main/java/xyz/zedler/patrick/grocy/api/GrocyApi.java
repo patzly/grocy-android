@@ -313,4 +313,13 @@ public class GrocyApi {
   public String getChores(int choreId) {
     return getUrl("/chores/" + choreId);
   }
+
+  // RECIPES
+
+  /**
+   * Returns all recipes
+   */
+  public String getRecipes() {
+    return getObjects("recipes") + "?query[]=id>0";
+  }
 }
