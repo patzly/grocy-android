@@ -1,5 +1,5 @@
 2.2.0:
-Please update your server to the latest grocy version for the best experience with our app.
+Please update your server to the latest version if you want to use all new features.
 - New: Support for grocy server v3.3.0, no support for v3.1.2 and lower
 - New: View and track chores (#149)
 - New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
