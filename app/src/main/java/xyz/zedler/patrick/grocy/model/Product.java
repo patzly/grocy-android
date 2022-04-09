@@ -38,6 +38,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 @Entity(tableName = "product_table")
 public class Product extends GroupedListItem implements Parcelable {
@@ -174,7 +175,7 @@ public class Product extends GroupedListItem implements Parcelable {
         STOCK.DEFAULT_DUE_DAYS,
         SETTINGS_DEFAULT.STOCK.DEFAULT_DUE_DAYS
     );
-    int presetTreatOpened = sharedPrefs.getInt(
+    boolean presetTreatOpened = sharedPrefs.getBoolean(
         STOCK.TREAT_OPENED_OUT_OF_STOCK,
         SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK
     );
@@ -190,7 +191,7 @@ public class Product extends GroupedListItem implements Parcelable {
     storeId = null;
     minStockAmount = String.valueOf(0);
     accumulateSubProductsMinStockAmount = "0";
-    treatOpenedAsOutOfStock = String.valueOf(presetTreatOpened);
+    treatOpenedAsOutOfStock = presetTreatOpened ? "1" : "0";
     dueDateType = "1";
     defaultDueDays = String.valueOf(presetDefaultDueDays);
     defaultDueDaysAfterOpen = "0";
@@ -612,7 +613,12 @@ public class Product extends GroupedListItem implements Parcelable {
     this.displayDivider = displayDivider;
   }
 
-  public static JSONObject getJsonFromProduct(Product product, boolean debug, String TAG) {
+  public static JSONObject getJsonFromProduct(
+      Product product,
+      SharedPreferences prefs,
+      boolean debug,
+      String TAG
+  ) {
     JSONObject json = new JSONObject();
     try {
       Object name = product.name;
@@ -658,7 +664,7 @@ public class Product extends GroupedListItem implements Parcelable {
       json.put("parent_product_id", parentProductId);
       json.put("calories", calories);
       json.put("cumulate_min_stock_amount_of_sub_products", cumulateAmounts);
-      if (treatOpened != null && (treatOpened.equals("1") || treatOpened.equals("0"))) {
+      if (treatOpened != null && VersionUtil.isGrocyServerMin320(prefs)) {
         json.put("treat_opened_as_out_of_stock", treatOpened);
       }
       json.put("due_type", dueType);
@@ -672,8 +678,8 @@ public class Product extends GroupedListItem implements Parcelable {
     return json;
   }
 
-  public JSONObject getJsonFromProduct(boolean debug, String TAG) {
-    return getJsonFromProduct(this, debug, TAG);
+  public JSONObject getJsonFromProduct(SharedPreferences prefs, boolean debug, String TAG) {
+    return getJsonFromProduct(this, prefs, debug, TAG);
   }
 
   public static Product getProductFromId(List<Product> products, int id) {

@@ -27,6 +27,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "quantity_unit_table")
@@ -135,6 +136,16 @@ public class QuantityUnit implements Parcelable {
 
   public void setPluralForms(String pluralForms) {
     this.pluralForms = pluralForms;
+  }
+
+  public static QuantityUnit getFromId(List<QuantityUnit> quantityUnits, int quantityUnitId) {
+    if (quantityUnits == null) return null;
+    for (QuantityUnit quantityUnit : quantityUnits) {
+      if (quantityUnit.getId() == quantityUnitId) {
+        return quantityUnit;
+      }
+    }
+    return null;
   }
 
   @Override
