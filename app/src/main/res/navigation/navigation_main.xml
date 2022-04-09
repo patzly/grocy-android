@@ -705,7 +705,19 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end"/>
+      <action
+        android:id="@+id/action_settingsCatUserSettingsFragment_to_settingsCatShoppingListFragment"
+        app:destination="@id/settingsCatShoppingListFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
+    <fragment
+      android:id="@+id/settingsCatShoppingListFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingListFragment"
+      android:label="SettingsCatShoppingListFragment"
+      tools:layout="@layout/fragment_settings_cat_shopping_list"/>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"

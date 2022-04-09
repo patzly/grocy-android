@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
@@ -173,11 +174,21 @@ public class ConfigUtil {
           STOCK.TREAT_OPENED_OUT_OF_STOCK,
           getBoolean(jsonObject, STOCK.TREAT_OPENED_OUT_OF_STOCK,
               SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK, prefs)
+      ).putBoolean(
+          SHOPPING_LIST.AUTO_ADD,
+          getBoolean(jsonObject, SHOPPING_LIST.AUTO_ADD,
+              SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD, prefs)
       ).apply();
       if (jsonObject.has(STOCK.DEFAULT_DUE_DAYS)) {
         prefs.edit().putInt(
             STOCK.DEFAULT_DUE_DAYS,
             jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
+        ).apply();
+      }
+      if (jsonObject.has(SHOPPING_LIST.AUTO_ADD_LIST_ID)) {
+        prefs.edit().putInt(
+            SHOPPING_LIST.AUTO_ADD_LIST_ID,
+            jsonObject.getInt(SHOPPING_LIST.AUTO_ADD_LIST_ID)
         ).apply();
       }
     } catch (JSONException e) {

@@ -1757,6 +1757,45 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem getShoppingLists(
+      OnShoppingListsResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<ShoppingList>>() {
+              }.getType();
+              ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "download ShoppingLists: " + shoppingLists);
+              }
+              onResponseListener.onResponse(shoppingLists);
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
   public QueueItem updateShoppingLists(
       String dbChangedTime,
       OnShoppingListsResponseListener onResponseListener

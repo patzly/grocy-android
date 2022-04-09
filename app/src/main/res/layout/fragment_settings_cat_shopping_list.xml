@@ -23,14 +23,16 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <!--suppress AndroidDomInspection -->
-    <import type="xyz.zedler.patrick.grocy.fragment.SettingsCatUserSettingsFragmentDirections" />
+    <import type="android.view.View" />
     <variable
       name="activity"
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
     <variable
       name="fragment"
-      type="xyz.zedler.patrick.grocy.fragment.SettingsCatUserSettingsFragment" />
+      type="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingListFragment" />
+    <variable
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel" />
     <variable
       name="clickUtil"
       type="xyz.zedler.patrick.grocy.util.ClickUtil" />
@@ -83,7 +85,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
-          android:text="@string/category_user_settings" />
+          android:text="@string/title_shopping_list" />
 
       </LinearLayout>
 
@@ -95,7 +97,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      android:fillViewport="true">
 
       <LinearLayout
         android:id="@+id/linear_body"
@@ -103,81 +106,61 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="80dp"
-        android:orientation="vertical">
-
-        <com.google.android.material.card.MaterialCardView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="8dp"
-          app:contentPadding="16dp"
-          app:cardElevation="0dp"
-          app:cardCornerRadius="12dp"
-          app:cardBackgroundColor="@color/on_background_variant">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_synchronized" />
-
-        </com.google.android.material.card.MaterialCardView>
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        app:transitionTypeChanging="@{true}">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.navigate(SettingsCatUserSettingsFragmentDirections.actionSettingsCatUserSettingsFragmentToSettingsCatStockFragment())}"
-          app:clickUtil="@{clickUtil}">
+          android:onClick="@{v -> switchAutoAdd.setChecked(!switchAutoAdd.isChecked())}">
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_kitchen"
+            android:src="@drawable/ic_round_auto_mode"
             tools:ignore="ContentDescription" />
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/category_stock" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-          <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
-            android:layout_marginStart="16dp"
-            android:clickable="false"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_auto_add_shopping_list" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_auto_add_shopping_list_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_auto_add"
+            style="@style/Widget.Grocy.Switch"
+            android:onCheckedChanged="@{(view, checked) -> viewModel.setAutoAddToShoppingListEnabled(checked)}"
+            app:initialChecked="@{viewModel.autoAddToShoppingListLive}"/>
 
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.navigate(SettingsCatUserSettingsFragmentDirections.actionSettingsCatUserSettingsFragmentToSettingsCatShoppingListFragment())}"
-          app:clickUtil="@{clickUtil}">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          android:onClick="@{() -> viewModel.showShoppingListsBottomSheet()}"
+          android:visibility="@{viewModel.autoAddToShoppingListLive ? View.VISIBLE : View.GONE}">
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_shopping_list"
             tools:ignore="ContentDescription" />
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/title_shopping_list" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-          <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
-            android:layout_marginStart="16dp"
-            android:clickable="false"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/property_shopping_list" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.autoAddToShoppingListTextLive}" />
+
+          </LinearLayout>
 
         </LinearLayout>
 

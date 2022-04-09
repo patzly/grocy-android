@@ -26,6 +26,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 @Entity(tableName = "shopping_list_table")
 public class ShoppingList implements Parcelable {
@@ -89,6 +90,15 @@ public class ShoppingList implements Parcelable {
 
   public void setNotes(String notes) {
     this.notes = notes;
+  }
+
+  public static ShoppingList getFromId(List<ShoppingList> shoppingLists, int id) {
+    for (ShoppingList shoppingList : shoppingLists) {
+      if (shoppingList.getId() == id) {
+        return shoppingList;
+      }
+    }
+    return null;
   }
 
   @Override

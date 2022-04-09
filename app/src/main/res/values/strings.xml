@@ -955,6 +955,8 @@
   <string name="setting_purchased_date">Ask for purchased date</string>
   <string name="setting_purchased_date_description">On purchase and inventory page</string>
   <string name="setting_use_quick_consume_amount">Use the product\'s \"Quick consume amount\"</string>
+  <string name="setting_auto_add_shopping_list">Automatically add products to shopping list</string>
+  <string name="setting_auto_add_shopping_list_description">Which are below their defined min. stock amount</string>
   <string name="setting_empty_value">Empty</string>
   <string name="setting_sync_off">Sync off</string>
   <string name="setting_loading">Loading value</string>
