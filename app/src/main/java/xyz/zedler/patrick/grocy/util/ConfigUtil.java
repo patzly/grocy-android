@@ -41,7 +41,10 @@ public class ConfigUtil {
       DownloadHelper.OnErrorListener onError
   ) {
 
-    boolean debug = prefs.getBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING, Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING);
+    boolean debug = prefs.getBoolean(
+        Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+        Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+    );
 
     DownloadHelper.Queue queue = dlHelper.newQueue(() -> {
       if (onSuccessAction != null) {
