@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -205,19 +205,12 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                   return;
                 }
                 swipeBehavior.recoverLatestSwipedItem();
+                new Handler().postDelayed(
+                    () -> viewModel.executeChore(displayedItems.get(pos).getChoreId()),
+                    100
+                );
               }
           ));
-          if (!viewModel.hasManualScheduling(displayedItems.get(position).getChoreId())) {
-            underlayButtons.add(new UnderlayButton(
-                R.drawable.ic_round_skip_next,
-                pos -> {
-                  if (pos >= displayedItems.size()) {
-                    return;
-                  }
-                  swipeBehavior.recoverLatestSwipedItem();
-                }
-            ));
-          }
         }
       };
     }
@@ -276,6 +269,11 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   }
 
   @Override
+  public void trackChoreExecution(int choreId) {
+    viewModel.executeChore(choreId);
+  }
+
+  @Override
   public void updateConnectivity(boolean isOnline) {
     if (!isOnline == viewModel.isOffline()) {
       return;
@@ -311,12 +309,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
-    );
   }
 
   @Override

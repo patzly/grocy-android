@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "chore_table")
 public class Chore implements Parcelable {
@@ -229,6 +230,10 @@ public class Chore implements Parcelable {
 
   public String getTrackDateOnly() {
     return trackDateOnly;
+  }
+
+  public boolean getTrackDateOnlyBoolean() {
+    return NumUtil.isStringInt(trackDateOnly) && Integer.parseInt(trackDateOnly) == 1;
   }
 
   public void setTrackDateOnly(String trackDateOnly) {

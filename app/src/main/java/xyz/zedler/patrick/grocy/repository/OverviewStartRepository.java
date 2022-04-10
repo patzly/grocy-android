@@ -137,18 +137,4 @@ public class OverviewStartRepository {
         .doOnSuccess(listener::actionFinished)
         .subscribe();
   }
-
-  public void updateDatabase(
-      List<StockItem> stockItems,
-      Runnable listener
-  ) {
-    Single.concat(
-        appDatabase.stockItemDao().deleteStockItems(),
-        appDatabase.stockItemDao().insertStockItems(stockItems)
-    )
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(listener::run)
-        .subscribe();
-  }
 }
