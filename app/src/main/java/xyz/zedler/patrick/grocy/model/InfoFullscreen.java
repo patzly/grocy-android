@@ -37,6 +37,7 @@ public class InfoFullscreen {
   public static final int INFO_EMPTY_TASKS = 26;
   public static final int INFO_EMPTY_TASK_CATEGORIES = 28;
   public static final int INFO_EMPTY_UNIT_CONVERSIONS = 30;
+  public static final int INFO_EMPTY_CHORES = 32;
 
   private final int type;
   private final String exact;

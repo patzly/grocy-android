@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.view;
 import static xyz.zedler.patrick.grocy.model.InfoFullscreen.ERROR_NETWORK;
 import static xyz.zedler.patrick.grocy.model.InfoFullscreen.ERROR_OFFLINE;
 import static xyz.zedler.patrick.grocy.model.InfoFullscreen.ERROR_UNSPECIFIED;
+import static xyz.zedler.patrick.grocy.model.InfoFullscreen.INFO_EMPTY_CHORES;
 import static xyz.zedler.patrick.grocy.model.InfoFullscreen.INFO_EMPTY_LOCATIONS;
 import static xyz.zedler.patrick.grocy.model.InfoFullscreen.INFO_EMPTY_PRODUCTS;
 import static xyz.zedler.patrick.grocy.model.InfoFullscreen.INFO_EMPTY_PRODUCT_BARCODES;
@@ -173,6 +174,12 @@ public class InfoFullscreenView extends RelativeLayout {
         picture = R.drawable.illustration_toast;
         title = R.string.error_empty_unit_conversions;
         subtitle = R.string.error_empty_master_data_sub;
+        inForeground = false;
+        break;
+      case INFO_EMPTY_CHORES:
+        picture = R.drawable.illustration_toast;
+        title = R.string.error_empty_chores;
+        subtitle = R.string.error_empty_chores_sub;
         inForeground = false;
         break;
     }

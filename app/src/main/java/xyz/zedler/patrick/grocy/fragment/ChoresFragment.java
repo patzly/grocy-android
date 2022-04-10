@@ -145,7 +145,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
         } else if (viewModel.getFilterChipLiveDataStatus().getData().isActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
         } else {
-          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_TASKS);
+          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_CHORES);
         }
         viewModel.getInfoFullscreenLive().setValue(info);
       } else {
