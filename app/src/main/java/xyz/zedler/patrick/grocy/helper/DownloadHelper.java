@@ -70,6 +70,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -497,7 +498,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_GROUPS, dbChangedTime).apply();
-                      onResponseListener.onResponse(productGroups);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(productGroups);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -595,7 +598,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, dbChangedTime).apply();
-                      onResponseListener.onResponse(quantityUnits);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(quantityUnits);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -654,7 +659,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, dbChangedTime).apply();
-                      onResponseListener.onResponse(conversions);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(conversions);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -752,7 +759,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, dbChangedTime).apply();
-                      onResponseListener.onResponse(locations);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(locations);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -808,8 +817,11 @@ public class DownloadHelper {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
-                          .putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime).apply();
-                      onResponseListener.onResponse(locations);
+                          .putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(locations);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -866,7 +878,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, dbChangedTime).apply();
-                      onResponseListener.onResponse(products);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(products);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -925,7 +939,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(PREF.DB_LAST_TIME_PRODUCTS_LAST_PURCHASED, dbChangedTime).apply();
-                      onResponseListener.onResponse(productsLastPurchased);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(productsLastPurchased);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -934,7 +950,6 @@ public class DownloadHelper {
               },
               error -> {
                 if (isOptional) {
-                  onResponseListener.onResponse(null);
                   if (responseListener != null) {
                     responseListener.onResponse(null);
                   }
@@ -990,8 +1005,11 @@ public class DownloadHelper {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
-                          .putString(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, dbChangedTime).apply();
-                      onResponseListener.onResponse(productsAveragePrice);
+                          .putString(PREF.DB_LAST_TIME_PRODUCTS_AVERAGE_PRICE, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(productsAveragePrice);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1000,7 +1018,6 @@ public class DownloadHelper {
               },
               error -> {
                 if (isOptional) {
-                  onResponseListener.onResponse(null);
                   if (responseListener != null) {
                     responseListener.onResponse(null);
                   }
@@ -1055,8 +1072,11 @@ public class DownloadHelper {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
-                          .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime).apply();
-                      onResponseListener.onResponse(barcodes);
+                          .putString(Constants.PREF.DB_LAST_TIME_PRODUCT_BARCODES, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(barcodes);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1199,7 +1219,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(PREF.DB_LAST_TIME_USERS, dbChangedTime).apply();
-                      onResponseListener.onResponse(users);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(users);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1222,64 +1244,57 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getStockItems(
-      OnStockItemsResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getStock(),
-            uuid,
-            response -> {
-              Type type = new TypeToken<List<StockItem>>() {
-              }.getType();
-              ArrayList<StockItem> stockItems = gson.fromJson(response, type);
-              if (debug) {
-                Log.i(tag, "download StockItems: " + stockItems);
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(stockItems);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
   public QueueItem updateStockItems(
       String dbChangedTime,
       OnStockItemsResponseListener onResponseListener
   ) {
-    OnStockItemsResponseListener newOnResponseListener = stockItems -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(
-          Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, dbChangedTime
-      );
-      editPrefs.apply();
-      onResponseListener.onResponse(stockItems);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_STOCK_ITEMS, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getStockItems(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getStock(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<StockItem>>() {
+                }.getType();
+                ArrayList<StockItem> stockItems = gson.fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download StockItems: " + stockItems);
+                }
+                Single.concat(
+                    appDatabase.stockItemDao().deleteStockItems(),
+                    appDatabase.stockItemDao().insertStockItems(stockItems)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_STOCK_ITEMS, dbChangedTime).apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(stockItems);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped StockItems download");
@@ -1288,109 +1303,115 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItem getVolatile(
-      OnVolatileResponseListener onResponseListener,
-      OnErrorListener onErrorListener
-  ) {
-    return new QueueItem() {
-      @Override
-      public void perform(
-          @Nullable OnStringResponseListener responseListener,
-          @Nullable OnErrorListener errorListener,
-          @Nullable String uuid
-      ) {
-        get(
-            grocyApi.getStockVolatile(),
-            uuid,
-            response -> {
-              if (debug) {
-                Log.i(tag, "download Volatile: success");
-              }
-              ArrayList<StockItem> dueItems = new ArrayList<>();
-              ArrayList<StockItem> overdueItems = new ArrayList<>();
-              ArrayList<StockItem> expiredItems = new ArrayList<>();
-              ArrayList<MissingItem> missingItems = new ArrayList<>();
-              try {
-                JSONObject jsonObject = new JSONObject(response);
-                // Parse first part of volatile array: expiring products
-                dueItems = gson.fromJson(
-                    jsonObject.getJSONArray("due_products").toString(),
-                    new TypeToken<List<StockItem>>() {
-                    }.getType()
-                );
-                if (debug) {
-                  Log.i(tag, "download Volatile: due = " + dueItems);
-                }
-                // Parse second part of volatile array: overdue products
-                overdueItems = gson.fromJson(
-                    jsonObject.getJSONArray("overdue_products").toString(),
-                    new TypeToken<List<StockItem>>() {
-                    }.getType()
-                );
-                if (debug) {
-                  Log.i(tag, "download Volatile: overdue = " + overdueItems);
-                }
-                // Parse third part of volatile array: expired products
-                expiredItems = gson.fromJson(
-                    jsonObject.getJSONArray("expired_products").toString(),
-                    new TypeToken<List<StockItem>>() {
-                    }.getType()
-                );
-                if (debug) {
-                  Log.i(tag, "download Volatile: expired = " + overdueItems);
-                }
-                // Parse fourth part of volatile array: missing products
-                missingItems = gson.fromJson(
-                    jsonObject.getJSONArray("missing_products").toString(),
-                    new TypeToken<List<MissingItem>>() {
-                    }.getType()
-                );
-                if (debug) {
-                  Log.i(tag, "download Volatile: missing = " + missingItems);
-                }
-              } catch (JSONException e) {
-                if (debug) {
-                  Log.e(tag, "download Volatile: " + e);
-                }
-              }
-              if (onResponseListener != null) {
-                onResponseListener.onResponse(dueItems, overdueItems,
-                    expiredItems, missingItems);
-              }
-              if (responseListener != null) {
-                responseListener.onResponse(response);
-              }
-            },
-            error -> {
-              if (onErrorListener != null) {
-                onErrorListener.onError(error);
-              }
-              if (errorListener != null) {
-                errorListener.onError(error);
-              }
-            }
-        );
-      }
-    };
-  }
-
   public QueueItem updateVolatile(
       String dbChangedTime,
       OnVolatileResponseListener onResponseListener
   ) {
-    OnVolatileResponseListener newOnResponseListener = (due, overdue, expired, missing) -> {
-      SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-      editPrefs.putString(
-          Constants.PREF.DB_LAST_TIME_VOLATILE, dbChangedTime
-      );
-      editPrefs.apply();
-      onResponseListener.onResponse(due, overdue, expired, missing);
-    };
     String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
         Constants.PREF.DB_LAST_TIME_VOLATILE, null
     );
     if (lastTime == null || !lastTime.equals(dbChangedTime)) {
-      return getVolatile(newOnResponseListener, null);
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getStockVolatile(),
+              uuid,
+              response -> {
+                if (debug) {
+                  Log.i(tag, "updateVolatile: success");
+                }
+                ArrayList<StockItem> dueItems = new ArrayList<>();
+                ArrayList<StockItem> overdueItems = new ArrayList<>();
+                ArrayList<StockItem> expiredItems = new ArrayList<>();
+                ArrayList<MissingItem> missingItems = new ArrayList<>();
+                try {
+                  Type typeStockItem = new TypeToken<List<StockItem>>() {
+                  }.getType();
+                  JSONObject jsonObject = new JSONObject(response);
+                  // Parse first part of volatile array: expiring products
+                  dueItems = gson.fromJson(
+                      jsonObject.getJSONArray("due_products").toString(), typeStockItem
+                  );
+                  // Parse second part of volatile array: overdue products
+                  overdueItems = gson.fromJson(
+                      jsonObject.getJSONArray("overdue_products").toString(), typeStockItem
+                  );
+                  // Parse third part of volatile array: expired products
+                  expiredItems = gson.fromJson(
+                      jsonObject.getJSONArray("expired_products").toString(), typeStockItem
+                  );
+                  // Parse fourth part of volatile array: missing products
+                  missingItems = gson.fromJson(
+                      jsonObject.getJSONArray("missing_products").toString(),
+                      new TypeToken<List<MissingItem>>() {
+                      }.getType()
+                  );
+                  if (debug) {
+                    Log.i(tag, "updateVolatile:\ndue = " + dueItems + "\noverdue: "
+                        + overdueItems + "\nexpired: " + expiredItems + "\nmissing: "
+                        + missingItems);
+                  }
+                } catch (JSONException e) {
+                  if (debug) {
+                    Log.e(tag, "updateVolatile: " + e);
+                  }
+                }
+                ArrayList<VolatileItem> volatileItemsTogether = new ArrayList<>();
+                for (StockItem stockItem : dueItems) {
+                  volatileItemsTogether.add(
+                      new VolatileItem(stockItem.getProductId(), VolatileItem.TYPE_DUE)
+                  );
+                }
+                for (StockItem stockItem : overdueItems) {
+                  volatileItemsTogether.add(
+                      new VolatileItem(stockItem.getProductId(), VolatileItem.TYPE_OVERDUE)
+                  );
+                }
+                for (StockItem stockItem : expiredItems) {
+                  volatileItemsTogether.add(
+                      new VolatileItem(stockItem.getProductId(), VolatileItem.TYPE_EXPIRED)
+                  );
+                }
+                ArrayList<StockItem> finalDueItems = dueItems;
+                ArrayList<StockItem> finalOverdueItems = overdueItems;
+                ArrayList<StockItem> finalExpiredItems = expiredItems;
+                ArrayList<MissingItem> finalMissingItems = missingItems;
+                Single.concat(
+                    appDatabase.volatileItemDao().deleteVolatileItems(),
+                    appDatabase.volatileItemDao().insertVolatileItems(volatileItemsTogether),
+                    appDatabase.missingItemDao().deleteMissingItems(),
+                    appDatabase.missingItemDao().insertMissingItems(missingItems)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(Constants.PREF.DB_LAST_TIME_VOLATILE, dbChangedTime)
+                          .putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(finalDueItems, finalOverdueItems,
+                            finalExpiredItems, finalMissingItems);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped Volatile download");
@@ -1449,7 +1470,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_VOLATILE_MISSING, dbChangedTime).apply();
-                      onResponseListener.onResponse(finalMissingItems);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(finalMissingItems);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1652,8 +1675,11 @@ public class DownloadHelper {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
-                          .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
-                      onResponseListener.onResponse(shoppingListItems);
+                          .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(shoppingListItems);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1733,8 +1759,12 @@ public class DownloadHelper {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
-                          .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime).apply();
-                      onResponseListener.onResponse(shoppingListItems, itemsToSync, serverItemsHashMap);
+                          .putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(shoppingListItems, itemsToSync,
+                            serverItemsHashMap);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1830,7 +1860,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, dbChangedTime).apply();
-                      onResponseListener.onResponse(shoppingLists);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(shoppingLists);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -1887,7 +1919,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_STORES, dbChangedTime).apply();
-                      onResponseListener.onResponse(stores);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(stores);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -2028,7 +2062,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(Constants.PREF.DB_LAST_TIME_TASKS, dbChangedTime).apply();
-                      onResponseListener.onResponse(tasks);
+                      if (onResponseListener != null) {{
+                        onResponseListener.onResponse(tasks);
+                      }}
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -2084,8 +2120,11 @@ public class DownloadHelper {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
                       sharedPrefs.edit()
-                          .putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime).apply();
-                      onResponseListener.onResponse(taskCategories);
+                          .putString(Constants.PREF.DB_LAST_TIME_TASK_CATEGORIES, dbChangedTime)
+                          .apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(taskCategories);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -2142,7 +2181,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(PREF.DB_LAST_TIME_CHORES, dbChangedTime).apply();
-                      onResponseListener.onResponse(chores);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(chores);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -2199,7 +2240,9 @@ public class DownloadHelper {
                     .doFinally(() -> {
                       sharedPrefs.edit()
                           .putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, dbChangedTime).apply();
-                      onResponseListener.onResponse(choreEntries);
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(choreEntries);
+                      }
                       if (responseListener != null) {
                         responseListener.onResponse(response);
                       }
@@ -2717,6 +2760,72 @@ public class DownloadHelper {
       // UUID is for cancelling the requests; should be uuidHelper from above
       perform(null, null, uuid);
     }
+  }
+
+  public void updateData(OnQueueEmptyListener onFinished,
+      OnErrorListener errorListener, Class<?>... types) {
+    updateData(onFinished, errorListener, null, types);
+  }
+
+  public void updateData(OnQueueEmptyListener onFinished,
+      OnErrorListener errorListener, String dbChangedTime, Class<?>... types) {
+    if (dbChangedTime == null) {
+      getTimeDbChanged(
+          time -> updateData(onFinished, errorListener, time, types),
+          () -> errorListener.onError(null)
+      );
+      return;
+    }
+    DownloadHelper.Queue queue = newQueue(onFinished, errorListener);
+    for (Class<?> type : types) {
+      if (type == ProductGroup.class) {
+        queue.append(updateProductGroups(dbChangedTime, null));
+      } else if (type == QuantityUnit.class) {
+        queue.append(updateQuantityUnits(dbChangedTime, null));
+      } else if (type == QuantityUnitConversion.class) {
+        queue.append(updateQuantityUnitConversions(dbChangedTime, null));
+      } else if (type == Location.class) {
+        queue.append(updateLocations(dbChangedTime, null));
+      } else if (type == StockLocation.class) {
+        queue.append(updateStockCurrentLocations(dbChangedTime, null));
+      } else if (type == Product.class) {
+        queue.append(updateProducts(dbChangedTime, null));
+      } else if (type == ProductLastPurchased.class) {
+        queue.append(updateProductsLastPurchased(dbChangedTime, null, true));
+      } else if (type == ProductAveragePrice.class) {
+        queue.append(updateProductsAveragePrice(dbChangedTime, null, true));
+      } else if (type == ProductBarcode.class) {
+        queue.append(updateProductBarcodes(dbChangedTime, null));
+      } else if (type == User.class) {
+        queue.append(updateUsers(dbChangedTime, null));
+      } else if (type == StockItem.class) {
+        queue.append(updateStockItems(dbChangedTime, null));
+      } else if (type == VolatileItem.class) {
+        queue.append(updateVolatile(dbChangedTime, null));
+      } else if (type == MissingItem.class) {
+        queue.append(updateMissingItems(dbChangedTime, null));
+      } else if (type == ShoppingListItem.class) {
+        queue.append(updateShoppingListItems(dbChangedTime,
+            (OnShoppingListItemsResponseListener) null));
+      } else if (type == ShoppingList.class) {
+        queue.append(updateShoppingLists(dbChangedTime, null));
+      } else if (type == Store.class) {
+        queue.append(updateStores(dbChangedTime, null));
+      } else if (type == Task.class) {
+        queue.append(updateTasks(dbChangedTime, null));
+      } else if (type == TaskCategory.class) {
+        queue.append(updateTaskCategories(dbChangedTime, null));
+      } else if (type == Chore.class) {
+        queue.append(updateChores(dbChangedTime, null));
+      } else if (type == ChoreEntry.class) {
+        queue.append(updateChoreEntries(dbChangedTime, null));
+      }
+    }
+    if (queue.isEmpty()) {
+      onFinished.execute();
+      return;
+    }
+    queue.start();
   }
 
   public interface OnProductGroupsResponseListener {

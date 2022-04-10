@@ -1,7 +1,7 @@
 2.2.0:
 Please update your server to the latest version if you want to use all new features.
 - New: Support for grocy server v3.3.0, no support for v3.1.2 and lower
-- New: View and track chores (#149)
+- New: View and track chores (feature will be finished in the next versions) (#149)
 - New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
 - New: Server v3.3.0 feature "Disable own stock" (#511)
 - New: Server v3.3.0 feature "Default consume location" (#511)

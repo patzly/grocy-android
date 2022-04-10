@@ -133,12 +133,6 @@ public class StockOverviewFragment extends BaseFragment implements
       viewModel.resetSearch();
     }
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
@@ -157,7 +151,7 @@ public class StockOverviewFragment extends BaseFragment implements
             viewModel.getProductGroupHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getLocationHashMap(),
-            viewModel.getProductIdsMissingStockItems(),
+            viewModel.getProductIdsMissingItems(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
             viewModel.getGroupingMode(),
@@ -175,7 +169,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getProductGroupHashMap(),
                 viewModel.getProductHashMap(),
                 viewModel.getLocationHashMap(),
-                viewModel.getProductIdsMissingStockItems(),
+                viewModel.getProductIdsMissingItems(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
                 viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
