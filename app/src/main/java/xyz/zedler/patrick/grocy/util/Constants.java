@@ -157,6 +157,12 @@ public final class Constants {
       public final static String USE_QUICK_CONSUME_AMOUNT = "stock_default_consume_amount_use_quick_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
     }
 
+    public final static class SHOPPING_LIST {
+
+      public final static String AUTO_ADD = "shopping_list_auto_add_below_min_stock_amount"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String AUTO_ADD_LIST_ID = "shopping_list_auto_add_below_min_stock_amount_list_id"; // used for pref sync, DO NOT EDIT VALUE
+    }
+
     public final static class SHOPPING_MODE {
 
       public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
@@ -238,6 +244,12 @@ public final class Constants {
       public final static String DEFAULT_CONSUME_AMOUNT = "1";
       public final static boolean USE_QUICK_CONSUME_AMOUNT = false;
       public final static boolean TREAT_OPENED_OUT_OF_STOCK = true;
+    }
+
+    public final static class SHOPPING_LIST {
+
+      public final static boolean AUTO_ADD = false;
+      public final static int AUTO_ADD_LIST_ID = 1;
     }
 
     public final static class SHOPPING_MODE {

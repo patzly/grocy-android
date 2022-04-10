@@ -102,6 +102,7 @@ public class LocationsBottomSheet extends BaseBottomSheet
   @Override
   public void onItemRowClicked(int position) {
     activity.getCurrentFragment().selectLocation(locations.get(position));
+    activity.getCurrentFragment().selectLocation(locations.get(position), requireArguments());
     dismiss();
   }
 

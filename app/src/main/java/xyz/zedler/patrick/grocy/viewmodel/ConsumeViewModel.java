@@ -250,10 +250,18 @@ public class ConsumeViewModel extends BaseViewModel {
       // stock location
       if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
         ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-        StockLocation stockLocation = StockLocation.getFromId(
-            stockLocations,
-            product.getLocationIdInt()
-        );
+        ArrayList<Integer> stockLocationIds = new ArrayList<>();
+        for (StockLocation loc : stockLocations) {
+          stockLocationIds.add(loc.getLocationId());
+        }
+        int locationId;
+        if (NumUtil.isStringInt(product.getDefaultConsumeLocationId())
+            && stockLocationIds.contains(Integer.parseInt(product.getDefaultConsumeLocationId()))) {
+          locationId = Integer.parseInt(product.getDefaultConsumeLocationId());
+        } else {
+          locationId = product.getLocationIdInt();
+        }
+        StockLocation stockLocation = StockLocation.getFromId(stockLocations, locationId);
         if (stockLocation == null && !stockLocations.isEmpty()) {
           stockLocation = stockLocations.get(stockLocations.size() - 1);
         }
@@ -562,7 +570,10 @@ public class ConsumeViewModel extends BaseViewModel {
     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
     if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       StockLocation stockLocation = formData.getStockLocationLive().getValue();
-      assert stockLocation != null;
+      if (stockLocation == null) {
+        showErrorMessage();
+        return;
+      }
       int locationId = stockLocation.getLocationId();
       for (StockEntry stockEntry : stockEntries) {
         if (stockEntry.getLocationId() == locationId) {
