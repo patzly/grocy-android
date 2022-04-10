@@ -366,6 +366,8 @@
   <string name="error_empty_tasks">Keine Aufgaben</string>
   <string name="error_empty_task_categories">Keine Aufgabenkategorien</string>
   <string name="error_empty_unit_conversions">Keine ME-Umrechnungen</string>
+  <string name="error_empty_chores">Keine Hausarbeiten</string>
+  <string name="error_empty_chores_sub">Erstellen Sie welche in den Stammdaten</string>
   <string name="error_search">Keine Suchergebnisse</string>
   <string name="error_search_sub">Versuchen Sie andere Begriffe</string>
   <string name="error_filter">Nichts zum Anzeigen</string>
