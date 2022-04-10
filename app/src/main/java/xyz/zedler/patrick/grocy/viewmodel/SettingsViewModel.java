@@ -38,24 +38,29 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
@@ -87,6 +92,8 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
   private final MutableLiveData<Boolean> showBarcodeScannerZXingInfo;
   private final MutableLiveData<Boolean> showMLKitCropStreamLive;
+  private final MutableLiveData<Boolean> autoAddToShoppingListLive;
+  private final MutableLiveData<String> autoAddToShoppingListTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -115,6 +122,10 @@ public class SettingsViewModel extends BaseViewModel {
     defaultConsumeAmountTextLive = new MutableLiveData<>(getDefaultConsumeAmountText());
     showBarcodeScannerZXingInfo = new MutableLiveData<>(true);
     showMLKitCropStreamLive = new MutableLiveData<>(getUseMlKitScanner());
+    autoAddToShoppingListLive = new MutableLiveData<>(sharedPrefs.getBoolean(
+        SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
+    ));
+    autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
   }
 
   public boolean isDemo() {
@@ -386,6 +397,53 @@ public class SettingsViewModel extends BaseViewModel {
   public void setExternalScannerEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER, enabled).apply();
     getExternalScannerEnabledLive.setValue(enabled);
+  }
+
+  public void loadShoppingLists() {
+    int autoShoppingListId = sharedPrefs.getInt(
+        SHOPPING_LIST.AUTO_ADD_LIST_ID, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD_LIST_ID
+    );
+    sharedPrefs.edit().putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null).apply();
+    dlHelper.getTimeDbChanged(
+        timeDbChanged -> dlHelper.updateShoppingLists(timeDbChanged, shoppingLists -> {
+          ShoppingList shoppingList = ShoppingList.getFromId(shoppingLists, autoShoppingListId);
+          autoAddToShoppingListTextLive.setValue(shoppingList != null ? shoppingList.getName()
+              : getString(R.string.subtitle_none_selected));
+        }).perform(
+            null,
+            error -> autoAddToShoppingListTextLive.setValue(getString(R.string.setting_not_loaded)),
+            dlHelper.getUuid()
+        ), () -> autoAddToShoppingListTextLive.setValue(getString(R.string.setting_not_loaded))
+    );
+  }
+
+  public void showShoppingListsBottomSheet() {
+    int autoShoppingListId = sharedPrefs.getInt(
+        SHOPPING_LIST.AUTO_ADD_LIST_ID, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD_LIST_ID
+    );
+    Bundle bundle = new Bundle();
+    bundle.putInt(ARGUMENT.SELECTED_ID, autoShoppingListId);
+    showBottomSheet(new ShoppingListsBottomSheet(), bundle);
+  }
+
+  public MutableLiveData<Boolean> getAutoAddToShoppingListLive() {
+    return autoAddToShoppingListLive;
+  }
+
+  public MutableLiveData<String> getAutoAddToShoppingListTextLive() {
+    return autoAddToShoppingListTextLive;
+  }
+
+  public void setAutoAddToShoppingListEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(SHOPPING_LIST.AUTO_ADD, enabled).apply();
+    dlHelper.uploadSetting(SHOPPING_LIST.AUTO_ADD, enabled, this::showMessage);
+    autoAddToShoppingListLive.setValue(enabled);
+  }
+
+  public void setAutoAddToShoppingListId(ShoppingList shoppingList) {
+    sharedPrefs.edit().putInt(SHOPPING_LIST.AUTO_ADD_LIST_ID, shoppingList.getId()).apply();
+    autoAddToShoppingListTextLive.setValue(shoppingList.getName());
+    dlHelper.uploadSetting(SHOPPING_LIST.AUTO_ADD_LIST_ID, shoppingList.getId(), this::showMessage);
   }
 
   public void showShoppingModeUpdateIntervalBottomSheet() {
@@ -678,24 +736,24 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public boolean hasServerNewOptionTreatOpenedAsOutOfStock() {
-    return sharedPrefs.getInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, -1) != -1;
+    return VersionUtil.isGrocyServerMin320(sharedPrefs);
   }
 
   public boolean getTreatOpenedAsOutOfStockEnabled() {
     if (!hasServerNewOptionTreatOpenedAsOutOfStock()) {
       return false;
     }
-    return sharedPrefs.getInt(
+    return sharedPrefs.getBoolean(
         STOCK.TREAT_OPENED_OUT_OF_STOCK,
         Constants.SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK
-    ) == 1;
+    );
   }
 
   public void setTreatOpenedAsOutOfStockEnabled(boolean enabled) {
     if (!hasServerNewOptionTreatOpenedAsOutOfStock()) {
       return;
     }
-    sharedPrefs.edit().putInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled ? 1 : 0).apply();
+    sharedPrefs.edit().putBoolean(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled).apply();
     dlHelper.uploadSetting(STOCK.TREAT_OPENED_OUT_OF_STOCK, enabled, this::showMessage);
   }
 

@@ -19,7 +19,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/linear__container"
+  android:id="@+id/linear_container"
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
     android:gravity="start">
 
     <TextView
-      android:id="@+id/text__name"
+      android:id="@+id/text_name"
       style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
       android:singleLine="true" />
 
     <View
-      android:id="@+id/view__on_shopping_list"
+      android:id="@+id/view_on_shopping_list"
       android:layout_width="5dp"
       android:layout_height="5dp"
       android:layout_gravity="center_vertical"
@@ -59,14 +59,14 @@
   </LinearLayout>
 
   <TextView
-    android:id="@+id/text__amount"
+    android:id="@+id/text_amount"
     style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:singleLine="true" />
 
   <LinearLayout
-    android:id="@+id/linear__days"
+    android:id="@+id/linear_days"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -81,7 +81,7 @@
       android:background="@drawable/shape_circle" />
 
     <TextView
-      android:id="@+id/text__days"
+      android:id="@+id/text_days"
       style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -89,13 +89,30 @@
 
   </LinearLayout>
 
-  <TextView
+  <LinearLayout
+    android:id="@+id/extra_field_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:visibility="gone">
+
+    <TextView
       android:id="@+id/extra_field"
       style="@style/Widget.Grocy.TextView"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:singleLine="true"
+      android:layout_gravity="end" />
+
+    <TextView
+      android:id="@+id/extra_field_subtitle"
+      style="@style/Widget.Grocy.TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:textSize="11sp"
       android:visibility="gone"/>
+
+  </LinearLayout>
 
 </LinearLayout>

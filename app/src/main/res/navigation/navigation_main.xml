@@ -216,7 +216,7 @@
       app:argType="xyz.zedler.patrick.grocy.model.StockItem"
       app:nullable="true" />
     <argument
-      android:name="quantityUnit"
+      android:name="quantityUnitStock"
       android:defaultValue="@null"
       app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
       app:nullable="true" />
@@ -253,6 +253,11 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down" />
+    <argument
+      android:name="quantityUnitPurchase"
+      app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </dialog>
   <dialog
     android:id="@+id/drawerBottomSheetDialogFragment"
@@ -286,6 +291,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_tasksFragment"
       app:destination="@id/tasksFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_choresFragment"
+      app:destination="@id/choresFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
@@ -583,13 +591,6 @@
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
       <action
-        android:id="@+id/action_settingsFragment_to_settingsCatStockFragment"
-        app:destination="@id/settingsCatStockFragment"
-        app:enterAnim="@anim/slide_from_end"
-        app:exitAnim="@anim/slide_to_start"
-        app:popEnterAnim="@anim/slide_from_start"
-        app:popExitAnim="@anim/slide_to_end" />
-      <action
         android:id="@+id/action_settingsFragment_to_settingsCatShoppingModeFragment"
         app:destination="@id/settingsCatShoppingModeFragment"
         app:enterAnim="@anim/slide_from_end"
@@ -610,6 +611,13 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end" />
+      <action
+        android:id="@+id/action_settingsFragment_to_settingsCatUserSettingsFragment"
+        app:destination="@id/settingsCatUserSettingsFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
     <fragment
       android:id="@+id/logFragment"
@@ -701,6 +709,31 @@
         android:id="@+id/deepLink13"
         app:uri="@string/deep_link_settingsCatScannerToolFragment" />
     </fragment>
+    <fragment
+      android:id="@+id/settingsCatUserSettingsFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatUserSettingsFragment"
+      android:label="SettingsCatUserSettingsFragment"
+      tools:layout="@layout/fragment_settings_cat_user_settings">
+      <action
+        android:id="@+id/action_settingsCatUserSettingsFragment_to_settingsCatStockFragment"
+        app:destination="@id/settingsCatStockFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
+      <action
+        android:id="@+id/action_settingsCatUserSettingsFragment_to_settingsCatShoppingListFragment"
+        app:destination="@id/settingsCatShoppingListFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
+    </fragment>
+    <fragment
+      android:id="@+id/settingsCatShoppingListFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingListFragment"
+      android:label="SettingsCatShoppingListFragment"
+      tools:layout="@layout/fragment_settings_cat_shopping_list"/>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"
@@ -1117,5 +1150,14 @@
     <deepLink
       android:id="@+id/deepLink15"
       app:uri="@string/deep_link_taskEntryEditFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/choresFragment"
+    android:label="ChoresFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ChoresFragment"
+    tools:layout="@layout/fragment_chores">
+    <deepLink
+      android:id="@+id/deepLink16"
+      app:uri="@string/deep_link_choresFragment" />
   </fragment>
 </navigation>

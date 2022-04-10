@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
@@ -41,7 +42,10 @@ public class ConfigUtil {
       DownloadHelper.OnErrorListener onError
   ) {
 
-    boolean debug = prefs.getBoolean(Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING, Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING);
+    boolean debug = prefs.getBoolean(
+        Constants.SETTINGS.DEBUGGING.ENABLE_DEBUGGING,
+        Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
+    );
 
     DownloadHelper.Queue queue = dlHelper.newQueue(() -> {
       if (onSuccessAction != null) {
@@ -87,39 +91,36 @@ public class ConfigUtil {
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_PRICE_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_PRICE_TRACKING"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRICE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_SHOPPINGLIST_MULTIPLE_LISTS")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_LOCATION_TRACKING"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_LOCATION_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_BBD_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING"
-              )
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING")
           )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK_OPENED_TRACKING,
-              jsonObject.getBoolean(
-                  "FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING"
-              )
-          ).putBoolean(
-          PREF.FEATURE_TASKS,
-          jsonObject.getBoolean(
-              "FEATURE_FLAG_TASKS"
+              jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
           )
-      ).apply();
+          .putBoolean(
+              PREF.FEATURE_TASKS,
+              jsonObject.getBoolean("FEATURE_FLAG_TASKS")
+          )
+          .putBoolean(
+              PREF.FEATURE_CHORES,
+              jsonObject.getBoolean("FEATURE_FLAG_CHORES")
+          )
+          .putBoolean(
+              PREF.FEATURE_CHORES_ASSIGNMENTS,
+              jsonObject.getBoolean("FEATURE_FLAG_CHORES_ASSIGNMENTS")
+          ).apply();
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
         prefs.edit().putBoolean(
             Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING,
@@ -169,6 +170,14 @@ public class ConfigUtil {
           STOCK.USE_QUICK_CONSUME_AMOUNT,
           getBoolean(jsonObject, STOCK.USE_QUICK_CONSUME_AMOUNT,
               SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT, prefs)
+      ).putBoolean(
+          STOCK.TREAT_OPENED_OUT_OF_STOCK,
+          getBoolean(jsonObject, STOCK.TREAT_OPENED_OUT_OF_STOCK,
+              SETTINGS_DEFAULT.STOCK.TREAT_OPENED_OUT_OF_STOCK, prefs)
+      ).putBoolean(
+          SHOPPING_LIST.AUTO_ADD,
+          getBoolean(jsonObject, SHOPPING_LIST.AUTO_ADD,
+              SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD, prefs)
       ).apply();
       if (jsonObject.has(STOCK.DEFAULT_DUE_DAYS)) {
         prefs.edit().putInt(
@@ -176,13 +185,11 @@ public class ConfigUtil {
             jsonObject.getInt(STOCK.DEFAULT_DUE_DAYS)
         ).apply();
       }
-      if (jsonObject.has(STOCK.TREAT_OPENED_OUT_OF_STOCK)) {
+      if (jsonObject.has(SHOPPING_LIST.AUTO_ADD_LIST_ID)) {
         prefs.edit().putInt(
-            STOCK.TREAT_OPENED_OUT_OF_STOCK,
-            getBoolean(jsonObject, STOCK.TREAT_OPENED_OUT_OF_STOCK, true, prefs) ? 1 : 0
+            SHOPPING_LIST.AUTO_ADD_LIST_ID,
+            jsonObject.getInt(SHOPPING_LIST.AUTO_ADD_LIST_ID)
         ).apply();
-      } else {
-        prefs.edit().putInt(STOCK.TREAT_OPENED_OUT_OF_STOCK, -1).apply();
       }
     } catch (JSONException e) {
       if (debug) {
@@ -210,9 +217,9 @@ public class ConfigUtil {
         return false;
       } else if (settingValue instanceof String && NumUtil.isStringInt((String) settingValue)) {
         return Integer.parseInt((String) settingValue) == 1;
-      } else if (settingValue instanceof String && ((String) settingValue).equals("false")) {
+      } else if (settingValue instanceof String && settingValue.equals("false")) {
         return false;
-      } else if (settingValue instanceof String && ((String) settingValue).equals("true")) {
+      } else if (settingValue instanceof String && settingValue.equals("true")) {
         return true;
       } else {
         return prefs.getBoolean(settingKey, settingDefault);
@@ -220,7 +227,11 @@ public class ConfigUtil {
     } catch (JSONException e) {
       Log.e(TAG, "downloadUserSettings: getBoolean: settingKey="
           + settingKey + " Exception:" + e);
-      return prefs.getBoolean(settingKey, settingDefault);
+      try {
+        return prefs.getBoolean(settingKey, settingDefault);
+      } catch (ClassCastException e1) {
+        return settingDefault;
+      }
     }
   }
 

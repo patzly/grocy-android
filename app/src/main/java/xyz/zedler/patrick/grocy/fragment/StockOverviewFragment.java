@@ -369,10 +369,12 @@ public class StockOverviewFragment extends BaseFragment implements
     if (stockItem == null) {
       return;
     }
-    QuantityUnit quantityUnit = viewModel
+    QuantityUnit quantityUnitStock = viewModel
         .getQuantityUnitFromId(stockItem.getProduct().getQuIdStockInt());
+    QuantityUnit quantityUnitPurchase = viewModel
+        .getQuantityUnitFromId(stockItem.getProduct().getQuIdPurchaseInt());
     Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
-    if (quantityUnit == null) {
+    if (quantityUnitStock == null || quantityUnitPurchase == null) {
       activity.showMessage(R.string.error_undefined);
       return;
     }
@@ -380,7 +382,8 @@ public class StockOverviewFragment extends BaseFragment implements
         .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
         .setShowActions(true)
         .setStockItem(stockItem)
-        .setQuantityUnit(quantityUnit)
+        .setQuantityUnitStock(quantityUnitStock)
+        .setQuantityUnitPurchase(quantityUnitPurchase)
         .setLocation(location));
   }
 

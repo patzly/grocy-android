@@ -245,7 +245,7 @@ public class MasterProductViewModel extends BaseViewModel {
     }
 
     Product product = getFilledProduct();
-    JSONObject jsonObject = product.getJsonFromProduct(debug, TAG);
+    JSONObject jsonObject = product.getJsonFromProduct(sharedPrefs, debug, TAG);
 
     if (isActionEdit()) {
       dlHelper.put(

@@ -128,7 +128,7 @@ public class TransferViewModel extends BaseViewModel {
       this.locations = data.getLocations();
       this.quantityUnits = data.getQuantityUnits();
       this.unitConversions = data.getQuantityUnitConversions();
-      formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+      formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -149,7 +149,7 @@ public class TransferViewModel extends BaseViewModel {
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+          formData.getProductsLive().setValue(Product.getActiveAndStockEnabledProductsOnly(products));
         }), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateLocations(

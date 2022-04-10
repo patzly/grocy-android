@@ -23,16 +23,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
-import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class ProductDetails implements Parcelable {
 
   @SerializedName("product")
   private final Product product;
-
-  @SerializedName("product_barcodes")
-  private final ArrayList<ProductBarcode> productBarcodes;
 
   @SerializedName("last_purchased")
   private final String lastPurchased;
@@ -55,7 +51,7 @@ public class ProductDetails implements Parcelable {
   @SerializedName("stock_amount_opened_aggregated")
   private final String stockAmountOpenedAggregated;
 
-  @SerializedName("quantity_unit_purchase")
+  @SerializedName("default_quantity_unit_purchase")
   private final QuantityUnit quantityUnitPurchase;
 
   @SerializedName("quantity_unit_stock")
@@ -67,8 +63,8 @@ public class ProductDetails implements Parcelable {
   @SerializedName("avg_price")
   private final String avgPrice;
 
-  @SerializedName("oldest_price")
-  private final String oldestPrice;
+  @SerializedName("current_price")
+  private final String currentPrice;
 
   @SerializedName("last_shopping_location_id")
   private final String lastShoppingLocationId;
@@ -91,10 +87,11 @@ public class ProductDetails implements Parcelable {
   @SerializedName("is_aggregated_amount")
   private final String isAggregatedAmount;
 
+  @SerializedName("has_childs")
+  private final String hasChilds;
+
   public ProductDetails(Parcel parcel) {
     product = parcel.readParcelable(Product.class.getClassLoader());
-    // productBarcodes = parcel.readParcelableList(); // TODO ?
-    productBarcodes = null;
     lastPurchased = parcel.readString();
     lastUsed = parcel.readString();
     stockAmount = parcel.readString();
@@ -106,7 +103,7 @@ public class ProductDetails implements Parcelable {
     quantityUnitStock = parcel.readParcelable(QuantityUnit.class.getClassLoader());
     lastPrice = parcel.readString();
     avgPrice = parcel.readString();
-    oldestPrice = parcel.readString();
+    currentPrice = parcel.readString();
     lastShoppingLocationId = parcel.readString();
     defaultShoppingLocationId = parcel.readString();
     nextDueDate = parcel.readString();
@@ -114,12 +111,12 @@ public class ProductDetails implements Parcelable {
     averageShelfLifeDays = parcel.readString();
     spoilRatePercent = parcel.readString();
     isAggregatedAmount = parcel.readString();
+    hasChilds = parcel.readString();
   }
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeParcelable(product, 0);
-    // dest.writeParcelableList(productBarcodes); // TODO ?
     dest.writeString(lastPurchased);
     dest.writeString(lastUsed);
     dest.writeString(stockAmount);
@@ -131,7 +128,7 @@ public class ProductDetails implements Parcelable {
     dest.writeParcelable(quantityUnitStock, 0);
     dest.writeString(lastPrice);
     dest.writeString(avgPrice);
-    dest.writeString(oldestPrice);
+    dest.writeString(currentPrice);
     dest.writeString(lastShoppingLocationId);
     dest.writeString(defaultShoppingLocationId);
     dest.writeString(nextDueDate);
@@ -139,6 +136,7 @@ public class ProductDetails implements Parcelable {
     dest.writeString(averageShelfLifeDays);
     dest.writeString(spoilRatePercent);
     dest.writeString(isAggregatedAmount);
+    dest.writeString(hasChilds);
   }
 
   public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
@@ -230,10 +228,6 @@ public class ProductDetails implements Parcelable {
     return defaultShoppingLocationId;
   }
 
-  public ArrayList<ProductBarcode> getProductBarcodes() {
-    return productBarcodes;
-  }
-
   public String getStockValue() {
     return stockValue;
   }
@@ -242,8 +236,12 @@ public class ProductDetails implements Parcelable {
     return avgPrice;
   }
 
-  public String getOldestPrice() {
-    return oldestPrice;
+  public String getCurrentPrice() {
+    return currentPrice;
+  }
+
+  public String getHasChilds() {
+    return hasChilds;
   }
 
   @Override

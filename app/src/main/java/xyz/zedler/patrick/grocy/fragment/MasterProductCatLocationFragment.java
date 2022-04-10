@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatLocationViewModel;
 public class MasterProductCatLocationFragment extends BaseFragment {
 
   private final static String TAG = MasterProductCatLocationFragment.class.getSimpleName();
+  private final static String IS_CONSUME_LOCATION = "is_consume_location";
 
   private MainActivity activity;
   private FragmentMasterProductCatLocationBinding binding;
@@ -171,7 +172,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     activity.hideKeyboard();
   }
 
-  public void showLocationsBottomSheet() {
+  public void showLocationsBottomSheet(boolean consumeLocation) {
     List<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
     if (locations == null) {
       viewModel.showErrorMessage(null);
@@ -179,9 +180,16 @@ public class MasterProductCatLocationFragment extends BaseFragment {
     }
     Bundle bundle = new Bundle();
     bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>(locations));
-    Location location = viewModel.getFormData().getLocationLive().getValue();
+    Location location;
+    if (consumeLocation) {
+      bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+      location = viewModel.getFormData().getLocationConsumeLive().getValue();
+    } else {
+      location = viewModel.getFormData().getLocationLive().getValue();
+    }
     int locationId = location != null ? location.getId() : -1;
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, locationId);
+    bundle.putBoolean(IS_CONSUME_LOCATION, consumeLocation);
     activity.showBottomSheet(new LocationsBottomSheet(), bundle);
   }
 
@@ -201,8 +209,12 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   }
 
   @Override
-  public void selectLocation(Location location) {
-    viewModel.getFormData().getLocationLive().setValue(location);
+  public void selectLocation(Location location, Bundle args) {
+    if (args.getBoolean(IS_CONSUME_LOCATION, false)) {
+      viewModel.getFormData().getLocationConsumeLive().setValue(location);
+    } else {
+      viewModel.getFormData().getLocationLive().setValue(location);
+    }
   }
 
   @Override

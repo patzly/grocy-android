@@ -1,15 +1,22 @@
 2.2.0:
+Please update your server to the latest version if you want to use all new features.
+- New: Support for grocy server v3.3.0, no support for v3.1.2 and lower
+- New: View and track chores (#149)
 - New: View and manage tasks (thanks @mcbloch for the initial work) (#435)
+- New: Server v3.3.0 feature "Disable own stock" (#511)
+- New: Server v3.3.0 feature "Default consume location" (#511)
 - New: 'Extra field' option on stock overview page for additional info
-- New: 'Extra field' option on shopping list page, can display last price with server v3.2.0 (#434)
+- New: 'Extra field' option on shopping list page, can display price with server v3.2.0+ (#434)
 - New: Shopping mode now groups items like on shopping list page (#430)
 - New: Open Beauty Facts lookup as second online source (#257)
-- New: Product option "Treat opened as out of stock" is available for server v3.2.0
+- New: Product option "Treat opened as out of stock" is available for server v3.2.0+
+- New: Moved stock settings to menu category "user settings" & added shopping list settings (#511)
 - Improved: Open button on consume page is now checkbox
 - Improved: Product search on stock overview is now fuzzy search (#486)
 - Improved: Barcode lookup now also with external scanner if enabled (#496)
 - Improved: Some shortcuts were not working, also added new shortcuts for tasks
 - Improved: (not F-Droid) Cropping option for MlKit scanner frame should work better
+- Improved: Changes from server v3.3.0 regarding prices shown per purchase unit (#511)
 - Fixed: Crash when opened master location or quantity unit page on F-Droid build (#503)
 - Fixed: App could show old data when page loading was interrupted (#409)
 - Fixed: Open action now works with quick mode (#500)

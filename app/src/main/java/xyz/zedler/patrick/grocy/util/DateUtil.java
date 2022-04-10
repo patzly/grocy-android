@@ -51,12 +51,16 @@ public class DateUtil {
   }
 
   public static Date getDate(String dateString) {
+    return getDate(dateString, false);
+  }
+
+  public static Date getDate(String dateString, boolean withTime) {
     if (dateString == null) {
       return null;
     }
     Date date = null;
     try {
-      date = DATE_FORMAT.parse(dateString);
+      date = withTime ? DATE_FORMAT_WITH_TIME.parse(dateString) : DATE_FORMAT.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getDate: ");
     }
@@ -68,12 +72,20 @@ public class DateUtil {
   }
 
   public static int getDaysFromNow(String dateString) {
+    return getDaysFromNow(dateString, DATE_FORMAT);
+  }
+
+  public static int getDaysFromNowWithTime(String dateString) {
+    return getDaysFromNow(dateString, DATE_FORMAT_WITH_TIME);
+  }
+
+  public static int getDaysFromNow(String dateString, SimpleDateFormat format) {
     if (dateString == null || dateString.isEmpty()) {
       return 0;
     }
     Date date = null;
     try {
-      date = DATE_FORMAT.parse(dateString);
+      date = format.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getDaysFromNow: " + e);
     }
@@ -162,12 +174,18 @@ public class DateUtil {
   }
 
   public String getHumanForDaysFromNow(String dateString) {
+    return getHumanForDaysFromNow(dateString, false);
+  }
+
+  public String getHumanForDaysFromNow(String dateString, boolean withTime) {
     if (dateString == null || dateString.isEmpty()) {
       return context.getString(R.string.date_unknown);
-    } else if (dateString.equals(Constants.DATE.NEVER_OVERDUE)) {
+    } else if (withTime && dateString.equals(DATE.NEVER_OVERDUE_WITH_TIME)
+        || !withTime && dateString.equals(Constants.DATE.NEVER_OVERDUE)) {
       return context.getString(R.string.date_never);
     } else {
-      return getHumanFromToday(getDaysFromNow(dateString));
+      return getHumanFromToday(withTime ? getDaysFromNowWithTime(dateString)
+          : getDaysFromNow(dateString));
     }
   }
 

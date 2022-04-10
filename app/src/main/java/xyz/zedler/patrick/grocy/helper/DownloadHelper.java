@@ -49,6 +49,8 @@ import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.Chore;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -1755,6 +1757,45 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem getShoppingLists(
+      OnShoppingListsResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+            uuid,
+            response -> {
+              Type type = new TypeToken<List<ShoppingList>>() {
+              }.getType();
+              ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "download ShoppingLists: " + shoppingLists);
+              }
+              onResponseListener.onResponse(shoppingLists);
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
   public QueueItem updateShoppingLists(
       String dbChangedTime,
       OnShoppingListsResponseListener onResponseListener
@@ -2062,6 +2103,120 @@ public class DownloadHelper {
     } else {
       if (debug) {
         Log.i(tag, "downloadData: skipped TaskCategories download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateChores(
+      String dbChangedTime,
+      OnChoresResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_CHORES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(ENTITY.CHORES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<Chore>>() {
+                }.getType();
+                ArrayList<Chore> chores = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download Chores: " + chores);
+                }
+                Single.concat(
+                    appDatabase.choreDao().deleteChores(),
+                    appDatabase.choreDao().insertChores(chores)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_CHORES, dbChangedTime).apply();
+                      onResponseListener.onResponse(chores);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Chores download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateChoreEntries(
+      String dbChangedTime,
+      OnChoreEntriesResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_CHORE_ENTRIES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getChores(),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<ChoreEntry>>() {
+                }.getType();
+                ArrayList<ChoreEntry> choreEntries = new Gson().fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "download ChoreEntries: " + choreEntries);
+                }
+                Single.concat(
+                    appDatabase.choreEntryDao().deleteChoreEntries(),
+                    appDatabase.choreEntryDao().insertChoreEntries(choreEntries)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, dbChangedTime).apply();
+                      onResponseListener.onResponse(choreEntries);
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Chores download");
       }
       return null;
     }
@@ -2676,6 +2831,16 @@ public class DownloadHelper {
   public interface OnTaskCategoriesResponseListener {
 
     void onResponse(ArrayList<TaskCategory> taskCategories);
+  }
+
+  public interface OnChoresResponseListener {
+
+    void onResponse(ArrayList<Chore> chores);
+  }
+
+  public interface OnChoreEntriesResponseListener {
+
+    void onResponse(ArrayList<ChoreEntry> choreEntries);
   }
 
   public interface OnUsersResponseListener {

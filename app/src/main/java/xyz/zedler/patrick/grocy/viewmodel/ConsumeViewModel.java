@@ -250,10 +250,18 @@ public class ConsumeViewModel extends BaseViewModel {
       // stock location
       if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
         ArrayList<StockLocation> stockLocations = formData.getStockLocations();
-        StockLocation stockLocation = getStockLocation(
-            stockLocations,
-            product.getLocationIdInt()
-        );
+        ArrayList<Integer> stockLocationIds = new ArrayList<>();
+        for (StockLocation loc : stockLocations) {
+          stockLocationIds.add(loc.getLocationId());
+        }
+        int locationId;
+        if (NumUtil.isStringInt(product.getDefaultConsumeLocationId())
+            && stockLocationIds.contains(Integer.parseInt(product.getDefaultConsumeLocationId()))) {
+          locationId = Integer.parseInt(product.getDefaultConsumeLocationId());
+        } else {
+          locationId = product.getLocationIdInt();
+        }
+        StockLocation stockLocation = StockLocation.getFromId(stockLocations, locationId);
         if (stockLocation == null && !stockLocations.isEmpty()) {
           stockLocation = stockLocations.get(stockLocations.size() - 1);
         }
@@ -311,8 +319,8 @@ public class ConsumeViewModel extends BaseViewModel {
       Product product,
       ProductBarcode barcode
   ) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
+    QuantityUnit stock = QuantityUnit.getFromId(quantityUnits, product.getQuIdStockInt());
+    QuantityUnit purchase = QuantityUnit.getFromId(quantityUnits, product.getQuIdPurchaseInt());
 
     if (stock == null || purchase == null) {
       throw new IllegalArgumentException(getString(R.string.error_loading_qus));
@@ -329,7 +337,7 @@ public class ConsumeViewModel extends BaseViewModel {
       if (product.getId() != conversion.getProductId()) {
         continue;
       }
-      QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
+      QuantityUnit unit = QuantityUnit.getFromId(quantityUnits, conversion.getToQuId());
       if (unit == null || quIdsInHashMap.contains(unit.getId())) {
         continue;
       }
@@ -340,7 +348,7 @@ public class ConsumeViewModel extends BaseViewModel {
 
     QuantityUnit barcodeUnit = null;
     if (barcode != null && barcode.hasQuId()) {
-      barcodeUnit = getQuantityUnit(barcode.getQuIdInt());
+      barcodeUnit = QuantityUnit.getFromId(quantityUnits, barcode.getQuIdInt());
     }
     if (barcodeUnit != null && unitFactors.containsKey(barcodeUnit)) {
       formData.getQuantityUnitLive().setValue(barcodeUnit);
@@ -530,24 +538,6 @@ public class ConsumeViewModel extends BaseViewModel {
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
   }
 
-  private QuantityUnit getQuantityUnit(int id) {
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
-  }
-
-  private StockLocation getStockLocation(ArrayList<StockLocation> locations, int locationId) {
-    for (StockLocation stockLocation : locations) {
-      if (stockLocation.getLocationId() == locationId) {
-        return stockLocation;
-      }
-    }
-    return null;
-  }
-
   public void showInputProductBottomSheet(@NonNull String input) {
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
@@ -580,7 +570,10 @@ public class ConsumeViewModel extends BaseViewModel {
     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
     if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       StockLocation stockLocation = formData.getStockLocationLive().getValue();
-      assert stockLocation != null;
+      if (stockLocation == null) {
+        showErrorMessage();
+        return;
+      }
       int locationId = stockLocation.getLocationId();
       for (StockEntry stockEntry : stockEntries) {
         if (stockEntry.getLocationId() == locationId) {

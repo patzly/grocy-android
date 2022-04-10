@@ -25,6 +25,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
@@ -51,6 +52,7 @@ public class OverviewStartRepository {
     private final List<ShoppingList> shoppingLists;
     private final List<Product> products;
     private final List<StoredPurchase> storedPurchases;
+    private final List<ChoreEntry> choreEntries;
     private final List<Task> tasks;
 
     public OverviewStartData(
@@ -59,6 +61,7 @@ public class OverviewStartRepository {
         List<ShoppingList> shoppingLists,
         List<Product> products,
         List<StoredPurchase> storedPurchases,
+        List<ChoreEntry> choreEntries,
         List<Task> tasks
     ) {
       this.stockItems = stockItems;
@@ -66,6 +69,7 @@ public class OverviewStartRepository {
       this.shoppingLists = shoppingLists;
       this.products = products;
       this.storedPurchases = storedPurchases;
+      this.choreEntries = choreEntries;
       this.tasks = tasks;
     }
 
@@ -89,6 +93,10 @@ public class OverviewStartRepository {
       return storedPurchases;
     }
 
+    public List<ChoreEntry> getChoreEntries() {
+      return choreEntries;
+    }
+
     public List<Task> getTasks() {
       return tasks;
     }
@@ -102,6 +110,7 @@ public class OverviewStartRepository {
             appDatabase.shoppingListDao().getShoppingLists(),
             appDatabase.productDao().getProducts(),
             appDatabase.storedPurchaseDao().getStoredPurchases(),
+            appDatabase.choreEntryDao().getChoreEntries(),
             appDatabase.taskDao().getTasks(),
             OverviewStartData::new
         )

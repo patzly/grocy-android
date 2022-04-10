@@ -120,6 +120,7 @@ public class TasksViewModel extends BaseViewModel {
       tasksDueSoonCount = 0;
       tasksOverdueCount = 0;
       for (Task task : data.getTasks()) {
+        if (task.isDone()) continue;
         int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
         if (daysFromNow < 0) {
           tasksOverdueCount++;
@@ -172,6 +173,7 @@ public class TasksViewModel extends BaseViewModel {
           tasksDueSoonCount = 0;
           tasksOverdueCount = 0;
           for (Task task : tasks) {
+            if (task.isDone()) continue;
             int daysFromNow = DateUtil.getDaysFromNow(task.getDueDate());
             if (daysFromNow < 0) {
               tasksOverdueCount++;

@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -71,7 +72,8 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new MasterProductRepository(application);
-    formData = new FormDataMasterProductCatOptional(application, getBeginnerModeEnabled());
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
+    formData = new FormDataMasterProductCatOptional(application, prefs, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 

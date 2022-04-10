@@ -119,6 +119,8 @@
   <string name="action_share_description">Tell your friends about Grocy Android</string>
   <string name="action_no_filter">No filter</string>
   <string name="action_show_done_tasks">Show done tasks</string>
+  <string name="action_track_chore_execution">Track chore execution</string>
+  <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -190,6 +192,11 @@
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d overdue</item>
     <item quantity="other">%1$d overdue</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d assigned</item>
+    <item quantity="other">%1$d assigned</item>
   </plurals>
   <string name="msg_task_mark">Mark task as completed</string>
   <string name="msg_task_completed">Marked task as completed</string>
@@ -289,6 +296,10 @@
   <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">This product cannot have a parent product because it is already used as a parent product in another product.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Stock entries at the location below will be consumed first.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">When enabled, the corresponding product can\'t have own stock, means it will not be selectable on purchase (useful for parent products which are just used as a summary/total view of the sub products).</string>
   <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
   <string name="msg_help_default_due_days_format">You can long press on an item below to enter a date instead of a number.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -451,6 +462,8 @@
   <string name="title_choose_product">Choose product</string>
   <string name="title_pending_products">Pending products</string>
   <string name="title_stored_purchases">Stored purchases</string>
+  <string name="title_chores">Chores</string>
+  <string name="title_chore">Chore</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -507,7 +520,6 @@
   <string name="subtitle_amount_opened">(%1$s opened)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">Where %1$s has stock</string>
-  <string name="subtitle_default_location">Default location</string>
   <string name="subtitle_none_selected">None selected</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">None</string>
@@ -553,6 +565,7 @@
   <string name="subtitle_product_due_date">Type, Default days (after opened, freezing, thawing)</string>
   <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
+  <string name="subtitle_synced_with_server">Synced with server</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -614,6 +627,26 @@
     <item quantity="one">%1$d item is on your shopping list.</item>
     <item quantity="other">%1$d items are on your shopping list.</item>
   </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d chore is due to be done within the next %2$d days.</item>
+    <item quantity="other">%1$d chores are due to be done within the next %2$d days.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d chore is overdue to be done.</item>
+    <item quantity="other">%1$d chores are overdue to be done.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d chore is due to be done today.</item>
+    <item quantity="other">%1$d chores are due to be done today.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d chore is assigned to you.</item>
+    <item quantity="other">%1$d chores are assigned to you.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
     <item quantity="one">%1$d task is to be completed.</item>
@@ -654,6 +687,8 @@
   <string name="property_price_average">Average price</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Price per %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s per %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Price in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -698,6 +733,7 @@
   <string name="property_due_days_default_thawing">Default due days after thawing</string>
   <string name="property_location">Location</string>
   <string name="property_location_default">Default location</string>
+  <string name="property_location_consume_default">Default consume location</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Locations</string>
   <string name="property_store">Store</string>
@@ -720,7 +756,9 @@
   <string name="property_price_history">Price history</string>
   <string name="property_product_group">Product group</string>
   <string name="property_product_groups">Product groups</string>
+  <string name="property_assignment">Assignment</string>
   <string name="property_value">Value</string>
+  <string name="property_stock_value">Stock value</string>
   <string name="property_opened">opened</string>
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
@@ -729,6 +767,8 @@
   <string name="property_active">Active</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Never show on stock overview</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Disable own stock</string>
   <string name="property_number">Number</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Enable tare weight handling</string>
@@ -844,6 +884,7 @@
   <string name="category_general">General</string>
   <string name="category_stock">Stock</string>
   <string name="category_server">Server</string>
+  <string name="category_user_settings">User settings</string>
   <string name="category_scanner">Scanner</string>
   <string name="category_scanner_camera">Camera scanner</string>
   <string name="category_scanner_external">External scanner</string>
@@ -914,6 +955,8 @@
   <string name="setting_purchased_date">Ask for purchased date</string>
   <string name="setting_purchased_date_description">On purchase and inventory page</string>
   <string name="setting_use_quick_consume_amount">Use the product\'s \"Quick consume amount\"</string>
+  <string name="setting_auto_add_shopping_list">Automatically add products to shopping list</string>
+  <string name="setting_auto_add_shopping_list_description">Which are below their defined min. stock amount</string>
   <string name="setting_empty_value">Empty</string>
   <string name="setting_sync_off">Sync off</string>
   <string name="setting_loading">Loading value</string>

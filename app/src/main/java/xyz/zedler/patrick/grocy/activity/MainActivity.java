@@ -587,6 +587,8 @@ public class MainActivity extends AppCompatActivity {
     editPrefs.remove(PREF.DB_LAST_TIME_VOLATILE_MISSING);
     editPrefs.remove(PREF.DB_LAST_TIME_TASKS);
     editPrefs.remove(PREF.DB_LAST_TIME_TASK_CATEGORIES);
+    editPrefs.remove(PREF.DB_LAST_TIME_CHORES);
+    editPrefs.remove(PREF.DB_LAST_TIME_CHORE_ENTRIES);
     editPrefs.remove(PREF.DB_LAST_TIME_USERS);
 
     editPrefs.remove(PREF.HOME_ASSISTANT_INGRESS_SESSION_KEY);

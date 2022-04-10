@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -160,6 +161,47 @@ public class SortUtil {
     Collections.sort(taskCategories, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
+    ));
+  }
+
+  public static void sortChoreEntriesByNextExecution(
+      List<ChoreEntry> choreEntries,
+      boolean ascending
+  ) {
+    if (choreEntries == null || choreEntries.isEmpty()) {
+      return;
+    }
+    Collections.sort(
+        choreEntries,
+        (item1, item2) -> {
+          String time1 = (ascending ? item1 : item2).getNextEstimatedExecutionTime();
+          String time2 = (ascending ? item2 : item1).getNextEstimatedExecutionTime();
+          if (time1 == null && time2 == null
+              || time1 != null && time1.isEmpty() && time2 != null && time2.isEmpty()) {
+            return 0;
+          } else if (time1 == null || time1.isEmpty()) {
+            return -1; // or 1 when items without BBD should be last
+          } else if (time2 == null || time2.isEmpty()) {
+            return 1; // or -1 when items without BBD should be last
+          }
+          return DateUtil.getDate(time1, true)
+              .compareTo(DateUtil.getDate(time2, true));
+        }
+    );
+  }
+
+  public static void sortChoreEntriesByName(
+      Context context,
+      ArrayList<ChoreEntry> choreEntries,
+      boolean ascending
+  ) {
+    if (choreEntries == null || choreEntries.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(choreEntries, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).getChoreName().toLowerCase(),
+        (ascending ? item2 : item1).getChoreName().toLowerCase()
     ));
   }
 
@@ -313,6 +355,17 @@ public class SortUtil {
         }
     );
     shoppingListItems.addAll(itemsWithoutProduct);
+  }
+
+  public static void sortUsersByName(Context context, List<User> users, boolean ascending) {
+    if (users == null || users.isEmpty()) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(users, (item1, item2) -> Collator.getInstance(locale).compare(
+        (ascending ? item1 : item2).getUserName().toLowerCase(),
+        (ascending ? item2 : item1).getUserName().toLowerCase()
+    ));
   }
 
   public static void sortLanguagesByName(List<Language> languages) {

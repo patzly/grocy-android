@@ -162,7 +162,7 @@ public class PurchaseViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.pendingProducts = data.getPendingProducts();
       formData.getProductsLive().setValue(
-              appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
+              appendPendingProducts(Product.getActiveAndStockEnabledProductsOnly(products), pendingProducts)
       );
       productHashMap = ArrayUtil.getProductsHashMap(products);
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
@@ -201,7 +201,7 @@ public class PurchaseViewModel extends BaseViewModel {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(
-                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
+                  appendPendingProducts(Product.getActiveAndStockEnabledProductsOnly(products), pendingProducts)
           );
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
@@ -760,7 +760,7 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   private void uploadProductBarcode(Runnable onSuccess) {
-    if (formData.getPendingProductLive() != null) {
+    if (formData.getPendingProductLive().getValue() != null) {
       storePendingProductBarcode(onSuccess);
       return;
     }

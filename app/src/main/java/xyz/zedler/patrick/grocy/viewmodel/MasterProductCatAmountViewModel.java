@@ -73,7 +73,7 @@ public class MasterProductCatAmountViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new MasterProductRepository(application);
-    formData = new FormDataMasterProductCatAmount(application, getBeginnerModeEnabled());
+    formData = new FormDataMasterProductCatAmount(application, sharedPrefs, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 

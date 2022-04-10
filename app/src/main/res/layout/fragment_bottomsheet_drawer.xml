@@ -185,6 +185,22 @@
         <View style="@style/Widget.Grocy.Divider" />
 
         <LinearLayout
+          android:id="@+id/linear_drawer_chores"
+          style="@style/Widget.Grocy.LinearLayout.Drawer">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.Drawer"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_home" />
+
+          <TextView
+            android:id="@+id/text_drawer_chores"
+            style="@style/Widget.Grocy.TextView.DrawerItem"
+            android:text="@string/title_chores" />
+
+        </LinearLayout>
+
+        <LinearLayout
           android:id="@+id/linear_drawer_tasks"
           style="@style/Widget.Grocy.LinearLayout.Drawer">
 
