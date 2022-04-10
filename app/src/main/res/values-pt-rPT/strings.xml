@@ -519,7 +519,6 @@
   <string name="subtitle_product_due_date">Tipo, Datas por defeito (depois de aberto, congeladas, descongeladas)</string>
   <string name="subtitle_product_optional_properties">Estado, Produto principal, Descrição, Grupo do produto, Energia, Imagem</string>
   <string name="subtitle_product_quantity_unit">Stock, Opções de compra</string>
-
   <string name="description_input_product_part1">Campo do produto contém:</string>
   <string name="description_input_product_part2">Por favor escolha como prosseguir:</string>
   <string name="description_input_product_option1">Criar novo produto introduzindo o nome</string>
