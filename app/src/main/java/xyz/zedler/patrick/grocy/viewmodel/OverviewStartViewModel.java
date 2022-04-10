@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.preference.PreferenceManager;
@@ -43,7 +44,9 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
@@ -74,8 +77,10 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<Integer> itemsExpiredCountLive;
   private final MutableLiveData<Integer> itemsMissingCountLive;
   private final MutableLiveData<Integer> itemsMissingShoppingListCountLive;
+  private final MutableLiveData<Integer> itemsInStockCountLive;
+  private final MutableLiveData<Double> stockValueLive;
   private final MutableLiveData<Boolean> storedPurchasesOnDevice;
-  private final LiveData<String> stockDescriptionTextLive;
+  private final MediatorLiveData<String> stockDescriptionTextLive;
   private final LiveData<String> stockDescriptionDueNextTextLive;
   private final LiveData<String> stockDescriptionOverdueTextLive;
   private final LiveData<String> stockDescriptionExpiredTextLive;
@@ -94,14 +99,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final LiveData<String> tasksUserDescriptionTextLive;
   private final LiveData<String> masterDataDescriptionTextLive;
   private final MutableLiveData<Integer> currentUserIdLive;
-  private ArrayList<StockItem> stockItemsTemp;
-  private ArrayList<StockItem> dueItemsTemp;
-  private ArrayList<StockItem> overdueItemsTemp;
-  private ArrayList<StockItem> expiredItemsTemp;
-  private ArrayList<MissingItem> missingItemsTemp;
   private List<ShoppingList> shoppingLists;
-
-  private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
 
   public OverviewStartViewModel(@NonNull Application application) {
@@ -122,6 +120,8 @@ public class OverviewStartViewModel extends BaseViewModel {
     itemsExpiredCountLive = new MutableLiveData<>();
     itemsMissingCountLive = new MutableLiveData<>();
     itemsMissingShoppingListCountLive = new MutableLiveData<>();
+    itemsInStockCountLive = new MutableLiveData<>();
+    stockValueLive = new MutableLiveData<>();
     storedPurchasesOnDevice = new MutableLiveData<>(false);
     shoppingListItemsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
@@ -133,33 +133,44 @@ public class OverviewStartViewModel extends BaseViewModel {
     tasksLive = new MutableLiveData<>();
     currentUserIdLive = new MutableLiveData<>(sharedPrefs.getInt(PREF.CURRENT_USER_ID, 1));
 
-    stockDescriptionTextLive = Transformations.map(
-        stockItemsLive,
-        stockItems -> {
-          if (stockItems == null) {
-            return null;
-          }
-          int products = stockItems.size();
-          double value = 0;
-          for (StockItem stockItem : stockItems) {
-            if (stockItem.isItemMissing() && !stockItem.isItemMissingAndPartlyInStock()) {
-              products--;
-              continue;
-            }
-            value += stockItem.getValueDouble();
-          }
+    stockDescriptionTextLive = new MediatorLiveData<>();
+    stockDescriptionTextLive.addSource(
+        itemsInStockCountLive,
+        count -> {
+          if (count == null) return;
+          double value = stockValueLive.getValue() != null ? stockValueLive.getValue() : 0;
           if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-            return getResources().getQuantityString(
+            stockDescriptionTextLive.setValue(getResources().getQuantityString(
                 R.plurals.description_overview_stock_value,
-                products, products,
+                count, count,
                 NumUtil.trim(value),
                 sharedPrefs.getString(Constants.PREF.CURRENCY, "")
-            );
+            ));
           } else {
-            return getResources().getQuantityString(
+            stockDescriptionTextLive.setValue(getResources().getQuantityString(
                 R.plurals.description_overview_stock,
-                products, products
-            );
+                count, count
+            ));
+          }
+        }
+    );
+    stockDescriptionTextLive.addSource(
+        stockValueLive,
+        value -> {
+          if (itemsInStockCountLive.getValue() == null) return;
+          int count = itemsInStockCountLive.getValue();
+          if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING)) {
+            stockDescriptionTextLive.setValue(getResources().getQuantityString(
+                R.plurals.description_overview_stock_value,
+                count, count,
+                NumUtil.trim(value),
+                sharedPrefs.getString(Constants.PREF.CURRENCY, "")
+            ));
+          } else {
+            stockDescriptionTextLive.setValue(getResources().getQuantityString(
+                R.plurals.description_overview_stock,
+                count, count
+            ));
           }
         }
     );
@@ -371,30 +382,56 @@ public class OverviewStartViewModel extends BaseViewModel {
       int itemsDueCount = 0;
       int itemsOverdueCount = 0;
       int itemsExpiredCount = 0;
-      int itemsMissingCount = 0;
-      int missingItemsOnShoppingListCount = 0;
-      for (StockItem stockItem : data.getStockItems()) {
-        if (stockItem.isItemDue()) {
+      HashMap<Integer, StockItem> stockItemHashMap = ArrayUtil
+          .getStockItemHashMap(data.getStockItems());
+      for (VolatileItem volatileItem : data.getVolatileItems()) {
+        StockItem stockItem = stockItemHashMap.get(volatileItem.getProductId());
+        if (stockItem == null) continue;
+        if (volatileItem.getVolatileType() == VolatileItem.TYPE_DUE) {
+          stockItem.setItemDue(true);
           itemsDueCount++;
-        }
-        if (stockItem.isItemOverdue()) {
+        } else if (volatileItem.getVolatileType() == VolatileItem.TYPE_OVERDUE) {
+          stockItem.setItemOverdue(true);
           itemsOverdueCount++;
-        }
-        if (stockItem.isItemExpired()) {
+        } else if (volatileItem.getVolatileType() == VolatileItem.TYPE_EXPIRED) {
+          stockItem.setItemExpired(true);
           itemsExpiredCount++;
         }
-        if (stockItem.isItemMissing()) {
-          itemsMissingCount++;
-          if (shoppingListItemsProductIds.contains(stockItem.getProductId())) {
-            missingItemsOnShoppingListCount++;
+      }
+      int itemsMissingCount = 0;
+      int missingItemsOnShoppingListCount = 0;
+      for (MissingItem missingItem : data.getMissingItems()) {
+        itemsMissingCount++;
+        StockItem stockItem = stockItemHashMap.get(missingItem.getId());
+        if (stockItem == null && !missingItem.getIsPartlyInStockBoolean()) {
+          StockItem stockItemMissing = new StockItem(missingItem);
+          if (stockItemsLive.getValue() != null) {
+            stockItemsLive.getValue().add(stockItemMissing);
           }
+        } else if (stockItem != null) {
+          stockItem.setItemMissing(true);
+          stockItem.setItemMissingAndPartlyInStock(missingItem.getIsPartlyInStockBoolean());
+        }
+        if (shoppingListItemsProductIds.contains(missingItem.getId())) {
+          missingItemsOnShoppingListCount++;
         }
       }
+      int itemsInStockCount = 0;
+      double stockValue = 0;
+      for (StockItem stockItem : data.getStockItems()) {
+        if (!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
+          itemsInStockCount++;
+          stockValue += stockItem.getValueDouble();
+        }
+      }
+
       itemsDueNextCountLive.setValue(itemsDueCount);
       itemsOverdueCountLive.setValue(itemsOverdueCount);
       itemsExpiredCountLive.setValue(itemsExpiredCount);
       itemsMissingCountLive.setValue(itemsMissingCount);
+      itemsInStockCountLive.setValue(itemsInStockCount);
       itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
+      stockValueLive.setValue(stockValue);
 
       int choresDueTodayCount = 0;
       int choresDueSoonCount = 0;
@@ -433,178 +470,22 @@ public class OverviewStartViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
+  public void downloadData() {
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
-      return;
-    }
-
-    DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
-      if (stockItemsTemp == null || dueItemsTemp == null || overdueItemsTemp == null
-          || expiredItemsTemp == null || missingItemsTemp == null) {
-        downloadDataForceUpdate();
-        return;
-      }
-
-      HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
-      for (StockItem stockItem : stockItemsTemp) {
-        stockItemHashMap.put(stockItem.getProductId(), stockItem);
-      }
-
-      for (StockItem stockItemDue : dueItemsTemp) {
-        StockItem stockItem = stockItemHashMap.get(stockItemDue.getProductId());
-        if (stockItem == null) {
-          continue;
-        }
-        stockItem.setItemDue(true);
-      }
-      for (StockItem stockItemOverdue : overdueItemsTemp) {
-        StockItem stockItem = stockItemHashMap.get(stockItemOverdue.getProductId());
-        if (stockItem == null) {
-          continue;
-        }
-        stockItem.setItemOverdue(true);
-      }
-      for (StockItem stockItemExpired : expiredItemsTemp) {
-        StockItem stockItem = stockItemHashMap.get(stockItemExpired.getProductId());
-        if (stockItem == null) {
-          continue;
-        }
-        stockItem.setItemExpired(true);
-      }
-
-      ArrayList<Integer> shoppingListItemsProductIds = new ArrayList<>();
-      if (shoppingListItemsLive.getValue() != null) {
-        for (ShoppingListItem item : shoppingListItemsLive.getValue()) {
-          if (!item.hasProduct()) {
-            continue;
-          }
-          shoppingListItemsProductIds.add(item.getProductIdInt());
-        }
-      }
-
-      DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-
-      int missingItemsOnShoppingListCount = 0;
-
-      for (MissingItem missingItem : missingItemsTemp) {
-
-        if (shoppingListItemsProductIds.contains(missingItem.getId())) {
-          missingItemsOnShoppingListCount++;
-        }
-        StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
-        if (missingStockItem != null) {
-          missingStockItem.setItemMissing(true);
-          missingStockItem.setItemMissingAndPartlyInStock(true);
-          continue;
-        }
-        queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
-          StockItem stockItem = new StockItem(productDetails);
-          stockItem.setItemMissing(true);
-          stockItem.setItemMissingAndPartlyInStock(false);
-          stockItemsTemp.add(stockItem);
-        }));
-      }
-      itemsMissingShoppingListCountLive.setValue(missingItemsOnShoppingListCount);
-      if (queue.getSize() == 0) {
-        onQueueEmpty();
-        return;
-      }
-      queue.start();
-    };
-
-    DownloadHelper.Queue queue = dlHelper.newQueue(onQueueEmptyListener, this::onDownloadError);
-    queue.append(
-        dlHelper.updateStockItems(dbChangedTime, stockItems -> stockItemsTemp = stockItems),
-        dlHelper.updateShoppingListItems(dbChangedTime, this.shoppingListItemsLive::setValue),
-        dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
-          this.shoppingLists = shoppingLists;
-          this.shoppingListItemsLive.setValue(this.shoppingListItemsLive.getValue());
-        }),
-        dlHelper.updateProducts(dbChangedTime, this.productsLive::setValue),
-        dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
-          this.dueItemsTemp = due;
-          itemsDueNextCountLive.setValue(due.size());
-          this.overdueItemsTemp = overdue;
-          itemsOverdueCountLive.setValue(overdue.size());
-          this.expiredItemsTemp = expired;
-          itemsExpiredCountLive.setValue(expired.size());
-          this.missingItemsTemp = missing;
-          itemsMissingCountLive.setValue(missing.size());
-        }),
-        dlHelper.updateChoreEntries(dbChangedTime, choreEntries -> {
-          this.choreEntriesLive.setValue(choreEntries);
-          int choresDueTodayCount = 0;
-          int choresDueSoonCount = 0;
-          int choresOverdueCount = 0;
-          int choresAssignedCount = 0;
-          for (ChoreEntry choreEntry : choreEntries) {
-            if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
-                && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
-                == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
-              choresAssignedCount++;
-            }
-            if (choreEntry.getNextEstimatedExecutionTime() == null
-                || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
-              continue;
-            }
-            int daysFromNow = DateUtil
-                .getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
-            if (daysFromNow < 0) {
-              choresOverdueCount++;
-            }
-            if (daysFromNow == 0) {
-              choresDueTodayCount++;
-            }
-            if (daysFromNow >= 0 && daysFromNow <= 5) {
-              choresDueSoonCount++;
-            }
-          }
-          choresAssignedCountLive.setValue(choresAssignedCount);
-          choresOverdueCountLive.setValue(choresOverdueCount);
-          choresDueSoonCountLive.setValue(choresDueSoonCount);
-          choresDueTodayCountLive.setValue(choresDueTodayCount);
-        }),
-        dlHelper.updateTasks(dbChangedTime, this.tasksLive::setValue)
+    dlHelper.updateData(
+        this::onQueueEmpty,
+        this::onDownloadError,
+        StockItem.class,
+        ShoppingListItem.class,
+        ShoppingList.class,
+        Product.class,
+        VolatileItem.class,
+        ChoreEntry.class,
+        Task.class
     );
-    if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
-      queue.append(dlHelper.getCurrentUserId(id -> {
-        if (id != -1) {
-          sharedPrefs.edit().putInt(PREF.CURRENT_USER_ID, id).apply();
-          currentUserIdLive.setValue(id);
-          tasksLive.setValue(tasksLive.getValue());  // update descriptions above
-          if (this.choreEntriesLive.getValue() != null) {
-            int choresAssignedCount = 0;
-            for (ChoreEntry choreEntry : this.choreEntriesLive.getValue()) {
-              if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
-                  && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
-                  == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
-                choresAssignedCount++;
-              }
-            }
-            choresAssignedCountLive.setValue(choresAssignedCount);
-          }
-        }
-      }));
-    }
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
   }
 
   public void downloadDataForceUpdate() {
@@ -624,9 +505,34 @@ public class OverviewStartViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateDatabase(stockItemsTemp, () -> {});
     infoFullscreenLive.setValue(null);
-    this.stockItemsLive.setValue(stockItemsTemp);
+
+    if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
+      dlHelper.getCurrentUserId(id -> {
+        if (id != -1) {
+          sharedPrefs.edit().putInt(PREF.CURRENT_USER_ID, id).apply();
+          currentUserIdLive.setValue(id);
+          tasksLive.setValue(tasksLive.getValue());  // update descriptions above
+          if (this.choreEntriesLive.getValue() != null) {
+            int choresAssignedCount = 0;
+            for (ChoreEntry choreEntry : this.choreEntriesLive.getValue()) {
+              if (NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
+                  && currentUserIdLive.getValue() != null && currentUserIdLive.getValue()
+                  == Integer.parseInt(choreEntry.getNextExecutionAssignedToUserId())) {
+                choresAssignedCount++;
+              }
+            }
+            choresAssignedCountLive.setValue(choresAssignedCount);
+          }
+        }
+      }).perform(
+          i -> loadFromDatabase(false),
+          error -> loadFromDatabase(false),
+          dlHelper.getUuid()
+      );
+    } else {
+      loadFromDatabase(false);
+    }
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -723,10 +629,6 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public MutableLiveData<Boolean> getStoredPurchasesOnDevice() {
     return storedPurchasesOnDevice;
-  }
-
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

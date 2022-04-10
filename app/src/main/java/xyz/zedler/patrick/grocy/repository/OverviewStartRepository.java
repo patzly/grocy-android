@@ -26,12 +26,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Task;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 
 public class OverviewStartRepository {
 
@@ -54,6 +56,8 @@ public class OverviewStartRepository {
     private final List<StoredPurchase> storedPurchases;
     private final List<ChoreEntry> choreEntries;
     private final List<Task> tasks;
+    private final List<VolatileItem> volatileItems;
+    private final List<MissingItem> missingItems;
 
     public OverviewStartData(
         List<StockItem> stockItems,
@@ -62,7 +66,9 @@ public class OverviewStartRepository {
         List<Product> products,
         List<StoredPurchase> storedPurchases,
         List<ChoreEntry> choreEntries,
-        List<Task> tasks
+        List<Task> tasks,
+        List<VolatileItem> volatileItems,
+        List<MissingItem> missingItems
     ) {
       this.stockItems = stockItems;
       this.shoppingListItems = shoppingListItems;
@@ -71,6 +77,8 @@ public class OverviewStartRepository {
       this.storedPurchases = storedPurchases;
       this.choreEntries = choreEntries;
       this.tasks = tasks;
+      this.volatileItems = volatileItems;
+      this.missingItems = missingItems;
     }
 
     public List<StockItem> getStockItems() {
@@ -100,6 +108,14 @@ public class OverviewStartRepository {
     public List<Task> getTasks() {
       return tasks;
     }
+
+    public List<VolatileItem> getVolatileItems() {
+      return volatileItems;
+    }
+
+    public List<MissingItem> getMissingItems() {
+      return missingItems;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
@@ -112,6 +128,8 @@ public class OverviewStartRepository {
             appDatabase.storedPurchaseDao().getStoredPurchases(),
             appDatabase.choreEntryDao().getChoreEntries(),
             appDatabase.taskDao().getTasks(),
+            appDatabase.volatileItemDao().getVolatileItems(),
+            appDatabase.missingItemDao().getMissingItems(),
             OverviewStartData::new
         )
         .subscribeOn(Schedulers.io())
