@@ -32,6 +32,7 @@ import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
@@ -88,7 +89,7 @@ public class ArrayUtil {
     return missingProductIds;
   }
 
-  public static HashMap<Integer, Location> getLocationsHashMap(ArrayList<Location> locations) {
+  public static HashMap<Integer, Location> getLocationsHashMap(List<Location> locations) {
     HashMap<Integer, Location> hashMap = new HashMap<>();
     for (Location l : locations) {
       hashMap.put(l.getId(), l);
@@ -187,6 +188,14 @@ public class ArrayUtil {
       hashMap.put(item.getId(), item);
     }
     return hashMap;
+  }
+
+  public static HashMap<Integer, StockItem> getStockItemHashMap(List<StockItem> stockItems) {
+    HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
+    for (StockItem stockItem : stockItems) {
+      stockItemHashMap.put(stockItem.getProductId(), stockItem);
+    }
+    return stockItemHashMap;
   }
 
   public static boolean contains(String[] array, String value) {

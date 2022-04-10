@@ -547,7 +547,6 @@
   <string name="subtitle_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
   <string name="subtitle_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
   <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
-
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
   <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>

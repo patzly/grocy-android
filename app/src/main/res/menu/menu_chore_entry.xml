@@ -32,6 +32,7 @@
     android:id="@+id/action_skip_next_chore_schedule"
     android:title="@string/action_skip_next_chore_schedule"
     android:icon="@drawable/ic_round_skip_next"
+    android:visible="false"
     app:showAsAction="always" />
 
 </menu>

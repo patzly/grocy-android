@@ -29,7 +29,6 @@ import xyz.zedler.patrick.grocy.dao.LocationDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductDao;
-import xyz.zedler.patrick.grocy.dao.StoredPurchaseDao;
 import xyz.zedler.patrick.grocy.dao.ProductAveragePriceDao;
 import xyz.zedler.patrick.grocy.dao.ProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.ProductDao;
@@ -42,16 +41,17 @@ import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.dao.StockItemDao;
 import xyz.zedler.patrick.grocy.dao.StockLocationDao;
 import xyz.zedler.patrick.grocy.dao.StoreDao;
+import xyz.zedler.patrick.grocy.dao.StoredPurchaseDao;
 import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
 import xyz.zedler.patrick.grocy.dao.TaskDao;
 import xyz.zedler.patrick.grocy.dao.UserDao;
+import xyz.zedler.patrick.grocy.dao.VolatileItemDao;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -64,9 +64,11 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 
 @Database(
     entities = {
@@ -77,6 +79,7 @@ import xyz.zedler.patrick.grocy.model.User;
         QuantityUnit.class,
         Store.class,
         Location.class,
+        VolatileItem.class,
         MissingItem.class,
         QuantityUnitConversion.class,
         ProductBarcode.class,
@@ -93,7 +96,7 @@ import xyz.zedler.patrick.grocy.model.User;
         Chore.class,
         ChoreEntry.class
     },
-    version = 33
+    version = 34
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -112,6 +115,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract StoreDao storeDao();
 
   public abstract LocationDao locationDao();
+
+  public abstract VolatileItemDao volatileItemDao();
 
   public abstract MissingItemDao missingItemDao();
 

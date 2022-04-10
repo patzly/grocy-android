@@ -49,6 +49,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
@@ -57,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.StockOverviewRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -98,18 +100,11 @@ public class StockOverviewViewModel extends BaseViewModel {
   private HashMap<Integer, ProductLastPurchased> productLastPurchasedHashMap;
   private List<ShoppingListItem> shoppingListItems;
   private ArrayList<String> shoppingListItemsProductIds;
-  private List<Location> locations;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-  private ArrayList<StockItem> dueItemsTemp;
-  private ArrayList<StockItem> overdueItemsTemp;
-  private ArrayList<StockItem> expiredItemsTemp;
-  private ArrayList<MissingItem> missingItemsTemp;
-  private HashMap<Integer, StockItem> productIdsMissingStockItems;
+  private HashMap<Integer, MissingItem> productIdsMissingItems;
   private HashMap<Integer, Location> locationHashMap;
-  private List<StockLocation> stockCurrentLocationsTemp;
   private HashMap<Integer, HashMap<Integer, StockLocation>> stockLocationsHashMap;
 
-  private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private ArrayList<String> searchResultsFuzzy;
   private final boolean debug;
@@ -169,29 +164,44 @@ public class StockOverviewViewModel extends BaseViewModel {
       productLastPurchasedHashMap = ArrayUtil
           .getProductLastPurchasedHashMap(data.getProductsLastPurchased());
       productBarcodeHashMap = ArrayUtil.getProductBarcodesHashMap(data.getProductBarcodes());
+      this.stockItems = data.getStockItems();
+
       int itemsDueCount = 0;
       int itemsOverdueCount = 0;
       int itemsExpiredCount = 0;
-      int itemsMissingCount = 0;
-      int itemsInStockCount = 0;
-      int itemsOpenedCount = 0;
-      productIdsMissingStockItems = new HashMap<>();
-      this.stockItems = data.getStockItems();
-      for (StockItem stockItem : stockItems) {
-        stockItem.setProduct(productHashMap.get(stockItem.getProductId()));
-        if (stockItem.isItemDue()) {
+      HashMap<Integer, StockItem> stockItemHashMap = ArrayUtil.getStockItemHashMap(stockItems);
+      for (VolatileItem volatileItem : data.getVolatileItems()) {
+        StockItem stockItem = stockItemHashMap.get(volatileItem.getProductId());
+        if (stockItem == null) continue;
+        if (volatileItem.getVolatileType() == VolatileItem.TYPE_DUE) {
+          stockItem.setItemDue(true);
           itemsDueCount++;
-        }
-        if (stockItem.isItemOverdue()) {
+        } else if (volatileItem.getVolatileType() == VolatileItem.TYPE_OVERDUE) {
+          stockItem.setItemOverdue(true);
           itemsOverdueCount++;
-        }
-        if (stockItem.isItemExpired()) {
+        } else if (volatileItem.getVolatileType() == VolatileItem.TYPE_EXPIRED) {
+          stockItem.setItemExpired(true);
           itemsExpiredCount++;
         }
-        if (stockItem.isItemMissing()) {
-          itemsMissingCount++;
-          productIdsMissingStockItems.put(stockItem.getProductId(), stockItem);
+      }
+      int itemsMissingCount = 0;
+      productIdsMissingItems = new HashMap<>();
+      for (MissingItem missingItem : data.getMissingItems()) {
+        itemsMissingCount++;
+        productIdsMissingItems.put(missingItem.getId(), missingItem);
+        StockItem stockItem = stockItemHashMap.get(missingItem.getId());
+        if (stockItem == null && !missingItem.getIsPartlyInStockBoolean()) {
+          StockItem stockItemMissing = new StockItem(missingItem);
+          stockItems.add(stockItemMissing);
+        } else if (stockItem != null) {
+          stockItem.setItemMissing(true);
+          stockItem.setItemMissingAndPartlyInStock(missingItem.getIsPartlyInStockBoolean());
         }
+      }
+      int itemsInStockCount = 0;
+      int itemsOpenedCount = 0;
+      for (StockItem stockItem : stockItems) {
+        stockItem.setProduct(productHashMap.get(stockItem.getProductId()));
         if (!stockItem.isItemMissing() || stockItem.isItemMissingAndPartlyInStock()) {
           itemsInStockCount++;
         }
@@ -207,16 +217,11 @@ public class StockOverviewViewModel extends BaseViewModel {
           shoppingListItemsProductIds.add(item.getProductId());
         }
       }
-      this.locations = data.getLocations();
-      filterChipLiveDataLocation.setLocations(locations);
-      locationHashMap = new HashMap<>();
-      for (Location location : locations) {
-        locationHashMap.put(location.getId(), location);
-      }
+      filterChipLiveDataLocation.setLocations(data.getLocations());
+      locationHashMap = ArrayUtil.getLocationsHashMap(data.getLocations());
 
-      this.stockCurrentLocationsTemp = data.getStockCurrentLocations();
       stockLocationsHashMap = new HashMap<>();
-      for (StockLocation stockLocation : this.stockCurrentLocationsTemp) {
+      for (StockLocation stockLocation : data.getStockCurrentLocations()) {
         HashMap<Integer, StockLocation> locationsForProductId = stockLocationsHashMap
             .get(stockLocation.getProductId());
         if (locationsForProductId == null) {
@@ -241,185 +246,27 @@ public class StockOverviewViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
+  public void downloadData() {
     if (isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredStockItems();
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
-      return;
-    }
-
-    DownloadHelper.OnQueueEmptyListener onQueueEmptyListener = () -> {
-      if (dueItemsTemp == null || overdueItemsTemp == null
-          || expiredItemsTemp == null || missingItemsTemp == null) {
-        downloadDataForceUpdate();
-        return;
-      }
-
-      HashMap<Integer, StockItem> stockItemHashMap = new HashMap<>();
-      for (StockItem stockItem : stockItems) {
-        stockItemHashMap.put(stockItem.getProductId(), stockItem);
-      }
-
-      for (StockItem stockItemDue : dueItemsTemp) {
-        StockItem stockItem = stockItemHashMap.get(stockItemDue.getProductId());
-        if (stockItem == null) {
-          continue;
-        }
-        stockItem.setItemDue(true);
-      }
-      for (StockItem stockItemOverdue : overdueItemsTemp) {
-        StockItem stockItem = stockItemHashMap.get(stockItemOverdue.getProductId());
-        if (stockItem == null) {
-          continue;
-        }
-        stockItem.setItemOverdue(true);
-      }
-      for (StockItem stockItemExpired : expiredItemsTemp) {
-        StockItem stockItem = stockItemHashMap.get(stockItemExpired.getProductId());
-        if (stockItem == null) {
-          continue;
-        }
-        stockItem.setItemExpired(true);
-      }
-
-      DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-
-      productIdsMissingStockItems = new HashMap<>();
-      for (MissingItem missingItem : missingItemsTemp) {
-
-        StockItem missingStockItem = stockItemHashMap.get(missingItem.getId());
-        if (missingStockItem != null) {
-          productIdsMissingStockItems.put(missingItem.getId(), missingStockItem);
-        }
-        if (missingStockItem != null && !missingStockItem.isItemMissing()) {
-          missingStockItem.setItemMissing(true);
-          missingStockItem.setItemMissingAndPartlyInStock(true);
-          continue;
-        } else if (missingStockItem != null) {
-          continue;
-        }
-        queue.append(dlHelper.getProductDetails(missingItem.getId(), productDetails -> {
-          StockItem stockItem = new StockItem(productDetails);
-          stockItem.setItemMissing(true);
-          stockItem.setItemMissingAndPartlyInStock(false);
-          productIdsMissingStockItems.put(missingItem.getId(), stockItem);
-          stockItems.add(stockItem);
-        }));
-      }
-      if (queue.getSize() == 0) {
-        onQueueEmpty();
-        return;
-      }
-      queue.start();
-    };
-
-    sharedPrefs.edit().putString(Constants.PREF.DB_LAST_TIME_VOLATILE, null).apply();
-
-    DownloadHelper.Queue queue = dlHelper.newQueue(onQueueEmptyListener, this::onDownloadError);
-    queue.append(
-        dlHelper.updateQuantityUnits(
-            dbChangedTime,
-            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
-        ), dlHelper.updateProductGroups(dbChangedTime, groups -> {
-          productGroupHashMap = ArrayUtil.getProductGroupsHashMap(groups);
-          filterChipLiveDataProductGroup.setProductGroups(groups);
-        }),
-        dlHelper.updateStockItems(dbChangedTime, stockItems -> {
-          this.stockItems = stockItems;
-          int itemsOpenedCount = 0;
-          if (isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)) {
-            for (StockItem stockItem : stockItems) {
-              if (stockItem.getAmountOpenedDouble() > 0) {
-                itemsOpenedCount++;
-              }
-            }
-          }
-          filterChipLiveDataStatus
-              .setInStockCount(stockItems.size())
-              .setOpenedCount(itemsOpenedCount)
-              .emitCounts();
-        }), dlHelper.updateProducts(dbChangedTime, products -> {
-          this.products = products;
-          productHashMap = new HashMap<>();
-          for (Product product : products) {
-            productHashMap.put(product.getId(), product);
-          }
-        }), dlHelper.updateProductBarcodes(
-            dbChangedTime,
-            productBarcodes -> productBarcodeHashMap = ArrayUtil
-                .getProductBarcodesHashMap(productBarcodes)
-        ), dlHelper.updateVolatile(dbChangedTime, (due, overdue, expired, missing) -> {
-          this.dueItemsTemp = due;
-          this.overdueItemsTemp = overdue;
-          this.expiredItemsTemp = expired;
-          this.missingItemsTemp = missing;
-          filterChipLiveDataStatus
-              .setDueSoonCount(due.size())
-              .setOverdueCount(overdue.size())
-              .setExpiredCount(expired.size())
-              .setBelowStockCount(missing.size())
-              .emitCounts();
-        }), dlHelper.updateShoppingListItems(dbChangedTime, shoppingListItems -> {
-          this.shoppingListItems = shoppingListItems;
-          shoppingListItemsProductIds = new ArrayList<>();
-          for (ShoppingListItem item : shoppingListItems) {
-            if (item.getProductId() != null && !item.getProductId().isEmpty()) {
-              shoppingListItemsProductIds.add(item.getProductId());
-            }
-          }
-        }), dlHelper.updateLocations(dbChangedTime, locations -> {
-          this.locations = locations;
-          filterChipLiveDataLocation.setLocations(locations);
-          locationHashMap = new HashMap<>();
-          for (Location location : locations) {
-            locationHashMap.put(location.getId(), location);
-          }
-        }), dlHelper.updateProductsAveragePrice(
-            dbChangedTime,
-            productsAveragePrice -> productAveragePriceHashMap = ArrayUtil
-                .getProductAveragePriceHashMap(productsAveragePrice),
-            true
-        ), dlHelper.updateProductsLastPurchased(
-            dbChangedTime,
-            productsLastPurchased -> productLastPurchasedHashMap = ArrayUtil
-                .getProductLastPurchasedHashMap(productsLastPurchased),
-            true
-        ),
-        dlHelper.updateStockCurrentLocations(dbChangedTime, stockLocations -> {
-          this.stockCurrentLocationsTemp = stockLocations;
-
-          stockLocationsHashMap = new HashMap<>();
-          for (StockLocation stockLocation : stockLocations) {
-            HashMap<Integer, StockLocation> locationsForProductId = stockLocationsHashMap
-                .get(stockLocation.getProductId());
-            if (locationsForProductId == null) {
-              locationsForProductId = new HashMap<>();
-              stockLocationsHashMap.put(stockLocation.getProductId(), locationsForProductId);
-            }
-            locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
-          }
-        })
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        this::onDownloadError,
+        QuantityUnit.class,
+        ProductGroup.class,
+        StockItem.class,
+        Product.class,
+        ProductBarcode.class,
+        VolatileItem.class,
+        ShoppingListItem.class,
+        Location.class,
+        ProductAveragePrice.class,
+        ProductLastPurchased.class,
+        StockLocation.class
     );
-
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
   }
 
   public void downloadDataForceUpdate() {
@@ -436,13 +283,6 @@ public class StockOverviewViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    repository.updateDatabase(
-        this.stockItems,
-        this::updateFilteredStockItems
-    );
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -510,7 +350,7 @@ public class StockOverviewViewModel extends BaseViewModel {
         }
       }
 
-      StockItem missingStockItem = productIdsMissingStockItems.get(item.getProductId());
+      MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
           && item.isItemDue()
@@ -519,9 +359,9 @@ public class StockOverviewViewModel extends BaseViewModel {
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
           && item.isItemExpired()
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
-          && missingStockItem != null
+          && missingItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
-          && (missingStockItem == null || missingStockItem.isItemMissingAndPartlyInStock())
+          && (missingItem == null || missingItem.getIsPartlyInStockBoolean())
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OPENED
           && item.getAmountOpenedDouble() > 0
       ) {
@@ -751,8 +591,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     updateFilteredStockItems();
   }
 
-  public ArrayList<Integer> getProductIdsMissingStockItems() {
-    return new ArrayList<>(productIdsMissingStockItems.keySet());
+  public ArrayList<Integer> getProductIdsMissingItems() {
+    return new ArrayList<>(productIdsMissingItems.keySet());
   }
 
   public HashMap<Integer, ProductGroup> getProductGroupHashMap() {
@@ -865,10 +705,6 @@ public class StockOverviewViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

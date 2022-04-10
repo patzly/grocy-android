@@ -30,6 +30,8 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -283,6 +285,47 @@ public class ChoresViewModel extends BaseViewModel {
     }
 
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
+  }
+
+  public void executeChore(int choreId) {
+    Chore chore = Chore.getFromId(chores, choreId);
+    if (chore == null) {
+      showErrorMessage();
+      return;
+    }
+    executeChore(chore);
+  }
+
+  public void executeChore(Chore chore) {
+    JSONObject body = new JSONObject();
+    try {
+      body.put("tracked_time", chore.getTrackDateOnlyBoolean()
+          ? dateUtil.getCurrentDateWithoutTimeStr() : dateUtil.getCurrentDateWithTimeStr());
+    } catch (JSONException e) {
+      if (debug) {
+        Log.i(TAG, "executeChore: " + e);
+      }
+      showErrorMessage();
+      return;
+    }
+    dlHelper.post(
+        grocyApi.executeChore(chore.getId()),
+        body,
+        response -> {
+          showMessage(getApplication().getString(R.string.msg_chore_executed));
+          downloadData();
+          if (debug) {
+            Log.i(TAG, "executeChore: " + response);
+          }
+        },
+        error -> {
+          showErrorMessage(error);
+          if (debug) {
+            Log.i(TAG, "executeChore: " + error);
+          }
+          downloadData();
+        }
+    );
   }
 
   public boolean isSearchActive() {

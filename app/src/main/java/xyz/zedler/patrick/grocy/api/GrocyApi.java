@@ -313,4 +313,11 @@ public class GrocyApi {
   public String getChores(int choreId) {
     return getUrl("/chores/" + choreId);
   }
+
+  /**
+   * Tracks an execution of the given chore
+   */
+  public String executeChore(int choreId) {
+    return getUrl("/chores/" + choreId + "/execute");
+  }
 }

@@ -26,6 +26,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "missing_item_table")
 public class MissingItem implements Parcelable {
@@ -101,6 +102,10 @@ public class MissingItem implements Parcelable {
 
   public String getIsPartlyInStock() {
     return isPartlyInStock;
+  }
+
+  public boolean getIsPartlyInStockBoolean() {
+    return NumUtil.isStringInt(isPartlyInStock) && Integer.parseInt(isPartlyInStock) == 1;
   }
 
   public void setId(int id) {

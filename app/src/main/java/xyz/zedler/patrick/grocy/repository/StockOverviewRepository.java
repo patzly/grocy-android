@@ -21,11 +21,11 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -35,6 +35,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class StockOverviewRepository {
@@ -61,6 +62,8 @@ public class StockOverviewRepository {
     private final List<ShoppingListItem> shoppingListItems;
     private final List<Location> locations;
     private final List<StockLocation> stockCurrentLocations;
+    private final List<VolatileItem> volatileItems;
+    private final List<MissingItem> missingItems;
 
     public StockOverviewData(
         List<QuantityUnit> quantityUnits,
@@ -72,7 +75,9 @@ public class StockOverviewRepository {
         List<ProductBarcode> productBarcodes,
         List<ShoppingListItem> shoppingListItems,
         List<Location> locations,
-        List<StockLocation> stockCurrentLocations
+        List<StockLocation> stockCurrentLocations,
+        List<VolatileItem> volatileItems,
+        List<MissingItem> missingItems
     ) {
       this.quantityUnits = quantityUnits;
       this.productGroups = productGroups;
@@ -84,6 +89,8 @@ public class StockOverviewRepository {
       this.shoppingListItems = shoppingListItems;
       this.locations = locations;
       this.stockCurrentLocations = stockCurrentLocations;
+      this.volatileItems = volatileItems;
+      this.missingItems = missingItems;
     }
 
     public List<QuantityUnit> getQuantityUnits() {
@@ -125,6 +132,14 @@ public class StockOverviewRepository {
     public List<StockLocation> getStockCurrentLocations() {
       return stockCurrentLocations;
     }
+
+    public List<VolatileItem> getVolatileItems() {
+      return volatileItems;
+    }
+
+    public List<MissingItem> getMissingItems() {
+      return missingItems;
+    }
   }
 
   public void loadFromDatabase(StockOverviewDataListener listener) {
@@ -140,25 +155,13 @@ public class StockOverviewRepository {
             appDatabase.shoppingListItemDao().getShoppingListItems(),
             appDatabase.locationDao().getLocations(),
             appDatabase.stockLocationDao().getStockLocations(),
+            appDatabase.volatileItemDao().getVolatileItems(),
+            appDatabase.missingItemDao().getMissingItems(),
             StockOverviewData::new
         )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
-        .subscribe();
-  }
-
-  public void updateDatabase(
-      List<StockItem> stockItems,
-      Runnable listener
-  ) {
-    Single.concat(
-        appDatabase.stockItemDao().deleteStockItems(),
-        appDatabase.stockItemDao().insertStockItems(stockItems)
-    )
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .doFinally(listener::run)
         .subscribe();
   }
 }

@@ -96,6 +96,13 @@ public class StockItem extends GroupedListItem implements Parcelable {
   }
 
   @Ignore
+  public StockItem(MissingItem missingItem) {
+    this.itemMissing = true;
+    this.itemMissingAndPartlyInStock = false;
+    this.productId = missingItem.getId();
+  }
+
+  @Ignore
   public StockItem(ProductDetails productDetails) {
     this.amount = String.valueOf(productDetails.getStockAmount());
     this.amountAggregated = String.valueOf(productDetails.getStockAmountAggregated());

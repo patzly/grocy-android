@@ -111,6 +111,10 @@
   <string name="action_share">Поделиться</string>
   <string name="action_share_description">Расскажите своим друзьям о Grocy Android</string>
   <string name="action_no_filter">Без фильтра</string>
+  <string name="action_show_done_tasks">Показать выполненные задачи</string>
+  <string name="action_track_chore_execution">Отслеживание выполнения работы по дому</string>
+  <string name="action_skip_next_chore_schedule">Пропустить следующий график работы по дому</string>
+
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d скоро испортится</item>
@@ -194,12 +198,26 @@
     <item quantity="many">%1$d скоро</item>
     <item quantity="other">%1$d скоро</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d на сегодня</item>
+    <item quantity="few">%1$d на сегодня</item>
+    <item quantity="many">%1$d на сегодня</item>
+    <item quantity="other">%1$d на сегодня</item>
+  </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d просрочено</item>
     <item quantity="few">%1$d просрочено</item>
     <item quantity="many">%1$d просрочено</item>
     <item quantity="other">%1$d просрочено</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d назначена</item>
+    <item quantity="few">%1$d назначены</item>
+    <item quantity="many">%1$d назначены</item>
+    <item quantity="other">%1$d назначены</item>
   </plurals>
   <string name="msg_task_mark">Отметить задачу выполненной</string>
   <string name="msg_task_completed">Помеченные выполненными задачи</string>
@@ -254,17 +272,26 @@
   <string name="msg_item_marked_as_undone">Пункт не выполнен</string>
   <string name="option_synced_success">Опция успешно синхронизирована</string>
   <string name="option_synced_error">Опция не была синхронизирована</string>
+  <string name="msg_stored_purchases_overview">На устройстве есть покупки, которые еще не были перенесены на сервер. Нажмите здесь для получения подробной информации.</string>
+  <string name="msg_stored_purchases">Здесь отображаются покупки, которые еще не были перенесены на сервер. Они были сохранены вместе с временными продуктами в этом приложении, чтобы вы могли быстрее сканировать свою покупку в быстром режиме и не создавать новые продукты непосредственно для основных данных.</string>
+  <string name="msg_stored_purchases_product_offline">Нажмите на продукт и заполните необходимые данные. После этого товар будет показан здесь как \"онлайн\", и сохраненные покупки могут быть отправлены на сервер.</string>
+  <string name="msg_stored_purchases_product_online">Нажмите здесь, чтобы отправить сохраненные покупки для этого продукта на сервер.</string>
   <string name="msg_choose_product">Отсканированный вами штрихкод еще не связан с продуктом. Вы можете связать его с существующим продуктом или создать для него новый.</string>
   <string name="msg_product_name_off">Название продукта для штрихкода взято из Open Food Facts.</string>
+  <string name="msg_product_name_obf">Название продукта для штрихкода взято из Open Beauty Facts.</string>
   <string name="msg_product_name_lookup_error">Невозможно найти штрихкод на Open Food Facts.</string>
   <string name="msg_product_name_lookup_empty">Штрихкод отсутствует в базе данных Open Food Facts.</string>
   <string name="msg_off_option_deactivated">Для автоматического предложения названия продукта вы можете активировать поиск по сервису Open Food Facts в настройках.</string>
   <string name="msg_create_new_product_filled">Создать новый продукт \"%1$s\"</string>
   <string name="msg_create_new_product">Создать новый продукт</string>
+  <string name="msg_create_new_pending_product_filled">Создать новый временный продукт \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Создать новый временный продукт</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Операция, которая будет выполнена:\n\nДобавить %1$s %2$s %3$s в запасы\nСрок годности: %4$s\nЦена: %5$s\nМагазин:%6$s\nМесто: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Операция, которая будет выполнена:\n\nУдалить %1$s %2$s %3$s из запасов\nМесто: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Транзакция, которая будет выполнена:\n\Отметить %1$s %2$s %3$s открытым\nРасположение: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Операция, которая будет выполнена:\n\nПереместить %1$s %2$s %3$s\nИз места: %4$s\nВ место: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -293,6 +320,10 @@
   <string name="msg_help_hide_on_stock">На странице обзора запасов перечислены все продукты, которые в настоящее время есть в наличии или меньше мин. количества. Включите, чтобы всегда скрывать этот продукт.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Продукт не может иметь родительский продукт потому что этот продукт уже используется как родительский продукт для другого продукта.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Товарные позиции, расположенные ниже, будут израсходованы в первую очередь.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Когда этот параметр включен, соответствующий продукт не может иметь собственного запаса. Это означает, что он не будет выбираться при покупке (полезно для родительских продуктов, которые просто используются в качестве сводного/общего представления вложенных продуктов).</string>
   <string name="msg_help_due_date_type">В зависимости от выбранного типа срока годности, отображение на странице обзора запасов будет другим. «Рекомендуемый» означает, что продукт может быть безопасным для употребления после наступления срока его годности. «Обязательный» означает, что продукт небезопасно употреблять после наступления срока его годности.</string>
   <string name="msg_help_default_due_days_format">Используйте долгое нажатие на элемент ниже, чтобы ввести дату вместо числа.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -309,6 +340,8 @@
   <string name="msg_help_qu_purchase">Настройка единицы измерения по умолчанию, при добавлении данного продукта в список покупок.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_accumulate_min_amount">Если включено, мин. количество субпродуктов будет накапливаться в этом продукте, это означает, что субпродукт никогда не будет «отсутствовать», в отличии от этого продукта.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Если этот параметр включен, открытые продукты будут учитываться как отсутствующие для расчета, если этого продукта меньше минимального количества в запасах.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Это количество используется для кнопок \"быстрого использования/вскрытия\" на странице обзора запасов (связано с единицей измерения продукта).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -426,6 +459,8 @@
   <string name="title_product_create">Создать продукт</string>
   <string name="title_product_edit">Редактировать продукт</string>
   <string name="title_tasks">Задачи</string>
+  <string name="title_task_entry">Ввод задачи</string>
+  <string name="title_task_add">Добавить задачу</string>
   <string name="title_master_data">Основные данные</string>
   <string name="title_stock_entries">Список запасов</string>
   <string name="title_shopping_list">Список покупок</string>
@@ -449,6 +484,11 @@
   <string name="title_external_barcode_input">Внешний сканер</string>
   <string name="title_confirmation">Подтверждение</string>
   <string name="title_choose_product">Выбрать продукт</string>
+  <string name="title_pending_products">Незавершенные продукты</string>
+  <string name="title_stored_purchases">Сохраненные покупки</string>
+  <string name="title_chores">Работы по дому</string>
+  <string name="title_chore">Работа по дому</string>
+
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
   <string name="title_specific">Конкретный продукт в запасах</string>
@@ -504,6 +544,7 @@
   <string name="subtitle_empty">Пусто</string>
   <string name="subtitle_done">Выполнено</string>
   <string name="subtitle_undone">Отменено</string>
+  <string name="subtitle_uncategorized">Без категории</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Никогда не просроченный</string>
   <string name="subtitle_selected">Выбрано</string>
@@ -524,6 +565,7 @@
   <string name="subtitle_product_hidden">Продукт скрыт</string>
   <string name="subtitle_product_not_hidden">Продукт не скрыт</string>
   <string name="subtitle_product_not_on_server">Продукта нет на сервере</string>
+  <string name="subtitle_barcodes_will_be_added">Там хранятся штрихкоды, которые добавляются к продукту с помощью операции сохранения.</string>
   <string name="subtitle_unknown">Неизвестный</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Поддерживается</string>
@@ -541,6 +583,7 @@
   <string name="subtitle_product_due_date">Тип, Дни по умолчанию (после открытия, замораживания, оттаивания)</string>
   <string name="subtitle_product_optional_properties">Состояние, Родительский продукт, Описание, Группа продукта, Энергетическая ценность, Изображение</string>
   <string name="subtitle_product_quantity_unit">В запасах, При покупках</string>
+  <string name="subtitle_synced_with_server">Синхронизировано с сервером</string>
 
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
@@ -622,6 +665,48 @@
     <item quantity="many">В списке покупок %1$d продуктов.</item>
     <item quantity="other">В списке покупок %1$d продуктов.</item>
   </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d работа по дому должны быть выполнены за следующие %2$d дней.</item>
+    <item quantity="few">%1$d работы по дому должны быть выполнены за следующие %2$d дней.</item>
+    <item quantity="many">%1$d работ по дому должны быть выполнены за следующие %2$d дней.</item>
+    <item quantity="other">%1$d работ по дому должны быть выполнены за следующие %2$d дней.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d работа по дому просрочена.</item>
+    <item quantity="few">%1$d работы по дому просрочены.</item>
+    <item quantity="many">%1$d работ по дому просрочено.</item>
+    <item quantity="other">%1$d работ по дому просрочено.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d работа по дому должна быть сделана сегодня. </item>
+    <item quantity="few">%1$d работы по дому должны быть сделаны сегодня.</item>
+    <item quantity="many">%1$d работ по дому должны быть сделаны сегодня.</item>
+    <item quantity="other">%1$d работ по дому должны быть сделаны сегодня.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d  работа назначена на Вас.</item>
+    <item quantity="few">%1$d работы назначены на Вас.</item>
+    <item quantity="many">%1$d работ назначено на Вас.</item>
+    <item quantity="other">%1$d работ назначено на Вас.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d задача должна быть выполнена.</item>
+    <item quantity="few">%1$d задачи должны быть выполнены.</item>
+    <item quantity="many">%1$d  задач должно быть выполнено.</item>
+    <item quantity="other">%1$d задач должно быть выполнено.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">Вам назначена %1$d задача.</item>
+    <item quantity="few">Вам назначено %1$d задачи.</item>
+    <item quantity="many">Вам назначено %1$d задач.</item>
+    <item quantity="other">Вам назначено %1$d задач.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">В базе данных %1$d продукт.</item>
@@ -653,8 +738,11 @@
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_in">Количество в %1$s</string>
   <string name="property_price">Цена</string>
+  <string name="property_price_average">Средняя цена</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Цена за %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s за %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Цена в %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -674,6 +762,7 @@
   <string name="property_factor">Множитель</string>
   <string name="property_barcode">Штрихкод</string>
   <string name="property_barcodes">Штрихкоды</string>
+  <string name="property_barcodes_insert">Штрихкоды: %1$s</string>
   <string name="property_days">Дни</string>
   <string name="property_purchased_date">Дата покупки</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -684,6 +773,8 @@
   <string name="property_due_type_expiration">Обязательный срок годности</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Срок годности</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Срок выполнения: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Следующий срок годности</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -696,6 +787,7 @@
   <string name="property_due_days_default_thawing">Срок годности после размораживания</string>
   <string name="property_location">Место</string>
   <string name="property_location_default">Место по умолчанию</string>
+  <string name="property_location_consume_default">Место потребления по умолчанию</string>
   <string name="property_notes">Заметки</string>
   <string name="property_locations">Места</string>
   <string name="property_store">Магазин</string>
@@ -710,13 +802,17 @@
   <string name="property_last_used">Последний раз использовано</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_last_price">Последняя цена</string>
+  <string name="property_last_price_unit">Последняя цена (за единицу)</string>
+  <string name="property_last_price_total">Последняя цена (всего)</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Обычно хранится</string>
   <string name="property_spoil_rate">Процент испорченного</string>
   <string name="property_price_history">История цен</string>
   <string name="property_product_group">Продуктовая группа</string>
   <string name="property_product_groups">Продуктовые группы</string>
+  <string name="property_assignment">Задание</string>
   <string name="property_value">Значение</string>
+  <string name="property_stock_value">Значение запасов</string>
   <string name="property_opened">вскрыто</string>
   <string name="property_not_opened">не вскрыто</string>
   <string name="property_is_freezer">Морозильник</string>
@@ -725,6 +821,8 @@
   <string name="property_active">Активный</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Никогда не показывать в обзоре запасов</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Отключить собственный запас</string>
   <string name="property_number">Количество</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Включить расчёт с учётом тары</string>
@@ -743,6 +841,10 @@
   <string name="property_picture">Изображение</string>
   <string name="property_note_singleline">Однострочная заметка</string>
   <string name="property_note_multiline">Многострочная заметка</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Однострочный</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Многострочный</string>
   <!-- %1$s is an amount together with quantity unit -->
   <string name="property_in_stock">В запасах: %1$s</string>
   <!-- %1$s is a sort mode like "name" or "due date" -->
@@ -752,9 +854,15 @@
   <string name="property_ungrouped">Не группированные</string>
   <!-- %1$s is a property like "product group" or "due date" -->
   <string name="property_extra_field">Дополнительное поле: %1$s</string>
+  <string name="property_task_category">Категория задачи</string>
   <string name="property_task_categories">Категории задач</string>
   <string name="property_calories">Калории</string>
   <string name="property_calories_unit">Калории (на единицу запаса)</string>
+  <string name="property_calories_total">Калории (всего)</string>
+  <string name="property_category">Категория</string>
+  <string name="property_assigned_to">Назначено на</string>
+  <string name="property_users">Пользователи</string>
+
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->
@@ -848,6 +956,7 @@
   <string name="category_general">Общее</string>
   <string name="category_stock">Запасы</string>
   <string name="category_server">Сервер</string>
+  <string name="category_user_settings">Настройки пользователя</string>
   <string name="category_scanner">Сканер</string>
   <string name="category_scanner_camera">Сканер камерой</string>
   <string name="category_scanner_external">Внешний сканер</string>
@@ -914,9 +1023,12 @@
   <string name="setting_default_amount_purchase">Обычное количество для покупки</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Обычное количество использования</string>
+  <string name="setting_treat_opened_as_out_of_stock">Рассматривать открытые как отсутствующие в наличии</string>
   <string name="setting_purchased_date">Запрашивать дата покупки</string>
   <string name="setting_purchased_date_description">На странице покупки и инвентаря</string>
   <string name="setting_use_quick_consume_amount">Применить \"Кол-во быстрого использования\" продукта</string>
+  <string name="setting_auto_add_shopping_list">Автоматическое добавление товаров в список покупок</string>
+  <string name="setting_auto_add_shopping_list_description">Которые находятся ниже их установленного мин. количества</string>
   <string name="setting_empty_value">Пусто</string>
   <string name="setting_sync_off">Синхронизация выключена</string>
   <string name="setting_loading">Загрузка значения</string>
