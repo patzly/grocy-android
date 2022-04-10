@@ -154,10 +154,6 @@
               style="@style/Widget.Grocy.TextView.ListItem.Title"
               android:text="@string/category_user_settings" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/subtitle_synced_with_server" />
-
           </LinearLayout>
 
           <ImageView
