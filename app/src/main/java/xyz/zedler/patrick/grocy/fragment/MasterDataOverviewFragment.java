@@ -230,6 +230,9 @@ public class MasterDataOverviewFragment extends BaseFragment {
     if (!viewModel.isFeatureEnabled(PREF.FEATURE_TASKS)) {
       binding.linearTaskCategories.setVisibility(View.GONE);
     }
+    if (!viewModel.isFeatureEnabled(PREF.FEATURE_CHORES)) {
+      binding.linearChores.setVisibility(View.GONE);
+    }
   }
 
   @Override
