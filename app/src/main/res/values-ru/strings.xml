@@ -223,6 +223,7 @@
   <string name="msg_task_completed">Помеченные выполненными задачи</string>
   <string name="msg_task_not_completed">Отметить задачу невыполненной</string>
   <string name="msg_task_undo">Отмененные задачи</string>
+  <string name="msg_chore_executed">Отслеживаемое выполнение работ по дому</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -397,6 +398,8 @@
   <string name="error_empty_tasks">Нет задач</string>
   <string name="error_empty_task_categories">Нет категорий задач</string>
   <string name="error_empty_unit_conversions">Без преобразования е.и. количества</string>
+  <string name="error_empty_chores">Нет работ</string>
+  <string name="error_empty_chores_sub">Перейдите в \"Основные данные\" и создайте что-нибудь</string>
   <string name="error_search">Нет результатов поиска</string>
   <string name="error_search_sub">Попробуйте другие условия</string>
   <string name="error_filter">Нечего показать</string>
