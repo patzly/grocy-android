@@ -650,7 +650,7 @@
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">У вас есть %1$d продукт в запасах стоимостью %2$s %3$s.</item>
-    <item quantity="few">У вас есть %1$d продукта в запасах стоимостью%2$s %3$s.</item>
+    <item quantity="few">У вас есть %1$d продукта в запасах стоимостью %2$s %3$s.</item>
     <item quantity="many">У вас есть %1$d продуктов в запасах стоимостью %2$s %3$s.</item>
     <item quantity="other">У вас есть %1$d продуктов в запасах стоимостью %2$s %3$s.</item>
   </plurals>
