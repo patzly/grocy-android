@@ -30,7 +30,7 @@
   <string name="action_transfer">Přesunout</string>
   <!-- This is an action – in English, it contains a verb.
    The string is visible after clicking long on the action button in inventory screen for example. -->
-  <string name="action_inventory">Aktualizovat množství</string>
+  <string name="action_inventory">Změnit množství</string>
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Spotřebovat vše</string>
 
