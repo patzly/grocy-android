@@ -63,9 +63,9 @@ import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class SettingsViewModel extends BaseViewModel {
 
-  public static final int THEME_SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-  public static final int THEME_LIGHT = AppCompatDelegate.MODE_NIGHT_NO;
-  public static final int THEME_DARK = AppCompatDelegate.MODE_NIGHT_YES;
+  public static final int DARK_MODE_SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+  public static final int DARK_MODE_NO = AppCompatDelegate.MODE_NIGHT_NO;
+  public static final int DARK_MODE_YES = AppCompatDelegate.MODE_NIGHT_YES;
 
   private static final String TAG = SettingsViewModel.class.getSimpleName();
   private final SharedPreferences sharedPrefs;
@@ -186,7 +186,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public int getTheme() {
-    return sharedPrefs.getInt(APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME);
+    return sharedPrefs.getInt(APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
   }
 
   public boolean isThemeActive(int theme) {
@@ -194,7 +194,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setTheme(int theme) {
-    sharedPrefs.edit().putInt(APPEARANCE.THEME, theme).apply();
+    sharedPrefs.edit().putInt(APPEARANCE.DARK_MODE, theme).apply();
   }
 
   public String getLanguage() {

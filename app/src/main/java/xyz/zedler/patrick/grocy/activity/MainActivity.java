@@ -63,6 +63,10 @@ import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
+import com.google.android.material.color.HarmonizedColors;
+import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.security.NoSuchAlgorithmException;
@@ -88,7 +92,9 @@ import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
@@ -97,6 +103,7 @@ import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -112,12 +119,20 @@ public class MainActivity extends AppCompatActivity {
   private NavController navController;
   private BroadcastReceiver networkReceiver;
   private BottomAppBarRefreshScrollBehavior scrollBehavior;
+  private boolean runAsSuperClass;
 
   public boolean isScrollRestored = false;
   private boolean debug;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    runAsSuperClass = savedInstanceState != null
+        && savedInstanceState.getBoolean(ARGUMENT.RUN_AS_SUPER_CLASS, false);
+
+    if (runAsSuperClass) {
+      super.onCreate(savedInstanceState);
+      return;
+    }
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
@@ -128,8 +143,19 @@ public class MainActivity extends AppCompatActivity {
 
     // this has to be placed before super.onCreate(savedInstanceState);
     // https://stackoverflow.com/a/53356918
-    int theme = sharedPrefs.getInt(APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME);
-    AppCompatDelegate.setDefaultNightMode(theme);
+    int modeNight = sharedPrefs.getInt(
+        SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+    );
+    int uiMode = getResources().getConfiguration().uiMode;
+    switch (modeNight) {
+      case AppCompatDelegate.MODE_NIGHT_NO:
+        uiMode = Configuration.UI_MODE_NIGHT_NO;
+        break;
+      case AppCompatDelegate.MODE_NIGHT_YES:
+        uiMode = Configuration.UI_MODE_NIGHT_YES;
+        break;
+    }
+    AppCompatDelegate.setDefaultNightMode(modeNight);
 
     // LANGUAGE
 
@@ -164,7 +190,46 @@ public class MainActivity extends AppCompatActivity {
       }
     }
 
-    super.onCreate(savedInstanceState);
+    /*switch (sharedPrefs.getString(PREF.THEME, DEF.THEME)) {
+      case THEME.RED:
+        setTheme(R.style.Theme_Grocy_Red);
+        break;
+      case THEME.YELLOW:
+        setTheme(R.style.Theme_Grocy_Yellow);
+        break;
+      case THEME.LIME:
+        setTheme(R.style.Theme_Grocy_Lime);
+        break;
+      case THEME.GREEN:
+        setTheme(R.style.Theme_Grocy_Green);
+        break;
+      case THEME.TEAL:
+        setTheme(R.style.Theme_Grocy_Teal);
+        break;
+      case THEME.BLUE:
+        setTheme(R.style.Theme_Grocy_Blue);
+        break;
+      case THEME.PURPLE:
+        setTheme(R.style.Theme_Grocy_Purple);
+        break;
+      default:
+        if (DynamicColors.isDynamicColorAvailable()) {
+          DynamicColors.applyToActivityIfAvailable(
+              this,
+              new DynamicColorsOptions.Builder().setOnAppliedCallback(
+                  activity -> HarmonizedColors.applyToContextIfAvailable(
+                      this, HarmonizedColorsOptions.createMaterialDefaults()
+                  )
+              ).build()
+          );
+        } else {
+          setTheme(R.style.Theme_Grocy_Yellow);
+        }
+        break;
+    }*/
+
+    Bundle bundleInstanceState = getIntent().getBundleExtra(ARGUMENT.INSTANCE_STATE);
+    super.onCreate(bundleInstanceState != null ? bundleInstanceState : savedInstanceState);
 
     // UTILS
 
@@ -288,14 +353,43 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void attachBaseContext(Context base) {
-    Locale userLocale = LocaleUtil.getUserLocale(base);
-    Locale.setDefault(userLocale);
-    Resources resources = base.getResources();
-    Configuration configuration = resources.getConfiguration();
-    configuration.setLocale(userLocale);
-    resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    if (runAsSuperClass) {
+      super.attachBaseContext(base);
+    } else {
+      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(base);
+      // Language
+      Locale userLocale = LocaleUtil.getUserLocale(base);
+      Locale.setDefault(userLocale);
+      // Night mode
+      int modeNight = sharedPrefs.getInt(
+          SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+      );
+      int uiMode = base.getResources().getConfiguration().uiMode;
+      switch (modeNight) {
+        case SettingsViewModel.DARK_MODE_NO:
+          uiMode = Configuration.UI_MODE_NIGHT_NO;
+          break;
+        case SettingsViewModel.DARK_MODE_YES:
+          uiMode = Configuration.UI_MODE_NIGHT_YES;
+          break;
+      }
+      AppCompatDelegate.setDefaultNightMode(modeNight);
+      // Apply config to resources
+      Resources resources = base.getResources();
+      Configuration config = resources.getConfiguration();
+      config.setLocale(userLocale);
+      config.uiMode = uiMode;
+      resources.updateConfiguration(config, resources.getDisplayMetrics());
+      super.attachBaseContext(base.createConfigurationContext(config));
+    }
+  }
 
-    super.attachBaseContext(base.createConfigurationContext(configuration));
+  @Override
+  public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+    if (!runAsSuperClass && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+      overrideConfiguration.setLocale(LocaleUtil.getUserLocale(this));
+    }
+    super.applyOverrideConfiguration(overrideConfiguration);
   }
 
   public void updateStartDestination() {
@@ -703,14 +797,6 @@ public class MainActivity extends AppCompatActivity {
 
   public void executeOnStart() {
     onStart();
-  }
-
-  @Override
-  public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
-      overrideConfiguration.setLocale(LocaleUtil.getUserLocale(this));
-    }
-    super.applyOverrideConfiguration(overrideConfiguration);
   }
 
   private void insertConscrypt() {
