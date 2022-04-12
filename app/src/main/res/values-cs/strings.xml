@@ -102,7 +102,7 @@
   <!-- This string should follow the equality between "all" and "Clear all items" -->
   <string name="action_clear_all">Vše</string>
   <!-- This string should follow the equality between "done" and "Clear done items" -->
-  <string name="action_clear_done">Hotovo</string>
+  <string name="action_clear_done">V košíku</string>
   <string name="action_display_help">Zobrazit texty nápovědy</string>
   <string name="action_demo_server">Demo server</string>
   <string name="action_own_server">Vlastní server</string>
