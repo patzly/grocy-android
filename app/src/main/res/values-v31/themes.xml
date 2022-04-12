@@ -19,7 +19,7 @@
 
 <resources>
 
-  <style name="Theme.Grocy" parent="Base.Grocy">
+  <!--style name="Theme.Grocy" parent="Base.Grocy">
     <item name="android:windowLightStatusBar">true</item>
     <item name="android:windowLightNavigationBar">true</item>
     <item name="android:navigationBarColor">@color/background</item>
@@ -28,6 +28,6 @@
     <item name="android:windowSplashScreenBackground">@color/primary</item>
     <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_anim</item>
     <item name="android:windowSplashScreenAnimationDuration">970</item>
-  </style>
+  </style-->
 
 </resources>

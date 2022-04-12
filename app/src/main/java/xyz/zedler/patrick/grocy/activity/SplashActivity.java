@@ -53,7 +53,7 @@ public class SplashActivity extends MainActivity {
 
   @Override
   public void onCreate(Bundle bundle) {
-    if (Build.VERSION.SDK_INT >= 31) {
+    /*if (Build.VERSION.SDK_INT >= 31) {
       super.onCreate(bundle);
 
       getSplashScreen().setOnExitAnimationListener(view -> {
@@ -72,7 +72,7 @@ public class SplashActivity extends MainActivity {
         });
         set.start();
       });
-    } else {
+    } else*/ {
       SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
       // DARK MODE
