@@ -86,7 +86,7 @@
   <string name="action_link">Odkaz</string>
   <string name="action_try_again">Zkusit znovu</string>
   <string name="action_open_scanner">Otevřít skener</string>
-  <string name="action_discard">Zrušit</string>
+  <string name="action_discard">Smazat</string>
   <string name="action_clear_form">Vyčistit formulář</string>
   <string name="action_toggle_done">Přepnout na hotovo</string>
   <string name="action_edit_notes">Upravit poznámky</string>
