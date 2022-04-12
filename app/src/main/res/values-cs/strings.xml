@@ -94,7 +94,7 @@
   <string name="action_purchase_done_items">Nakoupit produkty z nákupního košíku</string>
   <string name="action_purchase_all_items">Nakoupit všechno</string>
   <string name="action_skip_entry">Přeskočit položku</string>
-  <string name="action_toggle_flash">Přepnout blesk</string>
+  <string name="action_toggle_flash">Vybrat/nevybrat</string>
   <string name="action_delete_shopping_list">Smazat nákupní seznam</string>
   <string name="action_create_key">Vytvořit klíč</string>
   <string name="action_login">Přihlásit</string>
