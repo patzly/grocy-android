@@ -221,7 +221,7 @@
   </plurals>
   <string name="msg_task_mark">Označit jako hotový</string>
   <string name="msg_task_completed">Označený jako hotový</string>
-  <string name="msg_task_not_completed">Označený jako zbývající dokončit</string>
+  <string name="msg_task_not_completed">Označený jako nedokončený</string>
   <string name="msg_task_undo">Vrátit zpět</string>
   <string name="msg_chore_executed">Splnění povinnosti zaznamenáno</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
