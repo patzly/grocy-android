@@ -109,7 +109,7 @@
   <string name="action_enter_data_manually">Ruční vložení údajů o serveru</string>
   <string name="action_perform">Provést akci</string>
   <string name="action_share">Sdílet</string>
-  <string name="action_share_description">Řekněte svým přátelům o Grocy Android</string>
+  <string name="action_share_description">Řekněte ostatním o Grocy pro Android</string>
   <string name="action_no_filter">Žádný filtr</string>
   <string name="action_show_done_tasks">Zobrazit hotové úkoly</string>
   <string name="action_track_chore_execution">Splnění povinnosti</string>
