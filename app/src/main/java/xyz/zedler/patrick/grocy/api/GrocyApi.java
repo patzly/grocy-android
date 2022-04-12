@@ -21,11 +21,18 @@ package xyz.zedler.patrick.grocy.api;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class GrocyApi {
 
@@ -57,6 +64,46 @@ public class GrocyApi {
     public final static String CHORES = "chores";
   }
 
+  public final static class COMPARISON_OPERATOR {
+    private final String value;
+
+    private COMPARISON_OPERATOR(String value) {
+      this.value = value;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+      return value;
+    }
+
+    public final static COMPARISON_OPERATOR EQUAL = new COMPARISON_OPERATOR("%3D");
+    public final static COMPARISON_OPERATOR NOT_EQUAL = new COMPARISON_OPERATOR("!%3D");
+    public final static COMPARISON_OPERATOR LIKE = new COMPARISON_OPERATOR("~");
+    public final static COMPARISON_OPERATOR NOT_LIKE = new COMPARISON_OPERATOR("!~");
+    public final static COMPARISON_OPERATOR LESS = new COMPARISON_OPERATOR("%3C");
+    public final static COMPARISON_OPERATOR GREATER = new COMPARISON_OPERATOR("%3E");
+    public final static COMPARISON_OPERATOR LESS_OR_EQUAL = new COMPARISON_OPERATOR("%3C%3D");
+    public final static COMPARISON_OPERATOR GREATER_OR_EQUAL = new COMPARISON_OPERATOR("%3E%3D");
+    public final static COMPARISON_OPERATOR REGEX = new COMPARISON_OPERATOR("%C2%A7");
+  }
+
+  public final static class COMPARISON {
+    private final String field;
+    private final COMPARISON_OPERATOR operator;
+    private final String value;
+
+    public COMPARISON(String field, COMPARISON_OPERATOR operator, String value) {
+      this.field = field;
+      this.operator = operator;
+      this.value = value;
+    }
+
+    public String getQueryParam() {
+      return field + operator + value;
+    }
+  }
+
   public GrocyApi(Application application) {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     baseUrl = sharedPrefs.getString(
@@ -72,6 +119,25 @@ public class GrocyApi {
 
   private String getUrl(String command) {
     return baseUrl + "/api" + command;
+  }
+
+  public String getUrl(String command, COMPARISON... comparisons) {
+
+    StringBuilder url = new StringBuilder(getUrl(command));
+    if (comparisons.length > 0) {
+      url.append("?");
+
+      for (COMPARISON comparison : comparisons) {
+        url.append("query%5B%5D=");
+        url.append(comparison.getQueryParam());
+        url.append("&");
+      }
+
+      // Delete last & character
+      url.deleteCharAt(url.length() - 1);
+    }
+
+    return url.toString();
   }
 
   private String getUrl(@SuppressWarnings("SameParameterValue") String command, String... params) {
@@ -95,6 +161,14 @@ public class GrocyApi {
    */
   public String getObjects(String entity) {
     return getUrl("/objects/" + entity);
+  }
+
+  /**
+   * Returns all objects of the given entity and comparisons
+   */
+  public String getObjects(String entity, COMPARISON... comparisons) {
+
+    return getUrl("/objects/" + entity, comparisons);
   }
 
   /**
@@ -184,7 +258,10 @@ public class GrocyApi {
    * Returns all locations where the given product currently has stock
    */
   public String getStockLocationsFromProduct(int productId) {
-    return getUrl("/stock/products/" + productId + "/locations?include_sub_products=true");
+    return getUrl(
+            "/stock/products/" + productId + "/locations",
+            new COMPARISON("include_sub_products", COMPARISON_OPERATOR.EQUAL, "true")
+    );
   }
 
   /**
@@ -192,7 +269,10 @@ public class GrocyApi {
    * first in first out)
    */
   public String getStockEntriesFromProduct(int productId) {
-    return getUrl("/stock/products/" + productId + "/entries?include_sub_products=true");
+    return getUrl(
+            "/stock/products/" + productId + "/entries",
+            new COMPARISON("include_sub_products", COMPARISON_OPERATOR.EQUAL, "true")
+    );
   }
 
   /**
@@ -200,9 +280,11 @@ public class GrocyApi {
    */
   public String getStockVolatile() {
     return getUrl(
-        "/stock/volatile", "due_soon_days=" + sharedPrefs.getString(
-            STOCK.DUE_SOON_DAYS,
-            SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+        "/stock/volatile",
+        new COMPARISON("due_soon_days", COMPARISON_OPERATOR.EQUAL, sharedPrefs.getString(
+                STOCK.DUE_SOON_DAYS,
+                SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+            )
         )
     );
   }
@@ -320,6 +402,24 @@ public class GrocyApi {
    * Returns all recipes
    */
   public String getRecipes() {
-    return getObjects("recipes") + "?query[]=id>0";
+    return getObjects(
+            "recipes",
+            new COMPARISON("id", COMPARISON_OPERATOR.GREATER, "0")
+    );
+  }
+
+  public String getRecipeFulfillments() {
+    return getUrl(
+            "/recipes/fulfillment",
+            new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+    );
+  }
+
+  public String consumeRecipe(int recipeId) {
+    return getUrl("/recipes/" + recipeId + "/consume");
+  }
+
+  public String addNotFulfilledProductsToCartForRecipe(int recipeId) {
+    return getUrl("/recipes/" + recipeId + "/add-not-fulfilled-products-to-shoppinglist");
   }
 }

@@ -566,7 +566,7 @@
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
   <string name="subtitle_synced_with_server">Synced with server</string>
   <!-- %1$s and %2$s are numbers -->
-  <string name="subtitle_recipe_servings">%1$s / %2$s serving(s)</string>
+  <string name="subtitle_recipe_calories">%1$s calories</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -1042,5 +1042,8 @@
   <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
   <string name="title_recipes">Recipes</string>
+  <string name="error_empty_recipes">No recipes</string>
+    <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
+    <string name="subtitle_recipe_due_score">Due score: %1$s</string>
 
 </resources>

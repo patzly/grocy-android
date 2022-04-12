@@ -152,7 +152,7 @@ public class RecipesFragment extends BaseFragment implements
         } else if (viewModel.getFilterChipLiveDataStatus().getData().isActive()) {
           info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
         } else {
-          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_TASKS);
+          info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_RECIPES);
         }
         viewModel.getInfoFullscreenLive().setValue(info);
       } else {
@@ -161,6 +161,7 @@ public class RecipesFragment extends BaseFragment implements
       if (binding.recycler.getAdapter() instanceof RecipeEntryAdapter) {
         ((RecipeEntryAdapter) binding.recycler.getAdapter()).updateData(
             items,
+            viewModel.getRecipeFulfillments(),
             viewModel.getSortMode(),
             viewModel.isSortAscending()
         );
@@ -170,6 +171,7 @@ public class RecipesFragment extends BaseFragment implements
                 requireContext(),
                 (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
+                viewModel.getRecipeFulfillments(),
                 this,
                 viewModel.getSortMode(),
                 viewModel.isSortAscending()
@@ -204,6 +206,36 @@ public class RecipesFragment extends BaseFragment implements
               || position >= displayedItems.size()) {
             return;
           }
+
+          underlayButtons.add(new UnderlayButton(
+                  R.drawable.ic_round_restaurant_menu,
+                  pos -> {
+                    if (pos >= displayedItems.size()) {
+                      return;
+                    }
+                    swipeBehavior.recoverLatestSwipedItem();
+                    new Handler().postDelayed(() -> {
+                      Recipe recipe = displayedItems.get(pos);
+                      viewModel.consumeRecipe(recipe.getId());
+                      activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
+                    }, 100);
+                  }
+          ));
+
+          underlayButtons.add(new UnderlayButton(
+                  R.drawable.ic_round_add_shopping_cart,
+                  pos -> {
+                    if (pos >= displayedItems.size()) {
+                      return;
+                    }
+                    swipeBehavior.recoverLatestSwipedItem();
+                    new Handler().postDelayed(() -> {
+                      Recipe recipe = displayedItems.get(pos);
+                      viewModel.addNotFulfilledProductsToCartForRecipe(recipe.getId());
+                      activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
+                    }, 100);
+                  }
+          ));
         }
       };
     }

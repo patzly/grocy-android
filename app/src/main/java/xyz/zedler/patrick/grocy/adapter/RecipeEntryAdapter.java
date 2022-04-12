@@ -21,13 +21,10 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -37,13 +34,12 @@ import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class RecipeEntryAdapter extends
@@ -55,6 +51,7 @@ public class RecipeEntryAdapter extends
   private Context context;
   private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<Recipe> recipes;
+  private final ArrayList<RecipeFulfillment> recipeFulfillments;
   private final RecipesItemAdapterListener listener;
   private String sortMode;
   private boolean sortAscending;
@@ -63,6 +60,7 @@ public class RecipeEntryAdapter extends
       Context context,
       LinearLayoutManager linearLayoutManager,
       ArrayList<Recipe> recipes,
+      ArrayList<RecipeFulfillment> recipeFulfillments,
       RecipesItemAdapterListener listener,
       String sortMode,
       boolean sortAscending
@@ -70,6 +68,7 @@ public class RecipeEntryAdapter extends
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
     this.recipes = new ArrayList<>(recipes);
+    this.recipeFulfillments = new ArrayList<>(recipeFulfillments);
     this.listener = listener;
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
@@ -115,18 +114,49 @@ public class RecipeEntryAdapter extends
     int position = viewHolder.getAdapterPosition();
 
     Recipe recipe = recipes.get(position);
+    RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe.getId());
     RecipeViewHolder holder = (RecipeViewHolder) viewHolder;
 
     // NAME
 
     holder.binding.title.setText(recipe.getName());
-    holder.binding.servings.setText(
-        context.getString(
-            R.string.subtitle_recipe_servings,
-            String.valueOf(recipe.getBaseServings()),
-            String.valueOf(recipe.getDesiredServings())
-        )
-    );
+
+    if (recipeFulfillment != null) {
+      // CALORIES
+
+      holder.binding.calories.setText(
+              context.getString(
+                      R.string.subtitle_recipe_calories,
+                      String.valueOf(recipeFulfillment.getCalories())
+              )
+      );
+
+      // DUE SCORE
+      int due_score = recipeFulfillment.getDueScore();
+      int color;
+
+      holder.binding.dueScore.setTypeface(
+              ResourcesCompat.getFont(context, R.font.jost_medium)
+      );
+
+      if (due_score == 0) {
+        color = R.color.retro_green_fg;
+      }
+      else if (due_score <= 10) {
+        color = R.color.retro_yellow_fg;
+      }
+      else {
+        color = R.color.retro_red_fg;
+      }
+      holder.binding.dueScore.setTextColor(ContextCompat.getColor(context, color));
+
+      holder.binding.dueScore.setText(
+              context.getString(
+                      R.string.subtitle_recipe_due_score,
+                      String.valueOf(recipeFulfillment.getDueScore())
+              )
+      );
+    }
 
     // CONTAINER
 
@@ -147,6 +177,7 @@ public class RecipeEntryAdapter extends
 
   public void updateData(
       ArrayList<Recipe> newList,
+      ArrayList<RecipeFulfillment> newRecipeFulfillments,
       String sortMode,
       boolean sortAscending
   ) {
@@ -154,6 +185,8 @@ public class RecipeEntryAdapter extends
     RecipeEntryAdapter.DiffCallback diffCallback = new RecipeEntryAdapter.DiffCallback(
         this.recipes,
         newList,
+        this.recipeFulfillments,
+        newRecipeFulfillments,
         this.sortMode,
         sortMode,
         this.sortAscending,
@@ -162,6 +195,8 @@ public class RecipeEntryAdapter extends
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipes.clear();
     this.recipes.addAll(newList);
+    this.recipeFulfillments.clear();
+    this.recipeFulfillments.addAll(newRecipeFulfillments);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
@@ -171,6 +206,8 @@ public class RecipeEntryAdapter extends
 
     ArrayList<Recipe> oldItems;
     ArrayList<Recipe> newItems;
+    ArrayList<RecipeFulfillment> oldRecipeFulfillments;
+    ArrayList<RecipeFulfillment> newRecipeFulfillments;
     String sortModeOld;
     String sortModeNew;
     boolean sortAscendingOld;
@@ -179,13 +216,17 @@ public class RecipeEntryAdapter extends
     public DiffCallback(
         ArrayList<Recipe> oldItems,
         ArrayList<Recipe> newItems,
+        ArrayList<RecipeFulfillment> oldRecipeFulfillments,
+        ArrayList<RecipeFulfillment> newRecipeFulfillments,
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
         boolean sortAscendingNew
     ) {
-      this.newItems = newItems;
       this.oldItems = oldItems;
+      this.newItems = newItems;
+      this.oldRecipeFulfillments = oldRecipeFulfillments;
+      this.newRecipeFulfillments = newRecipeFulfillments;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
@@ -220,6 +261,12 @@ public class RecipeEntryAdapter extends
         return false;
       }
       if (sortAscendingOld != sortAscendingNew) {
+        return false;
+      }
+
+      RecipeFulfillment recipeFulfillmentOld = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(oldRecipeFulfillments, oldItem.getId());
+      RecipeFulfillment recipeFulfillmentNew = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(newRecipeFulfillments, newItem.getId());
+      if (recipeFulfillmentOld == null || recipeFulfillmentNew == null || recipeFulfillmentOld != recipeFulfillmentNew) {
         return false;
       }
 

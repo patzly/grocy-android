@@ -28,6 +28,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.User;
 
 public class RecipesRepository {
@@ -46,22 +47,19 @@ public class RecipesRepository {
   public static class RecipesData {
 
     private final List<Recipe> recipes;
-    private final List<User> users;
+    private final List<RecipeFulfillment> recipeFulfillments;
 
-    public RecipesData(
-        List<Recipe> recipes,
-        List<User> users
-    ) {
+    public RecipesData(List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments) {
       this.recipes = recipes;
-      this.users = users;
+      this.recipeFulfillments = recipeFulfillments;
     }
 
     public List<Recipe> getRecipes() {
       return recipes;
     }
 
-    public List<User> getUsers() {
-      return users;
+    public List<RecipeFulfillment> getRecipeFulfillments() {
+      return recipeFulfillments;
     }
   }
 
@@ -69,12 +67,26 @@ public class RecipesRepository {
     Single
         .zip(
             appDatabase.recipeDao().getRecipes(),
-            appDatabase.userDao().getUsers(),
+            appDatabase.recipeFulfillmentDao().getRecipeFulfillments(),
             RecipesData::new
         )
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
         .subscribe();
+  }
+
+  public void updateDatabase(List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, Runnable listener) {
+
+    Single.concat(
+            appDatabase.recipeDao().deleteRecipes(),
+            appDatabase.recipeDao().insertRecipes(recipes),
+            appDatabase.recipeFulfillmentDao().deleteRecipeFulfillments(),
+            appDatabase.recipeFulfillmentDao().insertRecipeFulfillments(recipeFulfillments)
+    )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally(listener::run)
+            .subscribe();
   }
 }

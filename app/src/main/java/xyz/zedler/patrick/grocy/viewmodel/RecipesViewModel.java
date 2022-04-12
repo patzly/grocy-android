@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -76,6 +77,7 @@ public class RecipesViewModel extends BaseViewModel {
   private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
 
   private List<Recipe> recipes;
+  private List<RecipeFulfillment> recipeFulfillments;
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
@@ -111,6 +113,7 @@ public class RecipesViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       recipes = data.getRecipes();
+      recipeFulfillments = data.getRecipeFulfillments();
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
@@ -134,17 +137,19 @@ public class RecipesViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::updateFilteredRecipes, this::onDownloadError);
+    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
-      dlHelper.updateRecipes(dbChangedTime, choreEntries -> {
-        this.recipes = choreEntries;
+      dlHelper.updateRecipes(dbChangedTime, recipes -> {
+        this.recipes = recipes;
 
         updateFilteredRecipes();
+      }), dlHelper.updateRecipeFulfillments(dbChangedTime, recipeFulfillments -> {
+        this.recipeFulfillments = recipeFulfillments;
       })
     );
 
     if (queue.isEmpty()) {
-      updateFilteredRecipes();
+      onQueueEmpty();
       return;
     }
 
@@ -162,6 +167,14 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
     downloadData();
+  }
+
+  private void onQueueEmpty() {
+    repository.updateDatabase(
+            this.recipes,
+            this.recipeFulfillments,
+            this::updateFilteredRecipes
+    );
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -201,6 +214,26 @@ public class RecipesViewModel extends BaseViewModel {
         response -> downloadData(),
         this::showErrorMessage
     );
+  }
+
+  public void consumeRecipe(int recipeId) {
+    dlHelper.get(
+        grocyApi.consumeRecipe(recipeId),
+        response -> downloadData(),
+        this::showErrorMessage
+    );
+  }
+
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+    dlHelper.get(
+        grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
+        response -> downloadData(),
+        this::showErrorMessage
+    );
+  }
+
+  public ArrayList<RecipeFulfillment> getRecipeFulfillments() {
+    return new ArrayList<>(recipeFulfillments);
   }
 
   public boolean isSearchActive() {

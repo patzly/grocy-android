@@ -24,6 +24,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -58,7 +59,7 @@ public class Recipe implements Parcelable {
 
   @ColumnInfo(name = "product_id")
   @SerializedName("product_id")
-  private int productId;
+  private String productId;
 
   @ColumnInfo(name = "type")
   @SerializedName("type")
@@ -88,7 +89,7 @@ public class Recipe implements Parcelable {
     id = parcel.readInt();
     name = parcel.readString();
     description = parcel.readString();
-    productId = parcel.readInt();
+    productId = parcel.readString();
     type = parcel.readString();
     pictureFileName = parcel.readString();
     baseServings = parcel.readInt();
@@ -101,7 +102,7 @@ public class Recipe implements Parcelable {
     dest.writeInt(id);
     dest.writeString(name);
     dest.writeString(description);
-    dest.writeInt(productId);
+    dest.writeString(productId);
     dest.writeString(type);
     dest.writeString(pictureFileName);
     dest.writeInt(baseServings);
@@ -146,12 +147,20 @@ public class Recipe implements Parcelable {
     this.description = description;
   }
 
-  public int getProductId() {
+  public String getProductId() {
     return productId;
   }
 
-  public void setProductId(int productId) {
+  public Integer getProductIdAsInt() {
+    return productId.isEmpty() ? null : Integer.getInteger(productId);
+  }
+
+  public void setProductId(String productId) {
     this.productId = productId;
+  }
+
+  public void setProductId(Integer productId) {
+    this.productId = productId == null ? "" : productId.toString();
   }
 
   public String getType() {
