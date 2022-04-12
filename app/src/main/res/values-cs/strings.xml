@@ -290,7 +290,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">Provede se:\n\nPřidat %1$s %2$s produktu %3$s do zásob\nDatum min trvanlivosti: %4$s\nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_consume">Transakce, která bude provedena:\n\nOdebrat %1$s %2$s %3$s ze zásob\nUmístění: %4$s</string>
+  <string name="msg_quick_mode_confirm_consume">Provede se:\n\nOdebrat %1$s %2$s produktu %3$s ze zásob\nUmístění: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_open">Provede se:\nOznačit %1$s %2$s produktu %3$s jako otevřené\nUmístění: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
