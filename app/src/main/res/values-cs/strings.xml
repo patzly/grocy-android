@@ -268,7 +268,7 @@
     <item quantity="many">%1$s %2$s bude ubráno ze zásob</item>
     <item quantity="other">%1$s %2$s bude ubráno ze zásob</item>
   </plurals>
-  <string name="msg_transfer_tare_weight">Produkty s povolenou tárou zatím nepodporují možnost přesunu.</string>
+  <string name="msg_transfer_tare_weight">Produkty s vyplněnou tárou zatím není možné přesouvat</string>
   <string name="msg_item_marked_as_done">Položka nastavena jako hotová</string>
   <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
