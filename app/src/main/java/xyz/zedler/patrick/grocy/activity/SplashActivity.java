@@ -146,7 +146,8 @@ public class SplashActivity extends MainActivity {
         LayerDrawable splashContent = (LayerDrawable) ResourcesCompat.getDrawable(
             getResources(), R.drawable.splash_content, getTheme()
         );
-        getWindow().getDecorView().setBackground(splashContent);
+        // TODO: Uncomment this here when Android 12 splash screen is properly implemented
+        // getWindow().getDecorView().setBackground(splashContent);
 
         try {
           if (speedUpStart) {
@@ -154,6 +155,9 @@ public class SplashActivity extends MainActivity {
                 this::startNewMainActivity, 50
             );
           } else {
+            // TODO: Remove the next line when Android 12 splash screen is properly implemented
+            getWindow().getDecorView().setBackground(splashContent);
+
             assert splashContent != null;
             ViewUtil.startIcon(splashContent.findDrawableByLayerId(R.id.splash_logo));
             new Handler(Looper.getMainLooper()).postDelayed(
