@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
     Resources resBase = getBaseContext().getResources();
     Configuration configBase = resBase.getConfiguration();
     configBase.setLocale(userLocale);
+    configBase.uiMode = uiMode;
     resBase.updateConfiguration(configBase, resBase.getDisplayMetrics());
     // app
     Resources resApp = getApplicationContext().getResources();
