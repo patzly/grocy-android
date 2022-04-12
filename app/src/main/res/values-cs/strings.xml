@@ -231,12 +231,12 @@
   <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
   <string name="msg_inventoried">Produkt %1$s má teď zásobu %2$s %3$s, rozdíl je %4$s</string>
   <!-- %1$s is a product name -->
-  <string name="msg_not_in_stock">%1$s není v zásobách</string>
+  <string name="msg_not_in_stock">%1$s není v zásobě</string>
   <string name="msg_no_connection">Není připojení</string>
   <!-- %1$s is a product name -->
-  <string name="msg_no_stock_locations">Žádné umístění zásob pro %1$s</string>
+  <string name="msg_no_stock_locations">Produkt %1$s nemá žádné umístění</string>
   <!-- %1$s is a product name -->
-  <string name="msg_no_stock_entries">Žádná položka zásob pro %1$s</string>
+  <string name="msg_no_stock_entries">Produkt %1$s nemá žádnou zásobu</string>
   <string name="msg_not_found">Produkt nenalezen</string>
   <string name="msg_undone_transaction">Vrácené transakce</string>
   <string name="msg_failed_to_sync">Chyba synchronizace záznamů</string>
