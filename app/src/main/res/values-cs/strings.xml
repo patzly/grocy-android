@@ -253,7 +253,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_master_delete_product">Opravdu chcete smazat produkt \"%1$s\"?\n\nTímto smažete produkt ze všech přehledů. Pokud tento produkt již nepotřebujete, ale měl by být ponechán např. v historii nákupů, jen ho odznačte jako aktivní.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
-  <string name="msg_master_delete_usage">Tento %1$s je stále používán</string>
+  <string name="msg_master_delete_usage">Označení „%1$s” je stále používáno</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
     <item quantity="one">%1$s %2$s bude přidán do zásob</item>
