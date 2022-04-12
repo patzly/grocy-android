@@ -110,7 +110,7 @@
   <string name="action_perform">Provést akci</string>
   <string name="action_share">Sdílet</string>
   <string name="action_share_description">Řekněte ostatním o Grocy pro Android</string>
-  <string name="action_no_filter">Žádný filtr</string>
+  <string name="action_no_filter">Bez filtru</string>
   <string name="action_show_done_tasks">Zobrazit hotové úkoly</string>
   <string name="action_track_chore_execution">Splnění povinnosti</string>
   <string name="action_skip_next_chore_schedule">Přeskočit aktuální datum splnění úkolu</string>
