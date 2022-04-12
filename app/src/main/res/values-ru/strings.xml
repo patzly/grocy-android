@@ -223,6 +223,7 @@
   <string name="msg_task_completed">Помеченные выполненными задачи</string>
   <string name="msg_task_not_completed">Отметить задачу невыполненной</string>
   <string name="msg_task_undo">Отмененные задачи</string>
+  <string name="msg_chore_executed">Отслеживаемое выполнение работ по дому</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Куплено %1$s %2$s %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -312,7 +313,7 @@
   <string name="msg_choose_option_below">Пожалуйста, выберите один вариант снизу</string>
   <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
   <string name="msg_qr_code_scan_token">Вы используете надстройку Grocy Home Assistant. Создайте долговечный токен доступа в настройках вашего профиля Home Assistant (последний раздел). Под полем токена нажмите на \"Сгенерировать QR-код\" и отсканируйте его здесь.</string>
-  <string name="msg_port_connection_info_without_port">Приложение подключится к порту %1$s.\тЕсли вы хотите подключить его к другому порту, вы можете добавить порт к адресу.\nПример: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_without_port">Приложение подключится к порту %1$s.\nЕсли вы хотите подключить его к другому порту, вы можете добавить порт к адресу.\nПример: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Приложение подключится к порту %1$s.</string>
   <string name="msg_not_implemented_yet">Скоро это будет реализовано. До тех пор используйте, пожалуйста, веб-интерфейс.</string>
   <string name="stock_disabled">Вы отключили функцию управления запасами в своей конфигурации Grocy, вероятно, потому что она вам не нужна. Но в данный момент это приложение может только управлять запасами, поэтому оно может не принести вам особой пользы.</string>
@@ -397,6 +398,8 @@
   <string name="error_empty_tasks">Нет задач</string>
   <string name="error_empty_task_categories">Нет категорий задач</string>
   <string name="error_empty_unit_conversions">Без преобразования е.и. количества</string>
+  <string name="error_empty_chores">Нет работ</string>
+  <string name="error_empty_chores_sub">Перейдите в \"Основные данные\" и создайте что-нибудь</string>
   <string name="error_search">Нет результатов поиска</string>
   <string name="error_search_sub">Попробуйте другие условия</string>
   <string name="error_filter">Нечего показать</string>
@@ -647,7 +650,7 @@
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">У вас есть %1$d продукт в запасах стоимостью %2$s %3$s.</item>
-    <item quantity="few">У вас есть %1$d продукта в запасах стоимостью%2$s %3$s.</item>
+    <item quantity="few">У вас есть %1$d продукта в запасах стоимостью %2$s %3$s.</item>
     <item quantity="many">У вас есть %1$d продуктов в запасах стоимостью %2$s %3$s.</item>
     <item quantity="other">У вас есть %1$d продуктов в запасах стоимостью %2$s %3$s.</item>
   </plurals>

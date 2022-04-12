@@ -19,8 +19,15 @@
 
 package xyz.zedler.patrick.grocy.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -34,60 +41,167 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SplashActivity extends AppCompatActivity {
 
+  @Override
   public void onCreate(Bundle bundle) {
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-    int theme = sharedPrefs.getInt(APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME);
-    AppCompatDelegate.setDefaultNightMode(theme);
+    if (Build.VERSION.SDK_INT >= 31) {
+      super.onCreate(bundle);
 
-    super.onCreate(bundle);
-
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-      startMainActivity();
-      return;
-    }
-
-    LayerDrawable splashContent = (LayerDrawable) ResourcesCompat.getDrawable(
-        getResources(), R.drawable.splash_content, null
-    );
-
-    getWindow().setBackgroundDrawable(splashContent);
-
-    boolean speedUpStart = sharedPrefs.getBoolean(
-        Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
-        Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
-    );
-
-    try {
-      if (speedUpStart) {
-        new Handler(Looper.getMainLooper()).postDelayed(
-            this::startMainActivity, 50
+      getSplashScreen().setOnExitAnimationListener(view -> {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+            ObjectAnimator.ofFloat(view, "alpha", 0),
+            ObjectAnimator.ofFloat(view.getIconView(), "alpha", 0)
         );
-      } else {
-        assert splashContent != null;
-        Drawable splashLogo = splashContent.findDrawableByLayerId(R.id.splash_logo);
-        AnimatedVectorDrawable logo = (AnimatedVectorDrawable) splashLogo;
-        logo.start();
-        new Handler(Looper.getMainLooper()).postDelayed(
-            this::startMainActivity, 800
-        );
+        set.setDuration(400);
+        set.setStartDelay(550);
+        set.addListener(new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationEnd(Animator animation, boolean isReverse) {
+            view.remove();
+          }
+        });
+        set.start();
+      });
+    } else {
+      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+      // DARK MODE
+
+      int modeNight = sharedPrefs.getInt(
+          SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+      );
+      int uiMode = getResources().getConfiguration().uiMode;
+      switch (modeNight) {
+        case SettingsViewModel.DARK_MODE_NO:
+          uiMode = Configuration.UI_MODE_NIGHT_NO;
+          break;
+        case SettingsViewModel.DARK_MODE_YES:
+          uiMode = Configuration.UI_MODE_NIGHT_YES;
+          break;
       }
-    } catch (Exception e) {
-      startMainActivity();
+      AppCompatDelegate.setDefaultNightMode(modeNight);
+      // Apply config to resources
+      Resources resBase = getBaseContext().getResources();
+      Configuration configBase = resBase.getConfiguration();
+      configBase.uiMode = uiMode;
+      resBase.updateConfiguration(configBase, resBase.getDisplayMetrics());
+
+      // THEME
+
+      /*switch (sharedPrefs.getString(PREF.THEME, DEF.THEME)) {
+        case THEME.RED:
+          setTheme(R.style.Theme_Grocy_Red);
+          break;
+        case THEME.YELLOW:
+          setTheme(R.style.Theme_Grocy_Yellow);
+          break;
+        case THEME.LIME:
+          setTheme(R.style.Theme_Grocy_Lime);
+          break;
+        case THEME.GREEN:
+          setTheme(R.style.Theme_Grocy_Green);
+          break;
+        case THEME.TEAL:
+          setTheme(R.style.Theme_Grocy_Teal);
+          break;
+        case THEME.BLUE:
+          setTheme(R.style.Theme_Grocy_Blue);
+          break;
+        case THEME.PURPLE:
+          setTheme(R.style.Theme_Grocy_Purple);
+          break;
+        default:
+          if (DynamicColors.isDynamicColorAvailable()) {
+            DynamicColors.applyToActivityIfAvailable(this);
+          } else {
+            setTheme(R.style.Theme_Grocy_Yellow);
+          }
+          break;
+      }*/
+
+      if (bundle == null) {
+        bundle = new Bundle();
+      }
+      bundle.putBoolean(ARGUMENT.RUN_AS_SUPER_CLASS, true);
+      super.onCreate(bundle);
+
+      // new SystemBarBehavior(this).setUp();
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        boolean speedUpStart = sharedPrefs.getBoolean(
+            Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
+            Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
+        );
+
+        LayerDrawable splashContent = (LayerDrawable) ResourcesCompat.getDrawable(
+            getResources(), R.drawable.splash_content, getTheme()
+        );
+        getWindow().getDecorView().setBackground(splashContent);
+
+        try {
+          if (speedUpStart) {
+            new Handler(Looper.getMainLooper()).postDelayed(
+                this::startNewMainActivity, 50
+            );
+          } else {
+            assert splashContent != null;
+            ViewUtil.startIcon(splashContent.findDrawableByLayerId(R.id.splash_logo));
+            new Handler(Looper.getMainLooper()).postDelayed(
+                this::startNewMainActivity, 900
+            );
+          }
+        } catch (Exception e) {
+          startNewMainActivity();
+        }
+      } else {
+        startNewMainActivity();
+      }
     }
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
+  protected void attachBaseContext(Context base) {
+    if (Build.VERSION.SDK_INT >= 31) {
+      super.attachBaseContext(base);
+      return;
+    }
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(base);
+    // Night mode
+    int modeNight = sharedPrefs.getInt(
+        SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
+    );
+    int uiMode = base.getResources().getConfiguration().uiMode;
+    switch (modeNight) {
+      case SettingsViewModel.DARK_MODE_NO:
+        uiMode = Configuration.UI_MODE_NIGHT_NO;
+        break;
+      case SettingsViewModel.DARK_MODE_YES:
+        uiMode = Configuration.UI_MODE_NIGHT_YES;
+        break;
+    }
+    AppCompatDelegate.setDefaultNightMode(modeNight);
+    // Apply config to resources
+    Resources resources = base.getResources();
+    Configuration config = resources.getConfiguration();
+    config.uiMode = uiMode;
+    resources.updateConfiguration(config, resources.getDisplayMetrics());
+    super.attachBaseContext(base.createConfigurationContext(config));
   }
 
-  private void startMainActivity() {
-    startActivity(new Intent(this, MainActivity.class));
+  private void startNewMainActivity() {
+    Intent intent = new Intent(this, MainActivity.class);
+    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+    startActivity(intent);
     overridePendingTransition(0, R.anim.splash_fade_out);
     finish();
   }

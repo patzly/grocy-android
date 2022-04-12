@@ -610,7 +610,7 @@ public class TransferViewModel extends BaseViewModel {
     Location currentToLocation = formData.getToLocationLive().getValue();
     int selectedId = currentToLocation != null ? currentToLocation.getId() : -1;
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>());
+    bundle.putParcelableArrayList(Constants.ARGUMENT.LOCATIONS, new ArrayList<>(locations));
     bundle.putInt(Constants.ARGUMENT.SELECTED_ID, selectedId);
     bundle.putString(ARGUMENT.TITLE, getString(R.string.title_location_to));
     showBottomSheet(new LocationsBottomSheet(), bundle);

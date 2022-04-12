@@ -1,3 +1,6 @@
+2.2.1:
+- Fixed: On transfer page no locations were selectable as target (#515)
+
 2.2.0:
 Please update your server to the latest version if you want to use all new features.
 - New: Support for grocy server v3.3.0, no support for v3.1.2 and lower
