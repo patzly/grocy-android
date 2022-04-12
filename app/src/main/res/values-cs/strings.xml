@@ -239,7 +239,7 @@
   <string name="msg_no_stock_entries">Produkt %1$s nemá žádnou zásobu</string>
   <string name="msg_not_found">Produkt nenalezen</string>
   <string name="msg_undone_transaction">Vrácené transakce</string>
-  <string name="msg_failed_to_sync">Chyba synchronizace záznamů</string>
+  <string name="msg_failed_to_sync">Synchronizace informací z aplikace se nezdařila</string>
   <string name="msg_synced">Záznamy úspěšně synchronizovány</string>
   <!-- %1$s is a shopping list name -->
   <string name="msg_added_missing_products">Přidat chybějící produkty do %1$s</string>
