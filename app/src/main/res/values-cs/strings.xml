@@ -88,7 +88,7 @@
   <string name="action_open_scanner">Otevřít skener</string>
   <string name="action_discard">Smazat</string>
   <string name="action_clear_form">Vyčistit formulář</string>
-  <string name="action_toggle_done">Přepnout na hotovo</string>
+  <string name="action_toggle_done">Přidat/odebrat z košíku</string>
   <string name="action_edit_notes">Upravit poznámky</string>
   <string name="action_add_missing">Přidat chybějící produkt</string>
   <string name="action_purchase_done_items">Nakoupit produkty z nákupního košíku</string>
