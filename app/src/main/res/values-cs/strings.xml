@@ -299,7 +299,7 @@
   <string name="msg_quick_mode_confirm_inventory">Provede se:\nZměna množství produktu %1$s na %2$s %3$s\nna všech přidaných baleních\nDatum min. trvanlivosti:%4$s \nCena: %5$s\nObchod: %6$s\nUmístění: %7$s</string>
   <string name="msg_compatibility">Tato verze aplikace není kompatibilní s verzí grocy na serveru.\n\nVerze na serveru: %1$s\n\nPodporovaná verze: %2$s\n\nJestliže má aktuální verze vyšší první číslo než podporovaná verze, mohlo by dojít až ke ztrátě dat na serveru nebo (což je pravděpodobnější) ke zhroucení aplikace.\nJestliže má nová verze vyšší druhé nebo třetí číslo, pak je riziko problémů malé.</string>
   <string name="msg_logout">Na váš server se nic neuloží. Budete přesměrováni na přihlašovací stránku.</string>
-  <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou nastálo uloženy!\nVše co zapíšete zůstane ale veřejné, dokud je server automaticky nepřepíše do výchozího stavu jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
+  <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou trvalé!\nVše co zapíšete ale zůstane veřejné, dokud se server neuvede do výchozího stavu, což se děje jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
   <string name="msg_logout_demo_short">Veřejný demo server. Klikněte pro více informací.</string>
   <string name="msg_restart">Je vyžadován restart aplikace pro řádné načtení nové konfigurace Grocy.</string>
   <string name="msg_shortcuts">Můžete povolit až 4 zkratky:</string>
