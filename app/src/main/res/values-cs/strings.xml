@@ -162,7 +162,7 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">%1$s %2$s produkty %3$s jsou zkažené</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_opened">Označit %1$s %2$s z %3$s jako otevřené</string>
+  <string name="msg_opened">Označit %1$s %2$s produktu %3$s jako otevřené</string>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d vrácený</item>
