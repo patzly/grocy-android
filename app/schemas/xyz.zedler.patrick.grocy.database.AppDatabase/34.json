@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 34,
-    "identityHash": "4f5cf48edf95e2ca506f6e4da0628884",
+    "identityHash": "49b45af2bb1eb4e13198947b30300d2d",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -1519,12 +1519,148 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_id` TEXT, `type` TEXT, `picture_file_name` TEXT, `base_servings` INTEGER NOT NULL, `desired_servings` INTEGER NOT NULL, `not_check_shoppinglist` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pictureFileName",
+            "columnName": "picture_file_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "baseServings",
+            "columnName": "base_servings",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "desiredServings",
+            "columnName": "desired_servings",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notCheckShoppingList",
+            "columnName": "not_check_shoppinglist",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_fulfillment_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recipe_id` INTEGER NOT NULL, `need_fulfilled` INTEGER NOT NULL, `need_fulfilled_with_shopping_list` INTEGER NOT NULL, `missing_products_count` INTEGER NOT NULL, `costs` REAL NOT NULL, `costs_per_serving` REAL NOT NULL, `calories` REAL NOT NULL, `due_score` INTEGER NOT NULL, `product_names_comma_separated` TEXT, PRIMARY KEY(`recipe_id`))",
+        "fields": [
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipe_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "needFulfilled",
+            "columnName": "need_fulfilled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "needFulfilledWithShoppingList",
+            "columnName": "need_fulfilled_with_shopping_list",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missingProductsCount",
+            "columnName": "missing_products_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "costs",
+            "columnName": "costs",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "costsPerServing",
+            "columnName": "costs_per_serving",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "calories",
+            "columnName": "calories",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueScore",
+            "columnName": "due_score",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productNamesCommaSeparated",
+            "columnName": "product_names_comma_separated",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "recipe_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4f5cf48edf95e2ca506f6e4da0628884')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '49b45af2bb1eb4e13198947b30300d2d')"
     ]
   }
 }

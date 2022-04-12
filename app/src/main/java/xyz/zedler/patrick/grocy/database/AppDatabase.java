@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.dao.StoredPurchaseDao;
 import xyz.zedler.patrick.grocy.dao.TaskCategoryDao;
 import xyz.zedler.patrick.grocy.dao.TaskDao;
 import xyz.zedler.patrick.grocy.dao.UserDao;
+import xyz.zedler.patrick.grocy.dao.VolatileItemDao;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;

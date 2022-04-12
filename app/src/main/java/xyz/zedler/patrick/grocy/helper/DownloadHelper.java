@@ -2935,6 +2935,10 @@ public class DownloadHelper {
         queue.append(updateChores(dbChangedTime, null));
       } else if (type == ChoreEntry.class) {
         queue.append(updateChoreEntries(dbChangedTime, null));
+      } else if (type == Recipe.class) {
+        queue.append(updateRecipes(dbChangedTime, null));
+      } else if (type == RecipeFulfillment.class) {
+        queue.append(updateRecipeFulfillments(dbChangedTime, null));
       }
     }
     if (queue.isEmpty()) {
