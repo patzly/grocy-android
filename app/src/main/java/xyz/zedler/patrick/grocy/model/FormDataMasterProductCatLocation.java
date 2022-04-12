@@ -31,10 +31,13 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 public class FormDataMasterProductCatLocation {
 
   private final Application application;
+  private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<List<Location>> locationsLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
   private final LiveData<Boolean> locationErrorLive;
+  private final MutableLiveData<Location> locationConsumeLive;
+  private final LiveData<String> locationConsumeNameLive;
   private final MutableLiveData<List<Store>> storesLive;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
@@ -42,8 +45,9 @@ public class FormDataMasterProductCatLocation {
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
 
-  public FormDataMasterProductCatLocation(Application application) {
+  public FormDataMasterProductCatLocation(Application application, boolean beginnerMode) {
     this.application = application;
+    displayHelpLive = new MutableLiveData<>(beginnerMode);
     locationsLive = new MutableLiveData<>();
     locationLive = new MutableLiveData<>();
     locationNameLive = Transformations.map(
@@ -55,6 +59,11 @@ public class FormDataMasterProductCatLocation {
         locationLive,
         location -> location == null
     );
+    locationConsumeLive = new MutableLiveData<>();
+    locationConsumeNameLive = Transformations.map(
+        locationConsumeLive,
+        location -> location != null ? location.getName() : null
+    );
     storesLive = new MutableLiveData<>();
     storeLive = new MutableLiveData<>();
     storeNameLive = Transformations.map(
@@ -64,6 +73,15 @@ public class FormDataMasterProductCatLocation {
 
     productLive = new MutableLiveData<>();
     filledWithProduct = false;
+  }
+
+  public MutableLiveData<Boolean> getDisplayHelpLive() {
+    return displayHelpLive;
+  }
+
+  public void toggleDisplayHelpLive() {
+    assert displayHelpLive.getValue() != null;
+    displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
   public MutableLiveData<List<Location>> getLocationsLive() {
@@ -80,6 +98,14 @@ public class FormDataMasterProductCatLocation {
 
   public LiveData<Boolean> getLocationErrorLive() {
     return locationErrorLive;
+  }
+
+  public MutableLiveData<Location> getLocationConsumeLive() {
+    return locationConsumeLive;
+  }
+
+  public LiveData<String> getLocationConsumeNameLive() {
+    return locationConsumeNameLive;
   }
 
   public MutableLiveData<List<Store>> getStoresLive() {
@@ -137,14 +163,21 @@ public class FormDataMasterProductCatLocation {
       if (locationLive.getValue() == null && NumUtil.isStringInt(product.getLocationId())) {
         product.setLocationId(null);
       }
+      if (locationConsumeLive.getValue() == null
+          && NumUtil.isStringInt(product.getDefaultConsumeLocationId())) {
+        product.setDefaultConsumeLocationId(null);
+      }
       if (storeLive.getValue() == null && NumUtil.isStringInt(product.getStoreId())) {
         product.setStoreId(null);
       }
       return product;
     }
     Location location = locationLive.getValue();
+    Location locationConsume = locationConsumeLive.getValue();
     Store store = storeLive.getValue();
     product.setLocationId(location != null ? String.valueOf(location.getId()) : null);
+    product.setDefaultConsumeLocationId(locationConsume != null
+        ? String.valueOf(locationConsume.getId()) : null);
     product.setStoreId(store != null ? String.valueOf(store.getId()) : null);
     return product;
   }
@@ -155,6 +188,7 @@ public class FormDataMasterProductCatLocation {
     }
 
     locationLive.setValue(getLocationFromId(product.getLocationId()));
+    locationConsumeLive.setValue(getLocationFromId(product.getDefaultConsumeLocationId()));
     storeLive.setValue(getStoreFromId(product.getStoreId()));
     filledWithProduct = true;
   }

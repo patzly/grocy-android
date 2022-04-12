@@ -40,7 +40,10 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class MasterProductCatLocationViewModel extends BaseViewModel {
 
@@ -75,7 +78,10 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new MasterProductRepository(application);
-    formData = new FormDataMasterProductCatLocation(application);
+    formData = new FormDataMasterProductCatLocation(
+        application,
+        sharedPrefs.getBoolean(BEHAVIOR.BEGINNER_MODE, SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE)
+    );
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
@@ -195,6 +201,10 @@ public class MasterProductCatLocationViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
+  }
+
+  public boolean showConsumeLocationOption() {
+    return VersionUtil.isGrocyServerMin330(sharedPrefs);
   }
 
   @Override

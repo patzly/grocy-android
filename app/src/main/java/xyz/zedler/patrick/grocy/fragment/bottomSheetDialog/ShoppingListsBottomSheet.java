@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class ShoppingListsBottomSheet extends BaseBottomSheet
@@ -91,7 +92,9 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
 
     MutableLiveData<Integer> selectedIdLive = activity.getCurrentFragment()
         .getSelectedShoppingListIdLive();
-    if (selectedIdLive == null) {
+    int selectedId = getArguments() != null
+        ? getArguments().getInt(ARGUMENT.SELECTED_ID, -1) : -1;
+    if (selectedIdLive == null && selectedId == -1) {
       dismiss();
       return view;
     }
@@ -117,7 +120,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
       ) {
         recyclerView.setAdapter(new ShoppingListAdapter(
             shoppingLists,
-            selectedIdLive.getValue(),
+            selectedIdLive != null && selectedIdLive.getValue() != null
+                ? selectedIdLive.getValue() : selectedId,
             this,
             activity.getCurrentFragment() instanceof ShoppingListFragment
                 && activity.isOnline()
@@ -125,21 +129,22 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
       } else {
         ((ShoppingListAdapter) recyclerView.getAdapter()).updateData(
             shoppingLists,
-            selectedIdLive.getValue()
+            selectedIdLive != null && selectedIdLive.getValue() != null
+                ? selectedIdLive.getValue() : selectedId
         );
       }
     });
 
-    selectedIdLive.observe(getViewLifecycleOwner(), selectedId -> {
-      if (recyclerView.getAdapter() == null
-          || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
-      ) {
-        return;
-      }
-      ((ShoppingListAdapter) recyclerView.getAdapter()).updateSelectedId(
-          selectedIdLive.getValue()
-      );
-    });
+    if (selectedIdLive != null) {
+      selectedIdLive.observe(getViewLifecycleOwner(), selectedIdNew -> {
+        if (recyclerView.getAdapter() == null
+            || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
+        ) {
+          return;
+        }
+        ((ShoppingListAdapter) recyclerView.getAdapter()).updateSelectedId(selectedIdNew);
+      });
+    }
 
     ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
     if (activity.isOnline() && multipleListsFeature

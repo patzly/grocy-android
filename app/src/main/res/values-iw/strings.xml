@@ -395,7 +395,6 @@
   <string name="subtitle_amount_opened">(%1$s נפתחו)</string>
   <!-- %1$s is a product name -->
   <string name="subtitle_stock_locations">איפה למוצר %1$s יש מלאי</string>
-  <string name="subtitle_default_location">בררת מחדל</string>
   <string name="subtitle_none_selected">לא נבחר כלום</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">ללא</string>
