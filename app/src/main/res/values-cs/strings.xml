@@ -244,7 +244,7 @@
   <!-- %1$s is a shopping list name -->
   <string name="msg_added_missing_products">Přidat produkty pod min. zásobou do: %1$s</string>
   <!-- %1$s is a shopping list name -->
-  <string name="msg_shopping_list_cleared">%1$s vyčištěno úspěšně</string>
+  <string name="msg_shopping_list_cleared">Obsah seznamu %1$s byl smazán</string>
   <!-- %1$s is a shopping list name -->
   <string name="msg_shopping_list_deleted">%1$s smazáno úspěšně</string>
   <string name="msg_barcode_duplicate">Čárový kód již existuje</string>
