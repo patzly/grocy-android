@@ -1,4 +1,5 @@
 2.2.1:
+- Improved: splash screen (will be further improved for Android 12 with the upcoming Material You redesign)
 - Fixed: On transfer page no locations were selectable as target (#515)
 
 2.2.0:
