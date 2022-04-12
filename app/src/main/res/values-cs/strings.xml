@@ -106,7 +106,7 @@
   <string name="action_display_help">Zobrazit nápovědu</string>
   <string name="action_demo_server">Server s demoverzí</string>
   <string name="action_own_server">Můj server s grocy</string>
-  <string name="action_enter_data_manually">Zadejte údaje ručně</string>
+  <string name="action_enter_data_manually">Zadejte údaje</string>
   <string name="action_perform">Provést akci</string>
   <string name="action_share">Sdílet</string>
   <string name="action_share_description">Řekněte svým přátelům o Grocy Android</string>
