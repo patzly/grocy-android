@@ -312,7 +312,7 @@
   <string name="msg_welcome_to_grocy">Vítejte v grocy klientu pro Android!\n\nChcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
   <string name="msg_choose_option_below">Prosím, vyberte jednu z možností.</string>
   <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pokud půjdete na web grocy na jiném zařízení, klikněte na ikonu QR kódu a API klíč naskenujte.</string>
-  <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistent. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistent. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
+  <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistnt. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
   <string name="msg_port_connection_info_without_port">Aplikace se připojuje k portu %1$s.\nJestliže ji chcete připojit k jinému číslu portu, přidejte toto číslo (např. 81) k URL vašeho serveru.\nPříklad: http://mujserver.cz:81/</string>
   <string name="msg_port_connection_info_with_port">Aplikace se připojuje k portu č.: %1$s</string>
   <string name="msg_not_implemented_yet">Toto bude již brzy implementováno. Zatím, prosím, použijte rozhraní svého serveru.</string>
