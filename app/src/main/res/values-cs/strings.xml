@@ -249,7 +249,7 @@
   <string name="msg_shopping_list_deleted">Nákupní seznam %1$s byl smazán</string>
   <string name="msg_barcode_duplicate">Čárový kód již existuje</string>
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
-  <string name="msg_master_delete">Opravdu smazat %1$s \"%2$s\"?</string>
+  <string name="msg_master_delete">Opravdu chcete smazat %1$s „%2$s”?</string>
   <!-- %1$s is a product name -->
   <string name="msg_master_delete_product">Opravdu chcete smazat produkt \"%1$s\"?\n\nTímto smažete produkt ze všech přehledů. Pokud tento produkt již nepotřebujete, ale měl by být ponechán např. v historii nákupů, jen ho odznačte jako aktivní.</string>
   <!-- %1$s is a master data type like "location" or "product" -->
