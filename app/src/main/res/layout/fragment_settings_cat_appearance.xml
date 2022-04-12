@@ -146,8 +146,8 @@
             android:layout_marginEnd="16dp"
             android:minHeight="40dp"
             android:text="@string/setting_theme_follow_system"
-            android:checked="@{viewModel.isThemeActive(viewModel.THEME_SYSTEM)}"
-            android:onClick="@{() -> fragment.setTheme(viewModel.THEME_SYSTEM)}"/>
+            android:checked="@{viewModel.isThemeActive(viewModel.DARK_MODE_SYSTEM)}"
+            android:onClick="@{() -> fragment.setTheme(viewModel.DARK_MODE_SYSTEM)}"/>
 
           <com.google.android.material.radiobutton.MaterialRadioButton
             style="@style/Widget.Grocy.RadioButton.BottomSheet"
@@ -157,8 +157,8 @@
             android:layout_marginEnd="16dp"
             android:minHeight="40dp"
             android:text="@string/setting_theme_light"
-            android:checked="@{viewModel.isThemeActive(viewModel.THEME_LIGHT)}"
-            android:onClick="@{() -> fragment.setTheme(viewModel.THEME_LIGHT)}"/>
+            android:checked="@{viewModel.isThemeActive(viewModel.DARK_MODE_NO)}"
+            android:onClick="@{() -> fragment.setTheme(viewModel.DARK_MODE_NO)}"/>
 
           <com.google.android.material.radiobutton.MaterialRadioButton
             style="@style/Widget.Grocy.RadioButton.BottomSheet"
@@ -168,8 +168,8 @@
             android:layout_marginEnd="16dp"
             android:minHeight="40dp"
             android:text="@string/setting_theme_dark"
-            android:checked="@{viewModel.isThemeActive(viewModel.THEME_DARK)}"
-            android:onClick="@{() -> fragment.setTheme(viewModel.THEME_DARK)}"/>
+            android:checked="@{viewModel.isThemeActive(viewModel.DARK_MODE_YES)}"
+            android:onClick="@{() -> fragment.setTheme(viewModel.DARK_MODE_YES)}"/>
 
         </LinearLayout>
 

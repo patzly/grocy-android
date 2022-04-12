@@ -110,7 +110,7 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
-      public final static String THEME = "theme";
+      public final static String DARK_MODE = "theme";
       public final static String LANGUAGE = "language";
     }
 
@@ -183,7 +183,7 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
-      public final static int THEME = SettingsViewModel.THEME_SYSTEM;
+      public final static int DARK_MODE = SettingsViewModel.DARK_MODE_SYSTEM;
       public final static String LANGUAGE = null;
     }
 
@@ -376,6 +376,8 @@ public final class Constants {
     public final static String USERS = "users";
     public final static String SHOW_OPTION_NEVER_EXPIRES = "show_option_never_expires";
     public final static String RECIPE = "recipe";
+    public final static String RUN_AS_SUPER_CLASS = "run_as_super_class";
+    public final static String INSTANCE_STATE = "instance_state";
   }
 
   public final static class FAB {

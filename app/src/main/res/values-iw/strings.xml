@@ -112,7 +112,6 @@
   <string name="action_share_description">לספר לחבר׳ה על Grocy ל־Android</string>
   <string name="action_no_filter">ללא מסנן</string>
   <string name="action_show_done_tasks">הצגת מטלות שבוצעו</string>
-
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d במלאי</item>
@@ -345,6 +344,8 @@
   <string name="title_choose_product">בחירת מוצר</string>
   <string name="title_pending_products">מוצרים ממתינים</string>
   <string name="title_stored_purchases">רכישות שמורות</string>
+  <string name="title_chores">מטלות</string>
+  <string name="title_chore">מטלה</string>
 
   <string name="title_spoiled">מקולקל</string>
   <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
@@ -422,6 +423,7 @@
   <string name="subtitle_product_hidden">המוצר מוסתר</string>
   <string name="subtitle_product_not_hidden">המוצר לא מוסתר</string>
   <string name="subtitle_product_not_on_server">המוצר אינו בשרת</string>
+  <string name="subtitle_barcodes_will_be_added">יש ברקודים מאוחסנים, שנוספים למוצר בפעולת השמירה.</string>
   <string name="subtitle_unknown">לא ידוע</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">נתמך</string>
@@ -437,7 +439,6 @@
   <string name="subtitle_product_default_location">מיקום, חנות</string>
   <string name="subtitle_product_due_date">סוג, ימי ברירת מחדל (לאחר הפתיחה, הקפאה, הפשרה)</string>
   <string name="subtitle_product_quantity_unit">מלאי, רכישת ברירת מחדל</string>
-
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>

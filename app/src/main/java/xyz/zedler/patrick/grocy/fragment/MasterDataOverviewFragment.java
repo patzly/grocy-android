@@ -117,6 +117,9 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 GrocyApi.ENTITY.TASK_CATEGORIES
             ))
     );
+    binding.linearChores.setOnClickListener(
+        v -> viewModel.showMessage(R.string.msg_not_implemented_yet)
+    );
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
       binding.swipe.setRefreshing(state);
@@ -226,6 +229,9 @@ public class MasterDataOverviewFragment extends BaseFragment {
     }
     if (!viewModel.isFeatureEnabled(PREF.FEATURE_TASKS)) {
       binding.linearTaskCategories.setVisibility(View.GONE);
+    }
+    if (!viewModel.isFeatureEnabled(PREF.FEATURE_CHORES)) {
+      binding.linearChores.setVisibility(View.GONE);
     }
   }
 

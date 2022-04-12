@@ -112,6 +112,8 @@
   <string name="action_share_description">Erzählen Sie Ihren Freunden von Grocy Android</string>
   <string name="action_no_filter">Nicht filtern</string>
   <string name="action_show_done_tasks">Erledigte Aufgaben anzeigen</string>
+  <string name="action_track_chore_execution">Ausführung erfassen</string>
+  <string name="action_skip_next_chore_schedule">Nächste geplante Ausführung überspringen</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -184,10 +186,16 @@
     <item quantity="one">%1$d überfällig</item>
     <item quantity="other">%1$d überfällig</item>
   </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d zugewiesen</item>
+    <item quantity="other">%1$d zugewiesen</item>
+  </plurals>
   <string name="msg_task_mark">Aufgabe als erledigt markieren</string>
   <string name="msg_task_completed">Aufgabe als erledigt markiert</string>
   <string name="msg_task_not_completed">Aufgabe als nicht erledigt markiert</string>
   <string name="msg_task_undo">Aufgabe rückgängig machen</string>
+  <string name="msg_chore_executed">Ausführung erfasst</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -281,6 +289,10 @@
   <string name="msg_help_hide_on_stock">Die Bestand-Seite listet alle Produkte auf, die derzeit im Bestand oder unter ihrem Mindestbestand sind. Aktiviere dies, um dieses Produkt nie dort anzuzeigen.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Dieses Produkt kann kein übergeordnetes Produkt haben, weil es schon in einem anderen Produkt als übergeodnetes Produkt benutzt wird.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Bestandseinträge an diesem Standort werden zuerst verbraucht.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Wenn aktiviert, kann dieses Produkt keinen eigenen Bestand haben, bedeutet es ist unter \"Einkauf\" nicht auswählbar (nützlich für übergeordnete Produkte, die nur als Zusammenfassung/Gesamtansicht der untergeordneten Produkte verwendet werden).</string>
   <string name="msg_help_due_date_type">Je nach ausgewähltem Typ wird die Hervorhebung auf der Bestandsübersicht unterschiedlich sein. \"MHD\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum möglicherweise immer noch verzehrt werden kann. \"Verbrauchsdatum\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum nicht mehr verzehrt werden kann.</string>
   <string name="msg_help_default_due_days_format">Sie können lange auf einen Eintrag unten tippen, um ein Datum anstatt einer Zahl einzugeben.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -354,6 +366,8 @@
   <string name="error_empty_tasks">Keine Aufgaben</string>
   <string name="error_empty_task_categories">Keine Aufgabenkategorien</string>
   <string name="error_empty_unit_conversions">Keine ME-Umrechnungen</string>
+  <string name="error_empty_chores">Keine Hausarbeiten</string>
+  <string name="error_empty_chores_sub">Erstellen Sie welche in den Stammdaten</string>
   <string name="error_search">Keine Suchergebnisse</string>
   <string name="error_search_sub">Versuchen Sie andere Begriffe</string>
   <string name="error_filter">Nichts zum Anzeigen</string>
@@ -417,6 +431,7 @@
   <string name="title_product_edit">Produkt bearbeiten</string>
   <string name="title_tasks">Aufgaben</string>
   <string name="title_task_entry">Aufgabe</string>
+  <string name="title_task_add">Aufgabe hinzufügen</string>
   <string name="title_master_data">Stammdaten</string>
   <string name="title_stock_entries">Bestandseinträge</string>
   <string name="title_shopping_list">Einkaufszettel</string>
@@ -442,6 +457,8 @@
   <string name="title_choose_product">Produkt auswählen</string>
   <string name="title_pending_products">Anstehende Produkte</string>
   <string name="title_stored_purchases">Gespeicherte Einkäufe</string>
+  <string name="title_chores">Hausarbeiten</string>
+  <string name="title_chore">Hausarbeit</string>
 
   <string name="title_spoiled">Verdorben</string>
   <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
@@ -537,6 +554,7 @@
   <string name="subtitle_product_due_date">Typ, Standard Tage (nach öffnen, einfrieren, auftauen)</string>
   <string name="subtitle_product_optional_properties">Status, Übergeordnetes Produkt, Beschreibung, Produktgruppe, Energie, Bild</string>
   <string name="subtitle_product_quantity_unit">Bestand, Einkauf Standard</string>
+  <string name="subtitle_synced_with_server">Mit Server synchronisiert</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
@@ -598,6 +616,26 @@
     <item quantity="one">Ein Eintrag ist auf Ihrer Einkaufsliste.</item>
     <item quantity="other">%1$d Einträge sind auf Ihrer Einkaufsliste.</item>
   </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d Hausarbeit steht innerhalb der nächsten %2$d Tage an.</item>
+    <item quantity="other">%1$d Hausarbeiten stehen innerhalb der nächsten %2$d Tage an.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d Hausarbeit ist überfällig.</item>
+    <item quantity="other">%1$d Hausarbeiten sind überfällig.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d Hausarbeit steht heute an.</item>
+    <item quantity="other">%1$d Hausarbeiten stehen heute an.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d Hausarbeit ist Ihnen zugewiesen.</item>
+    <item quantity="other">%1$d Hausarbeiten sind Ihnen zugewiesen.</item>
+  </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
     <item quantity="one">%1$d Aufgabe ist zu erledigen.</item>
@@ -638,6 +676,8 @@
   <string name="property_price_average">Durchschnittlicher Preis</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Preis pro %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s pro %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Preis in %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -682,6 +722,7 @@
   <string name="property_due_days_default_thawing">Standard-Fälligkeitstage nach dem Auftauen</string>
   <string name="property_location">Standort</string>
   <string name="property_location_default">Standard Standort</string>
+  <string name="property_location_consume_default">Standardverbrauchsstandort</string>
   <string name="property_notes">Notizen</string>
   <string name="property_locations">Standorte</string>
   <string name="property_store">Geschäft</string>
@@ -704,7 +745,9 @@
   <string name="property_price_history">Preisentwicklung</string>
   <string name="property_product_group">Produktgruppe</string>
   <string name="property_product_groups">Produktgruppen</string>
+  <string name="property_assignment">Zuweisung</string>
   <string name="property_value">Wert</string>
+  <string name="property_stock_value">Bestandswert</string>
   <string name="property_opened">geöffnet</string>
   <string name="property_not_opened">nicht geöffnet</string>
   <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
@@ -713,6 +756,8 @@
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nie auf der Bestand-Seite anzeigen</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Eigenen Bestand deaktivieren</string>
   <string name="property_number">Zahl</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Taragewichtbehandlung aktivieren</string>
@@ -828,6 +873,7 @@
   <string name="category_general">Allgemein</string>
   <string name="category_stock">Bestand</string>
   <string name="category_server">Server</string>
+  <string name="category_user_settings">Benutzereinstellungen</string>
   <string name="category_scanner">Scanner</string>
   <string name="category_scanner_camera">Kamera-Scanner</string>
   <string name="category_scanner_external">Externer Scanner</string>
@@ -898,6 +944,8 @@
   <string name="setting_purchased_date">Nach Einkaufsdatum fragen</string>
   <string name="setting_purchased_date_description">Auf der Einkauf- und Inventur-Seite</string>
   <string name="setting_use_quick_consume_amount">Die Schnell-Verbrauchs-Menge des Produkts verwenden</string>
+  <string name="setting_auto_add_shopping_list">Produkte automatisch zum Einkaufszettel hinzufügen</string>
+  <string name="setting_auto_add_shopping_list_description">Welche unter Mindestbestand sind</string>
   <string name="setting_empty_value">Leer</string>
   <string name="setting_sync_off">Synchonisation aus</string>
   <string name="setting_loading">Wert wird geladen</string>

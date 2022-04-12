@@ -123,6 +123,12 @@ public class DateUtil {
     return DATE_FORMAT_WITH_TIME.format(cal.getTime());
   }
 
+  public String getCurrentDateWithoutTimeStr() {
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.MILLISECOND, 0);
+    return DATE_FORMAT.format(cal.getTime());
+  }
+
   public boolean isTimeLessThanOneMinuteAway(String dateWithTimeStr) {
     if (dateWithTimeStr == null) {
       return true;

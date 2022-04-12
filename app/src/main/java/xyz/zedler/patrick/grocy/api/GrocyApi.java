@@ -21,18 +21,12 @@ package xyz.zedler.patrick.grocy.api;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class GrocyApi {
 
@@ -394,6 +388,13 @@ public class GrocyApi {
    */
   public String getChores(int choreId) {
     return getUrl("/chores/" + choreId);
+  }
+
+  /**
+   * Tracks an execution of the given chore
+   */
+  public String executeChore(int choreId) {
+    return getUrl("/chores/" + choreId + "/execute");
   }
 
   // RECIPES

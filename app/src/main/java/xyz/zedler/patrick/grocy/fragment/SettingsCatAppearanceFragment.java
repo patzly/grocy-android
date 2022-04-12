@@ -90,9 +90,9 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
         requireContext(),
         R.drawable.ic_round_dark_to_light_anim
     );
-    if (theme == SettingsViewModel.THEME_SYSTEM) {
+    if (theme == SettingsViewModel.DARK_MODE_SYSTEM) {
       binding.imageTheme.setImageDrawable(currentlyDark ? imageDarkToLight : imageLightToDark);
-    } else if (theme == SettingsViewModel.THEME_LIGHT) {
+    } else if (theme == SettingsViewModel.DARK_MODE_NO) {
       binding.imageTheme.setImageDrawable(imageLightToDark);
     } else {  // dark
       binding.imageTheme.setImageDrawable(imageDarkToLight);
@@ -114,19 +114,23 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
   }
 
   public void setTheme(int theme) {
-    binding.radioButtonFollowSystem.setChecked(theme == SettingsViewModel.THEME_SYSTEM);
-    binding.radioButtonLight.setChecked(theme == SettingsViewModel.THEME_LIGHT);
-    binding.radioButtonDark.setChecked(theme == SettingsViewModel.THEME_DARK);
+    binding.radioButtonFollowSystem.setChecked(theme == SettingsViewModel.DARK_MODE_SYSTEM);
+    binding.radioButtonLight.setChecked(theme == SettingsViewModel.DARK_MODE_NO);
+    binding.radioButtonDark.setChecked(theme == SettingsViewModel.DARK_MODE_YES);
 
     int currentTheme = viewModel.getTheme();
 
     boolean currentlyDark = isSystemThemeDark();
-    if (currentTheme == SettingsViewModel.THEME_LIGHT && theme == SettingsViewModel.THEME_DARK
-        || currentTheme == SettingsViewModel.THEME_DARK && theme == SettingsViewModel.THEME_LIGHT
-        || currentTheme == SettingsViewModel.THEME_LIGHT && theme == SettingsViewModel.THEME_SYSTEM && currentlyDark
-        || currentTheme == SettingsViewModel.THEME_DARK && theme == SettingsViewModel.THEME_SYSTEM && !currentlyDark
-        || currentTheme == SettingsViewModel.THEME_SYSTEM && theme == SettingsViewModel.THEME_LIGHT && currentlyDark
-        || currentTheme == SettingsViewModel.THEME_SYSTEM && theme == SettingsViewModel.THEME_DARK && !currentlyDark
+    if (currentTheme == SettingsViewModel.DARK_MODE_NO && theme == SettingsViewModel.DARK_MODE_YES
+        || currentTheme == SettingsViewModel.DARK_MODE_YES && theme == SettingsViewModel.DARK_MODE_NO
+        || currentTheme == SettingsViewModel.DARK_MODE_NO && theme == SettingsViewModel.DARK_MODE_SYSTEM
+        && currentlyDark
+        || currentTheme == SettingsViewModel.DARK_MODE_YES && theme == SettingsViewModel.DARK_MODE_SYSTEM
+        && !currentlyDark
+        || currentTheme == SettingsViewModel.DARK_MODE_SYSTEM && theme == SettingsViewModel.DARK_MODE_NO
+        && currentlyDark
+        || currentTheme == SettingsViewModel.DARK_MODE_SYSTEM && theme == SettingsViewModel.DARK_MODE_YES
+        && !currentlyDark
     ) {
       ViewUtil.startIcon(binding.imageTheme);
     }

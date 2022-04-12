@@ -202,6 +202,7 @@
   <string name="msg_task_completed">Marked task as completed</string>
   <string name="msg_task_not_completed">Marked task as not completed</string>
   <string name="msg_task_undo">Undo task</string>
+  <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -373,6 +374,8 @@
   <string name="error_empty_tasks">No tasks</string>
   <string name="error_empty_task_categories">No task categories</string>
   <string name="error_empty_unit_conversions">No quantity unit conversions</string>
+  <string name="error_empty_chores">No chores</string>
+  <string name="error_empty_chores_sub">Go to master data and create some</string>
   <string name="error_search">No search results</string>
   <string name="error_search_sub">Try other terms</string>
   <string name="error_filter">Nothing to display</string>
