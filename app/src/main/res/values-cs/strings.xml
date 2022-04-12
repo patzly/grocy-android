@@ -303,7 +303,7 @@
   <string name="msg_logout_demo_short">Toto je veřejný grocy demo server. Klepněte pro více informací.</string>
   <string name="msg_restart">Restartujte, prosím, aplikaci, aby se nová konfigurace grocy načetla celá.</string>
   <string name="msg_shortcuts">Můžete povolit až 4 zkratky:</string>
-  <string name="msg_shortcuts_not_supported">Zkratky nejsou na této verzi Android podporovány.</string>
+  <string name="msg_shortcuts_not_supported">Tato verze Androidu zkratky nepodporuje</string>
   <string name="msg_barcode_formats">Pokud vyberete jen ty druhy čárových (či jiných) kódů, které jsou u vámi nakupovaných produktů obvyklé, zrychlíte tak jejich přečtení</string>
   <string name="msg_features">Intro pustíte znova v \"O programu\"</string>
   <string name="msg_feedback">Máte nějaké přání, otázky a chyby? Kontaktujte nás a pomozte nám!\nRádi si přečteme vaší recenzi na Obchodu Play.</string>
