@@ -97,7 +97,7 @@
   <string name="action_toggle_flash">Vybrat/nevybrat</string>
   <string name="action_delete_shopping_list">Smazat nákupní seznam</string>
   <string name="action_create_key">Vytvořit klíč</string>
-  <string name="action_login">Přihlásit</string>
+  <string name="action_login">Přihlásit se</string>
   <string name="action_ignore">Ignorovat</string>
   <!-- This string should follow the equality between "all" and "Clear all items" -->
   <string name="action_clear_all">Vše</string>
