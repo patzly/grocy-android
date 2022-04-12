@@ -90,7 +90,7 @@
   <string name="action_clear_form">Vyčistit formulář</string>
   <string name="action_toggle_done">Přidat/odebrat z košíku</string>
   <string name="action_edit_notes">Upravit poznámky</string>
-  <string name="action_add_missing">Přidat chybějící produkt</string>
+  <string name="action_add_missing">Přidat produkty s malou zásobou</string>
   <string name="action_purchase_done_items">Nakoupit produkty z nákupního košíku</string>
   <string name="action_purchase_all_items">Koupit všechny položky</string>
   <string name="action_skip_entry">Přeskočit položku</string>
