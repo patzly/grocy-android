@@ -272,7 +272,7 @@
   <string name="msg_item_marked_as_done">Položka je označena jako hotová</string>
   <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
-  <string name="option_synced_error">Volbu nebylo možné zapsat na server</string>
+  <string name="option_synced_error">Volbu se nepodařilo zapsat na server</string>
   <string name="msg_stored_purchases_overview">Několik nákupů ještě nebylo zapsáno na server. Pro podrobnosti klepněte sem.</string>
   <string name="msg_stored_purchases">Tady jsou nákupy, které zatím nejsou uloženy na serveru. Jsou uloženy společně i s novými produkty, které tak nemusíte nejprve uložit do seznamu produktů</string>
   <string name="msg_stored_purchases_product_offline">Klepněte na produkt a zapište k němu informace. Poté se tu produkt zobrazí jako „online“ a zapsaný nákup produktu se uloží na server.</string>
