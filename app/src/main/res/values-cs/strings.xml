@@ -328,7 +328,7 @@
   <string name="msg_help_due_date_type">Podle zvoleného typu data min. trvanlivosti bude styl zvýrazňování na stránce přehledu zásob rozdílný. „Minimální trvanlivost” znamená, že produkt je bezpečné konzumovat i po tomto datu. „Expirace” znamená, že produkt po tomto datu konzumovat nelze.</string>
   <string name="msg_help_default_due_days_format">Dlouhým stiskem na položku zadat datum pomocí dialogu místo psaním</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days">Při označení jako Otevřený, bude nastavené datum min. trvanlivosti: dnes + tento počet dní. Ale jen pokud nové datum spotřeby nebude později, než původní. Hodnota 0 datum spotřeby nemění.</string>
+  <string name="msg_help_default_due_days">Tento počet dní bude přidán k dnešnímu datu jako návrh data minimální trvanlivosti Zadáním -1 bude min trvanlivost neomezená.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_opened">Jakmile produkt označíte jako otevřený, jeho datum min. trvanlivosti se vypočte podle zadaného počtu dní. Zadáním 0 se min. trvanlivost nezmění.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
