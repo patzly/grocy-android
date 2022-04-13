@@ -154,7 +154,7 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
       } else if (checkBox.getId() == R.id.shopping_list) {
         shortcutInfos.add(ShortcutUtil.createShortcutShoppingList(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.add_to_shopping_list) {
-        Uri uriWithArgs = getUriWithArgs(R.string.deep_link_shoppingListItemEditFragment,
+        Uri uriWithArgs = getUriWithArgs(getString(R.string.deep_link_shoppingListItemEditFragment),
             new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .build().toBundle()
         );
@@ -174,7 +174,7 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
       } else if (checkBox.getId() == R.id.tasks) {
         shortcutInfos.add(ShortcutUtil.createShortcutTasks(context, checkBox.getText()));
       } else if (checkBox.getId() == R.id.task_add) {
-        Uri uriWithArgs = getUriWithArgs(R.string.deep_link_taskEntryEditFragment,
+        Uri uriWithArgs = getUriWithArgs(getString(R.string.deep_link_taskEntryEditFragment),
             new TaskEntryEditFragmentArgs.Builder(Constants.ACTION.CREATE)
                 .build().toBundle()
         );
