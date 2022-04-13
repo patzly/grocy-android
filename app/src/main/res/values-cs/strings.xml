@@ -332,7 +332,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_opened">Při označení jako Otevřený, bude nastavené datum min. trvanlivosti: dnes + tento počet dní. Ale jen pokud nové datum spotřeby nebude později, než původní. Hodnota 0 datum spotřeby nemění.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_default_due_days_freezing">Po přesunutí tohoto produktu do mrazáku (tudíž po zmražení) bude datum spotřeby nahrazeno zadaným počtem dnů ode dneška (hodnota -1 znamená, že produkt nikdy neexpiruje)</string>
+  <string name="msg_help_default_due_days_freezing">Při přesunutí produktu do mrazničky (produkt rmražen) se datum min. trvanlivosti vypočítá jako dnešní datum + zadaný počet dní</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">Po přesunu tohoto produktu z mrazáku (tudíž po rozmražení) bude datum spotřeby nahrazeno zadaným počtem dnů ode dneška. </string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
