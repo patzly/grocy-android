@@ -325,7 +325,7 @@
   <string name="msg_help_consume_location">Produkty budou spotřebovávány nejprve z tohoto umístění, (nebude-li při spotřebě zadáno jiné umístění)</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Tento produkt nebude možné vybrat při nákupu. To je vhodné pro nadřazené produkty, které používáte jen jako sumář řady podřízených produktů.</string>
-  <string name="msg_help_due_date_type">Na základě zvoleného typu data spotřeby bude styl zvýrazňování na stránce přehledu zásob rozdílné. \"Minimální trvanlivost\" znamená, že produkt je teoreticky stále bezpečné konzumovat i po tomto datu. \"Datum spotřeby\" znamená, že produkt již není bezpečné konzumovat po tomto datu.</string>
+  <string name="msg_help_due_date_type">Podle zvoleného typu data min. trvanlivosti bude styl zvýrazňování na stránce přehledu zásob rozdílný. „Minimální trvanlivost” znamená, že produkt je bezpečné konzumovat i po tomto datu. „Expirace” znamená, že produkt po tomto datu konzumovat nelze.</string>
   <string name="msg_help_default_due_days_format">Dlouhým stiskem na položku níže můžete zadat datum místo psaní čísel</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Při nákupu bude použit tento počet dní ode dneška jako navrhované datum spotřeby. (hodnota -1 znamená, že produkt nemá datum spotřeby)</string>
