@@ -344,7 +344,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">Otevřená balení tedy nebudou započítána do zásob. To lze využít pro plánování nákupů.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_quick_consume_amount">Toto množství je použito pro tlačítka volby \"Rychlá spotřeba/otevření\" na stránce přehledu skladu (ve skladových jednotkách).</string>
+  <string name="msg_help_quick_consume_amount">Tento počet je použit pro tlačítko „rychle spotřebovat/otevřít“ na stránce přehledu zásob. Vztaženo k početní jednotce zásoby.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Tára se hodí např. u mouky kterou uchováváte ve sklenicích - při nákupu/spotřebě/v inventáři zadáte vždy celkovou váhu včetně sklenice, skutečná váha produktu poté bude automaticky vypočítána na základě zadané táry (hmotnosti obalu) níže.</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
