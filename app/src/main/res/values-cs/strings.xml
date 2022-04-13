@@ -336,7 +336,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days_thawing">Při přesunutí produktu z mrazničky (produkt rozmražen) se datum min. trvanlivosti vypočítá jako dnešní datum + zadaný počet dní</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_qu_stock">Jednotku množství zásoby není možné měnit po provedení prvního nákupu.</string>
+  <string name="msg_help_qu_stock">Jednotku množství zásoby již není možné po prvním nákupu změnit.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">Toto je výchozí jednotka množství při přidání tohoto produktu do nákupního seznamu.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
