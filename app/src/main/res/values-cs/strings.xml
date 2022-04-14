@@ -413,7 +413,7 @@
   <string name="error_invalid_url">Neplatné URL</string>
   <string name="error_invalid_amount">Neplatné množství</string>
   <string name="error_invalid_price">Neplatná cena</string>
-  <string name="error_invalid_factor">Neplatný faktor</string>
+  <string name="error_invalid_factor">Neplatný násobitel</string>
   <string name="error_invalid_date_format">Nesprávný formát data</string>
   <string name="error_api_qr_code">Tento QR kód neobsahuje autorizační údaje Grocy API</string>
   <string name="error_token_qr_code">Toto není  správný QR kód z Home Assistant s dlouhou životností</string>
