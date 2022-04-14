@@ -436,7 +436,7 @@
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
   <string name="error_unknown">Jejda!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
-  <string name="error_timeout">Chyba: čas vypršel</string>
+  <string name="error_timeout">Odezva serveru byla příliš dlouhá</string>
   <string name="error_no_product_selected">Nebyl vybrán žádný produkt</string>
   <string name="error_failed_to_connect_to">Připojení k serveru selhalo</string>
   <string name="error_missing_information">Nejsou vyplněna všechna vyžadovaná pole</string>
