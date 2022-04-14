@@ -390,7 +390,7 @@
   <string name="error_empty_stock_sub">Nejprve nakupte nějaké produkty</string>
   <string name="error_empty_shopping_list">Vyčistit nákupní seznam</string>
   <string name="error_empty_shopping_list_sub">Přidejte produkty, které jsou potřeba</string>
-  <string name="error_empty_barcodes_sub">Přidejte čárový kód pomocí tlačítka níže</string>
+  <string name="error_empty_barcodes_sub">Tlačítkem přidejte čárový kód</string>
   <string name="error_empty_master_data_sub">Vytvořte nějaké tlačítkem níže</string>
   <string name="error_empty_product_barcodes">Žádné čárové kódy produktu</string>
   <string name="error_empty_locations">Žádné umístění</string>
