@@ -386,7 +386,7 @@
   <string name="error_orbot_not_installed">Orbot není instalován</string>
   <string name="error_select_product">Vyber produkt</string>
   <string name="error_empty">Vyžadováno</string>
-  <string name="error_empty_stock">Nic v zásobách</string>
+  <string name="error_empty_stock">Zásoby jsou prázdné</string>
   <string name="error_empty_stock_sub">Nakoupit nějaké produkty</string>
   <string name="error_empty_shopping_list">Vyprázdnit nákupní seznam</string>
   <string name="error_empty_shopping_list_sub">Přidejte nějaké produkty, které jsou potřeba</string>
