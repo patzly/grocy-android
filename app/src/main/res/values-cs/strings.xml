@@ -410,7 +410,7 @@
   <string name="error_duplicate">Již existuje</string>
   <string name="error_parent">Nemůže být nadřazený sám sobě</string>
   <string name="error_invalid_product">Neplatný produkt</string>
-  <string name="error_invalid_url">Neplatná URL</string>
+  <string name="error_invalid_url">Neplatné URL</string>
   <string name="error_invalid_amount">Neplatné množství</string>
   <string name="error_invalid_price">Neplatná cena</string>
   <string name="error_invalid_factor">Neplatný faktor</string>
