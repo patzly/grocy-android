@@ -377,7 +377,7 @@
   <string name="msg_help_home_assistant_login">Používáte grocy Home Assistant add-on. Z toho důvodu je vyžadováno pár dalších informací. Klikněte na tuto kartu pro přepnutí na normální login.</string>
   <string name="msg_help_home_assistant_login_help_show">Klepnutím zobrazíte nápovědu</string>
   <string name="msg_help_home_assistant_login_help_hide">Klepnutím nápovědu skryjete</string>
-  <string name="msg_help_home_assistant_login_server">V poli níže můžete taktéž zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klikněte na tuto kartu pro otevření webu Nabu Casa.</string>
+  <string name="msg_help_home_assistant_login_server">Zde můžete zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klepněte na tuto kartu pro otevření webu Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Můžete vytvořit token s dlouhou životností ve vašem profilu v Home Assistantu (poslední sekce). Klikněte zde pro otevření URL adresy uvedené výše.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Vraťte se zpět nebo klikněte na tuto kartu pro naskenování QR kódu, který vyplní pole níže.</string>
   <string name="msg_share">Tato aplikace je klient projektu grocy: \nhttps://github.com/patzly/grocy-android</string>
