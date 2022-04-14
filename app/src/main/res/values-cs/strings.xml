@@ -428,7 +428,7 @@
   <string name="error_bounds_max">Musí být menší nebo roven %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Musí být větší než %1$s</string>
-  <string name="error_offline">Nepřipojen</string>
+  <string name="error_offline">Nepřipojen k serveru</string>
   <string name="error_offline_subtitle">Tato stránka funguje pouze s připojením k internetu. Zkontrolujte své připojení.</string>
   <string name="error_no_done_items">Zatím není nic vloženo do nákupního košíku</string>
   <string name="error_name_exists">Jméno již existuje</string>
