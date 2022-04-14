@@ -375,7 +375,7 @@
   <string name="msg_help_purchased_date_settings">Zobrazit možnost zadání data nákupu na stránce nákupu. Jinak se bude ukládat aktuální datum.</string>
   <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro grocy.</string>
   <string name="msg_help_home_assistant_login">Používáte grocy Home Assistant add-on. Z toho důvodu je vyžadováno pár dalších informací. Klikněte na tuto kartu pro přepnutí na normální login.</string>
-  <string name="msg_help_home_assistant_login_help_show">Klikněte zde pro zobrazení nápovědy.</string>
+  <string name="msg_help_home_assistant_login_help_show">Klepnutím zobrazíte nápovědu</string>
   <string name="msg_help_home_assistant_login_help_hide">Klikněte zde pro skrytí nápovědy.</string>
   <string name="msg_help_home_assistant_login_server">V poli níže můžete taktéž zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klikněte na tuto kartu pro otevření webu Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Můžete vytvořit token s dlouhou životností ve vašem profilu v Home Assistantu (poslední sekce). Klikněte zde pro otevření URL adresy uvedené výše.</string>
