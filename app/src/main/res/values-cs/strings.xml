@@ -433,7 +433,7 @@
   <string name="error_no_done_items">Zatím není nic vloženo do nákupního košíku</string>
   <string name="error_name_exists">Toto jméno již existuje</string>
   <string name="error_network">Chyba sítě</string>
-  <string name="error_network_subtitle">Vyžadovaná data nemohla být načtena</string>
+  <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
   <string name="error_unknown">Ups!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
   <string name="error_timeout">Chyba: čas vypršel</string>
