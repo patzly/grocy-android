@@ -423,7 +423,7 @@
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Musí být mezi %1$s a %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_bounds_min">Musí se rovnat, či být větší než %1$s</string>
+  <string name="error_bounds_min">Musí být větší nebo roven %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_max">Musí být menší, či se rovnat %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
