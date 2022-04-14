@@ -361,7 +361,10 @@
   <string name="msg_help_external_scanner_ready">Je-li řádek vybraný a prázdný můžete ho vyplnit pomocí externí čtečky</string>
   <string name="msg_help_external_scanner_settings">Tato aplikace podporuje externí skenery čárových kódů, které simulují klávesnici a mohou být připojeny přes USB nebo Bluetooth. Následující parametry musejí být nastaveny ve vašem externím skeneru:\n\nPrefix: Žádný\nSuffix: TAB nebo ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item">První položka v tomto seznamu by byla vybrána automaticky, dle výchozího pravidla, které zní: \"Nejprve otevřené, poté s nejbližší expirací a pak první přidané do zásob\".</string>
+  <string name="msg_help_specific_item">První položka seznamu je vybrána podle pravidel: 
+– první otevřené balení, 
+– nejbližší datum spotřeby,
+– dříve nakoupeno, dříve spotřebováno</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Toto je pouze pro statistické údaje.</string>
   <string name="msg_help_date_chooser">Můžete si nastavit i vkládání dat klávesnicí. Urychlí to práci.</string>
