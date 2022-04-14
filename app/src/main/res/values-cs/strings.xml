@@ -419,7 +419,7 @@
   <string name="error_token_qr_code">Toto není správný QR kód z Home Assistant s dlouhou životností</string>
   <string name="error_loading_qus">Nelze načíst jednotky množství z produktu</string>
   <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_amount_equal_stock">Musí být menší, než %1$s</string>
+  <string name="error_amount_equal_stock">Nemůže být roven %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
   <string name="error_bounds_min_max">Musí být mezi %1$s a %2$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
