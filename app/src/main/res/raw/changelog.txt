@@ -1,6 +1,7 @@
 2.2.1:
 - Improved: splash screen (will be further improved for Android 12 with the upcoming Material You redesign)
 - Fixed: On transfer page no locations were selectable as target (#515)
+- Fixed: Crash after creating product with purchase or inventory transaction
 
 2.2.0:
 Please update your server to the latest version if you want to use all new features.
