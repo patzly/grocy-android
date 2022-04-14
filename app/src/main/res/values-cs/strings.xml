@@ -373,7 +373,7 @@
   <string name="msg_help_loading_circle_settings">Na každé stránce, kde se něco čte ze serveru, aplikace nejprve zkontroluje, zda se databáze na serveru změnila od poslední aktualizace a pokud ano, načte nová data. Zapněte tuto volbu pokud chcete zobrazit symbol komunikace i pro ověřování aktuálnosti databáze.</string>
   <string name="msg_help_start">Je aktivní režim pro začátečníky. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klepnutím to změníte.</string>
   <string name="msg_help_purchased_date_settings">Zobrazit možnost zadání data nákupu na stránce nákupu. Jinak se bude ukládat aktuální datum.</string>
-  <string name="msg_help_normal_login">Klikněte na tuto kartu pokud používáte Home Assistant s grocy addonem.</string>
+  <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro grocy.</string>
   <string name="msg_help_home_assistant_login">Používáte grocy Home Assistant add-on. Z toho důvodu je vyžadováno pár dalších informací. Klikněte na tuto kartu pro přepnutí na normální login.</string>
   <string name="msg_help_home_assistant_login_help_show">Klikněte zde pro zobrazení nápovědy.</string>
   <string name="msg_help_home_assistant_login_help_hide">Klikněte zde pro skrytí nápovědy.</string>
