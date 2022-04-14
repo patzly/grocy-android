@@ -346,7 +346,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_quick_consume_amount">Tento počet je použit pro tlačítko „rychle spotřebovat/otevřít“ na stránce přehledu zásob. Vztaženo k početní jednotce zásoby.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight">Tára se hodí např. u mouky kterou uchováváte ve sklenicích - při nákupu/spotřebě/v inventáři zadáte vždy celkovou váhu včetně sklenice, skutečná váha produktu poté bude automaticky vypočítána na základě zadané táry (hmotnosti obalu) níže.</string>
+  <string name="msg_help_tare_weight">Hodí se například pro produkty v nádobách, které se zváží včetně ní, a jejíž váha je automaticky odečtena podle uložené hodnoty táry</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight_purchase">Tára byla zapnuta - prosím zadejte váhu produktu včetně obalu, skutečná váha bude vypočítána automaticky.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
