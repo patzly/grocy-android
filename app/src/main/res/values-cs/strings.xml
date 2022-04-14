@@ -348,7 +348,7 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_tare_weight">Hodí se například pro produkty v nádobách, které se zváží včetně ní, a jejíž váha je automaticky odečtena podle uložené hodnoty táry</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight_purchase">Tára byla zapnuta - prosím zadejte váhu produktu včetně obalu, skutečná váha bude vypočítána automaticky.</string>
+  <string name="msg_help_tare_weight_purchase">Je aktivní tára, prosím zvažte včetně nádoby, její váha bude automaticky odečtena</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">Toto bude použito jako výchozí nastavení při přidání tohoto produktu jako ingredienci receptu.</string>
   <string name="msg_help_inventory_fields">Výchozí údaje pro nově přidávané produkty</string>
