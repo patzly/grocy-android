@@ -382,7 +382,7 @@
   <string name="msg_help_home_assistant_login_proxy_id">Vraťte se zpět nebo klikněte na tuto kartu pro naskenování QR kódu, který vyplní pole níže.</string>
   <string name="msg_share">Tato aplikace je klient projektu grocy: \nhttps://github.com/patzly/grocy-android</string>
 
-  <string name="error_api_not_working">API key nefunguje</string>
+  <string name="error_api_not_working">Tento API klíč nefunguje</string>
   <string name="error_orbot_not_installed">Orbot není instalován</string>
   <string name="error_select_product">Vyber produkt</string>
   <string name="error_empty">Vyžadováno</string>
