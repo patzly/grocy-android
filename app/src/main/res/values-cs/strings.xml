@@ -839,7 +839,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_stock_check">Vypnout kontrolu stavu zásob pro tuto ingredienci</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_amount_quick_consume">Rychle spotřebovat množství</string>
+  <string name="property_amount_quick_consume">Množství pro „rychle spotřebovat“</string>
   <!-- %1$s is a quantity unit like "bottles" -->
   <string name="property_amount_quick_consume_in">Rychle spotřebovat množství v %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
