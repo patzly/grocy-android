@@ -1,7 +1,8 @@
 2.2.1:
+- New: Stock entries page (#403)
 - Improved: splash screen (will be further improved for Android 12 with the upcoming redesign)
 - Fixed: On transfer page no locations were selectable as target (#515)
-- Fixed: Crash after creating product with purchase or inventory transaction
+- Fixed: Crash after creating product with purchase or inventory transaction (#518)
 
 2.2.0:
 Please update your server to the latest version if you want to use all new features.

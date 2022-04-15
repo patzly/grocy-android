@@ -22,48 +22,70 @@ package xyz.zedler.patrick.grocy.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class StockEntry implements Parcelable {
+@Entity(tableName = "stock_entry_table")
+public class StockEntry extends GroupedListItem implements Parcelable {
 
+  @PrimaryKey
+  @ColumnInfo(name = "id")
   @SerializedName("id")
   private int id;
 
+  @ColumnInfo(name = "product_id")
   @SerializedName("product_id")
   private int productId;
 
+  @ColumnInfo(name = "amount")
   @SerializedName("amount")
   private double amount;
 
+  @ColumnInfo(name = "best_before_date")
   @SerializedName("best_before_date")
   private String bestBeforeDate;
 
+  @ColumnInfo(name = "purchased_date")
   @SerializedName("purchased_date")
   private String purchasedDate;
 
+  @ColumnInfo(name = "stock_id")
   @SerializedName("stock_id")
-  private final String stockId;
+  private String stockId;
 
+  @ColumnInfo(name = "price")
   @SerializedName("price")
   private String price;
 
+  @ColumnInfo(name = "open")
   @SerializedName("open")
   private int open;
 
+  @ColumnInfo(name = "opened_date")
   @SerializedName("opened_date")
   private String openedDate;
 
+  @ColumnInfo(name = "row_created_timestamp")
   @SerializedName("row_created_timestamp")
   private String rowCreatedTimestamp;
 
+  @ColumnInfo(name = "location_id")
   @SerializedName("location_id")
   private int locationId;
 
+  @ColumnInfo(name = "note")
+  @SerializedName("note")
+  private String note;
+
   public StockEntry() {
-    stockId = null;
   }
 
+  @Ignore
   public StockEntry(int id, String stockId) {
     this.id = id;
     this.stockId = stockId;
@@ -115,44 +137,96 @@ public class StockEntry implements Parcelable {
     return id;
   }
 
+  public void setId(int id) {
+    this.id = id;
+  }
+
   public int getProductId() {
     return productId;
+  }
+
+  public void setProductId(int productId) {
+    this.productId = productId;
   }
 
   public double getAmount() {
     return amount;
   }
 
+  public void setAmount(double amount) {
+    this.amount = amount;
+  }
+
   public String getBestBeforeDate() {
     return bestBeforeDate;
+  }
+
+  public void setBestBeforeDate(String bestBeforeDate) {
+    this.bestBeforeDate = bestBeforeDate;
   }
 
   public String getPurchasedDate() {
     return purchasedDate;
   }
 
+  public void setPurchasedDate(String purchasedDate) {
+    this.purchasedDate = purchasedDate;
+  }
+
   public String getStockId() {
     return stockId;
+  }
+
+  public void setStockId(String stockId) {
+    this.stockId = stockId;
   }
 
   public String getPrice() {
     return price;
   }
 
+  public void setPrice(String price) {
+    this.price = price;
+  }
+
   public int getOpen() {
     return open;
+  }
+
+  public void setOpen(int open) {
+    this.open = open;
   }
 
   public String getOpenedDate() {
     return openedDate;
   }
 
+  public void setOpenedDate(String openedDate) {
+    this.openedDate = openedDate;
+  }
+
   public String getRowCreatedTimestamp() {
     return rowCreatedTimestamp;
   }
 
+  public void setRowCreatedTimestamp(String rowCreatedTimestamp) {
+    this.rowCreatedTimestamp = rowCreatedTimestamp;
+  }
+
   public int getLocationId() {
     return locationId;
+  }
+
+  public void setLocationId(int locationId) {
+    this.locationId = locationId;
+  }
+
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(String note) {
+    this.note = note;
   }
 
   public static StockEntry getStockEntryFromId(ArrayList<StockEntry> stockEntries, String id) {
@@ -167,6 +241,34 @@ public class StockEntry implements Parcelable {
   @Override
   public int describeContents() {
     return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    StockEntry that = (StockEntry) o;
+    return id == that.id && productId == that.productId
+        && Double.compare(that.amount, amount) == 0 && open == that.open
+        && locationId == that.locationId && Objects
+        .equals(bestBeforeDate, that.bestBeforeDate) && Objects
+        .equals(purchasedDate, that.purchasedDate) && Objects.equals(stockId, that.stockId)
+        && Objects.equals(price, that.price) && Objects
+        .equals(openedDate, that.openedDate) && Objects
+        .equals(rowCreatedTimestamp, that.rowCreatedTimestamp) && Objects
+        .equals(note, that.note);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects
+        .hash(id, productId, amount, bestBeforeDate, purchasedDate, stockId, price, open,
+            openedDate,
+            rowCreatedTimestamp, locationId, note);
   }
 
   @NonNull

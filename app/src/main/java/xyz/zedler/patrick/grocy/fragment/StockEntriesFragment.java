@@ -34,11 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
+import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter.StockEntryAdapterListener;
 import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
-import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentStockEntriesBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
@@ -53,20 +55,19 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.StockEntriesViewModel;
 
-public class StockOverviewFragment extends BaseFragment implements
-    StockOverviewItemAdapter.StockOverviewItemAdapterListener,
+public class StockEntriesFragment extends BaseFragment implements StockEntryAdapterListener,
     BarcodeListener {
 
-  private final static String TAG = StockOverviewFragment.class.getSimpleName();
+  private final static String TAG = StockEntriesFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private StockOverviewViewModel viewModel;
+  private StockEntriesViewModel viewModel;
   private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
   private SwipeBehavior swipeBehavior;
-  private FragmentStockOverviewBinding binding;
+  private FragmentStockEntriesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
 
@@ -76,7 +77,7 @@ public class StockOverviewFragment extends BaseFragment implements
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
+    binding = FragmentStockEntriesBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
         this,
         binding.containerScanner,
@@ -104,7 +105,7 @@ public class StockOverviewFragment extends BaseFragment implements
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(StockOverviewViewModel.class);
+    viewModel = new ViewModelProvider(this).get(StockEntriesViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
@@ -140,32 +141,27 @@ public class StockOverviewFragment extends BaseFragment implements
 
     viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
-      if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
-        ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
+      if (binding.recycler.getAdapter() instanceof StockEntryAdapter) {
+        ((StockEntryAdapter) binding.recycler.getAdapter()).updateData(
             requireContext(),
             items,
             viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
-            viewModel.getProductAveragePriceHashMap(),
-            viewModel.getProductLastPurchasedHashMap(),
             viewModel.getProductGroupHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getLocationHashMap(),
             viewModel.getProductIdsMissingItems(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
-            viewModel.getGroupingMode(),
-            viewModel.getExtraField()
+            viewModel.getGroupingMode()
         );
       } else {
         binding.recycler.setAdapter(
-            new StockOverviewItemAdapter(
+            new StockEntryAdapter(
                 requireContext(),
                 items,
                 viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
-                viewModel.getProductAveragePriceHashMap(),
-                viewModel.getProductLastPurchasedHashMap(),
                 viewModel.getProductGroupHashMap(),
                 viewModel.getProductHashMap(),
                 viewModel.getLocationHashMap(),
@@ -177,8 +173,7 @@ public class StockOverviewFragment extends BaseFragment implements
                 viewModel.getCurrency(),
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
-                viewModel.getGroupingMode(),
-                viewModel.getExtraField()
+                viewModel.getGroupingMode()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -223,7 +218,7 @@ public class StockOverviewFragment extends BaseFragment implements
           if (stockItem.getAmountAggregatedDouble() > 0
               && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
           ) {
-            underlayButtons.add(new SwipeBehavior.UnderlayButton(
+            underlayButtons.add(new UnderlayButton(
                 R.drawable.ic_round_consume_product,
                 pos -> {
                   if (pos >= groupedListItems.size()) {
@@ -240,9 +235,9 @@ public class StockOverviewFragment extends BaseFragment implements
           if (stockItem.getAmountAggregatedDouble()
               > stockItem.getAmountOpenedAggregatedDouble()
               && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
-              && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+              && viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)
           ) {
-            underlayButtons.add(new SwipeBehavior.UnderlayButton(
+            underlayButtons.add(new UnderlayButton(
                 R.drawable.ic_round_open,
                 pos -> {
                   if (pos >= groupedListItems.size()) {
@@ -257,7 +252,7 @@ public class StockOverviewFragment extends BaseFragment implements
             ));
           }
           if (underlayButtons.isEmpty()) {
-            underlayButtons.add(new SwipeBehavior.UnderlayButton(
+            underlayButtons.add(new UnderlayButton(
                 R.drawable.ic_round_close,
                 pos -> swipeBehavior.recoverLatestSwipedItem()
             ));
@@ -340,9 +335,6 @@ public class StockOverviewFragment extends BaseFragment implements
     if (item.getItemId() == R.id.action_search) {
       ViewUtil.startIcon(item);
       setUpSearch();
-      return true;
-    } else if (item.getItemId() == R.id.action_stock_entries) {
-      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment());
       return true;
     }
     return false;

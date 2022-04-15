@@ -1495,6 +1495,65 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem updateStockEntries(
+      String dbChangedTime,
+      OnStockEntriesResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+        PREF.DB_LAST_TIME_STOCK_ENTRIES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+            @Nullable OnStringResponseListener responseListener,
+            @Nullable OnErrorListener errorListener,
+            @Nullable String uuid
+        ) {
+          get(
+              grocyApi.getObjects(ENTITY.STOCK_ENTRIES),
+              uuid,
+              response -> {
+                Type type = new TypeToken<List<StockEntry>>() {
+                }.getType();
+                ArrayList<StockEntry> stockEntries = gson.fromJson(response, type);
+                if (debug) {
+                  Log.i(tag, "dowload StockEntries: " + stockEntries);
+                }
+                Single.concat(
+                    appDatabase.stockEntryDao().deleteStockEntries(),
+                    appDatabase.stockEntryDao().insertStockEntries(stockEntries)
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                      sharedPrefs.edit()
+                          .putString(PREF.DB_LAST_TIME_STOCK_ENTRIES, dbChangedTime).apply();
+                      if (onResponseListener != null) {
+                        onResponseListener.onResponse(stockEntries);
+                      }
+                      if (responseListener != null) {
+                        responseListener.onResponse(response);
+                      }
+                    })
+                    .subscribe();
+              },
+              error -> {
+                if (errorListener != null) {
+                  errorListener.onError(error);
+                }
+              }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped StockEntries download");
+      }
+      return null;
+    }
+  }
+
   public QueueItem getProductDetails(
       int productId,
       OnProductDetailsResponseListener onResponseListener,
@@ -2800,6 +2859,8 @@ public class DownloadHelper {
         queue.append(updateUsers(dbChangedTime, null));
       } else if (type == StockItem.class) {
         queue.append(updateStockItems(dbChangedTime, null));
+      } else if (type == StockEntry.class) {
+        queue.append(updateStockEntries(dbChangedTime, null));
       } else if (type == VolatileItem.class) {
         queue.append(updateVolatile(dbChangedTime, null));
       } else if (type == MissingItem.class) {

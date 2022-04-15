@@ -32,12 +32,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
+import xyz.zedler.patrick.grocy.adapter.StockEntrySelectionAdapter;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.util.Constants;
 
 public class StockEntriesBottomSheet extends BaseBottomSheet
-    implements StockEntryAdapter.StockEntryAdapterListener {
+    implements StockEntrySelectionAdapter.StockEntrySelectionAdapterListener {
 
   private final static String TAG = StockEntriesBottomSheet.class.getSimpleName();
 
@@ -79,7 +79,7 @@ public class StockEntriesBottomSheet extends BaseBottomSheet
     );
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(
-        new StockEntryAdapter(activity, stockEntries, selectedStockId, this)
+        new StockEntrySelectionAdapter(activity, stockEntries, selectedStockId, this)
     );
 
     return view;

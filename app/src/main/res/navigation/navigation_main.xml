@@ -258,6 +258,12 @@
       app:argType="xyz.zedler.patrick.grocy.model.QuantityUnit"
       app:nullable="true"
       android:defaultValue="@null" />
+    <action
+      android:id="@+id/action_productOverviewBottomSheetDialogFragment_to_stockEntriesFragment"
+      app:destination="@id/stockEntriesFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </dialog>
   <dialog
     android:id="@+id/drawerBottomSheetDialogFragment"
@@ -1084,6 +1090,12 @@
     <deepLink
       android:id="@+id/deepLink"
       app:uri="@string/deep_link_stockOverviewFragment" />
+    <action
+      android:id="@+id/action_stockOverviewFragment_to_stockEntriesFragment"
+      app:destination="@id/stockEntriesFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/chooseProductFragment"
@@ -1144,4 +1156,9 @@
       android:id="@+id/deepLink16"
       app:uri="@string/deep_link_choresFragment" />
   </fragment>
+  <fragment
+    android:id="@+id/stockEntriesFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.StockEntriesFragment"
+    android:label="StockEntriesFragment"
+    tools:layout="@layout/fragment_stock_entries"/>
 </navigation>

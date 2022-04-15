@@ -64,6 +64,7 @@ public final class Constants {
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
+    public final static String DB_LAST_TIME_STOCK_ENTRIES = "db_last_time_stock_entries";
     public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
     public final static String DB_LAST_TIME_LOCATIONS = "db_last_time_locations";
     public final static String DB_LAST_TIME_STOCK_LOCATIONS = "db_last_time_stock_locations";
