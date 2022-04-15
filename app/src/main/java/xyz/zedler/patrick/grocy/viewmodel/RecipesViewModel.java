@@ -30,27 +30,22 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
-import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -61,6 +56,8 @@ public class RecipesViewModel extends BaseViewModel {
 
   private final static String TAG = RecipesViewModel.class.getSimpleName();
   public final static String SORT_NAME = "sort_name";
+  public final static String SORT_CALORIES = "sort_calories";
+  public final static String SORT_DUE_SCORE = "sort_due_score";
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
@@ -73,8 +70,8 @@ public class RecipesViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Recipe>> filteredRecipesLive;
-  private final FilterChipLiveDataTasksStatus filterChipLiveDataStatus;
-  private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
+  private final FilterChipLiveDataRecipesStatus filterChipLiveDataStatus;
+  private final FilterChipLiveDataRecipesSort filterChipLiveDataSort;
 
   private List<Recipe> recipes;
   private List<RecipeFulfillment> recipeFulfillments;
@@ -82,6 +79,10 @@ public class RecipesViewModel extends BaseViewModel {
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private final boolean debug;
+
+  private int enoughInStockCount = 0;
+  private int notEnoughInStockButInShoppingListCount = 0;
+  private int notEnoughInStockCount = 0;
 
   public RecipesViewModel(@NonNull Application application) {
     super(application);
@@ -100,11 +101,11 @@ public class RecipesViewModel extends BaseViewModel {
     offlineLive = new MutableLiveData<>(false);
     filteredRecipesLive = new MutableLiveData<>();
 
-    filterChipLiveDataStatus = new FilterChipLiveDataTasksStatus(
+    filterChipLiveDataStatus = new FilterChipLiveDataRecipesStatus(
         getApplication(),
         this::updateFilteredRecipes
     );
-    filterChipLiveDataSort = new FilterChipLiveDataTasksSort(
+    filterChipLiveDataSort = new FilterChipLiveDataRecipesSort(
         getApplication(),
         this::updateFilteredRecipes
     );
@@ -145,6 +146,8 @@ public class RecipesViewModel extends BaseViewModel {
         updateFilteredRecipes();
       }), dlHelper.updateRecipeFulfillments(dbChangedTime, recipeFulfillments -> {
         this.recipeFulfillments = recipeFulfillments;
+
+        updateFilteredRecipes();
       })
     );
 
@@ -190,20 +193,64 @@ public class RecipesViewModel extends BaseViewModel {
   public void updateFilteredRecipes() {
     ArrayList<Recipe> filteredRecipes = new ArrayList<>();
 
+    enoughInStockCount = 0;
+    notEnoughInStockButInShoppingListCount = 0;
+    notEnoughInStockCount = 0;
+
     for (Recipe recipe : this.recipes) {
+      RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe.getId());
+
+      if (recipeFulfillment != null) {
+        if (recipeFulfillment.isNeedFulfilled()) {
+          enoughInStockCount++;
+        } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+          notEnoughInStockButInShoppingListCount++;
+        } else {
+          notEnoughInStockCount++;
+        }
+
+        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataRecipesStatus.STATUS_ALL
+          && !(filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_ENOUGH_IN_STOCK
+                && recipeFulfillment.isNeedFulfilled()
+                || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
+                && recipeFulfillment.isNeedFulfilledWithShoppingList()
+                || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH
+                && !(recipeFulfillment.isNeedFulfilled() || recipeFulfillment.isNeedFulfilledWithShoppingList()))) {
+          continue;
+        }
+      }
+
       boolean searchContainsItem = true;
       if (searchInput != null && !searchInput.isEmpty()) {
         searchContainsItem = recipe.getName().toLowerCase().contains(searchInput) ||
                 recipe.getDescription().toLowerCase().contains(searchInput);
       }
+
       if (!searchContainsItem) {
         continue;
       }
+
       filteredRecipes.add(recipe);
     }
 
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
-    SortUtil.sortRecipesByName(getApplication(), filteredRecipes, sortAscending);
+    switch (filterChipLiveDataSort.getSortMode()) {
+      case SORT_NAME:
+        SortUtil.sortRecipesByName(getApplication(), filteredRecipes, sortAscending);
+        break;
+      case SORT_CALORIES:
+        SortUtil.sortRecipesByCalories(getApplication(), filteredRecipes, recipeFulfillments, sortAscending);
+        break;
+      case SORT_DUE_SCORE:
+        SortUtil.sortRecipesByDueScore(getApplication(), filteredRecipes, recipeFulfillments, sortAscending);
+        break;
+    }
+
+    filterChipLiveDataStatus
+            .setEnoughInStockCount(enoughInStockCount)
+            .setNotEnoughButInShoppingListCount(notEnoughInStockButInShoppingListCount)
+            .setNotEnoughCount(notEnoughInStockCount)
+            .emitCounts();
 
     filteredRecipesLive.setValue(filteredRecipes);
   }

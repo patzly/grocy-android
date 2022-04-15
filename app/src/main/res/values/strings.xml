@@ -1050,15 +1050,31 @@
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
   <string name="title_recipes">Recipes</string>
   <string name="error_empty_recipes">No recipes</string>
-    <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
-    <string name="subtitle_recipe_due_score">Due score: %1$s</string>
-    <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
-    <string name="property_base_servings">Servings</string>
-    <string name="error_invalid_base_servings">Servings invalid</string>
-    <string name="property_not_check_shopping_list">Do not check against shopping list</string>
+  <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
+  <string name="subtitle_recipe_due_score">Due score: %1$s</string>
+  <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
+  <string name="property_base_servings">Servings</string>
+  <string name="error_invalid_base_servings">Servings invalid</string>
+  <string name="property_not_check_shopping_list">Do not check against shopping list</string>
   <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
-    <string name="property_preparation">Preparation</string>
-    <string name="property_costs">Costs</string>
-    <string name="property_due_score">Due score</string>
+  <string name="property_preparation">Preparation</string>
+  <string name="property_costs">Costs</string>
+  <string name="property_due_score">Due score</string>
+
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_recipes_enough_in_stock">
+    <item quantity="one">%1$d enough in stock</item>
+    <item quantity="other">%1$d enough in stock</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_recipes_not_enough_but_in_shopping_list">
+    <item quantity="one">%1$d not enough in stock but in shopping list</item>
+    <item quantity="other">%1$d not enough in stock but in shopping list</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_recipes_not_enough">
+    <item quantity="one">%1$d not enough in stock</item>
+    <item quantity="other">%1$d not enough in stock</item>
+  </plurals>
 
 </resources>
