@@ -1059,7 +1059,7 @@
   <string name="setting_date_keyboard_reverse">Zadávat nejprve den v datumu</string>
   <string name="setting_date_keyboard_reverse_description">DDMMRR (DenMěsícRok) místo RRMMDD</string>
   <string name="setting_loading_circle">Zobrazovat symbol čtení ze serveru u všech požadavků</string>
-  <string name="setting_loading_circle_description">Dobré zapnout při pomalém připojení</string>
+  <string name="setting_loading_circle_description">vhodné pro pomalé připojení k internetu nebo serveru</string>
   <string name="setting_tor">Použít službu Tor</string>
   <string name="setting_tor_description">to vyžaduje aplikaci Orbot</string>
   <string name="setting_proxy">Používat HTTP proxy server</string>
