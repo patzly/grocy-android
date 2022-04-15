@@ -666,10 +666,10 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="one">Ve vašem nákupním seznamu je %1$d položka.</item>
-    <item quantity="few">Ve vašem nákupním seznamu jsou %1$d položky.</item>
-    <item quantity="many">Ve vašem nákupním seznamu je %1$d položek.</item>
-    <item quantity="other">Ve vašem nákupním seznamu je %1$d položek.</item>
+    <item quantity="one">Ve nákupním seznamu je %1$d položka</item>
+    <item quantity="few">V nákupním seznamu jsou %1$d položky</item>
+    <item quantity="many">V nákupním seznamu je %1$d položek</item>
+    <item quantity="other">V nákupním seznamu je %1$d položek</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
