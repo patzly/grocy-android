@@ -549,7 +549,7 @@
   <string name="subtitle_none">Žádný</string>
   <string name="subtitle_empty">Prázdné</string>
   <string name="subtitle_done">Vloženo</string>
-  <string name="subtitle_undone">Nehotovo</string>
+  <string name="subtitle_undone">Vráceno</string>
   <string name="subtitle_uncategorized">Bez kategorie</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Nemá datum spotřeby</string>
