@@ -570,7 +570,7 @@
   <string name="subtitle_factor_means">To znamená, že 1 %1$s odpovídá %2$s</string>
   <string name="subtitle_product_hidden">Produkt je skrytý</string>
   <string name="subtitle_product_not_hidden">Produkt není skrytý</string>
-  <string name="subtitle_product_not_on_server">Produkt není na serveru</string>
+  <string name="subtitle_product_not_on_server">Produkt není uložen na serveru</string>
   <string name="subtitle_barcodes_will_be_added">Přečtené čárové kódy se uloží k datům produktu</string>
   <string name="subtitle_unknown">Neznámý</string>
   <!-- Like the word 'supported' from 'This version is supported.'-->
