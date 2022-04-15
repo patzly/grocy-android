@@ -563,7 +563,7 @@
   <!-- %1$s and %2$s are numbers -->
   <string name="subtitle_entry_num_of_num">%1$d. položka z %2$d</string>
   <!-- %1$s is an amount, %2$s is a quantity unit -->
-  <string name="subtitle_amount_compare">To se rovná %1$s %2$s.</string>
+  <string name="subtitle_amount_compare">To odpovídá %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
   <string name="subtitle_price_means">To znamená %1$s za %2$s.</string>
   <!-- %1$s and %2$s are amounts -->
