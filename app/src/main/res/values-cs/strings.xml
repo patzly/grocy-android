@@ -481,7 +481,7 @@
   <string name="title_logs">Záznamy o činnosti aplikace</string>
   <string name="title_compatibility">Problémy s kompatibilitou</string>
   <string name="title_logout">Chcete se z rocy odhlásit?</string>
-  <string name="title_restart">Restartovat Grocy?</string>
+  <string name="title_restart">Chcete grocy restartovat ?</string>
   <string name="title_logout_demo">Odhláit z módu dema?</string>
   <string name="title_manage_master_data">Spravovat základní data</string>
   <string name="title_edit_description">Upravit popis</string>
