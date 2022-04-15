@@ -786,7 +786,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default">Výchozí počet dní min. trvanlivosti</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default_opened">Výchozí počet dní do spotřeby po otevření</string>
+  <string name="property_due_days_default_opened">Výchozí počet dní min. trvanlivosti po otevření</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_freezing">Výchozí počet dní do spotřeby po zmrazení</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
