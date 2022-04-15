@@ -892,7 +892,7 @@
     <item quantity="one">%d rok</item>
     <item quantity="few">%d roky</item>
     <item quantity="many">%d let</item>
-    <item quantity="other">%d roku</item>
+    <item quantity="other">%d let</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
