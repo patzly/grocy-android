@@ -756,7 +756,7 @@
   <string name="property_quantity_unit">Měrná jednotka</string>
   <string name="property_quantity_units">Měrná jednotky</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_default_qu_purchase">Výchozí množ. jednotka nákupu</string>
+  <string name="property_default_qu_purchase">Výchozí měrná jednotka pro nákup</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_stock">Měrná jednotka zásob</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
