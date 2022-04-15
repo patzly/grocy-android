@@ -582,7 +582,7 @@
   <!-- %1$s is a unit -->
   <string name="subtitle_barcode_unit">Jednotka množství: %1$s</string>
   <string name="subtitle_barcode">Čárový kód: %1$s</string>
-  <string name="subtitle_feature_disabled">Funkce je vypnuta</string>
+  <string name="subtitle_feature_disabled">Tato funkce je vypnuta</string>
   <string name="subtitle_date_from_input">Datum zápisu:\n%1$s</string>
   <string name="subtitle_product_amount">Nastavení pro min. zásobu, rychle spotřebovat, násobitel, táru</string>
   <string name="subtitle_product_default_location">Umístění, Obchod</string>
