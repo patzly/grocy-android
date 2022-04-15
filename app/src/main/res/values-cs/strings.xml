@@ -441,7 +441,7 @@
   <string name="error_failed_to_connect_to">Připojení k serveru selhalo</string>
   <string name="error_missing_information">Nejsou vyplněna všechna vyžadovaná pole</string>
   <string name="error_handshake">Neplatný certifikát</string>
-  <string name="error_handshake_description">Tento server vyžaduje certifikát který není známý nebo důvěryhodný Androidem.\nCertifikát serveru musí být buďto podepsán důvěryhodnou certifikační autoritou (např. letsencrypt.org) nebo uložen v uživatelském úložišti certifikátů v Androidu na tomto zařízení.</string>
+  <string name="error_handshake_description">Tento server požaduje certifikát jehož původ není operačnímu systému známý.\nCertifikát serveru musí být buďto podepsán důvěryhodnou certifikační autoritou (např. letsencrypt.org) anebo musí být v tomto zařízení nejprve uložen.</string>
   <string name="error_unexpected_response_code">Neočekávaný kód odpovědi</string>
   <string name="error_unexpected_response">Neočekávaná odpověď serveru</string>
   <string name="error_no_browser">Nainstalujte webový prohlížeč pro zobrazení nápovědy</string>
