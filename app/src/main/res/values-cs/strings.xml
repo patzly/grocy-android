@@ -841,7 +841,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_amount_quick_consume">Množství pro „rychle spotřebovat“</string>
   <!-- %1$s is a quantity unit like "bottles" -->
-  <string name="property_amount_quick_consume_in">Rychle spotřebovat množství v %1$s</string>
+  <string name="property_amount_quick_consume_in">Měrná jednotka pro „rychle spotřebovat“ %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_accumulate_amount">Sčítat minimální počet skladových zásob podřízených produktů</string>
   <string name="property_picture">Obrázek</string>
