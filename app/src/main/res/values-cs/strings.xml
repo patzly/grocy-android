@@ -445,7 +445,7 @@
   <string name="error_unexpected_response_code">Neočekávaný typ odpovědi</string>
   <string name="error_unexpected_response">Neočekávaná odpověď serveru</string>
   <string name="error_no_browser">Pro zobrazení nápovědy nejprve nainstalujte webový prohlížeč</string>
-  <string name="error_barcode_not_linked">Čárový kód není přiřazen žádnému produktu</string>
+  <string name="error_barcode_not_linked">Čárový kód není přiřazen k žádnému produktu</string>
   <string name="error_no_product_details">Nelze načíst detaily produktu</string>
   <string name="error_failed_barcode_upload">Čárový kód se nepodařilo odeslat</string>
   <string name="error_wrong_grocycode_type">Tento grocycode obsahuje chybný druh pole</string>
