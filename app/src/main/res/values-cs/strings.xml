@@ -531,7 +531,7 @@
   <string name="title_product_cat_quantity_unit">Měrná jednotka</string>
   <string name="title_product_cat_barcodes">Čárové kódy</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
-  <string name="title_product_cat_qu_conversions">Převody množ. jedn.</string>
+  <string name="title_product_cat_qu_conversions">Převody měr. jednotek</string>
   <string name="title_unknown_input">Neznámý vstup</string>
   <string name="title_presets_new_products">Předvolby pro nové produkty</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
