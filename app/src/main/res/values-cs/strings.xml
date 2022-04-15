@@ -652,10 +652,10 @@
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
-    <item quantity="one">Máte %1$d produkt v zásobách v hodnotě %2$s %3$s.</item>
-    <item quantity="few">Máte %1$d produkty v zásobách v hodnotě %2$s %3$s.</item>
-    <item quantity="many">Máte %1$d produktů v zásobách v hodnotě %2$s %3$s.</item>
-    <item quantity="other">Máte %1$d produktu v zásobách v hodnotě %2$s %3$s.</item>
+    <item quantity="one">V zásobě je %1$d produkt, celkem za %2$s %3$s</item>
+    <item quantity="few">V zásobě jsou %1$d produkty, celkem za %2$s %3$s</item>
+    <item quantity="many">V zásobě je %1$d produktů, celkem za %2$s %3$s</item>
+    <item quantity="other">V zásobě je %1$d produktů, celkem za %2$s %3$s</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
