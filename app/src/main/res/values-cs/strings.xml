@@ -1045,7 +1045,7 @@
   <string name="setting_error_logs">Jen chyby</string>
   <string name="setting_info_logs">Zobrazit info v logu</string>
   <string name="setting_logs_description">Zobrazit logcat tohoto procesu</string>
-  <string name="setting_timeout">Časový limit načítání</string>
+  <string name="setting_timeout">Časový limit pro načítání</string>
   <string name="setting_timeout_descriptions">Po kterém se načítání zruší</string>
   <string name="setting_beginner_mode">Začátečnický režim</string>
   <string name="setting_beginner_mode_description">Zobrazovat texty nápovědy ve výchozím stavu</string>
