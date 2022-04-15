@@ -831,7 +831,7 @@
   <string name="property_disable_own_stock">Produkt nemá vlastní zásobu</string>
   <string name="property_number">Číslo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_enable_tare_weight">Povolit zadání táry</string>
+  <string name="property_enable_tare_weight">Použít táru</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_tare_weight">Tára (hmotnost obalu)</string>
   <!-- %1$s is a quantity unit like "bottles" -->
