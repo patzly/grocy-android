@@ -158,7 +158,7 @@
     <item quantity="other">%1$d otevřených</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_consumed">Zkonzumováno %1$s %2$s z %3$s</string>
+  <string name="msg_consumed">Spotřebováno %1$s %2$s produktu %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed_spoiled">%1$s %2$s produkty %3$s jsou zkažené</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
