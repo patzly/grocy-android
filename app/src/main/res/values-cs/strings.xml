@@ -451,7 +451,7 @@
   <string name="error_wrong_grocycode_type">Tento grocycode obsahuje chybný druh pole</string>
   <string name="error_stock_entry_grocycode">Podle tohoto grocycode nebyl nalezen žádný produkt v zásobě</string>
   <string name="error_permission">Pro tuto akci nemáte přidělené oprávnění</string>
-  <string name="error_undefined">Nastala chyba</string>
+  <string name="error_undefined">Došlo k chybě</string>
 
   <string name="title_overview">Přehled</string>
   <string name="title_stock_overview">Přehled zásob</string>
