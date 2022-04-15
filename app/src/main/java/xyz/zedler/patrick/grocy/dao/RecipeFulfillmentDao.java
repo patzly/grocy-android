@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.ShoppingList;
 
 @Dao
 public interface RecipeFulfillmentDao {

@@ -42,11 +42,13 @@ import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipesBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
@@ -216,7 +218,7 @@ public class RecipesFragment extends BaseFragment implements
                     swipeBehavior.recoverLatestSwipedItem();
                     new Handler().postDelayed(() -> {
                       Recipe recipe = displayedItems.get(pos);
-                      viewModel.consumeRecipe(recipe.getId());
+                      consumeRecipe(recipe.getId());
                       activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
                     }, 100);
                   }
@@ -231,7 +233,7 @@ public class RecipesFragment extends BaseFragment implements
                     swipeBehavior.recoverLatestSwipedItem();
                     new Handler().postDelayed(() -> {
                       Recipe recipe = displayedItems.get(pos);
-                      viewModel.addNotFulfilledProductsToCartForRecipe(recipe.getId());
+                      addNotFulfilledProductsToCartForRecipe(recipe.getId());
                       activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
                     }, 100);
                   }
@@ -248,6 +250,27 @@ public class RecipesFragment extends BaseFragment implements
     }
 
     updateUI(savedInstanceState == null);
+  }
+
+  @Override
+  public void consumeRecipe(int recipeId) {
+    viewModel.consumeRecipe(recipeId);
+  }
+
+  @Override
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId);
+  }
+
+  @Override
+  public void editRecipe(Recipe recipe) {
+    navigate(RecipesFragmentDirections
+            .actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT).setRecipe(recipe));
+  }
+
+  @Override
+  public void deleteRecipe(int recipeId) {
+    viewModel.deleteRecipe(recipeId);
   }
 
   private void updateUI(boolean animated) {
@@ -303,10 +326,13 @@ public class RecipesFragment extends BaseFragment implements
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
+
+    RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(viewModel.getRecipeFulfillments(), recipe.getId());
+
     Bundle bundle = new Bundle();
     bundle.putParcelable(ARGUMENT.RECIPE, recipe);
-    activity.showMessage("Not implemented yet");
-    //activity.showBottomSheet(new TaskEntryBottomSheet(), bundle);
+    bundle.putParcelable(ARGUMENT.RECIPE_FULFILLMENT, recipeFulfillment);
+    activity.showBottomSheet(new RecipeBottomSheet(), bundle);
   }
 
   @Override

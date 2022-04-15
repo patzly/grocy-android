@@ -21,9 +21,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/action_toggle_done"
-    android:title="@string/action_toggle_done"
-    android:icon="@drawable/ic_round_done"
+    android:id="@+id/action_consume"
+    android:title="@string/action_consume"
+    android:icon="@drawable/ic_round_restaurant_menu"
+    app:showAsAction="always" />
+
+  <item
+    android:id="@+id/action_add_not_fulfilled_products_to_cart_for_recipe"
+    android:title="@string/action_consume"
+    android:icon="@drawable/ic_round_add_shopping_cart"
     app:showAsAction="always" />
 
   <item

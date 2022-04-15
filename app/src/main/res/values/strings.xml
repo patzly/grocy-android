@@ -1058,5 +1058,7 @@
     <string name="property_not_check_shopping_list">Do not check against shopping list</string>
   <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
     <string name="property_preparation">Preparation</string>
+    <string name="property_costs">Costs</string>
+    <string name="property_due_score">Due score</string>
 
 </resources>
