@@ -659,10 +659,10 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
-    <item quantity="one">Ve vašich nákupních seznamech je %1$d položka.</item>
-    <item quantity="few">Ve vašich nákupních seznamech jsou %1$d položky.</item>
-    <item quantity="many">Ve vašich nákupních seznamech je %1$d položek.</item>
-    <item quantity="other">Ve vašich nákupních seznamech je %1$d položek.</item>
+    <item quantity="one">Ve všech nákupních seznamech je celkem %1$d položka</item>
+    <item quantity="few">Ve všech nákupních seznamech jsou celkem %1$d položky</item>
+    <item quantity="many">Ve všech nákupních seznamech je celkem %1$d položek</item>
+    <item quantity="other">Ve všech nákupních seznamech je celkem %1$d položek</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
