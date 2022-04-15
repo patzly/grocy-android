@@ -526,7 +526,7 @@
   <string name="title_product_cat_optional">Volitelné vlastnosti</string>
   <string name="title_product_cat_location">Výchozí umístění</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="title_product_cat_due_date">Datum spotřeby</string>
+  <string name="title_product_cat_due_date">Datum min. trvanlivosti</string>
   <string name="title_product_cat_amount">Množství</string>
   <string name="title_product_cat_quantity_unit">Jednotka množství</string>
   <string name="title_product_cat_barcodes">Čárové kódy</string>
