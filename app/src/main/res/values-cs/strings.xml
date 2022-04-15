@@ -603,10 +603,10 @@
 
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
-    <item quantity="one">Máte %1$d produkt v zásobách.</item>
-    <item quantity="few">Máte %1$d produkty v zásobách.</item>
-    <item quantity="many">Máte %1$d produktů v zásobách.</item>
-    <item quantity="other">Máte %1$d produktu v zásobách.</item>
+    <item quantity="one">V zásobě máte %1$d produkt</item>
+    <item quantity="few">V zásobě máte %1$d produkty</item>
+    <item quantity="many">V zásobě máte %1$d produktů</item>
+    <item quantity="other">V zásobě máte %1$d produktů</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
