@@ -444,7 +444,7 @@
   <string name="error_handshake_description">Tento server požaduje certifikát jehož původ není operačnímu systému známý.\nCertifikát serveru musí být buďto podepsán důvěryhodnou certifikační autoritou (např. letsencrypt.org) anebo musí být v tomto zařízení nejprve uložen.</string>
   <string name="error_unexpected_response_code">Neočekávaný typ odpovědi</string>
   <string name="error_unexpected_response">Neočekávaná odpověď serveru</string>
-  <string name="error_no_browser">Nainstalujte webový prohlížeč pro zobrazení nápovědy</string>
+  <string name="error_no_browser">Pro zobrazení nápovědy nejprve nainstalujte webový prohlížeč</string>
   <string name="error_barcode_not_linked">Čárový kód není přiřazen žádnému produktu</string>
   <string name="error_no_product_details">Nelze načíst detaily produktu</string>
   <string name="error_failed_barcode_upload">Čárový kód se nepodařilo odeslat</string>
