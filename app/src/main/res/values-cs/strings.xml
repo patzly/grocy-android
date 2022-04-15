@@ -1051,7 +1051,7 @@
   <string name="setting_beginner_mode_description">Zobrazovat nápovědu</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Rozbalit kontextové záložky</string>
-  <string name="setting_expand_bottom_sheets_description">V režimu na šířku</string>
+  <string name="setting_expand_bottom_sheets_description">je-li displej na šířku</string>
   <string name="setting_speed_up_start">Zrychlení startu aplikace</string>
   <string name="setting_speed_up_start_description">funguje jen na rychlých zařízeních</string>
   <string name="setting_date_keyboard_input">Zadávat datum klávesnicí</string>
