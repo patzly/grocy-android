@@ -1018,7 +1018,7 @@
   <string name="setting_shopping_mode_update_interval">Interval aktualizace nákupního módu</string>
   <string name="setting_keep_screen_on">Nech rozsvícenou obrazovku</string>
   <string name="setting_keep_screen_on_description">Když je v módu nákupu</string>
-  <string name="setting_show_done_items">Zobrazit hotové položky</string>
+  <string name="setting_show_done_items">Zobrazit produkty v košíku</string>
   <string name="setting_show_done_items_description">Vespod</string>
   <string name="setting_smaller_font">Menší písmo</string>
   <string name="setting_smaller_font_description">aby se mohlo zobrazit více řádků</string>
