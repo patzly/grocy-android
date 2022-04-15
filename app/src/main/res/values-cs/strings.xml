@@ -937,7 +937,7 @@
     <item quantity="other">%d let od teď</item>
   </plurals>
 
-  <string name="info_acknowledgement">Rádi bychom poděkovali vývojáři Grocy, Bernd Bestelovi, bez jehož úžasné práce by tato aplikace nemohla existovat.</string>
+  <string name="info_acknowledgement">Děkujeme vývojáři grocy Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
   <string name="info_intro">Přehrát intro</string>
   <string name="info_intro_description">Představení funkcí</string>
   <string name="info_dev_beginning">Začátek vývoje</string>
