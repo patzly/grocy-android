@@ -778,7 +778,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_type_expiration">Datum expirace</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_date">Datum spotřeby</string>
+  <string name="property_due_date">Datum min. trvanlivosti</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Datum min. trvanlivosti: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
