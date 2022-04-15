@@ -486,7 +486,7 @@
   <string name="title_manage_master_data">Spravovat základní data</string>
   <string name="title_edit_description">Upravit popis</string>
   <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
-  <string name="title_input">Číselný vstup</string>
+  <string name="title_input">Jen čísla</string>
   <string name="title_external_barcode_input">Externí čtečka</string>
   <string name="title_confirmation">Potvrzení</string>
   <string name="title_choose_product">Vyberte produkt</string>
