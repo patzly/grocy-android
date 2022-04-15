@@ -439,7 +439,7 @@
   <string name="error_timeout">Odezva serveru byla příliš dlouhá</string>
   <string name="error_no_product_selected">Nebyl vybrán žádný produkt</string>
   <string name="error_failed_to_connect_to">Nepodařilo se připojit k serveru</string>
-  <string name="error_missing_information">Nejsou vyplněna všechna vyžadovaná pole</string>
+  <string name="error_missing_information">Nejsou vyplněny všechny povinné údaje</string>
   <string name="error_handshake">Neplatný certifikát</string>
   <string name="error_handshake_description">Tento server požaduje certifikát jehož původ není operačnímu systému známý.\nCertifikát serveru musí být buďto podepsán důvěryhodnou certifikační autoritou (např. letsencrypt.org) anebo musí být v tomto zařízení nejprve uložen.</string>
   <string name="error_unexpected_response_code">Neočekávaný typ odpovědi</string>
