@@ -482,7 +482,7 @@
   <string name="title_compatibility">Problémy s kompatibilitou</string>
   <string name="title_logout">Chcete se z rocy odhlásit?</string>
   <string name="title_restart">Chcete grocy restartovat ?</string>
-  <string name="title_logout_demo">Chcete se odhlásit z demoaplikace?</string>
+  <string name="title_logout_demo">Chcete se odhlásit ze zkušební verze?</string>
   <string name="title_manage_master_data">Spravovat základní data</string>
   <string name="title_edit_description">Upravit popis</string>
   <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
