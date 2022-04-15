@@ -782,9 +782,9 @@
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Datum min. trvanlivosti: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_date_next">Příští datum spotřeby</string>
+  <string name="property_due_date_next">Datum min. trvanlivosti</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default">Výchozí počet dní do spotřeby</string>
+  <string name="property_due_days_default">Výchozí počet dní min. trvanlivosti</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_opened">Výchozí počet dní do spotřeby po otevření</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
