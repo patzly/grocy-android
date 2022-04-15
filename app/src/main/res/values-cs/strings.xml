@@ -522,7 +522,7 @@
   <string name="title_shopping_list_edit">Nákupní nákupní seznam</string>
   <string name="title_shopping_list_new">Nový nákupní seznam</string>
   <string name="title_shopping_mode">Režim nakupování</string>
-  <string name="title_batch_mode_shopping_list">Dávkový mód nákupního seznamu </string>
+  <string name="title_batch_mode_shopping_list">Dávkový režim nákupního seznamu</string>
   <string name="title_product_cat_optional">Volitelné vlastnosti</string>
   <string name="title_product_cat_location">Výchozí umístění</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
