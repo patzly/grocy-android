@@ -599,7 +599,7 @@
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option1">Vymazat pouze položky v košíku</string>
   <!-- Context: Clear shopping list -->
-  <string name="description_clear_shopping_list_option2">Vymazat všechny položky</string>
+  <string name="description_clear_shopping_list_option2">Vymazat vše</string>
 
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
