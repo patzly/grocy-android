@@ -955,7 +955,7 @@
   <string name="feature_1_description">Správa potravin pro váš domov na vlastním serveru</string>
   <string name="feature_2_title">Intuitivní design</string>
   <string name="feature_2_description">Otevři a zkonzumuj jedním tahem</string>
-  <string name="feature_3_title">Výkonné dávkové zpracování</string>
+  <string name="feature_3_title">Dávkové zpracování</string>
   <string name="feature_3_description">Naskenujte celý nákup za pár sekund</string>
 
   <string name="category_licenses">Licence otevřených zdrojových kódů</string>
