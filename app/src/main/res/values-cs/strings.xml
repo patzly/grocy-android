@@ -308,7 +308,7 @@
   <string name="msg_features">Úvod si můžete znovu přehrát v sekci „O programu”</string>
   <string name="msg_feedback">Máte nějaké přání, otázky nebo jste našli chybu? Kontaktujte nás a my vám pomůžeme.\nRádi si od vás přečteme pěknou recenzi na Google Play.</string>
   <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
-  <string name="msg_press_hold_confirm">Stiskněte a podržte pro potvrzení</string>
+  <string name="msg_press_hold_confirm">Podržte pro potvrzení</string>
   <string name="msg_welcome_to_grocy">Vítejte v grocy klientu pro Android!\n\nChcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
   <string name="msg_choose_option_below">Prosím, vyberte jednu z možností.</string>
   <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pokud půjdete na web grocy na jiném zařízení, klikněte na ikonu QR kódu a API klíč naskenujte.</string>
