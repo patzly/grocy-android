@@ -490,7 +490,7 @@
   <string name="title_external_barcode_input">Externí čtečka</string>
   <string name="title_confirmation">Potvrzení</string>
   <string name="title_choose_product">Vyberte produkt</string>
-  <string name="title_pending_products">Nezpracované produkty</string>
+  <string name="title_pending_products">Neuložené produkty</string>
   <string name="title_stored_purchases">Uložené nákupy</string>
   <string name="title_chores">Povinnosti</string>
   <string name="title_chore">Povinnost</string>
