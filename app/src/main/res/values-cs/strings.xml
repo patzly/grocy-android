@@ -896,10 +896,10 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
-    <item quantity="one">před %d dnem</item>
-    <item quantity="few">před %d dny</item>
-    <item quantity="many">před %d dny</item>
-    <item quantity="other">před %d dny </item>
+    <item quantity="one">Před %d dnem</item>
+    <item quantity="few">Před %d dny</item>
+    <item quantity="many">Před %d dny</item>
+    <item quantity="other">Před %d dny</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
