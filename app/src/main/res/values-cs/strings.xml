@@ -565,7 +565,7 @@
   <!-- %1$s is an amount, %2$s is a quantity unit -->
   <string name="subtitle_amount_compare">To odpovídá %1$s %2$s.</string>
   <!-- %1$s is a price, %2$s is a quantity unit -->
-  <string name="subtitle_price_means">To znamená %1$s za %2$s.</string>
+  <string name="subtitle_price_means">To je %1$s za %2$s.</string>
   <!-- %1$s and %2$s are amounts -->
   <string name="subtitle_factor_means">To znamená, že 1 %1$s odpovídá %2$s</string>
   <string name="subtitle_product_hidden">Produkt je skrytý</string>
