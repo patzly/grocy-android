@@ -592,7 +592,7 @@
   <string name="subtitle_synced_with_server">Uloženo na server</string>
 
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
-  <string name="description_input_product_part2">Prosím zvolte jak pokračovat:</string>
+  <string name="description_input_product_part2">Vyberte si, jak pokračovat:</string>
   <string name="description_input_product_option1">Vytvořit produkt a použít zadanou hodnotu jako jméno</string>
   <string name="description_input_product_option2">Vytvořit produkt a použít zadanou hodnotu jako čárový kód</string>
   <string name="description_input_product_option3">Přidat jako čárový kód k existujícímu produktu</string>
