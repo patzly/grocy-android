@@ -1031,7 +1031,7 @@
   <string name="setting_default_amount_consume">Výchozí množství pro spotřebu</string>
   <string name="setting_treat_opened_as_out_of_stock">Považovat otevřené balení jako spotřebované</string>
   <string name="setting_purchased_date">Vyžadovat datum nákupu</string>
-  <string name="setting_purchased_date_description">Na stránce nákupu a inventáře</string>
+  <string name="setting_purchased_date_description">a stránce nákupu a inventáře</string>
   <string name="setting_use_quick_consume_amount">Použij množství „rychle spotřebovat“ z parametrů produktu</string>
   <string name="setting_auto_add_shopping_list">Automaticky vkládat produkty do nákupního seznamu</string>
   <string name="setting_auto_add_shopping_list_description">s menší, než minimální zásobou</string>
