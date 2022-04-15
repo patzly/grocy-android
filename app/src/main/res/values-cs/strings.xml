@@ -497,7 +497,7 @@
 
   <string name="title_spoiled">Zkaženo</string>
   <string name="title_use_specific">Vybrat balení produktu ze zásob</string>
-  <string name="title_specific">Specifická položka zásob</string>
+  <string name="title_specific">Určité balení ze zásob</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_exact_amount">Spotřebovat přesné množství</string>
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
