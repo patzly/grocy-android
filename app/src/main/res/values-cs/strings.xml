@@ -554,7 +554,7 @@
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">Produkt má neomezenou trvanlivost</string>
   <string name="subtitle_selected">Vybráno</string>
-  <string name="subtitle_stock_entry_no_specific">Nejprve otevřené, poté s nejbližší expirací, pak první dovnitř, první ven</string>
+  <string name="subtitle_stock_entry_no_specific">Nejprve otevřené, pak ty s nejbližším datem min. trvanlivosti spotřeby a nakonec „dříve nakoupený  dříve spotřebovaný“.</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_stock_entry_name">Koupeno dne %1$s</string>
