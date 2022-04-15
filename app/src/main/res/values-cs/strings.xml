@@ -988,7 +988,7 @@
   <string name="setting_language">Jazyk</string>
   <string name="setting_language_description">Vyberte jazyk</string>
   <string name="setting_language_info">Děkujeme všem dobrovolným překladatelům na Transifexu!\nPodívejte se, prosím, na náš GitHub, kde najdete, jak můžete pomoci s překladem grocy i do vašeho jazyka</string>
-  <string name="setting_language_system">Výchozí nastavení systému: %1$s</string>
+  <string name="setting_language_system">Výchozí nastavení: %1$s</string>
   <string name="setting_language_not_available">Není dostupný</string>
   <string name="setting_open_food_facts">Použij Open Food Facts</string>
   <string name="setting_open_food_facts_description">Získaz informace z čárových kódů</string>
