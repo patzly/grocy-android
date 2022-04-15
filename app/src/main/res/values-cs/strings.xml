@@ -359,7 +359,7 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_info_mlkit">ML kit používá strojové učení.\nJe téměř vždy přesný.\nČárový kód může být pod jakýmkoliv úhlem.</string>
   <string name="msg_help_external_scanner_ready">Je-li řádek vybraný a prázdný můžete ho vyplnit pomocí externí čtečky</string>
-  <string name="msg_help_external_scanner_settings">Tato aplikace podporuje externí skenery čárových kódů, které simulují klávesnici a mohou být připojeny přes USB nebo Bluetooth. Následující parametry musejí být nastaveny ve vašem externím skeneru:\n\nPrefix: Žádný\nSuffix: TAB nebo ENTER</string>
+  <string name="msg_help_external_scanner_settings">Tato aplikace podporuje externí skenery čárových kódů, které simulují klávesnici a mohou být připojeny přes USB nebo Bluetooth. Skener si nastavte takto:\n\nPrefix: Žádný\nSuffix: TAB nebo ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">První položka seznamu je vybrána podle pravidel: 
 – první otevřené balení, 
