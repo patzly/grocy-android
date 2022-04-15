@@ -597,7 +597,7 @@
   <string name="description_input_product_option2">Vytvořit produkt a použít zadané číslo jako čárový kód</string>
   <string name="description_input_product_option3">Přidat jako čárový kód ke stávajícímu produktu</string>
   <!-- Context: Clear shopping list -->
-  <string name="description_clear_shopping_list_option1">Vymazat pouze hotové položky</string>
+  <string name="description_clear_shopping_list_option1">Vymazat pouze položky v košíku</string>
   <!-- Context: Clear shopping list -->
   <string name="description_clear_shopping_list_option2">Vymazat všechny položky</string>
 
