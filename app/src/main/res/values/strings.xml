@@ -1052,5 +1052,11 @@
   <string name="error_empty_recipes">No recipes</string>
     <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
     <string name="subtitle_recipe_due_score">Due score: %1$s</string>
+    <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
+    <string name="property_base_servings">Servings</string>
+    <string name="error_invalid_base_servings">Servings invalid</string>
+    <string name="property_not_check_shopping_list">Do not check against shopping list</string>
+  <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
+    <string name="property_preparation">Preparation</string>
 
 </resources>

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 34,
-    "identityHash": "49b45af2bb1eb4e13198947b30300d2d",
+    "identityHash": "5ad6c65b096d88a7bb36b40009c3b844",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -1522,7 +1522,7 @@
       },
       {
         "tableName": "recipe_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_id` TEXT, `type` TEXT, `picture_file_name` TEXT, `base_servings` INTEGER NOT NULL, `desired_servings` INTEGER NOT NULL, `not_check_shoppinglist` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_id` TEXT, `type` TEXT, `picture_file_name` TEXT, `base_servings` REAL, `desired_servings` REAL, `not_check_shoppinglist` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -1563,14 +1563,14 @@
           {
             "fieldPath": "baseServings",
             "columnName": "base_servings",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "REAL",
+            "notNull": false
           },
           {
             "fieldPath": "desiredServings",
             "columnName": "desired_servings",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "REAL",
+            "notNull": false
           },
           {
             "fieldPath": "notCheckShoppingList",
@@ -1660,7 +1660,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '49b45af2bb1eb4e13198947b30300d2d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5ad6c65b096d88a7bb36b40009c3b844')"
     ]
   }
 }

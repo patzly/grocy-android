@@ -71,11 +71,11 @@ public class Recipe implements Parcelable {
 
   @ColumnInfo(name = "base_servings")
   @SerializedName("base_servings")
-  private int baseServings;
+  private Double baseServings;
 
   @ColumnInfo(name = "desired_servings")
   @SerializedName("desired_servings")
-  private int desiredServings;
+  private Double desiredServings;
 
   @ColumnInfo(name = "not_check_shoppinglist")
   @SerializedName("not_check_shoppinglist")
@@ -92,8 +92,8 @@ public class Recipe implements Parcelable {
     productId = parcel.readString();
     type = parcel.readString();
     pictureFileName = parcel.readString();
-    baseServings = parcel.readInt();
-    desiredServings = parcel.readInt();
+    baseServings = parcel.readDouble();
+    desiredServings = parcel.readDouble();
     notCheckShoppingList = parcel.readInt();
   }
 
@@ -105,8 +105,8 @@ public class Recipe implements Parcelable {
     dest.writeString(productId);
     dest.writeString(type);
     dest.writeString(pictureFileName);
-    dest.writeInt(baseServings);
-    dest.writeInt(desiredServings);
+    dest.writeDouble(baseServings);
+    dest.writeDouble(desiredServings);
     dest.writeInt(notCheckShoppingList);
   }
 
@@ -179,19 +179,19 @@ public class Recipe implements Parcelable {
     this.pictureFileName = pictureFileName;
   }
 
-  public int getBaseServings() {
+  public Double getBaseServings() {
     return baseServings;
   }
 
-  public void setBaseServings(int baseServings) {
+  public void setBaseServings(Double baseServings) {
     this.baseServings = baseServings;
   }
 
-  public int getDesiredServings() {
+  public Double getDesiredServings() {
     return desiredServings;
   }
 
-  public void setDesiredServings(int desiredServings) {
+  public void setDesiredServings(Double desiredServings) {
     this.desiredServings = desiredServings;
   }
 

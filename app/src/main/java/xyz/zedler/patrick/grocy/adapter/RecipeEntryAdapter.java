@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -133,7 +134,7 @@ public class RecipeEntryAdapter extends
 
       // DUE SCORE
       int due_score = recipeFulfillment.getDueScore();
-      int color;
+      @ColorRes int color;
 
       holder.binding.dueScore.setTypeface(
               ResourcesCompat.getFont(context, R.font.jost_medium)

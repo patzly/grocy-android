@@ -96,6 +96,7 @@ public final class Constants {
     public final static String CAMERA_SCANNER_VISIBLE_SHOPPING_ITEM = "camera_scanner_visible_shopping_item";
     public final static String CAMERA_SCANNER_VISIBLE_TRANSFER = "camera_scanner_visible_transfer";
     public final static String CAMERA_SCANNER_VISIBLE_INVENTORY = "camera_scanner_visible_inventory";
+    public final static String CAMERA_SCANNER_VISIBLE_RECIPE = "camera_scanner_visible_recipe";
 
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";

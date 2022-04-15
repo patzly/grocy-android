@@ -263,8 +263,8 @@ public class RecipesFragment extends BaseFragment implements
         R.string.action_add,
         Constants.FAB.TAG.ADD,
         animated,
-        () -> navigate(TasksFragmentDirections
-            .actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE))
+        () -> navigate(RecipesFragmentDirections
+            .actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE))
     );
   }
 
