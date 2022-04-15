@@ -374,7 +374,7 @@
   <string name="msg_help_start">Je aktivní režim pro začátečníky. Texty nápovědy jsou automaticky zobrazeny na všech stránkách, kde jsou dostupné. Klepnutím to změníte.</string>
   <string name="msg_help_purchased_date_settings">Zobrazit možnost zadání data nákupu na stránce nákupu. Jinak se bude ukládat aktuální datum.</string>
   <string name="msg_help_normal_login">Klepněte na tuto kartu pokud používáte Home Assistant s doplňkem pro grocy.</string>
-  <string name="msg_help_home_assistant_login">Používáte grocy Home Assistant add-on. Z toho důvodu je vyžadováno pár dalších informací. Klikněte na tuto kartu pro přepnutí na normální login.</string>
+  <string name="msg_help_home_assistant_login">Používáte doplněk grocy pro Home Assistant. To vyžaduje doplňkové informace. Klepněte na tuto kartu pro přepnutí na běžné přihlášení.</string>
   <string name="msg_help_home_assistant_login_help_show">Klepnutím zobrazíte nápovědu</string>
   <string name="msg_help_home_assistant_login_help_hide">Klepnutím nápovědu skryjete</string>
   <string name="msg_help_home_assistant_login_server">Zde můžete zadat URL adresu vašeho Nabu Casa cloudu, pokud ho používáte. Klepněte na tuto kartu pro otevření webu Nabu Casa.</string>
