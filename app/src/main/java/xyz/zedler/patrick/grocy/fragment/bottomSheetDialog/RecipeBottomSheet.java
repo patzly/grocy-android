@@ -26,6 +26,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -129,10 +130,15 @@ public class RecipeBottomSheet extends BaseBottomSheet {
     binding.costs.setText(getString(R.string.property_costs), NumUtil.trimPrice(recipeFulfillment.getCosts()) + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""));
     binding.baseServings.setText(getString(R.string.property_base_servings), NumUtil.trim(recipe.getBaseServings()));
     binding.dueScore.setText(getString(R.string.property_due_score), String.valueOf(recipeFulfillment.getDueScore()));
+
     if (recipe.getDescription() == null || recipe.getDescription().trim().isEmpty()) {
       binding.description.setVisibility(View.GONE);
     } else {
-      binding.description.setText(Html.fromHtml(recipe.getDescription()).toString());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        binding.description.setText(Html.fromHtml(recipe.getDescription(), Html.FROM_HTML_MODE_LEGACY));
+      } else {
+        binding.description.setText(Html.fromHtml(recipe.getDescription()));
+      }
     }
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
