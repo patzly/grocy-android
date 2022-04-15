@@ -941,7 +941,7 @@
   <string name="info_intro">Přehrát intro</string>
   <string name="info_intro_description">Představení funkcí</string>
   <string name="info_dev_beginning">Začátek vývoje</string>
-  <string name="info_dev_beginning_date">Duben 2020</string>
+  <string name="info_dev_beginning_date">duben 2020</string>
   <string name="info_version">Verze</string>
   <string name="info_grocy_version">Verze Grocy</string>
   <string name="info_changelog">Log změn</string>
