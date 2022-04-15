@@ -270,7 +270,7 @@
   </plurals>
   <string name="msg_transfer_tare_weight">Produkty s vyplněnou tárou zatím není možné přesouvat</string>
   <string name="msg_item_marked_as_done">Položka je označena jako hotová</string>
-  <string name="msg_item_marked_as_undone">Položka nastavena jako nehotová</string>
+  <string name="msg_item_marked_as_undone">Stav položky byl vrácen</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
   <string name="option_synced_error">Volbu se nepodařilo zapsat na server</string>
   <string name="msg_stored_purchases_overview">Několik nákupů ještě nebylo zapsáno na server. Pro podrobnosti klepněte sem.</string>
