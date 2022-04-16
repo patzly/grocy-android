@@ -665,7 +665,7 @@
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
   <string name="property_amount">Montant</string>
-  <string name="property_amount_insert">Quantité : %1$s</string>
+  <string name="property_amount_insert">Quantité : %1$s</string>
   <string name="property_seconds">Secondes</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
