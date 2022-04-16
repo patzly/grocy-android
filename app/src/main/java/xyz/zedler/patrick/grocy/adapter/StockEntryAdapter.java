@@ -287,8 +287,7 @@ public class StockEntryAdapter extends
 
     if (!showDateTracking) {
       holder.binding.dueDate.setVisibility(View.GONE);
-    } else if (days != null && !date.equals(Constants.DATE.NEVER_OVERDUE)
-    ) {
+    } else if (days != null) {
       holder.binding.dueDate.setVisibility(View.VISIBLE);
       holder.binding.dueDate.setText(context.getString(
           R.string.property_due_date_fill,

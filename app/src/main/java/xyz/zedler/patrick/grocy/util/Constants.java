@@ -336,6 +336,7 @@ public final class Constants {
     public final static String PRODUCT_GROUPS = "product_groups";
     public final static String STOCK_LOCATIONS = "stock_locations";
     public final static String STOCK_ENTRIES = "product_entries";
+    public final static String STOCK_ENTRY = "product_entry";
     public final static String PRODUCT_DETAILS = "product_details";
     public final static String PRODUCT = "product";
     public final static String PRODUCTS = "products";

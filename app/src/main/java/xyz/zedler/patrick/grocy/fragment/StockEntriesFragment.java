@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockEntriesBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
@@ -186,6 +187,9 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
             activity,
             activity.binding.frameMainContainer
         ));
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
 
@@ -349,7 +353,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    //showProductOverview(stockItem);
+    viewModel.showStockEntryBottomSheet(stockEntry);
   }
 
   private void showProductOverview(StockItem stockItem) {

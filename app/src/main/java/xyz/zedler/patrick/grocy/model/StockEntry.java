@@ -238,6 +238,10 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     return shoppingLocationId;
   }
 
+  public int getShoppingLocationIdInt() {
+    return NumUtil.isStringInt(shoppingLocationId) ? Integer.parseInt(shoppingLocationId) : -1;
+  }
+
   public void setShoppingLocationId(String shoppingLocationId) {
     this.shoppingLocationId = shoppingLocationId;
   }

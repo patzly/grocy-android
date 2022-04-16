@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StockEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
@@ -56,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.StockEntriesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -235,6 +238,24 @@ public class StockEntriesViewModel extends BaseViewModel {
     }
 
     filteredStockEntriesLive.setValue(filteredStockEntries);
+  }
+
+  public void showStockEntryBottomSheet(StockEntry stockEntry) {
+    Product product = productHashMap.get(stockEntry.getProductId());
+    QuantityUnit quantityUnitStock = product != null
+        ? quantityUnitHashMap.get(product.getQuIdStockInt()) : null;
+    QuantityUnit quantityUnitPurchase = product != null
+        ? quantityUnitHashMap.get(product.getQuIdPurchaseInt()) : null;
+    Location location = locationHashMap.get(stockEntry.getLocationIdInt());
+    Store store = storeHashMap.get(stockEntry.getShoppingLocationIdInt());
+    Bundle bundle = new Bundle();
+    bundle.putParcelable(ARGUMENT.PRODUCT, product);
+    bundle.putParcelable(ARGUMENT.QUANTITY_UNIT_PURCHASE, quantityUnitPurchase);
+    bundle.putParcelable(ARGUMENT.QUANTITY_UNIT_STOCK, quantityUnitStock);
+    bundle.putParcelable(ARGUMENT.LOCATION, location);
+    bundle.putParcelable(ARGUMENT.STORE, store);
+    bundle.putParcelable(ARGUMENT.STOCK_ENTRY, stockEntry);
+    showBottomSheet(new StockEntryBottomSheet(), bundle);
   }
 
   public void performAction(String action, StockItem stockItem) {
