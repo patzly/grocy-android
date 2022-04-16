@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
@@ -139,18 +140,15 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
+    viewModel.getFilteredStockEntriesLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
       if (binding.recycler.getAdapter() instanceof StockEntryAdapter) {
         ((StockEntryAdapter) binding.recycler.getAdapter()).updateData(
             requireContext(),
             items,
-            viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
-            viewModel.getProductGroupHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getLocationHashMap(),
-            viewModel.getProductIdsMissingItems(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
             viewModel.getGroupingMode()
@@ -160,16 +158,11 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
             new StockEntryAdapter(
                 requireContext(),
                 items,
-                viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
-                viewModel.getProductGroupHashMap(),
                 viewModel.getProductHashMap(),
                 viewModel.getLocationHashMap(),
-                viewModel.getProductIdsMissingItems(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
-                viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
-                viewModel.getDaysExpriringSoon(),
                 viewModel.getCurrency(),
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
@@ -341,17 +334,17 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   }
 
   @Override
-  public void onItemRowClicked(StockItem stockItem) {
+  public void onItemRowClicked(StockEntry stockEntry) {
     if (clickUtil.isDisabled()) {
       return;
     }
-    if (stockItem == null) {
+    if (stockEntry == null) {
       return;
     }
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    showProductOverview(stockItem);
+    //showProductOverview(stockItem);
   }
 
   private void showProductOverview(StockItem stockItem) {

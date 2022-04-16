@@ -24,30 +24,24 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
-import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
+import xyz.zedler.patrick.grocy.databinding.RowStockEntryBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
 import xyz.zedler.patrick.grocy.model.GroupHeader;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -57,14 +51,11 @@ public class StockEntryAdapter extends
   private final static String TAG = StockEntryAdapter.class.getSimpleName();
 
   private final ArrayList<GroupedListItem> groupedListItems;
-  private final ArrayList<String> shoppingListItemsProductIds;
+  private final HashMap<Integer, Product> productHashMap;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private final PluralUtil pluralUtil;
-  private final ArrayList<Integer> missingItemsProductIds;
   private final StockEntryAdapterListener listener;
   private final boolean showDateTracking;
-  private final boolean shoppingListFeatureEnabled;
-  private final int daysExpiringSoon;
   private String sortMode;
   private boolean sortAscending;
   private String groupingMode;
@@ -73,44 +64,34 @@ public class StockEntryAdapter extends
 
   public StockEntryAdapter(
       Context context,
-      ArrayList<StockItem> stockItems,
-      ArrayList<String> shoppingListItemsProductIds,
+      ArrayList<StockEntry> stockEntries,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
-      ArrayList<Integer> missingItemsProductIds,
       StockEntryAdapterListener listener,
       boolean showDateTracking,
-      boolean shoppingListFeatureEnabled,
-      int daysExpiringSoon,
       String currency,
       String sortMode,
       boolean sortAscending,
       String groupingMode
   ) {
-    this.shoppingListItemsProductIds = new ArrayList<>(shoppingListItemsProductIds);
+    this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.pluralUtil = new PluralUtil(context);
-    this.missingItemsProductIds = new ArrayList<>(missingItemsProductIds);
     this.listener = listener;
     this.showDateTracking = showDateTracking;
-    this.shoppingListFeatureEnabled = shoppingListFeatureEnabled;
-    this.daysExpiringSoon = daysExpiringSoon;
     this.currency = currency;
     this.dateUtil = new DateUtil(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
-    this.groupedListItems = getGroupedListItems(context, stockItems,
-        productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
+    this.groupedListItems = getGroupedListItems(context, stockEntries, productHashMap, locationHashMap, currency, dateUtil, sortMode,
         sortAscending, groupingMode);
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
       Context context,
-      ArrayList<StockItem> stockItems,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
+      ArrayList<StockEntry> stockEntries,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
       String currency,
@@ -120,59 +101,32 @@ public class StockEntryAdapter extends
       String groupingMode
   ) {
     if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_NONE)) {
-      sortStockItems(context, stockItems, sortMode, sortAscending);
-      return new ArrayList<>(stockItems);
+      sortStockEntries(context, stockEntries, sortMode, sortAscending);
+      return new ArrayList<>(stockEntries);
     }
-    HashMap<String, ArrayList<StockItem>> stockItemsGroupedHashMap = new HashMap<>();
-    ArrayList<StockItem> ungroupedItems = new ArrayList<>();
-    for (StockItem stockItem : stockItems) {
+    HashMap<String, ArrayList<StockEntry>> stockEntriesGroupedHashMap = new HashMap<>();
+    ArrayList<StockEntry> ungroupedItems = new ArrayList<>();
+    for (StockEntry stockEntry : stockEntries) {
       String groupName = null;
-      if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PRODUCT_GROUP)
-          && NumUtil.isStringInt(stockItem.getProduct().getProductGroupId())
-      ) {
-        int productGroupId = Integer.parseInt(stockItem.getProduct().getProductGroupId());
-        ProductGroup productGroup = productGroupHashMap.get(productGroupId);
-        groupName = productGroup != null ? productGroup.getName() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
-        groupName = NumUtil.trimPrice(stockItem.getValueDouble());
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES_PER_STOCK)) {
-        groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
-            ? stockItem.getProduct().getCalories() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
-        groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
-            ? NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
-            * stockItem.getAmountDouble()) : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
-        groupName = stockItem.getBestBeforeDate();
+      if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
+        groupName = stockEntry.getBestBeforeDate();
         if (groupName != null && !groupName.isEmpty()) {
           groupName += "  " + dateUtil.getHumanForDaysFromNow(groupName);
         }
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
-        groupName = stockItem.getProduct().getMinStockAmount();
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_PARENT_PRODUCT)
-          && NumUtil.isStringInt(stockItem.getProduct().getParentProductId())) {
-        int productId = Integer.parseInt(stockItem.getProduct().getParentProductId());
-        Product product = productHashMap.get(productId);
-        groupName = product != null ? product.getName() : null;
-      } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DEFAULT_LOCATION)
-          && NumUtil.isStringInt(stockItem.getProduct().getLocationId())) {
-        int locationId = Integer.parseInt(stockItem.getProduct().getLocationId());
-        Location location = locationHashMap.get(locationId);
-        groupName = location != null ? location.getName() : null;
       }
       if (groupName != null && !groupName.isEmpty()) {
-        ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(groupName);
+        ArrayList<StockEntry> itemsFromGroup = stockEntriesGroupedHashMap.get(groupName);
         if (itemsFromGroup == null) {
           itemsFromGroup = new ArrayList<>();
-          stockItemsGroupedHashMap.put(groupName, itemsFromGroup);
+          stockEntriesGroupedHashMap.put(groupName, itemsFromGroup);
         }
-        itemsFromGroup.add(stockItem);
+        itemsFromGroup.add(stockEntry);
       } else {
-        ungroupedItems.add(stockItem);
+        ungroupedItems.add(stockEntry);
       }
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
-    ArrayList<String> groupsSorted = new ArrayList<>(stockItemsGroupedHashMap.keySet());
+    ArrayList<String> groupsSorted = new ArrayList<>(stockEntriesGroupedHashMap.keySet());
     if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)
         || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)
         || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
@@ -182,11 +136,11 @@ public class StockEntryAdapter extends
     }
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      sortStockItems(context, ungroupedItems, sortMode, sortAscending);
+      sortStockEntries(context, ungroupedItems, sortMode, sortAscending);
       groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
-      ArrayList<StockItem> itemsFromGroup = stockItemsGroupedHashMap.get(group);
+      ArrayList<StockEntry> itemsFromGroup = stockEntriesGroupedHashMap.get(group);
       if (itemsFromGroup == null) continue;
       String groupString;
       if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
@@ -197,27 +151,27 @@ public class StockEntryAdapter extends
       GroupHeader groupHeader = new GroupHeader(groupString);
       groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
-      sortStockItems(context, itemsFromGroup, sortMode, sortAscending);
+      sortStockEntries(context, itemsFromGroup, sortMode, sortAscending);
       groupedListItems.addAll(itemsFromGroup);
     }
     return groupedListItems;
   }
 
-  static void sortStockItems(
+  static void sortStockEntries(
       Context context,
-      ArrayList<StockItem> stockItems,
+      ArrayList<StockEntry> stockEntries,
       String sortMode,
       boolean sortAscending
   ) {
-    if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
-      SortUtil.sortStockItemsByBBD(stockItems, sortAscending);
+    /*if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
+      SortUtil.sortStockItemsByBBD(stockEntries, sortAscending);
     } else {
       SortUtil.sortStockItemsByName(
           context,
-          stockItems,
+          stockEntries,
           sortAscending
       );
-    }
+    }*/
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -229,9 +183,9 @@ public class StockEntryAdapter extends
 
   public static class StockItemViewHolder extends ViewHolder {
 
-    private final RowStockItemBinding binding;
+    private final RowStockEntryBinding binding;
 
-    public StockItemViewHolder(RowStockItemBinding binding) {
+    public StockItemViewHolder(RowStockEntryBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
@@ -251,7 +205,7 @@ public class StockEntryAdapter extends
   public int getItemViewType(int position) {
     return GroupedListItem.getType(
         groupedListItems.get(position),
-        GroupedListItem.CONTEXT_STOCK_OVERVIEW
+        GroupedListItem.CONTEXT_STOCK_ENTRIES
     );
   }
 
@@ -259,7 +213,7 @@ public class StockEntryAdapter extends
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == GroupedListItem.TYPE_ENTRY) {
-      return new StockItemViewHolder(RowStockItemBinding.inflate(
+      return new StockItemViewHolder(RowStockEntryBinding.inflate(
           LayoutInflater.from(parent.getContext()),
           parent,
           false
@@ -293,97 +247,72 @@ public class StockEntryAdapter extends
       return;
     }
 
-    StockItem stockItem = (StockItem) groupedListItem;
+    StockEntry stockEntry = (StockEntry) groupedListItem;
     StockItemViewHolder holder = (StockItemViewHolder) viewHolder;
+    Product product = productHashMap.get(stockEntry.getProductId());
 
     // NAME
 
-    holder.binding.textName.setText(stockItem.getProduct().getName());
+    holder.binding.productName.setText(product.getName());
 
-    // IS ON SHOPPING LIST
-
-    if (shoppingListItemsProductIds.contains(String.valueOf(stockItem.getProduct().getId()))
-        && shoppingListFeatureEnabled) {
-      holder.binding.viewOnShoppingList.setVisibility(View.VISIBLE);
-    } else {
-      holder.binding.viewOnShoppingList.setVisibility(View.GONE);
-    }
-
-    Context context = holder.binding.textAmount.getContext();
+    Context context = holder.binding.amount.getContext();
 
     // AMOUNT
 
-    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
-    holder.binding.textAmount.setText(
-        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnitStock)
+    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(product.getQuIdStockInt());
+    holder.binding.amount.setText(
+        AmountUtil.getStockEntryAmountInfo(context, pluralUtil, stockEntry, quantityUnitStock)
     );
-    if (missingItemsProductIds.contains(stockItem.getProductId())) {
-      holder.binding.textAmount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
-      holder.binding.textAmount.setTextColor(
-          ContextCompat.getColor(context, R.color.retro_blue_fg)
-      );
-    } else {
-      holder.binding.textAmount.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      holder.binding.textAmount.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
-      );
-    }
 
     // BEST BEFORE
 
-    String date = stockItem.getBestBeforeDate();
+    String date = stockEntry.getBestBeforeDate();
     String days = null;
-    boolean colorDays = false;
     if (date != null) {
       days = String.valueOf(DateUtil.getDaysFromNow(date));
     }
 
     if (!showDateTracking) {
-      holder.binding.linearDays.setVisibility(View.GONE);
-    } else if (days != null && (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)
-        || Integer.parseInt(days) <= daysExpiringSoon
-        && !date.equals(Constants.DATE.NEVER_OVERDUE))
+      holder.binding.dueDate.setVisibility(View.GONE);
+    } else if (days != null && !date.equals(Constants.DATE.NEVER_OVERDUE)
     ) {
-      holder.binding.linearDays.setVisibility(View.VISIBLE);
-      holder.binding.textDays.setText(new DateUtil(context).getHumanForDaysFromNow(date));
-      if (Integer.parseInt(days) <= daysExpiringSoon) {
-        colorDays = true;
-      }
+      holder.binding.dueDate.setVisibility(View.VISIBLE);
+      holder.binding.dueDate.setText(new DateUtil(context).getHumanForDaysFromNow(date));
     } else {
-      holder.binding.linearDays.setVisibility(View.GONE);
-      holder.binding.textDays.setText(null);
+      holder.binding.dueDate.setVisibility(View.GONE);
+      holder.binding.dueDate.setText(null);
     }
 
-    if (colorDays) {
-      holder.binding.textDays.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
-      @ColorRes int color;
-      if (Integer.parseInt(days) >= 0) {
-        color = R.color.retro_yellow_fg;
-      } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-        color = R.color.retro_dirt_fg;
-      } else {
-        color = R.color.retro_red_fg;
-      }
-      holder.binding.textDays.setTextColor(ContextCompat.getColor(context, color));
+    // LOCATION
+
+    // PURCHASED DATE
+
+    String purchaseDate = stockEntry.getPurchasedDate();
+    String purchaseDays = null;
+    if (purchaseDate != null) {
+      purchaseDays = String.valueOf(DateUtil.getDaysFromNow(purchaseDate));
+    }
+    if (purchaseDays != null && !purchaseDate.equals(Constants.DATE.NEVER_OVERDUE)) {
+      holder.binding.purchasedDate.setVisibility(View.VISIBLE);
+      holder.binding.purchasedDate.setText(new DateUtil(context).getHumanForDaysFromNow(purchaseDate));
     } else {
-      holder.binding.textDays.setTypeface(
-          ResourcesCompat.getFont(context, R.font.jost_book)
-      );
-      holder.binding.textDays.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
-      );
+      holder.binding.purchasedDate.setVisibility(View.GONE);
+      holder.binding.purchasedDate.setText(null);
+    }
+
+    // NOTE
+
+    if (stockEntry.getNote() != null && !stockEntry.getNote().isEmpty()) {
+      holder.binding.note.setText(stockEntry.getNote());
+      holder.binding.note.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.note.setVisibility(View.GONE);
     }
 
     // CONTAINER
 
-    holder.binding.linearContainer.setOnClickListener(
-        view -> listener.onItemRowClicked(stockItem)
+    holder.binding.container.setOnClickListener(
+        view -> listener.onItemRowClicked(stockEntry)
     );
   }
 
@@ -398,34 +327,29 @@ public class StockEntryAdapter extends
 
   public interface StockEntryAdapterListener {
 
-    void onItemRowClicked(StockItem stockItem);
+    void onItemRowClicked(StockEntry stockEntry);
   }
 
   public void updateData(
       Context context,
-      ArrayList<StockItem> newList,
-      ArrayList<String> shoppingListItemsProductIds,
+      ArrayList<StockEntry> newList,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
-      HashMap<Integer, ProductGroup> productGroupHashMap,
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, Location> locationHashMap,
-      ArrayList<Integer> missingItemsProductIds,
       String sortMode,
       boolean sortAscending,
       String groupingMode
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
-        productGroupHashMap, productHashMap, locationHashMap, this.currency, this.dateUtil,
+        productHashMap, locationHashMap, this.currency, this.dateUtil,
         sortMode, sortAscending, groupingMode);
     StockEntryAdapter.DiffCallback diffCallback = new StockEntryAdapter.DiffCallback(
         this.groupedListItems,
         newGroupedListItems,
-        this.shoppingListItemsProductIds,
-        shoppingListItemsProductIds,
+        this.productHashMap,
+        productHashMap,
         this.quantityUnitHashMap,
         quantityUnitHashMap,
-        this.missingItemsProductIds,
-        missingItemsProductIds,
         this.sortMode,
         sortMode,
         this.sortAscending,
@@ -436,12 +360,10 @@ public class StockEntryAdapter extends
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.groupedListItems.clear();
     this.groupedListItems.addAll(newGroupedListItems);
-    this.shoppingListItemsProductIds.clear();
-    this.shoppingListItemsProductIds.addAll(shoppingListItemsProductIds);
+    this.productHashMap.clear();
+    this.productHashMap.putAll(productHashMap);
     this.quantityUnitHashMap.clear();
     this.quantityUnitHashMap.putAll(quantityUnitHashMap);
-    this.missingItemsProductIds.clear();
-    this.missingItemsProductIds.addAll(missingItemsProductIds);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.groupingMode = groupingMode;
@@ -452,12 +374,10 @@ public class StockEntryAdapter extends
 
     ArrayList<GroupedListItem> oldItems;
     ArrayList<GroupedListItem> newItems;
-    ArrayList<String> shoppingListItemsProductIdsOld;
-    ArrayList<String> shoppingListItemsProductIdsNew;
+    HashMap<Integer, Product> productHashMapOld;
+    HashMap<Integer, Product> productHashMapNew;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapOld;
     HashMap<Integer, QuantityUnit> quantityUnitHashMapNew;
-    ArrayList<Integer> missingProductIdsOld;
-    ArrayList<Integer> missingProductIdsNew;
     String sortModeOld;
     String sortModeNew;
     boolean sortAscendingOld;
@@ -468,12 +388,10 @@ public class StockEntryAdapter extends
     public DiffCallback(
         ArrayList<GroupedListItem> oldItems,
         ArrayList<GroupedListItem> newItems,
-        ArrayList<String> shoppingListItemsProductIdsOld,
-        ArrayList<String> shoppingListItemsProductIdsNew,
+        HashMap<Integer, Product> productHashMapOld,
+        HashMap<Integer, Product> productHashMapNew,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapOld,
         HashMap<Integer, QuantityUnit> quantityUnitHashMapNew,
-        ArrayList<Integer> missingProductIdsOld,
-        ArrayList<Integer> missingProductIdsNew,
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
@@ -483,12 +401,10 @@ public class StockEntryAdapter extends
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
-      this.shoppingListItemsProductIdsOld = shoppingListItemsProductIdsOld;
-      this.shoppingListItemsProductIdsNew = shoppingListItemsProductIdsNew;
+      this.productHashMapOld = productHashMapOld;
+      this.productHashMapNew = productHashMapNew;
       this.quantityUnitHashMapOld = quantityUnitHashMapOld;
       this.quantityUnitHashMapNew = quantityUnitHashMapNew;
-      this.missingProductIdsOld = missingProductIdsOld;
-      this.missingProductIdsNew = missingProductIdsNew;
       this.sortModeOld = sortModeOld;
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
@@ -520,11 +436,11 @@ public class StockEntryAdapter extends
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
       int oldItemType = GroupedListItem.getType(
           oldItems.get(oldItemPos),
-          GroupedListItem.CONTEXT_STOCK_OVERVIEW
+          GroupedListItem.CONTEXT_STOCK_ENTRIES
       );
       int newItemType = GroupedListItem.getType(
           newItems.get(newItemPos),
-          GroupedListItem.CONTEXT_STOCK_OVERVIEW
+          GroupedListItem.CONTEXT_STOCK_ENTRIES
       );
       if (oldItemType != newItemType) {
         return false;
@@ -539,36 +455,24 @@ public class StockEntryAdapter extends
         return false;
       }
       if (oldItemType == GroupedListItem.TYPE_ENTRY) {
-        StockItem newItem = (StockItem) newItems.get(newItemPos);
-        StockItem oldItem = (StockItem) oldItems.get(oldItemPos);
+        StockEntry newEntry = (StockEntry) newItems.get(newItemPos);
+        StockEntry oldEntry = (StockEntry) oldItems.get(oldItemPos);
         if (!compareContent) {
-          return newItem.getProductId() == oldItem.getProductId();
+          return newEntry.getProductId() == oldEntry.getProductId();
         }
-        if (!newItem.getProduct().equals(oldItem.getProduct())) {
+        Product productNew = productHashMapNew.get(newEntry.getProductId());
+        Product productOld = productHashMapOld.get(oldEntry.getProductId());
+        if (productNew == null || !productNew.equals(productOld)) {
           return false;
         }
-        QuantityUnit quOld = quantityUnitHashMapOld.get(oldItem.getProduct().getQuIdStockInt());
-        QuantityUnit quNew = quantityUnitHashMapNew.get(newItem.getProduct().getQuIdStockInt());
+        QuantityUnit quOld = quantityUnitHashMapOld.get(productOld.getQuIdStockInt());
+        QuantityUnit quNew = quantityUnitHashMapNew.get(productNew.getQuIdStockInt());
         if (quOld == null && quNew != null
             || quOld != null && quNew != null && quOld.getId() != quNew.getId()
         ) {
           return false;
         }
-
-        boolean isOnShoppingListOld = shoppingListItemsProductIdsOld
-            .contains(String.valueOf(oldItem.getProduct().getId()));
-        boolean isOnShoppingListNew = shoppingListItemsProductIdsNew
-            .contains(String.valueOf(newItem.getProduct().getId()));
-        if (isOnShoppingListNew != isOnShoppingListOld) {
-          return false;
-        }
-
-        boolean missingOld = missingProductIdsOld.contains(oldItem.getProductId());
-        boolean missingNew = missingProductIdsNew.contains(newItem.getProductId());
-        if (missingOld != missingNew) {
-          return false;
-        }
-        return newItem.equals(oldItem);
+        return newEntry.equals(oldEntry);
       } else {
         GroupHeader newGroup = (GroupHeader) newItems.get(newItemPos);
         GroupHeader oldGroup = (GroupHeader) oldItems.get(oldItemPos);
