@@ -640,7 +640,7 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="one">%1$d tâche est à accomplir.</item>
+    <item quantity="one">%1$d tâche à accomplir.</item>
     <item quantity="other">%1$d tâches sont à accomplir.</item>
   </plurals>
   <!-- %1$s is a number -->
