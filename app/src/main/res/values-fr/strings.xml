@@ -625,8 +625,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="one">%1$d corvée est en retard.</item>
-    <item quantity="other">%1$d corvées sont en retard.</item>
+    <item quantity="one">%1$d corvée en retard.</item>
+    <item quantity="other">%1$d corvées en retard.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
