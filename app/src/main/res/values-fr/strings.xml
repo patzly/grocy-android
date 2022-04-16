@@ -952,7 +952,7 @@
   <string name="setting_purchased_date_description">Sur les pages d\'achat et d\'inventaire</string>
   <string name="setting_use_quick_consume_amount">Utiliser le paramètre \"Quantité en consommation rapide\" du produit</string>
   <string name="setting_auto_add_shopping_list">Ajouter automatiquement des produits à la liste de courses</string>
-  <string name="setting_auto_add_shopping_list_description">Ceux qui sont en dessous de leur stock minimal</string>
+  <string name="setting_auto_add_shopping_list_description">Ajoute les produits qui sont en dessous de leur stock minimal</string>
   <string name="setting_empty_value">Vide</string>
   <string name="setting_sync_off">Synchronisation désactivée</string>
   <string name="setting_loading">Valeur chargée</string>
