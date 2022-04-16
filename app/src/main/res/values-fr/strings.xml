@@ -630,8 +630,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
-    <item quantity="one">%1$d corvée doit être faite aujourd\'hui.</item>
-    <item quantity="other">%1$d corvées doivent être faites aujourd\'hui.</item>
+    <item quantity="one">%1$d corvée à faire aujourd\'hui.</item>
+    <item quantity="other">%1$d corvées à faire aujourd\'hui.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
