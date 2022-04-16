@@ -25,6 +25,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
@@ -49,12 +52,11 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.StockEntriesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -84,15 +86,19 @@ public class StockEntriesViewModel extends BaseViewModel {
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
   private HashMap<Integer, Location> locationHashMap;
+  private HashMap<Integer, Store> storeHashMap;
 
   private String searchInput;
+  @Nullable private final Integer productId;
   private final boolean debug;
 
-  public StockEntriesViewModel(@NonNull Application application) {
+  public StockEntriesViewModel(@NonNull Application application, StockEntriesFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    productId = NumUtil.isStringInt(args.getProductId())
+        ? Integer.parseInt(args.getProductId()) : null;
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -107,15 +113,15 @@ public class StockEntriesViewModel extends BaseViewModel {
 
     filterChipLiveDataLocation = new FilterChipLiveDataLocation(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockEntries
     );
     filterChipLiveDataSort = new FilterChipLiveDataStockSort(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockEntries
     );
     filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
         getApplication(),
-        this::updateFilteredStockItems
+        this::updateFilteredStockEntries
     );
   }
 
@@ -129,8 +135,9 @@ public class StockEntriesViewModel extends BaseViewModel {
 
       filterChipLiveDataLocation.setLocations(data.getLocations());
       locationHashMap = ArrayUtil.getLocationsHashMap(data.getLocations());
+      storeHashMap = ArrayUtil.getStoresHashMap(data.getStores());
 
-      updateFilteredStockItems();
+      updateFilteredStockEntries();
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -140,7 +147,7 @@ public class StockEntriesViewModel extends BaseViewModel {
   public void downloadData() {
     if (isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
-      updateFilteredStockItems();
+      updateFilteredStockEntries();
       return;
     }
     dlHelper.updateData(
@@ -150,7 +157,8 @@ public class StockEntriesViewModel extends BaseViewModel {
         StockEntry.class,
         Product.class,
         ProductBarcode.class,
-        Location.class
+        Location.class,
+        Store.class
     );
   }
 
@@ -161,6 +169,7 @@ public class StockEntriesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_STORES, null);
     editPrefs.apply();
     downloadData();
   }
@@ -175,7 +184,7 @@ public class StockEntriesViewModel extends BaseViewModel {
     }
   }
 
-  public void updateFilteredStockItems() {
+  public void updateFilteredStockEntries() {
     ArrayList<StockEntry> filteredStockEntries = new ArrayList<>();
 
     ProductBarcode productBarcodeSearch = null;
@@ -185,25 +194,25 @@ public class StockEntriesViewModel extends BaseViewModel {
 
     for (StockEntry entry : this.stockEntries) {
 
+      if (productId != null && entry.getProductId() != productId) {
+        continue;
+      }
+
       boolean searchContainsItem = true;
-      /*if (searchInput != null && !searchInput.isEmpty()) {
-        String productName = item.getProduct().getName().toLowerCase();
-        searchContainsItem = productName.contains(searchInput);
+      if (searchInput != null && !searchInput.isEmpty()) {
+        Product product = productHashMap.get(entry.getProductId());
+        String productName = product != null ? product.getName().toLowerCase() : null;
+        searchContainsItem = productName != null && productName.contains(searchInput);
       }
       if (!searchContainsItem && productBarcodeSearch == null
-          || !searchContainsItem && productBarcodeSearch.getProductIdInt() != item.getProductId()) {
+          || !searchContainsItem && productBarcodeSearch.getProductIdInt() != entry.getProductId()) {
         continue;
-      }*/
+      }
 
       int locationFilterId = filterChipLiveDataLocation.getSelectedId();
-      if (locationFilterId != FilterChipLiveDataLocation.NO_FILTER) {
-        /*HashMap<Integer, StockLocation> stockLocationsForProductId
-            = stockLocationsHashMap.get(item.getProductId());
-        if (stockLocationsForProductId == null
-            || !stockLocationsForProductId.containsKey(locationFilterId)
-        ) {
-          continue;
-        }*/
+      if (locationFilterId != FilterChipLiveDataLocation.NO_FILTER
+          && entry.getLocationIdInt() != locationFilterId) {
+        continue;
       }
 
       filteredStockEntries.add(entry);
@@ -412,7 +421,7 @@ public class StockEntriesViewModel extends BaseViewModel {
   public void updateSearchInput(String input) {
     this.searchInput = input.toLowerCase();
 
-    updateFilteredStockItems();
+    updateFilteredStockEntries();
   }
 
   public HashMap<Integer, Product> getProductHashMap() {
@@ -435,6 +444,10 @@ public class StockEntriesViewModel extends BaseViewModel {
     return quantityUnitHashMap.get(id);
   }
 
+  public HashMap<Integer, Store> getStoreHashMap() {
+    return storeHashMap;
+  }
+
   public FilterChipLiveData.Listener getFilterChipLiveDataLocation() {
     return () -> filterChipLiveDataLocation;
   }
@@ -449,6 +462,10 @@ public class StockEntriesViewModel extends BaseViewModel {
 
   public boolean isSortAscending() {
     return filterChipLiveDataSort.isSortAscending();
+  }
+
+  public boolean hasProductFilter() {
+    return productId != null;
   }
 
   public FilterChipLiveData.Listener getFilterChipLiveDataGrouping() {
@@ -502,14 +519,6 @@ public class StockEntriesViewModel extends BaseViewModel {
     return sharedPrefs.getBoolean(pref, true);
   }
 
-  public int getDaysExpriringSoon() {
-    String days = sharedPrefs.getString(
-        STOCK.DUE_SOON_DAYS,
-        SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
-    );
-    return NumUtil.isStringInt(days) ? Integer.parseInt(days) : 5;
-  }
-
   public String getCurrency() {
     return sharedPrefs.getString(
         PREF.CURRENCY,
@@ -521,5 +530,23 @@ public class StockEntriesViewModel extends BaseViewModel {
   protected void onCleared() {
     dlHelper.destroy();
     super.onCleared();
+  }
+
+  public static class StockEntriesViewModelFactory implements ViewModelProvider.Factory {
+
+    private final Application application;
+    private final StockEntriesFragmentArgs args;
+
+    public StockEntriesViewModelFactory(Application application, StockEntriesFragmentArgs args) {
+      this.application = application;
+      this.args = args;
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new StockEntriesViewModel(application, args);
+    }
   }
 }

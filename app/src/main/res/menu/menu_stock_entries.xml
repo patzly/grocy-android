@@ -18,40 +18,15 @@
   -->
 
 <menu
+  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <group android:id="@+id/group_1">
-
-    <item
-      android:id="@+id/action_add_to_shopping_list"
-      android:title="@string/action_shopping_list_add"
-      app:showAsAction="never" />
-
-    <item
-      android:id="@+id/action_consume_all"
-      android:title="@string/action_consume_all"
-      app:showAsAction="never" />
-
-    <item
-      android:id="@+id/action_consume_spoiled"
-      android:title="@string/action_consume_one_spoiled"
-      app:showAsAction="never" />
-
-  </group>
-
-  <group android:id="@+id/group_3">
-
-    <item
-      android:id="@+id/action_stock_entries"
-      android:title="@string/title_stock_entries"
-      app:showAsAction="never" />
-
-    <item
-      android:id="@+id/action_edit_product"
-      android:title="@string/action_edit_product"
-      app:showAsAction="never" />
-
-  </group>
+  <item
+    android:id="@+id/action_search"
+    android:title="@string/action_search"
+    android:icon="@drawable/ic_round_search_anim"
+    app:showAsAction="always"
+    tools:ignore="AlwaysShowAction" />
 
 </menu>

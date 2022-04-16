@@ -29,6 +29,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "stock_entry_table")
 public class StockEntry extends GroupedListItem implements Parcelable {
@@ -76,7 +77,11 @@ public class StockEntry extends GroupedListItem implements Parcelable {
 
   @ColumnInfo(name = "location_id")
   @SerializedName("location_id")
-  private int locationId;
+  private String locationId;
+
+  @ColumnInfo(name = "shopping_location_id")
+  @SerializedName("shopping_location_id")
+  private String shoppingLocationId;
 
   @ColumnInfo(name = "note")
   @SerializedName("note")
@@ -102,7 +107,9 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     open = parcel.readInt();
     openedDate = parcel.readString();
     rowCreatedTimestamp = parcel.readString();
-    locationId = parcel.readInt();
+    locationId = parcel.readString();
+    shoppingLocationId = parcel.readString();
+    note = parcel.readString();
   }
 
   @Override
@@ -117,7 +124,9 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     dest.writeInt(open);
     dest.writeString(openedDate);
     dest.writeString(rowCreatedTimestamp);
-    dest.writeInt(locationId);
+    dest.writeString(locationId);
+    dest.writeString(shoppingLocationId);
+    dest.writeString(note);
   }
 
   public static final Creator<StockEntry> CREATOR = new Creator<StockEntry>() {
@@ -213,12 +222,24 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     this.rowCreatedTimestamp = rowCreatedTimestamp;
   }
 
-  public int getLocationId() {
+  public String getLocationId() {
     return locationId;
   }
 
-  public void setLocationId(int locationId) {
+  public int getLocationIdInt() {
+    return NumUtil.isStringInt(locationId) ? Integer.parseInt(locationId) : -1;
+  }
+
+  public void setLocationId(String locationId) {
     this.locationId = locationId;
+  }
+
+  public String getShoppingLocationId() {
+    return shoppingLocationId;
+  }
+
+  public void setShoppingLocationId(String shoppingLocationId) {
+    this.shoppingLocationId = shoppingLocationId;
   }
 
   public String getNote() {

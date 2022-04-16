@@ -30,6 +30,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.Store;
 
 public class StockEntriesRepository {
 
@@ -50,19 +51,22 @@ public class StockEntriesRepository {
     private final List<Product> products;
     private final List<ProductBarcode> productBarcodes;
     private final List<Location> locations;
+    private final List<Store> stores;
 
     public StockOverviewData(
         List<QuantityUnit> quantityUnits,
         List<StockEntry> stockEntries,
         List<Product> products,
         List<ProductBarcode> productBarcodes,
-        List<Location> locations
+        List<Location> locations,
+        List<Store> stores
     ) {
       this.quantityUnits = quantityUnits;
       this.stockEntries = stockEntries;
       this.products = products;
       this.productBarcodes = productBarcodes;
       this.locations = locations;
+      this.stores = stores;
     }
 
     public List<QuantityUnit> getQuantityUnits() {
@@ -84,6 +88,10 @@ public class StockEntriesRepository {
     public List<Location> getLocations() {
       return locations;
     }
+
+    public List<Store> getStores() {
+      return stores;
+    }
   }
 
   public void loadFromDatabase(StockOverviewDataListener listener) {
@@ -94,6 +102,7 @@ public class StockEntriesRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.locationDao().getLocations(),
+            appDatabase.storeDao().getStores(),
             StockOverviewData::new
         )
         .subscribeOn(Schedulers.io())

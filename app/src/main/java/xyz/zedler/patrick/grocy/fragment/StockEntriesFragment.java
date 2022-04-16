@@ -106,7 +106,10 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(StockEntriesViewModel.class);
+    viewModel = new ViewModelProvider(this, new StockEntriesViewModel
+        .StockEntriesViewModelFactory(activity.getApplication(),
+        StockEntriesFragmentArgs.fromBundle(requireArguments())
+    )).get(StockEntriesViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
@@ -149,6 +152,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
             viewModel.getQuantityUnitHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getLocationHashMap(),
+            viewModel.getStoreHashMap(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
             viewModel.getGroupingMode()
@@ -161,6 +165,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
                 viewModel.getQuantityUnitHashMap(),
                 viewModel.getProductHashMap(),
                 viewModel.getLocationHashMap(),
+                viewModel.getStoreHashMap(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
                 viewModel.getCurrency(),
@@ -269,7 +274,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.GONE,
-        R.menu.menu_stock,
+        viewModel.hasProductFilter() ? R.menu.menu_empty : R.menu.menu_stock_entries,
         this::onMenuItemClick
     );
   }

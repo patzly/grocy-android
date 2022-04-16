@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetProductOverviewBinding;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -172,6 +173,12 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         navigateDeepLink(R.string.deep_link_masterProductFragment,
             new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
                 .setProductId(productId).build().toBundle());
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_stock_entries) {
+        String productId = String.valueOf(product.getId());
+        navigateDeepLink(R.string.deep_link_stockEntriesFragment,
+            new StockEntriesFragmentArgs.Builder().setProductId(productId).build().toBundle());
         dismiss();
         return true;
       }

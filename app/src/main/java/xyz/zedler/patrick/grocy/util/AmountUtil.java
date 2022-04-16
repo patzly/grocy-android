@@ -136,15 +136,10 @@ public class AmountUtil {
             unitStr
         )
     );
-    /*if (stockItem.getAmountOpenedDouble() > 0) {
+    if (stockEntry.getOpen() == 1) {
       stringBuilder.append(" ");
-      stringBuilder.append(
-          context.getString(
-              R.string.subtitle_amount_opened,
-              NumUtil.trim(stockItem.getAmountOpenedDouble())
-          )
-      );
-    }*/ //TODO
+      stringBuilder.append(context.getString(R.string.subtitle_opened));
+    }
   }
 
   public static void addStockAmountAggregatedInfo(

@@ -99,7 +99,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         ChoreEntry.class,
         StockEntry.class
     },
-    version = 35
+    version = 36
 )
 public abstract class AppDatabase extends RoomDatabase {
 
