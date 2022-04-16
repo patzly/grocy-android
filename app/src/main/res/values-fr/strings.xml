@@ -620,8 +620,8 @@
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="one">%1$d corvée doit être faite dans les %2$d prochains jours.</item>
-    <item quantity="other">%1$d corvées doivent être faites dans les %2$d prochains jours.</item>
+    <item quantity="one">%1$d corvée à faire dans les %2$d prochains jours.</item>
+    <item quantity="other">%1$d corvées à faire dans les %2$d prochains jours.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
