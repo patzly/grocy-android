@@ -645,8 +645,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="one">%1$d tâche vous est attribuée.</item>
-    <item quantity="other">%1$d tâches vous sont attribuées.</item>
+    <item quantity="one">%1$d tâche attribuée.</item>
+    <item quantity="other">%1$d tâches attribuées.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
