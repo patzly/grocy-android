@@ -34,6 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Alles verbrauchen</string>
 
+  <string name="action_consume_spoiled">Verbrauche als verdorben</string>
   <string name="action_consume_one_spoiled">Verbrauche 1 als verdorben</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Verbrauche 1 %1$s %2$s</string>
@@ -434,6 +435,7 @@
   <string name="title_task_add">Aufgabe hinzufügen</string>
   <string name="title_master_data">Stammdaten</string>
   <string name="title_stock_entries">Bestandseinträge</string>
+  <string name="title_stock_entry">Bestandseintrag</string>
   <string name="title_shopping_list">Einkaufszettel</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Einstellungen</string>
@@ -727,6 +729,7 @@
   <string name="property_location">Standort</string>
   <string name="property_location_insert">Standort: %1$s</string>
   <string name="property_location_default">Standard Standort</string>
+  <string name="property_location_default_insert">Standard-Standort: %1$s</string>
   <string name="property_location_consume_default">Standardverbrauchsstandort</string>
   <string name="property_notes">Notizen</string>
   <string name="property_locations">Standorte</string>
