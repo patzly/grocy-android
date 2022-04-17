@@ -161,7 +161,7 @@ public class SplashActivity extends MainActivity {
             assert splashContent != null;
             ViewUtil.startIcon(splashContent.findDrawableByLayerId(R.id.splash_logo));
             new Handler(Looper.getMainLooper()).postDelayed(
-                this::startNewMainActivity, 750
+                this::startNewMainActivity, 850
             );
           }
         } catch (Exception e) {
