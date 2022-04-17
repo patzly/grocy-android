@@ -34,6 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">לצרוך הכול</string>
 
+  <string name="action_consume_spoiled">לצרוך כמקולקל</string>
   <string name="action_consume_one_spoiled">לצרוך אחד כמקולקל</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">לצרוך %1$s אחד מתוך %2$s</string>
@@ -112,12 +113,22 @@
   <string name="action_share_description">לספר לחבר׳ה על Grocy ל־Android</string>
   <string name="action_no_filter">ללא מסנן</string>
   <string name="action_show_done_tasks">הצגת מטלות שבוצעו</string>
+  <string name="action_track_chore_execution">מעקב אחר הוצאת מטלה לפועל</string>
+  <string name="action_skip_next_chore_schedule">דילוג על תזמון המטלה הבאה</string>
+
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d במלאי</item>
     <item quantity="two">%1$d במלאי</item>
     <item quantity="many">%1$d במלאי</item>
     <item quantity="other">%1$d במלאי</item>
+  </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d נפתח</item>
+    <item quantity="two">%1$d נפתחו</item>
+    <item quantity="many">%1$d נפתחו</item>
+    <item quantity="other">%1$d נפתחו</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">נצרכו %1$s %2$s מתוך %3$s</string>
@@ -177,7 +188,15 @@
   <string name="msg_item_marked_as_undone">פריט סומן לטיפול</string>
   <string name="option_synced_success">האפשרות סונכרנה בהצלחה</string>
   <string name="option_synced_error">לא ניתן לסנכרן את האפשרות</string>
+  <string name="msg_stored_purchases_overview">יש רכישות במכשיר שעדיין לא הועברו לשרת. נגיעה כאן תציג פרטים.</string>
+  <string name="msg_stored_purchases_product_offline">יש לגעת במוצר ולמלא את הנתונים הנחוצים. לאחר מכן, המוצר יופיע כאן כמקוון ואת הרכישות המאוחסנות ניתן לשלוח לשרת.</string>
+  <string name="msg_stored_purchases_product_online">נגיעה כאן תשלח את הרכישות המאוחסנות של המוצר הזה לשרת.</string>
+  <string name="msg_choose_product">הברקוד שסרקת אינו מקושר לאף מוצר עדיין. אפשר לקשר אותו למוצר קיים או ליצור עבורו מוצר חדש.</string>
+  <string name="msg_product_name_off">שם המוצר לברקוד מ־Open Food Facts.</string>
+  <string name="msg_product_name_obf">שם המוצר לברקוד מ־Open Beauty Facts.</string>
+  <string name="msg_product_name_lookup_error">לא ניתן לחפש את הברקוד ב־Open Food Facts או ב־Open Beauty Facts.</string>
   <string name="msg_product_name_lookup_empty">הברקוד לא נמצא במסדי הנתונים של Open Food Facts או של Open Beauty Facts.</string>
+  <string name="msg_off_option_deactivated">להצעה אוטומטית של שם המוצר אפשר להפעיל את החיפוש ב־Open Food Facts בהגדרות.</string>
   <string name="msg_create_new_product_filled">יצירת מוצר חדש „%1$s”</string>
   <string name="msg_create_new_product">יצירת מוצר חדש</string>
   <string name="msg_create_new_pending_product_filled">יצירת מוצר זמני חדש „%1$s”</string>
@@ -192,6 +211,7 @@
   <string name="msg_restart">נדרשת הפעלת היישומון מחדש כדי להחיל את ההגדרות הנוכחיות של Grocy כראוי.</string>
   <string name="msg_shortcuts">ניתן להפעיל עד 4 קיצורי דרך:</string>
   <string name="msg_shortcuts_not_supported">אין תמיכה בקיצורי דרך בגרסת ה־Android הזאת.</string>
+  <string name="msg_barcode_formats">אפשר לשפר את מהירות מזהה הברקודים על ידי הגדרתו לזהות את סוגי הברקודים שאמורים להיקרא.</string>
   <string name="msg_features">להתחיל את ההיכרות שוב תחת „על אודות”</string>
   <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
   <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
@@ -203,7 +223,12 @@
   <string name="msg_port_connection_info_with_port">היישומון יתחבר לפתחה %1$s.</string>
   <string name="msg_not_implemented_yet">זה יוטמע בקרוב. נא להשתמש במנשק השרת שלך לבינתיים.</string>
   <string name="stock_disabled">השבתת את יכולת המלאי בהגדרות ה־grocy שלך, כנראה כיוון שאין לך צורך בה. היישום הזה יכול לעשות ניהול מלאי בלבד כרגע, לכן יכול להיות שלא יביא לך תועלת.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">למוצר זה לא יכול להיות מוצר הורה כיוון שהוא כבר משמש כמוצר הורה למוצר אחר.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">רשומות מלאי במיקום שלהלן ייצרכו תחילה.</string>
   <string name="msg_help_due_date_type">בהתאם לסוג תאריך התפוגה הנבחר, תשתנה ההדגשה בעמוד סקירת המלאי. „תאריך תוקף עד” משמעו שיתכן המוצר עדיין בטוח לצריכה לאחר תאריך התפוגה שלו. „תאריך תפוגה” משמעו שהמוצר אינו בטוח לצריכה לאחר שתאריך התפוגה שלו פג.</string>
+  <string name="msg_help_default_due_days_format">בלחיצה ארוכה על פריט להלן ניתן למלא תאריך במקום מספר.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">לרכישות תתווסף כמות הימים הזו ליום הנוכחי להצעת תאריך התפוגה (המשמעות של ‎-1 היא שהמוצר הזה לא יפוג לעולם).</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -224,12 +249,14 @@
   <string name="msg_help_tare_weight_purchase">מופעל טיפול במשקל טרה - נא לשקול את כל האריזה, הכמות לפרסום תחושב אוטומטית.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">זה ישמש כהגדרת בררת המחדל בעת הוספת המוצר הזה כרכיב במתכון.</string>
+  <string name="msg_help_inventory_fields">השדות הבאים תקפים על מוצרים חדשים שנוספים.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">ניתן לבחור סורק ברקודים לסריקת ברקודים עם מצלמה.</string>
   <string name="msg_help_external_scanner_ready">ניתן להשתמש בסורק חיצוני לשדה שלהלן בזמן שהוא במיקוד וריק.</string>
   <string name="msg_help_external_scanner_settings">יישומון זה תומך בהתקני סריקה חיצוניים שמכהנים כמקלדת וניתן לחבר אותם דרך USB או Bluetooth (בלוטות׳). יש להגדיר את האפשרויות הבאות בסורק החיצוני שלך:\n\nקידומת: ללא\nסיומת: TAB או ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">זה למטרות סטטיסטיות בלבד.</string>
+  <string name="msg_help_date_chooser">אפשר להחליף קלט מקלדת בהגדרות, יכול להגביר את מהירות הקלט בשבילך.</string>
   <string name="msg_help_start">מופעל מצב מתחילים: הודעות עזרה מוצגות כבררת מחדל בכל העמודים אם הן זמינות. יש לגעת כדי לשנות.</string>
   <string name="msg_help_purchased_date_settings">אם האפשרות שלהלן מופעלת, שדה תאריך הרכישה יוצג בעמוד הרכישה והמאגר. אם לא, תאריך הרכישה יוחזר להיום.</string>
   <string name="msg_help_normal_login">יש לגעת בכרטיס זה אם יש לך את התוספת של grocy ל־Home Assistant.</string>
@@ -256,6 +283,7 @@
   <string name="error_empty_tasks">אין משימות</string>
   <string name="error_empty_task_categories">אין קטגוריות משימות</string>
   <string name="error_empty_unit_conversions">אין המרות יחידות כמות</string>
+  <string name="error_empty_chores">אין מטלות</string>
   <string name="error_search">אין תוצאות חיפוש</string>
   <string name="error_search_sub">נא לנסות ביטויים אחרים</string>
   <string name="error_filter">אין מה להציג</string>
@@ -269,6 +297,7 @@
   <string name="error_invalid_factor">מקדם שגוי</string>
   <string name="error_invalid_date_format">תצורת התאריך שגויה</string>
   <string name="error_api_qr_code">זה אינו קוד QR עם פרטי גישה ל־API של grocy</string>
+  <string name="error_token_qr_code">לא קוד QR עם אסימון גישה ארוך טווח מ־Home Assistant</string>
   <string name="error_loading_qus">טעינת יחידות הכמות מהמוצר נכשלה</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">לא יכול להיות שווה ל־%1$s</string>
@@ -321,6 +350,7 @@
   <string name="title_task_add">הוספת משימה</string>
   <string name="title_master_data">נתוני על</string>
   <string name="title_stock_entries">רשומות מלאי</string>
+  <string name="title_stock_entry">רשומת מלאי</string>
   <string name="title_shopping_list">רשימת קניות</string>
   <string name="title_feedback">משוב</string>
   <string name="title_settings">הגדרות</string>
@@ -392,6 +422,8 @@
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(נפתח)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s נפתחו)</string>
   <!-- %1$s is a product name -->
@@ -439,6 +471,8 @@
   <string name="subtitle_product_default_location">מיקום, חנות</string>
   <string name="subtitle_product_due_date">סוג, ימי ברירת מחדל (לאחר הפתיחה, הקפאה, הפשרה)</string>
   <string name="subtitle_product_quantity_unit">מלאי, רכישת ברירת מחדל</string>
+  <string name="subtitle_synced_with_server">מסונכרן עם שרת</string>
+
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
@@ -455,6 +489,20 @@
     <item quantity="two">יש לך %1$d מוצרים במלאי.</item>
     <item quantity="many">יש לך %1$d מוצרים במלאי.</item>
     <item quantity="other">יש לך %1$d מוצרים במלאי.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d מהם ברשימת הקניות שלך.</item>
+    <item quantity="two">%1$d מהם ברשימת הקניות שלך.</item>
+    <item quantity="many">%1$d מהם ברשימת הקניות שלך.</item>
+    <item quantity="other">%1$d מהם ברשימת הקניות שלך.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d מהם ברשימות הקניות שלך.</item>
+    <item quantity="two">%1$d מהם ברשימות הקניות שלך.</item>
+    <item quantity="many">%1$d מהם ברשימות הקניות שלך.</item>
+    <item quantity="other">%1$d מהם ברשימות הקניות שלך.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
@@ -478,6 +526,13 @@
     <item quantity="other">%1$d פריטים נמצאים ברשימת הקניות שלך.</item>
   </plurals>
   <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">הוקצתה לך משימה אחת.</item>
+    <item quantity="two">הוקצו לך %1$d משימות.</item>
+    <item quantity="many">הוקצו לך %1$d משימות.</item>
+    <item quantity="other">הוקצו לך %1$d משימות.</item>
+  </plurals>
+  <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">מסד הנתונים שלך מכיל מוצר אחד.</item>
     <item quantity="two">מסד הנתונים שלך מכיל %1$d מוצרים.</item>
@@ -496,6 +551,7 @@
   <string name="property_note">הערה</string>
   <string name="property_status">מצב</string>
   <string name="property_amount">כמות</string>
+  <string name="property_amount_insert">כמות: %1$s</string>
   <string name="property_seconds">שניות</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -511,6 +567,8 @@
   <string name="property_price_average">מחיר ממוצע</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">מחיר ל%1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s ל%2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">מחיר ב־%1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -533,6 +591,7 @@
   <string name="property_barcodes_insert">ברקודים: %1$s</string>
   <string name="property_days">ימים</string>
   <string name="property_purchased_date">מועד הרכישה</string>
+  <string name="property_purchased_date_fill">תאריך רכישה: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">סוג תאריך תפוגה</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -552,10 +611,14 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">ימים כבררת מחדל עד לתפוגה לאחר הפשרה</string>
   <string name="property_location">מיקום</string>
+  <string name="property_location_insert">מיקום: %1$s</string>
   <string name="property_location_default">מיקום בררת מחדל</string>
+  <string name="property_location_default_insert">מיקום ברירת מחדל: %1$s</string>
+  <string name="property_location_consume_default">מיקום הצריכה כברירת מחדל</string>
   <string name="property_notes">הערות</string>
   <string name="property_locations">מיקומים</string>
   <string name="property_store">חנות</string>
+  <string name="property_store_insert">חנות: %1$s</string>
   <string name="property_store_unknown">חנות בלתי ידועה</string>
   <string name="property_store_default">חנות בררת מחדל</string>
   <string name="property_stores">חנויות</string>
@@ -569,13 +632,16 @@
   <string name="property_last_price">מחיר אחרון</string>
   <string name="property_last_price_unit">מחיר אחרון (יחידה)</string>
   <string name="property_last_price_total">מחיר אחרון (סה״כ)</string>
+  <string name="property_price_insert">מחיר: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">חיי מדף ממוצעים</string>
   <string name="property_spoil_rate">יחס קלקול</string>
   <string name="property_price_history">היסטוריית מחירים</string>
   <string name="property_product_group">קבוצת מוצרים</string>
   <string name="property_product_groups">קבוצות מוצרים</string>
+  <string name="property_assignment">הקצאה</string>
   <string name="property_value">ערך</string>
+  <string name="property_stock_value">ערך במלאי</string>
   <string name="property_opened">נפתח</string>
   <string name="property_not_opened">לא נפתח</string>
   <string name="property_is_freezer">במקפיא</string>
@@ -584,6 +650,8 @@
   <string name="property_active">פעיל</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">לעולם לא להציג בסקירת המלאי</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">השבתת מלאי עצמי</string>
   <string name="property_number">מספר</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">הפעלת טיפול במשקל טרה</string>
@@ -715,6 +783,7 @@
   <string name="category_general">כללי</string>
   <string name="category_stock">מלאי</string>
   <string name="category_server">שרת</string>
+  <string name="category_user_settings">הגדרות משתמש</string>
   <string name="category_scanner">סורק</string>
   <string name="category_scanner_camera">סורק מצלמה</string>
   <string name="category_scanner_external">סורק חיצוני</string>
@@ -785,6 +854,7 @@
   <string name="setting_purchased_date">לבקש את תאריך הרכישה</string>
   <string name="setting_purchased_date_description">בעמודי הרכישה והמאגר</string>
   <string name="setting_use_quick_consume_amount">להשתמש ב„כמות לצריכה מהירה” של המוצר</string>
+  <string name="setting_auto_add_shopping_list">להוסיף מוצרים לרשימת הקניות אוטומטית</string>
   <string name="setting_empty_value">ריק</string>
   <string name="setting_sync_off">סנכרון כבוי</string>
   <string name="setting_loading">ערך טעינה</string>

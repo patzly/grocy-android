@@ -50,7 +50,7 @@
   <string name="action_new">新的</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
   <string name="action_prev">上一个</string>
-  <string name="action_feedback">发送反馈</string>
+  <string name="action_feedback">提交反馈</string>
   <string name="action_reset">重启</string>
   <string name="action_reload">刷新</string>
   <string name="action_top_scroll">滚动到顶部</string>
@@ -62,10 +62,10 @@
   <string name="action_clear">清除</string>
   <string name="action_clear_shopping_list">清空购物清单</string>
   <string name="action_rate">在Google Play上评分</string>
-  <string name="action_rate_description">支持发展</string>
+  <string name="action_rate_description">激励开发人员</string>
   <string name="action_email">发送邮件</string>
   <string name="action_email_description">联系开发者</string>
-  <string name="action_new_issue">在GitHub上打开新issue </string>
+  <string name="action_new_issue">在GitHub上提交新issue </string>
   <string name="action_new_issue_description">报告错误或请求功能</string>
   <string name="action_get_started">入门</string>
   <string name="action_ascending">升序</string>
@@ -78,6 +78,7 @@
   <string name="action_proceed">继续</string>
   <string name="action_delete">删除</string>
   <string name="action_save">保存</string>
+  <string name="action_save_close">保存并关闭</string>
   <string name="action_logout">退出</string>
   <string name="action_restart">重启</string>
   <string name="action_create">创建</string>
@@ -106,6 +107,8 @@
   <string name="action_own_server">自己的服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
   <string name="action_perform">执行动作</string>
+  <string name="action_share_description">向您的朋友介绍Grocy Android</string>
+  <string name="action_no_filter">未筛选</string>
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d即将到期</item>
@@ -126,6 +129,10 @@
   <plurals name="msg_in_stock_products">
     <item quantity="other">%1$d产品有库存</item>
   </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="other">%1$d已开封</item>
+  </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%3$s中的%1$s%2$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -136,6 +143,35 @@
   <plurals name="msg_undone_items">
     <item quantity="other">%1$d未完成</item>
   </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="other">%1$d已完成</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="other">%1$d已完成</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="other">%1$d未完成</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="other">%1$d即将到期</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="other">%1$d今日到期</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="other">%1$d过期</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="other">%1$d已分配</item>
+  </plurals>
+  <string name="msg_task_undo">撤销任务</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">已购买%3$s中的%1$s%2$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -163,7 +199,7 @@
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
   <string name="msg_master_delete">删除%1$s“%2$s”？</string>
   <!-- %1$s is a product name -->
-  <string name="msg_master_delete_product">您是否确定删除产品“%1$s”？\n\n 这也删除此产品的任何库存，日志和该产品的所有其他引用 - 考虑禁用它，而不是删除，如果你想只是隐藏产品。</string>
+  <string name="msg_master_delete_product">您是否确定删除产品“%1$s”？\n\n 这也会删除此产品的所有库存，日志和所有其他资料 - 如果想要保留并只是隐藏此产品，请考虑禁用它。</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">这个%1$s还在用</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
@@ -174,11 +210,13 @@
   <plurals name="msg_inventory_transaction_remove">
     <item quantity="other">%1$s%2$s将从库存删除</item>
   </plurals>
-  <string name="msg_transfer_tare_weight">允许皮重的产品目前不支持转移。</string>
+  <string name="msg_transfer_tare_weight">目前不支持转移已启用皮重的产品。</string>
   <string name="msg_item_marked_as_done">将项目标记为已完成</string>
   <string name="msg_item_marked_as_undone">将项目标记为撤消</string>
   <string name="option_synced_success">选项同步成功</string>
   <string name="option_synced_error">选项无法同步</string>
+  <string name="msg_create_new_product_filled">创建新产品“%1$s”</string>
+  <string name="msg_create_new_product">创建新产品</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_purchase">将被执行的事务: \n\n 添加%1$s%2$s的%3$s到库存 \n 到期日:%4$s \n 价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
@@ -262,6 +300,8 @@
   <string name="error_empty_products">没有产品</string>
   <string name="error_empty_qu">没有数量单位</string>
   <string name="error_empty_stores">没有商店</string>
+  <string name="error_empty_tasks">没有任务</string>
+  <string name="error_empty_chores">没有家务</string>
   <string name="error_search"> 没有搜索结果</string>
   <string name="error_search_sub">尝试其他条款</string>
   <string name="error_filter">无内容显示</string>
@@ -273,6 +313,7 @@
   <string name="error_invalid_amount">金额无效</string>
   <string name="error_invalid_price">价格无效</string>
   <string name="error_invalid_factor">无效因素</string>
+  <string name="error_invalid_date_format">无效的日期格式</string>
   <string name="error_api_qr_code">不是具有Grocy API凭据的QR码</string>
   <string name="error_loading_qus">无法从产品加载数量单位</string>
   <!-- %1$s is a number like 0, 1, 2 -->
@@ -318,11 +359,14 @@
   <string name="title_product">产品</string>
   <string name="title_product_create">创建产品</string>
   <string name="title_product_edit">编辑产品</string>
+  <string name="title_tasks">任务</string>
   <string name="title_master_data">主数据</string>
   <string name="title_stock_entries">库存条目</string>
   <string name="title_shopping_list">购物清单</string>
   <string name="title_feedback">反馈</string>
   <string name="title_settings">设置</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">条码扫描器</string>
   <!-- Context: About this app -->
   <string name="title_about">关于</string>
   <string name="title_info">信息</string>
@@ -338,6 +382,7 @@
   <string name="title_input">数字输入</string>
   <string name="title_external_barcode_input">外部扫描仪</string>
   <string name="title_confirmation">确认</string>
+  <string name="title_choose_product">选择产品</string>
   <string name="title_spoiled">损坏</string>
   <string name="title_use_specific">使用特定的库存物料</string>
   <string name="title_specific">具体库存项目</string>
@@ -356,6 +401,8 @@
   <string name="title_list_entry">列表条目</string>
   <string name="title_edit_list_entry">编辑列表条目</string>
   <string name="title_create_list_entry">创建列表条目</string>
+  <string name="title_edit_barcode">编辑条码</string>
+  <string name="title_create_barcode">新建条码</string>
   <string name="title_shopping_list_edit">修改购物清单</string>
   <string name="title_shopping_list_new">新购物清单</string>
   <string name="title_shopping_mode">购物模式</string>
@@ -406,6 +453,11 @@
   <string name="subtitle_not_supported">未支持</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">数量:%1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">数量单位：%1$s</string>
+  <string name="subtitle_barcode">条码：%1$s</string>
+  <string name="subtitle_product_default_location">位置，商店</string>
+  <string name="subtitle_product_optional_properties">状态，父产品，描述，产品分组、能量、图片</string>
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
@@ -446,7 +498,7 @@
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
-    <item quantity="other">您有%1$d具有价值%2$s%3$s的库存产品。</item>
+    <item quantity="other">%1$d款库存产品，总价值为%2$s%3$s</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
@@ -472,6 +524,7 @@
   <string name="property_note">注释</string>
   <string name="property_status">状态</string>
   <string name="property_amount">数量</string>
+  <string name="property_amount_insert">数量:%1$s</string>
   <string name="property_seconds">秒</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -539,6 +592,8 @@
   <string name="property_price_history">历史价格</string>
   <string name="property_product_group">产品组</string>
   <string name="property_product_groups">产品组</string>
+  <string name="property_value">价值</string>
+  <string name="property_stock_value">库存价值</string>
   <string name="property_opened">打开</string>
   <string name="property_not_opened">没开</string>
   <string name="property_is_freezer">是冰柜</string>
@@ -565,7 +620,25 @@
   <string name="property_picture">图片</string>
   <string name="property_note_singleline">单行的注释</string>
   <string name="property_note_multiline">多行注释</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">单行</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">多行</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">库存：%1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">种类：%1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">分组：%1$s</string>
   <string name="property_ungrouped">未分组</string>
+  <string name="property_task_category">任务分类</string>
+  <string name="property_task_categories">任务分类</string>
+  <string name="property_calories">卡路里</string>
+  <string name="property_calories_unit">卡路里 (每单位)</string>
+  <string name="property_calories_total">卡路里 (总共)</string>
+  <string name="property_category">分类</string>
+  <string name="property_users">用户</string>
+
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
@@ -632,15 +705,19 @@
   <string name="category_general">通用</string>
   <string name="category_stock">库存</string>
   <string name="category_server">服务器</string>
+  <string name="category_user_settings">用户设置</string>
   <string name="category_scanner">扫描器</string>
   <string name="category_scanner_external">外部扫描仪</string>
   <string name="category_appearance">主题</string>
   <string name="category_network">网络</string>
+  <string name="category_network_proxy">代理</string>
   <string name="category_behavior">行为</string>
   <string name="category_debugging">调试</string>
+  <string name="category_new_product">新产品</string>
   <string name="hint_server">服务器URL</string>
   <string name="hint_key">有效的API密钥</string>
 
+  <string name="setting_theme">主题</string>
   <string name="setting_language">语言</string>
   <string name="setting_language_description">选择语言</string>
   <string name="setting_language_info">非常感谢Transifex的所有志愿者翻译！\n 请访问GitHub上的我们，了解如何帮助为您的语言制作Grocy Android。</string>
@@ -648,8 +725,10 @@
   <string name="setting_language_not_available">无法使用</string>
   <string name="setting_open_food_facts">使用公开食品事实</string>
   <string name="setting_open_food_facts_description">从条形码获取信息</string>
+  <string name="setting_choose_barcode_scanner">选择条码扫描器</string>
   <string name="setting_use_front_cam">使用前置摄像头</string>
   <string name="setting_use_front_cam_description">用于条形码扫描</string>
+  <string name="setting_barcode_formats">条码格式</string>
   <string name="setting_external_support">外部扫描仪支持</string>
   <string name="setting_external_support_description">通过USB或蓝牙</string>
   <string name="setting_reload_config">重新加载配置</string>
@@ -694,6 +773,11 @@
   <string name="setting_speed_up_start_description">只对快速设备有影响</string>
   <string name="setting_loading_circle">显示所有请求的加载</string>
   <string name="setting_loading_circle_description">有助于慢速网络</string>
+  <string name="setting_tor">使用Tor</string>
+  <string name="setting_proxy">开启HTTP代理</string>
+  <string name="setting_proxy_host">代理主机</string>
+  <string name="setting_proxy_host_description">代理主机名称</string>
+  <string name="setting_proxy_port">代理端口</string>
   <string name="setting_synchronized">下面的选项与服务器同步。</string>
   <string name="settings_synchronized">这些设置与您的服务器同步。</string>
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
