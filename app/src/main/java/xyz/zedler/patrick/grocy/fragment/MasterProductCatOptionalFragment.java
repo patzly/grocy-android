@@ -232,6 +232,10 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   public void showDescriptionBottomSheet() {
+    if (true) {
+      navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
+      return;
+    }
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.title_edit_description));
     bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_description));

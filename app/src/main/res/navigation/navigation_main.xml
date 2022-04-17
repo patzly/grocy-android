@@ -932,6 +932,13 @@
       <argument
         android:name="action"
         app:argType="string" />
+      <action
+        android:id="@+id/action_masterProductCatOptionalFragment_to_editorHtmlFragment"
+        app:destination="@id/editorHtmlFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
     <fragment
       android:id="@+id/masterProductCatLocationFragment"
@@ -1068,6 +1075,11 @@
         app:nullable="true"
         android:defaultValue="@null" />
     </fragment>
+    <fragment
+      android:id="@+id/editorHtmlFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.EditorHtmlFragment"
+      android:label="EditorHtmlFragment"
+      tools:layout="@layout/fragment_editor_html"/>
   </navigation>
   <fragment
     android:id="@+id/stockOverviewFragment"

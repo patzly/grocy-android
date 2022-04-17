@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout
+  xmlns:aztec="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="android.view.View" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar_log"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+          android:id="@+id/linear_log_app_bar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:gravity="center_vertical"
+          android:orientation="horizontal"
+          android:background="@color/primary">
+
+          <FrameLayout
+            android:id="@+id/frame_log_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="20dp"
+            android:background="?attr/actionBarItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:contentDescription="@string/action_back"
+            android:tooltipText="@string/action_back"
+            android:focusable="true"
+            tools:targetApi="o"
+            android:onClick="@{() -> activity.navigateUp()}">
+
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_gravity="center"
+              android:importantForAccessibility="no"
+              android:src="@drawable/ic_round_arrow_back" />
+
+          </FrameLayout>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:text="Editor" />
+
+        </LinearLayout>
+
+        <org.wordpress.aztec.toolbar.AztecToolbar
+          android:id="@+id/formatting_toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          aztec:mediaToolbarAvailable="false"
+          aztec:toolbarBackgroundColor="@color/primary"
+          aztec:toolbarIconNormalColor="@color/on_primary"
+          aztec:toolbarIconDisabledColor="@color/on_primary"
+          aztec:toolbarIconHighlightColor="@color/retro_blue"/>
+
+      </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <org.wordpress.aztec.AztecText
+      android:id="@+id/visual"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="104dp"
+      android:layout_marginBottom="?attr/actionBarSize"
+      android:padding="16dp"
+      android:scrollbars="vertical"
+      android:imeOptions="flagNoExtractUi"
+      aztec:historyEnable="false"
+      aztec:textColor="@color/on_primary"
+      aztec:backgroundColor="@color/background"/>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
