@@ -37,6 +37,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Consume all</string>
 
+  <string name="action_consume_spoiled">Consume as spoiled</string>
   <string name="action_consume_one_spoiled">Consume 1 as spoiled</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Consume 1 %1$s of %2$s</string>
@@ -442,6 +443,7 @@
   <string name="title_task_add">Add task</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
+  <string name="title_stock_entry">Stock entry</string>
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
@@ -519,6 +521,8 @@
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(opened)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s opened)</string>
   <!-- %1$s is a product name -->
@@ -677,6 +681,7 @@
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
   <string name="property_amount">Amount</string>
+  <string name="property_amount_insert">Amount: %1$s</string>
   <string name="property_seconds">Seconds</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -714,6 +719,7 @@
   <string name="property_barcodes_insert">Barcodes: %1$s</string>
   <string name="property_days">Days</string>
   <string name="property_purchased_date">Purchased date</string>
+  <string name="property_purchased_date_fill">Purchased date: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Due date type</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -735,11 +741,14 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Default due days after thawing</string>
   <string name="property_location">Location</string>
+  <string name="property_location_insert">Location: %1$s</string>
   <string name="property_location_default">Default location</string>
+  <string name="property_location_default_insert">Default location: %1$s</string>
   <string name="property_location_consume_default">Default consume location</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Locations</string>
   <string name="property_store">Store</string>
+  <string name="property_store_insert">Store: %1$s</string>
   <string name="property_store_unknown">Unknown store</string>
   <string name="property_store_default">Default store</string>
   <string name="property_stores">Stores</string>
@@ -753,6 +762,7 @@
   <string name="property_last_price">Last price</string>
   <string name="property_last_price_unit">Last price (unit)</string>
   <string name="property_last_price_total">Last price (total)</string>
+  <string name="property_price_insert">Price: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>

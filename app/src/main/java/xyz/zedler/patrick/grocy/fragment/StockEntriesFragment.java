@@ -34,18 +34,19 @@ import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
+import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
+import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter.StockEntryAdapterListener;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
-import xyz.zedler.patrick.grocy.databinding.FragmentStockOverviewBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentStockEntriesBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
@@ -53,20 +54,19 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.StockEntriesViewModel;
 
-public class StockOverviewFragment extends BaseFragment implements
-    StockOverviewItemAdapter.StockOverviewItemAdapterListener,
+public class StockEntriesFragment extends BaseFragment implements StockEntryAdapterListener,
     BarcodeListener {
 
-  private final static String TAG = StockOverviewFragment.class.getSimpleName();
+  private final static String TAG = StockEntriesFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private StockOverviewViewModel viewModel;
+  private StockEntriesViewModel viewModel;
   private AppBarBehavior appBarBehavior;
   private ClickUtil clickUtil;
   private SwipeBehavior swipeBehavior;
-  private FragmentStockOverviewBinding binding;
+  private FragmentStockEntriesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
 
@@ -76,7 +76,7 @@ public class StockOverviewFragment extends BaseFragment implements
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
+    binding = FragmentStockEntriesBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
         this,
         binding.containerScanner,
@@ -104,7 +104,10 @@ public class StockOverviewFragment extends BaseFragment implements
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(StockOverviewViewModel.class);
+    viewModel = new ViewModelProvider(this, new StockEntriesViewModel
+        .StockEntriesViewModelFactory(activity.getApplication(),
+        StockEntriesFragmentArgs.fromBundle(requireArguments())
+    )).get(StockEntriesViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
@@ -138,47 +141,35 @@ public class StockOverviewFragment extends BaseFragment implements
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
+    viewModel.getFilteredStockEntriesLive().observe(getViewLifecycleOwner(), items -> {
       if (items == null) return;
-      if (binding.recycler.getAdapter() instanceof StockOverviewItemAdapter) {
-        ((StockOverviewItemAdapter) binding.recycler.getAdapter()).updateData(
+      if (binding.recycler.getAdapter() instanceof StockEntryAdapter) {
+        ((StockEntryAdapter) binding.recycler.getAdapter()).updateData(
             requireContext(),
             items,
-            viewModel.getShoppingListItemsProductIds(),
             viewModel.getQuantityUnitHashMap(),
-            viewModel.getProductAveragePriceHashMap(),
-            viewModel.getProductLastPurchasedHashMap(),
-            viewModel.getProductGroupHashMap(),
             viewModel.getProductHashMap(),
             viewModel.getLocationHashMap(),
-            viewModel.getProductIdsMissingItems(),
+            viewModel.getStoreHashMap(),
             viewModel.getSortMode(),
             viewModel.isSortAscending(),
-            viewModel.getGroupingMode(),
-            viewModel.getExtraField()
+            viewModel.getGroupingMode()
         );
       } else {
         binding.recycler.setAdapter(
-            new StockOverviewItemAdapter(
+            new StockEntryAdapter(
                 requireContext(),
                 items,
-                viewModel.getShoppingListItemsProductIds(),
                 viewModel.getQuantityUnitHashMap(),
-                viewModel.getProductAveragePriceHashMap(),
-                viewModel.getProductLastPurchasedHashMap(),
-                viewModel.getProductGroupHashMap(),
                 viewModel.getProductHashMap(),
                 viewModel.getLocationHashMap(),
-                viewModel.getProductIdsMissingItems(),
+                viewModel.getStoreHashMap(),
                 this,
                 viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
-                viewModel.isFeatureEnabled(PREF.FEATURE_SHOPPING_LIST),
-                viewModel.getDaysExpriringSoon(),
                 viewModel.getCurrency(),
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
-                viewModel.getGroupingMode(),
-                viewModel.getExtraField()
+                viewModel.getGroupingMode()
             )
         );
         binding.recycler.scheduleLayoutAnimation();
@@ -193,6 +184,9 @@ public class StockOverviewFragment extends BaseFragment implements
             activity,
             activity.binding.frameMainContainer
         ));
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
 
@@ -207,67 +201,49 @@ public class StockOverviewFragment extends BaseFragment implements
             List<UnderlayButton> underlayButtons
         ) {
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
-          if (!(binding.recycler.getAdapter() instanceof StockOverviewItemAdapter)) return;
+          if (!(binding.recycler.getAdapter() instanceof StockEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
           ArrayList<GroupedListItem> groupedListItems =
-              ((StockOverviewItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
+              ((StockEntryAdapter) binding.recycler.getAdapter()).getGroupedListItems();
           if (groupedListItems == null || position < 0
               || position >= groupedListItems.size()) {
             return;
           }
           GroupedListItem item = groupedListItems.get(position);
-          if (!(item instanceof StockItem)) {
+          if (!(item instanceof StockEntry)) {
             return;
           }
-          StockItem stockItem = (StockItem) item;
-          if (stockItem.getAmountAggregatedDouble() > 0
-              && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
-          ) {
-            underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                R.drawable.ic_round_consume_product,
-                pos -> {
-                  if (pos >= groupedListItems.size()) {
-                    return;
-                  }
-                  swipeBehavior.recoverLatestSwipedItem();
-                  viewModel.performAction(
-                      Constants.ACTION.CONSUME,
-                      stockItem
-                  );
+          StockEntry stockEntry = (StockEntry) item;
+          underlayButtons.add(new UnderlayButton(
+              R.drawable.ic_round_consume_product,
+              pos -> {
+                if (pos >= groupedListItems.size()) {
+                  return;
                 }
-            ));
-          }
-          if (stockItem.getAmountAggregatedDouble()
-              > stockItem.getAmountOpenedAggregatedDouble()
-              && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
-              && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
+                swipeBehavior.recoverLatestSwipedItem();
+                viewModel.performAction(Constants.ACTION.CONSUME, stockEntry);
+              }
+          ));
+          Product product = viewModel.getProductHashMap().get(stockEntry.getProductId());
+          if (product != null && product.getEnableTareWeightHandlingInt() == 0
+              && viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)
+              && stockEntry.getOpen() == 0
           ) {
-            underlayButtons.add(new SwipeBehavior.UnderlayButton(
+            underlayButtons.add(new UnderlayButton(
                 R.drawable.ic_round_open,
                 pos -> {
                   if (pos >= groupedListItems.size()) {
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
-                  viewModel.performAction(
-                      Constants.ACTION.OPEN,
-                      stockItem
-                  );
+                  viewModel.performAction(Constants.ACTION.OPEN, stockEntry);
                 }
-            ));
-          }
-          if (underlayButtons.isEmpty()) {
-            underlayButtons.add(new SwipeBehavior.UnderlayButton(
-                R.drawable.ic_round_close,
-                pos -> swipeBehavior.recoverLatestSwipedItem()
             ));
           }
         }
       };
     }
     swipeBehavior.attachToRecyclerView(binding.recycler);
-
-    hideDisabledFeatures();
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -281,7 +257,7 @@ public class StockOverviewFragment extends BaseFragment implements
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.GONE,
-        R.menu.menu_stock,
+        viewModel.hasProductFilter() ? R.menu.menu_empty : R.menu.menu_stock_entries,
         this::onMenuItemClick
     );
   }
@@ -332,8 +308,8 @@ public class StockOverviewFragment extends BaseFragment implements
   }
 
   @Override
-  public void performAction(String action, StockItem stockItem) {
-    viewModel.performAction(action, stockItem);
+  public void performAction(String action, StockEntry stockEntry) {
+    viewModel.performAction(action, stockEntry);
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -341,47 +317,22 @@ public class StockOverviewFragment extends BaseFragment implements
       ViewUtil.startIcon(item);
       setUpSearch();
       return true;
-    } else if (item.getItemId() == R.id.action_stock_entries) {
-      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment());
-      return true;
     }
     return false;
   }
 
   @Override
-  public void onItemRowClicked(StockItem stockItem) {
+  public void onItemRowClicked(StockEntry stockEntry) {
     if (clickUtil.isDisabled()) {
       return;
     }
-    if (stockItem == null) {
+    if (stockEntry == null) {
       return;
     }
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    showProductOverview(stockItem);
-  }
-
-  private void showProductOverview(StockItem stockItem) {
-    if (stockItem == null) {
-      return;
-    }
-    QuantityUnit quantityUnitStock = viewModel
-        .getQuantityUnitFromId(stockItem.getProduct().getQuIdStockInt());
-    QuantityUnit quantityUnitPurchase = viewModel
-        .getQuantityUnitFromId(stockItem.getProduct().getQuIdPurchaseInt());
-    Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
-    if (quantityUnitStock == null || quantityUnitPurchase == null) {
-      activity.showMessage(R.string.error_undefined);
-      return;
-    }
-    navigate(StockOverviewFragmentDirections
-        .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
-        .setShowActions(true)
-        .setStockItem(stockItem)
-        .setQuantityUnitStock(quantityUnitStock)
-        .setQuantityUnitPurchase(quantityUnitPurchase)
-        .setLocation(location));
+    viewModel.showStockEntryBottomSheet(stockEntry);
   }
 
   @Override
@@ -393,9 +344,6 @@ public class StockOverviewFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-  }
-
-  private void hideDisabledFeatures() {
   }
 
   private void setUpSearch() {

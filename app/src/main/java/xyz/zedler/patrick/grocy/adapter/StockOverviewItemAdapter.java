@@ -360,7 +360,7 @@ public class StockOverviewItemAdapter extends
         && !date.equals(Constants.DATE.NEVER_OVERDUE))
     ) {
       holder.binding.linearDays.setVisibility(View.VISIBLE);
-      holder.binding.textDays.setText(new DateUtil(context).getHumanForDaysFromNow(date));
+      holder.binding.textDays.setText(dateUtil.getHumanForDaysFromNow(date));
       if (Integer.parseInt(days) <= daysExpiringSoon) {
         colorDays = true;
       }

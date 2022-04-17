@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -90,6 +91,54 @@ public class SortUtil {
           return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
         }
     );
+  }
+
+  public static void sortStockEntriesByDueDate(List<StockEntry> stockEntries, boolean ascending) {
+    if (stockEntries == null) {
+      return;
+    }
+    Collections.sort(
+        stockEntries,
+        (item1, item2) -> {
+          String bbd1 = (ascending ? item1 : item2).getBestBeforeDate();
+          String bbd2 = (ascending ? item2 : item1).getBestBeforeDate();
+          if (bbd1 == null && bbd2 == null) {
+            return 0;
+          } else if (bbd1 == null) {
+            return -1; // or 1 when items without BBD should be last
+          } else if (bbd2 == null) {
+            return 1; // or -1 when items without BBD should be last
+          }
+          return DateUtil.getDate(bbd1).compareTo(DateUtil.getDate(bbd2));
+        }
+    );
+  }
+
+  public static void sortStockEntriesByName(
+      Context context, List<StockEntry> stockEntries,
+      HashMap<Integer, Product> productHashMap, boolean ascending
+  ) {
+    if (stockEntries == null || productHashMap == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(stockEntries, (entry1, entry2) -> {
+      int productId1 = (ascending ? entry1 : entry2).getProductId();
+      int productId2 = (ascending ? entry2 : entry1).getProductId();
+      Product product1 = productHashMap.get(productId1);
+      Product product2 = productHashMap.get(productId2);
+      if (product1 == null && product2 == null) {
+        return 0;
+      } else if (product1 == null) {
+        return -1;
+      } else if (product2 == null) {
+        return 1;
+      }
+      return Collator.getInstance(locale).compare(
+          product1.getName().toLowerCase(),
+          product2.getName().toLowerCase()
+      );
+    });
   }
 
   public static void sortProductsByName(List<Product> products, boolean ascending) {

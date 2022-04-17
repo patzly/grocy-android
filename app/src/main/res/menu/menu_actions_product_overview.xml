@@ -43,6 +43,11 @@
   <group android:id="@+id/group_3">
 
     <item
+      android:id="@+id/action_stock_entries"
+      android:title="@string/title_stock_entries"
+      app:showAsAction="never" />
+
+    <item
       android:id="@+id/action_edit_product"
       android:title="@string/action_edit_product"
       app:showAsAction="never" />

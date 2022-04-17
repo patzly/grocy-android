@@ -30,6 +30,7 @@ import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 
 public class AmountUtil {
@@ -116,6 +117,31 @@ public class AmountUtil {
     }
   }
 
+  public static void addStockEntryAmountNormalInfo(
+      @NonNull Context context,
+      @NonNull PluralUtil pluralUtil,
+      @NonNull StringBuilder stringBuilder,
+      @Nullable StockEntry stockEntry,
+      @Nullable QuantityUnit quantityUnit
+  ) {
+    if (stockEntry == null) return;
+    String unitStr = "";
+    if (quantityUnit != null) {
+      unitStr = pluralUtil.getQuantityUnitPlural(quantityUnit, stockEntry.getAmount());
+    }
+    stringBuilder.append(
+        context.getString(
+            R.string.subtitle_amount,
+            NumUtil.trim(stockEntry.getAmount()),
+            unitStr
+        )
+    );
+    if (stockEntry.getOpen() == 1) {
+      stringBuilder.append(" ");
+      stringBuilder.append(context.getString(R.string.subtitle_opened));
+    }
+  }
+
   public static void addStockAmountAggregatedInfo(
       @NonNull Context context,
       @NonNull PluralUtil pluralUtil,
@@ -176,5 +202,17 @@ public class AmountUtil {
         new StockItem(productDetails),
         productDetails.getQuantityUnitStock()
     );
+  }
+
+  public static String getStockEntryAmountInfo(
+      @NonNull Context context,
+      @NonNull PluralUtil pluralUtil,
+      @Nullable StockEntry stockEntry,
+      @Nullable QuantityUnit quantityUnit
+  ) {
+    if (stockEntry == null) return null;
+    StringBuilder stringBuilder = new StringBuilder();
+    addStockEntryAmountNormalInfo(context, pluralUtil, stringBuilder, stockEntry, quantityUnit);
+    return stringBuilder.toString();
   }
 }

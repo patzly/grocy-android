@@ -23,16 +23,26 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/action_search"
-    android:title="@string/action_search"
-    android:icon="@drawable/ic_round_search_anim"
-    app:showAsAction="always"
-    tools:ignore="AlwaysShowAction" />
+    android:id="@+id/action_consume"
+    android:title="@string/action_consume"
+    android:icon="@drawable/ic_round_consume_product"
+    app:showAsAction="ifRoom" />
 
   <item
-    android:id="@+id/action_stock_entries"
-    android:title="@string/title_stock_entries"
-    app:showAsAction="never"
-    tools:ignore="AlwaysShowAction" />
+    android:id="@+id/action_open"
+    android:title="@string/action_open"
+    android:icon="@drawable/ic_round_open"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/action_edit"
+    android:title="@string/action_edit"
+    android:icon="@drawable/ic_round_edit"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/action_consume_spoiled"
+    android:title="@string/action_consume_spoiled"
+    app:showAsAction="never" />
 
 </menu>

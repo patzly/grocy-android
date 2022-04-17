@@ -569,7 +569,7 @@ public class TransferViewModel extends BaseViewModel {
     assert stockLocation != null;
     int locationId = stockLocation.getLocationId();
     for (StockEntry stockEntry : stockEntries) {
-      if (stockEntry.getLocationId() == locationId) {
+      if (stockEntry.getLocationIdInt() == locationId) {
         filteredStockEntries.add(stockEntry);
       }
     }

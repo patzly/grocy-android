@@ -206,6 +206,9 @@ public class BaseFragment extends Fragment {
   public void performAction(String action, StockItem stockItem) {
   }
 
+  public void performAction(String action, StockEntry stockEntry) {
+  }
+
   public void updateShortcuts() {
   }
 

@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetProductOverviewBinding;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PriceHistoryEntry;
@@ -57,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
+import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -172,6 +174,12 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         navigateDeepLink(R.string.deep_link_masterProductFragment,
             new MasterProductFragmentArgs.Builder(Constants.ACTION.EDIT)
                 .setProductId(productId).build().toBundle());
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_stock_entries) {
+        String productId = String.valueOf(product.getId());
+        navigateDeepLink(R.string.deep_link_stockEntriesFragment,
+            new StockEntriesFragmentArgs.Builder().setProductId(productId).build().toBundle());
         dismiss();
         return true;
       }
@@ -297,9 +305,11 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
         stockItem = new StockItem(productDetails);
         refreshButtonStates(true);
         refreshItems();
+        loadStockLocations();
         loadPriceHistory((float) details.getProduct().getQuFactorPurchaseToStockDouble());
       }).perform(dlHelper.getUuid());
     } else if (activity.isOnline() && hasDetails()) {
+      loadStockLocations();
       loadPriceHistory((float) productDetails.getProduct().getQuFactorPurchaseToStockDouble());
     }
 
@@ -467,6 +477,30 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
           null
       );
     }
+  }
+
+  private void loadStockLocations() {
+    if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      return;
+    }
+    dlHelper.getStockLocations(product.getId(), stockLocations -> {
+      if (stockLocations.isEmpty()) return;
+      if (hasDetails()) {
+        location = productDetails.getLocation(); // refresh
+      }
+      StringBuilder locationsString = new StringBuilder();
+      for (StockLocation stockLocation : stockLocations) {
+        locationsString.append(stockLocation.getLocationName());
+        if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size()-1).getLocationId()) {
+          locationsString.append(", ");
+        }
+      }
+      binding.itemLocation.setText(
+          activity.getString(R.string.property_locations),
+          locationsString.toString(),
+          getString(R.string.property_location_default_insert, location.getName())
+      );
+    }).perform(dlHelper.getUuid());
   }
 
   private void loadPriceHistory(float factorPurchaseToStock) {
