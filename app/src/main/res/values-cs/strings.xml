@@ -34,6 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Spotřebovat vše</string>
 
+  <string name="action_consume_spoiled">Odebrat ze zásob a označit jako zkažené</string>
   <string name="action_consume_one_spoiled">Spotřebovat 1 a označit jako zkažený</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Spotřebovat 1 %1$s produktu %2$s</string>
@@ -469,6 +470,7 @@
   <string name="title_task_add">Přidat úkol</string>
   <string name="title_master_data">Základní data</string>
   <string name="title_stock_entries">Položky zásob</string>
+  <string name="title_stock_entry">Položka zásob</string>
   <string name="title_shopping_list">Nákupní seznam</string>
   <string name="title_feedback">Zpětná vazba</string>
   <string name="title_settings">Nastavení</string>
@@ -540,6 +542,8 @@
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(otevřeno)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s otevřeno)</string>
   <!-- %1$s is a product name -->
@@ -732,6 +736,7 @@
   <string name="property_note">Poznámka</string>
   <string name="property_status">Status</string>
   <string name="property_amount">Množství</string>
+  <string name="property_amount_insert">Množství: %1$s</string>
   <string name="property_seconds">Sekund</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -771,6 +776,7 @@
   <string name="property_barcodes_insert">Čárové kódy: %1$s</string>
   <string name="property_days">Dny</string>
   <string name="property_purchased_date">Datum nákupu</string>
+  <string name="property_purchased_date_fill">Nakoupeno: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Typ trvanlivosti produktu</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -792,11 +798,13 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Výchozí počet dní min. trvanlivosti po rozmrznutí</string>
   <string name="property_location">Umístění</string>
+  <string name="property_location_insert">Umístění: %1$s</string>
   <string name="property_location_default">Výchozí umístění</string>
   <string name="property_location_consume_default">Spotřebovávat z umístění</string>
   <string name="property_notes">Poznámky</string>
   <string name="property_locations">Umístění</string>
   <string name="property_store">Obchod</string>
+  <string name="property_store_insert">Obchod: %1$s</string>
   <string name="property_store_unknown">Neznámý obchod</string>
   <string name="property_store_default">Výchozí obchod</string>
   <string name="property_stores">Obchody</string>
@@ -810,6 +818,7 @@
   <string name="property_last_price">Poslední cena</string>
   <string name="property_last_price_unit">Poslední cena za jednotku</string>
   <string name="property_last_price_total">Poslední cena celkem</string>
+  <string name="property_price_insert">Cena: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Průměrná doba uskladnění</string>
   <string name="property_spoil_rate">Kazivost</string>
