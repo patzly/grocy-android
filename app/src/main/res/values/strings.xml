@@ -1079,5 +1079,6 @@
     <string name="property_ingredients">Ingredients</string>
     <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
     <string name="title_recipe_add">Add recipe</string>
+  <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
 
 </resources>

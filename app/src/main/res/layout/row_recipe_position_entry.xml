@@ -20,7 +20,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/linear_recipe_position_container"
-  android:orientation="horizontal"
+  android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:minHeight="48dp"
@@ -41,45 +41,52 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="0.2">
+        android:layout_weight="1">
 
       <TextView
           android:id="@+id/amount"
-          style="@style/Widget.Grocy.TextView.ListItem.Title"
+          style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_height="match_parent"
           android:layout_gravity="center_vertical"
-          android:layout_marginEnd="5dp" />
+          android:layout_marginEnd="7dp" />
 
       <TextView
           android:id="@+id/quantity_unit"
           style="@style/Widget.Grocy.TextView.ListItem.Description"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical" />
+          android:layout_height="match_parent"
+          android:layout_gravity="center_vertical"
+          android:paddingTop="1dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="0.8">
+        android:gravity="end">
 
       <TextView
           android:id="@+id/title"
           style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical" />
-
-      <TextView
-          android:id="@+id/note"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical" />
+          android:layout_height="wrap_content" />
 
     </LinearLayout>
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="end">
+
+    <TextView
+        android:id="@+id/note"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
   </LinearLayout>
 
 </LinearLayout>

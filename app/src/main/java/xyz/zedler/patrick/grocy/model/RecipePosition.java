@@ -86,6 +86,9 @@ public class RecipePosition implements Parcelable {
   @SerializedName("price_factor")
   private double priceFactor;
 
+  @Ignore
+  private boolean checked;
+
   public RecipePosition() {
   }  // for Room
 
@@ -234,6 +237,18 @@ public class RecipePosition implements Parcelable {
 
   public void setPriceFactor(double priceFactor) {
     this.priceFactor = priceFactor;
+  }
+
+  public boolean isChecked() {
+    return checked;
+  }
+
+  public void setChecked(boolean checked) {
+    this.checked = checked;
+  }
+
+  public void toggleChecked() {
+    checked = !checked;
   }
 
   public static JSONObject getJsonFromRecipe(RecipePosition recipe, boolean debug, String TAG) {

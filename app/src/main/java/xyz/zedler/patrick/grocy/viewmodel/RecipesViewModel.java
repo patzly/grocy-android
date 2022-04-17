@@ -66,8 +66,6 @@ public class RecipesViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final RecipesRepository repository;
-  private final PluralUtil pluralUtil;
-  private final DateUtil dateUtil;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -82,7 +80,6 @@ public class RecipesViewModel extends BaseViewModel {
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
 
-  private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private final boolean debug;
 
@@ -96,8 +93,6 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
     repository = new RecipesRepository(application);
-    pluralUtil = new PluralUtil(application);
-    dateUtil = new DateUtil(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -129,52 +124,21 @@ public class RecipesViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
     if (isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredRecipes();
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
-      return;
-    }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    queue.append(
-      dlHelper.updateRecipes(dbChangedTime, recipes -> {
-        this.recipes = recipes;
-
-        updateFilteredRecipes();
-      }), dlHelper.updateRecipeFulfillments(dbChangedTime, recipeFulfillments -> {
-        this.recipeFulfillments = recipeFulfillments;
-
-        updateFilteredRecipes();
-      }), dlHelper.updateRecipePositions(dbChangedTime, recipePositions -> {
-        this.recipePositions = recipePositions;
-
-        updateFilteredRecipes();
-      }), dlHelper.updateProducts(dbChangedTime, products -> {
-        this.products = products;
-
-        updateFilteredRecipes();
-      }), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
-        this.quantityUnits = quantityUnits;
-
-        updateFilteredRecipes();
-      })
+    dlHelper.updateData(
+        () -> loadFromDatabase(false),
+        this::onDownloadError,
+        Recipe.class,
+        RecipeFulfillment.class,
+        RecipePosition.class,
+        Product.class,
+        QuantityUnit.class
     );
-
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
   }
 
   public void downloadData() {
@@ -186,19 +150,10 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    repository.updateDatabase(
-            this.recipes,
-            this.recipeFulfillments,
-            this.recipePositions,
-            this.products,
-            this.quantityUnits,
-            this::updateFilteredRecipes
-    );
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -373,10 +328,6 @@ public class RecipesViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

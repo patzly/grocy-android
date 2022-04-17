@@ -2302,7 +2302,10 @@ public class DownloadHelper {
                             .doFinally(() -> {
                               sharedPrefs.edit()
                                       .putString(PREF.DB_LAST_TIME_RECIPES, dbChangedTime).apply();
-                              onResponseListener.onResponse(recipes);
+
+                              if (onResponseListener != null) {
+                                onResponseListener.onResponse(recipes);
+                              }
                               if (responseListener != null) {
                                 responseListener.onResponse(response);
                               }
@@ -2359,7 +2362,10 @@ public class DownloadHelper {
                             .doFinally(() -> {
                               sharedPrefs.edit()
                                       .putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, dbChangedTime).apply();
-                              onResponseListener.onResponse(recipeFulfillments);
+
+                              if (onResponseListener != null) {
+                                onResponseListener.onResponse(recipeFulfillments);
+                              }
                               if (responseListener != null) {
                                 responseListener.onResponse(response);
                               }
@@ -2416,7 +2422,10 @@ public class DownloadHelper {
                             .doFinally(() -> {
                               sharedPrefs.edit()
                                       .putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, dbChangedTime).apply();
-                              onResponseListener.onResponse(recipePositions);
+
+                              if (onResponseListener != null) {
+                                onResponseListener.onResponse(recipePositions);
+                              }
                               if (responseListener != null) {
                                 responseListener.onResponse(response);
                               }
@@ -2997,6 +3006,8 @@ public class DownloadHelper {
         queue.append(updateRecipes(dbChangedTime, null));
       } else if (type == RecipeFulfillment.class) {
         queue.append(updateRecipeFulfillments(dbChangedTime, null));
+      } else if (type == RecipePosition.class) {
+        queue.append(updateRecipePositions(dbChangedTime, null));
       }
     }
     if (queue.isEmpty()) {

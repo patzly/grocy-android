@@ -76,8 +76,6 @@ public class RecipeEditViewModel extends BaseViewModel {
   private List<Product> products;
   private List<ProductBarcode> productBarcodes;
 
-  private DownloadHelper.Queue currentQueueLoading;
-  private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
 
@@ -120,36 +118,17 @@ public class RecipeEditViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-    if (currentQueueLoading != null) {
-      currentQueueLoading.reset(true);
-      currentQueueLoading = null;
-    }
     if (isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
-      return;
-    }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    queue.append(
-        dlHelper.updateProducts(dbChangedTime, products -> {
-          this.products = products;
-          formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-        }),
-        dlHelper.updateProductBarcodes(dbChangedTime, productBarcodes -> {
-          this.productBarcodes = productBarcodes;
-        })
+    dlHelper.updateData(
+            () -> loadFromDatabase(false),
+            this::onDownloadError,
+            Product.class,
+            ProductBarcode.class
     );
-    if (queue.isEmpty()) {
-      onQueueEmpty();
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
   }
 
   public void downloadData() {
@@ -162,18 +141,6 @@ public class RecipeEditViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCT_BARCODES, null);
     editPrefs.apply();
     downloadData();
-  }
-
-  private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    if (queueEmptyAction != null) {
-      queueEmptyAction.run();
-      queueEmptyAction = null;
-      return;
-    }
-    fillWithRecipeIfNecessary();
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -413,14 +380,6 @@ public class RecipeEditViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
     return infoFullscreenLive;
-  }
-
-  public void setQueueEmptyAction(Runnable queueEmptyAction) {
-    this.queueEmptyAction = queueEmptyAction;
-  }
-
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
-    currentQueueLoading = queueLoading;
   }
 
   public boolean isFeatureEnabled(String pref) {

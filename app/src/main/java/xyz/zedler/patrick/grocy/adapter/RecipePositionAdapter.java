@@ -21,9 +21,12 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
@@ -45,6 +48,7 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.PluralUtil;
 
 public class RecipePositionAdapter extends
     RecyclerView.Adapter<RecipePositionAdapter.ViewHolder> {
@@ -58,6 +62,8 @@ public class RecipePositionAdapter extends
   private final ArrayList<Product> products;
   private final ArrayList<QuantityUnit> quantityUnits;
   private final RecipePositionsItemAdapterListener listener;
+
+  private final PluralUtil pluralUtil;
 
   public RecipePositionAdapter(
       Context context,
@@ -73,6 +79,7 @@ public class RecipePositionAdapter extends
     this.products = new ArrayList<>(products);
     this.quantityUnits = new ArrayList<>(quantityUnits);
     this.listener = listener;
+    this.pluralUtil = new PluralUtil(context);
   }
 
   @Override
@@ -123,7 +130,7 @@ public class RecipePositionAdapter extends
     holder.binding.amount.setText(NumUtil.trim(recipePosition.getAmount()));
 
     // QUANTITY UNIT
-    holder.binding.quantityUnit.setText(recipePosition.getAmount() == 1 || quantityUnit.getNamePlural() == null ? quantityUnit.getName() : quantityUnit.getNamePlural());
+    holder.binding.quantityUnit.setText(pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount()));
 
     // NAME
     holder.binding.title.setText(product.getName());
@@ -135,9 +142,19 @@ public class RecipePositionAdapter extends
       holder.binding.note.setText(recipePosition.getNote());
     }
 
+    if (recipePosition.isChecked()) {
+      holder.binding.linearRecipePositionContainer.setAlpha(0.5f);
+      //holder.binding.title.setPaintFlags(holder.binding.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+      //holder.binding.title.setTextColor(ContextCompat.getColor(context, R.color.on_background_secondary));
+    } else {
+      holder.binding.linearRecipePositionContainer.setAlpha(1f);
+      //holder.binding.title.setPaintFlags(holder.binding.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+      //holder.binding.title.setTextColor(ContextCompat.getColor(context, R.color.on_background));
+    }
+
     // CONTAINER
     holder.binding.linearRecipePositionContainer.setOnClickListener(
-        view -> listener.onItemRowClicked(recipePosition)
+        view -> listener.onItemRowClicked(recipePosition, position)
     );
   }
 
@@ -148,7 +165,7 @@ public class RecipePositionAdapter extends
 
   public interface RecipePositionsItemAdapterListener {
 
-    void onItemRowClicked(RecipePosition recipePosition);
+    void onItemRowClicked(RecipePosition recipePosition, int position);
   }
 
   public void updateData(

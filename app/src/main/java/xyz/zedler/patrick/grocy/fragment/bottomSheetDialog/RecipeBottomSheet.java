@@ -128,6 +128,7 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       binding.recycler.setAdapter(null);
       binding = null;
     }
+
     super.onDestroyView();
   }
 
@@ -173,6 +174,11 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
         dismiss();
         return;
       }
+    }
+
+    for (RecipePosition recipePosition: recipePositions) {
+      if (recipePosition.isChecked())
+        recipePosition.setChecked(false);
     }
 
     binding.name.setText(getString(R.string.property_name), recipe.getName());
@@ -234,12 +240,16 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     progressConfirm = binding.progressConfirmation;
   }
 
-  public void onItemRowClicked(RecipePosition recipePosition) {
+  public void onItemRowClicked(RecipePosition recipePosition, int position) {
     if (recipePosition == null) {
       return;
     }
 
-    activity.showMessage("Not implemented yet :(");
+    recipePosition.toggleChecked();
+    RecipePositionAdapter adapter = (RecipePositionAdapter)binding.recycler.getAdapter();
+    if (adapter != null) {
+      adapter.notifyItemChanged(position, recipePosition);
+    }
   }
 
   public void onTouchDelete(View view, MotionEvent event) {

@@ -135,12 +135,6 @@ public class RecipesFragment extends BaseFragment implements
       viewModel.resetSearch();
     }
 
-    viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
-      if (!state) {
-        viewModel.setCurrentQueueLoading(null);
-      }
-    });
-
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
@@ -246,8 +240,6 @@ public class RecipesFragment extends BaseFragment implements
     }
     swipeBehavior.attachToRecyclerView(binding.recycler);
 
-    hideDisabledFeatures();
-
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -257,22 +249,34 @@ public class RecipesFragment extends BaseFragment implements
 
   @Override
   public void consumeRecipe(int recipeId) {
+    if (showOfflineError()) {
+      return;
+    }
     viewModel.consumeRecipe(recipeId);
   }
 
   @Override
   public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+    if (showOfflineError()) {
+      return;
+    }
     viewModel.addNotFulfilledProductsToCartForRecipe(recipeId);
   }
 
   @Override
   public void editRecipe(Recipe recipe) {
+    if (showOfflineError()) {
+      return;
+    }
     navigate(RecipesFragmentDirections
             .actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT).setRecipe(recipe));
   }
 
   @Override
   public void deleteRecipe(int recipeId) {
+    if (showOfflineError()) {
+      return;
+    }
     viewModel.deleteRecipe(recipeId);
   }
 
@@ -353,9 +357,6 @@ public class RecipesFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-  }
-
-  private void hideDisabledFeatures() {
   }
 
   private void setUpSearch() {
