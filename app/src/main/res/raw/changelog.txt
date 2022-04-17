@@ -1,5 +1,6 @@
 2.2.1:
 - New: Stock entries page (#403)
+- Improved: Display stock locations on product overview bottom sheet (#449)
 - Improved: Splash screen (will be further improved for Android 12 with the upcoming redesign)
 - Fixed: On transfer page no locations were selectable as target (#515)
 - Fixed: Crash after creating product with purchase or inventory transaction (#518)

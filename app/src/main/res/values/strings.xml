@@ -743,6 +743,7 @@
   <string name="property_location">Location</string>
   <string name="property_location_insert">Location: %1$s</string>
   <string name="property_location_default">Default location</string>
+  <string name="property_location_default_insert">Default location: %1$s</string>
   <string name="property_location_consume_default">Default consume location</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Locations</string>
