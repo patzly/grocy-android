@@ -63,6 +63,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -2357,7 +2358,7 @@ public class DownloadHelper {
                             .observeOn(AndroidSchedulers.mainThread())
                             .doFinally(() -> {
                               sharedPrefs.edit()
-                                      .putString(PREF.DB_LAST_TIME_RECIPES, dbChangedTime).apply();
+                                      .putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, dbChangedTime).apply();
                               onResponseListener.onResponse(recipeFulfillments);
                               if (responseListener != null) {
                                 responseListener.onResponse(response);
@@ -2375,7 +2376,64 @@ public class DownloadHelper {
       };
     } else {
       if (debug) {
-        Log.i(tag, "downloadData: skipped Recipes download");
+        Log.i(tag, "downloadData: skipped Recipe fulfillments download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateRecipePositions(
+          String dbChangedTime,
+          OnRecipePositionsResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+            PREF.DB_LAST_TIME_RECIPE_POSITIONS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+                @Nullable OnStringResponseListener responseListener,
+                @Nullable OnErrorListener errorListener,
+                @Nullable String uuid
+        ) {
+          get(
+                  grocyApi.getRecipePositions(),
+                  uuid,
+                  response -> {
+                    Type type = new TypeToken<List<RecipePosition>>() {
+                    }.getType();
+                    ArrayList<RecipePosition> recipePositions = new Gson().fromJson(response, type);
+                    if (debug) {
+                      Log.i(tag, "download RecipePositions: " + recipePositions);
+                    }
+                    Single.concat(
+                            appDatabase.recipePositionDao().deleteRecipePositions(),
+                            appDatabase.recipePositionDao().insertRecipePositions(recipePositions)
+                    )
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                              sharedPrefs.edit()
+                                      .putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, dbChangedTime).apply();
+                              onResponseListener.onResponse(recipePositions);
+                              if (responseListener != null) {
+                                responseListener.onResponse(response);
+                              }
+                            })
+                            .subscribe();
+                  },
+                  error -> {
+                    if (errorListener != null) {
+                      errorListener.onError(error);
+                    }
+                  }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Recipe positions download");
       }
       return null;
     }
@@ -3080,6 +3138,11 @@ public class DownloadHelper {
   public interface OnRecipeFulfillmentsResponseListener {
 
     void onResponse(ArrayList<RecipeFulfillment> recipeFulfillments);
+  }
+
+  public interface OnRecipePositionsResponseListener {
+
+    void onResponse(ArrayList<RecipePosition> recipePositions);
   }
 
   public interface OnUsersResponseListener {

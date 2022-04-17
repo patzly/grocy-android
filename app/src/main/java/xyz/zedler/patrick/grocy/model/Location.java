@@ -26,6 +26,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity(tableName = "location_table")
@@ -129,6 +131,18 @@ public class Location implements Parcelable {
 
   public void setIsFreezer(String isFreezer) {
     this.isFreezer = isFreezer;
+  }
+
+  public static Location getFromId(ArrayList<Location> locations, int id) {
+    if (id == -1) {
+      return null;
+    }
+    for (Location location : locations) {
+      if (location.getId() == id) {
+        return location;
+      }
+    }
+    return null;
   }
 
   @Override

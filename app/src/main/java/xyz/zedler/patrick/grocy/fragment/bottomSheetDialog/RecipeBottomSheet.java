@@ -33,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -44,30 +45,41 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
+import xyz.zedler.patrick.grocy.adapter.RecipePositionAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetRecipeBinding;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
+import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class RecipeBottomSheet extends BaseBottomSheet {
+public class RecipeBottomSheet extends BaseBottomSheet implements
+        RecipePositionAdapter.RecipePositionsItemAdapterListener {
 
   private final static int DELETE_CONFIRMATION_DURATION = 1000;
   private final static String TAG = RecipeBottomSheet.class.getSimpleName();
 
+  private SharedPreferences sharedPrefs;
   private MainActivity activity;
   private FragmentBottomsheetRecipeBinding binding;
   private ProgressBar progressConfirm;
@@ -94,10 +106,27 @@ public class RecipeBottomSheet extends BaseBottomSheet {
   }
 
   @Override
+  public void onStart() {
+    super.onStart();
+    keepScreenOnIfNecessary(true);
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    keepScreenOnIfNecessary(false);
+  }
+
+  @Override
   public void onDestroyView() {
     if (confirmProgressAnimator != null) {
       confirmProgressAnimator.cancel();
       confirmProgressAnimator = null;
+    }
+    if (binding != null) {
+      binding.recycler.animate().cancel();
+      binding.recycler.setAdapter(null);
+      binding = null;
     }
     super.onDestroyView();
   }
@@ -109,8 +138,20 @@ public class RecipeBottomSheet extends BaseBottomSheet {
 
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplication());
 
+    binding.recycler.setLayoutManager(
+            new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+    );
+    binding.recycler.setAdapter(new MasterPlaceholderAdapter());
+
+    if (savedInstanceState == null) {
+      binding.recycler.scrollToPosition(0);
+    }
+
     Bundle bundle = getArguments();
     RecipeFulfillment recipeFulfillment;
+    ArrayList<RecipePosition> recipePositions;
+    ArrayList<Product> products;
+    ArrayList<QuantityUnit> quantityUnits;
 
     if (bundle == null) {
       dismiss();
@@ -118,8 +159,17 @@ public class RecipeBottomSheet extends BaseBottomSheet {
     } else {
       recipe = bundle.getParcelable(ARGUMENT.RECIPE);
       recipeFulfillment = bundle.getParcelable(ARGUMENT.RECIPE_FULFILLMENT);
+      recipePositions = bundle.getParcelableArrayList(ARGUMENT.RECIPE_POSITIONS);
+      products = bundle.getParcelableArrayList(ARGUMENT.PRODUCTS);
+      quantityUnits = bundle.getParcelableArrayList(ARGUMENT.QUANTITY_UNITS);
 
-      if (recipe == null || recipeFulfillment == null) {
+      if (
+              recipe == null ||
+              recipeFulfillment == null ||
+              recipePositions == null ||
+              products == null ||
+              quantityUnits == null
+      ) {
         dismiss();
         return;
       }
@@ -130,6 +180,26 @@ public class RecipeBottomSheet extends BaseBottomSheet {
     binding.costs.setText(getString(R.string.property_costs), NumUtil.trimPrice(recipeFulfillment.getCosts()) + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""));
     binding.baseServings.setText(getString(R.string.property_base_servings), NumUtil.trim(recipe.getBaseServings()));
     binding.dueScore.setText(getString(R.string.property_due_score), String.valueOf(recipeFulfillment.getDueScore()));
+
+    if (recipePositions.isEmpty()) {
+      binding.ingredientContainer.setVisibility(View.GONE);
+    } else {
+      binding.ingredientsHeadline.setText(getText(R.string.property_ingredients));
+      if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
+        ((RecipePositionAdapter) binding.recycler.getAdapter()).updateData(recipePositions, products, quantityUnits);
+      } else {
+        binding.recycler.setAdapter(
+                new RecipePositionAdapter(
+                        requireContext(),
+                        (LinearLayoutManager) binding.recycler.getLayoutManager(),
+                        recipePositions,
+                        products,
+                        quantityUnits,
+                        this
+                )
+        );
+      }
+    }
 
     if (recipe.getDescription() == null || recipe.getDescription().trim().isEmpty()) {
       binding.description.setVisibility(View.GONE);
@@ -162,6 +232,14 @@ public class RecipeBottomSheet extends BaseBottomSheet {
       return true;
     });
     progressConfirm = binding.progressConfirmation;
+  }
+
+  public void onItemRowClicked(RecipePosition recipePosition) {
+    if (recipePosition == null) {
+      return;
+    }
+
+    activity.showMessage("Not implemented yet :(");
   }
 
   public void onTouchDelete(View view, MotionEvent event) {
@@ -233,6 +311,25 @@ public class RecipeBottomSheet extends BaseBottomSheet {
 
     if (progressConfirm.getProgress() != 100) {
       Toast.makeText(requireContext(), R.string.msg_press_hold_confirm, Toast.LENGTH_LONG).show();
+    }
+  }
+
+  private void keepScreenOnIfNecessary(boolean keepOn) {
+    if (activity == null) {
+      activity = (MainActivity) requireActivity();
+    }
+    if (sharedPrefs == null) {
+      sharedPrefs = PreferenceManager
+              .getDefaultSharedPreferences(activity);
+    }
+    boolean necessary = sharedPrefs.getBoolean(
+            Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON,
+            Constants.SETTINGS_DEFAULT.RECIPES.KEEP_SCREEN_ON
+    );
+    if (necessary && keepOn) {
+      activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    } else {
+      activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
   }
 

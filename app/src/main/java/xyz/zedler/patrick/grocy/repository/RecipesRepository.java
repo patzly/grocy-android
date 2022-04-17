@@ -26,13 +26,19 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.internal.functions.Functions;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.util.SingleUtil;
 
 public class RecipesRepository {
 
@@ -51,10 +57,20 @@ public class RecipesRepository {
 
     private final List<Recipe> recipes;
     private final List<RecipeFulfillment> recipeFulfillments;
+    private final List<RecipePosition> recipePositions;
+    private final List<Product> products;
+    private final List<QuantityUnit> quantityUnits;
 
-    public RecipesData(List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments) {
+    public RecipesData(List<Recipe> recipes,
+                       List<RecipeFulfillment> recipeFulfillments,
+                       List<RecipePosition> recipePositions,
+                       List<Product> products,
+                       List<QuantityUnit> quantityUnits) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
+      this.recipePositions = recipePositions;
+      this.products = products;
+      this.quantityUnits = quantityUnits;
     }
 
     public List<Recipe> getRecipes() {
@@ -64,6 +80,18 @@ public class RecipesRepository {
     public List<RecipeFulfillment> getRecipeFulfillments() {
       return recipeFulfillments;
     }
+
+    public List<RecipePosition> getRecipePositions() {
+      return recipePositions;
+    }
+
+    public List<Product> getProducts() {
+      return products;
+    }
+
+    public List<QuantityUnit> getQuantityUnits() {
+      return quantityUnits;
+    }
   }
 
   public void loadFromDatabase(RecipesDataListener listener) {
@@ -71,6 +99,9 @@ public class RecipesRepository {
         .zip(
             appDatabase.recipeDao().getRecipes(),
             appDatabase.recipeFulfillmentDao().getRecipeFulfillments(),
+            appDatabase.recipePositionDao().getRecipePositions(),
+            appDatabase.productDao().getProducts(),
+            appDatabase.quantityUnitDao().getQuantityUnits(),
             RecipesData::new
         )
         .subscribeOn(Schedulers.io())
@@ -79,13 +110,26 @@ public class RecipesRepository {
         .subscribe();
   }
 
-  public void updateDatabase(List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, Runnable listener) {
+  public void updateDatabase(
+          List<Recipe> recipes,
+          List<RecipeFulfillment> recipeFulfillments,
+          List<RecipePosition> recipePositions,
+          List<Product> products,
+          List<QuantityUnit> quantityUnits,
+          Runnable listener
+  ) {
 
-    Single.concat(
+    SingleUtil.concat(
             appDatabase.recipeDao().deleteRecipes(),
             appDatabase.recipeDao().insertRecipes(recipes),
             appDatabase.recipeFulfillmentDao().deleteRecipeFulfillments(),
-            appDatabase.recipeFulfillmentDao().insertRecipeFulfillments(recipeFulfillments)
+            appDatabase.recipeFulfillmentDao().insertRecipeFulfillments(recipeFulfillments),
+            appDatabase.recipePositionDao().deleteRecipePositions(),
+            appDatabase.recipePositionDao().insertRecipePositions(recipePositions),
+            appDatabase.productDao().deleteProducts(),
+            appDatabase.productDao().insertProducts(products),
+            appDatabase.quantityUnitDao().deleteQuantityUnits(),
+            appDatabase.quantityUnitDao().insertQuantityUnits(quantityUnits)
     )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

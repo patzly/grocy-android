@@ -27,6 +27,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -146,6 +148,17 @@ public class QuantityUnit implements Parcelable {
       }
     }
     return null;
+  }
+
+  public static ArrayList<QuantityUnit> getQuantityUnitsForRecipePositions(ArrayList<QuantityUnit> quantityUnits, ArrayList<RecipePosition> recipePositions) {
+    ArrayList<QuantityUnit> result = new ArrayList<>();
+    for (RecipePosition recipePosition : recipePositions) {
+      QuantityUnit quantityUnit = getFromId(quantityUnits, recipePosition.getQuantityUnitId());
+      if (quantityUnit != null) {
+        result.add(quantityUnit);
+      }
+    }
+    return result;
   }
 
   @Override

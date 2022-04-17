@@ -45,6 +45,7 @@ public class ShortcutUtil {
   public final static String TRANSFER = "shortcut_transfer";
   public final static String TASKS = "shortcut_tasks";
   public final static String ADD_TASK = "shortcut_add_task";
+  public final static String RECIPES = "shortcut_recipes";
 
   @RequiresApi(api = Build.VERSION_CODES.N_MR1)
   public static List<ShortcutInfo> getDynamicShortcuts(Context context) {
@@ -101,11 +102,15 @@ public class ShortcutUtil {
         newShortcutInfos.add(createShortcutTasks(
             context, context.getString(R.string.title_task_add)
         ));
+      } else if (shortcutInfo.getId().equals(RECIPES)) {
+        newShortcutInfos.add(createShortcutRecipes(
+            context, context.getString(R.string.title_recipes)
+        ));
       }
     }
     List<String> shortcutIdsSorted = Arrays.asList(
         STOCK_OVERVIEW, SHOPPING_LIST, ADD_TO_SHOPPING_LIST,
-        SHOPPING_MODE, PURCHASE, CONSUME, TRANSFER, INVENTORY, TASKS, ADD_TASK
+        SHOPPING_MODE, PURCHASE, CONSUME, TRANSFER, INVENTORY, TASKS, ADD_TASK, RECIPES
     );
     shortcutManager.removeAllDynamicShortcuts();
     newShortcutInfos = SortUtil.sortShortcutsById(newShortcutInfos, shortcutIdsSorted);
@@ -217,6 +222,17 @@ public class ShortcutUtil {
     return new ShortcutInfo.Builder(context, ADD_TASK)
         .setShortLabel(label)
         .setIcon(Icon.createWithResource(context, R.mipmap.ic_task_add))
+        .setIntent(intent).build();
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.N_MR1)
+  public static ShortcutInfo createShortcutRecipes(Context context, CharSequence label) {
+    Uri uri = Uri.parse(context.getString(R.string.deep_link_recipesFragment));
+    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+    intent.setClass(context, MainActivity.class);
+    return new ShortcutInfo.Builder(context, RECIPES)
+        .setShortLabel(label)
+        .setIcon(Icon.createWithResource(context, R.mipmap.ic_restaurant_menu))
         .setIntent(intent).build();
   }
 

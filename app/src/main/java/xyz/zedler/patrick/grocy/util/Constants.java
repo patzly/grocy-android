@@ -87,6 +87,7 @@ public final class Constants {
     public final static String DB_LAST_TIME_USERS = "db_last_time_users";
     public final static String DB_LAST_TIME_RECIPES = "db_last_time_recipes";
     public final static String DB_LAST_TIME_RECIPE_FULFILLMENTS = "db_last_time_recipe_fulfillments";
+    public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -176,6 +177,11 @@ public final class Constants {
       public final static String SHOW_PRODUCT_DESCRIPTION = "show_product_description";
     }
 
+    public final static class RECIPES {
+
+      public final static String KEEP_SCREEN_ON = "recipes_keep_screen_on";
+    }
+
     public final static class DEBUGGING {
 
       public final static String ENABLE_DEBUGGING = "enable_debugging";
@@ -263,6 +269,11 @@ public final class Constants {
       public final static boolean SHOW_DONE_ITEMS = true;
       public final static boolean USE_SMALLER_FONT = false;
       public final static boolean SHOW_PRODUCT_DESCRIPTION = false;
+    }
+
+    public final static class RECIPES {
+
+      public final static boolean KEEP_SCREEN_ON = true;
     }
 
     public final static class DEBUGGING {
@@ -380,6 +391,7 @@ public final class Constants {
     public final static String SHOW_OPTION_NEVER_EXPIRES = "show_option_never_expires";
     public final static String RECIPE = "recipe";
     public final static String RECIPE_FULFILLMENT = "recipe_fulfillment";
+    public final static String RECIPE_POSITIONS = "recipe_positions";
     public final static String RUN_AS_SUPER_CLASS = "run_as_super_class";
     public final static String INSTANCE_STATE = "instance_state";
   }

@@ -1076,5 +1076,8 @@
     <item quantity="one">%1$d not enough in stock</item>
     <item quantity="other">%1$d not enough in stock</item>
   </plurals>
+    <string name="property_ingredients">Ingredients</string>
+    <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
+    <string name="title_recipe_add">Add recipe</string>
 
 </resources>

@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -307,6 +308,18 @@ public class SettingsViewModel extends BaseViewModel {
         .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_REVERSE, enabled).apply();
   }
 
+  public boolean getKeepScreenOnRecipesEnabled() {
+    return sharedPrefs.getBoolean(
+            RECIPES.KEEP_SCREEN_ON,
+            SETTINGS_DEFAULT.RECIPES.KEEP_SCREEN_ON
+    );
+  }
+
+  public void setKeepScreenOnRecipesEnabled(boolean enabled) {
+    sharedPrefs.edit()
+            .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
+  }
+
   public boolean getFrontCamEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.SCANNER.FRONT_CAM,
@@ -539,7 +552,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getLocations(
         locations -> {
           this.locations = locations;
-          Location location = getLocation(locationId);
+          Location location = Location.getFromId(locations, locationId);
           presetLocationTextLive.setValue(location != null ? location.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetLocationTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -552,7 +565,7 @@ public class SettingsViewModel extends BaseViewModel {
               true
           );
           this.productGroups = productGroups;
-          ProductGroup productGroup = getProductGroup(groupId);
+          ProductGroup productGroup = ProductGroup.getFromId(productGroups, groupId);
           presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetProductGroupTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -560,7 +573,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getQuantityUnits(
         quantityUnits -> {
           this.quantityUnits = quantityUnits;
-          QuantityUnit quantityUnit = getQuantityUnit(unitId);
+          QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, unitId);
           presetQuantityUnitTextLive.setValue(quantityUnit != null ? quantityUnit.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetQuantityUnitTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -933,42 +946,6 @@ public class SettingsViewModel extends BaseViewModel {
   public boolean getIsDemoInstance() {
     String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
     return server != null && server.contains("grocy.info");
-  }
-
-  private Location getLocation(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (Location location : locations) {
-      if (location.getId() == id) {
-        return location;
-      }
-    }
-    return null;
-  }
-
-  private ProductGroup getProductGroup(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (ProductGroup productGroup : productGroups) {
-      if (productGroup.getId() == id) {
-        return productGroup;
-      }
-    }
-    return null;
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
   }
 
   public DownloadHelper getDownloadHelper() {

@@ -106,6 +106,8 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         setCheckBoxChecked(R.id.tasks);
       } else if (shortcutInfo.getId().equals(ShortcutUtil.ADD_TASK)) {
         setCheckBoxChecked(R.id.task_add);
+      } else if (shortcutInfo.getId().equals(ShortcutUtil.RECIPES)) {
+        setCheckBoxChecked(R.id.recipes);
       }
     }
 
@@ -181,6 +183,8 @@ public class ShortcutsBottomSheet extends BaseBottomSheet {
         shortcutInfos.add(ShortcutUtil.createShortcutTaskAdd(
             context, uriWithArgs, checkBox.getText()
         ));
+      } else if (checkBox.getId() == R.id.recipes) {
+        shortcutInfos.add(ShortcutUtil.createShortcutRecipes(context, checkBox.getText()));
       }
     }
 

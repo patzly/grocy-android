@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 34,
-    "identityHash": "5ad6c65b096d88a7bb36b40009c3b844",
+    "identityHash": "af3853f53abd048dda693e7f06231b3e",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -1655,12 +1655,92 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_pos_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `recipe_id` INTEGER NOT NULL, `product_id` INTEGER NOT NULL, `amount` REAL NOT NULL, `note` TEXT, `qu_id` INTEGER NOT NULL, `only_check_single_unit_in_stock` INTEGER NOT NULL, `ingredient_group` TEXT, `not_check_stock_fulfillment` INTEGER NOT NULL, `variable_amount` TEXT, `price_factor` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipe_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quantityUnitId",
+            "columnName": "qu_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onlyCheckSingleUnitInStock",
+            "columnName": "only_check_single_unit_in_stock",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredientGroup",
+            "columnName": "ingredient_group",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notCheckStockFulfillment",
+            "columnName": "not_check_stock_fulfillment",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "variableAmount",
+            "columnName": "variable_amount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priceFactor",
+            "columnName": "price_factor",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5ad6c65b096d88a7bb36b40009c3b844')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'af3853f53abd048dda693e7f06231b3e')"
     ]
   }
 }

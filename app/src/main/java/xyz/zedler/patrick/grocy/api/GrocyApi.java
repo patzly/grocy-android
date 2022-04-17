@@ -416,6 +416,13 @@ public class GrocyApi {
     );
   }
 
+  public String getRecipePositions() {
+    return getObjects(
+            "recipes_pos",
+            new COMPARISON("recipe_id", COMPARISON_OPERATOR.GREATER, "0")
+    );
+  }
+
   public String consumeRecipe(int recipeId) {
     return getUrl("/recipes/" + recipeId + "/consume");
   }

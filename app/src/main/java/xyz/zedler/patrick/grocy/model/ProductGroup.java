@@ -27,6 +27,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity(tableName = "product_group_table")
@@ -136,6 +138,18 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
   @Override
   public int describeContents() {
     return 0;
+  }
+
+  public static ProductGroup getFromId(ArrayList<ProductGroup> productGroups, int id) {
+    if (id == -1) {
+      return null;
+    }
+    for (ProductGroup productGroup : productGroups) {
+      if (productGroup.getId() == id) {
+        return productGroup;
+      }
+    }
+    return null;
   }
 
   @Override

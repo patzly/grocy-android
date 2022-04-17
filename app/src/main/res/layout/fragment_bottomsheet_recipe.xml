@@ -147,6 +147,36 @@
         </RelativeLayout>
       </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ingredient_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+      <View
+          style="@style/Widget.Grocy.Divider"
+          android:layout_marginVertical="12dp" />
+
+      <TextView
+          android:id="@+id/ingredients_headline"
+          style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical" />
+
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recycler"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp"
+          android:overScrollMode="never"
+          android:clipToPadding="false"
+          android:scrollbarStyle="outsideOverlay"/>
+    </LinearLayout>
+
       <xyz.zedler.patrick.grocy.view.ExpandableCard
         android:id="@+id/description"
         android:layout_width="match_parent"

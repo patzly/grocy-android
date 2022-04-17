@@ -43,8 +43,11 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
@@ -75,14 +78,13 @@ public class RecipesViewModel extends BaseViewModel {
 
   private List<Recipe> recipes;
   private List<RecipeFulfillment> recipeFulfillments;
+  private List<RecipePosition> recipePositions;
+  private List<Product> products;
+  private List<QuantityUnit> quantityUnits;
 
   private DownloadHelper.Queue currentQueueLoading;
   private String searchInput;
   private final boolean debug;
-
-  private int enoughInStockCount = 0;
-  private int notEnoughInStockButInShoppingListCount = 0;
-  private int notEnoughInStockCount = 0;
 
   public RecipesViewModel(@NonNull Application application) {
     super(application);
@@ -115,6 +117,9 @@ public class RecipesViewModel extends BaseViewModel {
     repository.loadFromDatabase(data -> {
       recipes = data.getRecipes();
       recipeFulfillments = data.getRecipeFulfillments();
+      recipePositions = data.getRecipePositions();
+      products = data.getProducts();
+      quantityUnits = data.getQuantityUnits();
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
@@ -148,6 +153,18 @@ public class RecipesViewModel extends BaseViewModel {
         this.recipeFulfillments = recipeFulfillments;
 
         updateFilteredRecipes();
+      }), dlHelper.updateRecipePositions(dbChangedTime, recipePositions -> {
+        this.recipePositions = recipePositions;
+
+        updateFilteredRecipes();
+      }), dlHelper.updateProducts(dbChangedTime, products -> {
+        this.products = products;
+
+        updateFilteredRecipes();
+      }), dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
+        this.quantityUnits = quantityUnits;
+
+        updateFilteredRecipes();
       })
     );
 
@@ -167,7 +184,8 @@ public class RecipesViewModel extends BaseViewModel {
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
-    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -176,6 +194,9 @@ public class RecipesViewModel extends BaseViewModel {
     repository.updateDatabase(
             this.recipes,
             this.recipeFulfillments,
+            this.recipePositions,
+            this.products,
+            this.quantityUnits,
             this::updateFilteredRecipes
     );
   }
@@ -193,9 +214,9 @@ public class RecipesViewModel extends BaseViewModel {
   public void updateFilteredRecipes() {
     ArrayList<Recipe> filteredRecipes = new ArrayList<>();
 
-    enoughInStockCount = 0;
-    notEnoughInStockButInShoppingListCount = 0;
-    notEnoughInStockCount = 0;
+    int enoughInStockCount = 0;
+    int notEnoughInStockButInShoppingListCount = 0;
+    int notEnoughInStockCount = 0;
 
     for (Recipe recipe : this.recipes) {
       RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe.getId());
@@ -222,8 +243,10 @@ public class RecipesViewModel extends BaseViewModel {
 
       boolean searchContainsItem = true;
       if (searchInput != null && !searchInput.isEmpty()) {
-        searchContainsItem = recipe.getName().toLowerCase().contains(searchInput) ||
-                recipe.getDescription().toLowerCase().contains(searchInput);
+        searchContainsItem = recipe.getName().toLowerCase().contains(searchInput);
+
+        if (!searchContainsItem && recipeFulfillment != null)
+          searchContainsItem = recipeFulfillment.getProductNamesCommaSeparated().toLowerCase().contains(searchInput);
       }
 
       if (!searchContainsItem) {
@@ -281,6 +304,18 @@ public class RecipesViewModel extends BaseViewModel {
 
   public ArrayList<RecipeFulfillment> getRecipeFulfillments() {
     return new ArrayList<>(recipeFulfillments);
+  }
+
+  public ArrayList<RecipePosition> getRecipePositions() {
+    return new ArrayList<>(recipePositions);
+  }
+
+  public ArrayList<Product> getProducts() {
+    return new ArrayList<>(products);
+  }
+
+  public ArrayList<QuantityUnit> getQuantityUnits() {
+    return new ArrayList<>(quantityUnits);
   }
 
   public boolean isSearchActive() {

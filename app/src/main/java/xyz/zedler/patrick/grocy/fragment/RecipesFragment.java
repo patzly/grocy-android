@@ -47,8 +47,11 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
@@ -328,10 +331,16 @@ public class RecipesFragment extends BaseFragment implements
     }
 
     RecipeFulfillment recipeFulfillment = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(viewModel.getRecipeFulfillments(), recipe.getId());
+    ArrayList<RecipePosition> recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(viewModel.getRecipePositions(), recipe.getId());
+    ArrayList<Product> products = Product.getProductsForRecipePositions(viewModel.getProducts(), recipePositions);
+    ArrayList<QuantityUnit> quantityUnits = QuantityUnit.getQuantityUnitsForRecipePositions(viewModel.getQuantityUnits(), recipePositions);
 
     Bundle bundle = new Bundle();
     bundle.putParcelable(ARGUMENT.RECIPE, recipe);
     bundle.putParcelable(ARGUMENT.RECIPE_FULFILLMENT, recipeFulfillment);
+    bundle.putParcelableArrayList(ARGUMENT.RECIPE_POSITIONS, recipePositions);
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCTS, products);
+    bundle.putParcelableArrayList(ARGUMENT.QUANTITY_UNITS, quantityUnits);
     activity.showBottomSheet(new RecipeBottomSheet(), bundle);
   }
 
