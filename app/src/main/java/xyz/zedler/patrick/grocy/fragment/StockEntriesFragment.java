@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockEntryAdapter.StockEntryAdapterListener;
-import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
@@ -45,11 +44,9 @@ import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.GroupedListItem;
-import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
-import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
@@ -204,40 +201,33 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
             List<UnderlayButton> underlayButtons
         ) {
           if (viewHolder.getItemViewType() != GroupedListItem.TYPE_ENTRY) return;
-          if (!(binding.recycler.getAdapter() instanceof StockOverviewItemAdapter)) return;
+          if (!(binding.recycler.getAdapter() instanceof StockEntryAdapter)) return;
           int position = viewHolder.getAdapterPosition();
           ArrayList<GroupedListItem> groupedListItems =
-              ((StockOverviewItemAdapter) binding.recycler.getAdapter()).getGroupedListItems();
+              ((StockEntryAdapter) binding.recycler.getAdapter()).getGroupedListItems();
           if (groupedListItems == null || position < 0
               || position >= groupedListItems.size()) {
             return;
           }
           GroupedListItem item = groupedListItems.get(position);
-          if (!(item instanceof StockItem)) {
+          if (!(item instanceof StockEntry)) {
             return;
           }
-          StockItem stockItem = (StockItem) item;
-          if (stockItem.getAmountAggregatedDouble() > 0
-              && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
-          ) {
-            underlayButtons.add(new UnderlayButton(
-                R.drawable.ic_round_consume_product,
-                pos -> {
-                  if (pos >= groupedListItems.size()) {
-                    return;
-                  }
-                  swipeBehavior.recoverLatestSwipedItem();
-                  viewModel.performAction(
-                      Constants.ACTION.CONSUME,
-                      stockItem
-                  );
+          StockEntry stockEntry = (StockEntry) item;
+          underlayButtons.add(new UnderlayButton(
+              R.drawable.ic_round_consume_product,
+              pos -> {
+                if (pos >= groupedListItems.size()) {
+                  return;
                 }
-            ));
-          }
-          if (stockItem.getAmountAggregatedDouble()
-              > stockItem.getAmountOpenedAggregatedDouble()
-              && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
+                swipeBehavior.recoverLatestSwipedItem();
+                viewModel.performAction(Constants.ACTION.CONSUME, stockEntry);
+              }
+          ));
+          Product product = viewModel.getProductHashMap().get(stockEntry.getProductId());
+          if (product != null && product.getEnableTareWeightHandlingInt() == 0
               && viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_OPENED_TRACKING)
+              && stockEntry.getOpen() == 0
           ) {
             underlayButtons.add(new UnderlayButton(
                 R.drawable.ic_round_open,
@@ -246,25 +236,14 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
                     return;
                   }
                   swipeBehavior.recoverLatestSwipedItem();
-                  viewModel.performAction(
-                      Constants.ACTION.OPEN,
-                      stockItem
-                  );
+                  viewModel.performAction(Constants.ACTION.OPEN, stockEntry);
                 }
-            ));
-          }
-          if (underlayButtons.isEmpty()) {
-            underlayButtons.add(new UnderlayButton(
-                R.drawable.ic_round_close,
-                pos -> swipeBehavior.recoverLatestSwipedItem()
             ));
           }
         }
       };
     }
     swipeBehavior.attachToRecyclerView(binding.recycler);
-
-    hideDisabledFeatures();
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
@@ -329,8 +308,8 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   }
 
   @Override
-  public void performAction(String action, StockItem stockItem) {
-    viewModel.performAction(action, stockItem);
+  public void performAction(String action, StockEntry stockEntry) {
+    viewModel.performAction(action, stockEntry);
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -356,28 +335,6 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     viewModel.showStockEntryBottomSheet(stockEntry);
   }
 
-  private void showProductOverview(StockItem stockItem) {
-    if (stockItem == null) {
-      return;
-    }
-    QuantityUnit quantityUnitStock = viewModel
-        .getQuantityUnitFromId(stockItem.getProduct().getQuIdStockInt());
-    QuantityUnit quantityUnitPurchase = viewModel
-        .getQuantityUnitFromId(stockItem.getProduct().getQuIdPurchaseInt());
-    Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
-    if (quantityUnitStock == null || quantityUnitPurchase == null) {
-      activity.showMessage(R.string.error_undefined);
-      return;
-    }
-    navigate(StockOverviewFragmentDirections
-        .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
-        .setShowActions(true)
-        .setStockItem(stockItem)
-        .setQuantityUnitStock(quantityUnitStock)
-        .setQuantityUnitPurchase(quantityUnitPurchase)
-        .setLocation(location));
-  }
-
   @Override
   public void updateConnectivity(boolean isOnline) {
     if (!isOnline == viewModel.isOffline()) {
@@ -387,9 +344,6 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     if (isOnline) {
       viewModel.downloadData();
     }
-  }
-
-  private void hideDisabledFeatures() {
   }
 
   private void setUpSearch() {

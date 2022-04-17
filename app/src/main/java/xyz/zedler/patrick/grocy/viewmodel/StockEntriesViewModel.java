@@ -44,8 +44,8 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockEntriesGrouping;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockEntriesSort;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockEntry;
-import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.StockEntriesRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -80,11 +79,10 @@ public class StockEntriesViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<StockEntry>> filteredStockEntriesLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final FilterChipLiveDataLocation filterChipLiveDataLocation;
-  private final FilterChipLiveDataStockSort filterChipLiveDataSort;
-  private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
+  private final FilterChipLiveDataStockEntriesSort filterChipLiveDataSort;
+  private final FilterChipLiveDataStockEntriesGrouping filterChipLiveDataGrouping;
 
   private List<StockEntry> stockEntries;
-  private List<Product> products;
   private HashMap<String, ProductBarcode> productBarcodeHashMap;
   private HashMap<Integer, Product> productHashMap;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
@@ -118,11 +116,11 @@ public class StockEntriesViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockEntries
     );
-    filterChipLiveDataSort = new FilterChipLiveDataStockSort(
+    filterChipLiveDataSort = new FilterChipLiveDataStockEntriesSort(
         getApplication(),
         this::updateFilteredStockEntries
     );
-    filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
+    filterChipLiveDataGrouping = new FilterChipLiveDataStockEntriesGrouping(
         getApplication(),
         this::updateFilteredStockEntries
     );
@@ -131,7 +129,6 @@ public class StockEntriesViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
-      this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productBarcodeHashMap = ArrayUtil.getProductBarcodesHashMap(data.getProductBarcodes());
       this.stockEntries = data.getStockEntries();
@@ -258,42 +255,42 @@ public class StockEntriesViewModel extends BaseViewModel {
     showBottomSheet(new StockEntryBottomSheet(), bundle);
   }
 
-  public void performAction(String action, StockItem stockItem) {
+  public void performAction(String action, StockEntry stockEntry) {
+    Product product = productHashMap.get(stockEntry.getProductId());
+    if (product == null) {
+      showErrorMessage();
+      return;
+    }
     switch (action) {
       case Constants.ACTION.CONSUME:
-        consumeProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble(), false);
+        consumeEntry(stockEntry, product, false);
         break;
       case Constants.ACTION.OPEN:
-        openProduct(stockItem, stockItem.getProduct().getQuickConsumeAmountDouble());
-        break;
-      case Constants.ACTION.CONSUME_ALL:
-        consumeProduct(
-            stockItem,
-            stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
-                ? stockItem.getAmountDouble()
-                : stockItem.getProduct().getTareWeightDouble(),
-            false
-        );
+        openEntry(stockEntry, product);
         break;
       case Constants.ACTION.CONSUME_SPOILED:
-        consumeProduct(stockItem, 1, true);
+        consumeEntry(stockEntry, product, true);
         break;
     }
   }
 
-  private void consumeProduct(StockItem stockItem, double amount, boolean spoiled) {
+  private void consumeEntry(StockEntry stockEntry, Product product, boolean spoiled) {
     JSONObject body = new JSONObject();
     try {
-      body.put("amount", amount);
-      body.put("allow_subproduct_substitution", true);
+      body.put("amount", stockEntry.getAmount());
+      body.put("exact_amount", true);
+      if (NumUtil.isStringInt(stockEntry.getLocationId())) {
+        body.put("location_id", stockEntry.getLocationId());
+      }
       body.put("spoiled", spoiled);
+      body.put("stock_entry_id", stockEntry.getStockId());
     } catch (JSONException e) {
       if (debug) {
-        Log.e(TAG, "consumeProduct: " + e);
+        Log.e(TAG, "consumeEntry: " + e);
       }
     }
     dlHelper.postWithArray(
-        grocyApi.consumeProduct(stockItem.getProductId()),
+        grocyApi.consumeProduct(stockEntry.getProductId()),
         body,
         response -> {
           String transactionId = null;
@@ -306,7 +303,7 @@ public class StockEntriesViewModel extends BaseViewModel {
             }
           } catch (JSONException e) {
             if (debug) {
-              Log.e(TAG, "consumeProduct: " + e);
+              Log.e(TAG, "consumeEntry: " + e);
             }
           }
 
@@ -315,9 +312,9 @@ public class StockEntriesViewModel extends BaseViewModel {
               NumUtil.trim(amountConsumed),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
-                  stockItem.getProduct().getQuIdStockInt(),
+                  product.getQuIdStockInt(),
                   amountConsumed
-              ), stockItem.getProduct().getName()
+              ), product.getName()
           );
           SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
 
@@ -333,7 +330,7 @@ public class StockEntriesViewModel extends BaseViewModel {
                       Snackbar.LENGTH_SHORT
                   ));
                   if (debug) {
-                    Log.i(TAG, "consumeProduct: undone");
+                    Log.i(TAG, "consumeEntry: undone");
                   }
                 },
                 this::showErrorMessage
@@ -343,31 +340,31 @@ public class StockEntriesViewModel extends BaseViewModel {
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(
-                TAG, "consumeProduct: consumed " + amountConsumed
+                TAG, "consumeEntry: consumed " + amountConsumed
             );
           }
         },
         error -> {
           showErrorMessage(error);
           if (debug) {
-            Log.i(TAG, "consumeProduct: " + error);
+            Log.i(TAG, "consumeEntry: " + error);
           }
         }
     );
   }
 
-  private void openProduct(StockItem stockItem, double amount) {
+  private void openEntry(StockEntry stockEntry, Product product) {
     JSONObject body = new JSONObject();
     try {
-      body.put("amount", amount);
-      body.put("allow_subproduct_substitution", true);
+      body.put("amount", stockEntry.getAmount());
+      body.put("stock_entry_id", stockEntry.getStockId());
     } catch (JSONException e) {
       if (debug) {
-        Log.e(TAG, "openProduct: " + e);
+        Log.e(TAG, "openEntry: " + e);
       }
     }
     dlHelper.postWithArray(
-        grocyApi.openProduct(stockItem.getProductId()),
+        grocyApi.openProduct(stockEntry.getProductId()),
         body,
         response -> {
           String transactionId = null;
@@ -380,7 +377,7 @@ public class StockEntriesViewModel extends BaseViewModel {
             }
           } catch (JSONException e) {
             if (debug) {
-              Log.e(TAG, "openProduct: " + e);
+              Log.e(TAG, "openEntry: " + e);
             }
           }
 
@@ -389,9 +386,9 @@ public class StockEntriesViewModel extends BaseViewModel {
               NumUtil.trim(amountOpened),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
-                  stockItem.getProduct().getQuIdStockInt(),
+                  product.getQuIdStockInt(),
                   amountOpened
-              ), stockItem.getProduct().getName()
+              ), product.getName()
           );
           SnackbarMessage snackbarMsg = new SnackbarMessage(msg, 15);
 
@@ -407,7 +404,7 @@ public class StockEntriesViewModel extends BaseViewModel {
                       Snackbar.LENGTH_SHORT
                   ));
                   if (debug) {
-                    Log.i(TAG, "openProduct: undone");
+                    Log.i(TAG, "openEntry: undone");
                   }
                 },
                 this::showErrorMessage
@@ -417,14 +414,14 @@ public class StockEntriesViewModel extends BaseViewModel {
           showSnackbar(snackbarMsg);
           if (debug) {
             Log.i(
-                TAG, "openProduct: opened " + amountOpened
+                TAG, "openEntry: opened " + amountOpened
             );
           }
         },
         error -> {
           showErrorMessage(error);
           if (debug) {
-            Log.i(TAG, "openProduct: " + error);
+            Log.i(TAG, "openEntry: " + error);
           }
         }
     );
@@ -453,16 +450,8 @@ public class StockEntriesViewModel extends BaseViewModel {
     return locationHashMap;
   }
 
-  public Location getLocationFromId(int id) {
-    return locationHashMap.get(id);
-  }
-
   public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
     return quantityUnitHashMap;
-  }
-
-  public QuantityUnit getQuantityUnitFromId(int id) {
-    return quantityUnitHashMap.get(id);
   }
 
   public HashMap<Integer, Store> getStoreHashMap() {

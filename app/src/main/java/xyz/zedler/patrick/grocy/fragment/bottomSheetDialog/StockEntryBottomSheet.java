@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
@@ -200,9 +201,16 @@ public class StockEntryBottomSheet extends BaseBottomSheet {
         activity.getCurrentFragment().performAction(ACTION.CONSUME_SPOILED, stockEntry);
         dismiss();
         return true;
+      } else if (item.getItemId() == R.id.action_edit) {
+        Toast.makeText(requireContext(), R.string.msg_not_implemented_yet, Toast.LENGTH_LONG).show();
+        return true;
       }
       return false;
     });
+
+    if (stockEntry.getOpen() == 1 || product.getEnableTareWeightHandlingBoolean()) {
+      binding.toolbar.getMenu().findItem(R.id.action_open).setVisible(false);
+    }
   }
 
   @NonNull

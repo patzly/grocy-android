@@ -279,12 +279,13 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     StockEntry that = (StockEntry) o;
     return id == that.id && productId == that.productId
         && Double.compare(that.amount, amount) == 0 && open == that.open
-        && locationId == that.locationId && Objects
-        .equals(bestBeforeDate, that.bestBeforeDate) && Objects
+        && Objects.equals(bestBeforeDate, that.bestBeforeDate) && Objects
         .equals(purchasedDate, that.purchasedDate) && Objects.equals(stockId, that.stockId)
         && Objects.equals(price, that.price) && Objects
         .equals(openedDate, that.openedDate) && Objects
         .equals(rowCreatedTimestamp, that.rowCreatedTimestamp) && Objects
+        .equals(locationId, that.locationId) && Objects
+        .equals(shoppingLocationId, that.shoppingLocationId) && Objects
         .equals(note, that.note);
   }
 
@@ -293,7 +294,7 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     return Objects
         .hash(id, productId, amount, bestBeforeDate, purchasedDate, stockId, price, open,
             openedDate,
-            rowCreatedTimestamp, locationId, note);
+            rowCreatedTimestamp, locationId, shoppingLocationId, note);
   }
 
   @NonNull
