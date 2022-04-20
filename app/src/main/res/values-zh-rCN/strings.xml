@@ -110,7 +110,7 @@
   <string name="action_enter_data_manually">手动输入数据</string>
   <string name="action_perform">执行动作</string>
   <string name="action_share">分享</string>
-  <string name="action_share_description">向您的朋友介绍Grocy Android</string>
+  <string name="action_share_description">向您的朋友分享Grocy Android</string>
   <string name="action_no_filter">未筛选</string>
   <string name="action_show_done_tasks">‎显示已完成的任务‎</string>
   <string name="action_track_chore_execution">‎跟踪家务执行‎</string>
