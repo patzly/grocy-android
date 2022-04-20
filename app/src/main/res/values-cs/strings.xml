@@ -800,7 +800,7 @@
   <string name="property_location">Umístění</string>
   <string name="property_location_insert">Umístění: %1$s</string>
   <string name="property_location_default">Výchozí umístění</string>
-  <string name="property_location_default_insert">Výchozí umístění: </string>
+  <string name="property_location_default_insert">Výchozí umístění: %1$s</string>
   <string name="property_location_consume_default">Spotřebovávat z umístění</string>
   <string name="property_notes">Poznámky</string>
   <string name="property_locations">Umístění</string>
