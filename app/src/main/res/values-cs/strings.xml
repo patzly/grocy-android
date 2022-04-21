@@ -580,7 +580,7 @@
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Podporováno</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
-  <string name="subtitle_not_supported">Není podporováno</string>
+  <string name="subtitle_not_supported">Není podporována</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Množství: %1$s</string>
   <!-- %1$s is a unit -->
