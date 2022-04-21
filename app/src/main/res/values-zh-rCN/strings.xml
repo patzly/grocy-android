@@ -52,7 +52,7 @@
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
   <string name="action_prev">上一个</string>
   <string name="action_feedback">提交反馈</string>
-  <string name="action_reset">重启</string>
+  <string name="action_reset">重置</string>
   <string name="action_reload">刷新</string>
   <string name="action_top_scroll">滚动到顶部</string>
   <string name="action_send">发送</string>
