@@ -106,7 +106,7 @@
   <string name="action_clear_done">完成</string>
   <string name="action_display_help">显示帮助文本</string>
   <string name="action_demo_server">演示服务器</string>
-  <string name="action_own_server">自己的服务器</string>
+  <string name="action_own_server">私有服务器</string>
   <string name="action_enter_data_manually">手动输入数据</string>
   <string name="action_perform">执行动作</string>
   <string name="action_share">分享</string>
