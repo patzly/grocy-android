@@ -522,7 +522,7 @@
   <!-- %1$s and %2$s are amounts -->
   <string name="subtitle_factor_means">这意味着%1$s等于%2$s。</string>
   <string name="subtitle_product_hidden">产品是隐藏的</string>
-  <string name="subtitle_product_not_hidden">产品没有隐藏</string>
+  <string name="subtitle_product_not_hidden">产品未隐藏</string>
   <string name="subtitle_product_not_on_server">产品不在服务器上</string>
   <string name="subtitle_barcodes_will_be_added">‎有存储的条形码，这些条形码通过保存操作添加到产品中。‎</string>
   <string name="subtitle_unknown">未知</string>
