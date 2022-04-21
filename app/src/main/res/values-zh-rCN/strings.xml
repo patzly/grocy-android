@@ -321,7 +321,7 @@
   <string name="msg_help_date_chooser_keyboard">‎如果您所在的国家/地区首选 DDMMYY，则可以在设置中激活反向日期格式。\n要应用输入并关闭此页面，可以使用键盘上的 Done 键。‎</string>
   <string name="msg_help_quick_mode">你可以长时间点击上面的标题栏来激活快速模式。在这种模式下，如果已经输入或扫描了产品，并且所有字段都可以自动填充(根据产品和/或条码默认值)，事务将立即执行。</string>
   <string name="msg_help_loading_circle_settings">在必须从服务器加载的每个页面上，应用程序首先用微小的请求检查服务器数据库是否自上次更改并仅更新过时的数据。即使对于此小型请求，请启用下面的选项以显示加载圆圈。</string>
-  <string name="msg_help_start">初学者模式是活动的：如果可用，则默认情况下显示帮助文本。点按以更改。</string>
+  <string name="msg_help_start">已激活初学者模式：如果该模式有效，默认情况下会在所有页面显示帮助文本。点击进行更改。</string>
   <string name="msg_help_purchased_date_settings">如果启用了以下选项，则购买和库存页面将显示购买日期的字段。否则购买的日期默认为今天。</string>
   <string name="msg_help_normal_login">如果您在Home Assistant使用Grocy Add-On，请点击此卡。</string>
   <string name="msg_help_home_assistant_login">您正在使用Groy Home Assistant加载项。因此，需要更多细节。点击此卡以切换到正常登录。</string>
