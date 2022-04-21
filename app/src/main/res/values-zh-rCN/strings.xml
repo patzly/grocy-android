@@ -278,7 +278,7 @@
   <string name="msg_help_consume_location">‎以下位置的库存条目将首先被消耗。‎</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">当启用时，相应的产品不能有自己的库存，意味着它将无法在购买时被选择(有用的父产品，仅用作子产品的汇总/总体视图)。  </string>
-  <string name="msg_help_due_date_type">基于所选的截止日期类型，库存概述页面上的突出显示将不同。 “赏味期”意味着在达到的截止日期后，产品仍然是安全的。 “到期日”意味着在达到的截止日期后，产品不安全。</string>
+  <string name="msg_help_due_date_type">根据所选的截止日期类型，库存概览页面上的突出显示会有所不同。 “最佳食用日期”是指产品在到期日过后仍可安全食用。 “保质期”是指产品在到期日之后不能安全食用。</string>
   <string name="msg_help_default_due_days_format">‎您可以长按下面的项目以输入日期而不是数字。‎</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">对于购买，此天数将添加到今天以作为到期日建议（-1表示该产品永远不会过期）。</string>
