@@ -262,7 +262,7 @@
   <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
   <string name="msg_point_at_barcode">将相机对准条形码</string>
   <string name="msg_press_hold_confirm">按住确认</string>
-  <string name="msg_welcome_to_grocy">欢迎来到Groyny Android！\n\n grocy高效地使用您需要自己的服务器或家庭助手的附加组件。\n 如果您只想尝试使用此应用程序，您可以使用Bernd Bestel，创建者的演示服务器。</string>
+  <string name="msg_welcome_to_grocy">欢迎使用Groyny Android！\n\n 要高效地使用Grocy，需要您的私有服务器或者基于HomeAssistant的Grocy add-on插件。\n 如果您只想试用这个app，您可以使用创建者Bernd Bestel的演示服务器。</string>
   <string name="msg_choose_option_below">请从下面选择一个选项。</string>
   <string name="msg_qr_code_scan">在另一个设备上，访问您的Groy网站并转到“API键”页面。单击“添加”，然后单击Little QR码符号并扫描QR码。</string>
   <string name="msg_qr_code_scan_token">‎您正在使用Grocy Home Assistant附加组件。在“家庭助理”配置文件设置中创建长期访问令牌（最后一部分）。在令牌字段下方，单击“生成QR码”并在此处扫描。‎</string>
