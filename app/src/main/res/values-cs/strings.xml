@@ -973,7 +973,7 @@
   <string name="category_stock">Zásoby</string>
   <string name="category_server">Server</string>
   <string name="category_user_settings">Uživatelské nastavení</string>
-  <string name="category_scanner">Skener</string>
+  <string name="category_scanner">Čtečka</string>
   <string name="category_scanner_camera">Skenovat vestavěnou kamerou</string>
   <string name="category_scanner_external">Externí čtečka</string>
   <string name="category_appearance">Vzhled</string>
