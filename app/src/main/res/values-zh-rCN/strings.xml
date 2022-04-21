@@ -271,7 +271,7 @@
   <string name="msg_not_implemented_yet">这将很快实施。请立即使用您的服务器界面。</string>
   <string name="stock_disabled">您已经禁用了grocy配置中的常用特性，可能是因为您不需要它。但是这个应用目前只能做库存管理，所以可能对你没有太大的用处。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_hide_on_stock">库存概述页面列出了所有当前在库存或低于其最低数量的产品。启用此功能可将此产品始终隐藏在那里。</string>
+  <string name="msg_help_hide_on_stock">库存概述页面列出了所有库存产品或低于最小库存的产品。启用此选项可始终隐藏该产品。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">这个产品不能有一个父产品，因为它已经作为另一个产品的父产品使用。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
