@@ -865,7 +865,7 @@
   <string name="setting_theme_light">亮</string>
   <string name="setting_language">语言</string>
   <string name="setting_language_description">选择语言</string>
-  <string name="setting_language_info">非常感谢Transifex的所有志愿者翻译！\n 请访问GitHub上的我们，了解如何帮助为您的语言制作Grocy Android。</string>
+  <string name="setting_language_info">非常感谢Transifex的所有志愿者翻译！\n 请访问我们的GitHub，了解如何帮助Grocy Android支持您的语言。</string>
   <string name="setting_language_system">系统默认值：%1$s</string>
   <string name="setting_language_not_available">无法使用</string>
   <string name="setting_open_food_facts">使用公开食品事实</string>
