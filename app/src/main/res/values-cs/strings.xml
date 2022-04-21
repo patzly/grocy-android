@@ -719,10 +719,10 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
-    <item quantity="one">Vaše databáze obsahuje %1$d produkt.</item>
-    <item quantity="few">Vaše databáze obsahuje %1$d produkty.</item>
-    <item quantity="many">Vaše databáze obsahuje %1$d produktů.</item>
-    <item quantity="other">Vaše databáze obsahuje %1$d produktu.</item>
+    <item quantity="one">Máte uložený %1$d produkt</item>
+    <item quantity="few">Máte uloženy %1$d produkty</item>
+    <item quantity="many">Máte uloženo %1$d produktů</item>
+    <item quantity="other">Máte uloženo %1$d produktů</item>
   </plurals>
 
   <string name="property_name">Jméno</string>
