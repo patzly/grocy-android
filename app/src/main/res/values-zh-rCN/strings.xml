@@ -729,7 +729,7 @@
   <string name="property_is_freezer">是冰柜</string>
   <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_energy">能量（kcal）</string>
-  <string name="property_active">积极</string>
+  <string name="property_active">活动</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">从不显示库存概述</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
