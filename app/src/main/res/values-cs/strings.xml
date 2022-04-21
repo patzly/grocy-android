@@ -1016,7 +1016,7 @@
   <!-- %1$s are barcode formats -->
   <string name="setting_barcode_formats_description">Číst jen tyto: %1$s</string>
   <string name="setting_barcode_formats_description_all">Bez omezení</string>
-  <string name="setting_external_support">Podpora externího skeneru</string>
+  <string name="setting_external_support">Podpora externí čtečky čárového kódu</string>
   <string name="setting_external_support_description">Přes USB nebo Bluetooth</string>
   <string name="setting_reload_config">Znovu načíst konfiguraci</string>
   <string name="setting_reload_config_description">Restart aplikace vyžadován</string>
