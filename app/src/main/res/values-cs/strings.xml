@@ -85,7 +85,7 @@
   <string name="action_restart">Restartovat</string>
   <string name="action_create">Vytvořit</string>
   <string name="action_link">Odkaz</string>
-  <string name="action_try_again">Zkusit znovu</string>
+  <string name="action_try_again">Zkuste to znovu</string>
   <string name="action_open_scanner">Otevřít skener</string>
   <string name="action_discard">Smazat</string>
   <string name="action_clear_form">Vyčistit formulář</string>
