@@ -48,7 +48,7 @@
   <string name="action_search">搜索</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
   <string name="action_next">下一个</string>
-  <string name="action_new">新的</string>
+  <string name="action_new">新建</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
   <string name="action_prev">上一个</string>
   <string name="action_feedback">提交反馈</string>
