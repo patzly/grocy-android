@@ -508,7 +508,7 @@
   <string name="title_location_to">Do umístění</string>
   <string name="title_recipe">Recept</string>
   <string name="title_total_price">Celková cena</string>
-  <string name="title_unit_price">Jednotková cena</string>
+  <string name="title_unit_price">Cena za jednotku</string>
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">Cena za %1$s</string>
   <string name="title_stock_entry_no_specific">Nespecifikovaná položka</string>
