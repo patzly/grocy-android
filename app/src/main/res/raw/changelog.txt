@@ -1,4 +1,5 @@
 2.3.0:
+- New: Server v3.3.0 feature "Notes for stock entries" (#511)
 - Improved: Entries on stock entries page are colored if volatile
 
 2.2.1:

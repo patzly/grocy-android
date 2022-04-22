@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataInventory {
@@ -88,6 +89,7 @@ public class FormDataInventory {
   private final LiveData<String> storeNameLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
+  private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
 
@@ -250,6 +252,7 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    noteLive = new MutableLiveData<>();
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -576,6 +579,10 @@ public class FormDataInventory {
     return locationNameLive;
   }
 
+  public MutableLiveData<String> getNoteLive() {
+    return noteLive;
+  }
+
   public boolean isCurrentProductFlowNotInterrupted() {
     return !currentProductFlowInterrupted;
   }
@@ -785,6 +792,9 @@ public class FormDataInventory {
         if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
           json.put("location_id", String.valueOf(location.getId()));
         }
+        if (noteLive.getValue() != null && !noteLive.getValue().isEmpty()) {
+          json.put("note", noteLive.getValue());
+        }
       }
     } catch (JSONException e) {
       if (isDebuggingEnabled()) {
@@ -826,6 +836,7 @@ public class FormDataInventory {
     storeLive.setValue(null);
     showStoreSection.setValue(true);
     locationLive.setValue(null);
+    noteLive.setValue(null);
     new Handler().postDelayed(() -> {
       productNameErrorLive.setValue(null);
       quantityUnitErrorLive.setValue(false);
@@ -853,6 +864,10 @@ public class FormDataInventory {
         Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
         Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
     );
+  }
+
+  public boolean showNotesField() {
+    return VersionUtil.isGrocyServerMin330(sharedPrefs);
   }
 
   public boolean isFeatureEnabled(String pref) {
