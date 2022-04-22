@@ -33,17 +33,21 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.LoginRequestFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
+import xyz.zedler.patrick.grocy.model.Server;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -55,6 +59,7 @@ public class LoginRequestViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final SharedPreferences sharedPrefsPrivate;
   private final DownloadHelper dlHelper;
+  private final AppDatabase appDatabase;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -96,6 +101,7 @@ public class LoginRequestViewModel extends BaseViewModel {
         TAG,
         isLoadingLive::setValue
     );
+    appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
 
     infoFullscreenLive = new MutableLiveData<>();
     loginErrorOccurred = new MutableLiveData<>(false);
@@ -157,7 +163,17 @@ public class LoginRequestViewModel extends BaseViewModel {
                 ).putString(Constants.PREF.API_KEY, apiKey)
                 .apply();
           }
-          loadInfoAndFinish();
+          // TODO: Feature needs migrations for database
+          /*Server server = new Server();
+          server.setGrocyServerUrl(serverUrl);
+          server.setGrocyApiKey(apiKey);
+          server.setHomeAssistantServerUrl(homeAssistantServerUrl);
+          server.setHomeAssistantToken(homeAssistantLongLivedToken);
+          appDatabase.serverDao().insertServer(server)
+              .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+              .doFinally(this::loadInfoAndFinish)
+              .subscribe();*/
         },
         error -> {
           Log.e(TAG, "requestLogin: VolleyError: " + error);
