@@ -85,7 +85,7 @@
   <string name="action_restart">Restartovat</string>
   <string name="action_create">Vytvořit</string>
   <string name="action_link">Odkaz</string>
-  <string name="action_try_again">Zkusit znovu</string>
+  <string name="action_try_again">Zkuste to znovu</string>
   <string name="action_open_scanner">Otevřít skener</string>
   <string name="action_discard">Smazat</string>
   <string name="action_clear_form">Vyčistit formulář</string>
@@ -508,7 +508,7 @@
   <string name="title_location_to">Do umístění</string>
   <string name="title_recipe">Recept</string>
   <string name="title_total_price">Celková cena</string>
-  <string name="title_unit_price">Jednotková cena</string>
+  <string name="title_unit_price">Cena za jednotku</string>
   <!-- %1$s is a quantity unit -->
   <string name="title_unit_price_specific">Cena za %1$s</string>
   <string name="title_stock_entry_no_specific">Nespecifikovaná položka</string>
@@ -580,7 +580,7 @@
   <!-- Like the word 'supported' from 'This version is supported.'-->
   <string name="subtitle_supported">Podporováno</string>
   <!-- Like the words 'not supported' from 'This version is not supported.'-->
-  <string name="subtitle_not_supported">Není podporováno</string>
+  <string name="subtitle_not_supported">Není podporována</string>
   <!-- %1$s is a number -->
   <string name="subtitle_barcode_amount">Množství: %1$s</string>
   <!-- %1$s is a unit -->
@@ -719,10 +719,10 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
-    <item quantity="one">Vaše databáze obsahuje %1$d produkt.</item>
-    <item quantity="few">Vaše databáze obsahuje %1$d produkty.</item>
-    <item quantity="many">Vaše databáze obsahuje %1$d produktů.</item>
-    <item quantity="other">Vaše databáze obsahuje %1$d produktu.</item>
+    <item quantity="one">Máte uložený %1$d produkt</item>
+    <item quantity="few">Máte uloženy %1$d produkty</item>
+    <item quantity="many">Máte uloženo %1$d produktů</item>
+    <item quantity="other">Máte uloženo %1$d produktů</item>
   </plurals>
 
   <string name="property_name">Jméno</string>
@@ -765,7 +765,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_stock">Měrná jednotka zásob</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_qu_factor">Převodní poměr z nákupních jednotek do jednotek zásob</string>
+  <string name="property_qu_factor">Převodní koeficient (násobek) měrné jednotky nákupu produktu do měrné jednotky zásob</string>
   <!-- This string is part of a pair, there is also 'quantity unit to' -->
   <string name="property_quantity_unit_from">Z měrné jednotky</string>
   <!-- This string is part of a pair, there is also 'quantity unit from' -->
@@ -780,7 +780,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Typ trvanlivosti produktu</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_type_best_before">Minimální trvanlivost do</string>
+  <string name="property_due_type_best_before">Datum min. trvanlivosti</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_type_expiration">Datum expirace</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -950,7 +950,7 @@
   <string name="info_acknowledgement">Děkujeme vývojáři grocy Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
   <string name="info_intro">Přehrát intro</string>
   <string name="info_intro_description">Představení funkcí</string>
-  <string name="info_dev_beginning">Začátek vývoje</string>
+  <string name="info_dev_beginning">Vyvíjeno od</string>
   <string name="info_dev_beginning_date">duben 2020</string>
   <string name="info_version">Verze</string>
   <string name="info_grocy_version">Verze Grocy</string>
@@ -973,7 +973,7 @@
   <string name="category_stock">Zásoby</string>
   <string name="category_server">Server</string>
   <string name="category_user_settings">Uživatelské nastavení</string>
-  <string name="category_scanner">Skener</string>
+  <string name="category_scanner">Čtečka</string>
   <string name="category_scanner_camera">Skenovat vestavěnou kamerou</string>
   <string name="category_scanner_external">Externí čtečka</string>
   <string name="category_appearance">Vzhled</string>
@@ -1016,7 +1016,7 @@
   <!-- %1$s are barcode formats -->
   <string name="setting_barcode_formats_description">Číst jen tyto: %1$s</string>
   <string name="setting_barcode_formats_description_all">Bez omezení</string>
-  <string name="setting_external_support">Podpora externího skeneru</string>
+  <string name="setting_external_support">Podpora externí čtečky čárového kódu</string>
   <string name="setting_external_support_description">Přes USB nebo Bluetooth</string>
   <string name="setting_reload_config">Znovu načíst konfiguraci</string>
   <string name="setting_reload_config_description">Restart aplikace vyžadován</string>
