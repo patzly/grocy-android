@@ -150,7 +150,7 @@ public class QuantityUnit implements Parcelable {
     return null;
   }
 
-  public static ArrayList<QuantityUnit> getQuantityUnitsForRecipePositions(ArrayList<QuantityUnit> quantityUnits, ArrayList<RecipePosition> recipePositions) {
+  public static ArrayList<QuantityUnit> getQuantityUnitsForRecipePositions(List<QuantityUnit> quantityUnits, List<RecipePosition> recipePositions) {
     ArrayList<QuantityUnit> result = new ArrayList<>();
     for (RecipePosition recipePosition : recipePositions) {
       QuantityUnit quantityUnit = getFromId(quantityUnits, recipePosition.getQuantityUnitId());

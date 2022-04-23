@@ -1186,5 +1186,68 @@
         android:name="startWithScanner"
         app:argType="boolean"
         android:defaultValue="false" />
+    <action
+        android:id="@+id/action_recipeEditFragment_to_recipeEditIngredientListFragment"
+        app:destination="@id/recipeEditIngredientListFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
+  </fragment>
+  <fragment
+      android:id="@+id/recipeEditIngredientListFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragment"
+      android:label="RecipeEditIngredientListFragment"
+      tools:layout="@layout/fragment_recipe_edit_ingredient_list">
+    <deepLink
+        android:id="@+id/deepLink18"
+        app:uri="@string/deep_link_recipeEditIngredientListFragment" />
+    <argument
+        android:name="action"
+        app:argType="string" />
+    <argument
+        android:name="recipe"
+        app:argType="xyz.zedler.patrick.grocy.model.Recipe"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <action
+        android:id="@+id/action_recipeEditIngredientListFragment_to_recipeEditIngredientEditFragment"
+        app:destination="@id/recipeEditIngredientEditFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
+  </fragment>
+  <fragment
+      android:id="@+id/recipeEditIngredientEditFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientEditFragment"
+      android:label="RecipeEditIngredientEditFragment"
+      tools:layout="@layout/fragment_recipe_edit_ingredient_edit">
+    <deepLink
+        android:id="@+id/deepLink18"
+        app:uri="@string/deep_link_recipeEditIngredientEditFragment" />
+    <argument
+        android:name="action"
+        app:argType="string" />
+    <argument
+        android:name="recipePosition"
+        app:argType="xyz.zedler.patrick.grocy.model.RecipePosition"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <argument
+        android:name="startWithScanner"
+        app:argType="boolean"
+        android:defaultValue="false" />
+    <argument
+        android:name="closeWhenFinished"
+        android:defaultValue="false"
+        app:argType="boolean" />
+    <action
+        android:id="@+id/action_recipeEditIngredientEditFragment_to_masterProductCatQuantityUnitFragment"
+        app:destination="@id/masterProductCatQuantityUnitFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
   </fragment>
 </navigation>

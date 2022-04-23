@@ -29,6 +29,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 
 public class RecipeEditRepository {
 
@@ -46,10 +48,18 @@ public class RecipeEditRepository {
 
     private final List<Product> products;
     private final List<ProductBarcode> productBarcodes;
+    private final List<RecipePosition> recipePositions;
+    private final List<QuantityUnit> quantityUnits;
 
-    public RecipeEditData(List<Product> products, List<ProductBarcode> productBarcodes) {
+    public RecipeEditData(
+            List<Product> products,
+            List<ProductBarcode> productBarcodes,
+            List<RecipePosition> recipePositions,
+            List<QuantityUnit> quantityUnits) {
       this.products = products;
       this.productBarcodes = productBarcodes;
+      this.recipePositions = recipePositions;
+      this.quantityUnits = quantityUnits;
     }
 
     public List<Product> getProducts() {
@@ -59,6 +69,14 @@ public class RecipeEditRepository {
     public List<ProductBarcode> getProductBarcodes() {
       return productBarcodes;
     }
+
+    public List<RecipePosition> getRecipePositions() {
+      return recipePositions;
+    }
+
+    public List<QuantityUnit> getQuantityUnits() {
+      return quantityUnits;
+    }
   }
 
   public void loadFromDatabase(DataListener listener) {
@@ -66,6 +84,8 @@ public class RecipeEditRepository {
         .zip(
             appDatabase.productDao().getProducts(),
             appDatabase.productBarcodeDao().getProductBarcodes(),
+            appDatabase.recipePositionDao().getRecipePositions(),
+            appDatabase.quantityUnitDao().getQuantityUnits(),
             RecipeEditData::new
         )
         .subscribeOn(Schedulers.io())

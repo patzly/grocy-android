@@ -42,32 +42,36 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataRecipeEdit;
+import xyz.zedler.patrick.grocy.model.FormDataRecipeEditIngredientEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
-public class RecipeEditViewModel extends BaseViewModel {
+public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
-  private static final String TAG = RecipeEditViewModel.class.getSimpleName();
+  private static final String TAG = RecipeEditIngredientEditViewModel.class.getSimpleName();
 
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final RecipeEditRepository repository;
-  private final FormDataRecipeEdit formData;
-  private final RecipeEditFragmentArgs args;
+  private final FormDataRecipeEditIngredientEdit formData;
+  private final RecipeEditIngredientEditFragmentArgs args;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -79,9 +83,9 @@ public class RecipeEditViewModel extends BaseViewModel {
   private final boolean debug;
   private final boolean isActionEdit;
 
-  public RecipeEditViewModel(
+  public RecipeEditIngredientEditViewModel(
       @NonNull Application application,
-      @NonNull RecipeEditFragmentArgs startupArgs
+      @NonNull RecipeEditIngredientEditFragmentArgs startupArgs
   ) {
     super(application);
 
@@ -92,7 +96,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(application);
     repository = new RecipeEditRepository(application);
-    formData = new FormDataRecipeEdit(application, sharedPrefs, startupArgs);
+    formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs, getBeginnerModeEnabled());
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
@@ -100,7 +104,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     offlineLive = new MutableLiveData<>(false);
   }
 
-  public FormDataRecipeEdit getFormData() {
+  public FormDataRecipeEditIngredientEdit getFormData() {
     return formData;
   }
 
@@ -272,16 +276,16 @@ public class RecipeEditViewModel extends BaseViewModel {
       return;
     }
 
-    Recipe recipe = null;
+    RecipePosition recipePosition = null;
     if (isActionEdit) {
-      recipe = args.getRecipe();
+      recipePosition = args.getRecipePosition();
     }
-    recipe = formData.fillRecipe(recipe);
-    JSONObject jsonObject = Recipe.getJsonFromRecipe(recipe, debug, TAG);
+    recipePosition = formData.fillRecipePosition(recipePosition);
+    JSONObject jsonObject = RecipePosition.getJsonFromRecipe(recipePosition, debug, TAG);
 
     if (isActionEdit) {
       dlHelper.put(
-          grocyApi.getObject(ENTITY.RECIPES, recipe.getId()),
+          grocyApi.getObject(ENTITY.RECIPES, recipePosition.getId()),
           jsonObject,
           response -> navigateUp(),
           error -> {
@@ -307,32 +311,29 @@ public class RecipeEditViewModel extends BaseViewModel {
   }
 
   private void fillWithRecipeIfNecessary() {
-    if (!isActionEdit || formData.isFilledWithRecipe()) {
+    if (!isActionEdit || formData.isFilledWithRecipePosition()) {
       return;
     }
 
-    Recipe entry = args.getRecipe();
+    RecipePosition entry = args.getRecipePosition();
     assert entry != null;
 
-    formData.getNameLive().setValue(entry.getName());
-    formData.getBaseServingsLive().setValue(String.valueOf(entry.getBaseServings()));
-    formData.getNotCheckShoppingListLive().setValue(entry.isNotCheckShoppingList());
     formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-    formData.getDescriptionLive().setValue(entry.getDescription());
+    formData.getAmountLive().setValue(NumUtil.trim(entry.getAmount()));
 
-    formData.setFilledWithRecipe(true);
+    formData.setFilledWithRecipePosition(true);
   }
 
   public void deleteEntry() {
     if (!isActionEdit()) {
       return;
     }
-    Recipe recipe = args.getRecipe();
-    assert recipe != null;
+    RecipePosition recipePosition = args.getRecipePosition();
+    assert recipePosition != null;
     dlHelper.delete(
         grocyApi.getObject(
             ENTITY.RECIPES,
-            recipe.getId()
+            recipePosition.getId()
         ),
         response -> navigateUp(),
         this::showErrorMessage
@@ -341,7 +342,7 @@ public class RecipeEditViewModel extends BaseViewModel {
 
   public void showInputProductBottomSheet(@NonNull String input) {
     Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
+    bundle.putString(ARGUMENT.PRODUCT_INPUT, input);
     showBottomSheet(new InputProductBottomSheet(), bundle);
   }
 
@@ -399,18 +400,22 @@ public class RecipeEditViewModel extends BaseViewModel {
     return args.getAction();
   }
 
-  public Recipe getRecipe() {
-    return args.getRecipe();
+  public RecipePosition getRecipePosition() {
+    return args.getRecipePosition();
   }
 
-  public static class RecipeEditViewModelFactory implements ViewModelProvider.Factory {
+  public Product getProduct() {
+    return Product.getProductFromId(products, getRecipePosition().getProductId());
+  }
+
+  public static class RecipeEditIngredientEditViewModelFactory implements ViewModelProvider.Factory {
 
     private final Application application;
-    private final RecipeEditFragmentArgs args;
+    private final RecipeEditIngredientEditFragmentArgs args;
 
-    public RecipeEditViewModelFactory(
+    public RecipeEditIngredientEditViewModelFactory(
         Application application,
-        RecipeEditFragmentArgs args
+        RecipeEditIngredientEditFragmentArgs args
     ) {
       this.application = application;
       this.args = args;
@@ -420,7 +425,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-      return (T) new RecipeEditViewModel(application, args);
+      return (T) new RecipeEditIngredientEditViewModel(application, args);
     }
   }
 }

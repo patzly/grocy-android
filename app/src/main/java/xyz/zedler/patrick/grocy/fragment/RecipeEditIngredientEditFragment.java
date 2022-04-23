@@ -21,15 +21,11 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientEditBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -51,22 +47,22 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
-import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
+import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel;
+import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel.RecipeEditIngredientEditViewModelFactory;
 
-public class RecipeEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener {
+public class RecipeEditIngredientEditFragment extends BaseFragment implements EmbeddedFragmentScanner.BarcodeListener {
 
-  private final static String TAG = RecipeEditFragment.class.getSimpleName();
+  private final static String TAG = RecipeEditIngredientEditFragment.class.getSimpleName();
 
   private MainActivity activity;
-  private FragmentRecipeEditBinding binding;
-  private RecipeEditViewModel viewModel;
+  private FragmentRecipeEditIngredientEditBinding binding;
+  private RecipeEditIngredientEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
-    binding = FragmentRecipeEditBinding.inflate(inflater, group, false);
+    binding = FragmentRecipeEditIngredientEditBinding.inflate(inflater, group, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
             this,
             binding.containerScanner,
@@ -84,21 +80,21 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    RecipeEditFragmentArgs args = RecipeEditFragmentArgs
+    RecipeEditIngredientEditFragmentArgs args = RecipeEditIngredientEditFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(
         this,
-        new RecipeEditViewModelFactory(activity.getApplication(), args)
-    ).get(RecipeEditViewModel.class);
+        new RecipeEditIngredientEditViewModelFactory(activity.getApplication(), args)
+    ).get(RecipeEditIngredientEditViewModel.class);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
     binding.setFormData(viewModel.getFormData());
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    binding.ingredients.setOnClickListener(v -> navigate(RecipeEditFragmentDirections
-            .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
-            .setRecipe(viewModel.getRecipe())));
+    binding.categoryQuantityUnit.setOnClickListener(v -> navigate(RecipeEditIngredientEditFragmentDirections
+            .actionRecipeEditIngredientEditFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
+            .setProduct(viewModel.getProduct())));
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -127,12 +123,6 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
 
-    if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
-      if (binding.editTextName.getText() == null || binding.editTextName.getText().length() == 0) {
-        new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextName), 50);
-      }
-    }
-
     embeddedFragmentScanner.setScannerVisibilityLive(
             viewModel.getFormData().getScannerVisibilityLive()
     );
@@ -160,9 +150,8 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         Constants.FAB.TAG.SAVE,
         animated,
         () -> {
-          if (!viewModel.getFormData().isNameValid()) {
+          if (!viewModel.getFormData().isFormValid()) {
             clearInputFocus();
-            activity.showKeyboard(binding.editTextName);
           } else {
             viewModel.saveEntry();
           }
@@ -173,11 +162,10 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.dummyFocusView.requestFocus();
-    binding.textInputName.clearFocus();
-    binding.textInputDescription.clearFocus();
+    // TODO: Add missing input fields
   }
 
-  public void clearBaseServingsFieldAndFocusIt() {
+  public void clearAmountFieldAndFocusIt() {
     binding.editTextAmount.setText("");
     activity.showKeyboard(binding.editTextAmount);
   }

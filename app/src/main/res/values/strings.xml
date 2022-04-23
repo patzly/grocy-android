@@ -1080,5 +1080,13 @@
     <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
     <string name="title_recipe_add">Add recipe</string>
   <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
+  <string name="deep_link_recipeEditIngredientListFragment">grocy://masterRecipeEditIngredientListFragment?recipeId={recipeId}</string>
+    <string name="msg_help_ingredient_list">You can add ingredients with the button at the bottom, edit ingredients by selecting them and delete them by swiping an ingredient to the right and clicking the trash can icon.</string>
+    <string name="property_variable_amount">Variable amount</string>
+    <string name="deep_link_recipeEditIngredientEditFragment">grocy://recipeEditIngredientEditFragment</string>
+    <string name="property_only_check_single_unit_in_stock">Only check for any amount in stock</string>
+  <string name="property_only_check_single_unit_in_stock_description">E.g. if the quantity unit differs from the one below</string>
+    <string name="property_do_not_check_stock_fulfillment">Disable stock fulfillment checking</string>
+    <string name="property_ingredient_group">Group</string>
 
 </resources>
