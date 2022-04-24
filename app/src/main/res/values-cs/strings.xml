@@ -833,7 +833,7 @@
   <string name="property_stock_value">Cena zásob</string>
   <string name="property_opened">otevřeno</string>
   <string name="property_not_opened">neotevřeno</string>
-  <string name="property_is_freezer">Je mražák</string>
+  <string name="property_is_freezer">Místo je mrazící box</string>
   <!-- kcal (kilo calories) is a unit for energy -->
   <string name="property_energy">Energie (kcal)</string>
   <string name="property_active">Aktivní</string>
