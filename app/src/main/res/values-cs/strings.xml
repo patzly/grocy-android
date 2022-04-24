@@ -420,7 +420,7 @@
   <string name="error_invalid_date_format">Nesprávný formát data</string>
   <string name="error_api_qr_code">Tento QR kód neobsahuje přihlašovací údaje Grocy API</string>
   <string name="error_token_qr_code">Toto není správný QR kód z Home Assistant s dlouhou životností</string>
-  <string name="error_loading_qus">Nelze načíst jednotky množství z produktu</string>
+  <string name="error_loading_qus">Nepodařilo se načíst měrné jednotky produktu</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Nemůže být roven %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
