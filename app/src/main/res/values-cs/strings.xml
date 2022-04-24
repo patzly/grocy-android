@@ -524,7 +524,7 @@
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_create_qu_conversion">Nový převod měrné jednotky</string>
   <string name="title_shopping_list_edit">Upravit nákupní seznam</string>
-  <string name="title_shopping_list_new">Nový nákupní seznam</string>
+  <string name="title_shopping_list_new">Vytvořit nákupní seznam</string>
   <string name="title_shopping_mode">Režim nakupování</string>
   <string name="title_batch_mode_shopping_list">Dávkový režim nákupního seznamu</string>
   <string name="title_product_cat_optional">Volitelné vlastnosti</string>
