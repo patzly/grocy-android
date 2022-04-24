@@ -115,6 +115,7 @@
   <string name="action_show_done_tasks">Zobrazit hotové úkoly</string>
   <string name="action_track_chore_execution">Splnění povinnosti</string>
   <string name="action_skip_next_chore_schedule">Přeskočit aktuální datum splnění úkolu</string>
+  <string name="action_reschedule_next_execution">Změna data příštího plnění povinnosti</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -338,6 +339,7 @@
   <string name="msg_help_default_due_days_thawing">Při přesunutí produktu z mrazničky (produkt rozmražen) se datum min. trvanlivosti vypočítá jako dnešní datum + zadaný počet dní</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Jednotku množství zásoby již není možné po prvním nákupu změnit.</string>
+  <string name="msg_help_qu_stock_changeable">Měrnou jednotka zásoby můžete změnit jen tehdy, pokud je definován její převod do jiné jednotky.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">Toto je výchozí měrná jednotka produktu při jeho přidání do nákupního seznamu</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -878,6 +880,8 @@
   <string name="property_category">Kategorie</string>
   <string name="property_assigned_to">Přiřazeno</string>
   <string name="property_users">Uživatelé</string>
+  <string name="property_last_done_by">Naposledy provedl(a)</string>
+  <string name="property_last_tracked">Naposledy provedeno</string>
 
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznámý</string>
