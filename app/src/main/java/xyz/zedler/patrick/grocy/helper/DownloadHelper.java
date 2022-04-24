@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Chore;
+import xyz.zedler.patrick.grocy.model.ChoreDetails;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -2324,6 +2325,52 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem getChoreDetails(
+      int choreId,
+      OnChoreDetailsResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getChores(choreId),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ChoreDetails>() {
+              }.getType();
+              ChoreDetails choreDetails = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "download ChoreDetails: " + choreDetails);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(choreDetails);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public QueueItem getChoreDetails(int choreId, OnChoreDetailsResponseListener onResponseListener) {
+    return getChoreDetails(choreId, onResponseListener, null);
+  }
+
   public QueueItem getCurrentUserId(OnIntegerResponseListener onResponseListener) {
     return new QueueItem() {
       @Override
@@ -3011,6 +3058,11 @@ public class DownloadHelper {
   public interface OnChoreEntriesResponseListener {
 
     void onResponse(ArrayList<ChoreEntry> choreEntries);
+  }
+
+  public interface OnChoreDetailsResponseListener {
+
+    void onResponse(ChoreDetails choreDetails);
   }
 
   public interface OnUsersResponseListener {

@@ -122,6 +122,7 @@
   <string name="action_show_done_tasks">Show done tasks</string>
   <string name="action_track_chore_execution">Track chore execution</string>
   <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
+  <string name="action_reschedule_next_execution">Reschedule next execution</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -822,6 +823,8 @@
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
+  <string name="property_last_done_by">Last done by</string>
+  <string name="property_last_tracked">Last tracked</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
