@@ -411,7 +411,7 @@
   <string name="error_filter">Nic k zobrazení</string>
   <string name="error_filter_sub">Zkuste jiný filtr</string>
   <string name="error_duplicate">Již existuje</string>
-  <string name="error_parent">Nemůže být nadřazený sám sobě</string>
+  <string name="error_parent">Produkt nemůže být nadřazený sám sobě</string>
   <string name="error_invalid_product">Neplatný produkt</string>
   <string name="error_invalid_url">Neplatné URL</string>
   <string name="error_invalid_amount">Neplatné množství</string>
