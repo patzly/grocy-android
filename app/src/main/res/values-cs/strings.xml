@@ -463,7 +463,7 @@
   <string name="title_transfer">Přesun</string>
   <string name="title_inventory">Inventura zásob</string>
   <string name="title_barcode_input">Zadání čárového kódu</string>
-  <string name="title_product_overview">Přehled produktů</string>
+  <string name="title_product_overview">Přehled dat k produktu</string>
   <string name="title_product">Produkt</string>
   <string name="title_product_create">Vytvořit produkt</string>
   <string name="title_product_edit">Upravit produkt</string>
