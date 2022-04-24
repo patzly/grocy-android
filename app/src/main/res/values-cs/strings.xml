@@ -765,7 +765,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_default_qu_purchase">Výchozí měrná jednotka pro nákup</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_qu_stock">Měrná jednotka zásob</string>
+  <string name="property_qu_stock">Měrná jednotka zásoby</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_qu_factor">Převodní koeficient (násobek) měrné jednotky nákupu produktu do měrné jednotky zásob</string>
   <!-- This string is part of a pair, there is also 'quantity unit to' -->
