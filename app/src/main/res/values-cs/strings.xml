@@ -414,7 +414,7 @@
   <string name="error_parent">Produkt nemůže být nadřazený sám sobě</string>
   <string name="error_invalid_product">Neexistující produkt</string>
   <string name="error_invalid_url">Neplatné URL</string>
-  <string name="error_invalid_amount">Neplatné množství</string>
+  <string name="error_invalid_amount">Nesprávné množství</string>
   <string name="error_invalid_price">Neplatná cena</string>
   <string name="error_invalid_factor">Neplatný násobitel</string>
   <string name="error_invalid_date_format">Nesprávný formát data</string>
