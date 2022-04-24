@@ -549,7 +549,7 @@
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s otevřeno)</string>
   <!-- %1$s is a product name -->
-  <string name="subtitle_stock_locations">Kde %1$s má zásobu</string>
+  <string name="subtitle_stock_locations">%1$s je v zásobě</string>
   <string name="subtitle_none_selected">Nic není vybráno</string>
   <!-- Should follow the equality between 'None' and 'None selected' -->
   <string name="subtitle_none">Žádný</string>
