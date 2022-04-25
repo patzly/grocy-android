@@ -1040,7 +1040,7 @@
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_due_soon_days">Trvanlivost brzy skončí</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_default_amount_purchase">Výchozí množství pro nákup</string>
+  <string name="setting_default_amount_purchase">Výchozí množství k nákupu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_consume">Výchozí množství pro spotřebu</string>
   <string name="setting_treat_opened_as_out_of_stock">Považovat otevřené balení jako spotřebované</string>
