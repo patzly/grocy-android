@@ -1029,7 +1029,7 @@
   <string name="setting_manage_shortcuts">Upravit zkratky</string>
   <string name="setting_list_indicator">Označit položky na seznamu</string>
   <string name="setting_list_indicator_description">Zobrazit modrou tečku, když je produkt na nákupním seznamu</string>
-  <string name="setting_shopping_mode_update_interval">Interval aktualizace nákupního módu</string>
+  <string name="setting_shopping_mode_update_interval">Interval aktualizace nákupního režimu</string>
   <string name="setting_keep_screen_on">Nech rozsvícenou obrazovku</string>
   <string name="setting_keep_screen_on_description">Když je v módu nákupu</string>
   <string name="setting_show_done_items">Zobrazit produkty v košíku</string>
