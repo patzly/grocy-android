@@ -952,7 +952,7 @@
   </plurals>
 
   <string name="info_acknowledgement">Děkujeme vývojáři grocy Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
-  <string name="info_intro">Přehrát intro</string>
+  <string name="info_intro">Přehrát úvodní animaci</string>
   <string name="info_intro_description">Představení funkcí</string>
   <string name="info_dev_beginning">Vyvíjeno od</string>
   <string name="info_dev_beginning_date">duben 2020</string>
