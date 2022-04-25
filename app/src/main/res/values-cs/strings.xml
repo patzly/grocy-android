@@ -1023,7 +1023,7 @@
   <string name="setting_external_support">Podpora externí čtečky čárového kódu</string>
   <string name="setting_external_support_description">Přes USB nebo Bluetooth</string>
   <string name="setting_reload_config">Znovu načíst konfiguraci</string>
-  <string name="setting_reload_config_description">Restart aplikace vyžadován</string>
+  <string name="setting_reload_config_description">Zavřete aplikaci a znovu ji spusťte</string>
   <string name="setting_logout">Odhlásit</string>
   <string name="setting_logout_description">Návrat na přihlašovací stránku</string>
   <string name="setting_manage_shortcuts">Upravit zkratky</string>
