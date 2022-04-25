@@ -1031,7 +1031,7 @@
   <string name="setting_list_indicator_description">Zobrazit modrou tečku, když je produkt na nákupním seznamu</string>
   <string name="setting_shopping_mode_update_interval">Interval aktualizace nákupního režimu</string>
   <string name="setting_keep_screen_on">Nechat zapnutý displej</string>
-  <string name="setting_keep_screen_on_description">Když je v módu nákupu</string>
+  <string name="setting_keep_screen_on_description">V režimu nákupu</string>
   <string name="setting_show_done_items">Zobrazit produkty v košíku</string>
   <string name="setting_show_done_items_description">na konci seznamu</string>
   <string name="setting_smaller_font">Menší písmo</string>
