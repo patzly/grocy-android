@@ -1005,7 +1005,7 @@
   <string name="setting_language_system">Výchozí nastavení: %1$s</string>
   <string name="setting_language_not_available">Není dostupný</string>
   <string name="setting_open_food_facts">Použij Open Food Facts</string>
-  <string name="setting_open_food_facts_description">Získaz informace z čárových kódů</string>
+  <string name="setting_open_food_facts_description">Získat informace z čárových kódů</string>
   <string name="setting_choose_barcode_scanner">Vyberte skener čárových kódů</string>
   <string name="setting_choose_barcode_scanner_description">Pro kameru jako skener čárových kódů</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
