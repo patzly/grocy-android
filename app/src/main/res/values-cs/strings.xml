@@ -1052,7 +1052,7 @@
   <string name="setting_empty_value">Prázdné</string>
   <string name="setting_sync_off">Synchronizace vypnuta</string>
   <string name="setting_loading">Načítání dat</string>
-  <string name="setting_not_loaded">Nemůže být načteno</string>
+  <string name="setting_not_loaded">Nepodařilo se načíst</string>
   <string name="setting_debug">Povolit logování</string>
   <string name="setting_debug_description">Zobrazit chyby v logu</string>
   <string name="setting_log_level">Jaké systémové události zapisovat</string>
