@@ -1024,7 +1024,7 @@
   <string name="setting_external_support_description">Přes USB nebo Bluetooth</string>
   <string name="setting_reload_config">Znovu načíst konfiguraci</string>
   <string name="setting_reload_config_description">Zavřete aplikaci a znovu ji spusťte</string>
-  <string name="setting_logout">Odhlásit</string>
+  <string name="setting_logout">Odhlásit se</string>
   <string name="setting_logout_description">Návrat na přihlašovací stránku</string>
   <string name="setting_manage_shortcuts">Upravit zkratky</string>
   <string name="setting_list_indicator">Označit položky na seznamu</string>
