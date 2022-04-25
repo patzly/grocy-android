@@ -958,7 +958,7 @@
   <string name="info_dev_beginning_date">duben 2020</string>
   <string name="info_version">Verze</string>
   <string name="info_grocy_version">Verze grocy</string>
-  <string name="info_changelog">Log změn</string>
+  <string name="info_changelog">Seznam změn</string>
   <string name="info_changelog_description">Co je nového?</string>
   <string name="info_developers">Vývojáři</string>
   <string name="info_github">Grocy Android na GitHubu</string>
