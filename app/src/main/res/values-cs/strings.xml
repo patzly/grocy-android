@@ -945,10 +945,10 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_from_now">
-    <item quantity="one">%d rok od teď</item>
-    <item quantity="few">%d roky od teď</item>
-    <item quantity="many">%d let od teď</item>
-    <item quantity="other">%d let od teď</item>
+    <item quantity="one">Za %d rok</item>
+    <item quantity="few">Za %d roky</item>
+    <item quantity="many">Za %d let</item>
+    <item quantity="other">Za %d let</item>
   </plurals>
 
   <string name="info_acknowledgement">Děkujeme vývojáři grocy Berndu Bestelovi, bez jehož skvělé práce by tato aplikace nevznikla.</string>
