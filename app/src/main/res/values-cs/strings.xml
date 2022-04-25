@@ -917,10 +917,10 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
-    <item quantity="one">před %d měsícem</item>
-    <item quantity="few">před %d měsíci</item>
-    <item quantity="many">před %d měsíci</item>
-    <item quantity="other">před %d měsíci</item>
+    <item quantity="one">Před %d měsícem</item>
+    <item quantity="few">Před %d měsíci</item>
+    <item quantity="many">Před %d měsíci</item>
+    <item quantity="other">Před %d měsíci</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
