@@ -287,18 +287,19 @@ public class ChoresViewModel extends BaseViewModel {
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
   }
 
-  public void executeChore(int choreId) {
+  public void executeChore(int choreId, boolean skip) {
     Chore chore = Chore.getFromId(chores, choreId);
     if (chore == null) {
       showErrorMessage();
       return;
     }
-    executeChore(chore);
+    executeChore(chore, skip);
   }
 
-  public void executeChore(Chore chore) {
+  public void executeChore(Chore chore, boolean skip) {
     JSONObject body = new JSONObject();
     try {
+      body.put("skipped", skip);
       body.put("tracked_time", chore.getTrackDateOnlyBoolean()
           ? dateUtil.getCurrentDateWithoutTimeStr() : dateUtil.getCurrentDateWithTimeStr());
     } catch (JSONException e) {
@@ -378,6 +379,11 @@ public class ChoresViewModel extends BaseViewModel {
     Chore chore = Chore.getFromId(chores, choreId);
     if (chore == null) return true;
     return chore.getPeriodType().equals(Chore.PERIOD_TYPE_MANUALLY);
+  }
+
+  @Override
+  public SharedPreferences getSharedPrefs() {
+    return sharedPrefs;
   }
 
   @NonNull

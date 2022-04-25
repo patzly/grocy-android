@@ -1,3 +1,8 @@
+2.3.0:
+- New: Server v3.3.0 feature "Notes for stock entries" (#511)
+- New: Stock quantity unit now can be changed with server v3.3.0 (#511)
+- Improved: Entries on stock entries page are colored if volatile
+
 2.2.1:
 - New: Stock entries page (#403)
 - Improved: Display stock locations on product overview bottom sheet (#449)
