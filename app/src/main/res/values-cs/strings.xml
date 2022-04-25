@@ -931,10 +931,10 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
-    <item quantity="one">%d den od teď</item>
-    <item quantity="few">%d dny od teď</item>
-    <item quantity="many">%d dní od teď</item>
-    <item quantity="other">%d dní od teď</item>
+    <item quantity="one">Za %d den</item>
+    <item quantity="few">Za %d dny</item>
+    <item quantity="many">Za %d dnů</item>
+    <item quantity="other">Za %d dnů</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
