@@ -94,9 +94,8 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
   private final MutableLiveData<Boolean> autoAddToShoppingListLive;
   private final MutableLiveData<String> autoAddToShoppingListTextLive;
-  private final MutableLiveData<Boolean> notificationsEnabled;
-  private final MutableLiveData<Integer> notificationsDueDaysTextLive;
-  //private final MutableLiveData<String> notificationsTimeTextLive;
+  private final MutableLiveData<Boolean> notificationsEnabledLive;
+  private final MutableLiveData<String> notificationsTimeTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -127,9 +126,8 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
-    notificationsEnabled = new MutableLiveData<>(getNotificationsEnabled());
-    notificationsDueDaysTextLive = new MutableLiveData<>(getNotificationsDueDays());
-    //notificationsTimeTextLive = new MutableLiveData<>(getNotificationsTime());
+    notificationsEnabledLive = new MutableLiveData<>(getNotificationsEnabled());
+    notificationsTimeTextLive = new MutableLiveData<>(getNotificationsTime());
   }
 
   public boolean isDemo() {
@@ -933,6 +931,39 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
+  public boolean getNotificationsEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_ENABLE
+    );
+  }
+
+  public MutableLiveData<Boolean> getNotificationsEnabledLive() {
+    return notificationsEnabledLive;
+  }
+
+  public String getNotificationsTime() {
+    return sharedPrefs.getString(
+        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_TIME
+    );
+  }
+
+  public MutableLiveData<String> getNotificationsTimeTextLive() {
+    return notificationsTimeTextLive;
+  }
+
+  public void setNotificationsEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled)
+        .apply();
+    notificationsEnabledLive.setValue(enabled);
+  }
+
+  public void setNotificationsTime(String text) {
+    sharedPrefs.edit().putString(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME, text).apply();
+    notificationsTimeTextLive.setValue(text);
+  }
+
   public ArrayList<String> getSupportedVersions() {
     return new ArrayList<>(Arrays.asList(
         getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
@@ -1000,58 +1031,4 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.destroy();
     super.onCleared();
   }
-
-  public boolean getNotificationsEnabled() {
-    return sharedPrefs.getBoolean(
-            Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE
-            ,SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_ENABLE);
-  }
-
-  public int getNotificationsDueDays() {
-    return sharedPrefs.getInt(
-            Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_DAYS_BEFORE
-            ,SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_DAYS_BEFORE);
-  }
-
-  /*
-  public String getNotificationsTime() {
-    return sharedPrefs.getString(
-            Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME
-            ,SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_TIME);
-  }
-  */
-
-  public void setNotificationsEnabled(boolean enabled) {
-    /*
-    boolean enabled = false;
-    if (NumUtil.isStringInt(text)) {
-      enabled = Integer.parseInt(text) > 0;
-    }
-    */
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled).apply();
-    dlHelper.uploadSetting(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled, this::showMessage);
-    notificationsEnabled.setValue(enabled);
-  }
-
-  public void setNotificationsDueDays(String text) {
-    int days = 0;
-    if (NumUtil.isStringInt(text)) {
-      days = Integer.parseInt(text);
-      if (days < 0) {
-        days = 0;
-      }
-    }
-    sharedPrefs.edit().putInt(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_DAYS_BEFORE, days).apply();
-    dlHelper.uploadSetting(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_DAYS_BEFORE, days, this::showMessage);
-    notificationsDueDaysTextLive.setValue(days);
-  }
-
-  /*
-  public void setNotificationsTime(String text) {
-    sharedPrefs.edit().putString(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME, text).apply();
-    dlHelper.uploadSetting(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME, text, this::showMessage);
-    notificationsTimeTextLive.setValue(text);
-  }
-  */
-
 }

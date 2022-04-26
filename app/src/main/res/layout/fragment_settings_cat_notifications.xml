@@ -23,12 +23,13 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <!--suppress AndroidDomInspection -->
-    <import type="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsFragmentDirections" />
+    <import type="android.view.View" />
     <variable
       name="activity"
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
-
+    <variable
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel" />
     <variable
       name="fragment"
       type="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsFragment" />
@@ -96,7 +97,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      android:fillViewport="true">
 
       <LinearLayout
         android:id="@+id/linear_body"
@@ -104,33 +106,67 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="80dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        app:transitionTypeChanging="@{true}">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.navigate(SettingsCatNotificationsFragmentDirections.actionSettingsCatNotificationsFragmentToSettingsCatNotificationsSettingsFragment())}"
-          app:clickUtil="@{clickUtil}">
+          android:onClick="@{v -> switchEnableNotifications.setChecked(!switchEnableNotifications.isChecked())}">
+
+          <ImageView
+            android:id="@+id/image_show_done"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            app:srcCompat="@android:drawable/ic_lock_idle_alarm"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="Enable notifications" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="Checks for expiring items" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_enable_notifications"
+            style="@style/Widget.Grocy.Switch"
+            android:onCheckedChanged="@{(view, checked) -> viewModel.setNotificationsEnabled(checked)}"
+            app:initialChecked="@{viewModel.getNotificationsEnabled()}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          app:clickUtil="@{clickUtil}"
+          android:visibility="@{viewModel.notificationsEnabledLive ? View.VISIBLE : View.GONE}">
 
           <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              app:srcCompat="@android:drawable/ic_lock_idle_alarm"
+              android:src="@drawable/ic_round_event"
               tools:ignore="ContentDescription" />
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.ListItem.Title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Expiring items" />
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-          <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
-            android:layout_marginStart="16dp"
-            android:clickable="false"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
+            <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="Notification time" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@{viewModel.notificationsTimeTextLive}"/>
+
+            <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="Time when the check is done"/>
+
+          </LinearLayout>
 
         </LinearLayout>
 

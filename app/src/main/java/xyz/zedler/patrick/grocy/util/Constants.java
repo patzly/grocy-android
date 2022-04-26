@@ -183,7 +183,6 @@ public final class Constants {
     public final static class NOTIFICATIONS {
 
       public final static String NOTIFICATIONS_ENABLE = "notification_enable";
-      public final static String NOTIFICATIONS_DAYS_BEFORE = "notification_days_before";
       public final static String NOTIFICATIONS_TIME = "notification_time";
     }
   }
@@ -279,7 +278,6 @@ public final class Constants {
     public final static class NOTIFICATIONS {
 
       public final static boolean NOTIFICATIONS_ENABLE = false;
-      public final static int NOTIFICATIONS_DAYS_BEFORE = 7;
       public final static String NOTIFICATIONS_TIME = "21:00";
     }
   }

@@ -24,11 +24,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatNotificationsBinding;
@@ -37,6 +35,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatNotificationsFragment extends BaseFragment {
@@ -69,7 +68,7 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
     binding.setActivity(activity);
     binding.setFragment(this);
-    //binding.setViewModel(viewModel);
+    binding.setViewModel(viewModel);
     //binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
@@ -101,18 +100,13 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
-  /*
   @Override
   public void saveInput(String text, Bundle argsBundle) {
     String type = argsBundle.getString(ARGUMENT.TYPE);
     if (type != null ){
-      if(type.equals(NOTIFICATIONS.NOTIFICATIONS_ENABLE))
-        viewModel.setNotificationsEnabled(text);
-      else if(type.equals(NOTIFICATIONS.NOTIFICATIONS_DAYS_BEFORE))
-        viewModel.setNotificationsDueDays(text);
+
     }
   }
-  */
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
