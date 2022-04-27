@@ -28,6 +28,7 @@
   <uses-permission android:name="android.permission.VIBRATE" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
@@ -80,6 +81,7 @@
         <action android:name="android.intent.action.PACKAGE_REMOVED" />
         <action android:name="android.intent.action.MY_PACKAGE_SUSPENDED" />
         <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
       </intent-filter>
     </receiver>
 

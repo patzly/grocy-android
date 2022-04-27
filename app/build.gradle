@@ -102,6 +102,8 @@ dependencies {
 
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
+    implementation "androidx.work:work-runtime:2.7.1"
+
     //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'

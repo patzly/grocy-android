@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.helper;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -169,6 +171,10 @@ public class DownloadHelper {
 
   public DownloadHelper(Activity activity, String tag) {
     this(activity.getApplication(), tag, null);
+  }
+
+  public DownloadHelper(Context context, String tag) {
+    this((Application) context.getApplicationContext(), tag, null);
   }
 
   // cancel all requests
@@ -1419,6 +1425,17 @@ public class DownloadHelper {
       }
       return null;
     }
+  }
+
+  public void getVolatile(
+      Response.Listener<String> responseListener,
+      Response.ErrorListener errorListener
+  ) {
+    get(
+        grocyApi.getStockVolatile(),
+        responseListener::onResponse,
+        errorListener::onErrorResponse
+    );
   }
 
   public QueueItem updateMissingItems(
