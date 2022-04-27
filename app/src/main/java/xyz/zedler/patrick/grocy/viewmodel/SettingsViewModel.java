@@ -20,17 +20,20 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
@@ -45,6 +48,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.NotificationService;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -546,7 +550,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getLocations(
         locations -> {
           this.locations = locations;
-          Location location = getLocation(locationId);
+          Location location = Location.getFromId(locations, locationId);
           presetLocationTextLive.setValue(location != null ? location.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetLocationTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -559,7 +563,7 @@ public class SettingsViewModel extends BaseViewModel {
               true
           );
           this.productGroups = productGroups;
-          ProductGroup productGroup = getProductGroup(groupId);
+          ProductGroup productGroup = ProductGroup.getFromId(productGroups, groupId);
           presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetProductGroupTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -567,7 +571,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getQuantityUnits(
         quantityUnits -> {
           this.quantityUnits = quantityUnits;
-          QuantityUnit quantityUnit = getQuantityUnit(unitId);
+          QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, unitId);
           presetQuantityUnitTextLive.setValue(quantityUnit != null ? quantityUnit.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetQuantityUnitTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -957,6 +961,25 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled)
         .apply();
     notificationsEnabledLive.setValue(enabled);
+
+    Intent intent = new Intent(getApplication(), NotificationService.class);
+    if (!enabled) {
+      intent.putExtra("close",true);
+    }
+    getApplication().startService(intent);
+
+    /*Notification.Builder builder = new Notification.Builder(getApplication());
+    builder.setContentTitle("This is the title");
+    builder.setContentText("This is the text");
+    builder.setSubText("Some sub text");
+    builder.setNumber(101);
+    builder.setTicker("Fancy Notification");
+    builder.setAutoCancel(true);
+    builder.setPriority(Notification.PRIORITY_MIN);
+    Notification notification = builder.build();
+    NotificationManager notificationManger =
+        (NotificationManager) getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationManger.notify(1, notification);*/
   }
 
   public void setNotificationsTime(String text) {
@@ -973,42 +996,6 @@ public class SettingsViewModel extends BaseViewModel {
   public boolean getIsDemoInstance() {
     String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
     return server != null && server.contains("grocy.info");
-  }
-
-  private Location getLocation(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (Location location : locations) {
-      if (location.getId() == id) {
-        return location;
-      }
-    }
-    return null;
-  }
-
-  private ProductGroup getProductGroup(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (ProductGroup productGroup : productGroups) {
-      if (productGroup.getId() == id) {
-        return productGroup;
-      }
-    }
-    return null;
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
   }
 
   public DownloadHelper getDownloadHelper() {
