@@ -20,20 +20,27 @@
 package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
+import androidx.work.BackoffPolicy;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
@@ -47,8 +54,8 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.DueSoonCheckWorker;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.model.NotificationService;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -962,11 +969,79 @@ public class SettingsViewModel extends BaseViewModel {
         .apply();
     notificationsEnabledLive.setValue(enabled);
 
-    Intent intent = new Intent(getApplication(), NotificationService.class);
+    final int SELF_REMINDER_HOUR = 23;
+    final int SELF_REMINDER_MINUTE = 57;
+
+    long delay;
+    if (DateTime.now().getHourOfDay() < SELF_REMINDER_HOUR
+        || DateTime.now().getHourOfDay() == SELF_REMINDER_HOUR
+        && DateTime.now().getMinuteOfHour() < SELF_REMINDER_MINUTE) {
+      delay = new Duration(
+          DateTime.now(),
+          DateTime.now().withTimeAtStartOfDay().plusHours(SELF_REMINDER_HOUR)
+              .plusMinutes(SELF_REMINDER_MINUTE)
+      ).getStandardMinutes();
+    } else {
+      delay = new Duration(
+          DateTime.now(),
+          DateTime.now().withTimeAtStartOfDay().plusDays(1).plusHours(SELF_REMINDER_HOUR)
+              .plusMinutes(SELF_REMINDER_MINUTE)
+      ).getStandardMinutes();
+    }
+
+    String checkRequestName = "due_soon_check_periodic";
+
+    if (enabled) {
+      int timeout = sharedPrefs
+          .getInt(NETWORK.LOADING_TIMEOUT, SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT);
+
+      Constraints constraints = new Constraints.Builder()
+          .setRequiredNetworkType(NetworkType.CONNECTED)
+          .setRequiresBatteryNotLow(true)
+          .setRequiresCharging(false)
+          .build();
+
+      PeriodicWorkRequest checkRequest = new PeriodicWorkRequest.Builder(
+          DueSoonCheckWorker.class,
+          PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+          TimeUnit.MILLISECONDS
+      )
+          .setInitialDelay(delay, TimeUnit.MINUTES)
+          .setBackoffCriteria(
+              BackoffPolicy.LINEAR,
+              timeout + 30,
+              TimeUnit.SECONDS
+          )
+          .setConstraints(constraints)
+          .build();
+
+      WorkManager.getInstance(getApplication()).getWorkInfosForUniqueWorkLiveData(checkRequestName)
+          .observeForever(workInfos -> {
+            for (WorkInfo workInfo : workInfos) {
+              if (workInfo == null) {
+                Log.d("download", "workInfo == null");
+              } else {
+                Log.d("download", "workInfo != null: " + workInfo.getState());
+              }
+            }
+          });
+
+      WorkManager.getInstance(getApplication()).enqueueUniquePeriodicWork(
+          checkRequestName,
+          ExistingPeriodicWorkPolicy.REPLACE,
+          checkRequest
+      );
+    } else {
+      WorkManager.getInstance(getApplication()).cancelUniqueWork(checkRequestName);
+    }
+
+
+
+    /*Intent intent = new Intent(getApplication(), NotificationService.class);
     if (!enabled) {
       intent.putExtra("close",true);
     }
-    getApplication().startService(intent);
+    getApplication().startService(intent);*/
 
     /*Notification.Builder builder = new Notification.Builder(getApplication());
     builder.setContentTitle("This is the title");

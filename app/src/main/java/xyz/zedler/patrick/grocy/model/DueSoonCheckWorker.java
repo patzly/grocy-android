@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.work.Worker;
@@ -39,11 +40,11 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
-public class ExpiringSoonCheckWorker extends Worker {
+public class DueSoonCheckWorker extends Worker {
 
-  private final static String TAG = ExpiringSoonCheckWorker.class.getSimpleName();
+  private final static String TAG = DueSoonCheckWorker.class.getSimpleName();
 
-  public ExpiringSoonCheckWorker(@NonNull Context context, @NonNull WorkerParameters params) {
+  public DueSoonCheckWorker(@NonNull Context context, @NonNull WorkerParameters params) {
     super(context, params);
   }
 
@@ -68,6 +69,8 @@ public class ExpiringSoonCheckWorker extends Worker {
       dueItems = (new Gson()).fromJson(
           jsonObject.getJSONArray("due_products").toString(), typeStockItem
       );
+
+      Log.i(TAG, "doWork: " + dueItems);
 
       dlHelper.destroy();
       return Result.success();
