@@ -969,8 +969,8 @@ public class SettingsViewModel extends BaseViewModel {
         .apply();
     notificationsEnabledLive.setValue(enabled);
 
-    final int SELF_REMINDER_HOUR = 23;
-    final int SELF_REMINDER_MINUTE = 57;
+    final int SELF_REMINDER_HOUR = 12;
+    final int SELF_REMINDER_MINUTE = 0;
 
     long delay;
     if (DateTime.now().getHourOfDay() < SELF_REMINDER_HOUR
@@ -1003,8 +1003,8 @@ public class SettingsViewModel extends BaseViewModel {
 
       PeriodicWorkRequest checkRequest = new PeriodicWorkRequest.Builder(
           DueSoonCheckWorker.class,
-          PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
-          TimeUnit.MILLISECONDS
+          24,
+          TimeUnit.HOURS
       )
           .setInitialDelay(delay, TimeUnit.MINUTES)
           .setBackoffCriteria(
@@ -1015,17 +1015,6 @@ public class SettingsViewModel extends BaseViewModel {
           .setConstraints(constraints)
           .build();
 
-      WorkManager.getInstance(getApplication()).getWorkInfosForUniqueWorkLiveData(checkRequestName)
-          .observeForever(workInfos -> {
-            for (WorkInfo workInfo : workInfos) {
-              if (workInfo == null) {
-                Log.d("download", "workInfo == null");
-              } else {
-                Log.d("download", "workInfo != null: " + workInfo.getState());
-              }
-            }
-          });
-
       WorkManager.getInstance(getApplication()).enqueueUniquePeriodicWork(
           checkRequestName,
           ExistingPeriodicWorkPolicy.REPLACE,
@@ -1034,27 +1023,6 @@ public class SettingsViewModel extends BaseViewModel {
     } else {
       WorkManager.getInstance(getApplication()).cancelUniqueWork(checkRequestName);
     }
-
-
-
-    /*Intent intent = new Intent(getApplication(), NotificationService.class);
-    if (!enabled) {
-      intent.putExtra("close",true);
-    }
-    getApplication().startService(intent);*/
-
-    /*Notification.Builder builder = new Notification.Builder(getApplication());
-    builder.setContentTitle("This is the title");
-    builder.setContentText("This is the text");
-    builder.setSubText("Some sub text");
-    builder.setNumber(101);
-    builder.setTicker("Fancy Notification");
-    builder.setAutoCancel(true);
-    builder.setPriority(Notification.PRIORITY_MIN);
-    Notification notification = builder.build();
-    NotificationManager notificationManger =
-        (NotificationManager) getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
-    notificationManger.notify(1, notification);*/
   }
 
   public void setNotificationsTime(String text) {

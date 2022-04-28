@@ -1012,6 +1012,9 @@
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
 
+  <string name="notification_channel_due_soon">Due soon items</string>
+  <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
+
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>
   <string name="barcode_format_code93" translatable="false">Code 93</string>

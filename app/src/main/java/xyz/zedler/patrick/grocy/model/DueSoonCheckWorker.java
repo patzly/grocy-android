@@ -19,9 +19,18 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -36,7 +45,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
@@ -62,15 +76,47 @@ public class DueSoonCheckWorker extends Worker {
     try {
       String response = future.get(timeout, TimeUnit.SECONDS); // this will block
 
-      ArrayList<StockItem> dueItems = new ArrayList<>();
       Type typeStockItem = new TypeToken<List<StockItem>>() {
       }.getType();
       JSONObject jsonObject = new JSONObject(response);
-      dueItems = (new Gson()).fromJson(
+      ArrayList<StockItem> dueItems = (new Gson()).fromJson(
           jsonObject.getJSONArray("due_products").toString(), typeStockItem
       );
 
-      Log.i(TAG, "doWork: " + dueItems);
+      if (dueItems.size() == 0) return Result.success();
+
+      Bitmap bitmap = getBitmapFromVectorDrawable(getApplicationContext(), R.drawable.ic_round_grocy);
+
+      Uri uri = BaseBottomSheet.getUriWithArgs(
+          getApplicationContext().getString(R.string.deep_link_stockOverviewFragment),
+          new StockOverviewFragmentArgs.Builder()
+              .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_DUE_SOON))
+              .build().toBundle()
+      );
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      intent.setClass(getApplicationContext(), MainActivity.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+      @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent
+          .getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+      NotificationCompat.Builder builder = new NotificationCompat
+          .Builder(getApplicationContext(), "xyz.zedler.patrick.grocy.due_soon")
+          .setSmallIcon(R.drawable.ic_round_grocy)
+          .setContentTitle(dueItems.size() + " stock items are due soon")
+          .setContentText("Consume them in the next few days.")
+          .setLargeIcon(bitmap)
+          .setContentIntent(pendingIntent)
+          .setAutoCancel(true)
+          .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+      NotificationManagerCompat notificationManager = NotificationManagerCompat
+          .from(getApplicationContext());
+
+      int lastId = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+          .getInt(PREF.LAST_NOTIFICATION_ID, 0);
+      PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+          .putInt(PREF.LAST_NOTIFICATION_ID, lastId+1).apply();
+      notificationManager.notify(lastId+1, builder.build());
 
       dlHelper.destroy();
       return Result.success();
@@ -82,4 +128,22 @@ public class DueSoonCheckWorker extends Worker {
     }
   }
 
+  public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+    Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+    if (drawable == null) return null;
+    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+        drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+    drawable.draw(canvas);
+
+    return Bitmap.createScaledBitmap(
+            bitmap,
+            context.getResources()
+                .getDimensionPixelSize(android.R.dimen.notification_large_icon_width),
+            context.getResources()
+                .getDimensionPixelSize(android.R.dimen.notification_large_icon_height),
+            true
+        );
+  }
 }
