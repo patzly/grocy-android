@@ -174,6 +174,7 @@ public class LoginRequestViewModel extends BaseViewModel {
               .observeOn(AndroidSchedulers.mainThread())
               .doFinally(this::loadInfoAndFinish)
               .subscribe();*/
+          loadInfoAndFinish();
         },
         error -> {
           Log.e(TAG, "requestLogin: VolleyError: " + error);
