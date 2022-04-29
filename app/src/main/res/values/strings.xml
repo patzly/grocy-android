@@ -1011,9 +1011,14 @@
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
+  <string name="setting_notifications_due_soon">Due soon items</string>
+  <string name="setting_notifications_due_soon_description">Daily notifications</string>
+  <string name="setting_notification_time">Notification time</string>
+  <string name="setting_notification_time_description">When the check is done</string>
 
   <string name="notification_channel_due_soon">Due soon items</string>
   <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
+  <string name="notification_due_soon_content">Consume them in the next few days</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

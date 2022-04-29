@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatNotificationsBinding;
@@ -35,7 +39,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatNotificationsFragment extends BaseFragment {
@@ -100,12 +104,34 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
-  @Override
-  public void saveInput(String text, Bundle argsBundle) {
-    String type = argsBundle.getString(ARGUMENT.TYPE);
-    if (type != null ){
-
+  public void showTimePickerDialog() {
+    String[] timeParts = viewModel.getNotificationsTime().split(":");
+    int hour = 12;
+    int minute = 0;
+    if (timeParts.length == 2) {
+      if (NumUtil.isStringInt(timeParts[0])) {
+        hour = Integer.parseInt(timeParts[0]);
+      }
+      if (NumUtil.isStringInt(timeParts[1])) {
+        minute = Integer.parseInt(timeParts[1]);
+      }
     }
+    MaterialTimePicker picker = new MaterialTimePicker.Builder()
+        .setTimeFormat(DateFormat.is24HourFormat(requireContext())
+            ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+        .setHour(hour)
+        .setMinute(minute)
+        .setTitleText("Notification time") // TODO
+        .setNegativeButtonText(R.string.action_cancel)
+        .setPositiveButtonText(R.string.action_save)
+        .setTheme(R.style.Theme_Grocy_TimePicker)
+        .build();
+
+    picker.addOnPositiveButtonClickListener(v -> viewModel.setNotificationsTime(
+            String.format(Locale.getDefault(), "%02d:%02d",
+                picker.getHour(), picker.getMinute())
+    ));
+    picker.show(getParentFragmentManager(), "time_picker_dialog");
   }
 
   @Override

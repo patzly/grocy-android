@@ -279,7 +279,7 @@ public final class Constants {
     public final static class NOTIFICATIONS {
 
       public final static boolean NOTIFICATIONS_ENABLE = false;
-      public final static String NOTIFICATIONS_TIME = "21:00";
+      public final static String NOTIFICATIONS_TIME = "12:00";
     }
   }
 

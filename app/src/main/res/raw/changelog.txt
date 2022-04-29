@@ -1,6 +1,7 @@
 2.3.0:
 - New: Server v3.3.0 feature "Notes for stock entries" (#511)
 - New: Stock quantity unit now can be changed with server v3.3.0 (#511)
+- New: Notification for due soon items in stock (thanks @igor-cali for the initial work) (#108)
 - Improved: Entries on stock entries page are colored if volatile
 
 2.2.1:

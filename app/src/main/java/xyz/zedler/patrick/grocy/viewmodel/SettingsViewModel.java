@@ -953,45 +953,45 @@ public class SettingsViewModel extends BaseViewModel {
     return notificationsEnabledLive;
   }
 
-  public String getNotificationsTime() {
-    return sharedPrefs.getString(
-        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_TIME
-    );
-  }
-
-  public MutableLiveData<String> getNotificationsTimeTextLive() {
-    return notificationsTimeTextLive;
-  }
-
   public void setNotificationsEnabled(boolean enabled) {
     sharedPrefs.edit().putBoolean(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled)
         .apply();
     notificationsEnabledLive.setValue(enabled);
 
-    final int SELF_REMINDER_HOUR = 12;
-    final int SELF_REMINDER_MINUTE = 0;
-
-    long delay;
-    if (DateTime.now().getHourOfDay() < SELF_REMINDER_HOUR
-        || DateTime.now().getHourOfDay() == SELF_REMINDER_HOUR
-        && DateTime.now().getMinuteOfHour() < SELF_REMINDER_MINUTE) {
-      delay = new Duration(
-          DateTime.now(),
-          DateTime.now().withTimeAtStartOfDay().plusHours(SELF_REMINDER_HOUR)
-              .plusMinutes(SELF_REMINDER_MINUTE)
-      ).getStandardMinutes();
-    } else {
-      delay = new Duration(
-          DateTime.now(),
-          DateTime.now().withTimeAtStartOfDay().plusDays(1).plusHours(SELF_REMINDER_HOUR)
-              .plusMinutes(SELF_REMINDER_MINUTE)
-      ).getStandardMinutes();
-    }
-
     String checkRequestName = "due_soon_check_periodic";
 
     if (enabled) {
+      String[] timeParts = getNotificationsTime().split(":");
+      int hour = 12;
+      int minute = 0;
+      if (timeParts.length == 2) {
+        if (NumUtil.isStringInt(timeParts[0])) {
+          hour = Integer.parseInt(timeParts[0]);
+        }
+        if (NumUtil.isStringInt(timeParts[1])) {
+          minute = Integer.parseInt(timeParts[1]);
+        }
+      }
+
+      int dayHour = DateTime.now().getHourOfDay();
+      int dayMinute = DateTime.now().getMinuteOfHour();
+      long delay;
+      if (DateTime.now().getHourOfDay() < hour
+          || DateTime.now().getHourOfDay() == hour
+          && DateTime.now().getMinuteOfHour() < minute) {
+        delay = new Duration(
+            DateTime.now(),
+            DateTime.now().withTimeAtStartOfDay().plusHours(hour)
+                .plusMinutes(minute)
+        ).getStandardMinutes();
+      } else {
+        delay = new Duration(
+            DateTime.now(),
+            DateTime.now().withTimeAtStartOfDay().plusDays(1).plusHours(hour)
+                .plusMinutes(minute)
+        ).getStandardMinutes();
+      }
+
       int timeout = sharedPrefs
           .getInt(NETWORK.LOADING_TIMEOUT, SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT);
 
@@ -1025,9 +1025,21 @@ public class SettingsViewModel extends BaseViewModel {
     }
   }
 
+  public String getNotificationsTime() {
+    return sharedPrefs.getString(
+        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_TIME
+    );
+  }
+
+  public MutableLiveData<String> getNotificationsTimeTextLive() {
+    return notificationsTimeTextLive;
+  }
+
   public void setNotificationsTime(String text) {
     sharedPrefs.edit().putString(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME, text).apply();
     notificationsTimeTextLive.setValue(text);
+    setNotificationsEnabled(true);
   }
 
   public ArrayList<String> getSupportedVersions() {

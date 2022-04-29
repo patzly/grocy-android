@@ -52,7 +52,9 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class DueSoonCheckWorker extends Worker {
 
@@ -99,11 +101,26 @@ public class DueSoonCheckWorker extends Worker {
       @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent
           .getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+      String days = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(
+          STOCK.DUE_SOON_DAYS,
+          SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
+      );
+      int daysInt;
+      if (NumUtil.isStringInt(days)) {
+        daysInt = Integer.parseInt(days);
+      } else {
+        daysInt = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+      }
+      String titleText = getApplicationContext().getResources().getQuantityString(
+          R.plurals.description_overview_stock_due_soon,
+          dueItems.size(), dueItems.size(), daysInt
+      );
+
       NotificationCompat.Builder builder = new NotificationCompat
           .Builder(getApplicationContext(), "xyz.zedler.patrick.grocy.due_soon")
           .setSmallIcon(R.drawable.ic_round_grocy)
-          .setContentTitle(dueItems.size() + " stock items are due soon")
-          .setContentText("Consume them in the next few days.")
+          .setContentTitle(titleText)
+          .setContentText(getApplicationContext().getString(R.string.notification_due_soon_content))
           .setLargeIcon(bitmap)
           .setContentIntent(pendingIntent)
           .setAutoCancel(true)
