@@ -33,14 +33,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientEditBinding;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
@@ -92,9 +97,17 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    binding.categoryQuantityUnit.setOnClickListener(v -> navigate(RecipeEditIngredientEditFragmentDirections
-            .actionRecipeEditIngredientEditFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
-            .setProduct(viewModel.getProduct())));
+    binding.categoryQuantityUnit.setOnClickListener(v -> {
+      ArrayList<QuantityUnit> quantityUnits = viewModel.getQuantityUnits();
+      Bundle bundle = new Bundle();
+      bundle.putParcelableArrayList(
+              Constants.ARGUMENT.QUANTITY_UNITS,
+              quantityUnits
+      );
+      QuantityUnit quantityUnit = viewModel.getFormData().getQuantityUnitLive().getValue();
+      bundle.putInt(Constants.ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
+      activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
+    });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -210,6 +223,11 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (viewModel.getFormData().isScannerVisible()) {
       clearInputFocus();
     }
+  }
+
+  @Override
+  public void selectQuantityUnit(QuantityUnit quantityUnit) {
+    viewModel.getFormData().setQuantityUnit(quantityUnit);
   }
 
   @Override

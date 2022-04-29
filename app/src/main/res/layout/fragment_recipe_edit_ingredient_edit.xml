@@ -87,30 +87,6 @@
           android:textColor="@color/on_primary"
           android:text="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}" />
 
-        <FrameLayout
-            android:id="@+id/frame_help"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="?attr/actionBarItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:contentDescription="@string/action_display_help"
-            android:tooltipText="@string/action_display_help"
-            android:focusable="true"
-            tools:targetApi="o"
-            android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
-
-          <ImageView
-              android:layout_width="24dp"
-              android:layout_height="24dp"
-              android:layout_gravity="center"
-              android:importantForAccessibility="no"
-              android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
-
-        </FrameLayout>
-
       </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -355,12 +331,12 @@
                 <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
                     android:text="@string/title_product_cat_quantity_unit"
-                    android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background}" />
+                    android:textColor="@{formData.quantityUnitLive == null ? @color/retro_red : @color/on_background}" />
 
                 <TextView
-                    style="@style/Widget.Grocy.TextView.ListItem.Description"
-                    android:text="@string/subtitle_product_quantity_unit"
-                    android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}" />
+                    android:id="@+id/quantity_unit"
+                    android:text="@{formData.quantityUnitLabelLive}"
+                    style="@style/Widget.Grocy.TextView.ListItem.Description" />
 
               </LinearLayout>
 

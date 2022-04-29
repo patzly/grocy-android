@@ -1242,12 +1242,5 @@
         android:name="closeWhenFinished"
         android:defaultValue="false"
         app:argType="boolean" />
-    <action
-        android:id="@+id/action_recipeEditIngredientEditFragment_to_masterProductCatQuantityUnitFragment"
-        app:destination="@id/masterProductCatQuantityUnitFragment"
-        app:enterAnim="@anim/slide_from_end"
-        app:exitAnim="@anim/slide_to_start"
-        app:popEnterAnim="@anim/slide_from_start"
-        app:popExitAnim="@anim/slide_to_end" />
   </fragment>
 </navigation>

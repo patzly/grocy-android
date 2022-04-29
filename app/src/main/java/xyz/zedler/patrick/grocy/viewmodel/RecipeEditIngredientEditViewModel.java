@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
@@ -52,6 +53,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
+import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
@@ -77,8 +79,9 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
-  private List<Product> products;
-  private List<ProductBarcode> productBarcodes;
+  private ArrayList<Product> products;
+  private ArrayList<ProductBarcode> productBarcodes;
+  private ArrayList<QuantityUnit> quantityUnits;
 
   private final boolean debug;
   private final boolean isActionEdit;
@@ -96,7 +99,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(application);
     repository = new RecipeEditRepository(application);
-    formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs, getBeginnerModeEnabled());
+    formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs);
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
@@ -110,8 +113,9 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
-      this.products = data.getProducts();
-      this.productBarcodes = data.getProductBarcodes();
+      this.products = new ArrayList<>(data.getProducts());
+      this.productBarcodes = new ArrayList<>(data.getProductBarcodes());
+      this.quantityUnits = new ArrayList<>(data.getQuantityUnits());
 
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       fillWithRecipeIfNecessary();
@@ -131,7 +135,8 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
             () -> loadFromDatabase(false),
             this::onDownloadError,
             Product.class,
-            ProductBarcode.class
+            ProductBarcode.class,
+            QuantityUnit.class
     );
   }
 
@@ -163,16 +168,14 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       assert productDetails != null;
       Product product = productDetails.getProduct();
 
-      if (productDetails.getStockAmountAggregated() == 0) {
-        String name = product.getName();
-        showMessageAndContinueScanning(getApplication().getString(R.string.msg_not_in_stock, name));
-        return;
-      }
-
       formData.getProductDetailsLive().setValue(productDetails);
       formData.getProductNameLive().setValue(product.getName());
 
-      formData.isFormValid();
+      if (formData.getQuantityUnitLive().getValue() == null) {
+        formData.setQuantityUnit(productDetails.getQuantityUnitStock());
+      }
+
+      formData.isProductNameValid();
     };
 
     dlHelper.newQueue(
@@ -242,16 +245,16 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
     }
+
     if (product == null) {
-      ProductBarcode productBarcode = null;
       for (ProductBarcode code : productBarcodes) {
         if (code.getBarcode().equals(input.trim())) {
-          productBarcode = code;
           product = Product.getProductFromId(products, code.getProductIdInt());
+          break;
         }
       }
       if (product != null) {
-        setProduct(product.getId(), productBarcode, null);
+        setProduct(product.getId(), null, null);
         return;
       }
     }
@@ -406,6 +409,10 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
   public Product getProduct() {
     return Product.getProductFromId(products, getRecipePosition().getProductId());
+  }
+
+  public ArrayList<QuantityUnit> getQuantityUnits() {
+    return quantityUnits;
   }
 
   public static class RecipeEditIngredientEditViewModelFactory implements ViewModelProvider.Factory {

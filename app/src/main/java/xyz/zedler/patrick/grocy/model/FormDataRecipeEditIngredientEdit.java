@@ -45,7 +45,6 @@ public class FormDataRecipeEditIngredientEdit {
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
-  private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<ProductDetails> productDetailsLive;
   private final MutableLiveData<String> productNameLive;
@@ -57,7 +56,7 @@ public class FormDataRecipeEditIngredientEdit {
   private final MutableLiveData<String> amountLive;
   private final MutableLiveData<Integer> amountErrorLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
-  private final MutableLiveData<Boolean> quantityUnitErrorLive;
+  private final MutableLiveData<String> quantityUnitLabelLive;
   private final MutableLiveData<String> variableAmountLive;
   private final MutableLiveData<Boolean> notCheckStockFulfillmentLive;
   private final MutableLiveData<String> ingredientGroupLive;
@@ -69,12 +68,10 @@ public class FormDataRecipeEditIngredientEdit {
 
   public FormDataRecipeEditIngredientEdit(Application application,
                                           SharedPreferences sharedPrefs,
-                                          RecipeEditIngredientEditFragmentArgs args,
-                                          boolean beginnerMode) {
+                                          RecipeEditIngredientEditFragmentArgs args) {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     pluralUtil = new PluralUtil(application);
-    displayHelpLive = new MutableLiveData<>(beginnerMode);
     productsLive = new MutableLiveData<>();
     productDetailsLive = new MutableLiveData<>();
     productDetailsLive.setValue(null);
@@ -101,7 +98,7 @@ public class FormDataRecipeEditIngredientEdit {
     amountLive = new MutableLiveData<>();
     amountErrorLive = new MutableLiveData<>();
     quantityUnitLive = new MutableLiveData<>();
-    quantityUnitErrorLive = new MutableLiveData<>();
+    quantityUnitLabelLive = new MutableLiveData<>(getString(R.string.error_empty_qu));
     variableAmountLive = new MutableLiveData<>();
     notCheckStockFulfillmentLive = new MutableLiveData<>();
     ingredientGroupLive = new MutableLiveData<>();
@@ -110,15 +107,6 @@ public class FormDataRecipeEditIngredientEdit {
     priceFactorErrorLive = new MutableLiveData<>();
 
     filledWithRecipePosition = false;
-  }
-
-  public MutableLiveData<Boolean> getDisplayHelpLive() {
-    return displayHelpLive;
-  }
-
-  public void toggleDisplayHelpLive() {
-    assert displayHelpLive.getValue() != null;
-    displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
   public MutableLiveData<ArrayList<Product>> getProductsLive() {
@@ -161,8 +149,15 @@ public class FormDataRecipeEditIngredientEdit {
     return quantityUnitLive;
   }
 
-  public MutableLiveData<Boolean> getQuantityUnitErrorLive() {
-    return quantityUnitErrorLive;
+  public MutableLiveData<String> getQuantityUnitLabelLive() {
+    return quantityUnitLabelLive;
+  }
+
+  public void setQuantityUnit(QuantityUnit quantityUnit) {
+    quantityUnitLive.setValue(quantityUnit);
+    quantityUnitLabelLive.setValue(
+            quantityUnit == null ? getString(R.string.error_empty_qu) : quantityUnit.getName()
+    );
   }
 
   public MutableLiveData<String> getVariableAmountLive() {
@@ -208,7 +203,7 @@ public class FormDataRecipeEditIngredientEdit {
         return false;
       }
     }
-    if (productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()) {
+    if (productDetailsLive.getValue() == null || productNameLive.getValue().isEmpty()) {
       productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
@@ -230,7 +225,7 @@ public class FormDataRecipeEditIngredientEdit {
         return false;
       }
     }
-    if (amountLive.getValue() == null && !amountLive.getValue().isEmpty()) {
+    if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountErrorLive.setValue(R.string.error_invalid_base_servings);
       return false;
     }
@@ -290,7 +285,7 @@ public class FormDataRecipeEditIngredientEdit {
     amountLive.setValue(null);
     amountErrorLive.setValue(null);
     quantityUnitLive.setValue(null);
-    quantityUnitErrorLive.setValue(null);
+    quantityUnitLabelLive.setValue(null);
     variableAmountLive.setValue(null);
     notCheckStockFulfillmentLive.setValue(null);
     ingredientGroupLive.setValue(null);

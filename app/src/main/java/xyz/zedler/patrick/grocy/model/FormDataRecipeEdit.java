@@ -175,7 +175,7 @@ public class FormDataRecipeEdit {
         return false;
       }
     }
-    if (productDetailsLive.getValue() == null && !productNameLive.getValue().isEmpty()) {
+    if (productDetailsLive.getValue() == null || productNameLive.getValue().isEmpty()) {
       productNameErrorLive.setValue(R.string.error_invalid_product);
       return false;
     }
