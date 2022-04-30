@@ -31,6 +31,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "quantity_unit_conversion_table")
 public class QuantityUnitConversion implements Parcelable {
@@ -54,7 +55,7 @@ public class QuantityUnitConversion implements Parcelable {
 
   @ColumnInfo(name = "product_id")
   @SerializedName("product_id")
-  private int productId;
+  private String productId;
 
   @ColumnInfo(name = "row_created_timestamp")
   @SerializedName("row_created_timestamp")
@@ -69,7 +70,7 @@ public class QuantityUnitConversion implements Parcelable {
     fromQuId = parcel.readInt();
     toQuId = parcel.readInt();
     factor = parcel.readDouble();
-    productId = parcel.readInt();
+    productId = parcel.readString();
     rowCreatedTimestamp = parcel.readString();
   }
 
@@ -79,7 +80,7 @@ public class QuantityUnitConversion implements Parcelable {
     dest.writeInt(fromQuId);
     dest.writeInt(toQuId);
     dest.writeDouble(factor);
-    dest.writeInt(productId);
+    dest.writeString(productId);
     dest.writeString(rowCreatedTimestamp);
   }
 
@@ -128,11 +129,15 @@ public class QuantityUnitConversion implements Parcelable {
     this.factor = factor;
   }
 
-  public int getProductId() {
+  public String getProductId() {
     return productId;
   }
 
-  public void setProductId(int productId) {
+  public int getProductIdInt() {
+    return NumUtil.isStringInt(productId) ? Integer.parseInt(productId) : -1;
+  }
+
+  public void setProductId(String productId) {
     this.productId = productId;
   }
 
@@ -175,7 +180,7 @@ public class QuantityUnitConversion implements Parcelable {
       String TAG) {
     JSONObject json = new JSONObject();
     try {
-      json.put("product_id", conversion.getProductId());
+      json.put("product_id", conversion.getProductIdInt());
       json.put("from_qu_id", conversion.getFromQuId());
       json.put("to_qu_id", conversion.getToQuId());
       json.put("factor", conversion.getFactor());

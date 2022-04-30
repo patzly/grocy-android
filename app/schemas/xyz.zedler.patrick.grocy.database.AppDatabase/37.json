@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 37,
-    "identityHash": "564979ac3a4ce81aafb773bb683b3001",
+    "identityHash": "ccc78b26056e4aa3cc9a0e18ecbc921c",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -516,7 +516,7 @@
       },
       {
         "tableName": "quantity_unit_conversion_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` INTEGER NOT NULL, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -545,8 +545,8 @@
           {
             "fieldPath": "productId",
             "columnName": "product_id",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "rowCreatedTimestamp",
@@ -1666,7 +1666,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '564979ac3a4ce81aafb773bb683b3001')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ccc78b26056e4aa3cc9a0e18ecbc921c')"
     ]
   }
 }

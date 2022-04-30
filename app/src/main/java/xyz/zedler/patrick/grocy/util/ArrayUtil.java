@@ -141,10 +141,10 @@ public class ArrayUtil {
     HashMap<Integer, ArrayList<QuantityUnitConversion>> hashMap = new HashMap<>();
     for (QuantityUnitConversion unitConversion : unitConversions) {
       ArrayList<QuantityUnitConversion> unitConversionArrayList
-          = hashMap.get(unitConversion.getProductId());
+          = hashMap.get(unitConversion.getProductIdInt());
       if (unitConversionArrayList == null) {
         unitConversionArrayList = new ArrayList<>();
-        hashMap.put(unitConversion.getProductId(), unitConversionArrayList);
+        hashMap.put(unitConversion.getProductIdInt(), unitConversionArrayList);
       }
       unitConversionArrayList.add(unitConversion);
     }

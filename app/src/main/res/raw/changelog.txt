@@ -3,6 +3,7 @@
 - New: Stock quantity unit now can be changed with server v3.3.0 (#511)
 - New: Notification for due soon items in stock (thanks @igor-cali for the initial work) (#108)
 - Improved: Entries on stock entries page are colored if volatile
+- Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
 
 2.2.1:
 - New: Stock entries page (#403)

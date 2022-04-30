@@ -186,7 +186,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
       quantityUnitsAllowed = new ArrayList<>();
       ArrayList<Integer> addedQuIds = new ArrayList<>();
       for (QuantityUnitConversion conversion : conversions) {
-        if (conversion.getProductId() == getFilledProduct().getId()
+        if (conversion.getProductIdInt() == getFilledProduct().getId()
             && conversion.getFromQuId() == quStockOld.getId()
             && !addedQuIds.contains(conversion.getToQuId())) {
           QuantityUnit quantityUnit = QuantityUnit
