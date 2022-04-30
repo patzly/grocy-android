@@ -19,7 +19,7 @@
 
 <resources>
 
-  <string name="deep_link_stockOverviewFragment" translatable="false">grocy://stockOverviewFragment</string>
+  <string name="deep_link_stockOverviewFragment" translatable="false">grocy://stockOverviewFragment?statusFilterId={statusFilterId}</string>
   <string name="deep_link_shoppingListFragment" translatable="false">grocy://shoppingListFragment</string>
   <string name="deep_link_shoppingListItemEditFragment" translatable="false">grocy://shoppingListItemEditFragment?action={action}&amp;productId={productId}</string>
   <string name="deep_link_shoppingModeFragment" translatable="false">grocy://shoppingModeFragment</string>

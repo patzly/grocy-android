@@ -78,6 +78,10 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     return this;
   }
 
+  public void setStatusDueSoon() {
+    setStatus(STATUS_DUE_SOON, getQuString(R.plurals.msg_due_products, dueSoonCount));
+  }
+
   public FilterChipLiveDataStockStatus setDueSoonCount(int dueSoonCount) {
     this.dueSoonCount = dueSoonCount;
     return this;

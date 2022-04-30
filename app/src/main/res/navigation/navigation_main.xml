@@ -618,6 +618,13 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end"/>
+      <action
+          android:id="@+id/action_settingsFragment_to_settingsNotificationsFragment"
+          app:destination="@id/settingsCatNotificationsFragment"
+          app:enterAnim="@anim/slide_from_end"
+          app:exitAnim="@anim/slide_to_start"
+          app:popEnterAnim="@anim/slide_from_start"
+          app:popExitAnim="@anim/slide_to_end" />
     </fragment>
     <fragment
       android:id="@+id/logFragment"
@@ -734,6 +741,24 @@
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingListFragment"
       android:label="SettingsCatShoppingListFragment"
       tools:layout="@layout/fragment_settings_cat_shopping_list"/>
+    <fragment
+        android:id="@+id/settingsCatNotificationsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsFragment"
+        android:label="SettingsCatNotificationsFragment"
+        tools:layout="@layout/fragment_settings_cat_notifications">
+      <action
+          android:id="@+id/action_settingsCatNotificationsFragment_to_settingsCatNotificationsSettingsFragment"
+          app:destination="@id/settingsCatNotificationsSettingsFragment"
+          app:enterAnim="@anim/slide_from_end"
+          app:exitAnim="@anim/slide_to_start"
+          app:popEnterAnim="@anim/slide_from_start"
+          app:popExitAnim="@anim/slide_to_end"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsCatNotificationsSettingsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsSettingsFragment"
+        android:label="SettingsCatNotificationsSettingsFragment"
+        tools:layout="@layout/fragment_settings_cat_notifications_settings"/>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"
@@ -1106,6 +1131,11 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
+    <argument
+      android:name="statusFilterId"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </fragment>
   <fragment
     android:id="@+id/chooseProductFragment"

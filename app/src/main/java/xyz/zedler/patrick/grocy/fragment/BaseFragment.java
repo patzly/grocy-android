@@ -132,6 +132,9 @@ public class BaseFragment extends Fragment {
   public void skipNextChoreSchedule(int choreId) {
   }
 
+  public void rescheduleNextExecution(int choreId) {
+  }
+
   public void toggleDoneStatus(Task task) {
   }
 

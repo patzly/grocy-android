@@ -22,12 +22,25 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
+import androidx.work.BackoffPolicy;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
@@ -41,6 +54,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.DueSoonCheckWorker;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -94,6 +108,8 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> showMLKitCropStreamLive;
   private final MutableLiveData<Boolean> autoAddToShoppingListLive;
   private final MutableLiveData<String> autoAddToShoppingListTextLive;
+  private final MutableLiveData<Boolean> notificationsEnabledLive;
+  private final MutableLiveData<String> notificationsTimeTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -126,6 +142,8 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
+    notificationsEnabledLive = new MutableLiveData<>(getNotificationsEnabled());
+    notificationsTimeTextLive = new MutableLiveData<>(getNotificationsTime());
   }
 
   public boolean isDemo() {
@@ -589,7 +607,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getLocations(
         locations -> {
           this.locations = locations;
-          Location location = getLocation(locationId);
+          Location location = Location.getFromId(locations, locationId);
           presetLocationTextLive.setValue(location != null ? location.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetLocationTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -602,7 +620,7 @@ public class SettingsViewModel extends BaseViewModel {
               true
           );
           this.productGroups = productGroups;
-          ProductGroup productGroup = getProductGroup(groupId);
+          ProductGroup productGroup = ProductGroup.getFromId(productGroups, groupId);
           presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetProductGroupTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -610,7 +628,7 @@ public class SettingsViewModel extends BaseViewModel {
     dlHelper.getQuantityUnits(
         quantityUnits -> {
           this.quantityUnits = quantityUnits;
-          QuantityUnit quantityUnit = getQuantityUnit(unitId);
+          QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, unitId);
           presetQuantityUnitTextLive.setValue(quantityUnit != null ? quantityUnit.getName()
               : getString(R.string.subtitle_none_selected));
         }, error -> presetQuantityUnitTextLive.setValue(getString(R.string.setting_not_loaded))
@@ -974,6 +992,106 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
+  public boolean getNotificationsEnabled() {
+    return sharedPrefs.getBoolean(
+        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_ENABLE
+    );
+  }
+
+  public MutableLiveData<Boolean> getNotificationsEnabledLive() {
+    return notificationsEnabledLive;
+  }
+
+  public void setNotificationsEnabled(boolean enabled) {
+    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled)
+        .apply();
+    notificationsEnabledLive.setValue(enabled);
+
+    String checkRequestName = "due_soon_check_periodic";
+
+    if (enabled) {
+      String[] timeParts = getNotificationsTime().split(":");
+      int hour = 12;
+      int minute = 0;
+      if (timeParts.length == 2) {
+        if (NumUtil.isStringInt(timeParts[0])) {
+          hour = Integer.parseInt(timeParts[0]);
+        }
+        if (NumUtil.isStringInt(timeParts[1])) {
+          minute = Integer.parseInt(timeParts[1]);
+        }
+      }
+
+      int dayHour = DateTime.now().getHourOfDay();
+      int dayMinute = DateTime.now().getMinuteOfHour();
+      long delay;
+      if (DateTime.now().getHourOfDay() < hour
+          || DateTime.now().getHourOfDay() == hour
+          && DateTime.now().getMinuteOfHour() < minute) {
+        delay = new Duration(
+            DateTime.now(),
+            DateTime.now().withTimeAtStartOfDay().plusHours(hour)
+                .plusMinutes(minute)
+        ).getStandardMinutes();
+      } else {
+        delay = new Duration(
+            DateTime.now(),
+            DateTime.now().withTimeAtStartOfDay().plusDays(1).plusHours(hour)
+                .plusMinutes(minute)
+        ).getStandardMinutes();
+      }
+
+      int timeout = sharedPrefs
+          .getInt(NETWORK.LOADING_TIMEOUT, SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT);
+
+      Constraints constraints = new Constraints.Builder()
+          .setRequiredNetworkType(NetworkType.CONNECTED)
+          .setRequiresBatteryNotLow(true)
+          .setRequiresCharging(false)
+          .build();
+
+      PeriodicWorkRequest checkRequest = new PeriodicWorkRequest.Builder(
+          DueSoonCheckWorker.class,
+          24,
+          TimeUnit.HOURS
+      )
+          .setInitialDelay(delay, TimeUnit.MINUTES)
+          .setBackoffCriteria(
+              BackoffPolicy.LINEAR,
+              timeout + 30,
+              TimeUnit.SECONDS
+          )
+          .setConstraints(constraints)
+          .build();
+
+      WorkManager.getInstance(getApplication()).enqueueUniquePeriodicWork(
+          checkRequestName,
+          ExistingPeriodicWorkPolicy.REPLACE,
+          checkRequest
+      );
+    } else {
+      WorkManager.getInstance(getApplication()).cancelUniqueWork(checkRequestName);
+    }
+  }
+
+  public String getNotificationsTime() {
+    return sharedPrefs.getString(
+        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_TIME
+    );
+  }
+
+  public MutableLiveData<String> getNotificationsTimeTextLive() {
+    return notificationsTimeTextLive;
+  }
+
+  public void setNotificationsTime(String text) {
+    sharedPrefs.edit().putString(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME, text).apply();
+    notificationsTimeTextLive.setValue(text);
+    setNotificationsEnabled(true);
+  }
+
   public ArrayList<String> getSupportedVersions() {
     return new ArrayList<>(Arrays.asList(
         getApplication().getResources().getStringArray(R.array.compatible_grocy_versions)
@@ -983,42 +1101,6 @@ public class SettingsViewModel extends BaseViewModel {
   public boolean getIsDemoInstance() {
     String server = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
     return server != null && server.contains("grocy.info");
-  }
-
-  private Location getLocation(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (Location location : locations) {
-      if (location.getId() == id) {
-        return location;
-      }
-    }
-    return null;
-  }
-
-  private ProductGroup getProductGroup(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (ProductGroup productGroup : productGroups) {
-      if (productGroup.getId() == id) {
-        return productGroup;
-      }
-    }
-    return null;
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
   }
 
   public DownloadHelper getDownloadHelper() {

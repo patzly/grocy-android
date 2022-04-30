@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.dao.ProductGroupDao;
 import xyz.zedler.patrick.grocy.dao.ProductLastPurchasedDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitConversionDao;
 import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
+import xyz.zedler.patrick.grocy.dao.ServerDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
 import xyz.zedler.patrick.grocy.dao.StockEntryDao;
@@ -60,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.Server;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -97,9 +99,10 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         User.class,
         Chore.class,
         ChoreEntry.class,
-        StockEntry.class
+        StockEntry.class,
+        Server.class
     },
-    version = 36
+    version = 37
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -152,6 +155,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract ChoreEntryDao choreEntryDao();
 
   public abstract StockEntryDao stockEntryDao();
+
+  public abstract ServerDao serverDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

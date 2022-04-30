@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.helper;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -50,6 +52,7 @@ import xyz.zedler.patrick.grocy.api.OpenBeautyFactsApi;
 import xyz.zedler.patrick.grocy.api.OpenFoodFactsApi;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Chore;
+import xyz.zedler.patrick.grocy.model.ChoreDetails;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -168,6 +171,10 @@ public class DownloadHelper {
 
   public DownloadHelper(Activity activity, String tag) {
     this(activity.getApplication(), tag, null);
+  }
+
+  public DownloadHelper(Context context, String tag) {
+    this((Application) context.getApplicationContext(), tag, null);
   }
 
   // cancel all requests
@@ -1420,6 +1427,17 @@ public class DownloadHelper {
     }
   }
 
+  public void getVolatile(
+      Response.Listener<String> responseListener,
+      Response.ErrorListener errorListener
+  ) {
+    get(
+        grocyApi.getStockVolatile(),
+        responseListener::onResponse,
+        errorListener::onErrorResponse
+    );
+  }
+
   public QueueItem updateMissingItems(
       String dbChangedTime,
       OnMissingItemsResponseListener onResponseListener
@@ -2324,6 +2342,52 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem getChoreDetails(
+      int choreId,
+      OnChoreDetailsResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getChores(choreId),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ChoreDetails>() {
+              }.getType();
+              ChoreDetails choreDetails = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "download ChoreDetails: " + choreDetails);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(choreDetails);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public QueueItem getChoreDetails(int choreId, OnChoreDetailsResponseListener onResponseListener) {
+    return getChoreDetails(choreId, onResponseListener, null);
+  }
+
   public QueueItem getCurrentUserId(OnIntegerResponseListener onResponseListener) {
     return new QueueItem() {
       @Override
@@ -3011,6 +3075,11 @@ public class DownloadHelper {
   public interface OnChoreEntriesResponseListener {
 
     void onResponse(ArrayList<ChoreEntry> choreEntries);
+  }
+
+  public interface OnChoreDetailsResponseListener {
+
+    void onResponse(ChoreDetails choreDetails);
   }
 
   public interface OnUsersResponseListener {

@@ -316,6 +316,34 @@
         </LinearLayout>
 
         <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
+            app:clickUtil="@{clickUtil}">
+
+          <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@android:drawable/ic_lock_idle_alarm" />
+
+          <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="Notifications" />
+
+          <ImageView
+              android:layout_height="24dp"
+              android:layout_width="24dp"
+              android:layout_marginStart="16dp"
+              android:clickable="false"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

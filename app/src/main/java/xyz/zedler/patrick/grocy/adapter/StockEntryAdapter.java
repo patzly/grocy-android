@@ -21,10 +21,15 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -41,9 +46,13 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -67,6 +76,7 @@ public class StockEntryAdapter extends
   private String groupingMode;
   private final DateUtil dateUtil;
   private final String currency;
+  private final int dueSoonDays;
 
   public StockEntryAdapter(
       Context context,
@@ -76,20 +86,25 @@ public class StockEntryAdapter extends
       HashMap<Integer, Location> locationHashMap,
       HashMap<Integer, Store> storeHashMap,
       StockEntryAdapterListener listener,
-      boolean showDateTracking,
-      String currency,
       String sortMode,
       boolean sortAscending,
       String groupingMode
   ) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    this.showDateTracking = sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true);
+    this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
+    String days = sharedPrefs.getString(STOCK.DUE_SOON_DAYS, SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+    if (NumUtil.isStringInt(days)) {
+      this.dueSoonDays = Integer.parseInt(days);
+    } else {
+      this.dueSoonDays = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
+    }
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.locationHashMap = new HashMap<>(locationHashMap);
     this.storeHashMap = new HashMap<>(storeHashMap);
     this.pluralUtil = new PluralUtil(context);
     this.listener = listener;
-    this.showDateTracking = showDateTracking;
-    this.currency = currency;
     this.dateUtil = new DateUtil(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
@@ -296,23 +311,46 @@ public class StockEntryAdapter extends
     // BEST BEFORE
 
     String date = stockEntry.getBestBeforeDate();
-    String days = null;
-    if (date != null) {
-      days = String.valueOf(DateUtil.getDaysFromNow(date));
-    }
+    int daysInt = DateUtil.getDaysFromNow(date);
+    String days = date != null ? String.valueOf(DateUtil.getDaysFromNow(date)) : null;
+    boolean colorDays = false;
 
     if (!showDateTracking) {
       holder.binding.dueDate.setVisibility(View.GONE);
     } else if (days != null) {
-      holder.binding.dueDate.setVisibility(View.VISIBLE);
       holder.binding.dueDate.setText(context.getString(
           R.string.property_due_date_fill,
           dateUtil.getLocalizedDate(date, DateUtil.FORMAT_SHORT) + "  "
               + dateUtil.getHumanForDaysFromNow(date)
       ));
+      holder.binding.dueDate.setVisibility(View.VISIBLE);
+      if (daysInt <= dueSoonDays) {
+        colorDays = true;
+      }
     } else {
       holder.binding.dueDate.setVisibility(View.GONE);
-      holder.binding.dueDate.setText(null);
+    }
+
+    if (colorDays) {
+      holder.binding.dueDate.setTypeface(
+          ResourcesCompat.getFont(context, R.font.jost_medium)
+      );
+      @ColorRes int color;
+      if (Integer.parseInt(days) >= 0) {
+        color = R.color.retro_yellow_fg;
+      } else if (product != null && product.getDueDateTypeInt() == StockItem.DUE_TYPE_EXPIRATION) {
+        color = R.color.retro_red_fg;
+      } else {
+        color = R.color.retro_dirt_fg;
+      }
+      holder.binding.dueDate.setTextColor(ContextCompat.getColor(context, color));
+    } else {
+      holder.binding.dueDate.setTypeface(
+          ResourcesCompat.getFont(context, R.font.jost_book)
+      );
+      holder.binding.dueDate.setTextColor(
+          ContextCompat.getColor(context, R.color.on_background_secondary)
+      );
     }
 
     // LOCATION

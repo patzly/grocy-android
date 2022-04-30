@@ -122,6 +122,7 @@
   <string name="action_show_done_tasks">Show done tasks</string>
   <string name="action_track_chore_execution">Track chore execution</string>
   <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
+  <string name="action_reschedule_next_execution">Reschedule next execution</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -314,6 +315,7 @@
   <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Quantity unit stock cannot be changed after first purchase.</string>
+  <string name="msg_help_qu_stock_changeable">Quantity unit stock can only be changed if unit conversions for the current quantity unit exist.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -821,6 +823,8 @@
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
+  <string name="property_last_done_by">Last done by</string>
+  <string name="property_last_tracked">Last tracked</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -1007,6 +1011,14 @@
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
+  <string name="setting_notifications_due_soon">Due soon items</string>
+  <string name="setting_notifications_due_soon_description">Daily notifications</string>
+  <string name="setting_notification_time">Notification time</string>
+  <string name="setting_notification_time_description">When the check is done</string>
+
+  <string name="notification_channel_due_soon">Due soon items</string>
+  <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
+  <string name="notification_due_soon_content">Consume them in the next few days</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

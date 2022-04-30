@@ -702,6 +702,42 @@
 
               </LinearLayout>
 
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:orientation="horizontal"
+                android:visibility="@{formData.showNotesField() ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  android:id="@+id/image_note"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_short_text"
+                  android:layout_marginBottom="0dp"
+                  tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_purchase_note"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_note">
+
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_purchase_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapSentences"
+                    android:textColor="@color/on_background"
+                    android:imeOptions="actionDone"
+                    android:maxLength="10"
+                    android:text="@={formData.noteLive}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
             </LinearLayout>
 
           </LinearLayout>
