@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

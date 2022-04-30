@@ -63,9 +63,9 @@
       android:theme="@style/Theme.Grocy.BottomAppBar"
       android:windowSoftInputMode="adjustPan" />
 
-    <service android:name=".model.NotificationService" />
+    <service android:name=".notification.NotificationService" />
     <receiver
-      android:name=".model.RestarterBroadcastReceiver"
+      android:name=".notification.RestarterBroadcastReceiver"
       android:enabled="true"
       android:exported="true">
       <intent-filter>

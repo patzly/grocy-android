@@ -296,7 +296,7 @@ public class PurchaseViewModel extends BaseViewModel {
         } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
           forcedQuId = shoppingListItem.getQuIdInt();
         }
-        HashMap<QuantityUnit, Double> unitFactors= QuantityUnitConversionUtil.getUnitFactors(
+        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
             getApplication(),
             quantityUnitHashMap,
             unitConversions,
