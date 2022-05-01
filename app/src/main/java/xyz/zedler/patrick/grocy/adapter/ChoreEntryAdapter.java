@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowChoreEntryBinding;
+import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.Constants.DATE;
@@ -51,6 +52,7 @@ public class ChoreEntryAdapter extends
   private Context context;
   private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<ChoreEntry> choreEntries;
+  private final HashMap<Integer, Chore> choreHashMap;
   private final HashMap<Integer, User> usersHashMap;
   private final ChoreEntryAdapterListener listener;
   private String sortMode;
@@ -60,6 +62,7 @@ public class ChoreEntryAdapter extends
       Context context,
       LinearLayoutManager linearLayoutManager,
       ArrayList<ChoreEntry> choreEntries,
+      HashMap<Integer, Chore> choreHashMap,
       HashMap<Integer, User> usersHashMap,
       ChoreEntryAdapterListener listener,
       String sortMode,
@@ -68,6 +71,7 @@ public class ChoreEntryAdapter extends
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
     this.choreEntries = new ArrayList<>(choreEntries);
+    this.choreHashMap = new HashMap<>(choreHashMap);
     this.usersHashMap = new HashMap<>(usersHashMap);
     this.listener = listener;
     this.sortMode = sortMode;
@@ -161,6 +165,15 @@ public class ChoreEntryAdapter extends
       );
     }
 
+    // RESCHEDULED
+
+    Chore chore = choreHashMap.get(choreEntry.getChoreId());
+    if (chore != null && chore.getRescheduledDate() != null) {
+      holder.binding.imageReschedule.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.imageReschedule.setVisibility(View.GONE);
+    }
+
     // USER
 
     User user = NumUtil.isStringInt(choreEntry.getNextExecutionAssignedToUserId())
@@ -191,6 +204,7 @@ public class ChoreEntryAdapter extends
 
   public void updateData(
       ArrayList<ChoreEntry> newList,
+      HashMap<Integer, Chore> choreHashMap,
       HashMap<Integer, User> usersHashMap,
       String sortMode,
       boolean sortAscending
@@ -199,6 +213,8 @@ public class ChoreEntryAdapter extends
     ChoreEntryAdapter.DiffCallback diffCallback = new ChoreEntryAdapter.DiffCallback(
         this.choreEntries,
         newList,
+        this.choreHashMap,
+        choreHashMap,
         this.usersHashMap,
         usersHashMap,
         this.sortMode,
@@ -209,6 +225,8 @@ public class ChoreEntryAdapter extends
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.choreEntries.clear();
     this.choreEntries.addAll(newList);
+    this.choreHashMap.clear();
+    this.choreHashMap.putAll(choreHashMap);
     this.usersHashMap.clear();
     this.usersHashMap.putAll(usersHashMap);
     this.sortMode = sortMode;
@@ -220,6 +238,8 @@ public class ChoreEntryAdapter extends
 
     ArrayList<ChoreEntry> oldItems;
     ArrayList<ChoreEntry> newItems;
+    HashMap<Integer, Chore> choreHashMapOld;
+    HashMap<Integer, Chore> choreHashMapNew;
     HashMap<Integer, User> usersHashMapOld;
     HashMap<Integer, User> usersHashMapNew;
     String sortModeOld;
@@ -230,6 +250,8 @@ public class ChoreEntryAdapter extends
     public DiffCallback(
         ArrayList<ChoreEntry> oldItems,
         ArrayList<ChoreEntry> newItems,
+        HashMap<Integer, Chore> choreHashMapOld,
+        HashMap<Integer, Chore> choreHashMapNew,
         HashMap<Integer, User> usersHashMapOld,
         HashMap<Integer, User> usersHashMapNew,
         String sortModeOld,
@@ -239,6 +261,8 @@ public class ChoreEntryAdapter extends
     ) {
       this.newItems = newItems;
       this.oldItems = oldItems;
+      this.choreHashMapOld = choreHashMapOld;
+      this.choreHashMapNew = choreHashMapNew;
       this.usersHashMapOld = usersHashMapOld;
       this.usersHashMapNew = usersHashMapNew;
       this.sortModeOld = sortModeOld;
@@ -275,6 +299,14 @@ public class ChoreEntryAdapter extends
         return false;
       }
       if (sortAscendingOld != sortAscendingNew) {
+        return false;
+      }
+
+      Chore choreOld = choreHashMapOld.get(oldItem.getChoreId());
+      Chore choreNew = choreHashMapNew.get(newItem.getChoreId());
+      if (choreOld == null && choreNew != null
+          || choreOld != null && choreNew == null
+          || choreOld != null && !choreOld.equals(choreNew)) {
         return false;
       }
 

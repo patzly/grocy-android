@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -165,6 +166,14 @@ public class ArrayUtil {
     HashMap<Integer, TaskCategory> hashMap = new HashMap<>();
     for (TaskCategory t : taskCategories) {
       hashMap.put(t.getId(), t);
+    }
+    return hashMap;
+  }
+
+  public static HashMap<Integer, Chore> getChoresHashMap(List<Chore> chores) {
+    HashMap<Integer, Chore> hashMap = new HashMap<>();
+    for (Chore c : chores) {
+      hashMap.put(c.getId(), c);
     }
     return hashMap;
   }

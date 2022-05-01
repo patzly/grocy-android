@@ -155,6 +155,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       if (binding.recycler.getAdapter() instanceof ChoreEntryAdapter) {
         ((ChoreEntryAdapter) binding.recycler.getAdapter()).updateData(
             items,
+            viewModel.getChoreHashMap(),
             viewModel.getUsersHashMap(),
             viewModel.getSortMode(),
             viewModel.isSortAscending()
@@ -165,6 +166,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                 requireContext(),
                 (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
+                viewModel.getChoreHashMap(),
                 viewModel.getUsersHashMap(),
                 this,
                 viewModel.getSortMode(),
@@ -273,8 +275,9 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     if (clickUtil.isDisabled()) {
       return;
     }
-    Chore chore = Chore.getFromId(viewModel.getChores(), choreEntry.getChoreId());
+    Chore chore = viewModel.getChoreHashMap().get(choreEntry.getChoreId());
     if (chore == null) {
+      viewModel.showErrorMessage();
       return;
     }
     if (swipeBehavior != null) {
@@ -293,6 +296,16 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   @Override
   public void skipNextChoreSchedule(int choreId) {
     viewModel.executeChore(choreId, true);
+  }
+
+  @Override
+  public void rescheduleNextExecution(int choreId) {
+    Chore chore = viewModel.getChoreHashMap().get(choreId);
+    if (chore == null) {
+      viewModel.showErrorMessage();
+      return;
+    }
+    navigate(ChoresFragmentDirections.actionChoresFragmentToChoreEntryRescheduleFragment(chore));
   }
 
   @Override

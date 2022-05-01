@@ -19,6 +19,8 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linear_container"
   android:orientation="horizontal"
   android:layout_width="match_parent"
@@ -46,12 +48,31 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical" />
 
-    <TextView
-      android:id="@+id/days"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
+    <LinearLayout
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:singleLine="true" />
+      android:orientation="horizontal"
+      android:gravity="center_vertical">
+
+      <TextView
+        android:id="@+id/days"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"/>
+
+      <ImageView
+        android:id="@+id/image_reschedule"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_round_schedule"
+        android:visibility="gone"
+        tools:ignore="ContentDescription"
+        app:tint="@color/on_background_secondary" />
+
+    </LinearLayout>
 
     <TextView
       android:id="@+id/user"
