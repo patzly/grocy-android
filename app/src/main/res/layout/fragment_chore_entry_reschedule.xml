@@ -23,6 +23,9 @@
   <data>
     <import type="android.view.View" />
     <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.ChoreEntryRescheduleFragment" />
+    <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.ChoreEntryRescheduleViewModel" />
     <variable
@@ -113,7 +116,9 @@
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
             android:paddingBottom="90dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            app:transitionTypeChanging="@{true}">
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
@@ -140,7 +145,7 @@
             <LinearLayout
               android:id="@+id/linear_due_date"
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> viewModel.showNextTrackingDateBottomSheet()}">
+              android:onClick="@{() -> fragment.showNextTrackingDatePicker()}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -155,12 +160,12 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.nextTrackingTextLive}" />
+                  android:text="@{viewModel.nextTrackingDateTextLive}" />
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@{viewModel.nextTrackingHumanTextLive}"
-                  android:visibility="@{viewModel.nextTrackingHumanTextLive != null ? View.VISIBLE : View.GONE}" />
+                  android:text="@{viewModel.nextTrackingDateHumanTextLive}"
+                  android:visibility="@{viewModel.nextTrackingDateHumanTextLive != null ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
 
@@ -168,7 +173,7 @@
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> viewModel.showNextTrackingTimeBottomSheet()}">
+              android:onClick="@{() -> fragment.showNextTrackingTimePicker()}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -183,7 +188,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.nextTrackingTimeLive}" />
+                  android:text="@{viewModel.nextTrackingTimeLive ?? @string/subtitle_none_selected}" />
 
               </LinearLayout>
 

@@ -969,8 +969,6 @@ public class SettingsViewModel extends BaseViewModel {
         }
       }
 
-      int dayHour = DateTime.now().getHourOfDay();
-      int dayMinute = DateTime.now().getMinuteOfHour();
       long delay;
       if (DateTime.now().getHourOfDay() < hour
           || DateTime.now().getHourOfDay() == hour

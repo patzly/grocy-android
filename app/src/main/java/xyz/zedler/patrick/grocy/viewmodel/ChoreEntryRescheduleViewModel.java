@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,19 +32,24 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UsersBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
+import xyz.zedler.patrick.grocy.repository.ChoresRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class ChoreEntryRescheduleViewModel extends BaseViewModel {
@@ -54,47 +60,50 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
   private final EventHandler eventHandler;
-  private final ShoppingListRepository repository;
+  private final ChoresRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
   private final MutableLiveData<String> nextTrackingDateLive;
-  private final LiveData<String> nextTrackingTextLive;
-  private final LiveData<String> nextTrackingHumanTextLive;
+  private final LiveData<String> nextTrackingDateTextLive;
+  private final LiveData<String> nextTrackingDateHumanTextLive;
   private final MutableLiveData<String> nextTrackingTimeLive;
   private final MutableLiveData<User> userLive;
 
-  private List<ShoppingList> shoppingLists;
+  private List<User> users;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final Chore chore;
   private final boolean debug;
 
-  public ChoreEntryRescheduleViewModel(@NonNull Application application, @Nullable Chore chore) {
+  public ChoreEntryRescheduleViewModel(@NonNull Application application, @NonNull Chore chore) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    DateUtil dateUtil = new DateUtil(application);
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
     eventHandler = new EventHandler();
-    repository = new ShoppingListRepository(application);
+    repository = new ChoresRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
 
-    nextTrackingDateLive = new MutableLiveData<>();
-    nextTrackingTextLive = Transformations.map(
+    nextTrackingDateLive = new MutableLiveData<>(chore.getRescheduledDate());
+    nextTrackingDateTextLive = Transformations.map(
         nextTrackingDateLive,
-        date -> date
+        date -> date != null
+            ? dateUtil.getLocalizedDate(date, DateUtil.FORMAT_MEDIUM)
+            : getString(R.string.subtitle_none_selected)
     );
-    nextTrackingHumanTextLive = Transformations.map(
+    nextTrackingDateHumanTextLive = Transformations.map(
         nextTrackingDateLive,
-        date -> date
+        date -> date != null ? dateUtil.getHumanForDaysFromNow(date) : null
     );
     nextTrackingTimeLive = new MutableLiveData<>();
     userLive = new MutableLiveData<>();
@@ -102,9 +111,16 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
-    repository.loadShoppingListsFromDatabase(
-        shoppingLists -> {
-          this.shoppingLists = shoppingLists;
+    repository.loadFromDatabase(
+        data -> {
+          this.users = data.getUsers();
+          if (userLive.getValue() == null
+              && NumUtil.isStringInt(chore.getRescheduledNextExecutionAssignedToUserId())) {
+            userLive.setValue(User.getUserFromId(
+                data.getUsers(),
+                Integer.parseInt(chore.getRescheduledNextExecutionAssignedToUserId())
+            ));
+          }
           if (downloadAfterLoading) {
             downloadData();
           }
@@ -112,7 +128,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     );
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
+  public void downloadData() {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
@@ -121,34 +137,12 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
       isLoadingLive.setValue(false);
       return;
     }
-    if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(
-          this::downloadData,
-          () -> onDownloadError(null)
-      );
-      return;
-    }
-
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
-    queue.append(dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
-      this.shoppingLists = shoppingLists;
-    }));
-
-    if (queue.isEmpty()) {
-      return;
-    }
-
-    currentQueueLoading = queue;
-    queue.start();
-  }
-
-  public void downloadData() {
-    downloadData(null);
+    dlHelper.updateData(this::onQueueEmpty, this::onDownloadError, User.class);
   }
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -157,7 +151,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     if (isOffline()) {
       setOfflineLive(false);
     }
-    repository.updateShoppingLists(this.shoppingLists);
+    loadFromDatabase(false);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
@@ -215,24 +209,37 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
   }
 
-  public void showNextTrackingTimeBottomSheet() {
-
-  }
-
   public void showUsersBottomSheet() {
-
+    if (users == null || users.isEmpty()) {
+      return;
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.USERS, new ArrayList<>(users));
+    bundle.putInt(
+        Constants.ARGUMENT.SELECTED_ID,
+        userLive.getValue() != null
+            ? userLive.getValue().getId()
+            : -1
+    );
+    bundle.putBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, true);
+    showBottomSheet(new UsersBottomSheet(), bundle);
   }
 
   public void resetReschedule() {
-
+    nextTrackingDateLive.setValue(null);
+    nextTrackingTimeLive.setValue(null);
   }
 
-  public LiveData<String> getNextTrackingTextLive() {
-    return nextTrackingTextLive;
+  public MutableLiveData<String> getNextTrackingDateLive() {
+    return nextTrackingDateLive;
   }
 
-  public LiveData<String> getNextTrackingHumanTextLive() {
-    return nextTrackingHumanTextLive;
+  public LiveData<String> getNextTrackingDateTextLive() {
+    return nextTrackingDateTextLive;
+  }
+
+  public LiveData<String> getNextTrackingDateHumanTextLive() {
+    return nextTrackingDateHumanTextLive;
   }
 
   public MutableLiveData<String> getNextTrackingTimeLive() {

@@ -20,21 +20,29 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentChoreEntryRescheduleBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
+import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ChoreEntryRescheduleViewModel;
 
 public class ChoreEntryRescheduleFragment extends BaseFragment {
@@ -72,6 +80,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
     )).get(ChoreEntryRescheduleViewModel.class);
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
+    binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -82,6 +91,9 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         ));
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
+      } else if (event.getType() == Event.BOTTOM_SHEET) {
+        BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
+        activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
 
@@ -128,6 +140,54 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         animated,
         () -> viewModel.saveShoppingList()
     );
+  }
+
+  public void showNextTrackingTimePicker() {
+    String[] timeParts = viewModel.getNextTrackingTimeLive().getValue() != null
+        ? viewModel.getNextTrackingTimeLive().getValue().split(":")
+        : new String[]{};
+    int hour = 12;
+    int minute = 0;
+    if (timeParts.length == 2) {
+      if (NumUtil.isStringInt(timeParts[0])) {
+        hour = Integer.parseInt(timeParts[0]);
+      }
+      if (NumUtil.isStringInt(timeParts[1])) {
+        minute = Integer.parseInt(timeParts[1]);
+      }
+    }
+    MaterialTimePicker picker = new MaterialTimePicker.Builder()
+        .setTimeFormat(DateFormat.is24HourFormat(requireContext())
+            ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
+        .setHour(hour)
+        .setMinute(minute)
+        .setTitleText(R.string.property_next_estimated_tracking_time)
+        .setNegativeButtonText(R.string.action_cancel)
+        .setPositiveButtonText(R.string.action_save)
+        .setTheme(R.style.Theme_Grocy_TimePicker)
+        .build();
+
+    picker.addOnPositiveButtonClickListener(v -> viewModel.getNextTrackingTimeLive().setValue(
+        String.format(Locale.getDefault(), "%02d:%02d",
+            picker.getHour(), picker.getMinute())
+    ));
+    picker.show(getParentFragmentManager(), "time_picker_dialog");
+  }
+
+  public void showNextTrackingDatePicker() {
+
+    MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
+        .setTitleText(R.string.property_next_estimated_tracking)
+        .setNegativeButtonText(R.string.action_cancel)
+        .setPositiveButtonText(R.string.action_save)
+        .setTheme(R.style.Theme_Grocy_DatePicker)
+        .build();
+
+    picker.addOnPositiveButtonClickListener(v -> {
+      String date = DateUtil.DATE_FORMAT.format(picker.getSelection());
+      viewModel.getNextTrackingDateLive().setValue(date);
+    });
+    picker.show(getParentFragmentManager(), "date_picker_dialog");
   }
 
   @Override
