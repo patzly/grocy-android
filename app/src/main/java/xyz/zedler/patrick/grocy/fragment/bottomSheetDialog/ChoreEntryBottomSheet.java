@@ -110,6 +110,14 @@ public class ChoreEntryBottomSheet extends BaseBottomSheet {
     });
 
     dlHelper.getChoreDetails(chore.getId(), choreDetails -> {
+      binding.trackedCount.setText(
+          getString(R.string.property_tracked_count),
+          String.valueOf(choreDetails.getTrackedCount())
+      );
+      binding.trackedCount.setText(
+          getString(R.string.property_average_execution_frequency),
+          choreDetails.getAverageExecutionFrequencyHours()
+      );
       binding.lastTracked.setText(
           getString(R.string.property_last_tracked),
           choreDetails.getLastTracked(),

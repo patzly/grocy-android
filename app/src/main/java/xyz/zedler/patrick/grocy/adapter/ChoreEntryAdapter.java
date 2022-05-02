@@ -168,7 +168,8 @@ public class ChoreEntryAdapter extends
     // RESCHEDULED
 
     Chore chore = choreHashMap.get(choreEntry.getChoreId());
-    if (chore != null && chore.getRescheduledDate() != null) {
+    if (chore != null && chore.getRescheduledDate() != null
+        && !chore.getRescheduledDate().isEmpty()) {
       holder.binding.imageReschedule.setVisibility(View.VISIBLE);
     } else {
       holder.binding.imageReschedule.setVisibility(View.GONE);
@@ -183,6 +184,14 @@ public class ChoreEntryAdapter extends
       holder.binding.user.setVisibility(View.VISIBLE);
     } else {
       holder.binding.user.setVisibility(View.GONE);
+    }
+
+    // REASSIGNED
+
+    if (chore != null && NumUtil.isStringInt(chore.getRescheduledNextExecutionAssignedToUserId())) {
+      holder.binding.imageReassign.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.imageReassign.setVisibility(View.GONE);
     }
 
     // CONTAINER

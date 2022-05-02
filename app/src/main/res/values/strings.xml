@@ -825,6 +825,8 @@
   <string name="property_users">Users</string>
   <string name="property_last_done_by">Last done by</string>
   <string name="property_last_tracked">Last tracked</string>
+  <string name="property_tracked_count">Tracked count</string>
+  <string name="property_average_execution_frequency">Average execution frequency</string>
   <string name="property_next_estimated_tracking">Next estimated tracking</string>
   <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
 

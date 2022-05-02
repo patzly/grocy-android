@@ -173,7 +173,8 @@
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-              android:onClick="@{() -> fragment.showNextTrackingTimePicker()}">
+              android:onClick="@{() -> fragment.showNextTrackingTimePicker()}"
+              android:visibility="@{viewModel.showTimeField() ? View.VISIBLE : View.GONE}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -213,7 +214,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.userLive ?? @string/subtitle_none_selected}" />
+                  android:text="@{viewModel.getUserTextLive}" />
 
               </LinearLayout>
 

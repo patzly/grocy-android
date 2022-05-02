@@ -34,8 +34,8 @@ public class ChoreDetails implements Parcelable {
   @SerializedName("last_tracked")
   private String lastTracked;
 
-  @SerializedName("track_count")
-  private int trackCount;
+  @SerializedName("tracked_count")
+  private int trackedCount;
 
   @SerializedName("last_done_by")
   private User lastDoneBy;
@@ -43,22 +43,30 @@ public class ChoreDetails implements Parcelable {
   @SerializedName("next_estimated_execution_time")
   private String nextEstimatedExecutionTime;
 
+  @SerializedName("next_estimated_assigned_user")
+  private User nextEstimatedAssignedUser;
+
+  @SerializedName("average_execution_frequency_hours")
+  private String averageExecutionFrequencyHours;
+
   @Ignore
   public ChoreDetails(Parcel parcel) {
     chore = parcel.readParcelable(Chore.class.getClassLoader());
     lastTracked = parcel.readString();
-    trackCount = parcel.readInt();
+    trackedCount = parcel.readInt();
     lastDoneBy = parcel.readParcelable(User.class.getClassLoader());
     nextEstimatedExecutionTime = parcel.readString();
+    averageExecutionFrequencyHours = parcel.readString();
   }
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeParcelable(chore, 0);
     dest.writeString(lastTracked);
-    dest.writeInt(trackCount);
+    dest.writeInt(trackedCount);
     dest.writeParcelable(lastDoneBy, 0);
     dest.writeString(nextEstimatedExecutionTime);
+    dest.writeString(averageExecutionFrequencyHours);
   }
 
   public static final Creator<ChoreDetails> CREATOR = new Creator<ChoreDetails>() {
@@ -90,12 +98,12 @@ public class ChoreDetails implements Parcelable {
     this.lastTracked = lastTracked;
   }
 
-  public int getTrackCount() {
-    return trackCount;
+  public int getTrackedCount() {
+    return trackedCount;
   }
 
-  public void setTrackCount(int trackCount) {
-    this.trackCount = trackCount;
+  public void setTrackedCount(int trackedCount) {
+    this.trackedCount = trackedCount;
   }
 
   public User getLastDoneBy() {
@@ -114,6 +122,22 @@ public class ChoreDetails implements Parcelable {
     this.nextEstimatedExecutionTime = nextEstimatedExecutionTime;
   }
 
+  public User getNextEstimatedAssignedUser() {
+    return nextEstimatedAssignedUser;
+  }
+
+  public void setNextEstimatedAssignedUser(User nextEstimatedAssignedUser) {
+    this.nextEstimatedAssignedUser = nextEstimatedAssignedUser;
+  }
+
+  public String getAverageExecutionFrequencyHours() {
+    return averageExecutionFrequencyHours;
+  }
+
+  public void setAverageExecutionFrequencyHours(String averageExecutionFrequencyHours) {
+    this.averageExecutionFrequencyHours = averageExecutionFrequencyHours;
+  }
+
   @Override
   public int describeContents() {
     return 0;
@@ -128,15 +152,18 @@ public class ChoreDetails implements Parcelable {
       return false;
     }
     ChoreDetails that = (ChoreDetails) o;
-    return trackCount == that.trackCount && Objects.equals(chore, that.chore)
+    return trackedCount == that.trackedCount && Objects.equals(chore, that.chore)
         && Objects.equals(lastTracked, that.lastTracked) && Objects
         .equals(lastDoneBy, that.lastDoneBy) && Objects
-        .equals(nextEstimatedExecutionTime, that.nextEstimatedExecutionTime);
+        .equals(nextEstimatedExecutionTime, that.nextEstimatedExecutionTime) && Objects
+        .equals(nextEstimatedAssignedUser, that.nextEstimatedAssignedUser) && Objects
+        .equals(averageExecutionFrequencyHours, that.averageExecutionFrequencyHours);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chore, lastTracked, trackCount, lastDoneBy, nextEstimatedExecutionTime);
+    return Objects.hash(chore, lastTracked, trackedCount, lastDoneBy, nextEstimatedExecutionTime,
+        nextEstimatedAssignedUser, averageExecutionFrequencyHours);
   }
 
   @NonNull

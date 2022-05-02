@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -138,7 +139,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
         animated,
-        () -> viewModel.saveShoppingList()
+        () -> viewModel.rescheduleChore()
     );
   }
 
@@ -188,6 +189,11 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
       viewModel.getNextTrackingDateLive().setValue(date);
     });
     picker.show(getParentFragmentManager(), "date_picker_dialog");
+  }
+
+  @Override
+  public void selectUser(User user) {
+    viewModel.getUserLive().setValue(user);
   }
 
   @Override

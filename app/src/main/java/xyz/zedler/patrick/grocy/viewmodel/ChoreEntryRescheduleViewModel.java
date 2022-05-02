@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.UsersBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
@@ -59,7 +60,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   private final SharedPreferences sharedPrefs;
   private final DownloadHelper dlHelper;
   private final GrocyApi grocyApi;
-  private final EventHandler eventHandler;
   private final ChoresRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
@@ -71,6 +71,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   private final LiveData<String> nextTrackingDateHumanTextLive;
   private final MutableLiveData<String> nextTrackingTimeLive;
   private final MutableLiveData<User> userLive;
+  private final LiveData<String> userTextLive;
 
   private List<User> users;
 
@@ -88,13 +89,13 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     grocyApi = new GrocyApi(getApplication());
-    eventHandler = new EventHandler();
     repository = new ChoresRepository(application);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
 
-    nextTrackingDateLive = new MutableLiveData<>(chore.getRescheduledDate());
+    nextTrackingDateLive = new MutableLiveData<>(chore.getRescheduledDate() != null
+        && !chore.getRescheduledDate().isEmpty() ? chore.getRescheduledDate() : null);
     nextTrackingDateTextLive = Transformations.map(
         nextTrackingDateLive,
         date -> date != null
@@ -107,6 +108,13 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     );
     nextTrackingTimeLive = new MutableLiveData<>();
     userLive = new MutableLiveData<>();
+    userTextLive = Transformations.map(
+        userLive,
+        user -> user != null && user.getId() != -1
+            ? user.getUserName()
+            : getString(R.string.subtitle_none_selected)
+    );
+    userLive.setValue(null);
     this.chore = chore;
   }
 
@@ -164,49 +172,41 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     }
   }
 
-  public void saveShoppingList() {
+  public void rescheduleChore() {
     if (offlineLive.getValue()) {
       showMessage(getString(R.string.error_offline));
       return;
     }
-
-    String name = null;
+    Object date = JSONObject.NULL;
+    if (nextTrackingDateLive.getValue() != null) {
+      date = nextTrackingDateLive.getValue();
+    }
+    Object userId = JSONObject.NULL;
+    if (userLive.getValue() != null && userLive.getValue().getId() != -1
+        && nextTrackingDateLive.getValue() != null && !nextTrackingDateLive.getValue().isEmpty()) {
+      userId = String.valueOf(userLive.getValue().getId());
+    }
     JSONObject jsonObject = new JSONObject();
     try {
-      jsonObject.put("name", name);
+      jsonObject.put("rescheduled_date", date);
+      jsonObject.put("rescheduled_next_execution_assigned_to_user_id", userId);
     } catch (JSONException e) {
       if (debug) {
-        Log.e(TAG, "saveShoppingList: " + e);
+        Log.e(TAG, "rescheduleChore: " + e);
       }
     }
 
-    dlHelper.post(
-        grocyApi.getObjects(GrocyApi.ENTITY.SHOPPING_LISTS),
+    dlHelper.put(
+        grocyApi.getObject(ENTITY.CHORES, chore.getId()),
         jsonObject,
-        response -> {
-          int objectId;
-          try {
-            objectId = response.getInt("created_object_id");
-            Log.i(TAG, "saveShoppingList: " + objectId);
-          } catch (JSONException e) {
-            if (debug) {
-              Log.e(TAG, "saveShoppingList: " + e);
-            }
-            objectId = 1;
-          }
-          sendEvent(Event.NAVIGATE_UP);
-        },
+        response -> sendEvent(Event.NAVIGATE_UP),
         error -> {
           showErrorMessage();
           if (debug) {
-            Log.e(TAG, "saveShoppingList: " + error);
+            Log.e(TAG, "rescheduleChore: " + error);
           }
         }
     );
-  }
-
-  public void showNextTrackingDateBottomSheet() {
-
   }
 
   public void showUsersBottomSheet() {
@@ -228,6 +228,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   public void resetReschedule() {
     nextTrackingDateLive.setValue(null);
     nextTrackingTimeLive.setValue(null);
+    userLive.setValue(null);
   }
 
   public MutableLiveData<String> getNextTrackingDateLive() {
@@ -250,8 +251,16 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     return userLive;
   }
 
+  public LiveData<String> getUserTextLive() {
+    return userTextLive;
+  }
+
   public Chore getChore() {
     return chore;
+  }
+
+  public boolean showTimeField() {
+    return !chore.getTrackDateOnlyBoolean();
   }
 
   @NonNull
@@ -279,11 +288,6 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
-  }
-
-  @NonNull
-  public EventHandler getEventHandler() {
-    return eventHandler;
   }
 
   @Override

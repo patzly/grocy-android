@@ -2,6 +2,7 @@
 - New: Server v3.3.0 feature "Notes for stock entries" (#511)
 - New: Stock quantity unit now can be changed with server v3.3.0 (#511)
 - New: Notification for due soon items in stock (thanks @igor-cali for the initial work) (#108)
+- New: Chores can now be rescheduled (server v3.3.0 feature) (#511)
 - Improved: Entries on stock entries page are colored if volatile
 - Improved: Price entered on inventory page is now related to selected quantity unit (#511)
 - Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
