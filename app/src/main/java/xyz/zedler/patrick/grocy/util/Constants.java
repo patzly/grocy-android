@@ -38,7 +38,6 @@ public final class Constants {
     public final static String GROCY_VERSION = "grocy_version";
     public final static String CREDENTIALS = "credentials";
     public final static String CURRENT_USER_ID = "current_user_id";
-    public final static String LAST_NOTIFICATION_ID = "last_notification_id";
 
     public final static String FEATURE_STOCK = "feature_stock";
     public final static String FEATURE_SHOPPING_LIST = "feature_shopping_list";
@@ -183,8 +182,10 @@ public final class Constants {
 
     public final static class NOTIFICATIONS {
 
-      public final static String NOTIFICATIONS_ENABLE = "notification_enable";
-      public final static String NOTIFICATIONS_TIME = "notification_time";
+      public final static String DUE_SOON_ENABLE = "notification_enable";
+      public final static String DUE_SOON_TIME = "notification_time";
+      public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
+      public final static int DUE_SOON_ID = 1;
     }
   }
 
@@ -277,9 +278,8 @@ public final class Constants {
     }
 
     public final static class NOTIFICATIONS {
-
-      public final static boolean NOTIFICATIONS_ENABLE = false;
-      public final static String NOTIFICATIONS_TIME = "12:00";
+      public final static boolean DUE_SOON_ENABLE = false;
+      public final static String DUE_SOON_TIME = "12:00";
     }
   }
 

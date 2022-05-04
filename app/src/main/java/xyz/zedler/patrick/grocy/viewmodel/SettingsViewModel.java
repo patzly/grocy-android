@@ -26,17 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import androidx.work.BackoffPolicy;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomSheet;
@@ -50,7 +41,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShortcutsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.notification.DueSoonCheckWorker;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -62,12 +52,14 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ReminderUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
@@ -940,8 +932,8 @@ public class SettingsViewModel extends BaseViewModel {
 
   public boolean getNotificationsEnabled() {
     return sharedPrefs.getBoolean(
-        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_ENABLE
+        NOTIFICATIONS.DUE_SOON_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
     );
   }
 
@@ -950,79 +942,14 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setNotificationsEnabled(boolean enabled) {
-    sharedPrefs.edit().putBoolean(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_ENABLE, enabled)
-        .apply();
     notificationsEnabledLive.setValue(enabled);
-
-    String checkRequestName = "due_soon_check_periodic";
-
-    if (enabled) {
-      String[] timeParts = getNotificationsTime().split(":");
-      int hour = 12;
-      int minute = 0;
-      if (timeParts.length == 2) {
-        if (NumUtil.isStringInt(timeParts[0])) {
-          hour = Integer.parseInt(timeParts[0]);
-        }
-        if (NumUtil.isStringInt(timeParts[1])) {
-          minute = Integer.parseInt(timeParts[1]);
-        }
-      }
-
-      long delay;
-      if (DateTime.now().getHourOfDay() < hour
-          || DateTime.now().getHourOfDay() == hour
-          && DateTime.now().getMinuteOfHour() < minute) {
-        delay = new Duration(
-            DateTime.now(),
-            DateTime.now().withTimeAtStartOfDay().plusHours(hour)
-                .plusMinutes(minute)
-        ).getStandardMinutes();
-      } else {
-        delay = new Duration(
-            DateTime.now(),
-            DateTime.now().withTimeAtStartOfDay().plusDays(1).plusHours(hour)
-                .plusMinutes(minute)
-        ).getStandardMinutes();
-      }
-
-      int timeout = sharedPrefs
-          .getInt(NETWORK.LOADING_TIMEOUT, SETTINGS_DEFAULT.NETWORK.LOADING_TIMEOUT);
-
-      Constraints constraints = new Constraints.Builder()
-          .setRequiredNetworkType(NetworkType.CONNECTED)
-          .setRequiresBatteryNotLow(true)
-          .setRequiresCharging(false)
-          .build();
-
-      PeriodicWorkRequest checkRequest = new PeriodicWorkRequest.Builder(
-          DueSoonCheckWorker.class,
-          24,
-          TimeUnit.HOURS
-      )
-          .setInitialDelay(delay, TimeUnit.MINUTES)
-          .setBackoffCriteria(
-              BackoffPolicy.LINEAR,
-              timeout + 30,
-              TimeUnit.SECONDS
-          )
-          .setConstraints(constraints)
-          .build();
-
-      WorkManager.getInstance(getApplication()).enqueueUniquePeriodicWork(
-          checkRequestName,
-          ExistingPeriodicWorkPolicy.REPLACE,
-          checkRequest
-      );
-    } else {
-      WorkManager.getInstance(getApplication()).cancelUniqueWork(checkRequestName);
-    }
+    (new ReminderUtil(getApplication())).setReminderEnabled(enabled);
   }
 
   public String getNotificationsTime() {
     return sharedPrefs.getString(
-        Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME,
-        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_TIME
+        NOTIFICATIONS.DUE_SOON_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
     );
   }
 
@@ -1031,7 +958,7 @@ public class SettingsViewModel extends BaseViewModel {
   }
 
   public void setNotificationsTime(String text) {
-    sharedPrefs.edit().putString(Constants.SETTINGS.NOTIFICATIONS.NOTIFICATIONS_TIME, text).apply();
+    sharedPrefs.edit().putString(NOTIFICATIONS.DUE_SOON_TIME, text).apply();
     notificationsTimeTextLive.setValue(text);
     setNotificationsEnabled(true);
   }
