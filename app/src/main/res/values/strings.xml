@@ -1015,8 +1015,10 @@
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
+  <string name="setting_notifications_enable">Enable notifications</string>
   <string name="setting_notifications_due_soon">Due soon items</string>
-  <string name="setting_notifications_due_soon_description">Daily notifications</string>
+  <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
+  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
   <string name="setting_notification_time">Notification time</string>
   <string name="setting_notification_time_description">When the check is done</string>
 
