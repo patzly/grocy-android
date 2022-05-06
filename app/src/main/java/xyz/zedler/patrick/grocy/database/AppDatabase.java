@@ -107,8 +107,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         Chore.class,
         ChoreEntry.class,
         StockEntry.class,
-        Server.class
-        ChoreEntry.class,
+        Server.class,
         Recipe.class,
         RecipeFulfillment.class,
         RecipePosition.class
