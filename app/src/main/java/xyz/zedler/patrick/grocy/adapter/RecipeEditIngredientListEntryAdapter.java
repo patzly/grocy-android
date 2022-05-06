@@ -130,6 +130,12 @@ public class RecipeEditIngredientListEntryAdapter extends
                     pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount())
             )
     );
+
+    // CONTAINER
+
+    holder.binding.linearRecipeIngredientContainer.setOnClickListener(
+            view -> listener.onItemRowClicked(recipePosition, position)
+    );
   }
 
   @Override

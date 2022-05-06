@@ -269,7 +269,7 @@ public class RecipePosition implements Parcelable {
       json.put("product_id", productId);
       json.put("amount", amount);
       json.put("note", note);
-      json.put("quantity_unit_id", quantityUnitId);
+      json.put("qu_id", quantityUnitId);
       json.put("only_check_single_unit_in_stock", onlyCheckSingleUnitInStock);
       json.put("ingredient_group", ingredientGroup);
       json.put("not_check_stock_fulfillment", notCheckStockFulfillment);

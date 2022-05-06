@@ -85,6 +85,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
   private final boolean debug;
   private final boolean isActionEdit;
+  private final boolean isRecipeActionEdit;
 
   public RecipeEditIngredientEditViewModel(
       @NonNull Application application,
@@ -102,6 +103,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs);
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
+    isRecipeActionEdit = startupArgs.getRecipeAction().equals(Constants.ACTION.EDIT);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -284,11 +286,19 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
       recipePosition = args.getRecipePosition();
     }
     recipePosition = formData.fillRecipePosition(recipePosition);
+
+    if (isRecipeActionEdit) {
+      Recipe recipe = args.getRecipe();
+      if (recipe != null) {
+        recipePosition.setRecipeId(recipe.getId());
+      }
+    }
+
     JSONObject jsonObject = RecipePosition.getJsonFromRecipe(recipePosition, debug, TAG);
 
     if (isActionEdit) {
       dlHelper.put(
-          grocyApi.getObject(ENTITY.RECIPES, recipePosition.getId()),
+          grocyApi.getObject(ENTITY.RECIPES_POS, recipePosition.getId()),
           jsonObject,
           response -> navigateUp(),
           error -> {
@@ -299,17 +309,24 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
           }
       );
     } else {
-      dlHelper.post(
-          grocyApi.getObjects(ENTITY.RECIPES),
-          jsonObject,
-          response -> navigateUp(),
-          error -> {
-            showErrorMessage(error);
-            if (debug) {
-              Log.e(TAG, "saveEntry: " + error);
-            }
-          }
-      );
+      if (isRecipeActionEdit) {
+        dlHelper.post(
+                grocyApi.getObjects(ENTITY.RECIPES_POS),
+                jsonObject,
+                response -> navigateUp(),
+                error -> {
+                  showErrorMessage(error);
+                  if (debug) {
+                    Log.e(TAG, "saveEntry: " + error);
+                  }
+                }
+        );
+      } else {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARGUMENT.RECIPE_POSITION, recipePosition);
+
+        sendEvent(Event.ADD_RECIPE_POS, bundle);
+      }
     }
   }
 
@@ -321,8 +338,14 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     RecipePosition entry = args.getRecipePosition();
     assert entry != null;
 
-    formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
+    setProduct(entry.getProductId(), null, null);
+    formData.getOnlyCheckSingleUnitInStockLive().setValue(entry.isOnlyCheckSingleUnitInStock());
     formData.getAmountLive().setValue(NumUtil.trim(entry.getAmount()));
+    formData.setQuantityUnit(QuantityUnit.getFromId(quantityUnits, entry.getQuantityUnitId()));
+    formData.getVariableAmountLive().setValue(entry.getVariableAmount());
+    formData.getNotCheckStockFulfillmentLive().setValue(entry.isNotCheckStockFulfillment());
+    formData.getIngredientGroupLive().setValue(entry.getIngredientGroup());
+    formData.getNoteLive().setValue(entry.getNote());
 
     formData.setFilledWithRecipePosition(true);
   }
@@ -335,7 +358,7 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     assert recipePosition != null;
     dlHelper.delete(
         grocyApi.getObject(
-            ENTITY.RECIPES,
+            ENTITY.RECIPES_POS,
             recipePosition.getId()
         ),
         response -> navigateUp(),

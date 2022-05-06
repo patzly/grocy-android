@@ -1230,8 +1230,16 @@
         android:name="action"
         app:argType="string" />
     <argument
+        android:name="recipeAction"
+        app:argType="string" />
+    <argument
         android:name="recipePosition"
         app:argType="xyz.zedler.patrick.grocy.model.RecipePosition"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <argument
+        android:name="recipe"
+        app:argType="xyz.zedler.patrick.grocy.model.Recipe"
         app:nullable="true"
         android:defaultValue="@null" />
     <argument

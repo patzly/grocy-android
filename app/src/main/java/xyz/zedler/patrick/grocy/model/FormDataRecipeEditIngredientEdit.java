@@ -94,13 +94,13 @@ public class FormDataRecipeEditIngredientEdit {
       scannerVisibilityLive.setValue(true);
     }
 
-    onlyCheckSingleUnitInStockLive = new MutableLiveData<>();
+    onlyCheckSingleUnitInStockLive = new MutableLiveData<>(false);
     amountLive = new MutableLiveData<>();
     amountErrorLive = new MutableLiveData<>();
     quantityUnitLive = new MutableLiveData<>();
     quantityUnitLabelLive = new MutableLiveData<>(getString(R.string.error_empty_qu));
     variableAmountLive = new MutableLiveData<>();
-    notCheckStockFulfillmentLive = new MutableLiveData<>();
+    notCheckStockFulfillmentLive = new MutableLiveData<>(false);
     ingredientGroupLive = new MutableLiveData<>();
     noteLive = new MutableLiveData<>();
     priceFactorLive = new MutableLiveData<>();
@@ -272,7 +272,15 @@ public class FormDataRecipeEditIngredientEdit {
       recipePosition = new RecipePosition();
     }
 
-    // TODO: Add all input fields!!!
+    recipePosition.setProductId(productDetailsLive.getValue().getProduct().getId());
+    recipePosition.setOnlyCheckSingleUnitInStock(onlyCheckSingleUnitInStockLive.getValue());
+    recipePosition.setAmount(Double.parseDouble(amountLive.getValue()));
+    recipePosition.setQuantityUnitId(quantityUnitLive.getValue().getId());
+    recipePosition.setVariableAmount(variableAmountLive.getValue());
+    recipePosition.setNotCheckStockFulfillment(notCheckStockFulfillmentLive.getValue());
+    recipePosition.setIngredientGroup(ingredientGroupLive.getValue());
+    recipePosition.setNote(noteLive.getValue());
+
     return recipePosition;
   }
 

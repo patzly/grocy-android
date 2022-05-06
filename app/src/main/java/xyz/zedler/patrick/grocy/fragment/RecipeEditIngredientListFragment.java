@@ -213,7 +213,12 @@ public class RecipeEditIngredientListFragment extends BaseFragment
         Constants.FAB.TAG.ADD,
         animated,
         () -> navigate(RecipeEditIngredientListFragmentDirections
-          .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(ACTION.CREATE))
+          .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
+                  ACTION.CREATE,
+                  viewModel.getAction()
+          )
+          .setRecipe(viewModel.getRecipe())
+        )
     );
   }
 
@@ -221,8 +226,12 @@ public class RecipeEditIngredientListFragment extends BaseFragment
   public void onItemRowClicked(RecipePosition recipePosition, int position) {
     navigate(
         RecipeEditIngredientListFragmentDirections
-            .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(ACTION.EDIT)
+            .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
+                    ACTION.EDIT,
+                    viewModel.getAction()
+            )
             .setRecipePosition(recipePosition)
+            .setRecipe(viewModel.getRecipe())
     );
   }
 

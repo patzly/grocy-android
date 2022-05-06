@@ -104,6 +104,10 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     return formData;
   }
 
+  public String getAction() {
+    return args.getAction();
+  }
+
   public boolean isActionEdit() {
     return isActionEdit;
   }
