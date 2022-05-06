@@ -22,9 +22,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
+    android:id="@+id/action_stock_entries"
+    android:title="@string/title_stock_entries"
+    app:showAsAction="never" />
+
+  <item
     android:id="@+id/action_edit_product"
     android:title="@string/action_edit_product"
     android:icon="@drawable/ic_round_edit"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
 
 </menu>

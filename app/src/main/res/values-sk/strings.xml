@@ -527,6 +527,7 @@
   <string name="property_note">Poznámka</string>
   <string name="property_status">Stav</string>
   <string name="property_amount">Množstvo</string>
+  <string name="property_amount_insert">Počet: %1$s</string>
   <string name="property_seconds">Sekundy</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">

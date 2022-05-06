@@ -28,6 +28,7 @@ public abstract class GroupedListItem {
 
   public static final String CONTEXT_SHOPPING_LIST = "shopping_list";
   public static final String CONTEXT_STOCK_OVERVIEW = "stock_overview";
+  public static final String CONTEXT_STOCK_ENTRIES = "stock_entries";
   public static final String CONTEXT_STORED_PURCHASES = "stored_purchases";
 
   public static int getType(GroupedListItem groupedListItem, String context) {
@@ -43,6 +44,12 @@ public abstract class GroupedListItem {
         }
       case CONTEXT_STOCK_OVERVIEW:
         if (groupedListItem instanceof StockItem) {
+          return GroupedListItem.TYPE_ENTRY;
+        } else {
+          return GroupedListItem.TYPE_HEADER;
+        }
+      case CONTEXT_STOCK_ENTRIES:
+        if (groupedListItem instanceof StockEntry) {
           return GroupedListItem.TYPE_ENTRY;
         } else {
           return GroupedListItem.TYPE_HEADER;

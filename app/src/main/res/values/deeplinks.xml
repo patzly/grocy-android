@@ -19,7 +19,7 @@
 
 <resources>
 
-  <string name="deep_link_stockOverviewFragment" translatable="false">grocy://stockOverviewFragment</string>
+  <string name="deep_link_stockOverviewFragment" translatable="false">grocy://stockOverviewFragment?statusFilterId={statusFilterId}</string>
   <string name="deep_link_shoppingListFragment" translatable="false">grocy://shoppingListFragment</string>
   <string name="deep_link_shoppingListItemEditFragment" translatable="false">grocy://shoppingListItemEditFragment?action={action}&amp;productId={productId}</string>
   <string name="deep_link_shoppingModeFragment" translatable="false">grocy://shoppingModeFragment</string>
@@ -39,5 +39,6 @@
   <string name="deep_link_masterProductFragment" translatable="false">grocy://masterProductFragment?action={action}&amp;productName={productName}&amp;productId={productId}&amp;pendingProductId={pendingProductId}&amp;pendingProductBarcodes={pendingProductBarcodes}</string>
   <string name="deep_link_masterDataOverviewFragment" translatable="false">grocy://masterDataOverviewFragment</string>
   <string name="deep_link_storedPurchasesFragment" translatable="false">grocy://storedPurchasesFragment</string>
+  <string name="deep_link_stockEntriesFragment" translatable="false">grocy://stockEntriesFragment?productId={productId}</string>
 
 </resources>

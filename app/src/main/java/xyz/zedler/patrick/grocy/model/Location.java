@@ -28,6 +28,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "location_table")
@@ -133,18 +134,6 @@ public class Location implements Parcelable {
     this.isFreezer = isFreezer;
   }
 
-  public static Location getFromId(ArrayList<Location> locations, int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (Location location : locations) {
-      if (location.getId() == id) {
-        return location;
-      }
-    }
-    return null;
-  }
-
   @Override
   public int describeContents() {
     return 0;
@@ -160,7 +149,7 @@ public class Location implements Parcelable {
     }
     Location location = (Location) o;
     return id == location.id &&
-        isFreezer == location.isFreezer &&
+        Objects.equals(isFreezer, location.isFreezer) &&
         Objects.equals(name, location.name) &&
         Objects.equals(description, location.description) &&
         Objects.equals(rowCreatedTimestamp, location.rowCreatedTimestamp);
@@ -169,6 +158,15 @@ public class Location implements Parcelable {
   @Override
   public int hashCode() {
     return Objects.hash(id, name, description, rowCreatedTimestamp, isFreezer);
+  }
+
+  public static Location getFromId(List<Location> locations, int id) {
+    for (Location location : locations) {
+      if (location.getId() == id) {
+        return location;
+      }
+    }
+    return null;
   }
 
   @NonNull

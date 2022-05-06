@@ -40,9 +40,12 @@ import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatQuantityUnit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
@@ -59,6 +62,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
 
   private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> conversions;
 
   private DownloadHelper.Queue currentQueueLoading;
   private final boolean debug;
@@ -99,6 +103,7 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       this.quantityUnits = data.getQuantityUnits();
+      this.conversions = data.getConversions();
       formData.getQuantityUnitsLive().setValue(this.quantityUnits);
       formData.fillWithProductIfNecessary(args.getProduct());
       if (downloadAfterLoading) {
@@ -126,7 +131,10 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
         dlHelper.updateQuantityUnits(dbChangedTime, quantityUnits -> {
           this.quantityUnits = quantityUnits;
           formData.getQuantityUnitsLive().setValue(quantityUnits);
-        })
+        }),
+        dlHelper.updateQuantityUnitConversions(
+            dbChangedTime, conversions -> this.conversions = conversions
+        )
     );
     if (queue.isEmpty()) {
       return;
@@ -142,7 +150,8 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -165,17 +174,44 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
   }
 
   public void showQuBottomSheet(int type) {
-    if (type == FormDataMasterProductCatQuantityUnit.STOCK && isActionEdit) {
+    if (type == FormDataMasterProductCatQuantityUnit.STOCK && !isQuantityUnitStockChangeable()) {
       showMessage(getString(R.string.msg_help_qu_stock));
       return;
     }
-    List<QuantityUnit> quantityUnits = formData.getQuantityUnitsLive().getValue();
-    if (quantityUnits == null) {
-      showErrorMessage(null);
+    List<QuantityUnit> quantityUnitsAllowed;
+    if (type == FormDataMasterProductCatQuantityUnit.STOCK && isActionEdit
+        && isQuantityUnitStockChangeable()) {
+      QuantityUnit quStockOld = QuantityUnit
+          .getFromId(this.quantityUnits, getFilledProduct().getQuIdStockInt());
+      quantityUnitsAllowed = new ArrayList<>();
+      ArrayList<Integer> addedQuIds = new ArrayList<>();
+      for (QuantityUnitConversion conversion : conversions) {
+        if (conversion.getProductIdInt() == getFilledProduct().getId()
+            && conversion.getFromQuId() == quStockOld.getId()
+            && !addedQuIds.contains(conversion.getToQuId())) {
+          QuantityUnit quantityUnit = QuantityUnit
+              .getFromId(this.quantityUnits, conversion.getToQuId());
+          if (quantityUnit != null) {
+            quantityUnitsAllowed.add(quantityUnit);
+            addedQuIds.add(quantityUnit.getId());
+          }
+        }
+      }
+      if (!addedQuIds.contains(quStockOld.getId())) {
+        quantityUnitsAllowed.add(quStockOld);
+      }
+    } else {
+      quantityUnitsAllowed = this.quantityUnits;
+    }
+    if (quantityUnitsAllowed == null || quantityUnitsAllowed.isEmpty()) {
+      showErrorMessage();
       return;
     }
     Bundle bundle = new Bundle();
-    bundle.putParcelableArrayList(Constants.ARGUMENT.QUANTITY_UNITS, new ArrayList<>(quantityUnits));
+    bundle.putParcelableArrayList(
+        Constants.ARGUMENT.QUANTITY_UNITS,
+        new ArrayList<>(quantityUnitsAllowed)
+    );
     QuantityUnit quantityUnit;
     if (type == FormDataMasterProductCatQuantityUnit.STOCK) {
       quantityUnit = formData.getQuStockLive().getValue();
@@ -213,6 +249,10 @@ public class MasterProductCatQuantityUnitViewModel extends BaseViewModel {
 
   public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
     currentQueueLoading = queueLoading;
+  }
+
+  public boolean isQuantityUnitStockChangeable() {
+    return VersionUtil.isGrocyServerMin330(sharedPrefs);
   }
 
   public boolean isFeatureEnabled(String pref) {

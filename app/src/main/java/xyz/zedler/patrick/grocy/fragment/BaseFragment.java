@@ -133,6 +133,9 @@ public class BaseFragment extends Fragment {
   public void skipNextChoreSchedule(int choreId) {
   }
 
+  public void rescheduleNextExecution(int choreId) {
+  }
+
   public void toggleDoneStatus(Task task) {
   }
 
@@ -220,6 +223,9 @@ public class BaseFragment extends Fragment {
   }
 
   public void performAction(String action, StockItem stockItem) {
+  }
+
+  public void performAction(String action, StockEntry stockEntry) {
   }
 
   public void updateShortcuts() {

@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 
 public class ShortcutUtil {
 
@@ -53,7 +55,7 @@ public class ShortcutUtil {
     return shortcutManager.getDynamicShortcuts();
   }
 
-  public static void refreshShortcuts(Context context, Uri uriAddToShoppingListDeepLink) {
+  public static void refreshShortcuts(Context context) {
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) {
       return;
     }
@@ -70,6 +72,11 @@ public class ShortcutUtil {
             context, context.getString(R.string.title_shopping_list)
         ));
       } else if (shortcutInfo.getId().equals(ADD_TO_SHOPPING_LIST)) {
+        Uri uriAddToShoppingListDeepLink = BaseBottomSheet.getUriWithArgs(
+            context.getString(R.string.deep_link_shoppingListItemEditFragment),
+            new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                .build().toBundle()
+        );
         newShortcutInfos.add(createShortcutAddToShoppingList(
             context, uriAddToShoppingListDeepLink,
             context.getString(R.string.action_shopping_list_add)

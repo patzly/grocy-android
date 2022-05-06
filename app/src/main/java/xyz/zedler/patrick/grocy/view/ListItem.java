@@ -79,6 +79,7 @@ public class ListItem extends LinearLayout {
     // extra
     if (extra != null) {
       textViewExtra.setText(extra);
+      linearLayoutExtra.setVisibility(VISIBLE);
     } else {
       linearLayoutExtra.setVisibility(GONE);
     }

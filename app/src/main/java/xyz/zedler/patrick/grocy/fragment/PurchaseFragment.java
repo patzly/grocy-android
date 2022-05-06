@@ -370,6 +370,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     binding.textInputAmount.clearFocus();
     binding.linearDueDate.clearFocus();
     binding.textInputPurchasePrice.clearFocus();
+    binding.textInputPurchaseNote.clearFocus();
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {

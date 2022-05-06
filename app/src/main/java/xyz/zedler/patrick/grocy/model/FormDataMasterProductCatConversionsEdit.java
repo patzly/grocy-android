@@ -206,7 +206,7 @@ public class FormDataMasterProductCatConversionsEdit {
     assert quantityUnitFromLive.getValue() != null;
     assert quantityUnitToLive.getValue() != null;
     assert factorLive.getValue() != null;
-    conversion.setProductId(product.getId());
+    conversion.setProductId(String.valueOf(product.getId()));
     conversion.setFromQuId(quantityUnitFromLive.getValue().getId());
     conversion.setToQuId(quantityUnitToLive.getValue().getId());
     conversion.setFactor(Double.parseDouble(factorLive.getValue()));

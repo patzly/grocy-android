@@ -37,6 +37,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Consume all</string>
 
+  <string name="action_consume_spoiled">Consume as spoiled</string>
   <string name="action_consume_one_spoiled">Consume 1 as spoiled</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Consume 1 %1$s of %2$s</string>
@@ -121,6 +122,7 @@
   <string name="action_show_done_tasks">Show done tasks</string>
   <string name="action_track_chore_execution">Track chore execution</string>
   <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
+  <string name="action_reschedule_next_execution">Reschedule next execution</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -313,6 +315,7 @@
   <string name="msg_help_default_due_days_thawing">On moving this product from a freezer location (so when thawing it), the due date will be replaced by today + this amount of days.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Quantity unit stock cannot be changed after first purchase.</string>
+  <string name="msg_help_qu_stock_changeable">Quantity unit stock can only be changed if unit conversions for the current quantity unit exist.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">This is the default quantity unit used when adding this product to the shopping list.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -442,6 +445,7 @@
   <string name="title_task_add">Add task</string>
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
+  <string name="title_stock_entry">Stock entry</string>
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
@@ -519,6 +523,8 @@
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(opened)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s opened)</string>
   <!-- %1$s is a product name -->
@@ -679,6 +685,7 @@
   <string name="property_note">Note</string>
   <string name="property_status">Status</string>
   <string name="property_amount">Amount</string>
+  <string name="property_amount_insert">Amount: %1$s</string>
   <string name="property_seconds">Seconds</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -716,6 +723,7 @@
   <string name="property_barcodes_insert">Barcodes: %1$s</string>
   <string name="property_days">Days</string>
   <string name="property_purchased_date">Purchased date</string>
+  <string name="property_purchased_date_fill">Purchased date: %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Due date type</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -737,11 +745,14 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Default due days after thawing</string>
   <string name="property_location">Location</string>
+  <string name="property_location_insert">Location: %1$s</string>
   <string name="property_location_default">Default location</string>
+  <string name="property_location_default_insert">Default location: %1$s</string>
   <string name="property_location_consume_default">Default consume location</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Locations</string>
   <string name="property_store">Store</string>
+  <string name="property_store_insert">Store: %1$s</string>
   <string name="property_store_unknown">Unknown store</string>
   <string name="property_store_default">Default store</string>
   <string name="property_stores">Stores</string>
@@ -755,6 +766,7 @@
   <string name="property_last_price">Last price</string>
   <string name="property_last_price_unit">Last price (unit)</string>
   <string name="property_last_price_total">Last price (total)</string>
+  <string name="property_price_insert">Price: %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Average shelf life</string>
   <string name="property_spoil_rate">Spoil rate</string>
@@ -813,6 +825,12 @@
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
+  <string name="property_last_done_by">Last done by</string>
+  <string name="property_last_tracked">Last tracked</string>
+  <string name="property_tracked_count">Tracked count</string>
+  <string name="property_average_execution_frequency">Average execution frequency</string>
+  <string name="property_next_estimated_tracking">Next estimated tracking</string>
+  <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -999,6 +1017,16 @@
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
+  <string name="setting_notifications_enable">Enable notifications</string>
+  <string name="setting_notifications_due_soon">Due soon items</string>
+  <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
+  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
+  <string name="setting_notification_time">Notification time</string>
+  <string name="setting_notification_time_description">When the check is done</string>
+
+  <string name="notification_channel_due_soon">Due soon items</string>
+  <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
+  <string name="notification_due_soon_content">Consume them over the next few days to help reduce food waste.</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

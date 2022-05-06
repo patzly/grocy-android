@@ -39,8 +39,10 @@ import xyz.zedler.patrick.grocy.dao.QuantityUnitDao;
 import xyz.zedler.patrick.grocy.dao.RecipeDao;
 import xyz.zedler.patrick.grocy.dao.RecipeFulfillmentDao;
 import xyz.zedler.patrick.grocy.dao.RecipePositionDao;
+import xyz.zedler.patrick.grocy.dao.ServerDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListDao;
 import xyz.zedler.patrick.grocy.dao.ShoppingListItemDao;
+import xyz.zedler.patrick.grocy.dao.StockEntryDao;
 import xyz.zedler.patrick.grocy.dao.StockItemDao;
 import xyz.zedler.patrick.grocy.dao.StockLocationDao;
 import xyz.zedler.patrick.grocy.dao.StoreDao;
@@ -66,8 +68,10 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.Server;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
@@ -101,6 +105,9 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         StoredPurchase.class,
         User.class,
         Chore.class,
+        ChoreEntry.class,
+        StockEntry.class,
+        Server.class
         ChoreEntry.class,
         Recipe.class,
         RecipeFulfillment.class,
@@ -163,6 +170,10 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract RecipeFulfillmentDao recipeFulfillmentDao();
 
   public abstract RecipePositionDao recipePositionDao();
+
+  public abstract StockEntryDao stockEntryDao();
+
+  public abstract ServerDao serverDao();
 
   public static AppDatabase getAppDatabase(Context context) {
     if (INSTANCE == null) {

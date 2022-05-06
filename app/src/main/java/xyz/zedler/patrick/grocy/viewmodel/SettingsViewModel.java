@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
@@ -59,6 +60,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ReminderUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
@@ -92,6 +94,8 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<String> defaultConsumeAmountTextLive;
   private final MutableLiveData<Boolean> autoAddToShoppingListLive;
   private final MutableLiveData<String> autoAddToShoppingListTextLive;
+  private final MutableLiveData<Boolean> notificationsEnabledLive;
+  private final MutableLiveData<String> notificationsTimeTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -122,6 +126,8 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
+    notificationsEnabledLive = new MutableLiveData<>(getNotificationsEnabled());
+    notificationsTimeTextLive = new MutableLiveData<>(getNotificationsTime());
   }
 
   public boolean isDemo() {
@@ -935,6 +941,39 @@ public class SettingsViewModel extends BaseViewModel {
     bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.setting_proxy_port));
     bundle.putString(ARGUMENT.TYPE, NETWORK.PROXY_PORT);
     showBottomSheet(new InputBottomSheet(), bundle);
+  }
+
+  public boolean getNotificationsEnabled() {
+    return sharedPrefs.getBoolean(
+        NOTIFICATIONS.DUE_SOON_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
+    );
+  }
+
+  public MutableLiveData<Boolean> getNotificationsEnabledLive() {
+    return notificationsEnabledLive;
+  }
+
+  public void setNotificationsEnabled(boolean enabled) {
+    notificationsEnabledLive.setValue(enabled);
+    (new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+  }
+
+  public String getNotificationsTime() {
+    return sharedPrefs.getString(
+        NOTIFICATIONS.DUE_SOON_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
+    );
+  }
+
+  public MutableLiveData<String> getNotificationsTimeTextLive() {
+    return notificationsTimeTextLive;
+  }
+
+  public void setNotificationsTime(String text) {
+    sharedPrefs.edit().putString(NOTIFICATIONS.DUE_SOON_TIME, text).apply();
+    notificationsTimeTextLive.setValue(text);
+    setNotificationsEnabled(true);
   }
 
   public ArrayList<String> getSupportedVersions() {

@@ -26,13 +26,17 @@
     android:id="@+id/action_track_chore_execution"
     android:title="@string/action_track_chore_execution"
     android:icon="@drawable/ic_round_play_arrow"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
 
   <item
     android:id="@+id/action_skip_next_chore_schedule"
     android:title="@string/action_skip_next_chore_schedule"
     android:icon="@drawable/ic_round_skip_next"
-    android:visible="false"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/action_reschedule_next_execution"
+    android:title="@string/action_reschedule_next_execution"
+    app:showAsAction="never" />
 
 </menu>

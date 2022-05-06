@@ -157,7 +157,7 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
     findNavController().navigate(uri, builder.build());
   }
 
-  private Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+  public static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
     String[] parts = uri.split("\\?");
     if (parts.length == 1) {
       return Uri.parse(uri);
@@ -183,10 +183,6 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
       }
     }
     return Uri.parse(finalDeepLink.toString());
-  }
-
-  Uri getUriWithArgs(@StringRes int uri, @NonNull Bundle args) {
-    return getUriWithArgs(getString(uri), args);
   }
 
   void showMessage(@StringRes int msg) {

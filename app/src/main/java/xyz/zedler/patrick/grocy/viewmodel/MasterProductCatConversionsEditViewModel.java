@@ -46,6 +46,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
@@ -146,8 +147,8 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
 
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
-    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -214,6 +215,9 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
       return;
     } else if(!isActionEdit) {
       formData.getQuantityUnitsLive().setValue(quantityUnits);
+      QuantityUnit quStock = QuantityUnit
+          .getFromId(quantityUnits, args.getProduct().getQuIdStockInt());
+      formData.getQuantityUnitFromLive().setValue(quStock);
       return;
     }
 

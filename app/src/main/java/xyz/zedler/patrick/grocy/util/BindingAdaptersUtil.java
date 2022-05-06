@@ -42,7 +42,7 @@ public class BindingAdaptersUtil {
 
   @BindingAdapter({"errorText"})
   public static void setErrorMessage(TextInputLayout view, MutableLiveData<Integer> errorMsg) {
-    if (errorMsg.getValue() != null) {
+    if (errorMsg != null && errorMsg.getValue() != null) {
       view.setError(view.getContext().getString(errorMsg.getValue()));
     } else if (view.isErrorEnabled()) {
       view.setErrorEnabled(false);

@@ -42,6 +42,7 @@ public class GrocyApi {
     public final static String PRODUCTS_AVERAGE_PRICE = "products_average_price";
     public final static String PRODUCT_BARCODES = "product_barcodes";
     public final static String LOCATIONS = "locations";
+    public final static String STOCK_ENTRIES = "stock";
     public final static String STOCK_CURRENT_LOCATIONS = "stock_current_locations";
     public final static String STORES = "shopping_locations";
     public final static String QUANTITY_UNITS = "quantity_units";

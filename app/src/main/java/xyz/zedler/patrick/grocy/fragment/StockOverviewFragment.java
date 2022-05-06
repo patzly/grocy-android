@@ -104,7 +104,11 @@ public class StockOverviewFragment extends BaseFragment implements
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    viewModel = new ViewModelProvider(this).get(StockOverviewViewModel.class);
+    StockOverviewFragmentArgs args = StockOverviewFragmentArgs
+        .fromBundle(requireArguments());
+    viewModel = new ViewModelProvider(this, new StockOverviewViewModel
+        .StockOverviewViewModelFactory(activity.getApplication(), args)
+    ).get(StockOverviewViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
     binding.setViewModel(viewModel);
     binding.setActivity(activity);
@@ -340,6 +344,9 @@ public class StockOverviewFragment extends BaseFragment implements
     if (item.getItemId() == R.id.action_search) {
       ViewUtil.startIcon(item);
       setUpSearch();
+      return true;
+    } else if (item.getItemId() == R.id.action_stock_entries) {
+      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment());
       return true;
     }
     return false;

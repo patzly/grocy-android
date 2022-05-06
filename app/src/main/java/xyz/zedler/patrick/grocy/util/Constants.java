@@ -56,6 +56,9 @@ public final class Constants {
     public final static String STOCK_SORT_ASCENDING = "stock_sort_ascending";
     public final static String STOCK_GROUPING_MODE = "stock_grouping_mode";
     public final static String STOCK_EXTRA_FIELD = "stock_extra_field";
+    public final static String STOCK_ENTRIES_SORT_MODE = "stock_entries_sort_mode";
+    public final static String STOCK_ENTRIES_SORT_ASCENDING = "stock_entries_sort_ascending";
+    public final static String STOCK_ENTRIES_GROUPING_MODE = "stock_entries_grouping_mode";
     public final static String SHOPPING_LIST_GROUPING_MODE = "shopping_list_grouping_mode";
     public final static String SHOPPING_LIST_EXTRA_FIELD = "shopping_list_extra_field";
     public final static String SHOPPING_LIST_LAST_ID = "shopping_list_last_id";
@@ -66,6 +69,7 @@ public final class Constants {
     public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
+    public final static String DB_LAST_TIME_STOCK_ENTRIES = "db_last_time_stock_entries";
     public final static String DB_LAST_TIME_STORES = "db_last_time_stores";
     public final static String DB_LAST_TIME_LOCATIONS = "db_last_time_locations";
     public final static String DB_LAST_TIME_STOCK_LOCATIONS = "db_last_time_stock_locations";
@@ -186,6 +190,14 @@ public final class Constants {
 
       public final static String ENABLE_DEBUGGING = "enable_debugging";
     }
+
+    public final static class NOTIFICATIONS {
+
+      public final static String DUE_SOON_ENABLE = "notification_enable";
+      public final static String DUE_SOON_TIME = "notification_time";
+      public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
+      public final static int DUE_SOON_ID = 1;
+    }
   }
 
   public final static class SETTINGS_DEFAULT {
@@ -280,6 +292,15 @@ public final class Constants {
 
       public final static boolean ENABLE_DEBUGGING = false;
     }
+
+    public final static class NOTIFICATIONS {
+      public final static boolean DUE_SOON_ENABLE = false;
+      public final static String DUE_SOON_TIME = "12:00";
+    }
+  }
+
+  public final static class NotificationChannels {
+    public final static String DUE_SOON = "xyz.zedler.patrick.grocy.due_soon";
   }
 
   public final static class BarcodeFormats {
@@ -351,6 +372,7 @@ public final class Constants {
     public final static String PRODUCT_GROUPS = "product_groups";
     public final static String STOCK_LOCATIONS = "stock_locations";
     public final static String STOCK_ENTRIES = "product_entries";
+    public final static String STOCK_ENTRY = "product_entry";
     public final static String PRODUCT_DETAILS = "product_details";
     public final static String PRODUCT = "product";
     public final static String PRODUCTS = "products";

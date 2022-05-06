@@ -195,6 +195,7 @@
   <string name="msg_task_completed">Tâche marquée comme terminée</string>
   <string name="msg_task_not_completed">Marquer la tâche comme non terminée</string>
   <string name="msg_task_undo">Annuler la tâche</string>
+  <string name="msg_chore_executed">Suivi de la réalisation de la corvée</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -288,6 +289,10 @@
   <string name="msg_help_hide_on_stock">L\'aperçu du stock liste tous les produits actuellement en stock ou en-deça de leur stock minimum. Activer cette cette option désactive l\'affichage de ce produit dans tous les cas.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">Impossible, ce produit est déjà assigné comme parent sur un autre produit.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Les entrées de stock à l\'emplacement ci-dessous seront consommées en premier.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Lorsque activé, le produit correspondant ne peut pas avoir son propre stock, ce qui signifie qu\'il ne sera pas sélectionnable à l\'achat (utile pour les produits parents qui ne sont utilisés que comme vue récapitulative/totale des sous-produits).</string>
   <string name="msg_help_due_date_type">D\'après le type d\'échéance sélectionné, la coloration de la page d\'aperçu du stock sera différente. \"À consommer de préférence avant le\" signifie que le produit est peut-être toujours consommable après la date limite. \"À consommer jusqu\'au\" signifie que le produit n\'est plus consommable après la date limite.</string>
   <string name="msg_help_default_due_days_format">Vous pouvez appuyer longuement sur un élément ci-dessous pour entrer une date au lieu d\'un nombre.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -361,6 +366,8 @@
   <string name="error_empty_tasks">Aucune tâche</string>
   <string name="error_empty_task_categories">Aucune catégorie de tâches</string>
   <string name="error_empty_unit_conversions">Pas de conversion d\'unité de quantité</string>
+  <string name="error_empty_chores">Pas de corvées</string>
+  <string name="error_empty_chores_sub">Accéder aux données de base pour en créer</string>
   <string name="error_search">Aucun résultat trouvé</string>
   <string name="error_search_sub">Essayez d\'autres termes</string>
   <string name="error_filter">Rien à afficher</string>
@@ -470,7 +477,7 @@
   <string name="title_stock_entry_no_specific">Aucune entrée spécifique</string>
   <string name="title_list_entry">Liste d\'articles</string>
   <string name="title_edit_list_entry">Modifier la liste d\'articles</string>
-  <string name="title_create_list_entry">Créer une liste d\'articles</string>
+  <string name="title_create_list_entry">Créer une entrée pour la liste</string>
   <string name="title_edit_barcode">Modifier le code-barres</string>
   <string name="title_create_barcode">Créer un code-barres</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
@@ -498,6 +505,8 @@
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(ouvert)</string>
   <!-- %1$s is a number like 1, 2, 3 -->
   <string name="subtitle_amount_opened">(%1$s ouvert)</string>
   <!-- %1$s is a product name -->
@@ -547,6 +556,8 @@
   <string name="subtitle_product_due_date">Type, Date par défaut (après ouverture, congélation, décongélation)</string>
   <string name="subtitle_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
   <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
+  <string name="subtitle_synced_with_server">Synchronisé avec le serveur</string>
+
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
   <string name="description_input_product_option1">Créer un nouveau produit et utiliser l\'entrée comme nom</string>
@@ -609,33 +620,33 @@
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
-    <item quantity="one">%1$d corvée doit être faite dans les %2$d prochains jours.</item>
-    <item quantity="other">%1$d corvées doivent être faites dans les %2$d prochains jours.</item>
+    <item quantity="one">%1$d corvée à faire dans les %2$d prochains jours.</item>
+    <item quantity="other">%1$d corvées à faire dans les %2$d prochains jours.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="one">%1$d corvée est en retard.</item>
-    <item quantity="other">%1$d corvées sont en retard.</item>
+    <item quantity="one">%1$d corvée en retard.</item>
+    <item quantity="other">%1$d corvées en retard.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
-    <item quantity="one">%1$d corvée doit être faite aujourd\'hui.</item>
-    <item quantity="other">%1$d corvées doivent être faites aujourd\'hui.</item>
+    <item quantity="one">%1$d corvée à faire aujourd\'hui.</item>
+    <item quantity="other">%1$d corvées à faire aujourd\'hui.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
-    <item quantity="one">%1$d tâche vous est attribuée.</item>
-    <item quantity="other">%1$d tâches vous sont attribuées.</item>
+    <item quantity="one">%1$d tâche attribuée.</item>
+    <item quantity="other">%1$d tâches attribuées.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
-    <item quantity="one">%1$d tâche est à accomplir.</item>
-    <item quantity="other">%1$d tâches sont à accomplir.</item>
+    <item quantity="one">%1$d tâche à accomplir.</item>
+    <item quantity="other">%1$d tâches à accomplir.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
-    <item quantity="one">%1$d tâche vous est attribuée.</item>
-    <item quantity="other">%1$d tâches vous sont attribuées.</item>
+    <item quantity="one">%1$d tâche attribuée.</item>
+    <item quantity="other">%1$d tâches attribuées.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
@@ -654,6 +665,7 @@
   <string name="property_note">Note</string>
   <string name="property_status">Statut</string>
   <string name="property_amount">Montant</string>
+  <string name="property_amount_insert">Quantité : %1$s</string>
   <string name="property_seconds">Secondes</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
@@ -667,6 +679,8 @@
   <string name="property_price_average">Prix ​​moyen</string>
   <!-- %1$s is a quantity unit-->
   <string name="property_price_unit">Prix par %1$s</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s les %2$s</string>
   <!-- %1$s is a currency like "USD", or "EUR" -->
   <string name="property_price_in">Prix en %1$s</string>
   <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
@@ -689,6 +703,7 @@
   <string name="property_barcodes_insert">Codes-barres : %1$s</string>
   <string name="property_days">Jours</string>
   <string name="property_purchased_date">Date d\'achat</string>
+  <string name="property_purchased_date_fill">Date d\'achat : %1$s</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_type">Type de date de péremption</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -710,10 +725,13 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_thawing">Date de péremption par défaut après décongélation</string>
   <string name="property_location">Emplacement</string>
+  <string name="property_location_insert">Emplacement : %1$s</string>
   <string name="property_location_default">Emplacement par défaut</string>
+  <string name="property_location_consume_default">Emplacement de consommation par défaut</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Emplacements</string>
   <string name="property_store">Magasin</string>
+  <string name="property_store_insert">Magasin : %1$s</string>
   <string name="property_store_unknown">Magasin inconnu</string>
   <string name="property_store_default">Magasin par défaut</string>
   <string name="property_stores">Magasins</string>
@@ -727,6 +745,7 @@
   <string name="property_last_price">Dernier prix</string>
   <string name="property_last_price_unit">Dernier prix (par unité)</string>
   <string name="property_last_price_total">Dernier prix (total)</string>
+  <string name="property_price_insert">Prix : %1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">Durée de conservation moyenne</string>
   <string name="property_spoil_rate">Taux de péremption</string>
@@ -735,6 +754,7 @@
   <string name="property_product_groups">Groupes de produits</string>
   <string name="property_assignment">Attribution</string>
   <string name="property_value">Valeur</string>
+  <string name="property_stock_value">Valeur du stock</string>
   <string name="property_opened">ouvert</string>
   <string name="property_not_opened">pas ouvert</string>
   <string name="property_is_freezer">Est un congélateur</string>
@@ -743,6 +763,8 @@
   <string name="property_active">Actif</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne jamais afficher sur l\'aperçu du stock</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Désactiver son propre stock</string>
   <string name="property_number">Nombre</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Activer la gestion du tarage du poids</string>
@@ -858,6 +880,7 @@
   <string name="category_general">Général</string>
   <string name="category_stock">Stock</string>
   <string name="category_server">Serveur</string>
+  <string name="category_user_settings">Paramètres utilisateur</string>
   <string name="category_scanner">Scanner</string>
   <string name="category_scanner_camera">Scanner appareil photo</string>
   <string name="category_scanner_external">Scanner externe</string>
@@ -928,6 +951,8 @@
   <string name="setting_purchased_date">Demander la date d\'achat</string>
   <string name="setting_purchased_date_description">Sur les pages d\'achat et d\'inventaire</string>
   <string name="setting_use_quick_consume_amount">Utiliser le paramètre \"Quantité en consommation rapide\" du produit</string>
+  <string name="setting_auto_add_shopping_list">Ajouter automatiquement des produits à la liste de courses</string>
+  <string name="setting_auto_add_shopping_list_description">Ajoute les produits qui sont en dessous de leur stock minimal</string>
   <string name="setting_empty_value">Vide</string>
   <string name="setting_sync_off">Synchronisation désactivée</string>
   <string name="setting_loading">Valeur chargée</string>

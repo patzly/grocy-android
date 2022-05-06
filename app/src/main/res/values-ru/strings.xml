@@ -729,6 +729,7 @@
   <string name="property_note">Заметка</string>
   <string name="property_status">Статус</string>
   <string name="property_amount">Количество</string>
+  <string name="property_amount_insert">Количество: %1$s</string>
   <string name="property_seconds">Секунды</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">

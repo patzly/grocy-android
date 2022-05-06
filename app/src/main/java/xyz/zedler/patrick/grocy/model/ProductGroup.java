@@ -27,8 +27,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "product_group_table")
@@ -140,18 +139,6 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     return 0;
   }
 
-  public static ProductGroup getFromId(ArrayList<ProductGroup> productGroups, int id) {
-    if (id == -1) {
-      return null;
-    }
-    for (ProductGroup productGroup : productGroups) {
-      if (productGroup.getId() == id) {
-        return productGroup;
-      }
-    }
-    return null;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -170,6 +157,15 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
   @Override
   public int hashCode() {
     return Objects.hash(id, name, description, displayDivider);
+  }
+
+  public static ProductGroup getFromId(List<ProductGroup> productGroups, int id) {
+    for (ProductGroup productGroup : productGroups) {
+      if (productGroup.getId() == id) {
+        return productGroup;
+      }
+    }
+    return null;
   }
 
   @NonNull
