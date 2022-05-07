@@ -166,7 +166,7 @@ public class ReminderUtil {
         .setContentTitle(title)
         .setContentText(text)
         .setAutoCancel(true)
-        .setColor(ContextCompat.getColor(context, R.color.retro_green_fg))
+        .setColor(ContextCompat.getColor(context, R.color.retro_green_bg_black))
         .setSmallIcon(R.drawable.ic_round_grocy_notification)
         .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
         .setContentIntent(
