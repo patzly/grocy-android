@@ -277,7 +277,7 @@ public class MasterProductCatBarcodesEditViewModel extends BaseViewModel {
       unitFactors.put(stock, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
-      if (product.getId() != conversion.getProductId()) {
+      if (product.getId() != conversion.getProductIdInt()) {
         continue;
       }
       QuantityUnit unit = getQuantityUnit(conversion.getToQuId());

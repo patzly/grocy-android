@@ -746,19 +746,7 @@
         android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsFragment"
         android:label="SettingsCatNotificationsFragment"
         tools:layout="@layout/fragment_settings_cat_notifications">
-      <action
-          android:id="@+id/action_settingsCatNotificationsFragment_to_settingsCatNotificationsSettingsFragment"
-          app:destination="@id/settingsCatNotificationsSettingsFragment"
-          app:enterAnim="@anim/slide_from_end"
-          app:exitAnim="@anim/slide_to_start"
-          app:popEnterAnim="@anim/slide_from_start"
-          app:popExitAnim="@anim/slide_to_end"/>
     </fragment>
-    <fragment
-        android:id="@+id/settingsCatNotificationsSettingsFragment"
-        android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsSettingsFragment"
-        android:label="SettingsCatNotificationsSettingsFragment"
-        tools:layout="@layout/fragment_settings_cat_notifications_settings"/>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"
@@ -1195,6 +1183,12 @@
     <deepLink
       android:id="@+id/deepLink16"
       app:uri="@string/deep_link_choresFragment" />
+    <action
+      android:id="@+id/action_choresFragment_to_choreEntryRescheduleFragment"
+      app:destination="@id/choreEntryRescheduleFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/stockEntriesFragment"
@@ -1209,5 +1203,14 @@
     <deepLink
       android:id="@+id/deepLink17"
       app:uri="@string/deep_link_stockEntriesFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/choreEntryRescheduleFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ChoreEntryRescheduleFragment"
+    android:label="ChoreEntryRescheduleFragment"
+    tools:layout="@layout/fragment_chore_entry_reschedule">
+    <argument
+      android:name="chore"
+      app:argType="xyz.zedler.patrick.grocy.model.Chore" />
   </fragment>
 </navigation>

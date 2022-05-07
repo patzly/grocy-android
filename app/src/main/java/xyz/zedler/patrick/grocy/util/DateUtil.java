@@ -39,7 +39,7 @@ public class DateUtil {
   public static final int FORMAT_SHORT = 0;
   public static final int FORMAT_SHORT_WITH_TIME = 3;
 
-  private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+  public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
       "yyyy-MM-dd", Locale.ENGLISH
   );
   private static final SimpleDateFormat DATE_FORMAT_WITH_TIME = new SimpleDateFormat(

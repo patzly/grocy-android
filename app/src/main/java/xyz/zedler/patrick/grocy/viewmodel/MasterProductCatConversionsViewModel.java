@@ -168,7 +168,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     assert args.getProduct() != null;
     int productId = args.getProduct().getId();
     for (QuantityUnitConversion conversion : conversions) {
-      if (conversion.getProductId() == productId) {
+      if (conversion.getProductIdInt() == productId) {
         filteredConversions.add(conversion);
       }
     }

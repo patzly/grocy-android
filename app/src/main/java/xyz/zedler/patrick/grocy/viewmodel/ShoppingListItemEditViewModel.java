@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
@@ -50,11 +49,13 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 
 public class ShoppingListItemEditViewModel extends BaseViewModel {
 
@@ -74,8 +75,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private List<ShoppingList> shoppingLists;
   private List<Product> products;
   private List<ProductBarcode> barcodes;
-  private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> unitConversions;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
   private Runnable queueEmptyAction;
@@ -112,7 +113,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       this.shoppingLists = data.getShoppingLists();
       this.products = data.getProducts();
       this.barcodes = data.getBarcodes();
-      this.quantityUnits = data.getQuantityUnits();
+      this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getQuantityUnitConversions();
       formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
       if (!isActionEdit) {
@@ -154,7 +155,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
         ), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateQuantityUnits(
-            dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+            dbChangedTime,
+            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
         )
     );
     if (queue.isEmpty()) {
@@ -275,17 +277,29 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (product != null) {
       formData.getProductLive().setValue(product);
       formData.getProductNameLive().setValue(product.getName());
-      HashMap<QuantityUnit, Double> unitFactors = setProductQuantityUnitsAndFactors(product);
 
-      quantityUnit = getQuantityUnit(item.getQuIdInt());
-      if (unitFactors != null && quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
-        Double factor = unitFactors.get(quantityUnit);
-        assert factor != null;
-        if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
-          amount = amount / factor;
-        } else if (factor != -1) {
-          amount = amount * factor;
+      try {
+        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+            getApplication(),
+            quantityUnitHashMap,
+            unitConversions,
+            product
+        );
+        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+
+        quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
+        if (quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
+          Double factor = unitFactors.get(quantityUnit);
+          assert factor != null;
+          if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
+            amount = amount / factor;
+          } else if (factor != -1) {
+            amount = amount * factor;
+          }
         }
+      } catch (IllegalArgumentException e) {
+        showMessage(e.getMessage());
+        return;
       }
     }
     formData.getAmountLive().setValue(NumUtil.trim(amount));
@@ -295,47 +309,26 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.setFilledWithShoppingListItem(true);
   }
 
-  private HashMap<QuantityUnit, Double> setProductQuantityUnitsAndFactors(Product product) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
-
-    if (stock == null || purchase == null) {
-      showMessage(getString(R.string.error_loading_qus));
-      return null;
-    }
-
-    HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-    ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-    unitFactors.put(stock, (double) -1);
-    quIdsInHashMap.add(stock.getId());
-    if (!quIdsInHashMap.contains(purchase.getId())) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
-    }
-    for (QuantityUnitConversion conversion : unitConversions) {
-      if (product.getId() != conversion.getProductId()) {
-        continue;
-      }
-      QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-        continue;
-      }
-      unitFactors.put(unit, conversion.getFactor());
-    }
-    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-
-    if (!isActionEdit) {
-      formData.getQuantityUnitLive().setValue(purchase);
-    }
-    return unitFactors;
-  }
-
   public void setProduct(Product product) {
     if (product == null) {
       return;
     }
     formData.getProductLive().setValue(product);
     formData.getProductNameLive().setValue(product.getName());
-    setProductQuantityUnitsAndFactors(product);
+
+
+    HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+        getApplication(),
+        quantityUnitHashMap,
+        unitConversions,
+        product
+    );
+    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+    if (!isActionEdit) {
+      QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+      formData.getQuantityUnitLive().setValue(purchase);
+    }
+
     formData.isFormValid();
   }
 
@@ -425,15 +418,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       showBottomSheet(new InputProductBottomSheet(), bundle);
     }
     return product;
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    for (QuantityUnit quantityUnit : quantityUnits) {
-      if (quantityUnit.getId() == id) {
-        return quantityUnit;
-      }
-    }
-    return null;
   }
 
   private ShoppingList getLastShoppingList() {

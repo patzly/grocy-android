@@ -602,9 +602,9 @@
                   <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_purchase_price"
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                    android:hint="@{formData.priceHintLive}"
+                    android:hint="@{formData.priceHint}"
                     app:helperTextEnabled="true"
-                    app:helperText=" "
+                    app:helperText="@{formData.priceHelperLive}"
                     app:helperTextTextColor="@color/retro_blue_fg"
                     app:errorText="@{formData.priceErrorLive}">
 

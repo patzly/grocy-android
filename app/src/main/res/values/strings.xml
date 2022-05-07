@@ -825,6 +825,10 @@
   <string name="property_users">Users</string>
   <string name="property_last_done_by">Last done by</string>
   <string name="property_last_tracked">Last tracked</string>
+  <string name="property_tracked_count">Tracked count</string>
+  <string name="property_average_execution_frequency">Average execution frequency</string>
+  <string name="property_next_estimated_tracking">Next estimated tracking</string>
+  <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -1011,14 +1015,16 @@
   <string name="settings_synchronized">These settings are synchronized with your server.</string>
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
+  <string name="setting_notifications_enable">Enable notifications</string>
   <string name="setting_notifications_due_soon">Due soon items</string>
-  <string name="setting_notifications_due_soon_description">Daily notifications</string>
+  <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
+  <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
   <string name="setting_notification_time">Notification time</string>
   <string name="setting_notification_time_description">When the check is done</string>
 
   <string name="notification_channel_due_soon">Due soon items</string>
   <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
-  <string name="notification_due_soon_content">Consume them in the next few days</string>
+  <string name="notification_due_soon_content">Consume them over the next few days to help reduce food waste.</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

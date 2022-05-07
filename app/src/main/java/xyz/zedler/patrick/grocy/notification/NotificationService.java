@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.notification;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -104,8 +104,10 @@ public class NotificationService extends Service {
   public void onDestroy() {
     super.onDestroy();
 
-    if (PreferenceManager.getDefaultSharedPreferences(getApplication()).getBoolean(NOTIFICATIONS.NOTIFICATIONS_ENABLE,
-        SETTINGS_DEFAULT.NOTIFICATIONS.NOTIFICATIONS_ENABLE)) {
+    if (PreferenceManager.getDefaultSharedPreferences(getApplication()).getBoolean(
+        NOTIFICATIONS.DUE_SOON_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
+    )) {
       Intent broadcastIntent = new Intent();
       broadcastIntent.setAction("restartservice");
       broadcastIntent.setClass(this, RestarterBroadcastReceiver.class);

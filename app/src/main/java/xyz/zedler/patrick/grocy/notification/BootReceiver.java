@@ -17,22 +17,20 @@
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.model;
+package xyz.zedler.patrick.grocy.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.widget.Toast;
+import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
-public class RestarterBroadcastReceiver extends BroadcastReceiver {
+public class BootReceiver extends BroadcastReceiver {
+
   @Override
   public void onReceive(Context context, Intent intent) {
-    Toast.makeText(context, "Service restarted", Toast.LENGTH_SHORT).show();
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      context.startForegroundService(new Intent(context, NotificationService.class));
-    } else {
-      context.startService(new Intent(context, NotificationService.class));
+    String action = intent.getAction();
+    if (action != null && action.equals("android.intent.action.BOOT_COMPLETED")) {
+      new ReminderUtil(context).scheduleReminderIfEnabled();
     }
   }
 }

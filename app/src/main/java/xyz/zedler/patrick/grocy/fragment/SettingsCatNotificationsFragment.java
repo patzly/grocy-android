@@ -121,7 +121,7 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
             ? TimeFormat.CLOCK_24H : TimeFormat.CLOCK_12H)
         .setHour(hour)
         .setMinute(minute)
-        .setTitleText("Notification time") // TODO
+        .setTitleText(R.string.setting_notification_time)
         .setNegativeButtonText(R.string.action_cancel)
         .setPositiveButtonText(R.string.action_save)
         .setTheme(R.style.Theme_Grocy_TimePicker)

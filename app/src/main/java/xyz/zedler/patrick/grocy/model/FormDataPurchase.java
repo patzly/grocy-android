@@ -100,7 +100,7 @@ public class FormDataPurchase {
   private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
-  private boolean noScanner = false;
+  private final boolean noScanner;
 
   public FormDataPurchase(
       Application application,
