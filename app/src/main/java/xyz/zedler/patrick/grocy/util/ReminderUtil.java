@@ -167,7 +167,7 @@ public class ReminderUtil {
         .setContentText(text)
         .setAutoCancel(true)
         .setColor(ContextCompat.getColor(context, R.color.retro_green_fg))
-        .setSmallIcon(R.drawable.ic_round_grocy)
+        .setSmallIcon(R.drawable.ic_round_grocy_notification)
         .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
         .setContentIntent(
             PendingIntent.getActivity(
