@@ -115,11 +115,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
 
-      if (action.equals(Constants.ACTION.EDIT)) {
-        this.recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
-      } else {
-        this.recipePositions = new ArrayList<>();
-      }
+      this.recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
       this.products = Product.getProductsForRecipePositions(data.getProducts(), recipePositions);
       this.quantityUnits = QuantityUnit.getQuantityUnitsForRecipePositions(data.getQuantityUnits(), recipePositions);
 

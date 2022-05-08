@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
@@ -96,9 +97,15 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    binding.ingredients.setOnClickListener(v -> navigate(RecipeEditFragmentDirections
-            .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
-            .setRecipe(viewModel.getRecipe())));
+    binding.ingredients.setOnClickListener(v -> {
+      if (viewModel.isActionEdit()) {
+        navigate(RecipeEditFragmentDirections
+                .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
+                .setRecipe(viewModel.getRecipe()));
+      } else {
+        activity.showMessage(R.string.subtitle_recipe_not_on_server);
+      }
+    });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -107,6 +114,9 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
+      } else if (event.getType() == Event.SET_RECIPE_ID) {
+        int id = event.getBundle().getInt(Constants.ARGUMENT.RECIPE_ID);
+        setForPreviousDestination(Constants.ARGUMENT.RECIPE_ID, id);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -137,6 +147,22 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
             viewModel.getFormData().getScannerVisibilityLive()
     );
 
+    String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
+    if (action != null) {
+      removeForThisDestination(Constants.ARGUMENT.ACTION);
+      switch (action) {
+        case ACTION.SAVE_CLOSE:
+          new Handler().postDelayed(() -> viewModel.saveEntry(true), 500);
+          break;
+        case ACTION.SAVE_NOT_CLOSE:
+          new Handler().postDelayed(() -> viewModel.saveEntry(false), 500);
+          break;
+        case ACTION.DELETE:
+          new Handler().postDelayed(() -> viewModel.deleteEntry(), 500);
+          break;
+      }
+    }
+
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
     }
@@ -164,7 +190,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
             clearInputFocus();
             activity.showKeyboard(binding.editTextName);
           } else {
-            viewModel.saveEntry();
+            viewModel.saveEntry(true);
           }
         }
     );
@@ -212,6 +238,9 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     } else if (item.getItemId() == R.id.action_clear_form) {
       clearInputFocus();
       viewModel.getFormData().clearForm();
+      return true;
+    } else if (item.getItemId() == R.id.action_save_not_close) {
+      viewModel.saveEntry(false);
       return true;
     }
     return false;

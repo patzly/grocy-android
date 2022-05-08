@@ -120,9 +120,6 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
-      } else if (event.getType() == Event.ADD_RECIPE_POS) {
-        RecipePosition recipePosition = event.getBundle().getParcelable(Constants.ARGUMENT.RECIPE_POSITION);
-        activity.navigateUp();
       }
     });
 
@@ -179,7 +176,13 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
   public void clearInputFocus() {
     activity.hideKeyboard();
     binding.dummyFocusView.requestFocus();
-    // TODO: Add missing input fields
+    binding.autoCompleteProduct.clearFocus();
+    binding.switchOnlyCheckSingleUnitInStock.clearFocus();
+    binding.textInputAmount.clearFocus();
+    binding.textInputVariableAmount.clearFocus();
+    binding.switchDoNotCheckStockFulfillment.clearFocus();
+    binding.textInputIngredientGroup.clearFocus();
+    binding.textInputNotes.clearFocus();
   }
 
   public void clearAmountFieldAndFocusIt() {

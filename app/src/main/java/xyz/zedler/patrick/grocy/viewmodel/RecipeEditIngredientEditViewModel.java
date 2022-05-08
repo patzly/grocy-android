@@ -85,7 +85,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
   private final boolean debug;
   private final boolean isActionEdit;
-  private final boolean isRecipeActionEdit;
 
   public RecipeEditIngredientEditViewModel(
       @NonNull Application application,
@@ -103,7 +102,6 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     formData = new FormDataRecipeEditIngredientEdit(application, sharedPrefs, startupArgs);
     args = startupArgs;
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
-    isRecipeActionEdit = startupArgs.getRecipeAction().equals(Constants.ACTION.EDIT);
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -287,11 +285,9 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
     }
     recipePosition = formData.fillRecipePosition(recipePosition);
 
-    if (isRecipeActionEdit) {
-      Recipe recipe = args.getRecipe();
-      if (recipe != null) {
-        recipePosition.setRecipeId(recipe.getId());
-      }
+    Recipe recipe = args.getRecipe();
+    if (recipe != null) {
+      recipePosition.setRecipeId(recipe.getId());
     }
 
     JSONObject jsonObject = RecipePosition.getJsonFromRecipe(recipePosition, debug, TAG);
@@ -309,24 +305,17 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
           }
       );
     } else {
-      if (isRecipeActionEdit) {
-        dlHelper.post(
-                grocyApi.getObjects(ENTITY.RECIPES_POS),
-                jsonObject,
-                response -> navigateUp(),
-                error -> {
-                  showErrorMessage(error);
-                  if (debug) {
-                    Log.e(TAG, "saveEntry: " + error);
-                  }
-                }
-        );
-      } else {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ARGUMENT.RECIPE_POSITION, recipePosition);
-
-        sendEvent(Event.ADD_RECIPE_POS, bundle);
-      }
+      dlHelper.post(
+          grocyApi.getObjects(ENTITY.RECIPES_POS),
+          jsonObject,
+          response -> navigateUp(),
+          error -> {
+            showErrorMessage(error);
+            if (debug) {
+              Log.e(TAG, "saveEntry: " + error);
+            }
+          }
+      );
     }
   }
 

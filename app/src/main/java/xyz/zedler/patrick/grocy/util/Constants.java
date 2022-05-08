@@ -412,6 +412,7 @@ public final class Constants {
     public final static String USERS = "users";
     public final static String SHOW_OPTION_NEVER_EXPIRES = "show_option_never_expires";
     public final static String RECIPE = "recipe";
+    public final static String RECIPE_ID = "recipe_id";
     public final static String RECIPE_FULFILLMENT = "recipe_fulfillment";
     public final static String RECIPE_POSITION = "recipe_position";
     public final static String RECIPE_POSITIONS = "recipe_positions";

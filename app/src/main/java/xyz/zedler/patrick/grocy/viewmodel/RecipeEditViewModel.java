@@ -34,6 +34,7 @@ import androidx.preference.PreferenceManager;
 
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -75,9 +76,10 @@ public class RecipeEditViewModel extends BaseViewModel {
 
   private List<Product> products;
   private List<ProductBarcode> productBarcodes;
+  private Recipe recipe;
 
   private final boolean debug;
-  private final boolean isActionEdit;
+  private final MutableLiveData<Boolean> actionEditLive;
 
   public RecipeEditViewModel(
       @NonNull Application application,
@@ -94,7 +96,9 @@ public class RecipeEditViewModel extends BaseViewModel {
     repository = new RecipeEditRepository(application);
     formData = new FormDataRecipeEdit(application, sharedPrefs, startupArgs);
     args = startupArgs;
-    isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
+    actionEditLive = new MutableLiveData<>();
+    actionEditLive.setValue(args.getAction().equals(Constants.ACTION.EDIT));
+    recipe = args.getRecipe();
 
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
@@ -266,22 +270,22 @@ public class RecipeEditViewModel extends BaseViewModel {
     }
   }
 
-  public void saveEntry() {
+  public void saveEntry(boolean withClosing) {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
     }
 
-    Recipe recipe = null;
-    if (isActionEdit) {
-      recipe = args.getRecipe();
+    Recipe recipeToSave = new Recipe();
+    if (isActionEdit()) {
+      recipeToSave = recipe;
     }
-    recipe = formData.fillRecipe(recipe);
-    JSONObject jsonObject = Recipe.getJsonFromRecipe(recipe, debug, TAG);
+    recipeToSave = formData.fillRecipe(recipeToSave);
+    JSONObject jsonObject = Recipe.getJsonFromRecipe(recipeToSave, debug, TAG);
 
-    if (isActionEdit) {
+    if (isActionEdit()) {
       dlHelper.put(
-          grocyApi.getObject(ENTITY.RECIPES, recipe.getId()),
+          grocyApi.getObject(ENTITY.RECIPES, recipeToSave.getId()),
           jsonObject,
           response -> navigateUp(),
           error -> {
@@ -292,10 +296,33 @@ public class RecipeEditViewModel extends BaseViewModel {
           }
       );
     } else {
+      Recipe finalRecipe = recipeToSave;
       dlHelper.post(
           grocyApi.getObjects(ENTITY.RECIPES),
           jsonObject,
-          response -> navigateUp(),
+          response -> {
+            int objectId = -1;
+            try {
+              objectId = response.getInt("created_object_id");
+              Log.i(TAG, "saveEntry: " + objectId);
+            } catch (JSONException e) {
+              if (debug) {
+                Log.e(TAG, "saveEntry: " + e);
+              }
+            }
+            if (withClosing) {
+              if (objectId != -1) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.ARGUMENT.RECIPE_ID, objectId);
+                sendEvent(Event.SET_RECIPE_ID, bundle);
+              }
+              navigateUp();
+            } else {
+              actionEditLive.setValue(true);
+              finalRecipe.setId(objectId);
+              recipe = finalRecipe;
+            }
+          },
           error -> {
             showErrorMessage(error);
             if (debug) {
@@ -307,7 +334,7 @@ public class RecipeEditViewModel extends BaseViewModel {
   }
 
   private void fillWithRecipeIfNecessary() {
-    if (!isActionEdit || formData.isFilledWithRecipe()) {
+    if (!isActionEdit() || formData.isFilledWithRecipe()) {
       return;
     }
 
@@ -356,7 +383,12 @@ public class RecipeEditViewModel extends BaseViewModel {
   }
 
   public boolean isActionEdit() {
-    return isActionEdit;
+    assert actionEditLive.getValue() != null;
+    return actionEditLive.getValue();
+  }
+
+  public MutableLiveData<Boolean> getActionEditLive() {
+    return actionEditLive;
   }
 
   @NonNull
@@ -400,7 +432,7 @@ public class RecipeEditViewModel extends BaseViewModel {
   }
 
   public Recipe getRecipe() {
-    return args.getRecipe();
+    return recipe;
   }
 
   public static class RecipeEditViewModelFactory implements ViewModelProvider.Factory {

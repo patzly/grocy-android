@@ -85,7 +85,7 @@
           android:layout_weight="1"
           android:layout_marginEnd="16dp"
           android:textColor="@color/on_primary"
-          android:text="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}" />
+          android:text="@{viewModel.actionEditLive ? @string/title_edit_list_entry : @string/title_create_list_entry}" />
 
       </LinearLayout>
 
@@ -350,7 +350,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
-                app:transitionTypeChanging="@{true}">
+                app:transitionTypeChanging="@{true}"
+                android:alpha="@{viewModel.actionEditLive ? 1.0f : 0.4f}">
 
               <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"

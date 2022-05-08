@@ -241,16 +241,6 @@ public class RecipeEditIngredientListFragment extends BaseFragment
   }
 
   @Override
-  public boolean onBackPressed() {
-    setForDestination(
-        R.id.recipeEditFragment,
-        ARGUMENT.RECIPE,
-        viewModel.getRecipe()
-    );
-    return false;
-  }
-
-  @Override
   public void updateConnectivity(boolean isOnline) {
     if (!isOnline == viewModel.isOffline()) {
       return;
