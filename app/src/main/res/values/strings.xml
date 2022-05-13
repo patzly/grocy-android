@@ -293,6 +293,7 @@
   <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
+  <string name="msg_clear_form_first">Clear the form first before scanning another known barcode.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
   <string name="stock_disabled">You have disabled the stock feature in your grocy configuration, probably because you don\'t need it. But this app can only do stock management at the moment, so it may not be of much use to you.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

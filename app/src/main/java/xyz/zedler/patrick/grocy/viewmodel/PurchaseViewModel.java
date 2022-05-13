@@ -508,7 +508,11 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void onBarcodeRecognized(String barcode) {
     if (formData.getProductDetailsLive().getValue() != null) {
-      formData.getBarcodeLive().setValue(barcode);
+      if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
+        formData.getBarcodeLive().setValue(barcode);
+      } else {
+        showMessage(R.string.msg_clear_form_first);
+      }
       return;
     }
     Product product = null;
@@ -525,16 +529,12 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     ProductBarcode productBarcode = null;
     if (product == null) {
-      for (ProductBarcode code : barcodes) {
-        if (code.getBarcode().equals(barcode)) {
-          productBarcode = code;
-          if (code instanceof PendingProductBarcode) {
-            setPendingProduct(code.getProductIdInt(), (PendingProductBarcode) code);
-            return;
-          } else {
-            product = productHashMap.get(code.getProductIdInt());
-          }
-        }
+      productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
+      if (productBarcode instanceof PendingProductBarcode) {
+        setPendingProduct(productBarcode.getProductIdInt(), (PendingProductBarcode) productBarcode);
+        return;
+      } else if (productBarcode != null) {
+        product = productHashMap.get(productBarcode.getProductIdInt());
       }
     }
     if (product != null) {
