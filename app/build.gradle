@@ -76,6 +76,7 @@ android {
         targetCompatibility 1.8
     }
     buildToolsVersion '31.0.0'
+    namespace 'xyz.zedler.patrick.grocy'
 }
 
 dependencies {

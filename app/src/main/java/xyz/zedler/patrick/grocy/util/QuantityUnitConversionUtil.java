@@ -52,6 +52,8 @@ public class QuantityUnitConversionUtil {
           || product.getId() != conversion.getProductIdInt()) {
         continue;
       }
+      // Only add product specific conversions
+      // ("overriding" standard conversions which are added in the next step)
       QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
       if (unit == null || unitFactors.containsKey(unit)) {
         continue;
@@ -63,6 +65,7 @@ public class QuantityUnitConversionUtil {
           || stock.getId() != conversion.getFromQuId()) {
         continue;
       }
+      // Only add standard unit conversions
       QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
       if (unit == null || unitFactors.containsKey(unit)) {
         continue;
