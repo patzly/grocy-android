@@ -2283,6 +2283,25 @@ public class DownloadHelper {
     }
   }
 
+  public void getChoreEntries(
+      OnChoreEntriesResponseListener onResponseListener,
+      Response.ErrorListener errorListener
+  ) {
+    get(
+        grocyApi.getChores(),
+        response -> {
+          Type type = new TypeToken<List<ChoreEntry>>() {
+          }.getType();
+          ArrayList<ChoreEntry> choreEntries = new Gson().fromJson(response, type);
+          if (debug) {
+            Log.i(tag, "getChoreEntries: " + choreEntries);
+          }
+          onResponseListener.onResponse(choreEntries);
+        },
+        errorListener::onErrorResponse
+    );
+  }
+
   public QueueItem updateChoreEntries(
       String dbChangedTime,
       OnChoreEntriesResponseListener onResponseListener

@@ -28,25 +28,12 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import androidx.preference.PreferenceManager;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import org.json.JSONException;
-import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
-import xyz.zedler.patrick.grocy.model.StockItem;
-import xyz.zedler.patrick.grocy.util.Constants.NotificationChannels;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.CHORES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class ChoresNotificationReceiver extends BroadcastReceiver {
@@ -63,7 +50,7 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       String description = context.getString(R.string.notification_channel_due_soon_description);
       int importance = NotificationManager.IMPORTANCE_HIGH;
       NotificationChannel channel = new NotificationChannel(
-          NotificationChannels.DUE_SOON, name, importance
+          NOTIFICATIONS.CHORES_CHANNEL, name, importance
       );
       channel.setDescription(description);
       notificationManager.createNotificationChannel(channel);
@@ -71,56 +58,32 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     DownloadHelper dlHelper = new DownloadHelper(context, ChoresNotificationReceiver.class.getSimpleName());
 
-    dlHelper.getVolatile(response -> {
-      try {
-        Type typeStockItem = new TypeToken<List<StockItem>>() {
-        }.getType();
-        JSONObject jsonObject = new JSONObject(response);
-        ArrayList<StockItem> dueItems = (new Gson()).fromJson(
-            jsonObject.getJSONArray("due_products").toString(), typeStockItem
-        );
+    dlHelper.getChoreEntries(choreEntries -> {
+      if (choreEntries.size() == 0) return;
 
-        if (dueItems.size() == 0) return;
+      int days = sharedPrefs.getInt(
+          CHORES.DUE_SOON_DAYS,
+          SETTINGS_DEFAULT.CHORES.DUE_SOON_DAYS
+      );
+      String titleText = context.getResources().getQuantityString(
+          R.plurals.description_overview_chores_due_today,
+          choreEntries.size(), choreEntries.size(), days
+      );
 
-        String days = sharedPrefs.getString(
-            STOCK.DUE_SOON_DAYS,
-            SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
-        );
-        int daysInt;
-        if (NumUtil.isStringInt(days)) {
-          daysInt = Integer.parseInt(days);
-        } else {
-          daysInt = Integer.parseInt(SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
-        }
-        String titleText = context.getResources().getQuantityString(
-            R.plurals.description_overview_stock_due_soon,
-            dueItems.size(), dueItems.size(), daysInt
-        );
+      Uri uri = Uri.parse(context.getString(R.string.deep_link_choresFragment));
+      Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
+      notificationIntent.setClass(context, MainActivity.class);
+      notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        Uri uri = BaseBottomSheet.getUriWithArgs(
-            context.getString(R.string.deep_link_stockOverviewFragment),
-            new StockOverviewFragmentArgs.Builder()
-                .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_DUE_SOON))
-                .build().toBundle()
-        );
-        Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
-        notificationIntent.setClass(context, MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        notificationManager.notify(NOTIFICATIONS.DUE_SOON_ID, ReminderUtil.getNotification(
-            context,
-            titleText,
-            context.getString(R.string.notification_due_soon_content),
-            NOTIFICATIONS.DUE_SOON_ID,
-            NOTIFICATIONS.DUE_SOON_CHANNEL,
-            notificationIntent
-        ));
-        dlHelper.destroy();
-      } catch (JSONException e) {
-        e.printStackTrace();
-        // exception handling
-        dlHelper.destroy();
-      }
+      notificationManager.notify(NOTIFICATIONS.CHORES_ID, ReminderUtil.getNotification(
+          context,
+          titleText,
+          null,
+          NOTIFICATIONS.CHORES_ID,
+          NOTIFICATIONS.CHORES_CHANNEL,
+          notificationIntent
+      ));
+      dlHelper.destroy();
     }, error -> dlHelper.destroy());
   }
 }

@@ -166,6 +166,11 @@ public final class Constants {
       public final static String AUTO_ADD_LIST_ID = "shopping_list_auto_add_below_min_stock_amount_list_id"; // used for pref sync, DO NOT EDIT VALUE
     }
 
+    public final static class CHORES {
+
+      public final static String DUE_SOON_DAYS = "chores_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
+    }
+
     public final static class SHOPPING_MODE {
 
       public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
@@ -182,10 +187,15 @@ public final class Constants {
 
     public final static class NOTIFICATIONS {
 
-      public final static String DUE_SOON_ENABLE = "notification_enable";
-      public final static String DUE_SOON_TIME = "notification_time";
+      public final static String DUE_SOON_ENABLE = "notification_due_soon_enable";
+      public final static String DUE_SOON_TIME = "notification_due_soon_time";
       public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
       public final static int DUE_SOON_ID = 1;
+
+      public final static String CHORES_ENABLE = "notification_chores_enable";
+      public final static String CHORES_TIME = "notification_chores_time";
+      public final static String CHORES_CHANNEL = "xyz.zedler.patrick.grocy.chores";
+      public final static int CHORES_ID = 2;
     }
   }
 
@@ -263,6 +273,11 @@ public final class Constants {
       public final static int AUTO_ADD_LIST_ID = 1;
     }
 
+    public final static class CHORES {
+
+      public final static int DUE_SOON_DAYS = 5;
+    }
+
     public final static class SHOPPING_MODE {
 
       public final static int UPDATE_INTERVAL = 10;
@@ -280,11 +295,10 @@ public final class Constants {
     public final static class NOTIFICATIONS {
       public final static boolean DUE_SOON_ENABLE = false;
       public final static String DUE_SOON_TIME = "12:00";
-    }
-  }
 
-  public final static class NotificationChannels {
-    public final static String DUE_SOON = "xyz.zedler.patrick.grocy.due_soon";
+      public final static boolean CHORES_ENABLE = false;
+      public final static String CHORES_TIME = "12:00";
+    }
   }
 
   public final static class BarcodeFormats {
