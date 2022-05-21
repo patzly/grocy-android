@@ -555,13 +555,23 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     BaseFragment currentFragment = getCurrentFragment();
-    return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    try {
+      return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    } catch (Exception e) {
+      Log.e(TAG, "onKeyDown: currentFragment is null");
+      return false;
+    }
   }
 
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     BaseFragment currentFragment = getCurrentFragment();
-    return currentFragment.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event);
+    try {
+      return currentFragment.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event);
+    } catch (Exception e) {
+      Log.e(TAG, "onKeyUp: currentFragment is null");
+      return false;
+    }
   }
 
   public void navigateUp() {
