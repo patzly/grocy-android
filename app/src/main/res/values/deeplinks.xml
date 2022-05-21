@@ -35,6 +35,7 @@
   <string name="deep_link_tasksFragment" translatable="false">grocy://tasksFragment</string>
   <string name="deep_link_taskEntryEditFragment" translatable="false">grocy://taskEntryEditFragment?action={action}</string>
   <string name="deep_link_choresFragment" translatable="false">grocy://choresFragment</string>
+  <string name="deep_link_recipesFragment" translatable="false">grocy://recipesFragment</string>
   <string name="deep_link_aboutFragment" translatable="false">grocy://aboutFragment</string>
   <string name="deep_link_masterProductFragment" translatable="false">grocy://masterProductFragment?action={action}&amp;productName={productName}&amp;productId={productId}&amp;pendingProductId={pendingProductId}&amp;pendingProductBarcodes={pendingProductBarcodes}</string>
   <string name="deep_link_masterDataOverviewFragment" translatable="false">grocy://masterDataOverviewFragment</string>

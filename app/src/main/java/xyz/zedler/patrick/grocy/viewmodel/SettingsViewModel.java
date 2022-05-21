@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
@@ -96,8 +97,10 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> showMLKitCropStreamLive;
   private final MutableLiveData<Boolean> autoAddToShoppingListLive;
   private final MutableLiveData<String> autoAddToShoppingListTextLive;
-  private final MutableLiveData<Boolean> notificationsEnabledLive;
-  private final MutableLiveData<String> notificationsTimeTextLive;
+  private final MutableLiveData<Boolean> dueSoonNotificationsEnabledLive;
+  private final MutableLiveData<String> dueSoonNotificationsTimeTextLive;
+  private final MutableLiveData<Boolean> choresNotificationsEnabledLive;
+  private final MutableLiveData<String> choresNotificationsTimeTextLive;
 
   public SettingsViewModel(@NonNull Application application) {
     super(application);
@@ -130,8 +133,10 @@ public class SettingsViewModel extends BaseViewModel {
         SHOPPING_LIST.AUTO_ADD, SETTINGS_DEFAULT.SHOPPING_LIST.AUTO_ADD
     ));
     autoAddToShoppingListTextLive = new MutableLiveData<>(getString(R.string.setting_loading));
-    notificationsEnabledLive = new MutableLiveData<>(getNotificationsEnabled());
-    notificationsTimeTextLive = new MutableLiveData<>(getNotificationsTime());
+    dueSoonNotificationsEnabledLive = new MutableLiveData<>(getDueSoonNotificationsEnabled());
+    dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getDueSoonNotificationsTime());
+    choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
+    choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
   }
 
   public boolean isDemo() {
@@ -361,6 +366,18 @@ public class SettingsViewModel extends BaseViewModel {
 
   public MutableLiveData<Boolean> getShowMLKitCropStreamLive() {
     return showMLKitCropStreamLive;
+  }
+
+  public boolean getKeepScreenOnRecipesEnabled() {
+    return sharedPrefs.getBoolean(
+            RECIPES.KEEP_SCREEN_ON,
+            SETTINGS_DEFAULT.RECIPES.KEEP_SCREEN_ON
+    );
+  }
+
+  public void setKeepScreenOnRecipesEnabled(boolean enabled) {
+    sharedPrefs.edit()
+            .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
   }
 
   public boolean getFrontCamEnabled() {
@@ -980,37 +997,70 @@ public class SettingsViewModel extends BaseViewModel {
     showBottomSheet(new InputBottomSheet(), bundle);
   }
 
-  public boolean getNotificationsEnabled() {
+  public boolean getDueSoonNotificationsEnabled() {
     return sharedPrefs.getBoolean(
         NOTIFICATIONS.DUE_SOON_ENABLE,
         SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_ENABLE
     );
   }
 
-  public MutableLiveData<Boolean> getNotificationsEnabledLive() {
-    return notificationsEnabledLive;
+  public MutableLiveData<Boolean> getDueSoonNotificationsEnabledLive() {
+    return dueSoonNotificationsEnabledLive;
   }
 
-  public void setNotificationsEnabled(boolean enabled) {
-    notificationsEnabledLive.setValue(enabled);
+  public void setDueSoonNotificationsEnabled(boolean enabled) {
+    dueSoonNotificationsEnabledLive.setValue(enabled);
     (new ReminderUtil(getApplication())).setReminderEnabled(enabled);
   }
 
-  public String getNotificationsTime() {
+  public String getDueSoonNotificationsTime() {
     return sharedPrefs.getString(
         NOTIFICATIONS.DUE_SOON_TIME,
         SETTINGS_DEFAULT.NOTIFICATIONS.DUE_SOON_TIME
     );
   }
 
-  public MutableLiveData<String> getNotificationsTimeTextLive() {
-    return notificationsTimeTextLive;
+  public MutableLiveData<String> getDueSoonNotificationsTimeTextLive() {
+    return dueSoonNotificationsTimeTextLive;
   }
 
-  public void setNotificationsTime(String text) {
+  public void setDueSoonNotificationsTime(String text) {
     sharedPrefs.edit().putString(NOTIFICATIONS.DUE_SOON_TIME, text).apply();
-    notificationsTimeTextLive.setValue(text);
-    setNotificationsEnabled(true);
+    dueSoonNotificationsTimeTextLive.setValue(text);
+    setDueSoonNotificationsEnabled(true);
+  }
+
+  public boolean getChoresNotificationsEnabled() {
+    return sharedPrefs.getBoolean(
+        NOTIFICATIONS.CHORES_ENABLE,
+        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_ENABLE
+    );
+  }
+
+  public MutableLiveData<Boolean> getChoresNotificationsEnabledLive() {
+    return choresNotificationsEnabledLive;
+  }
+
+  public void setChoresNotificationsEnabled(boolean enabled) {
+    //choresNotificationsEnabledLive.setValue(enabled);
+    //(new ReminderUtil(getApplication())).setReminderEnabled(enabled);
+  }
+
+  public String getChoresNotificationsTime() {
+    return sharedPrefs.getString(
+        NOTIFICATIONS.CHORES_TIME,
+        SETTINGS_DEFAULT.NOTIFICATIONS.CHORES_TIME
+    );
+  }
+
+  public MutableLiveData<String> getChoresNotificationsTimeTextLive() {
+    return choresNotificationsTimeTextLive;
+  }
+
+  public void setChoresNotificationsTime(String text) {
+    sharedPrefs.edit().putString(NOTIFICATIONS.CHORES_TIME, text).apply();
+    choresNotificationsTimeTextLive.setValue(text);
+    setChoresNotificationsEnabled(true);
   }
 
   public ArrayList<String> getSupportedVersions() {

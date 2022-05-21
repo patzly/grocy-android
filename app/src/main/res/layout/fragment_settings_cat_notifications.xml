@@ -140,16 +140,16 @@
           <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch_stock_enable_notifications"
             style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setNotificationsEnabled(checked)}"
-            app:initialChecked="@{viewModel.getNotificationsEnabled()}"/>
+            android:onCheckedChanged="@{(view, checked) -> viewModel.setDueSoonNotificationsEnabled(checked)}"
+            app:initialChecked="@{viewModel.getDueSoonNotificationsEnabled()}"/>
 
         </LinearLayout>
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           app:clickUtil="@{clickUtil}"
-          android:visibility="@{viewModel.notificationsEnabledLive ? View.VISIBLE : View.GONE}"
-          android:onClick="@{() -> fragment.showTimePickerDialog()}">
+          android:visibility="@{viewModel.dueSoonNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
+          android:onClick="@{() -> fragment.showDueSoonTimePickerDialog()}">
 
           <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -164,7 +164,7 @@
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.notificationsTimeTextLive}"/>
+              android:text="@{viewModel.dueSoonNotificationsTimeTextLive}"/>
 
             <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Description"
@@ -204,16 +204,16 @@
           <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch_chores_enable_notifications"
             style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setNotificationsEnabled(checked)}"
-            app:initialChecked="@{viewModel.getNotificationsEnabled()}"/>
+            android:onCheckedChanged="@{(view, checked) -> viewModel.setChoresNotificationsEnabled(checked)}"
+            app:initialChecked="@{viewModel.getChoresNotificationsEnabled()}"/>
 
         </LinearLayout>
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           app:clickUtil="@{clickUtil}"
-          android:visibility="@{viewModel.notificationsEnabledLive ? View.VISIBLE : View.GONE}"
-          android:onClick="@{() -> fragment.showTimePickerDialog()}">
+          android:visibility="@{viewModel.choresNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
+          android:onClick="@{() -> fragment.showChoresTimePickerDialog()}">
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -228,7 +228,7 @@
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.notificationsTimeTextLive}"/>
+              android:text="@{viewModel.choresNotificationsTimeTextLive}"/>
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Description"

@@ -5,6 +5,8 @@
 - New: Chores can now be rescheduled (server v3.3.0 feature) (#511)
 - Improved: Entries on stock entries page are colored if volatile
 - Improved: Price entered on inventory page is now related to selected quantity unit (#511)
+- Improved: On transaction pages adding of known barcode is prevented (#541)
+- Fixed: Product 'purchase to stock' conversion is preferred to additional conversions (#490)
 - Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
 
 2.2.1:

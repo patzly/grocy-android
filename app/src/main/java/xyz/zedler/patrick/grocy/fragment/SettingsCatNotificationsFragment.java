@@ -104,8 +104,25 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
-  public void showTimePickerDialog() {
-    String[] timeParts = viewModel.getNotificationsTime().split(":");
+  public void showDueSoonTimePickerDialog() {
+    showTimePickerDialog(
+        () -> viewModel.getDueSoonNotificationsTime(),
+        time -> viewModel.setDueSoonNotificationsTime(time)
+    );
+  }
+
+  public void showChoresTimePickerDialog() {
+    showTimePickerDialog(
+        () -> viewModel.getChoresNotificationsTime(),
+        time -> viewModel.setChoresNotificationsTime(time)
+    );
+  }
+
+  private void showTimePickerDialog(
+      TimePickerTimeListener timeListener,
+      TimePickerFinishedListener finishedListener
+  ) {
+    String[] timeParts = timeListener.getTime().split(":");
     int hour = 12;
     int minute = 0;
     if (timeParts.length == 2) {
@@ -127,11 +144,18 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
         .setTheme(R.style.Theme_Grocy_TimePicker)
         .build();
 
-    picker.addOnPositiveButtonClickListener(v -> viewModel.setNotificationsTime(
-            String.format(Locale.getDefault(), "%02d:%02d",
-                picker.getHour(), picker.getMinute())
-    ));
+    picker.addOnPositiveButtonClickListener(v -> finishedListener.onFinished(
+        String.format(Locale.getDefault(), "%02d:%02d",
+        picker.getHour(), picker.getMinute())));
     picker.show(getParentFragmentManager(), "time_picker_dialog");
+  }
+
+  public interface TimePickerTimeListener {
+    String getTime();
+  }
+
+  public interface TimePickerFinishedListener {
+    void onFinished(String time);
   }
 
   @Override

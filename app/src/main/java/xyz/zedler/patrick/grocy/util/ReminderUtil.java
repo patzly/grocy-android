@@ -159,16 +159,14 @@ public class ReminderUtil {
       String notificationChannelId,
       Intent intent
   ) {
-    return new NotificationCompat.Builder(
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(
         context,
         notificationChannelId
     )
         .setContentTitle(title)
-        .setContentText(text)
         .setAutoCancel(true)
         .setColor(ContextCompat.getColor(context, R.color.retro_green_bg_black))
         .setSmallIcon(R.drawable.ic_round_grocy_notification)
-        .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
         .setContentIntent(
             PendingIntent.getActivity(
                 context,
@@ -178,8 +176,12 @@ public class ReminderUtil {
                     ? PendingIntent.FLAG_IMMUTABLE
                     : PendingIntent.FLAG_UPDATE_CURRENT
             )
-        ).setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        .build();
+        ).setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    if (text != null) {
+      builder.setContentText(text);
+      builder.setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+    }
+    return builder.build();
   }
 }
 

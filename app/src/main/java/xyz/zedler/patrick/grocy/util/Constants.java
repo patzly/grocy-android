@@ -65,6 +65,8 @@ public final class Constants {
     public final static String TASKS_SORT_MODE = "tasks_sort_mode";
     public final static String TASKS_SORT_ASCENDING = "tasks_sort_ascending";
     public final static String TASKS_SHOW_DONE = "tasks_show_done";
+    public final static String RECIPES_SORT_MODE = "recipes_sort_mode";
+    public final static String RECIPES_SORT_ASCENDING = "recipes_sort_ascending";
 
     public final static String DB_LAST_TIME_STOCK_ITEMS = "db_last_time_stock_items";
     public final static String DB_LAST_TIME_STOCK_ENTRIES = "db_last_time_stock_entries";
@@ -87,6 +89,9 @@ public final class Constants {
     public final static String DB_LAST_TIME_CHORES = "db_last_time_chores";
     public final static String DB_LAST_TIME_CHORE_ENTRIES = "db_last_time_chore_entries";
     public final static String DB_LAST_TIME_USERS = "db_last_time_users";
+    public final static String DB_LAST_TIME_RECIPES = "db_last_time_recipes";
+    public final static String DB_LAST_TIME_RECIPE_FULFILLMENTS = "db_last_time_recipe_fulfillments";
+    public final static String DB_LAST_TIME_RECIPE_POSITIONS = "db_last_time_recipe_positions";
 
     public final static String QUICK_MODE_ACTIVE_CONSUME = "quick_mode_active_consume";
     public final static String QUICK_MODE_ACTIVE_PURCHASE = "quick_mode_active_purchase";
@@ -98,6 +103,7 @@ public final class Constants {
     public final static String CAMERA_SCANNER_VISIBLE_SHOPPING_ITEM = "camera_scanner_visible_shopping_item";
     public final static String CAMERA_SCANNER_VISIBLE_TRANSFER = "camera_scanner_visible_transfer";
     public final static String CAMERA_SCANNER_VISIBLE_INVENTORY = "camera_scanner_visible_inventory";
+    public final static String CAMERA_SCANNER_VISIBLE_RECIPE = "camera_scanner_visible_recipe";
 
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
@@ -171,6 +177,11 @@ public final class Constants {
       public final static String AUTO_ADD_LIST_ID = "shopping_list_auto_add_below_min_stock_amount_list_id"; // used for pref sync, DO NOT EDIT VALUE
     }
 
+    public final static class CHORES {
+
+      public final static String DUE_SOON_DAYS = "chores_due_soon_days"; // used for pref sync, DO NOT EDIT VALUE
+    }
+
     public final static class SHOPPING_MODE {
 
       public final static String UPDATE_INTERVAL = "shopping_mode_update_interval";
@@ -180,6 +191,11 @@ public final class Constants {
       public final static String SHOW_PRODUCT_DESCRIPTION = "show_product_description";
     }
 
+    public final static class RECIPES {
+
+      public final static String KEEP_SCREEN_ON = "recipes_keep_screen_on";
+    }
+
     public final static class DEBUGGING {
 
       public final static String ENABLE_DEBUGGING = "enable_debugging";
@@ -187,10 +203,15 @@ public final class Constants {
 
     public final static class NOTIFICATIONS {
 
-      public final static String DUE_SOON_ENABLE = "notification_enable";
-      public final static String DUE_SOON_TIME = "notification_time";
+      public final static String DUE_SOON_ENABLE = "notification_due_soon_enable";
+      public final static String DUE_SOON_TIME = "notification_due_soon_time";
       public final static String DUE_SOON_CHANNEL = "xyz.zedler.patrick.grocy.due_soon";
       public final static int DUE_SOON_ID = 1;
+
+      public final static String CHORES_ENABLE = "notification_chores_enable";
+      public final static String CHORES_TIME = "notification_chores_time";
+      public final static String CHORES_CHANNEL = "xyz.zedler.patrick.grocy.chores";
+      public final static int CHORES_ID = 2;
     }
   }
 
@@ -270,6 +291,11 @@ public final class Constants {
       public final static int AUTO_ADD_LIST_ID = 1;
     }
 
+    public final static class CHORES {
+
+      public final static int DUE_SOON_DAYS = 5;
+    }
+
     public final static class SHOPPING_MODE {
 
       public final static int UPDATE_INTERVAL = 10;
@@ -277,6 +303,11 @@ public final class Constants {
       public final static boolean SHOW_DONE_ITEMS = true;
       public final static boolean USE_SMALLER_FONT = false;
       public final static boolean SHOW_PRODUCT_DESCRIPTION = false;
+    }
+
+    public final static class RECIPES {
+
+      public final static boolean KEEP_SCREEN_ON = true;
     }
 
     public final static class DEBUGGING {
@@ -287,11 +318,10 @@ public final class Constants {
     public final static class NOTIFICATIONS {
       public final static boolean DUE_SOON_ENABLE = false;
       public final static String DUE_SOON_TIME = "12:00";
-    }
-  }
 
-  public final static class NotificationChannels {
-    public final static String DUE_SOON = "xyz.zedler.patrick.grocy.due_soon";
+      public final static boolean CHORES_ENABLE = false;
+      public final static String CHORES_TIME = "12:00";
+    }
   }
 
   public final static class BarcodeFormats {
@@ -402,6 +432,11 @@ public final class Constants {
     public final static String USER = "user";
     public final static String USERS = "users";
     public final static String SHOW_OPTION_NEVER_EXPIRES = "show_option_never_expires";
+    public final static String RECIPE = "recipe";
+    public final static String RECIPE_ID = "recipe_id";
+    public final static String RECIPE_FULFILLMENT = "recipe_fulfillment";
+    public final static String RECIPE_POSITION = "recipe_position";
+    public final static String RECIPE_POSITIONS = "recipe_positions";
     public final static String RUN_AS_SUPER_CLASS = "run_as_super_class";
     public final static String INSTANCE_STATE = "instance_state";
   }

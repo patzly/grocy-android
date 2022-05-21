@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 34,
-    "identityHash": "4f5cf48edf95e2ca506f6e4da0628884",
+    "identityHash": "e958cac4ca9a0abe1ae6489d0dc394d5",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -516,7 +516,7 @@
       },
       {
         "tableName": "quantity_unit_conversion_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` INTEGER NOT NULL, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `from_qu_id` INTEGER NOT NULL, `to_qu_id` INTEGER NOT NULL, `factor` REAL NOT NULL, `product_id` TEXT, `row_created_timestamp` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -545,8 +545,8 @@
           {
             "fieldPath": "productId",
             "columnName": "product_id",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "rowCreatedTimestamp",
@@ -1519,12 +1519,426 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "stock_entry_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `product_id` INTEGER NOT NULL, `amount` REAL NOT NULL, `best_before_date` TEXT, `purchased_date` TEXT, `stock_id` TEXT, `price` TEXT, `open` INTEGER NOT NULL, `opened_date` TEXT, `row_created_timestamp` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `note` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestBeforeDate",
+            "columnName": "best_before_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "purchasedDate",
+            "columnName": "purchased_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stockId",
+            "columnName": "stock_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "open",
+            "columnName": "open",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openedDate",
+            "columnName": "opened_date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rowCreatedTimestamp",
+            "columnName": "row_created_timestamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationId",
+            "columnName": "location_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "shoppingLocationId",
+            "columnName": "shopping_location_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "server_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `alias` TEXT, `grocy_server_url` TEXT, `grocy_api_key` TEXT, `home_assistant_server_url` TEXT, `home_assistant_token` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alias",
+            "columnName": "alias",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "grocyServerUrl",
+            "columnName": "grocy_server_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "grocyApiKey",
+            "columnName": "grocy_api_key",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "homeAssistantServerUrl",
+            "columnName": "home_assistant_server_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "homeAssistantToken",
+            "columnName": "home_assistant_token",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "chore_entry_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `chore_id` INTEGER NOT NULL, `chore_name` TEXT, `last_tracked_time` TEXT, `next_estimated_execution_time` TEXT, `track_date_only` TEXT, `next_execution_assigned_to_user_id` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "choreId",
+            "columnName": "chore_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "choreName",
+            "columnName": "chore_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastTrackedTime",
+            "columnName": "last_tracked_time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextEstimatedExecutionTime",
+            "columnName": "next_estimated_execution_time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "trackDateOnly",
+            "columnName": "track_date_only",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextExecutionAssignedToUserId",
+            "columnName": "next_execution_assigned_to_user_id",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_id` TEXT, `type` TEXT, `picture_file_name` TEXT, `base_servings` REAL, `desired_servings` REAL, `not_check_shoppinglist` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pictureFileName",
+            "columnName": "picture_file_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "baseServings",
+            "columnName": "base_servings",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "desiredServings",
+            "columnName": "desired_servings",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notCheckShoppingList",
+            "columnName": "not_check_shoppinglist",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_fulfillment_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recipe_id` INTEGER NOT NULL, `need_fulfilled` INTEGER NOT NULL, `need_fulfilled_with_shopping_list` INTEGER NOT NULL, `missing_products_count` INTEGER NOT NULL, `costs` REAL NOT NULL, `costs_per_serving` REAL NOT NULL, `calories` REAL NOT NULL, `due_score` INTEGER NOT NULL, `product_names_comma_separated` TEXT, PRIMARY KEY(`recipe_id`))",
+        "fields": [
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipe_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "needFulfilled",
+            "columnName": "need_fulfilled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "needFulfilledWithShoppingList",
+            "columnName": "need_fulfilled_with_shopping_list",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missingProductsCount",
+            "columnName": "missing_products_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "costs",
+            "columnName": "costs",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "costsPerServing",
+            "columnName": "costs_per_serving",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "calories",
+            "columnName": "calories",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueScore",
+            "columnName": "due_score",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productNamesCommaSeparated",
+            "columnName": "product_names_comma_separated",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "recipe_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "recipe_pos_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `recipe_id` INTEGER NOT NULL, `product_id` INTEGER NOT NULL, `amount` REAL NOT NULL, `note` TEXT, `qu_id` INTEGER NOT NULL, `only_check_single_unit_in_stock` INTEGER NOT NULL, `ingredient_group` TEXT, `not_check_stock_fulfillment` INTEGER NOT NULL, `variable_amount` TEXT, `price_factor` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipe_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productId",
+            "columnName": "product_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quantityUnitId",
+            "columnName": "qu_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onlyCheckSingleUnitInStock",
+            "columnName": "only_check_single_unit_in_stock",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredientGroup",
+            "columnName": "ingredient_group",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notCheckStockFulfillment",
+            "columnName": "not_check_stock_fulfillment",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "variableAmount",
+            "columnName": "variable_amount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priceFactor",
+            "columnName": "price_factor",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4f5cf48edf95e2ca506f6e4da0628884')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e958cac4ca9a0abe1ae6489d0dc394d5')"
     ]
   }
 }

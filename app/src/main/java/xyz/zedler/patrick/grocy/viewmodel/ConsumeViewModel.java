@@ -337,7 +337,11 @@ public class ConsumeViewModel extends BaseViewModel {
 
   public void onBarcodeRecognized(String barcode) {
     if (formData.getProductDetailsLive().getValue() != null) {
-      formData.getBarcodeLive().setValue(barcode);
+      if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
+        formData.getBarcodeLive().setValue(barcode);
+      } else {
+        showMessage(R.string.msg_clear_form_first);
+      }
       return;
     }
     Product product = null;
@@ -356,12 +360,9 @@ public class ConsumeViewModel extends BaseViewModel {
     }
     ProductBarcode productBarcode = null;
     if (product == null) {
-      for (ProductBarcode code : barcodes) {
-        if (code.getBarcode().equals(barcode)) {
-          productBarcode = code;
-          product = Product.getProductFromId(products, code.getProductIdInt());
-        }
-      }
+      productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
+      product = productBarcode != null
+          ? Product.getProductFromId(products, productBarcode.getProductIdInt()) : null;
     }
     if (product != null) {
       setProduct(product.getId(), productBarcode, stockEntryId);

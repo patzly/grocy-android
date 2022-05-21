@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.StockItem;
-import xyz.zedler.patrick.grocy.util.Constants.NotificationChannels;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
@@ -63,7 +62,7 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
       String description = context.getString(R.string.notification_channel_due_soon_description);
       int importance = NotificationManager.IMPORTANCE_HIGH;
       NotificationChannel channel = new NotificationChannel(
-          NotificationChannels.DUE_SOON, name, importance
+          NOTIFICATIONS.DUE_SOON_CHANNEL, name, importance
       );
       channel.setDescription(description);
       notificationManager.createNotificationChannel(channel);

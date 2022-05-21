@@ -216,6 +216,24 @@
 
         </LinearLayout>
 
+
+
+        <LinearLayout
+            android:id="@+id/linear_drawer_recipes"
+            style="@style/Widget.Grocy.LinearLayout.Drawer">
+
+          <ImageView
+              style="@style/Widget.Grocy.ImageView.Drawer"
+              android:importantForAccessibility="no"
+              android:src="@drawable/ic_round_restaurant_menu" />
+
+          <TextView
+              android:id="@+id/text_drawer_recipes"
+              style="@style/Widget.Grocy.TextView.DrawerItem"
+              android:text="@string/title_recipes" />
+
+        </LinearLayout>
+
       </LinearLayout>
 
       <View style="@style/Widget.Grocy.Divider" />
