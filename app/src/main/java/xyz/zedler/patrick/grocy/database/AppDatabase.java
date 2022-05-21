@@ -112,7 +112,7 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         RecipeFulfillment.class,
         RecipePosition.class
     },
-    version = 34
+    version = 39
 )
 public abstract class AppDatabase extends RoomDatabase {
 
