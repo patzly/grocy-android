@@ -3106,6 +3106,8 @@ public class DownloadHelper {
         queue.append(updateUsers(dbChangedTime, null));
       } else if (type == StockItem.class) {
         queue.append(updateStockItems(dbChangedTime, null));
+      } else if (type == StockEntry.class) {
+        queue.append(updateStockEntries(dbChangedTime, null));
       } else if (type == VolatileItem.class) {
         queue.append(updateVolatile(dbChangedTime, null));
       } else if (type == MissingItem.class) {
