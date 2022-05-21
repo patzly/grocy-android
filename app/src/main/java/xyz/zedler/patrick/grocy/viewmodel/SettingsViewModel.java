@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
@@ -315,6 +316,18 @@ public class SettingsViewModel extends BaseViewModel {
   public void setDateKeyboardReverseEnabled(boolean enabled) {
     sharedPrefs.edit()
         .putBoolean(Constants.SETTINGS.BEHAVIOR.DATE_KEYBOARD_REVERSE, enabled).apply();
+  }
+
+  public boolean getKeepScreenOnRecipesEnabled() {
+    return sharedPrefs.getBoolean(
+            RECIPES.KEEP_SCREEN_ON,
+            SETTINGS_DEFAULT.RECIPES.KEEP_SCREEN_ON
+    );
+  }
+
+  public void setKeepScreenOnRecipesEnabled(boolean enabled) {
+    sharedPrefs.edit()
+            .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
   }
 
   public boolean getFrontCamEnabled() {

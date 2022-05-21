@@ -35,6 +35,8 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -444,5 +446,45 @@ public class SortUtil {
     return sorted;
   }
 
+  public static void sortRecipesByName(Context context, List<Recipe> recipes, boolean ascending) {
+    if (recipes == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(recipes, (item1, item2) -> Collator.getInstance(locale).compare(
+            (ascending ? item1 : item2).getName().toLowerCase(),
+            (ascending ? item2 : item1).getName().toLowerCase()));
+  }
 
+  public static void sortRecipesByCalories(Context context, List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, boolean ascending) {
+    if (recipes == null || recipeFulfillments == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(recipes, (recipe1, recipe2) -> {
+      RecipeFulfillment recipeFulfillment1 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe1.getId());
+      RecipeFulfillment recipeFulfillment2 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe2.getId());
+
+      double recipe1Calories = recipeFulfillment1 != null ? recipeFulfillment1.getCalories() : 0;
+      double recipe2Calories = recipeFulfillment2 != null ? recipeFulfillment2.getCalories() : 0;
+
+      return (int)(ascending ? recipe1Calories : recipe2Calories) - (int)(ascending ? recipe2Calories : recipe1Calories);
+    });
+  }
+
+  public static void sortRecipesByDueScore(Context context, List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, boolean ascending) {
+    if (recipes == null || recipeFulfillments == null) {
+      return;
+    }
+    Locale locale = LocaleUtil.getUserLocale(context);
+    Collections.sort(recipes, (recipe1, recipe2) -> {
+      RecipeFulfillment recipeFulfillment1 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe1.getId());
+      RecipeFulfillment recipeFulfillment2 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe2.getId());
+
+      int recipe1DueScore = recipeFulfillment1 != null ? recipeFulfillment1.getDueScore() : 0;
+      int recipe2DueScore = recipeFulfillment2 != null ? recipeFulfillment2.getDueScore() : 0;
+
+      return (ascending ? recipe1DueScore : recipe2DueScore) - (ascending ? recipe2DueScore : recipe1DueScore);
+    });
+  }
 }

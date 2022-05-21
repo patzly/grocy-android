@@ -64,6 +64,9 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
+import xyz.zedler.patrick.grocy.model.Recipe;
+import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -2407,6 +2410,186 @@ public class DownloadHelper {
     return getChoreDetails(choreId, onResponseListener, null);
   }
 
+  public QueueItem updateRecipes(
+          String dbChangedTime,
+          OnRecipesResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+            PREF.DB_LAST_TIME_RECIPES, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+                @Nullable OnStringResponseListener responseListener,
+                @Nullable OnErrorListener errorListener,
+                @Nullable String uuid
+        ) {
+          get(
+                  grocyApi.getRecipes(),
+                  uuid,
+                  response -> {
+                    Type type = new TypeToken<List<Recipe>>() {
+                    }.getType();
+                    ArrayList<Recipe> recipes = new Gson().fromJson(response, type);
+                    if (debug) {
+                      Log.i(tag, "download Recipes: " + recipes);
+                    }
+                    Single.concat(
+                            appDatabase.recipeDao().deleteRecipes(),
+                            appDatabase.recipeDao().insertRecipes(recipes)
+                    )
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                              sharedPrefs.edit()
+                                      .putString(PREF.DB_LAST_TIME_RECIPES, dbChangedTime).apply();
+
+                              if (onResponseListener != null) {
+                                onResponseListener.onResponse(recipes);
+                              }
+                              if (responseListener != null) {
+                                responseListener.onResponse(response);
+                              }
+                            })
+                            .subscribe();
+                  },
+                  error -> {
+                    if (errorListener != null) {
+                      errorListener.onError(error);
+                    }
+                  }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Recipes download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateRecipeFulfillments(
+          String dbChangedTime,
+          OnRecipeFulfillmentsResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+            PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+                @Nullable OnStringResponseListener responseListener,
+                @Nullable OnErrorListener errorListener,
+                @Nullable String uuid
+        ) {
+          get(
+                  grocyApi.getRecipeFulfillments(),
+                  uuid,
+                  response -> {
+                    Type type = new TypeToken<List<RecipeFulfillment>>() {
+                    }.getType();
+                    ArrayList<RecipeFulfillment> recipeFulfillments = new Gson().fromJson(response, type);
+                    if (debug) {
+                      Log.i(tag, "download RecipeFulfillments: " + recipeFulfillments);
+                    }
+                    Single.concat(
+                            appDatabase.recipeFulfillmentDao().deleteRecipeFulfillments(),
+                            appDatabase.recipeFulfillmentDao().insertRecipeFulfillments(recipeFulfillments)
+                    )
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                              sharedPrefs.edit()
+                                      .putString(PREF.DB_LAST_TIME_RECIPE_FULFILLMENTS, dbChangedTime).apply();
+
+                              if (onResponseListener != null) {
+                                onResponseListener.onResponse(recipeFulfillments);
+                              }
+                              if (responseListener != null) {
+                                responseListener.onResponse(response);
+                              }
+                            })
+                            .subscribe();
+                  },
+                  error -> {
+                    if (errorListener != null) {
+                      errorListener.onError(error);
+                    }
+                  }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Recipe fulfillments download");
+      }
+      return null;
+    }
+  }
+
+  public QueueItem updateRecipePositions(
+          String dbChangedTime,
+          OnRecipePositionsResponseListener onResponseListener
+  ) {
+    String lastTime = sharedPrefs.getString(  // get last offline db-changed-time value
+            PREF.DB_LAST_TIME_RECIPE_POSITIONS, null
+    );
+    if (lastTime == null || !lastTime.equals(dbChangedTime)) {
+      return new QueueItem() {
+        @Override
+        public void perform(
+                @Nullable OnStringResponseListener responseListener,
+                @Nullable OnErrorListener errorListener,
+                @Nullable String uuid
+        ) {
+          get(
+                  grocyApi.getRecipePositions(),
+                  uuid,
+                  response -> {
+                    Type type = new TypeToken<List<RecipePosition>>() {
+                    }.getType();
+                    ArrayList<RecipePosition> recipePositions = new Gson().fromJson(response, type);
+                    if (debug) {
+                      Log.i(tag, "download RecipePositions: " + recipePositions);
+                    }
+                    Single.concat(
+                            appDatabase.recipePositionDao().deleteRecipePositions(),
+                            appDatabase.recipePositionDao().insertRecipePositions(recipePositions)
+                    )
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                              sharedPrefs.edit()
+                                      .putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, dbChangedTime).apply();
+
+                              if (onResponseListener != null) {
+                                onResponseListener.onResponse(recipePositions);
+                              }
+                              if (responseListener != null) {
+                                responseListener.onResponse(response);
+                              }
+                            })
+                            .subscribe();
+                  },
+                  error -> {
+                    if (errorListener != null) {
+                      errorListener.onError(error);
+                    }
+                  }
+          );
+        }
+      };
+    } else {
+      if (debug) {
+        Log.i(tag, "downloadData: skipped Recipe positions download");
+      }
+      return null;
+    }
+  }
+
   public QueueItem getCurrentUserId(OnIntegerResponseListener onResponseListener) {
     return new QueueItem() {
       @Override
@@ -2963,6 +3146,12 @@ public class DownloadHelper {
         queue.append(updateChores(dbChangedTime, null));
       } else if (type == ChoreEntry.class) {
         queue.append(updateChoreEntries(dbChangedTime, null));
+      } else if (type == Recipe.class) {
+        queue.append(updateRecipes(dbChangedTime, null));
+      } else if (type == RecipeFulfillment.class) {
+        queue.append(updateRecipeFulfillments(dbChangedTime, null));
+      } else if (type == RecipePosition.class) {
+        queue.append(updateRecipePositions(dbChangedTime, null));
       }
     }
     if (queue.isEmpty()) {
@@ -3099,6 +3288,21 @@ public class DownloadHelper {
   public interface OnChoreDetailsResponseListener {
 
     void onResponse(ChoreDetails choreDetails);
+  }
+
+  public interface OnRecipesResponseListener {
+
+    void onResponse(ArrayList<Recipe> recipes);
+  }
+
+  public interface OnRecipeFulfillmentsResponseListener {
+
+    void onResponse(ArrayList<RecipeFulfillment> recipeFulfillments);
+  }
+
+  public interface OnRecipePositionsResponseListener {
+
+    void onResponse(ArrayList<RecipePosition> recipePositions);
   }
 
   public interface OnUsersResponseListener {

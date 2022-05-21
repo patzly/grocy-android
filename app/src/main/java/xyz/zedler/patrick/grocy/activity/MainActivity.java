@@ -588,16 +588,24 @@ public class MainActivity extends AppCompatActivity {
     snackbar.show();
   }
 
-  public void showMessage(String message) {
-    Snackbar bar = Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG);
+  public void showMessage(String message, View view) {
+    Snackbar bar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
     View v = bar.getView();
     TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
     text.setMaxLines(4);
     showSnackbar(bar);
   }
 
+  public void showMessage(String message) {
+    showMessage(message, binding.frameMainContainer);
+  }
+
   public void showMessage(@StringRes int message) {
     showMessage(getString(message));
+  }
+
+  public void showMessage(@StringRes int message, View view) {
+    showMessage(getString(message), view);
   }
 
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
