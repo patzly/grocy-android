@@ -123,6 +123,7 @@
   <string name="action_track_chore_execution">Track chore execution</string>
   <string name="action_skip_next_chore_schedule">Skip next chore schedule</string>
   <string name="action_reschedule_next_execution">Reschedule next execution</string>
+  <string name="action_put_missing_products_on_shopping_list">Put missing products on shopping list</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -204,6 +205,18 @@
   <string name="msg_task_completed">Marked task as completed</string>
   <string name="msg_task_not_completed">Marked task as not completed</string>
   <string name="msg_task_undo">Undo task</string>
+  <string name="msg_recipes_enough_in_stock">Enough in stock</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Enough in stock</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Not enough in stock but on shopping list</string>
+  <plurals name="msg_recipes_not_enough_but_on_shopping_list">
+    <item quantity="one">Not enough in stock, %1$d ingredient missing but already on the shopping list</item>
+    <item quantity="other">Not enough in stock, %1$d ingredients missing but already on the shopping list</item>
+  </plurals>
+  <string name="msg_recipes_not_enough_filter">(%1$d) Not enough in stock</string>
+  <plurals name="msg_recipes_not_enough">
+    <item quantity="one">Not enough in stock, %1$d ingredient missing</item>
+    <item quantity="other">Not enough in stock, %1$d ingredients missing</item>
+  </plurals>
   <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
@@ -250,6 +263,9 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
+  <string name="msg_help_ingredient_list">You can add ingredients with the button at the bottom, edit ingredients by selecting them and delete them by swiping an ingredient to the right and clicking the trash can icon.</string>
+  <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
+  <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
@@ -380,6 +396,7 @@
   <string name="error_empty_unit_conversions">No quantity unit conversions</string>
   <string name="error_empty_chores">No chores</string>
   <string name="error_empty_chores_sub">Go to master data and create some</string>
+  <string name="error_empty_recipes">No recipes</string>
   <string name="error_search">No search results</string>
   <string name="error_search_sub">Try other terms</string>
   <string name="error_filter">Nothing to display</string>
@@ -429,6 +446,7 @@
   <string name="error_stock_entry_grocycode">Stock entry from grocycode not found</string>
   <string name="error_permission">No permission for this action</string>
   <string name="error_undefined">An error occurred</string>
+  <string name="error_invalid_base_servings">Servings invalid</string>
 
   <string name="title_overview">Overview</string>
   <string name="title_stock_overview">Stock overview</string>
@@ -472,6 +490,7 @@
   <string name="title_stored_purchases">Stored purchases</string>
   <string name="title_chores">Chores</string>
   <string name="title_chore">Chore</string>
+  <string name="title_recipes">Recipes</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -578,6 +597,8 @@
   <string name="subtitle_synced_with_server">Synced with server</string>
   <!-- %1$s and %2$s are numbers -->
   <string name="subtitle_recipe_calories">%1$s calories</string>
+  <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
+  <string name="subtitle_recipe_due_score">Due score: %1$s</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -832,6 +853,19 @@
   <string name="property_average_execution_frequency">Average execution frequency</string>
   <string name="property_next_estimated_tracking">Next estimated tracking</string>
   <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
+  <string name="property_base_servings">Servings</string>
+  <string name="property_not_check_shopping_list">Do not check against shopping list</string>
+  <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
+  <string name="property_preparation">Preparation</string>
+  <string name="property_costs">Costs</string>
+  <string name="property_due_score">Due score</string>
+  <string name="property_ingredients">Ingredients</string>
+  <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
+  <string name="property_only_check_single_unit_in_stock">Only check for any amount in stock</string>
+  <string name="property_only_check_single_unit_in_stock_description">E.g. if the quantity unit differs from the one below</string>
+  <string name="property_do_not_check_stock_fulfillment">Disable stock fulfillment checking</string>
+  <string name="property_ingredient_group">Group</string>
+  <string name="property_variable_amount">Variable amount</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
@@ -1024,6 +1058,7 @@
   <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
   <string name="setting_notification_time">Notification time</string>
   <string name="setting_notification_time_description">When the check is done</string>
+  <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
 
   <string name="notification_channel_due_soon">Due soon items</string>
   <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
@@ -1079,47 +1114,5 @@
   <string name="url_netcipher" translatable="false">https://github.com/guardianproject/NetCipher</string>
   <string name="url_volley" translatable="false">https://github.com/google/volley</string>
   <string name="url_zxing_android" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
-  <string name="title_recipes">Recipes</string>
-  <string name="error_empty_recipes">No recipes</string>
-  <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
-  <string name="subtitle_recipe_due_score">Due score: %1$s</string>
-  <string name="deep_link_recipeEditFragment">grocy://recipeEditFragment?action={action}</string>
-  <string name="property_base_servings">Servings</string>
-  <string name="error_invalid_base_servings">Servings invalid</string>
-  <string name="property_not_check_shopping_list">Do not check against shopping list</string>
-  <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
-  <string name="property_preparation">Preparation</string>
-  <string name="property_costs">Costs</string>
-  <string name="property_due_score">Due score</string>
-
-  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
-  <plurals name="msg_recipes_enough_in_stock">
-    <item quantity="one">%1$d enough in stock</item>
-    <item quantity="other">%1$d enough in stock</item>
-  </plurals>
-  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
-  <plurals name="msg_recipes_not_enough_but_in_shopping_list">
-    <item quantity="one">%1$d not enough in stock but in shopping list</item>
-    <item quantity="other">%1$d not enough in stock but in shopping list</item>
-  </plurals>
-  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
-  <plurals name="msg_recipes_not_enough">
-    <item quantity="one">%1$d not enough in stock</item>
-    <item quantity="other">%1$d not enough in stock</item>
-  </plurals>
-  <string name="property_ingredients">Ingredients</string>
-  <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
-  <string name="title_recipe_add">Add recipe</string>
-  <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
-  <string name="deep_link_recipeEditIngredientListFragment">grocy://masterRecipeEditIngredientListFragment?recipeId={recipeId}</string>
-  <string name="msg_help_ingredient_list">You can add ingredients with the button at the bottom, edit ingredients by selecting them and delete them by swiping an ingredient to the right and clicking the trash can icon.</string>
-  <string name="property_variable_amount">Variable amount</string>
-  <string name="deep_link_recipeEditIngredientEditFragment">grocy://recipeEditIngredientEditFragment</string>
-  <string name="property_only_check_single_unit_in_stock">Only check for any amount in stock</string>
-  <string name="property_only_check_single_unit_in_stock_description">E.g. if the quantity unit differs from the one below</string>
-  <string name="property_do_not_check_stock_fulfillment">Disable stock fulfillment checking</string>
-  <string name="property_ingredient_group">Group</string>
-  <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
-    <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
 
 </resources>

@@ -24,7 +24,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -33,15 +32,11 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
-import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class RecipeEntryAdapter extends
     RecyclerView.Adapter<RecipeEntryAdapter.ViewHolder> {
@@ -267,7 +262,9 @@ public class RecipeEntryAdapter extends
 
       RecipeFulfillment recipeFulfillmentOld = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(oldRecipeFulfillments, oldItem.getId());
       RecipeFulfillment recipeFulfillmentNew = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(newRecipeFulfillments, newItem.getId());
-      if (recipeFulfillmentOld == null || recipeFulfillmentNew == null || recipeFulfillmentOld != recipeFulfillmentNew) {
+      if (recipeFulfillmentOld == null && recipeFulfillmentNew != null
+          || recipeFulfillmentOld != null && recipeFulfillmentNew == null
+          || recipeFulfillmentOld != null && !recipeFulfillmentOld.equals(recipeFulfillmentNew)) {
         return false;
       }
 

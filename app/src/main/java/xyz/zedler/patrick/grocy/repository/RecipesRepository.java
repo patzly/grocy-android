@@ -20,25 +20,16 @@
 package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
-
-import androidx.lifecycle.LiveData;
-
-import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.internal.functions.Functions;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
-import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.util.SingleUtil;
 
 public class RecipesRepository {
 
@@ -108,32 +99,5 @@ public class RecipesRepository {
         .observeOn(AndroidSchedulers.mainThread())
         .doOnSuccess(listener::actionFinished)
         .subscribe();
-  }
-
-  public void updateDatabase(
-          List<Recipe> recipes,
-          List<RecipeFulfillment> recipeFulfillments,
-          List<RecipePosition> recipePositions,
-          List<Product> products,
-          List<QuantityUnit> quantityUnits,
-          Runnable listener
-  ) {
-
-    SingleUtil.concat(
-            appDatabase.recipeDao().deleteRecipes(),
-            appDatabase.recipeDao().insertRecipes(recipes),
-            appDatabase.recipeFulfillmentDao().deleteRecipeFulfillments(),
-            appDatabase.recipeFulfillmentDao().insertRecipeFulfillments(recipeFulfillments),
-            appDatabase.recipePositionDao().deleteRecipePositions(),
-            appDatabase.recipePositionDao().insertRecipePositions(recipePositions),
-            appDatabase.productDao().deleteProducts(),
-            appDatabase.productDao().insertProducts(products),
-            appDatabase.quantityUnitDao().deleteQuantityUnits(),
-            appDatabase.quantityUnitDao().insertQuantityUnits(quantityUnits)
-    )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally(listener::run)
-            .subscribe();
   }
 }
