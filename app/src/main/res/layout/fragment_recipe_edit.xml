@@ -85,7 +85,7 @@
           android:layout_weight="1"
           android:layout_marginEnd="16dp"
           android:textColor="@color/on_primary"
-          android:text="@{viewModel.actionEditLive ? @string/title_edit_list_entry : @string/title_create_list_entry}" />
+          android:text="@{viewModel.actionEditLive ? @string/title_recipe_edit : @string/title_recipe_create}" />
 
       </LinearLayout>
 
@@ -145,6 +145,8 @@
                 android:id="@+id/text_input_name"
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                 android:hint="@string/property_name"
+                app:helperTextEnabled="true"
+                app:helperText=" "
                 app:errorText="@{formData.nameErrorLive}">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -193,6 +195,8 @@
                     android:id="@+id/text_input_amount"
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox"
                     android:hint="@string/property_base_servings"
+                    app:helperTextEnabled="true"
+                  app:helperText=" "
                     app:errorText="@{formData.baseServingsErrorLive}"
                     app:endIconMode="clear_text"
                     app:endIconOnClickListener="@{v -> fragment.clearBaseServingsFieldAndFocusIt()}">

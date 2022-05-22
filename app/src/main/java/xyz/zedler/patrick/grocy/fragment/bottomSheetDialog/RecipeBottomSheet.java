@@ -37,40 +37,26 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.transition.TransitionManager;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipePositionAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetRecipeBinding;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
-import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class RecipeBottomSheet extends BaseBottomSheet implements
@@ -182,7 +168,7 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     }
 
     binding.name.setText(getString(R.string.property_name), recipe.getName());
-    binding.calories.setText(getString(R.string.property_calories), NumUtil.trim(recipeFulfillment.getCalories()));
+    binding.calories.setText(getString(R.string.property_energy), NumUtil.trim(recipeFulfillment.getCalories()), getString(R.string.subtitle_per_serving));
     binding.costs.setText(getString(R.string.property_costs), NumUtil.trimPrice(recipeFulfillment.getCosts()) + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""));
     binding.baseServings.setText(getString(R.string.property_base_servings), NumUtil.trim(recipe.getBaseServings()));
     binding.dueScore.setText(getString(R.string.property_due_score), String.valueOf(recipeFulfillment.getDueScore()));

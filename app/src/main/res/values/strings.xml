@@ -492,6 +492,8 @@
   <string name="title_chores">Chores</string>
   <string name="title_chore">Chore</string>
   <string name="title_recipes">Recipes</string>
+  <string name="title_recipe_create">Create recipe</string>
+  <string name="title_recipe_edit">Edit recipe</string>
 
   <string name="title_home_assistant" translatable="false">Home Assistant</string>
   <string name="title_grocy" translatable="false">grocy</string>
@@ -598,6 +600,7 @@
   <string name="subtitle_synced_with_server">Synced with server</string>
   <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
+  <string name="subtitle_per_serving">per serving</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>

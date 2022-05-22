@@ -57,6 +57,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class RecipeEditViewModel extends BaseViewModel {
@@ -342,7 +343,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     assert entry != null;
 
     formData.getNameLive().setValue(entry.getName());
-    formData.getBaseServingsLive().setValue(String.valueOf(entry.getBaseServings()));
+    formData.getBaseServingsLive().setValue(NumUtil.trim(entry.getBaseServings()));
     formData.getNotCheckShoppingListLive().setValue(entry.isNotCheckShoppingList());
     formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
     formData.getDescriptionLive().setValue(entry.getDescription());

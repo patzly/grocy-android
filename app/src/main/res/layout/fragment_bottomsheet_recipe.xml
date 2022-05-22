@@ -106,9 +106,9 @@
           android:layout_weight="0.5">
 
           <xyz.zedler.patrick.grocy.view.ListItem
-              android:id="@+id/calories"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content" />
+            android:id="@+id/calories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         </RelativeLayout>
 
         <RelativeLayout
