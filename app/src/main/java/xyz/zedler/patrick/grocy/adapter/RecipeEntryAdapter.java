@@ -35,8 +35,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class RecipeEntryAdapter extends
     RecyclerView.Adapter<RecipeEntryAdapter.ViewHolder> {
@@ -51,6 +53,7 @@ public class RecipeEntryAdapter extends
   private final RecipesItemAdapterListener listener;
   private String sortMode;
   private boolean sortAscending;
+  private String extraField;
 
   public RecipeEntryAdapter(
       Context context,
@@ -59,7 +62,8 @@ public class RecipeEntryAdapter extends
       ArrayList<RecipeFulfillment> recipeFulfillments,
       RecipesItemAdapterListener listener,
       String sortMode,
-      boolean sortAscending
+      boolean sortAscending,
+      String extraField
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
@@ -68,6 +72,7 @@ public class RecipeEntryAdapter extends
     this.listener = listener;
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
+    this.extraField = extraField;
   }
 
   @Override
@@ -118,22 +123,9 @@ public class RecipeEntryAdapter extends
     holder.binding.title.setText(recipe.getName());
 
     if (recipeFulfillment != null) {
-      // CALORIES
-
-      holder.binding.calories.setText(
-              context.getString(
-                      R.string.subtitle_recipe_calories,
-                      String.valueOf(recipeFulfillment.getCalories())
-              )
-      );
-
       // DUE SCORE
       int due_score = recipeFulfillment.getDueScore();
       @ColorRes int color;
-
-      holder.binding.dueScore.setTypeface(
-              ResourcesCompat.getFont(context, R.font.jost_medium)
-      );
 
       if (due_score == 0) {
         color = R.color.retro_green_fg;
@@ -152,7 +144,74 @@ public class RecipeEntryAdapter extends
                       String.valueOf(recipeFulfillment.getDueScore())
               )
       );
+
+      // REQUIREMENTS FULFILLED
+      if (recipeFulfillment.isNeedFulfilled() && recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+        holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
+        holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
+            context.getResources(),
+            R.drawable.ic_round_done,
+            context.getTheme()
+        ));
+        holder.binding.imageFulfillment.setColorFilter(
+            ContextCompat.getColor(context, R.color.retro_green_fg),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        );
+        holder.binding.missing.setVisibility(View.GONE);
+      } else if (!recipeFulfillment.isNeedFulfilled() && recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+        holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
+        holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
+            context.getResources(),
+            R.drawable.ic_round_priority_high,
+            context.getTheme()
+        ));
+        holder.binding.imageFulfillment.setColorFilter(
+            ContextCompat.getColor(context, R.color.retro_yellow_fg),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        );
+        holder.binding.missing.setText(
+            context.getResources()
+                .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
+                    recipeFulfillment.getMissingProductsCount(),
+                    recipeFulfillment.getMissingProductsCount())
+        );
+        holder.binding.missing.setVisibility(View.VISIBLE);
+      } else {
+        holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
+        holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
+            context.getResources(),
+            R.drawable.ic_round_close,
+            context.getTheme()
+        ));
+        holder.binding.imageFulfillment.setColorFilter(
+            ContextCompat.getColor(context, R.color.retro_red_fg),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        );
+        holder.binding.missing.setText(
+            context.getResources()
+                .getQuantityString(R.plurals.msg_recipes_ingredients_missing,
+                    recipeFulfillment.getMissingProductsCount(),
+                    recipeFulfillment.getMissingProductsCount())
+        );
+        holder.binding.missing.setVisibility(View.VISIBLE);
+      }
     }
+
+    String extraFieldText = null;
+    switch (extraField) {
+      case FilterChipLiveDataRecipesExtraField.EXTRA_FIELD_CALORIES:
+        if (recipeFulfillment != null) {
+          extraFieldText = NumUtil.trim(recipeFulfillment.getCalories());
+        }
+        break;
+    }
+    if (extraFieldText != null) {
+      holder.binding.extraField.setText(extraFieldText);
+      holder.binding.extraFieldContainer.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.extraFieldContainer.setVisibility(View.GONE);
+    }
+    holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
 
     // CONTAINER
 
@@ -175,7 +234,8 @@ public class RecipeEntryAdapter extends
       ArrayList<Recipe> newList,
       ArrayList<RecipeFulfillment> newRecipeFulfillments,
       String sortMode,
-      boolean sortAscending
+      boolean sortAscending,
+      String extraField
   ) {
 
     RecipeEntryAdapter.DiffCallback diffCallback = new RecipeEntryAdapter.DiffCallback(
@@ -186,7 +246,9 @@ public class RecipeEntryAdapter extends
         this.sortMode,
         sortMode,
         this.sortAscending,
-        sortAscending
+        sortAscending,
+        this.extraField,
+        extraField
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipes.clear();
@@ -195,6 +257,7 @@ public class RecipeEntryAdapter extends
     this.recipeFulfillments.addAll(newRecipeFulfillments);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
+    this.extraField = extraField;
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -208,6 +271,8 @@ public class RecipeEntryAdapter extends
     String sortModeNew;
     boolean sortAscendingOld;
     boolean sortAscendingNew;
+    String extraFieldOld;
+    String extraFieldNew;
 
     public DiffCallback(
         ArrayList<Recipe> oldItems,
@@ -217,7 +282,9 @@ public class RecipeEntryAdapter extends
         String sortModeOld,
         String sortModeNew,
         boolean sortAscendingOld,
-        boolean sortAscendingNew
+        boolean sortAscendingNew,
+        String extraFieldOld,
+        String extraFieldNew
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
@@ -227,6 +294,8 @@ public class RecipeEntryAdapter extends
       this.sortModeNew = sortModeNew;
       this.sortAscendingOld = sortAscendingOld;
       this.sortAscendingNew = sortAscendingNew;
+      this.extraFieldOld = extraFieldOld;
+      this.extraFieldNew = extraFieldNew;
     }
 
     @Override
@@ -257,6 +326,9 @@ public class RecipeEntryAdapter extends
         return false;
       }
       if (sortAscendingOld != sortAscendingNew) {
+        return false;
+      }
+      if (!extraFieldOld.equals(extraFieldNew)) {
         return false;
       }
 

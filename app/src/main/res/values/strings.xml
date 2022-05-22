@@ -208,14 +208,15 @@
   <string name="msg_recipes_enough_in_stock">Enough in stock</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Enough in stock</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Not enough in stock but on shopping list</string>
-  <plurals name="msg_recipes_not_enough_but_on_shopping_list">
-    <item quantity="one">Not enough in stock, %1$d ingredient missing but already on the shopping list</item>
-    <item quantity="other">Not enough in stock, %1$d ingredients missing but already on the shopping list</item>
-  </plurals>
   <string name="msg_recipes_not_enough_filter">(%1$d) Not enough in stock</string>
-  <plurals name="msg_recipes_not_enough">
-    <item quantity="one">Not enough in stock, %1$d ingredient missing</item>
-    <item quantity="other">Not enough in stock, %1$d ingredients missing</item>
+  <string name="msg_recipes_not_enough">Not enough in stock</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d ingredient missing but already on the shopping list</item>
+    <item quantity="other">%1$d ingredients missing but already on the shopping list</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d ingredient missing</item>
+    <item quantity="other">%1$d ingredients missing</item>
   </plurals>
   <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -595,8 +596,6 @@
   <string name="subtitle_product_optional_properties">State, Parent product, Description, Product group, Energy, Picture</string>
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
   <string name="subtitle_synced_with_server">Synced with server</string>
-  <!-- %1$s and %2$s are numbers -->
-  <string name="subtitle_recipe_calories">%1$s calories</string>
   <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
 

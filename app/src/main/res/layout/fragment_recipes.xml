@@ -199,6 +199,11 @@
             android:layout_height="wrap_content"
             app:data="@{viewModel.filterChipLiveDataSort}"/>
 
+          <xyz.zedler.patrick.grocy.view.FilterChip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:data="@{viewModel.filterChipLiveDataExtraField}"/>
+
         </LinearLayout>
 
       </HorizontalScrollView>
