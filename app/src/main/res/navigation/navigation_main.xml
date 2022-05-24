@@ -1095,7 +1095,13 @@
       android:id="@+id/editorHtmlFragment"
       android:name="xyz.zedler.patrick.grocy.fragment.EditorHtmlFragment"
       android:label="EditorHtmlFragment"
-      tools:layout="@layout/fragment_editor_html"/>
+      tools:layout="@layout/fragment_editor_html">
+      <argument
+        android:name="htmlText"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    </fragment>
   </navigation>
   <fragment
     android:id="@+id/stockOverviewFragment"

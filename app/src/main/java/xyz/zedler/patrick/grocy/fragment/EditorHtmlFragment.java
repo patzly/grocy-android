@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.GlideUtil.GlideImageLoader;
 
 public class EditorHtmlFragment extends BaseFragment {
 
@@ -63,12 +64,17 @@ public class EditorHtmlFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
+    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
+    if (args.getHtmlText() != null) {
+      binding.visual.fromHtml(args.getHtmlText(), true);
+    }
+
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
       activity.getScrollBehavior().setHideOnScroll(false);
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.GONE,
-          R.menu.menu_log,
+          R.menu.menu_empty,
           this::onMenuItemClick
       );
     }
@@ -108,7 +114,7 @@ public class EditorHtmlFragment extends BaseFragment {
       public boolean onToolbarMediaButtonClicked() {
         return false;
       }
-    });
+    }).setImageGetter(new GlideImageLoader(requireContext()));
   }
 
   @Override

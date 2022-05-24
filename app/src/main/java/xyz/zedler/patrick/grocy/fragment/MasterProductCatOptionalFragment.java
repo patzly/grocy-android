@@ -233,13 +233,19 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   public void showDescriptionBottomSheet() {
     if (true) {
-      navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
+      if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
+        navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
+            .setHtmlText(viewModel.getFormData().getDescriptionLive().getValue()));
+      } else {
+        navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
+      }
+
       return;
     }
     Bundle bundle = new Bundle();
     bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.title_edit_description));
     bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_description));
-    Spanned description = viewModel.getFormData().getDescriptionLive().getValue();
+    Spanned description = viewModel.getFormData().getDescriptionSpannedLive().getValue();
     bundle.putString(
         Constants.ARGUMENT.HTML,
         description != null ? Html.toHtml(description) : null
@@ -249,7 +255,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
 
   @Override
   public void saveText(Spanned text) {
-    viewModel.getFormData().getDescriptionLive().setValue(text);
+    viewModel.getFormData().getDescriptionSpannedLive().setValue(text);
   }
 
   public void showProductGroupsBottomSheet() {

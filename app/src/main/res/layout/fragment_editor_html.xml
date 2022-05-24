@@ -89,11 +89,8 @@
           android:id="@+id/formatting_toolbar"
           android:layout_width="match_parent"
           android:layout_height="48dp"
-          aztec:mediaToolbarAvailable="false"
-          aztec:toolbarBackgroundColor="@color/primary"
-          aztec:toolbarIconNormalColor="@color/on_primary"
-          aztec:toolbarIconDisabledColor="@color/on_primary"
-          aztec:toolbarIconHighlightColor="@color/retro_blue"/>
+          aztec:mediaToolbarAvailable="true"
+          aztec:toolbarBackgroundColor="@color/primary"/>
 
       </LinearLayout>
 
@@ -102,12 +99,15 @@
     <org.wordpress.aztec.AztecText
       android:id="@+id/visual"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_marginTop="104dp"
       android:layout_marginBottom="?attr/actionBarSize"
       android:padding="16dp"
       android:scrollbars="vertical"
       android:imeOptions="flagNoExtractUi"
+      android:gravity="start"
+      android:hint="Input text here"
+      android:minLines="5"
       aztec:historyEnable="false"
       aztec:textColor="@color/on_primary"
       aztec:backgroundColor="@color/background"/>

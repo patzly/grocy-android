@@ -548,4 +548,12 @@
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 
+  <style name="AztecToolbarStyle">
+    <item name="advanced">false</item>
+    <item name="toolbarBorderColor">@color/primary</item>
+    <item name="toolbarIconNormalColor">@color/on_primary</item>
+    <item name="toolbarIconHighlightColor">@color/retro_blue</item>
+    <item name="toolbarIconDisabledColor">@color/material_on_primary_disabled</item>
+  </style>
+
 </resources>
