@@ -406,12 +406,14 @@ public class StockOverviewItemAdapter extends
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_UNIT:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
           extraFieldText = stockItem.getProduct().getCalories();
+          extraFieldSubtitleText = "kcal";
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_TOTAL:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
           extraFieldText = NumUtil.trim(Double.parseDouble(stockItem.getProduct()
               .getCalories()) * stockItem.getAmountDouble());
+          extraFieldSubtitleText = "kcal";
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:

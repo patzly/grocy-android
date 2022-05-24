@@ -137,7 +137,7 @@ public class GrocyApi {
     return url.toString();
   }
 
-  private String getUrl(@SuppressWarnings("SameParameterValue") String command, String... params) {
+  private String getUrl(String command, String... params) {
     StringBuilder url = new StringBuilder(getUrl(command));
     if (params.length > 0) {
       url.append("?");
@@ -256,8 +256,8 @@ public class GrocyApi {
    */
   public String getStockLocationsFromProduct(int productId) {
     return getUrl(
-            "/stock/products/" + productId + "/locations",
-            new COMPARISON("include_sub_products", COMPARISON_OPERATOR.EQUAL, "true")
+        "/stock/products/" + productId + "/locations",
+        "include_sub_products=true"
     );
   }
 
@@ -267,8 +267,8 @@ public class GrocyApi {
    */
   public String getStockEntriesFromProduct(int productId) {
     return getUrl(
-            "/stock/products/" + productId + "/entries",
-            new COMPARISON("include_sub_products", COMPARISON_OPERATOR.EQUAL, "true")
+        "/stock/products/" + productId + "/entries",
+        "include_sub_products=true"
     );
   }
 
@@ -278,10 +278,9 @@ public class GrocyApi {
   public String getStockVolatile() {
     return getUrl(
         "/stock/volatile",
-        new COMPARISON("due_soon_days", COMPARISON_OPERATOR.EQUAL, sharedPrefs.getString(
-                STOCK.DUE_SOON_DAYS,
-                SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
-            )
+        "due_soon_days=" + sharedPrefs.getString(
+            STOCK.DUE_SOON_DAYS,
+            SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
         )
     );
   }

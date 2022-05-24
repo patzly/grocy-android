@@ -213,10 +213,12 @@ public class RecipeEntryAdapter extends
     }
 
     String extraFieldText = null;
+    String extraFieldSubtitleText = null;
     switch (extraField) {
       case FilterChipLiveDataRecipesExtraField.EXTRA_FIELD_CALORIES:
         if (recipeFulfillment != null) {
           extraFieldText = NumUtil.trim(recipeFulfillment.getCalories());
+          extraFieldSubtitleText = "kcal";
         }
         break;
     }
@@ -226,14 +228,19 @@ public class RecipeEntryAdapter extends
     } else {
       holder.binding.extraFieldContainer.setVisibility(View.GONE);
     }
-    holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
+    if (extraFieldSubtitleText != null) {
+      holder.binding.extraFieldSubtitle.setText(extraFieldSubtitleText);
+      holder.binding.extraFieldSubtitle.setVisibility(View.VISIBLE);
+    } else {
+      holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
+    }
 
     if (recipe.getPictureFileName() != null) {
       holder.binding.picture.layout(0, 0, 0, 0);
       Glide
           .with(context)
           .load(grocyApi.getRecipePicture(recipe.getPictureFileName()))
-          .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(context, 6)))
+          .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(context, 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<Drawable>() {
             @Override
