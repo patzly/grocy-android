@@ -23,6 +23,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://a8c-libs.s3.amazonaws.com/android" }
     }
 }
 
@@ -30,6 +31,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://a8c-libs.s3.amazonaws.com/android" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.0'

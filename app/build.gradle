@@ -101,6 +101,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    api "org.wordpress:aztec:v1.5.4"
+
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
