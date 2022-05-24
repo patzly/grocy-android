@@ -183,14 +183,15 @@ public class RecipesViewModel extends BaseViewModel {
           notEnoughInStockCount++;
         }
 
-        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataRecipesStatus.STATUS_ALL
-          && !(filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_ENOUGH_IN_STOCK
-                && recipeFulfillment.isNeedFulfilled()
-                || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
-                && recipeFulfillment.isNeedFulfilledWithShoppingList()
-                || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH
-                && !(recipeFulfillment.isNeedFulfilled() || recipeFulfillment.isNeedFulfilledWithShoppingList()))) {
-          continue;
+        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataRecipesStatus.STATUS_ALL) {
+          if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_ENOUGH_IN_STOCK
+              && !recipeFulfillment.isNeedFulfilled()
+              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
+              && (recipeFulfillment.isNeedFulfilled() || !recipeFulfillment.isNeedFulfilledWithShoppingList())
+              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH
+              && (recipeFulfillment.isNeedFulfilled() || recipeFulfillment.isNeedFulfilledWithShoppingList())) {
+            continue;
+          }
         }
       }
 

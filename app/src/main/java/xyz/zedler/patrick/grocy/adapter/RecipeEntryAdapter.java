@@ -20,25 +20,38 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public class RecipeEntryAdapter extends
     RecyclerView.Adapter<RecipeEntryAdapter.ViewHolder> {
@@ -51,6 +64,7 @@ public class RecipeEntryAdapter extends
   private final ArrayList<Recipe> recipes;
   private final ArrayList<RecipeFulfillment> recipeFulfillments;
   private final RecipesItemAdapterListener listener;
+  private final GrocyApi grocyApi;
   private String sortMode;
   private boolean sortAscending;
   private String extraField;
@@ -70,6 +84,7 @@ public class RecipeEntryAdapter extends
     this.recipes = new ArrayList<>(recipes);
     this.recipeFulfillments = new ArrayList<>(recipeFulfillments);
     this.listener = listener;
+    this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.extraField = extraField;
@@ -146,7 +161,7 @@ public class RecipeEntryAdapter extends
       );
 
       // REQUIREMENTS FULFILLED
-      if (recipeFulfillment.isNeedFulfilled() && recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+      if (recipeFulfillment.isNeedFulfilled()) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
@@ -158,7 +173,7 @@ public class RecipeEntryAdapter extends
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setVisibility(View.GONE);
-      } else if (!recipeFulfillment.isNeedFulfilled() && recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+      } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
@@ -212,6 +227,34 @@ public class RecipeEntryAdapter extends
       holder.binding.extraFieldContainer.setVisibility(View.GONE);
     }
     holder.binding.extraFieldSubtitle.setVisibility(View.GONE);
+
+    if (recipe.getPictureFileName() != null) {
+      holder.binding.picture.layout(0, 0, 0, 0);
+      Glide
+          .with(context)
+          .load(grocyApi.getRecipePicture(recipe.getPictureFileName()))
+          .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(context, 6)))
+          .transition(DrawableTransitionOptions.withCrossFade())
+          .listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(
+                @Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model,
+                Target<Drawable> target, boolean isFirstResource) {
+              holder.binding.picture.setVisibility(View.GONE);
+              return false;
+            }
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                DataSource dataSource, boolean isFirstResource) {
+              holder.binding.picture.setVisibility(View.VISIBLE);
+              return false;
+            }
+          })
+          .into(holder.binding.picture);
+    } else {
+      holder.binding.picture.setVisibility(View.GONE);
+    }
+
 
     // CONTAINER
 

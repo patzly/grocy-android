@@ -103,6 +103,8 @@ dependencies {
 
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+
     implementation 'androidx.work:work-runtime:2.7.1'
     implementation 'net.danlew:android.joda:2.10.14'
 
