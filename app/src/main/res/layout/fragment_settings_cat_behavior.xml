@@ -326,6 +326,36 @@
 
         <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchKeepScreenOnRecipes.setChecked(!switchKeepScreenOnRecipes.isChecked())}">
+
+          <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_preview" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_keep_screen_on" />
+
+            <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_keep_screen_on_recipes_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.switchmaterial.SwitchMaterial
+              android:id="@+id/switch_keep_screen_on_recipes"
+              style="@style/Widget.Grocy.Switch"
+              android:checked="@={viewModel.keepScreenOnRecipesEnabled}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
             android:onClick="@{() -> viewModel.showMessageDurationBottomSheet()}"
             clickUtil="@{clickUtil}">
 

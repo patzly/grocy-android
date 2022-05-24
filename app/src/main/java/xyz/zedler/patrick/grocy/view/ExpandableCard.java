@@ -23,6 +23,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -89,6 +90,11 @@ public class ExpandableCard extends LinearLayout {
   public void setText(String text) {
     textViewCollapsed.setText(text);
     textViewExpanded.setText(text);
+  }
+
+  public void setText(Spanned spanned) {
+    textViewCollapsed.setText(spanned);
+    textViewExpanded.setText(spanned);
   }
 
   public void changeState() {

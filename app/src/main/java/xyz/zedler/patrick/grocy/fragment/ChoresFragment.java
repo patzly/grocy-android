@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ChoresViewModel;
 
@@ -154,6 +155,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       if (binding.recycler.getAdapter() instanceof ChoreEntryAdapter) {
         ((ChoreEntryAdapter) binding.recycler.getAdapter()).updateData(
             items,
+            viewModel.getChoreHashMap(),
             viewModel.getUsersHashMap(),
             viewModel.getSortMode(),
             viewModel.isSortAscending()
@@ -164,6 +166,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                 requireContext(),
                 (LinearLayoutManager) binding.recycler.getLayoutManager(),
                 items,
+                viewModel.getChoreHashMap(),
                 viewModel.getUsersHashMap(),
                 this,
                 viewModel.getSortMode(),
@@ -206,11 +209,27 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
                 }
                 swipeBehavior.recoverLatestSwipedItem();
                 new Handler().postDelayed(
-                    () -> viewModel.executeChore(displayedItems.get(pos).getChoreId()),
+                    () -> viewModel.executeChore(displayedItems.get(pos).getChoreId(), false),
                     100
                 );
               }
           ));
+          if (VersionUtil.isGrocyServerMin320(viewModel.getSharedPrefs())
+              && !viewModel.hasManualScheduling(displayedItems.get(position).getChoreId())) {
+            underlayButtons.add(new UnderlayButton(
+                R.drawable.ic_round_skip_next,
+                pos -> {
+                  if (pos >= displayedItems.size()) {
+                    return;
+                  }
+                  swipeBehavior.recoverLatestSwipedItem();
+                  new Handler().postDelayed(
+                      () -> viewModel.executeChore(displayedItems.get(pos).getChoreId(), true),
+                      100
+                  );
+                }
+            ));
+          }
         }
       };
     }
@@ -256,8 +275,9 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     if (clickUtil.isDisabled()) {
       return;
     }
-    Chore chore = Chore.getFromId(viewModel.getChores(), choreEntry.getChoreId());
+    Chore chore = viewModel.getChoreHashMap().get(choreEntry.getChoreId());
     if (chore == null) {
+      viewModel.showErrorMessage();
       return;
     }
     if (swipeBehavior != null) {
@@ -270,7 +290,22 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
 
   @Override
   public void trackChoreExecution(int choreId) {
-    viewModel.executeChore(choreId);
+    viewModel.executeChore(choreId, false);
+  }
+
+  @Override
+  public void skipNextChoreSchedule(int choreId) {
+    viewModel.executeChore(choreId, true);
+  }
+
+  @Override
+  public void rescheduleNextExecution(int choreId) {
+    Chore chore = viewModel.getChoreHashMap().get(choreId);
+    if (chore == null) {
+      viewModel.showErrorMessage();
+      return;
+    }
+    navigate(ChoresFragmentDirections.actionChoresFragmentToChoreEntryRescheduleFragment(chore));
   }
 
   @Override

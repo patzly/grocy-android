@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
-import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
@@ -62,6 +61,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.PurchaseRepository;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
@@ -73,6 +73,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 
 public class PurchaseViewModel extends BaseViewModel {
 
@@ -295,7 +296,27 @@ public class PurchaseViewModel extends BaseViewModel {
         } else if (shoppingListItem != null && shoppingListItem.hasQuId()) {
           forcedQuId = shoppingListItem.getQuIdInt();
         }
-        initialUnitFactor = setProductQuantityUnitsAndFactors(updatedProduct, forcedQuId);
+        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+            getApplication(),
+            quantityUnitHashMap,
+            unitConversions,
+            updatedProduct
+        );
+        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+        QuantityUnit forcedUnit = null;
+        if (forcedQuId != null) {
+          forcedUnit = quantityUnitHashMap.get(forcedQuId);
+        }
+        Double factor;
+        if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
+          formData.getQuantityUnitLive().setValue(forcedUnit);
+          factor = unitFactors.get(forcedUnit);
+        } else {
+          QuantityUnit purchase = quantityUnitHashMap.get(updatedProduct.getQuIdPurchaseInt());
+          formData.getQuantityUnitLive().setValue(purchase);
+          factor = unitFactors.get(purchase);
+        }
+        initialUnitFactor = factor != null && factor != -1 ? factor : 1;
       } catch (IllegalArgumentException e) {
         showMessageAndContinueScanning(e.getMessage());
         return;
@@ -485,55 +506,13 @@ public class PurchaseViewModel extends BaseViewModel {
     formData.isFormValid();
   }
 
-  private double setProductQuantityUnitsAndFactors( // returns factor for unit which was set
-      Product product,
-      Integer forcedQuId
-  ) {
-    QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
-    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
-
-    if (stock == null || purchase == null) {
-      throw new IllegalArgumentException(getString(R.string.error_loading_qus));
-    }
-
-    HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-    ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-    unitFactors.put(stock, (double) -1);
-    quIdsInHashMap.add(stock.getId());
-    if (!quIdsInHashMap.contains(purchase.getId())) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
-    }
-    for (QuantityUnitConversion conversion : unitConversions) {
-      if (product.getId() != conversion.getProductId()) {
-        continue;
-      }
-      QuantityUnit unit = quantityUnitHashMap.get(conversion.getToQuId());
-      if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-        continue;
-      }
-      unitFactors.put(unit, conversion.getFactor());
-      quIdsInHashMap.add(unit.getId());
-    }
-    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-
-    QuantityUnit forcedUnit = null;
-    if (forcedQuId != null) {
-      forcedUnit = quantityUnitHashMap.get(forcedQuId);
-    }
-    Double factor;
-    if (forcedUnit != null && unitFactors.containsKey(forcedUnit)) {
-      formData.getQuantityUnitLive().setValue(forcedUnit);
-      factor = unitFactors.get(forcedUnit);
-    } else {
-      formData.getQuantityUnitLive().setValue(purchase);
-      factor = unitFactors.get(purchase);
-    }
-    return factor != null && factor != -1 ? factor : 1;
-  }
-
   public void onBarcodeRecognized(String barcode) {
     if (formData.getProductDetailsLive().getValue() != null) {
-      formData.getBarcodeLive().setValue(barcode);
+      if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
+        formData.getBarcodeLive().setValue(barcode);
+      } else {
+        showMessage(R.string.msg_clear_form_first);
+      }
       return;
     }
     Product product = null;
@@ -550,16 +529,12 @@ public class PurchaseViewModel extends BaseViewModel {
     }
     ProductBarcode productBarcode = null;
     if (product == null) {
-      for (ProductBarcode code : barcodes) {
-        if (code.getBarcode().equals(barcode)) {
-          productBarcode = code;
-          if (code instanceof PendingProductBarcode) {
-            setPendingProduct(code.getProductIdInt(), (PendingProductBarcode) code);
-            return;
-          } else {
-            product = productHashMap.get(code.getProductIdInt());
-          }
-        }
+      productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
+      if (productBarcode instanceof PendingProductBarcode) {
+        setPendingProduct(productBarcode.getProductIdInt(), (PendingProductBarcode) productBarcode);
+        return;
+      } else if (productBarcode != null) {
+        product = productHashMap.get(productBarcode.getProductIdInt());
       }
     }
     if (product != null) {

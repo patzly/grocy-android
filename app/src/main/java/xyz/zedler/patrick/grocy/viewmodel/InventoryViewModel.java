@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.InventoryRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
@@ -66,6 +67,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 
 public class InventoryViewModel extends BaseViewModel {
 
@@ -79,11 +81,11 @@ public class InventoryViewModel extends BaseViewModel {
   private final FormDataInventory formData;
 
   private List<Product> products;
-  private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> unitConversions;
   private List<ProductBarcode> barcodes;
   private List<Store> stores;
   private List<Location> locations;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
@@ -128,7 +130,7 @@ public class InventoryViewModel extends BaseViewModel {
     repository.loadFromDatabase(data -> {
       this.products = data.getProducts();
       this.barcodes = data.getBarcodes();
-      this.quantityUnits = data.getQuantityUnits();
+      this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       this.unitConversions = data.getQuantityUnitConversions();
       this.stores = data.getStores();
       this.locations = data.getLocations();
@@ -159,7 +161,8 @@ public class InventoryViewModel extends BaseViewModel {
         ), dlHelper.updateProductBarcodes(
             dbChangedTime, barcodes -> this.barcodes = barcodes
         ), dlHelper.updateQuantityUnits(
-            dbChangedTime, quantityUnits -> this.quantityUnits = quantityUnits
+            dbChangedTime,
+            quantityUnits -> quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(quantityUnits)
         ), dlHelper.updateStores(
             dbChangedTime, stores -> this.stores = stores
         ), dlHelper.updateLocations(
@@ -216,7 +219,15 @@ public class InventoryViewModel extends BaseViewModel {
 
       // quantity unit
       try {
-        setProductQuantityUnitsAndFactors(updatedProduct);
+        HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+            getApplication(),
+            quantityUnitHashMap,
+            unitConversions,
+            updatedProduct
+        );
+        formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+        QuantityUnit stock = quantityUnitHashMap.get(updatedProduct.getQuIdStockInt());
+        formData.getQuantityUnitLive().setValue(stock);
       } catch (IllegalArgumentException e) {
         showMessageAndContinueScanning(e.getMessage());
         return;
@@ -279,39 +290,13 @@ public class InventoryViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
   }
 
-  private void setProductQuantityUnitsAndFactors(Product product) {
-    QuantityUnit stock = getQuantityUnit(product.getQuIdStockInt());
-    QuantityUnit purchase = getQuantityUnit(product.getQuIdPurchaseInt());
-
-    if (stock == null || purchase == null) {
-      throw new IllegalArgumentException(getString(R.string.error_loading_qus));
-    }
-
-    HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-    ArrayList<Integer> quIdsInHashMap = new ArrayList<>();
-    unitFactors.put(stock, (double) -1);
-    quIdsInHashMap.add(stock.getId());
-    if (!quIdsInHashMap.contains(purchase.getId())) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
-    }
-    for (QuantityUnitConversion conversion : unitConversions) {
-        if (product.getId() != conversion.getProductId()) {
-            continue;
-        }
-      QuantityUnit unit = getQuantityUnit(conversion.getToQuId());
-        if (unit == null || quIdsInHashMap.contains(unit.getId())) {
-            continue;
-        }
-      unitFactors.put(unit, conversion.getFactor());
-      quIdsInHashMap.add(unit.getId());
-    }
-    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-    formData.getQuantityUnitLive().setValue(stock);
-  }
-
   public void onBarcodeRecognized(String barcode) {
     if (formData.getProductDetailsLive().getValue() != null) {
-      formData.getBarcodeLive().setValue(barcode);
+      if (ProductBarcode.getFromBarcode(barcodes, barcode) == null) {
+        formData.getBarcodeLive().setValue(barcode);
+      } else {
+        showMessage(R.string.msg_clear_form_first);
+      }
       return;
     }
     Product product = null;
@@ -327,11 +312,9 @@ public class InventoryViewModel extends BaseViewModel {
       return;
     }
     if (product == null) {
-      for (ProductBarcode code : barcodes) {
-        if (code.getBarcode().equals(barcode)) {
-          product = Product.getProductFromId(products, code.getProductIdInt());
-        }
-      }
+      ProductBarcode productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
+      product = productBarcode != null
+          ? Product.getProductFromId(products, productBarcode.getProductIdInt()) : null;
     }
     if (product != null) {
       setProduct(product.getId());
@@ -472,15 +455,6 @@ public class InventoryViewModel extends BaseViewModel {
             onSuccess.run();
         }
     }, error -> showMessage(R.string.error_failed_barcode_upload)).perform(dlHelper.getUuid());
-  }
-
-  private QuantityUnit getQuantityUnit(int id) {
-    for (QuantityUnit quantityUnit : quantityUnits) {
-        if (quantityUnit.getId() == id) {
-            return quantityUnit;
-        }
-    }
-    return null;
   }
 
   private Store getStore(int id) {

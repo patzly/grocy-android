@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/linear_recipe_entry_container"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingVertical="10dp"
+  android:paddingHorizontal="16dp"
+  android:minHeight="48dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:background="@drawable/bg_list_item"
+  android:gravity="center_vertical"
+  android:baselineAligned="false"
+  android:weightSum="4">
+
+  <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="3">
+
+    <TextView
+      android:id="@+id/title"
+      style="@style/Widget.Grocy.TextView.ListItem.Title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical" />
+
+    <TextView
+      android:id="@+id/due_score"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true" />
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:weightSum="1">
+
+      <TextView
+        android:id="@+id/fulfilled"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:maxLines="2"
+        android:layout_weight="1"/>
+
+      <ImageView
+        android:id="@+id/image_fulfillment"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="4dp"
+        android:visibility="visible"
+        tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/missing"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="false"
+      android:maxLines="5"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/extra_field_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:visibility="gone">
+
+    <TextView
+      android:id="@+id/extra_field"
+      style="@style/Widget.Grocy.TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"/>
+
+    <TextView
+      android:id="@+id/extra_field_subtitle"
+      style="@style/Widget.Grocy.TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:textSize="11sp"
+      android:visibility="gone"/>
+
+  </LinearLayout>
+
+  <ImageView
+    android:id="@+id/picture"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:layout_marginStart="16dp"
+    tools:ignore="ContentDescription" />
+
+</LinearLayout>

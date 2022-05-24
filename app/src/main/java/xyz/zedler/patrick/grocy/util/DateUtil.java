@@ -37,8 +37,9 @@ public class DateUtil {
   public static final int FORMAT_LONG = 2;
   public static final int FORMAT_MEDIUM = 1;
   public static final int FORMAT_SHORT = 0;
+  public static final int FORMAT_SHORT_WITH_TIME = 3;
 
-  private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+  public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
       "yyyy-MM-dd", Locale.ENGLISH
   );
   private static final SimpleDateFormat DATE_FORMAT_WITH_TIME = new SimpleDateFormat(
@@ -157,7 +158,9 @@ public class DateUtil {
     }
     Date date = null;
     try {
-      date = DATE_FORMAT.parse(dateString);
+      date = format != FORMAT_SHORT_WITH_TIME
+          ? DATE_FORMAT.parse(dateString)
+          : DATE_FORMAT_WITH_TIME.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getLocalizedDate: " + e);
     }
@@ -169,8 +172,10 @@ public class DateUtil {
       localized = android.text.format.DateFormat.getLongDateFormat(context).format(date);
     } else if (format == FORMAT_MEDIUM) {
       localized = android.text.format.DateFormat.getMediumDateFormat(context).format(date);
-    } else {
+    } else if (format == FORMAT_SHORT) {
       localized = android.text.format.DateFormat.getDateFormat(context).format(date);
+    } else {
+      localized = DATE_FORMAT_WITH_TIME.format(date);
     }
     return localized;
   }

@@ -165,8 +165,6 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
                 viewModel.getLocationHashMap(),
                 viewModel.getStoreHashMap(),
                 this,
-                viewModel.isFeatureEnabled(PREF.FEATURE_STOCK_BBD_TRACKING),
-                viewModel.getCurrency(),
                 viewModel.getSortMode(),
                 viewModel.isSortAscending(),
                 viewModel.getGroupingMode()

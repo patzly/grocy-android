@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class FormDataInventory {
@@ -81,13 +82,16 @@ public class FormDataInventory {
   private final LiveData<String> dueDateTextHumanLive;
   private final MutableLiveData<Boolean> dueDateErrorLive;
   private final MutableLiveData<String> priceLive;
+  private final MediatorLiveData<String> priceStockLive;
   private final MutableLiveData<String> priceErrorLive;
-  private final MediatorLiveData<String> priceHintLive;
+  private final MediatorLiveData<String> priceHelperLive;
+  private final String priceHint;
   private final MutableLiveData<Boolean> showStoreSection;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
+  private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
 
@@ -224,20 +228,18 @@ public class FormDataInventory {
     dueDateLive.setValue(null);
     dueDateErrorLive = new MutableLiveData<>();
     priceLive = new MutableLiveData<>();
+    priceStockLive = new MediatorLiveData<>();
+    priceStockLive.addSource(priceLive, i -> priceStockLive.setValue(getPriceStock()));
+    priceStockLive.addSource(quantityUnitLive, i -> priceStockLive.setValue(getPriceStock()));
     priceErrorLive = new MutableLiveData<>();
-    priceHintLive = new MediatorLiveData<>();
-    priceHintLive.addSource(quantityUnitStockLive, i -> {
-      if (currency != null && !currency.isEmpty() && i != null) {
-        priceHintLive.setValue(
-            application.getString(R.string.property_price_unit_in, i.getName(), currency));
-      } else if (currency != null && !currency.isEmpty()) {
-        priceHintLive.setValue(application.getString(R.string.property_price_in, currency));
-      } else if (i != null) {
-        priceHintLive.setValue(application.getString(R.string.property_price_unit, i.getName()));
-      } else {
-        priceHintLive.setValue(getString(R.string.property_price));
-      }
-    });
+    priceHelperLive = new MediatorLiveData<>();
+    priceHelperLive.addSource(priceStockLive, i -> priceHelperLive.setValue(getPriceHelpText()));
+    priceHelperLive.addSource(quantityUnitLive, i -> priceHelperLive.setValue(getPriceHelpText()));
+    if (currency != null && !currency.isEmpty()) {
+      priceHint = application.getString(R.string.property_price_in, currency);
+    } else {
+      priceHint = getString(R.string.property_price);
+    }
     quantityUnitLive.setValue(null);
     showStoreSection = new MutableLiveData<>(true);
     storeLive = new MutableLiveData<>();
@@ -250,6 +252,7 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    noteLive = new MutableLiveData<>();
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -527,12 +530,68 @@ public class FormDataInventory {
     return priceLive;
   }
 
+  private String getPriceStock() {
+    ProductDetails productDetails = productDetailsLive.getValue();
+    QuantityUnit stock = quantityUnitStockLive.getValue();
+    QuantityUnit current = quantityUnitLive.getValue();
+    HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
+    String priceString = priceLive.getValue();
+
+    if (!NumUtil.isStringDouble(priceString)) {
+      return null;
+    }
+    if (stock == null || current == null || productDetails == null || hashMap == null) {
+      return null;
+    }
+
+    double price = Double.parseDouble(priceString);
+    Object currentFactor = hashMap.get(current);
+    if (currentFactor == null) {
+      return null;
+    }
+
+    double priceMultiplied;
+    if (isTareWeightEnabled() || (double) currentFactor == -1) {
+      priceMultiplied = price;
+    } else if (current.getId() == productDetails.getProduct()
+        .getQuIdPurchaseInt()) {
+      priceMultiplied = price / (double) currentFactor;
+    } else {
+      priceMultiplied = price * (double) currentFactor;
+    }
+    return NumUtil.trimPrice(priceMultiplied);
+  }
+
   public MutableLiveData<String> getPriceErrorLive() {
     return priceErrorLive;
   }
 
-  public MediatorLiveData<String> getPriceHintLive() {
-    return priceHintLive;
+  public String getPriceHint() {
+    return priceHint;
+  }
+
+  public LiveData<String> getPriceHelperLive() {
+    return priceHelperLive;
+  }
+
+  private String getPriceHelpText() {
+    QuantityUnit current = quantityUnitLive.getValue();
+    QuantityUnit stock = quantityUnitStockLive.getValue();
+    if (current == null || stock == null || current.getId() == stock.getId()) {
+      return " ";
+    }
+    if (priceStockLive.getValue() == null) {
+      return " ";
+    }
+    String priceWithCurrency = priceStockLive.getValue();
+    if (currency != null && !currency.isEmpty()) {
+      priceWithCurrency += " " + currency;
+    }
+    return application.getString(
+        R.string.subtitle_price_means,
+        priceWithCurrency,
+        stock.getName()
+    );
   }
 
   public void morePrice() {
@@ -574,6 +633,10 @@ public class FormDataInventory {
 
   public LiveData<String> getLocationNameLive() {
     return locationNameLive;
+  }
+
+  public MutableLiveData<String> getNoteLive() {
+    return noteLive;
   }
 
   public boolean isCurrentProductFlowNotInterrupted() {
@@ -757,7 +820,7 @@ public class FormDataInventory {
     String price = null;
     String storeId = null;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
-      price = priceLive.getValue();
+      price = priceStockLive.getValue();
       Store store = storeLive.getValue();
       storeId = store != null ? String.valueOf(store.getId()) : null;
     }
@@ -784,6 +847,9 @@ public class FormDataInventory {
         }
         if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
           json.put("location_id", String.valueOf(location.getId()));
+        }
+        if (noteLive.getValue() != null && !noteLive.getValue().isEmpty()) {
+          json.put("note", noteLive.getValue());
         }
       }
     } catch (JSONException e) {
@@ -826,6 +892,7 @@ public class FormDataInventory {
     storeLive.setValue(null);
     showStoreSection.setValue(true);
     locationLive.setValue(null);
+    noteLive.setValue(null);
     new Handler().postDelayed(() -> {
       productNameErrorLive.setValue(null);
       quantityUnitErrorLive.setValue(false);
@@ -853,6 +920,10 @@ public class FormDataInventory {
         Constants.SETTINGS.SCANNER.EXTERNAL_SCANNER,
         Constants.SETTINGS_DEFAULT.SCANNER.EXTERNAL_SCANNER
     );
+  }
+
+  public boolean showNotesField() {
+    return VersionUtil.isGrocyServerMin330(sharedPrefs);
   }
 
   public boolean isFeatureEnabled(String pref) {

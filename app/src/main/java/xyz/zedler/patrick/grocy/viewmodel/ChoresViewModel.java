@@ -71,7 +71,7 @@ public class ChoresViewModel extends BaseViewModel {
   private final FilterChipLiveDataTasksSort filterChipLiveDataSort;
 
   private List<ChoreEntry> choreEntries;
-  private List<Chore> chores;
+  private HashMap<Integer, Chore> choreHashMap;
   private HashMap<Integer, User> usersHashMap;
 
   private DownloadHelper.Queue currentQueueLoading;
@@ -115,7 +115,7 @@ public class ChoresViewModel extends BaseViewModel {
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       choreEntries = data.getChoreEntries();
-      chores = data.getChores();
+      choreHashMap = ArrayUtil.getChoresHashMap(data.getChores());
       usersHashMap = ArrayUtil.getUsersHashMap(data.getUsers());
       filterChipLiveDataAssignment.setUsers(data.getUsers());
 
@@ -201,10 +201,10 @@ public class ChoresViewModel extends BaseViewModel {
               .emitCounts();
 
           updateFilteredChoreEntries();
-        }), dlHelper.updateChores(dbChangedTime, chores -> {
-          this.chores = chores;
-
-        }), dlHelper.updateUsers(dbChangedTime, users -> {
+        }), dlHelper.updateChores(
+            dbChangedTime,
+            chores -> this.choreHashMap = ArrayUtil.getChoresHashMap(chores)
+        ), dlHelper.updateUsers(dbChangedTime, users -> {
           usersHashMap = ArrayUtil.getUsersHashMap(users);
           filterChipLiveDataAssignment.setUsers(users);
         })
@@ -287,18 +287,19 @@ public class ChoresViewModel extends BaseViewModel {
     filteredChoreEntriesLive.setValue(filteredChoreEntries);
   }
 
-  public void executeChore(int choreId) {
-    Chore chore = Chore.getFromId(chores, choreId);
+  public void executeChore(int choreId, boolean skip) {
+    Chore chore = choreHashMap.get(choreId);
     if (chore == null) {
       showErrorMessage();
       return;
     }
-    executeChore(chore);
+    executeChore(chore, skip);
   }
 
-  public void executeChore(Chore chore) {
+  public void executeChore(Chore chore, boolean skip) {
     JSONObject body = new JSONObject();
     try {
+      body.put("skipped", skip);
       body.put("tracked_time", chore.getTrackDateOnlyBoolean()
           ? dateUtil.getCurrentDateWithoutTimeStr() : dateUtil.getCurrentDateWithTimeStr());
     } catch (JSONException e) {
@@ -370,14 +371,19 @@ public class ChoresViewModel extends BaseViewModel {
     return usersHashMap;
   }
 
-  public List<Chore> getChores() {
-    return chores;
+  public HashMap<Integer, Chore> getChoreHashMap() {
+    return choreHashMap;
   }
 
   public boolean hasManualScheduling(int choreId) {
-    Chore chore = Chore.getFromId(chores, choreId);
+    Chore chore = choreHashMap.get(choreId);
     if (chore == null) return true;
     return chore.getPeriodType().equals(Chore.PERIOD_TYPE_MANUALLY);
+  }
+
+  @Override
+  public SharedPreferences getSharedPrefs() {
+    return sharedPrefs;
   }
 
   @NonNull

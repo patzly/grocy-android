@@ -596,6 +596,7 @@
   <string name="property_note">Nota</string>
   <string name="property_status">Estado</string>
   <string name="property_amount">Quantidade</string>
+  <string name="property_amount_insert">Quantidade: %1$s</string>
   <string name="property_seconds">Segundos</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">

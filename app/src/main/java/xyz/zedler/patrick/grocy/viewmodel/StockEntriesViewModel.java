@@ -203,6 +203,10 @@ public class StockEntriesViewModel extends BaseViewModel {
         Product product = productHashMap.get(entry.getProductId());
         String productName = product != null ? product.getName().toLowerCase() : null;
         searchContainsItem = productName != null && productName.contains(searchInput);
+        if (!searchContainsItem) {
+          searchContainsItem = entry.getNote() != null && !entry.getNote().isEmpty()
+              && entry.getNote().toLowerCase().contains(searchInput);
+        }
       }
       if (!searchContainsItem && productBarcodeSearch == null
           || !searchContainsItem && productBarcodeSearch.getProductIdInt() != entry.getProductId()) {
@@ -530,10 +534,7 @@ public class StockEntriesViewModel extends BaseViewModel {
   }
 
   public String getCurrency() {
-    return sharedPrefs.getString(
-        PREF.CURRENCY,
-        ""
-    );
+    return sharedPrefs.getString(PREF.CURRENCY, "");
   }
 
   @Override

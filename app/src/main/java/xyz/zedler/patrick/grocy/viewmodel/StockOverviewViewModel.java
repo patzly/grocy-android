@@ -25,6 +25,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
@@ -109,7 +112,7 @@ public class StockOverviewViewModel extends BaseViewModel {
   private ArrayList<String> searchResultsFuzzy;
   private final boolean debug;
 
-  public StockOverviewViewModel(@NonNull Application application) {
+  public StockOverviewViewModel(@NonNull Application application, StockOverviewFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
@@ -130,6 +133,12 @@ public class StockOverviewViewModel extends BaseViewModel {
         getApplication(),
         this::updateFilteredStockItems
     );
+    if (NumUtil.isStringInt(args.getStatusFilterId())) {
+      if (Integer.parseInt(args.getStatusFilterId())
+          == FilterChipLiveDataStockStatus.STATUS_DUE_SOON) {
+        filterChipLiveDataStatus.setStatusDueSoon();
+      }
+    }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
         getApplication(),
         this::updateFilteredStockItems
@@ -733,5 +742,26 @@ public class StockOverviewViewModel extends BaseViewModel {
   protected void onCleared() {
     dlHelper.destroy();
     super.onCleared();
+  }
+
+  public static class StockOverviewViewModelFactory implements ViewModelProvider.Factory {
+
+    private final Application application;
+    private final StockOverviewFragmentArgs args;
+
+    public StockOverviewViewModelFactory(
+        Application application,
+        StockOverviewFragmentArgs args
+    ) {
+      this.application = application;
+      this.args = args;
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new StockOverviewViewModel(application, args);
+    }
   }
 }

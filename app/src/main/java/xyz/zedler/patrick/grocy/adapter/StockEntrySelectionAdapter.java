@@ -101,6 +101,7 @@ public class StockEntrySelectionAdapter
       } else {
         holder.binding.selected.setVisibility(View.INVISIBLE);
       }
+      holder.binding.note.setVisibility(View.GONE);
     } else {
       holder.binding.name.setText(
           context.getString(
@@ -130,6 +131,12 @@ public class StockEntrySelectionAdapter
               )
           )
       );
+      if (stockEntry.getNote() != null && !stockEntry.getNote().isEmpty()) {
+        holder.binding.note.setText(stockEntry.getNote());
+        holder.binding.note.setVisibility(View.VISIBLE);
+      } else {
+        holder.binding.note.setVisibility(View.GONE);
+      }
 
       if (stockEntry.getStockId().equals(selectedId)) {
         holder.binding.selected.setVisibility(View.VISIBLE);

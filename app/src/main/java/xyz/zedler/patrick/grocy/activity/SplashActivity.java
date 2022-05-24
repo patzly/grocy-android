@@ -161,7 +161,7 @@ public class SplashActivity extends MainActivity {
             assert splashContent != null;
             ViewUtil.startIcon(splashContent.findDrawableByLayerId(R.id.splash_logo));
             new Handler(Looper.getMainLooper()).postDelayed(
-                this::startNewMainActivity, 900
+                this::startNewMainActivity, 850
             );
           }
         } catch (Exception e) {
@@ -206,7 +206,7 @@ public class SplashActivity extends MainActivity {
     Intent intent = new Intent(this, MainActivity.class);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     startActivity(intent);
-    overridePendingTransition(0, R.anim.splash_fade_out);
+    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     finish();
   }
 }

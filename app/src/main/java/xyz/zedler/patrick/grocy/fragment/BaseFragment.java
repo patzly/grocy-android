@@ -48,6 +48,7 @@ import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -132,6 +133,9 @@ public class BaseFragment extends Fragment {
   public void skipNextChoreSchedule(int choreId) {
   }
 
+  public void rescheduleNextExecution(int choreId) {
+  }
+
   public void toggleDoneStatus(Task task) {
   }
 
@@ -139,6 +143,21 @@ public class BaseFragment extends Fragment {
   }
 
   public void editTask(Task task) {
+  }
+
+  public void consumeRecipe(int recipeId) {
+  }
+
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+  }
+
+  public void editRecipe(Recipe recipe) {
+  }
+
+  public void deleteRecipe(int recipeId) {
+  }
+
+  public void deleteRecipePosition(int recipePositionId) {
   }
 
   @Nullable

@@ -56,21 +56,18 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical" />
 
-    <LinearLayout
+    <TextView
+      android:id="@+id/subtitle"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:id="@+id/note"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:minHeight="20dp"
-      android:gravity="bottom">
-
-      <TextView
-        android:id="@+id/subtitle"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="2" />
-
-    </LinearLayout>
+      android:textStyle="italic"/>
 
   </LinearLayout>
 

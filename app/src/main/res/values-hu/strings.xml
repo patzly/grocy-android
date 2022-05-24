@@ -561,6 +561,7 @@
   <string name="property_note">Jegyzet</string>
   <string name="property_status">Állapot</string>
   <string name="property_amount">Mennyiség</string>
+  <string name="property_amount_insert">Mennyiség: %1$s</string>
   <string name="property_seconds">Másodperc</string>
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">

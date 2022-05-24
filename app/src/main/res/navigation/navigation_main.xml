@@ -294,6 +294,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_choresFragment"
       app:destination="@id/choresFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_recipesFragment"
+      app:destination="@id/recipesFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
@@ -618,6 +621,13 @@
         app:exitAnim="@anim/slide_to_start"
         app:popEnterAnim="@anim/slide_from_start"
         app:popExitAnim="@anim/slide_to_end"/>
+      <action
+          android:id="@+id/action_settingsFragment_to_settingsNotificationsFragment"
+          app:destination="@id/settingsCatNotificationsFragment"
+          app:enterAnim="@anim/slide_from_end"
+          app:exitAnim="@anim/slide_to_start"
+          app:popEnterAnim="@anim/slide_from_start"
+          app:popExitAnim="@anim/slide_to_end" />
     </fragment>
     <fragment
       android:id="@+id/logFragment"
@@ -718,6 +728,12 @@
       android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatShoppingListFragment"
       android:label="SettingsCatShoppingListFragment"
       tools:layout="@layout/fragment_settings_cat_shopping_list"/>
+    <fragment
+        android:id="@+id/settingsCatNotificationsFragment"
+        android:name="xyz.zedler.patrick.grocy.fragment.SettingsCatNotificationsFragment"
+        android:label="SettingsCatNotificationsFragment"
+        tools:layout="@layout/fragment_settings_cat_notifications">
+    </fragment>
   </navigation>
   <navigation
     android:id="@+id/navigation_master_objects"
@@ -1102,6 +1118,11 @@
       app:enterAnim="@anim/slide_in_up"
       app:exitAnim="@anim/slide_no"
       app:popExitAnim="@anim/slide_out_down"/>
+    <argument
+      android:name="statusFilterId"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="@null" />
   </fragment>
   <fragment
     android:id="@+id/chooseProductFragment"
@@ -1161,6 +1182,12 @@
     <deepLink
       android:id="@+id/deepLink16"
       app:uri="@string/deep_link_choresFragment" />
+    <action
+      android:id="@+id/action_choresFragment_to_choreEntryRescheduleFragment"
+      app:destination="@id/choreEntryRescheduleFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/stockEntriesFragment"
@@ -1175,5 +1202,118 @@
     <deepLink
       android:id="@+id/deepLink17"
       app:uri="@string/deep_link_stockEntriesFragment" />
+  </fragment>
+  <fragment
+    android:id="@+id/choreEntryRescheduleFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ChoreEntryRescheduleFragment"
+    android:label="ChoreEntryRescheduleFragment"
+    tools:layout="@layout/fragment_chore_entry_reschedule">
+    <argument
+      android:name="chore"
+      app:argType="xyz.zedler.patrick.grocy.model.Chore" />
+  </fragment>
+  <fragment
+      android:id="@+id/recipesFragment"
+      android:label="RecipesFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipesFragment"
+      tools:layout="@layout/fragment_recipes">
+    <deepLink
+        android:id="@+id/deepLink16"
+        app:uri="@string/deep_link_recipesFragment" />
+    <action
+        android:id="@+id/action_recipesFragment_to_recipeEditFragment"
+        app:destination="@id/recipeEditFragment"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/slide_no"
+        app:popExitAnim="@anim/slide_out_down"/>
+  </fragment>
+  <fragment
+      android:id="@+id/recipeEditFragment"
+      android:label="RecipeEditFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipeEditFragment"
+      tools:layout="@layout/fragment_recipe_edit">
+    <argument
+        android:name="closeWhenFinished"
+        android:defaultValue="false"
+        app:argType="boolean" />
+    <argument
+        android:name="action"
+        app:argType="string" />
+    <argument
+        android:defaultValue="@null"
+        android:name="recipe"
+        app:argType="xyz.zedler.patrick.grocy.model.Recipe"
+        app:nullable="true" />
+    <deepLink
+        android:id="@+id/deepLink17"
+        app:uri="@string/deep_link_recipeEditFragment" />
+    <argument
+        android:name="startWithScanner"
+        app:argType="boolean"
+        android:defaultValue="false" />
+    <action
+        android:id="@+id/action_recipeEditFragment_to_recipeEditIngredientListFragment"
+        app:destination="@id/recipeEditIngredientListFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
+  </fragment>
+  <fragment
+      android:id="@+id/recipeEditIngredientListFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragment"
+      android:label="RecipeEditIngredientListFragment"
+      tools:layout="@layout/fragment_recipe_edit_ingredient_list">
+    <deepLink
+        android:id="@+id/deepLink18"
+        app:uri="@string/deep_link_recipeEditIngredientListFragment" />
+    <argument
+        android:name="action"
+        app:argType="string" />
+    <argument
+        android:name="recipe"
+        app:argType="xyz.zedler.patrick.grocy.model.Recipe"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <action
+        android:id="@+id/action_recipeEditIngredientListFragment_to_recipeEditIngredientEditFragment"
+        app:destination="@id/recipeEditIngredientEditFragment"
+        app:enterAnim="@anim/slide_from_end"
+        app:exitAnim="@anim/slide_to_start"
+        app:popEnterAnim="@anim/slide_from_start"
+        app:popExitAnim="@anim/slide_to_end" />
+  </fragment>
+  <fragment
+      android:id="@+id/recipeEditIngredientEditFragment"
+      android:name="xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientEditFragment"
+      android:label="RecipeEditIngredientEditFragment"
+      tools:layout="@layout/fragment_recipe_edit_ingredient_edit">
+    <deepLink
+        android:id="@+id/deepLink18"
+        app:uri="@string/deep_link_recipeEditIngredientEditFragment" />
+    <argument
+        android:name="action"
+        app:argType="string" />
+    <argument
+        android:name="recipeAction"
+        app:argType="string" />
+    <argument
+        android:name="recipePosition"
+        app:argType="xyz.zedler.patrick.grocy.model.RecipePosition"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <argument
+        android:name="recipe"
+        app:argType="xyz.zedler.patrick.grocy.model.Recipe"
+        app:nullable="true"
+        android:defaultValue="@null" />
+    <argument
+        android:name="startWithScanner"
+        app:argType="boolean"
+        android:defaultValue="false" />
+    <argument
+        android:name="closeWhenFinished"
+        android:defaultValue="false"
+        app:argType="boolean" />
   </fragment>
 </navigation>

@@ -28,6 +28,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -232,6 +233,18 @@ public class ProductBarcode implements Parcelable {
     return 0;
   }
 
+  public static ProductBarcode getFromBarcode(
+      List<ProductBarcode> productBarcodes,
+      String barcode
+  ) {
+    for (ProductBarcode code : productBarcodes) {
+      if (code.getBarcode().equals(barcode)) {
+        return code;
+      }
+    }
+    return null;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -242,7 +255,7 @@ public class ProductBarcode implements Parcelable {
     }
     ProductBarcode that = (ProductBarcode) o;
     return id == that.id &&
-        productId == that.productId &&
+        Objects.equals(productId, that.productId) &&
         Objects.equals(barcode, that.barcode) &&
         Objects.equals(quId, that.quId) &&
         Objects.equals(amount, that.amount) &&

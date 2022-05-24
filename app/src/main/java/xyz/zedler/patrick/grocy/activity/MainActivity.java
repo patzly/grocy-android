@@ -63,10 +63,6 @@ import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.color.DynamicColors;
-import com.google.android.material.color.DynamicColorsOptions;
-import com.google.android.material.color.HarmonizedColors;
-import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.security.NoSuchAlgorithmException;
@@ -95,7 +91,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
@@ -559,14 +554,24 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    BaseFragment currentFragment = getCurrentFragment();
-    return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    try {
+      BaseFragment currentFragment = getCurrentFragment();
+      return currentFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    } catch (Exception e) {
+      Log.e(TAG, "onKeyDown: fragmentManager or currentFragment is null");
+      return false;
+    }
   }
 
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
-    BaseFragment currentFragment = getCurrentFragment();
-    return currentFragment.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event);
+    try {
+      BaseFragment currentFragment = getCurrentFragment();
+      return currentFragment.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event);
+    } catch (Exception e) {
+      Log.e(TAG, "onKeyUp: fragmentManager or currentFragment is null");
+      return false;
+    }
   }
 
   public void navigateUp() {
@@ -593,16 +598,24 @@ public class MainActivity extends AppCompatActivity {
     snackbar.show();
   }
 
-  public void showMessage(String message) {
-    Snackbar bar = Snackbar.make(binding.frameMainContainer, message, Snackbar.LENGTH_LONG);
+  public void showMessage(String message, View view) {
+    Snackbar bar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
     View v = bar.getView();
     TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
     text.setMaxLines(4);
     showSnackbar(bar);
   }
 
+  public void showMessage(String message) {
+    showMessage(message, binding.frameMainContainer);
+  }
+
   public void showMessage(@StringRes int message) {
     showMessage(getString(message));
+  }
+
+  public void showMessage(@StringRes int message, View view) {
+    showMessage(getString(message), view);
   }
 
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {

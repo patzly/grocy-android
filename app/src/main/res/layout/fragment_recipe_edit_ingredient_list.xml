@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="android.view.View" />
+    <import type="xyz.zedler.patrick.grocy.R" />
+    <variable
+      name="formData"
+      type="xyz.zedler.patrick.grocy.model.FormDataRecipeEditIngredientList" />
+    <variable
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientListViewModel" />
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragment" />
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/primary">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+          android:id="@+id/frame_master_product_simple_cancel"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="20dp"
+          android:background="?attr/actionBarItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:contentDescription="@string/action_back"
+          android:tooltipText="@string/action_back"
+          android:focusable="true"
+          tools:targetApi="o"
+          android:onClick="@{() -> activity.onBackPressed()}">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_arrow_back" />
+
+        </FrameLayout>
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.Toolbar"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/property_ingredients"
+          android:layout_marginEnd="16dp" />
+
+        <FrameLayout
+          android:id="@+id/frame_help"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="4dp"
+          android:background="?attr/actionBarItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:contentDescription="@string/action_display_help"
+          android:tooltipText="@string/action_display_help"
+          android:focusable="true"
+          tools:targetApi="o"
+          android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
+
+          <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+
+        </FrameLayout>
+
+      </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipe"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
+      android:overScrollMode="never"
+      app:progressBackgroundColor="@{@color/surface}"
+      app:progressForegroundColor="@{@color/secondary}"
+      app:setRefreshing="@{viewModel.isLoadingLive}"
+      app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
+
+      <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}"
+            app:contentPadding="16dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/on_background_variant">
+
+          <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/msg_help_ingredient_list" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"/>
+
+      </LinearLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

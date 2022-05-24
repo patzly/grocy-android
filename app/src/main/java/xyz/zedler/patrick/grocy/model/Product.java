@@ -781,6 +781,16 @@ public class Product extends GroupedListItem implements Parcelable {
     return activeProductsOnly;
   }
 
+  public static ArrayList<Product> getProductsForRecipePositions(List<Product> products, List<RecipePosition> recipePositions) {
+    ArrayList<Product> result = new ArrayList<>();
+    for (RecipePosition recipePosition : recipePositions) {
+      Product product = getProductFromId(products, recipePosition.getProductId());
+      if (product != null)
+        result.add(product);
+    }
+    return result;
+  }
+
   @Override
   public int describeContents() {
     return 0;

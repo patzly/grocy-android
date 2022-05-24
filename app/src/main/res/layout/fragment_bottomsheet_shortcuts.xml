@@ -152,6 +152,14 @@
             android:text="@string/title_task_add"
             android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
 
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/recipes"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_recipes"
+            android:onCheckedChanged="@{() -> sheet.checkLimitReached()}" />
+
         </LinearLayout>
 
         <LinearLayout

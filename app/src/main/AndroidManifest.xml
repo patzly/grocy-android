@@ -19,13 +19,13 @@
 
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  package="xyz.zedler.patrick.grocy">
+  xmlns:tools="http://schemas.android.com/tools">
 
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
@@ -59,6 +59,19 @@
       android:name=".activity.MainActivity"
       android:theme="@style/Theme.Grocy.BottomAppBar"
       android:windowSoftInputMode="adjustPan" />
+
+    <receiver
+      android:name=".notification.DueSoonNotificationReceiver"
+      android:enabled="true"/>
+
+    <receiver
+      android:name=".notification.BootReceiver"
+      android:enabled="false"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+      </intent-filter>
+    </receiver>
 
   </application>
 

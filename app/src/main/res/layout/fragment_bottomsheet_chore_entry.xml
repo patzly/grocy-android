@@ -95,19 +95,25 @@
         android:layout_marginVertical="8dp" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/date"
+        android:id="@+id/tracked_count"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/category"
+        android:id="@+id/average_execution_frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/assigned_to"
+        android:id="@+id/last_tracked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+      <xyz.zedler.patrick.grocy.view.ListItem
+        android:id="@+id/last_done_by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
