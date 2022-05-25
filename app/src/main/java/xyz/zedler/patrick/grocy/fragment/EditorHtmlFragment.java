@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -32,7 +31,8 @@ import org.wordpress.aztec.toolbar.IAztecToolbarClickListener;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.GlideUtil.GlideImageLoader;
 
@@ -64,67 +64,63 @@ public class EditorHtmlFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
-    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
-    if (args.getHtmlText() != null) {
-      binding.visual.fromHtml(args.getHtmlText(), true);
-    }
-
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         POSITION.END,
         R.menu.menu_empty,
-        this::onMenuItemClick
+        () -> {}
     );
     activity.updateFab(
         R.drawable.ic_round_done,
         R.string.action_back,
-        Constants.FAB.TAG.SAVE,
-        false,
+        FAB.TAG.DONE,
+        true,
         () -> {
-
+          setForPreviousDestination(ARGUMENT.DESCRIPTION, binding.visual.toHtml(false));
+          activity.navigateUp();
         }
     );
 
+    binding.visual.setCalypsoMode(false);
     Aztec.with(binding.visual, binding.formattingToolbar, new IAztecToolbarClickListener() {
-      @Override
-      public void onToolbarCollapseButtonClicked() {
+          @Override
+          public void onToolbarCollapseButtonClicked() {
 
-      }
+          }
 
-      @Override
-      public void onToolbarExpandButtonClicked() {
+          @Override
+          public void onToolbarExpandButtonClicked() {
 
-      }
+          }
 
-      @Override
-      public void onToolbarFormatButtonClicked(@NonNull ITextFormat iTextFormat, boolean b) {
+          @Override
+          public void onToolbarFormatButtonClicked(@NonNull ITextFormat iTextFormat, boolean b) {
 
-      }
+          }
 
-      @Override
-      public void onToolbarHeadingButtonClicked() {
+          @Override
+          public void onToolbarHeadingButtonClicked() {
 
-      }
+          }
 
-      @Override
-      public void onToolbarHtmlButtonClicked() {
+          @Override
+          public void onToolbarHtmlButtonClicked() {
 
-      }
+          }
 
-      @Override
-      public void onToolbarListButtonClicked() {
+          @Override
+          public void onToolbarListButtonClicked() {
 
-      }
+          }
 
-      @Override
-      public boolean onToolbarMediaButtonClicked() {
-        return false;
-      }
-    }).setImageGetter(new GlideImageLoader(requireContext()));
-  }
+          @Override
+          public boolean onToolbarMediaButtonClicked() {
+            return false;
+          }
+        }).setImageGetter(new GlideImageLoader(requireContext()));
 
-  private boolean onMenuItemClick(MenuItem item) {
-    return false;
+    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
+    if (args.getHtmlText() != null && savedInstanceState == null) {
+      binding.visual.fromHtml(args.getHtmlText(), true);
+    }
   }
 }

@@ -114,6 +114,14 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
       }
     });
 
+    Object descriptionEdited = getFromThisDestinationNow(ARGUMENT.DESCRIPTION);
+    if (descriptionEdited != null) {
+      removeForThisDestination(ARGUMENT.DESCRIPTION);
+      viewModel.getFormData().getDescriptionLive().setValue((String) descriptionEdited);
+      viewModel.getFormData().getDescriptionSpannedLive()
+          .setValue(Html.fromHtml((String) descriptionEdited));
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
