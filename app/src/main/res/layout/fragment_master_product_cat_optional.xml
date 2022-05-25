@@ -272,7 +272,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@{formData.descriptionLive ?? fragment.getString(R.string.subtitle_empty)}"
+                  android:text="@{formData.descriptionSpannedLive ?? fragment.getString(R.string.subtitle_empty)}"
                   android:singleLine="true" />
 
               </LinearLayout>

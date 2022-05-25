@@ -24,8 +24,6 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +32,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
@@ -60,6 +60,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
@@ -239,12 +240,17 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     // DESCRIPTION
 
-    Spanned description = product.getDescription() != null
-        ? Html.fromHtml(product.getDescription())
-        : null;
-    description = (Spanned) TextUtil.trimCharSequence(description);
-    if (description != null && !description.toString().isEmpty()) {
-      binding.cardDescription.setText(description.toString());
+    String description = product.getDescription() != null ? TextUtil.trimCharSequence(product.getDescription()).toString() : null;
+    if (description != null) {
+      description = "<font color='" + String.format("%06x", ContextCompat.getColor(requireContext(), R.color.on_background) & 0xffffff) + "'>" + description + "</font>";
+      binding.description.getSettings().setJavaScriptEnabled(false);
+      binding.description.loadData(description, "text/html; charset=utf-8", "UTF-8");
+      binding.description.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.on_background_tertiary, null));
+      String finalDescription = description;
+      binding.cardDescription.setOnClickListener(
+          v -> AlertDialogUtil.showProductDescriptionDialog(requireContext(), finalDescription)
+      );
+
     } else {
       binding.cardDescription.setVisibility(View.GONE);
     }

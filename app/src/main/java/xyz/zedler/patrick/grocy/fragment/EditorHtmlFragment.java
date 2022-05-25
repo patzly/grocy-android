@@ -33,6 +33,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.GlideUtil.GlideImageLoader;
 
 public class EditorHtmlFragment extends BaseFragment {
@@ -41,7 +42,6 @@ public class EditorHtmlFragment extends BaseFragment {
 
   private FragmentEditorHtmlBinding binding;
   private MainActivity activity;
-  private boolean showInfo = false;
 
   @Override
   public View onCreateView(
@@ -69,15 +69,22 @@ public class EditorHtmlFragment extends BaseFragment {
       binding.visual.fromHtml(args.getHtmlText(), true);
     }
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(R.id.scroll_log);
-      activity.getScrollBehavior().setHideOnScroll(false);
-      activity.updateBottomAppBar(
-          Constants.FAB.POSITION.GONE,
-          R.menu.menu_empty,
-          this::onMenuItemClick
-      );
-    }
+    activity.getScrollBehavior().setUpScroll(R.id.scroll);
+    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.updateBottomAppBar(
+        POSITION.END,
+        R.menu.menu_empty,
+        this::onMenuItemClick
+    );
+    activity.updateFab(
+        R.drawable.ic_round_done,
+        R.string.action_back,
+        Constants.FAB.TAG.SAVE,
+        false,
+        () -> {
+
+        }
+    );
 
     Aztec.with(binding.visual, binding.formattingToolbar, new IAztecToolbarClickListener() {
       @Override
@@ -115,12 +122,6 @@ public class EditorHtmlFragment extends BaseFragment {
         return false;
       }
     }).setImageGetter(new GlideImageLoader(requireContext()));
-  }
-
-  @Override
-  public void onSaveInstanceState(@NonNull Bundle outState) {
-    outState.putBoolean("show_info", showInfo);
-    super.onSaveInstanceState(outState);
   }
 
   private boolean onMenuItemClick(MenuItem item) {

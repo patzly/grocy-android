@@ -556,4 +556,15 @@
     <item name="toolbarIconDisabledColor">@color/material_on_primary_disabled</item>
   </style>
 
+  <style name="AlertDialogCustom" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+    <item name="android:background">@color/on_background_tertiary</item>
+    <item name="android:textColor">@color/retro_green_fg</item>
+    <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+  </style>
+
+  <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <item name="android:textColor">@color/retro_green_fg</item>
+  </style>
+
 </resources>

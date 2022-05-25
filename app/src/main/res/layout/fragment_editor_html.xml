@@ -89,7 +89,7 @@
           android:id="@+id/formatting_toolbar"
           android:layout_width="match_parent"
           android:layout_height="48dp"
-          aztec:mediaToolbarAvailable="true"
+          aztec:mediaToolbarAvailable="false"
           aztec:toolbarBackgroundColor="@color/primary"/>
 
       </LinearLayout>
