@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.model;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.text.Spanned;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -33,8 +34,6 @@ import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.ConsumeFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.RecipeEditFragment;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -57,7 +56,8 @@ public class FormDataRecipeEdit {
   private final LiveData<String> productNameInfoStockLive;
   private final MutableLiveData<Integer> productNameErrorLive;
   private final MutableLiveData<String> barcodeLive;
-  private final MutableLiveData<String> descriptionLive;
+  private final MutableLiveData<String> preparationLive;
+  private final MutableLiveData<Spanned> preparationSpannedLive;
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithRecipe;
@@ -86,7 +86,8 @@ public class FormDataRecipeEdit {
     );
     productNameErrorLive = new MutableLiveData<>();
     barcodeLive = new MutableLiveData<>();
-    descriptionLive = new MutableLiveData<>();
+    preparationLive = new MutableLiveData<>();
+    preparationSpannedLive = new MutableLiveData<>();
     scannerVisibilityLive = new MutableLiveData<>(false);
     if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
             .getCloseWhenFinished()) {
@@ -143,8 +144,12 @@ public class FormDataRecipeEdit {
     return barcodeLive;
   }
 
-  public MutableLiveData<String> getDescriptionLive() {
-    return descriptionLive;
+  public MutableLiveData<String> getPreparationLive() {
+    return preparationLive;
+  }
+
+  public MutableLiveData<Spanned> getPreparationSpannedLive() {
+    return preparationSpannedLive;
   }
 
   public boolean isFilledWithRecipe() {
@@ -254,7 +259,7 @@ public class FormDataRecipeEdit {
     recipe.setNotCheckShoppingList(notCheckShoppingListLive.getValue() != null ? notCheckShoppingListLive.getValue() : false);
     ProductDetails productDetails = productDetailsLive.getValue();
     recipe.setProductId(productDetails == null ? null : productDetails.getProduct().getId());
-    recipe.setDescription(descriptionLive.getValue());
+    recipe.setDescription(preparationLive.getValue());
     return recipe;
   }
 
@@ -266,7 +271,8 @@ public class FormDataRecipeEdit {
     productNameLive.setValue(null);
     productNameErrorLive.setValue(null);
     barcodeLive.setValue(null);
-    descriptionLive.setValue(null);
+    preparationLive.setValue(null);
+    preparationSpannedLive.setValue(null);
     new Handler().postDelayed(() -> nameErrorLive.setValue(null), 50);
   }
 

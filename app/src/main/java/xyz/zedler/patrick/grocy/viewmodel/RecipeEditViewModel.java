@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -346,7 +347,9 @@ public class RecipeEditViewModel extends BaseViewModel {
     formData.getBaseServingsLive().setValue(NumUtil.trim(entry.getBaseServings()));
     formData.getNotCheckShoppingListLive().setValue(entry.isNotCheckShoppingList());
     formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
-    formData.getDescriptionLive().setValue(entry.getDescription());
+    formData.getPreparationLive().setValue(entry.getDescription());
+    formData.getPreparationSpannedLive().setValue(entry.getDescription() != null
+        ? Html.fromHtml(entry.getDescription()) : null);
 
     formData.setFilledWithRecipe(true);
   }

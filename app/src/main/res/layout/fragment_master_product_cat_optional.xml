@@ -257,7 +257,7 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:onClick="@{() -> fragment.showDescriptionBottomSheet()}">
+              android:onClick="@{() -> fragment.navigateToHtmlEditor()}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"

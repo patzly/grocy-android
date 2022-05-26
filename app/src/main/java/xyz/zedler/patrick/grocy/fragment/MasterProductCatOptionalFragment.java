@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -239,26 +238,13 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     viewModel.getFormData().isParentProductValid();
   }
 
-  public void showDescriptionBottomSheet() {
-    if (true) {
-      if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
-        navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
-            .setHtmlText(viewModel.getFormData().getDescriptionLive().getValue()));
-      } else {
-        navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
-      }
-
-      return;
+  public void navigateToHtmlEditor() {
+    if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
+      navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
+          .setHtmlText(viewModel.getFormData().getDescriptionLive().getValue()));
+    } else {
+      navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
     }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.title_edit_description));
-    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_description));
-    Spanned description = viewModel.getFormData().getDescriptionSpannedLive().getValue();
-    bundle.putString(
-        Constants.ARGUMENT.HTML,
-        description != null ? Html.toHtml(description) : null
-    );
-    activity.showBottomSheet(new TextEditBottomSheet(), bundle);
   }
 
   @Override
