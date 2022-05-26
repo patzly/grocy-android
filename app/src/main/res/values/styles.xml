@@ -560,7 +560,17 @@
     <item name="android:background">@color/on_background_tertiary</item>
     <item name="android:textColor">@color/retro_green_fg</item>
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="android:windowAnimationStyle">@style/DialogFadeAnimation</item>
     <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+
+  </style>
+
+  <style name="DialogFadeAnimation" parent="@android:style/Animation.Activity">
+    <item name="android:windowEnterAnimation">@anim/fade_in</item>
+    <item name="android:windowShowAnimation">@anim/fade_in</item>
+    <item name="android:windowExitAnimation">@anim/fade_out</item>
+    <item name="android:windowHideAnimation">@anim/fade_out</item>
+
   </style>
 
   <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">

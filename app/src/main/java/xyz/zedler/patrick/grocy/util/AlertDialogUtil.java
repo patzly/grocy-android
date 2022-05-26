@@ -20,10 +20,12 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -35,11 +37,11 @@ public class AlertDialogUtil {
     MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(context, R.style.AlertDialogCustom);
     alertBuilder.setTitle(R.string.property_description);
 
-    LinearLayout linearLayout = new LinearLayout(context);
-    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    RelativeLayout relativeLayout = new RelativeLayout(context);
+    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     int margin = UnitUtil.dpToPx(context, 16);
-    linearLayout.setPadding(margin, margin, margin, 0);
-    linearLayout.setLayoutParams(lp);
+    relativeLayout.setPadding(margin, margin, margin, 0);
+    relativeLayout.setLayoutParams(lp);
 
     WebView webView = new WebView(context);
     webView.getSettings().setJavaScriptEnabled(false);
@@ -50,16 +52,25 @@ public class AlertDialogUtil {
     webView.loadData(description, "text/html; charset=utf-8", "UTF-8");
     webView.setBackgroundColor(
         ResourcesCompat.getColor(context.getResources(), R.color.on_background_tertiary, null));
-    FrameLayout.LayoutParams wlp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    FrameLayout.LayoutParams wlp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     webView.setLayoutParams(wlp);
 
-    linearLayout.addView(webView);
+    relativeLayout.addView(webView);
 
-    alertBuilder.setView(linearLayout);
+    int linearId = View.generateViewId();
+    relativeLayout.setId(linearId);
+    alertBuilder.setView(relativeLayout);
     alertBuilder.setNegativeButton(R.string.action_close, (dialog, which) -> dialog.dismiss());
     AlertDialog alert = alertBuilder.create();
     alert.show();
 
+    if (alert.getWindow() != null) {
+      WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+      lp2.copyFrom(alert.getWindow().getAttributes());
+      lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+      lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+      alert.getWindow().setAttributes(lp2);
+    }
   }
 
 }

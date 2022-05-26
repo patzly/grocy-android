@@ -106,7 +106,7 @@
       android:scrollbars="vertical"
       android:imeOptions="flagNoExtractUi"
       android:gravity="start"
-      android:hint="Input text here"
+      android:hint="@string/msg_editor_hint"
       android:minLines="5"
       aztec:historyEnable="false"
       aztec:textColor="@color/on_primary"

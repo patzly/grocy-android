@@ -233,6 +233,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">No stock entries for %1$s</string>
   <string name="msg_not_found">Product not found</string>
+  <string name="msg_editor_hint">Write text here</string>
   <string name="msg_undone_transaction">Undone transaction</string>
   <string name="msg_failed_to_sync">Failed to sync entries</string>
   <string name="msg_synced">Entries synced successfully</string>
