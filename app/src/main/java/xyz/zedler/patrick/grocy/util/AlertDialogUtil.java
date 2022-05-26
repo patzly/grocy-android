@@ -25,16 +25,15 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AlertDialog.Builder;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.res.ResourcesCompat;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
 
 public class AlertDialogUtil {
 
   public static void showProductDescriptionDialog(Context context, String description) {
-    AlertDialog.Builder alert = new Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom));
-    alert.setTitle(R.string.property_description);
+    MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(context, R.style.AlertDialogCustom);
+    alertBuilder.setTitle(R.string.property_description);
 
     LinearLayout linearLayout = new LinearLayout(context);
     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -56,9 +55,11 @@ public class AlertDialogUtil {
 
     linearLayout.addView(webView);
 
-    alert.setView(linearLayout);
-    alert.setNegativeButton(R.string.action_close, (dialog, which) -> dialog.dismiss());
+    alertBuilder.setView(linearLayout);
+    alertBuilder.setNegativeButton(R.string.action_close, (dialog, which) -> dialog.dismiss());
+    AlertDialog alert = alertBuilder.create();
     alert.show();
+
   }
 
 }

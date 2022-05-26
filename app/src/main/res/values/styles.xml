@@ -556,7 +556,7 @@
     <item name="toolbarIconDisabledColor">@color/material_on_primary_disabled</item>
   </style>
 
-  <style name="AlertDialogCustom" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+  <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
     <item name="android:background">@color/on_background_tertiary</item>
     <item name="android:textColor">@color/retro_green_fg</item>
     <item name="android:fontFamily">@font/jost_medium</item>

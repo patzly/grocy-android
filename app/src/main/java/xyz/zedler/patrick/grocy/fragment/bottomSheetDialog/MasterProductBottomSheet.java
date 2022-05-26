@@ -22,8 +22,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +40,8 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.view.ExpandableCard;
 import xyz.zedler.patrick.grocy.view.ListItem;
+import xyz.zedler.patrick.grocy.view.ProductDescriptionCard;
 
 public class MasterProductBottomSheet extends BaseBottomSheet {
 
@@ -63,7 +61,7 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
       itemQuStock,
       itemQuFactor,
       itemProductGroup;
-  private ExpandableCard cardDescription;
+  private ProductDescriptionCard cardDescription;
 
   @NonNull
   @Override
@@ -139,15 +137,9 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
     );
 
     // DESCRIPTION
-    Spanned description = product.getDescription() != null
-        ? Html.fromHtml(product.getDescription())
-        : null;
-    description = (Spanned) TextUtil.trimCharSequence(description);
-    if (description != null && !description.toString().isEmpty()) {
-      cardDescription.setText(description.toString());
-    } else {
-      cardDescription.setVisibility(View.GONE);
-    }
+    String description = product.getDescription() != null
+        ? TextUtil.trimCharSequence(product.getDescription()).toString() : null;
+    cardDescription.setDescriptionHtml(description);
 
     // LOCATION
     if (location != null && isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
