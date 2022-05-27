@@ -19,32 +19,24 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.transition.TransitionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -70,18 +62,18 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 
 public class RecipeBottomSheet extends BaseBottomSheet implements
         RecipePositionAdapter.RecipePositionsItemAdapterListener {
 
-  private final static int DELETE_CONFIRMATION_DURATION = 2000;
   private final static String TAG = RecipeBottomSheet.class.getSimpleName();
 
   private SharedPreferences sharedPrefs;
   private MainActivity activity;
   private FragmentBottomsheetRecipeBinding binding;
-  private ProgressBar progressConfirm;
-  private ValueAnimator confirmProgressAnimator;
+  private ViewUtil.TouchProgressBarUtil touchProgressBarUtil;
   private Recipe recipe;
 
   private MutableLiveData<String> servingsDesiredLive;
@@ -119,9 +111,9 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
 
   @Override
   public void onDestroyView() {
-    if (confirmProgressAnimator != null) {
-      confirmProgressAnimator.cancel();
-      confirmProgressAnimator = null;
+    if (touchProgressBarUtil != null) {
+      touchProgressBarUtil.onDestroy();
+      touchProgressBarUtil = null;
     }
     if (binding != null) {
       binding.recycler.animate().cancel();
@@ -231,11 +223,15 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       activity.getCurrentFragment().editRecipe(recipe);
       dismiss();
     });
-    binding.menuItemDelete.setOnTouchListener((v, event) -> {
-      onTouchDelete(v, event);
-      return true;
-    });
-    progressConfirm = binding.progressConfirmation;
+    touchProgressBarUtil = new TouchProgressBarUtil(
+        binding.progressConfirmation,
+        binding.menuItemDelete,
+        2000,
+        object -> {
+          activity.getCurrentFragment().deleteRecipe(recipe.getId());
+          dismiss();
+        }
+    );
 
     if (recipe.getPictureFileName() != null) {
       GrocyApi grocyApi = new GrocyApi(activity.getApplication());
@@ -251,7 +247,9 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
                 @Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model,
                 Target<Drawable> target, boolean isFirstResource) {
               binding.picture.setVisibility(View.GONE);
-              binding.headerTextContainer.setWeightSum(4);
+              LinearLayout.LayoutParams params = (LayoutParams) binding.headerTextContainer.getLayoutParams();
+              params.weight = 4f;
+              binding.headerTextContainer.setLayoutParams(params);
               return false;
             }
             @Override
@@ -264,7 +262,9 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
           .into(binding.picture);
     } else {
       binding.picture.setVisibility(View.GONE);
-      binding.headerTextContainer.setWeightSum(4);
+      LinearLayout.LayoutParams params = (LayoutParams) binding.headerTextContainer.getLayoutParams();
+      params.weight = 4f;
+      binding.headerTextContainer.setLayoutParams(params);
     }
   }
 
@@ -277,78 +277,6 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     RecipePositionAdapter adapter = (RecipePositionAdapter)binding.recycler.getAdapter();
     if (adapter != null) {
       adapter.notifyItemChanged(position, recipePosition);
-    }
-  }
-
-  public void onTouchDelete(View view, MotionEvent event) {
-    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-      showAndStartProgress(view);
-    } else if (event.getAction() == MotionEvent.ACTION_UP
-        || event.getAction() == MotionEvent.ACTION_CANCEL) {
-      hideAndStopProgress();
-    }
-  }
-
-  private void showAndStartProgress(View buttonView) {
-    assert getView() != null;
-    TransitionManager.beginDelayedTransition((ViewGroup) getView());
-    progressConfirm.setVisibility(View.VISIBLE);
-    int startValue = 0;
-    if (confirmProgressAnimator != null) {
-      startValue = progressConfirm.getProgress();
-      if (startValue == 100) {
-        startValue = 0;
-      }
-      confirmProgressAnimator.removeAllListeners();
-      confirmProgressAnimator.cancel();
-      confirmProgressAnimator = null;
-    }
-    confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressConfirm.getMax());
-    confirmProgressAnimator.setDuration((long) DELETE_CONFIRMATION_DURATION
-        * (progressConfirm.getMax() - startValue) / progressConfirm.getMax());
-    confirmProgressAnimator.addUpdateListener(
-        animation -> progressConfirm.setProgress((Integer) animation.getAnimatedValue())
-    );
-    confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        int currentProgress = progressConfirm.getProgress();
-        if (currentProgress == progressConfirm.getMax()) {
-          TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-          progressConfirm.setVisibility(View.GONE);
-          ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
-          ((Animatable) buttonImage.getDrawable()).start();
-          activity.getCurrentFragment().deleteRecipe(recipe.getId());
-          dismiss();
-          return;
-        }
-        confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
-        confirmProgressAnimator.setDuration((long) (DELETE_CONFIRMATION_DURATION / 2)
-            * currentProgress / progressConfirm.getMax());
-        confirmProgressAnimator.setInterpolator(new FastOutSlowInInterpolator());
-        confirmProgressAnimator.addUpdateListener(
-            anim -> progressConfirm.setProgress((Integer) anim.getAnimatedValue())
-        );
-        confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-            progressConfirm.setVisibility(View.GONE);
-          }
-        });
-        confirmProgressAnimator.start();
-      }
-    });
-    confirmProgressAnimator.start();
-  }
-
-  private void hideAndStopProgress() {
-    if (confirmProgressAnimator != null) {
-      confirmProgressAnimator.cancel();
-    }
-
-    if (progressConfirm.getProgress() != 100) {
-      Toast.makeText(requireContext(), R.string.msg_press_hold_confirm, Toast.LENGTH_LONG).show();
     }
   }
 

@@ -1,5 +1,9 @@
 package xyz.zedler.patrick.grocy.util;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -7,16 +11,24 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.transition.TransitionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import xyz.zedler.patrick.grocy.R;
 
 public class ViewUtil {
 
@@ -154,6 +166,128 @@ public class ViewUtil {
       imageView.setImageDrawable((Drawable) animatable);
     } catch (ClassCastException e) {
       Log.e(TAG, "resetting animated icon requires AnimVectorDrawable");
+    }
+  }
+
+  public static class TouchProgressBarUtil {
+    private final ProgressBar progressConfirm;
+    private ValueAnimator confirmProgressAnimator;
+    private final OnConfirmedListener onConfirmedListener;
+    private final int delayMilliseconds;
+
+    private final static int CONFIRMATION_DURATION = 2000;
+
+    @SuppressLint("ClickableViewAccessibility")
+    public TouchProgressBarUtil(
+        ProgressBar progressConfirm,
+        @Nullable Button button,
+        int delayMilliseconds,
+        OnConfirmedListener onConfirmedListener
+    ) {
+      this.progressConfirm = progressConfirm;
+      this.onConfirmedListener = onConfirmedListener;
+      this.delayMilliseconds = delayMilliseconds;
+      if (button != null) {
+        button.setOnTouchListener((v, event) -> {
+          onTouchDelete(v, event);
+          return true;
+        });
+      }
+    }
+
+    public TouchProgressBarUtil(
+        ProgressBar progressConfirm,
+        Button button,
+        OnConfirmedListener onConfirmedListener
+    ) {
+      this(progressConfirm, button, CONFIRMATION_DURATION, onConfirmedListener);
+    }
+
+    public void onTouchDelete(View view, MotionEvent event) {
+      if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        showAndStartProgress(view, null);
+      } else if (event.getAction() == MotionEvent.ACTION_UP
+          || event.getAction() == MotionEvent.ACTION_CANCEL) {
+        hideAndStopProgress();
+      }
+    }
+
+    public void showAndStartProgress(View buttonView, @Nullable Object objectOptional) {
+      TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
+      progressConfirm.setVisibility(View.VISIBLE);
+      int startValue = 0;
+      if (confirmProgressAnimator != null) {
+        startValue = progressConfirm.getProgress();
+        if (startValue == 100) {
+          startValue = 0;
+        }
+        confirmProgressAnimator.removeAllListeners();
+        confirmProgressAnimator.cancel();
+        confirmProgressAnimator = null;
+      }
+      confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressConfirm.getMax());
+      confirmProgressAnimator.setDuration((long) delayMilliseconds
+          * (progressConfirm.getMax() - startValue) / progressConfirm.getMax());
+      confirmProgressAnimator.addUpdateListener(
+          animation -> progressConfirm.setProgress((Integer) animation.getAnimatedValue())
+      );
+      confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+          int currentProgress = progressConfirm.getProgress();
+          if (currentProgress == progressConfirm.getMax()) {
+            TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
+            progressConfirm.setVisibility(View.GONE);
+            ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
+            if (buttonImage != null) {
+              ((Animatable) buttonImage.getDrawable()).start();
+            }
+            onConfirmedListener.onConfirmed(objectOptional);
+            return;
+          }
+          confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
+          confirmProgressAnimator.setDuration((long) (delayMilliseconds / 2)
+              * currentProgress / progressConfirm.getMax());
+          confirmProgressAnimator.setInterpolator(new FastOutSlowInInterpolator());
+          confirmProgressAnimator.addUpdateListener(
+              anim -> progressConfirm.setProgress((Integer) anim.getAnimatedValue())
+          );
+          confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+              TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
+              progressConfirm.setVisibility(View.GONE);
+            }
+          });
+          confirmProgressAnimator.start();
+        }
+      });
+      confirmProgressAnimator.start();
+    }
+
+    public void hideAndStopProgress() {
+      if (confirmProgressAnimator != null) {
+        confirmProgressAnimator.cancel();
+      }
+
+      if (progressConfirm.getProgress() != 100) {
+        Toast.makeText(
+            progressConfirm.getContext(),
+            R.string.msg_press_hold_confirm,
+            Toast.LENGTH_LONG
+        ).show();
+      }
+    }
+
+    public void onDestroy() {
+      if (confirmProgressAnimator != null) {
+        confirmProgressAnimator.cancel();
+        confirmProgressAnimator = null;
+      }
+    }
+
+    public interface OnConfirmedListener {
+      void onConfirmed(@Nullable Object objectOptional);
     }
   }
 }

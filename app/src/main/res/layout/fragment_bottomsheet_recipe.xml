@@ -87,7 +87,7 @@
           android:layout_height="match_parent"
           android:layout_weight="1"
           android:layout_marginStart="16dp"
-          tools:ignore="ContentDescription"/>
+          tools:ignore="ContentDescription" />
 
         <com.google.android.material.appbar.MaterialToolbar
           android:id="@+id/toolbar"

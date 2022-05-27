@@ -19,30 +19,21 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -54,18 +45,16 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class ShoppingListsBottomSheet extends BaseBottomSheet
     implements ShoppingListAdapter.ShoppingListAdapterListener {
 
-  private final static int DELETE_CONFIRMATION_DURATION = 2000;
   private final static String TAG = ShoppingListsBottomSheet.class.getSimpleName();
 
   private MainActivity activity;
-
-  private ProgressBar progressConfirm;
-  private ValueAnimator confirmProgressAnimator;
+  private TouchProgressBarUtil touchProgressBarUtil;
 
   @NonNull
   @Override
@@ -158,16 +147,20 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
       });
     }
 
-    progressConfirm = view.findViewById(R.id.progress_confirmation);
+    touchProgressBarUtil = new TouchProgressBarUtil(
+        view.findViewById(R.id.progress_confirmation),
+        null,
+        object -> activity.getCurrentFragment().deleteShoppingList((ShoppingList) object)
+    );
 
     return view;
   }
 
   @Override
   public void onDestroyView() {
-    if (confirmProgressAnimator != null) {
-      confirmProgressAnimator.cancel();
-      confirmProgressAnimator = null;
+    if (touchProgressBarUtil != null) {
+      touchProgressBarUtil.onDestroy();
+      touchProgressBarUtil = null;
     }
     super.onDestroyView();
   }
@@ -197,75 +190,13 @@ public class ShoppingListsBottomSheet extends BaseBottomSheet
         showMessage(R.string.error_offline);
         return;
       }
-      showAndStartProgress(view, shoppingList);
+      touchProgressBarUtil.showAndStartProgress(view, shoppingList);
     } else if (event.getAction() == MotionEvent.ACTION_UP
         || event.getAction() == MotionEvent.ACTION_CANCEL) {
       if (!activity.isOnline()) {
         return;
       }
-      hideAndStopProgress();
-    }
-  }
-
-  private void showAndStartProgress(View buttonView, ShoppingList shoppingList) {
-    assert getView() != null;
-    TransitionManager.beginDelayedTransition((ViewGroup) getView());
-    progressConfirm.setVisibility(View.VISIBLE);
-    int startValue = 0;
-    if (confirmProgressAnimator != null) {
-      startValue = progressConfirm.getProgress();
-      if (startValue == 100) {
-        startValue = 0;
-      }
-      confirmProgressAnimator.removeAllListeners();
-      confirmProgressAnimator.cancel();
-      confirmProgressAnimator = null;
-    }
-    confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressConfirm.getMax());
-    confirmProgressAnimator.setDuration((long) DELETE_CONFIRMATION_DURATION
-        * (progressConfirm.getMax() - startValue) / progressConfirm.getMax());
-    confirmProgressAnimator.addUpdateListener(
-        animation -> progressConfirm.setProgress((Integer) animation.getAnimatedValue())
-    );
-    confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        int currentProgress = progressConfirm.getProgress();
-        if (currentProgress == progressConfirm.getMax()) {
-          TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-          progressConfirm.setVisibility(View.GONE);
-          ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
-          ((Animatable) buttonImage.getDrawable()).start();
-          activity.getCurrentFragment().deleteShoppingList(shoppingList);
-          return;
-        }
-        confirmProgressAnimator = ValueAnimator.ofInt(currentProgress, 0);
-        confirmProgressAnimator.setDuration((long) (DELETE_CONFIRMATION_DURATION / 2)
-            * currentProgress / progressConfirm.getMax());
-        confirmProgressAnimator.setInterpolator(new FastOutSlowInInterpolator());
-        confirmProgressAnimator.addUpdateListener(
-            anim -> progressConfirm.setProgress((Integer) anim.getAnimatedValue())
-        );
-        confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
-          @Override
-          public void onAnimationEnd(Animator animation) {
-            TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-            progressConfirm.setVisibility(View.GONE);
-          }
-        });
-        confirmProgressAnimator.start();
-      }
-    });
-    confirmProgressAnimator.start();
-  }
-
-  private void hideAndStopProgress() {
-    if (confirmProgressAnimator != null) {
-      confirmProgressAnimator.cancel();
-    }
-
-    if (progressConfirm.getProgress() != 100) {
-      Toast.makeText(requireContext(), R.string.msg_press_hold_confirm, Toast.LENGTH_LONG).show();
+      touchProgressBarUtil.hideAndStopProgress();
     }
   }
 
