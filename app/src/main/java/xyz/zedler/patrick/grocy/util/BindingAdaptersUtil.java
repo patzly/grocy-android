@@ -26,10 +26,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -167,6 +169,14 @@ public class BindingAdaptersUtil {
   public static void setOnLongClickListener(View view, Runnable listener) {
     view.setOnLongClickListener(v -> {
       listener.run();
+      return true;
+    });
+  }
+
+  @BindingAdapter("longClickToastText")
+  public static void setLongClickToastText(MaterialButton view, String text) {
+    view.setOnLongClickListener(v -> {
+      Toast.makeText(view.getContext(), text, Toast.LENGTH_SHORT).show();
       return true;
     });
   }

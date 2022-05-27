@@ -194,7 +194,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_amount"
                     style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                    android:hint="@string/property_base_servings"
+                    android:hint="@string/property_servings"
                     app:helperTextEnabled="true"
                   app:helperText=" "
                     app:errorText="@{formData.baseServingsErrorLive}"

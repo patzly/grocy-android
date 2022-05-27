@@ -21,21 +21,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/action_consume"
-    android:title="@string/action_consume"
-    android:icon="@drawable/ic_round_restaurant_menu"
-    app:showAsAction="ifRoom" />
-
-  <item
-    android:id="@+id/action_add_not_fulfilled_products_to_cart_for_recipe"
-    android:title="@string/action_put_missing_products_on_shopping_list"
-    android:icon="@drawable/ic_round_add_shopping_cart"
-    app:showAsAction="ifRoom" />
-
-  <item
-    android:id="@+id/action_edit"
-    android:title="@string/action_edit"
-    android:icon="@drawable/ic_round_edit"
-    app:showAsAction="ifRoom" />
+    android:id="@+id/action_copy_recipe"
+    android:title="@string/action_copy_recipe"
+    app:showAsAction="never" />
 
 </menu>

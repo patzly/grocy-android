@@ -916,7 +916,6 @@
   <string name="property_average_execution_frequency">Průměrná frekvence plnění této povinnosti</string>
   <string name="property_next_estimated_tracking">Předpokládané datum provedení</string>
   <string name="property_next_estimated_tracking_time">Předpokládaný čas provedení</string>
-  <string name="property_base_servings">Porce</string>
   <string name="property_not_check_shopping_list">Přidat chybějící ingredience do nákupního seznamu, přestože v něm již jsou</string>
   <string name="property_not_check_shopping_list_description">Kontrolovat jen stav zásob, ne produkty v nákupním seznamu</string>
   <string name="property_preparation">Postup přípravy</string>

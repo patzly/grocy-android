@@ -46,6 +46,8 @@
   <string name="action_open_one">Open 1 %1$s of %2$s</string>
   <string name="action_edit_product">Edit product</string>
   <string name="action_shopping_list_add">Add to shopping list</string>
+  <string name="action_consume_recipe">Consume all ingredients needed by this recipe</string>
+  <string name="action_copy_recipe">Copy recipe</string>
 
   <string name="action_back">Back</string>
   <string name="action_search">Search</string>
@@ -305,7 +307,7 @@
   <string name="msg_features">Start intro again in \"About\"</string>
   <string name="msg_feedback">Do you have any wishes, questions or errors? Contact us and let us help!\nOtherwise we would be very happy about a nice review in the Play Store.</string>
   <string name="msg_point_at_barcode">Point your camera at a barcode</string>
-  <string name="msg_press_hold_confirm">Press and hold to confirm</string>
+  <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
   <string name="msg_choose_option_below">Please choose one option from below.</string>
   <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
@@ -603,6 +605,7 @@
   <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
+  <string name="subtitle_tap_preparation_mode">Tap here for preparation mode</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
@@ -857,7 +860,9 @@
   <string name="property_average_execution_frequency">Average execution frequency</string>
   <string name="property_next_estimated_tracking">Next estimated tracking</string>
   <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
-  <string name="property_base_servings">Servings</string>
+  <string name="property_servings">Servings</string>
+  <string name="property_servings_base_insert">Base servings: %1$s</string>
+  <string name="property_servings_desired">Desired servings</string>
   <string name="property_not_check_shopping_list">Do not check against shopping list</string>
   <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
   <string name="property_preparation">Preparation</string>
@@ -870,6 +875,7 @@
   <string name="property_do_not_check_stock_fulfillment">Disable stock fulfillment checking</string>
   <string name="property_ingredient_group">Group</string>
   <string name="property_variable_amount">Variable amount</string>
+  <string name="property_requirements_fulfilled">Requirements fulfilled</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>
