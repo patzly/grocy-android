@@ -110,6 +110,15 @@
         android:max="100"
         android:visibility="gone"/>
 
+      <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:indeterminate="true"
+        app:indicatorColor="@color/secondary"
+        android:visibility="@{bottomSheet.networkLoadingLive ? View.VISIBLE : View.GONE}"/>
+
     </FrameLayout>
 
     <View
@@ -204,6 +213,13 @@
 
         </LinearLayout>
 
+        <View
+          android:id="@+id/dummy_focus_view"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:focusable="true"
+          android:focusableInTouchMode="true"/>
+
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -217,9 +233,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="0dp"
             android:paddingStart="16dp"
-            android:paddingEnd="8dp"
-            android:animateLayoutChanges="true"
-            app:transitionTypeChanging="@{true}">
+            android:paddingEnd="8dp">
 
             <com.google.android.material.textfield.TextInputLayout
               android:id="@+id/text_input_servings"
@@ -240,7 +254,7 @@
                 android:imeOptions="actionDone"
                 android:maxLength="10"
                 android:text="@={bottomSheet.servingsDesiredLive}"
-                android:afterTextChanged="@{() -> bottomSheet.updateDataWithServings()}"
+                android:afterTextChanged="@{() -> bottomSheet.updateSaveDesiredServingsVisibility()}"
                 app:onDoneClickInSoftKeyboard="@{() -> bottomSheet.clearInputFocus()}" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -269,6 +283,24 @@
             app:tint="@color/icon"
             app:dense="true" />
 
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:visibility="@{bottomSheet.servingsDesiredSaveVisibleLive ? View.VISIBLE : View.GONE}"
+            android:onClick="@{v -> bottomSheet.saveDesiredServings()}"
+            android:animateLayoutChanges="true"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            app:icon="@drawable/ic_round_done"
+            app:longClickToastText="@{@string/action_apply_desired_servings}"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -291,7 +323,7 @@
 
             <TextView
               android:id="@+id/fulfilled"
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
               android:singleLine="false"

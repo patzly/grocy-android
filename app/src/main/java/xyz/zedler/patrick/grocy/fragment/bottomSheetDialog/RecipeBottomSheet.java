@@ -21,22 +21,28 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.transition.TransitionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -47,12 +53,14 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipePositionAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetRecipeBinding;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
@@ -74,9 +82,14 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
   private MainActivity activity;
   private FragmentBottomsheetRecipeBinding binding;
   private ViewUtil.TouchProgressBarUtil touchProgressBarUtil;
-  private Recipe recipe;
+  private DownloadHelper dlHelper;
 
+  private Recipe recipe;
+  private RecipeFulfillment recipeFulfillment;
+
+  private MutableLiveData<Boolean> networkLoadingLive;
   private MutableLiveData<String> servingsDesiredLive;
+  private MutableLiveData<Boolean> servingsDesiredSaveVisibleLive;
 
   @NonNull
   @Override
@@ -132,6 +145,9 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     binding.setBottomSheet(this);
 
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplication());
+    networkLoadingLive = new MutableLiveData<>(false);
+    dlHelper = new DownloadHelper(activity.getApplication(), TAG,
+        isLoading -> networkLoadingLive.setValue(isLoading));
 
     binding.recycler.setLayoutManager(
             new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -143,7 +159,6 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     }
 
     Bundle bundle = getArguments();
-    RecipeFulfillment recipeFulfillment;
     ArrayList<RecipePosition> recipePositions;
     ArrayList<Product> products;
     ArrayList<QuantityUnit> quantityUnits;
@@ -175,8 +190,11 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
         recipePosition.setChecked(false);
     }
 
+    updateDataWithServings();
+
     binding.name.setText(recipe.getName());
     servingsDesiredLive = new MutableLiveData<>(NumUtil.trim(recipe.getDesiredServings()));
+    servingsDesiredSaveVisibleLive = new MutableLiveData<>(false);
     binding.textInputServings.setHelperText(getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings())));
     binding.calories.setText(getString(R.string.property_energy), NumUtil.trim(recipeFulfillment.getCalories()), getString(R.string.subtitle_per_serving));
     binding.costs.setText(getString(R.string.property_costs), NumUtil.trimPrice(recipeFulfillment.getCosts()) + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""));
@@ -300,23 +318,125 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
   }
 
   public void changeAmount(boolean more) {
-
+    if (!NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
+      servingsDesiredLive.setValue(String.valueOf(1));
+    } else {
+      double servings = Double.parseDouble(servingsDesiredLive.getValue());
+      double servingsNew = more ? servings + 1 : servings - 1;
+      if (servingsNew <= 0) servingsNew = 1;
+      servingsDesiredLive.setValue(NumUtil.trim(servingsNew));
+    }
   }
 
   public void updateDataWithServings() {
+    TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
 
+    // REQUIREMENTS FULFILLED
+    if (recipeFulfillment.isNeedFulfilled()) {
+      binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
+      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
+          getResources(),
+          R.drawable.ic_round_done,
+          null
+      ));
+      binding.imageFulfillment.setColorFilter(
+          ContextCompat.getColor(requireContext(), R.color.retro_green_fg),
+          android.graphics.PorterDuff.Mode.SRC_IN
+      );
+      binding.missing.setVisibility(View.GONE);
+    } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+      binding.fulfilled.setText(R.string.msg_recipes_not_enough);
+      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
+          getResources(),
+          R.drawable.ic_round_priority_high,
+          null
+      ));
+      binding.imageFulfillment.setColorFilter(
+          ContextCompat.getColor(requireContext(), R.color.retro_yellow_fg),
+          android.graphics.PorterDuff.Mode.SRC_IN
+      );
+      binding.missing.setText(
+          getResources()
+              .getQuantityString(R.plurals.msg_recipes_ingredients_missing_but_on_shopping_list,
+                  recipeFulfillment.getMissingProductsCount(),
+                  recipeFulfillment.getMissingProductsCount())
+      );
+      binding.missing.setVisibility(View.VISIBLE);
+    } else {
+      binding.fulfilled.setText(R.string.msg_recipes_not_enough);
+      binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
+          getResources(),
+          R.drawable.ic_round_close,
+          null
+      ));
+      binding.imageFulfillment.setColorFilter(
+          ContextCompat.getColor(requireContext(), R.color.retro_red_fg),
+          android.graphics.PorterDuff.Mode.SRC_IN
+      );
+      binding.missing.setText(
+          getResources().getQuantityString(R.plurals.msg_recipes_ingredients_missing,
+              recipeFulfillment.getMissingProductsCount(),
+              recipeFulfillment.getMissingProductsCount())
+      );
+      binding.missing.setVisibility(View.VISIBLE);
+    }
   }
 
   public void clearServingsFieldAndFocusIt() {
-
+    servingsDesiredLive.setValue(null);
+    binding.textInputServings.requestFocus();
   }
 
   public void clearInputFocus() {
+    binding.textInputServings.clearFocus();
+    binding.dummyFocusView.requestFocus();
+    hideSoftKeyboardBottomSheet(binding.recipeBottomsheet);
+  }
 
+  public void updateSaveDesiredServingsVisibility() {
+    new Handler().postDelayed(() -> {
+      if (NumUtil.isStringDouble(servingsDesiredLive.getValue())) {
+        TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
+        double servings = NumUtil.toDouble(servingsDesiredLive.getValue());
+        servingsDesiredSaveVisibleLive.setValue(servings != recipe.getDesiredServings());
+      }
+    }, 50);
+  }
+
+  public void saveDesiredServings() {
+    clearInputFocus();
+
+    dlHelper.updateData(
+        () -> {
+          TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
+          servingsDesiredSaveVisibleLive.setValue(false);
+          updateDataWithServings();
+        },
+        volleyError -> {
+          TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
+          servingsDesiredSaveVisibleLive.setValue(true);
+        },
+        Recipe.class,
+        RecipeFulfillment.class,
+        RecipePosition.class
+    );
   }
 
   public MutableLiveData<String> getServingsDesiredLive() {
     return servingsDesiredLive;
+  }
+
+  public MutableLiveData<Boolean> getServingsDesiredSaveVisibleLive() {
+    return servingsDesiredSaveVisibleLive;
+  }
+
+  public MutableLiveData<Boolean> getNetworkLoadingLive() {
+    return networkLoadingLive;
+  }
+
+  private void hideSoftKeyboardBottomSheet(View view) {
+    ((InputMethodManager) Objects.requireNonNull(activity.getSystemService(
+        Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(view.getWindowToken(), 0);
   }
 
   @NonNull

@@ -48,6 +48,7 @@
   <string name="action_shopping_list_add">Add to shopping list</string>
   <string name="action_consume_recipe">Consume all ingredients needed by this recipe</string>
   <string name="action_copy_recipe">Copy recipe</string>
+  <string name="action_apply_desired_servings">Apply desired servings for this recipe and update data</string>
 
   <string name="action_back">Back</string>
   <string name="action_search">Search</string>
