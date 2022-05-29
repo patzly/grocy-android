@@ -26,11 +26,13 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
@@ -50,6 +52,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
@@ -277,6 +280,8 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
 
     // REQUIREMENTS FULFILLED
     if (recipeFulfillment.isNeedFulfilled()) {
+      setMenuButtonState(binding.menuItemConsume, true);
+      setMenuButtonState(binding.menuItemShoppingList, false);
       binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -289,6 +294,8 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       );
       binding.missing.setVisibility(View.GONE);
     } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
+      setMenuButtonState(binding.menuItemConsume, false);
+      setMenuButtonState(binding.menuItemShoppingList, false);
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -307,6 +314,8 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       );
       binding.missing.setVisibility(View.VISIBLE);
     } else {
+      setMenuButtonState(binding.menuItemConsume, false);
+      setMenuButtonState(binding.menuItemShoppingList, true);
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -470,10 +479,20 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
           dismiss();
         })
     );
-    binding.menuItemShoppingList.setOnClickListener(v -> {
-      activity.getCurrentFragment().addNotFulfilledProductsToCartForRecipe(recipe.getId());
-      dismiss();
-    });
+    HashMap<String, Boolean> missingIngredients = new HashMap<>();
+    for (Product product : products) {
+      missingIngredients.put(product.getName(), true);
+    }
+    binding.menuItemShoppingList.setOnClickListener(v -> AlertDialogUtil.showConfirmationDialog(
+        requireContext(),
+        getString(R.string.msg_recipe_shopping_list_ask, recipe.getName()),
+        missingIngredients,
+        ingredientsToAdd -> {
+          Log.i(TAG, "setupMenuButtons: " + ingredientsToAdd);
+          activity.getCurrentFragment().addNotFulfilledProductsToCartForRecipe(recipe.getId());
+          dismiss();
+        })
+    );
     binding.menuItemEdit.setOnClickListener(v -> {
       activity.getCurrentFragment().editRecipe(recipe);
       dismiss();
@@ -504,6 +523,11 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
   private void hideSoftKeyboardBottomSheet(View view) {
     ((InputMethodManager) Objects.requireNonNull(activity.getSystemService(
         Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow(view.getWindowToken(), 0);
+  }
+
+  private void setMenuButtonState(Button button, boolean enabled) {
+    button.setEnabled(enabled);
+    button.setAlpha(enabled ? 1f : 0.5f);
   }
 
   @NonNull
