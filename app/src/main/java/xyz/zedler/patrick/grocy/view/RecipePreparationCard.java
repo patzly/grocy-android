@@ -31,46 +31,46 @@ import com.google.android.material.card.MaterialCardView;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 
-public class ProductDescriptionCard extends LinearLayout {
+public class RecipePreparationCard extends LinearLayout {
 
   private WebView webView;
   private MaterialCardView card;
 
-  public ProductDescriptionCard(Context context) {
+  public RecipePreparationCard(Context context) {
     super(context);
 
     init();
   }
 
-  public ProductDescriptionCard(Context context, @Nullable AttributeSet attrs) {
+  public RecipePreparationCard(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
 
     init();
   }
 
   private void init() {
-    inflate(getContext(), R.layout.view_product_description_card, this);
+    inflate(getContext(), R.layout.view_recipe_preparation_card, this);
 
     webView = findViewById(R.id.webview);
     card = findViewById(R.id.card);
   }
 
-  public void setDescriptionHtml(String description) {
-    if (description != null) {
-      description = "<font color='" + String.format(
+  public void setPreparationHtml(String preparation) {
+    if (preparation != null) {
+      preparation = "<font color='" + String.format(
           "%06x",
           ContextCompat.getColor(getContext(), R.color.on_background) & 0xffffff
-      ) + "'>" + description + "</font>";
+      ) + "'>" + preparation + "</font>";
       webView.getSettings().setJavaScriptEnabled(false);
-      webView.loadData(description, "text/html; charset=utf-8", "UTF-8");
+      webView.loadData(preparation, "text/html; charset=utf-8", "UTF-8");
       webView.setBackgroundColor(
           ResourcesCompat.getColor(getResources(), R.color.on_background_tertiary, null));
-      String finalDescription = description;
+      String finalPreparation = preparation;
       card.setOnClickListener(
           v -> AlertDialogUtil.showWebViewDialog(
               getContext(),
-              getContext().getString(R.string.property_description),
-              finalDescription
+              getContext().getString(R.string.property_preparation),
+              finalPreparation
           )
       );
 

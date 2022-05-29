@@ -20,22 +20,23 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
-import android.view.View;
+import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.util.Arrays;
 import xyz.zedler.patrick.grocy.R;
 
 public class AlertDialogUtil {
 
-  public static void showProductDescriptionDialog(Context context, String description) {
-    MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(context, R.style.AlertDialogCustom);
-    alertBuilder.setTitle(R.string.property_description);
+  public static void showWebViewDialog(Context context, String title, String html) {
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context, R.style.AlertDialogCustomWithNegativeOnly);
+    alertBuilder.setTitle(title);
 
     RelativeLayout relativeLayout = new RelativeLayout(context);
     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -49,28 +50,52 @@ public class AlertDialogUtil {
     webView.getSettings().setAppCacheEnabled(false);
     webView.getSettings().setAllowFileAccess(false);
 
-    webView.loadData(description, "text/html; charset=utf-8", "UTF-8");
+    webView.loadData(html, "text/html; charset=utf-8", "UTF-8");
     webView.setBackgroundColor(
-        ResourcesCompat.getColor(context.getResources(), R.color.on_background_tertiary, null));
-    FrameLayout.LayoutParams wlp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        ResourcesCompat.getColor(context.getResources(), R.color.surface, null));
+    FrameLayout.LayoutParams wlp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     webView.setLayoutParams(wlp);
 
     relativeLayout.addView(webView);
 
-    int linearId = View.generateViewId();
-    relativeLayout.setId(linearId);
     alertBuilder.setView(relativeLayout);
     alertBuilder.setNegativeButton(R.string.action_close, (dialog, which) -> dialog.dismiss());
-    AlertDialog alert = alertBuilder.create();
-    alert.show();
+    AlertDialog alert = alertBuilder.show();
 
     if (alert.getWindow() != null) {
       WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
       lp2.copyFrom(alert.getWindow().getAttributes());
       lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-      lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+      lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
       alert.getWindow().setAttributes(lp2);
     }
+  }
+
+  public static void showConfirmationDialog(Context context, String question, Runnable confirmed) {
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context, R.style.AlertDialogCustom);
+
+    TextView title = new TextView(context);
+    title.setTextAppearance(context, R.style.Widget_Grocy_TextView);
+    int paddingTitle = UnitUtil.dpToPx(context, 8);
+    title.setPadding(paddingTitle*3, paddingTitle*2, paddingTitle*3, 0);
+    title.setText(question);
+    title.setTextSize(UnitUtil.spToPx(context, 6));
+    alertBuilder.setCustomTitle(title);
+
+    CharSequence[] names = new CharSequence[]{"hallo", "ahahah", "jjjjs"};
+    boolean[] namesChecked = new boolean[]{false, true, true};
+    alertBuilder.setMultiChoiceItems(names, namesChecked, (dialog, which, isChecked) -> {
+      namesChecked[which] = isChecked;
+    });
+
+
+    alertBuilder.setNegativeButton(R.string.action_cancel, (dialog, which) -> dialog.dismiss());
+    alertBuilder.setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+      //confirmed.run();
+      Log.i("TAG", "showConfirmationDialog: " + Arrays.toString(namesChecked));
+      dialog.dismiss();
+    });
+    alertBuilder.show();
   }
 
 }

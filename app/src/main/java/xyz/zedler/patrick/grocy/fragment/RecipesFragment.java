@@ -276,6 +276,11 @@ public class RecipesFragment extends BaseFragment implements
     viewModel.deleteRecipe(recipeId);
   }
 
+  @Override
+  public void updateData() {
+    viewModel.downloadData();
+  }
+
   private void updateUI(boolean animated) {
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);

@@ -2470,6 +2470,43 @@ public class DownloadHelper {
     }
   }
 
+  public QueueItem editRecipe(
+      int recipeId,
+      JSONObject body,
+      OnJSONResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        put(
+            grocyApi.getObject(ENTITY.RECIPES, recipeId),
+            body,
+            response -> {
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(response);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(null);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
   public QueueItem updateRecipeFulfillments(
           String dbChangedTime,
           OnRecipeFulfillmentsResponseListener onResponseListener

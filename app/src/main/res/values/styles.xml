@@ -557,12 +557,21 @@
   </style>
 
   <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
-    <item name="android:background">@color/on_background_tertiary</item>
-    <item name="android:textColor">@color/retro_green_fg</item>
-    <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="android:colorBackground">@color/surface</item>
+    <item name="android:textColor">@color/on_surface</item>
+    <item name="android:textColorPrimary">@color/on_surface</item>
+    <item name="textColorAlertDialogListItem">@color/on_surface</item>
+    <item name="fontFamily">@font/jost_book</item>
     <item name="android:windowAnimationStyle">@style/DialogFadeAnimation</item>
-    <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    <item name="buttonBarNegativeButtonStyle">@style/AlertDialogNegativeButtonStyle</item>
+    <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.UnelevatedButton</item>
+    <item name="buttonBarStyle">@style/AlertDialogButtonBarStyle</item>
+    <item name="colorAccent">@color/retro_green</item>
+    <item name="android:colorAccent">@color/retro_green</item>
+  </style>
 
+  <style name="AlertDialogCustomWithNegativeOnly" parent="AlertDialogCustom">
+    <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.OutlinedButton</item>
   </style>
 
   <style name="DialogFadeAnimation" parent="@android:style/Animation.Activity">
@@ -573,8 +582,12 @@
 
   </style>
 
-  <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-    <item name="android:textColor">@color/retro_green_fg</item>
+  <style name="AlertDialogNegativeButtonStyle" parent="Widget.Grocy.Button.OutlinedButton">
+    <item name="android:layout_marginEnd">8dp</item>
+  </style>
+
+  <style name="AlertDialogButtonBarStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <item name="android:layout_marginBottom">8dp</item>
   </style>
 
 </resources>

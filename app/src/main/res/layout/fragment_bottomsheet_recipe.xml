@@ -233,7 +233,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="0dp"
             android:paddingStart="16dp"
-            android:paddingEnd="8dp">
+            android:paddingEnd="0dp">
 
             <com.google.android.material.textfield.TextInputLayout
               android:id="@+id/text_input_servings"
@@ -266,6 +266,7 @@
             android:id="@+id/amount_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginBottom="4dp"
             android:onClick="@{() -> bottomSheet.changeAmount(true)}"
             app:icon="@drawable/ic_round_expand_less"
@@ -277,7 +278,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="4dp"
             android:onClick="@{() -> bottomSheet.changeAmount(false)}"
             app:icon="@drawable/ic_round_expand_more"
             app:tint="@color/icon"
@@ -285,7 +286,7 @@
 
           <com.google.android.material.button.MaterialButton
             style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
@@ -293,12 +294,13 @@
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
-            android:visibility="@{bottomSheet.servingsDesiredSaveVisibleLive ? View.VISIBLE : View.GONE}"
+            android:enabled="@{bottomSheet.servingsDesiredSaveEnabledLive}"
             android:onClick="@{v -> bottomSheet.saveDesiredServings()}"
             android:animateLayoutChanges="true"
             app:iconPadding="0dp"
             app:iconGravity="textStart"
             app:icon="@drawable/ic_round_done"
+            app:iconTint="@color/white"
             app:longClickToastText="@{@string/action_apply_desired_servings}"/>
 
         </LinearLayout>
@@ -307,7 +309,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical"
-          android:padding="16dp">
+          android:padding="16dp"
+          android:layout_marginTop="8dp">
 
           <TextView
             style="@style/Widget.Grocy.TextView.ListItem.OverLine"
@@ -371,43 +374,42 @@
 
         </LinearLayout>
 
-      <LinearLayout
-          android:id="@+id/ingredient_container"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingStart="16dp"
-          android:paddingEnd="16dp">
+        <LinearLayout
+            android:id="@+id/ingredient_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <View
-            style="@style/Widget.Grocy.Divider"
-            android:layout_marginVertical="12dp" />
+          <View
+              style="@style/Widget.Grocy.Divider"
+              android:layout_marginVertical="12dp" />
 
-        <TextView
+          <TextView
             android:id="@+id/ingredients_headline"
             style="@style/Widget.Grocy.TextView.ListItem.OverLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:text="@string/property_ingredients"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:overScrollMode="never"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"/>
-      </LinearLayout>
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/recycler"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:overScrollMode="never"
+              android:clipToPadding="false"
+              android:scrollbarStyle="outsideOverlay"/>
 
-        <xyz.zedler.patrick.grocy.view.ExpandableCard
-          android:id="@+id/description"
+        </LinearLayout>
+
+        <xyz.zedler.patrick.grocy.view.RecipePreparationCard
+          android:id="@+id/preparation"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginVertical="8dp" />
+          android:layout_height="wrap_content"/>
 
       </LinearLayout>
 

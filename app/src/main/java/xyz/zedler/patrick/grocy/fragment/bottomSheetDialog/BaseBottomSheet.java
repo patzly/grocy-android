@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -187,5 +188,9 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
 
   void showMessage(@StringRes int msg) {
     ((MainActivity) requireActivity()).showMessage(msg);
+  }
+
+  void showToast(@StringRes int msg) {
+    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
   }
 }

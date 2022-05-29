@@ -21,31 +21,19 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
+import java.util.List;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.Recipe;
-import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -58,9 +46,9 @@ public class RecipePositionAdapter extends
 
   private Context context;
   private final LinearLayoutManager linearLayoutManager;
-  private final ArrayList<RecipePosition> recipePositions;
-  private final ArrayList<Product> products;
-  private final ArrayList<QuantityUnit> quantityUnits;
+  private final List<RecipePosition> recipePositions;
+  private final List<Product> products;
+  private final List<QuantityUnit> quantityUnits;
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
@@ -68,9 +56,9 @@ public class RecipePositionAdapter extends
   public RecipePositionAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
-      ArrayList<RecipePosition> recipePositions,
-      ArrayList<Product> products,
-      ArrayList<QuantityUnit> quantityUnits,
+      List<RecipePosition> recipePositions,
+      List<Product> products,
+      List<QuantityUnit> quantityUnits,
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
@@ -169,9 +157,9 @@ public class RecipePositionAdapter extends
   }
 
   public void updateData(
-      ArrayList<RecipePosition> newList,
-      ArrayList<Product> newProducts,
-      ArrayList<QuantityUnit> newQuantityUnits
+      List<RecipePosition> newList,
+      List<Product> newProducts,
+      List<QuantityUnit> newQuantityUnits
   ) {
 
     RecipePositionAdapter.DiffCallback diffCallback = new RecipePositionAdapter.DiffCallback(
@@ -194,20 +182,20 @@ public class RecipePositionAdapter extends
 
   static class DiffCallback extends DiffUtil.Callback {
 
-    ArrayList<RecipePosition> oldItems;
-    ArrayList<RecipePosition> newItems;
-    ArrayList<Product> oldProducts;
-    ArrayList<Product> newProducts;
-    ArrayList<QuantityUnit> oldQuantityUnits;
-    ArrayList<QuantityUnit> newQuantityUnits;
+    List<RecipePosition> oldItems;
+    List<RecipePosition> newItems;
+    List<Product> oldProducts;
+    List<Product> newProducts;
+    List<QuantityUnit> oldQuantityUnits;
+    List<QuantityUnit> newQuantityUnits;
 
     public DiffCallback(
-        ArrayList<RecipePosition> oldItems,
-        ArrayList<RecipePosition> newItems,
-        ArrayList<Product> oldProducts,
-        ArrayList<Product> newProducts,
-        ArrayList<QuantityUnit> oldQuantityUnits,
-        ArrayList<QuantityUnit> newQuantityUnits
+        List<RecipePosition> oldItems,
+        List<RecipePosition> newItems,
+        List<Product> oldProducts,
+        List<Product> newProducts,
+        List<QuantityUnit> oldQuantityUnits,
+        List<QuantityUnit> newQuantityUnits
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
