@@ -640,6 +640,45 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_recipesFragment)}"
+              app:clickUtil="@{clickUtil}">
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Title"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/title_recipes" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@{viewModel.recipesDescriptionTextLive}" />
+
+              </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+              android:layout_width="70dp"
+              android:layout_height="1dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
+              android:background="@color/stroke_secondary"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginBottom="16dp"
+              android:layout_marginTop="8dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card"
+              android:layout_marginStart="@dimen/main_side_margin"
+              android:layout_marginEnd="@dimen/main_side_margin"
+              android:layout_marginBottom="8dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_choresFragment)}"
               app:clickUtil="@{clickUtil}">
