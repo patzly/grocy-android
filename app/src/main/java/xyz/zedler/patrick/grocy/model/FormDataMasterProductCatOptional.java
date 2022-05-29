@@ -46,7 +46,8 @@ public class FormDataMasterProductCatOptional {
   private final MutableLiveData<String> parentProductNameLive;
   private final MutableLiveData<Boolean> parentProductEnabled;
   private final MutableLiveData<Integer> parentProductNameErrorLive;
-  private final MutableLiveData<Spanned> descriptionLive;
+  private final MutableLiveData<String> descriptionLive;
+  private final MutableLiveData<Spanned> descriptionSpannedLive;
   private final MutableLiveData<List<ProductGroup>> productGroupsLive;
   private final MutableLiveData<ProductGroup> productGroupLive;
   private final LiveData<String> productGroupNameLive;
@@ -77,6 +78,7 @@ public class FormDataMasterProductCatOptional {
     parentProductEnabled = new MutableLiveData<>(true);
     parentProductNameErrorLive = new MutableLiveData<>();
     descriptionLive = new MutableLiveData<>();
+    descriptionSpannedLive = new MutableLiveData<>();
     productGroupsLive = new MutableLiveData<>();
     productGroupLive = new MutableLiveData<>();
     productGroupNameLive = Transformations.map(
@@ -128,8 +130,12 @@ public class FormDataMasterProductCatOptional {
     return parentProductEnabled;
   }
 
-  public MutableLiveData<Spanned> getDescriptionLive() {
+  public MutableLiveData<String> getDescriptionLive() {
     return descriptionLive;
+  }
+
+  public MutableLiveData<Spanned> getDescriptionSpannedLive() {
+    return descriptionSpannedLive;
   }
 
   public MutableLiveData<List<ProductGroup>> getProductGroupsLive() {
@@ -274,7 +280,7 @@ public class FormDataMasterProductCatOptional {
     product.setParentProductId(parentProductLive.getValue() != null
         ? String.valueOf(parentProductLive.getValue().getId()) : null);
     product.setDescription(descriptionLive.getValue() != null
-        ? Html.toHtml(descriptionLive.getValue()) : null);
+        ? descriptionLive.getValue() : null);
     product.setProductGroupId(pGroup != null ? String.valueOf(pGroup.getId()) : null);
     product.setCalories(energyLive.getValue());
     product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
@@ -300,7 +306,8 @@ public class FormDataMasterProductCatOptional {
         }
       }
     }
-    descriptionLive.setValue(product.getDescription() != null
+    descriptionLive.setValue(product.getDescription());
+    descriptionSpannedLive.setValue(product.getDescription() != null
         ? Html.fromHtml(product.getDescription()) : null);
     productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
     energyLive.setValue(product.getCalories());

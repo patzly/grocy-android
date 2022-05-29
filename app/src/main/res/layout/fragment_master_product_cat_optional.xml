@@ -257,7 +257,7 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:onClick="@{() -> fragment.showDescriptionBottomSheet()}">
+              android:onClick="@{() -> fragment.navigateToHtmlEditor()}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -272,10 +272,20 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@{formData.descriptionLive ?? fragment.getString(R.string.subtitle_empty)}"
+                  android:text="@{formData.descriptionSpannedLive ?? fragment.getString(R.string.subtitle_empty)}"
                   android:singleLine="true" />
 
               </LinearLayout>
+
+              <ImageView
+                android:layout_marginStart="16dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:src="@drawable/ic_round_expand_more"
+                android:rotation="-90"
+                tools:ignore="ContentDescription"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
 
             </LinearLayout>
 

@@ -24,8 +24,6 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -239,15 +237,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheet {
 
     // DESCRIPTION
 
-    Spanned description = product.getDescription() != null
-        ? Html.fromHtml(product.getDescription())
-        : null;
-    description = (Spanned) TextUtil.trimCharSequence(description);
-    if (description != null && !description.toString().isEmpty()) {
-      binding.cardDescription.setText(description.toString());
-    } else {
-      binding.cardDescription.setVisibility(View.GONE);
-    }
+    String description = product.getDescription() != null
+        ? TextUtil.trimCharSequence(product.getDescription()).toString() : null;
+    binding.description.setDescriptionHtml(description);
 
     // ACTIONS
 

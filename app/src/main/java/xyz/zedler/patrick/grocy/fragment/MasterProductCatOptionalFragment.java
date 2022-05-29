@@ -36,7 +36,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatOptionalBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -113,6 +112,14 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
+
+    Object descriptionEdited = getFromThisDestinationNow(ARGUMENT.DESCRIPTION);
+    if (descriptionEdited != null) {
+      removeForThisDestination(ARGUMENT.DESCRIPTION);
+      viewModel.getFormData().getDescriptionLive().setValue((String) descriptionEdited);
+      viewModel.getFormData().getDescriptionSpannedLive()
+          .setValue(Html.fromHtml((String) descriptionEdited));
+    }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
@@ -231,21 +238,18 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     viewModel.getFormData().isParentProductValid();
   }
 
-  public void showDescriptionBottomSheet() {
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.TITLE, getString(R.string.title_edit_description));
-    bundle.putString(Constants.ARGUMENT.HINT, getString(R.string.property_description));
-    Spanned description = viewModel.getFormData().getDescriptionLive().getValue();
-    bundle.putString(
-        Constants.ARGUMENT.HTML,
-        description != null ? Html.toHtml(description) : null
-    );
-    activity.showBottomSheet(new TextEditBottomSheet(), bundle);
+  public void navigateToHtmlEditor() {
+    if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
+      navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
+          .setHtmlText(viewModel.getFormData().getDescriptionLive().getValue()));
+    } else {
+      navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
+    }
   }
 
   @Override
   public void saveText(Spanned text) {
-    viewModel.getFormData().getDescriptionLive().setValue(text);
+    viewModel.getFormData().getDescriptionSpannedLive().setValue(text);
   }
 
   public void showProductGroupsBottomSheet() {

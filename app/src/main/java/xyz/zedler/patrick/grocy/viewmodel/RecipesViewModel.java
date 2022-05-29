@@ -22,26 +22,21 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-
 import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesSort;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksSort;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataTasksStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -50,8 +45,6 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -73,6 +66,7 @@ public class RecipesViewModel extends BaseViewModel {
   private final MutableLiveData<ArrayList<Recipe>> filteredRecipesLive;
   private final FilterChipLiveDataRecipesStatus filterChipLiveDataStatus;
   private final FilterChipLiveDataRecipesSort filterChipLiveDataSort;
+  private final FilterChipLiveDataRecipesExtraField filterChipLiveDataExtraField;
 
   private List<Recipe> recipes;
   private List<RecipeFulfillment> recipeFulfillments;
@@ -103,6 +97,10 @@ public class RecipesViewModel extends BaseViewModel {
         this::updateFilteredRecipes
     );
     filterChipLiveDataSort = new FilterChipLiveDataRecipesSort(
+        getApplication(),
+        this::updateFilteredRecipes
+    );
+    filterChipLiveDataExtraField = new FilterChipLiveDataRecipesExtraField(
         getApplication(),
         this::updateFilteredRecipes
     );
@@ -185,14 +183,15 @@ public class RecipesViewModel extends BaseViewModel {
           notEnoughInStockCount++;
         }
 
-        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataRecipesStatus.STATUS_ALL
-          && !(filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_ENOUGH_IN_STOCK
-                && recipeFulfillment.isNeedFulfilled()
-                || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
-                && recipeFulfillment.isNeedFulfilledWithShoppingList()
-                || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH
-                && !(recipeFulfillment.isNeedFulfilled() || recipeFulfillment.isNeedFulfilledWithShoppingList()))) {
-          continue;
+        if (filterChipLiveDataStatus.getStatus() != FilterChipLiveDataRecipesStatus.STATUS_ALL) {
+          if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_ENOUGH_IN_STOCK
+              && !recipeFulfillment.isNeedFulfilled()
+              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST
+              && (recipeFulfillment.isNeedFulfilled() || !recipeFulfillment.isNeedFulfilledWithShoppingList())
+              || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataRecipesStatus.STATUS_NOT_ENOUGH
+              && (recipeFulfillment.isNeedFulfilled() || recipeFulfillment.isNeedFulfilledWithShoppingList())) {
+            continue;
+          }
         }
       }
 
@@ -292,6 +291,14 @@ public class RecipesViewModel extends BaseViewModel {
 
   public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
     return () -> filterChipLiveDataSort;
+  }
+
+  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
+    return () -> filterChipLiveDataExtraField;
+  }
+
+  public String getExtraField() {
+    return filterChipLiveDataExtraField.getExtraField();
   }
 
   public void updateSearchInput(String input) {

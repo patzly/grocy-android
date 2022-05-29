@@ -103,17 +103,17 @@ public class FilterChipLiveDataRecipesStatus extends FilterChipLiveData {
     menuItemDataList.add(new MenuItemData(
         STATUS_ENOUGH_IN_STOCK,
         0,
-        getQuString(R.plurals.msg_recipes_enough_in_stock, enoughInStockCount)
+        application.getString(R.string.msg_recipes_enough_in_stock_filter, enoughInStockCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_NOT_ENOUGH_BUT_IN_SHOPPING_LIST,
         0,
-        getQuString(R.plurals.msg_recipes_not_enough_but_in_shopping_list, notEnoughButInShoppingListCount)
+        application.getString(R.string.msg_recipes_not_enough_but_on_shopping_list_filter, notEnoughButInShoppingListCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_NOT_ENOUGH,
         0,
-        getQuString(R.plurals.msg_recipes_not_enough, notEnoughCount)
+        application.getString(R.string.msg_recipes_not_enough_filter, notEnoughCount)
     ));
     setMenuItemDataList(menuItemDataList);
     setMenuItemGroups(

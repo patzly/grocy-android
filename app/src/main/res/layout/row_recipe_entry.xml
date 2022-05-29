@@ -19,25 +19,26 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linear_recipe_entry_container"
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:paddingVertical="10dp"
+  android:paddingHorizontal="16dp"
   android:minHeight="48dp"
   android:clickable="true"
   android:focusable="true"
   android:background="@drawable/bg_list_item"
-  android:paddingTop="10dp"
-  android:paddingBottom="10dp"
-  android:paddingStart="16dp"
-  android:paddingEnd="20dp"
-  android:gravity="center_vertical">
+  android:gravity="center_vertical"
+  android:baselineAligned="false"
+  android:weightSum="4">
 
   <LinearLayout
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_weight="1">
+    android:layout_weight="3">
 
     <TextView
       android:id="@+id/title"
@@ -47,19 +48,80 @@
       android:layout_gravity="center_vertical" />
 
     <TextView
-      android:id="@+id/calories"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true" />
-
-    <TextView
       android:id="@+id/due_score"
       style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:singleLine="true" />
 
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:weightSum="1">
+
+      <TextView
+        android:id="@+id/fulfilled"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:maxLines="2"
+        android:layout_weight="1"/>
+
+      <ImageView
+        android:id="@+id/image_fulfillment"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="4dp"
+        android:visibility="visible"
+        tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/missing"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="false"
+      android:maxLines="5"/>
+
   </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/extra_field_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:visibility="gone">
+
+    <TextView
+      android:id="@+id/extra_field"
+      style="@style/Widget.Grocy.TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"/>
+
+    <TextView
+      android:id="@+id/extra_field_subtitle"
+      style="@style/Widget.Grocy.TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:textSize="11sp"
+      android:visibility="gone"/>
+
+  </LinearLayout>
+
+  <ImageView
+    android:id="@+id/picture"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:layout_marginStart="16dp"
+    tools:ignore="ContentDescription" />
 
 </LinearLayout>

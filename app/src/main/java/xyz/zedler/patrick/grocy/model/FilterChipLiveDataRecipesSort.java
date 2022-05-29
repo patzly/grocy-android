@@ -78,7 +78,7 @@ public class FilterChipLiveDataRecipesSort extends FilterChipLiveData {
         R.string.property_sort_mode,
         sortMode.equals(SORT_NAME)
             ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_date)
+            : application.getString(R.string.property_due_score)
     ));
   }
 

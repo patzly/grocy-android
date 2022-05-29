@@ -21,8 +21,10 @@ package xyz.zedler.patrick.grocy.api;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+import java.nio.charset.StandardCharsets;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
@@ -135,7 +137,7 @@ public class GrocyApi {
     return url.toString();
   }
 
-  private String getUrl(@SuppressWarnings("SameParameterValue") String command, String... params) {
+  private String getUrl(String command, String... params) {
     StringBuilder url = new StringBuilder(getUrl(command));
     if (params.length > 0) {
       url.append("?");
@@ -254,8 +256,8 @@ public class GrocyApi {
    */
   public String getStockLocationsFromProduct(int productId) {
     return getUrl(
-            "/stock/products/" + productId + "/locations",
-            new COMPARISON("include_sub_products", COMPARISON_OPERATOR.EQUAL, "true")
+        "/stock/products/" + productId + "/locations",
+        "include_sub_products=true"
     );
   }
 
@@ -265,8 +267,8 @@ public class GrocyApi {
    */
   public String getStockEntriesFromProduct(int productId) {
     return getUrl(
-            "/stock/products/" + productId + "/entries",
-            new COMPARISON("include_sub_products", COMPARISON_OPERATOR.EQUAL, "true")
+        "/stock/products/" + productId + "/entries",
+        "include_sub_products=true"
     );
   }
 
@@ -276,10 +278,9 @@ public class GrocyApi {
   public String getStockVolatile() {
     return getUrl(
         "/stock/volatile",
-        new COMPARISON("due_soon_days", COMPARISON_OPERATOR.EQUAL, sharedPrefs.getString(
-                STOCK.DUE_SOON_DAYS,
-                SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
-            )
+        "due_soon_days=" + sharedPrefs.getString(
+            STOCK.DUE_SOON_DAYS,
+            SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS
         )
     );
   }
@@ -430,5 +431,16 @@ public class GrocyApi {
 
   public String addNotFulfilledProductsToCartForRecipe(int recipeId) {
     return getUrl("/recipes/" + recipeId + "/add-not-fulfilled-products-to-shoppinglist");
+  }
+
+  // FILES
+
+  public String getRecipePicture(String filename) {
+    return getUrl(
+        "/files/recipepictures/" + new String(Base64.encode(
+            filename.getBytes(StandardCharsets.UTF_8),
+            Base64.DEFAULT
+        ), StandardCharsets.UTF_8) + "?force_serve_as=picture&best_fit_height=240&best_fit_width=360"
+    );
   }
 }

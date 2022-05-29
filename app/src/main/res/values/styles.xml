@@ -548,4 +548,46 @@
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 
+  <style name="AztecToolbarStyle">
+    <item name="advanced">false</item>
+    <item name="toolbarBorderColor">@color/primary</item>
+    <item name="toolbarIconNormalColor">@color/on_primary</item>
+    <item name="toolbarIconHighlightColor">@color/retro_blue</item>
+    <item name="toolbarIconDisabledColor">@color/material_on_primary_disabled</item>
+  </style>
+
+  <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
+    <item name="android:colorBackground">@color/surface</item>
+    <item name="android:textColor">@color/on_surface</item>
+    <item name="android:textColorPrimary">@color/on_surface</item>
+    <item name="textColorAlertDialogListItem">@color/on_surface</item>
+    <item name="fontFamily">@font/jost_book</item>
+    <item name="android:windowAnimationStyle">@style/DialogFadeAnimation</item>
+    <item name="buttonBarNegativeButtonStyle">@style/AlertDialogNegativeButtonStyle</item>
+    <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.UnelevatedButton</item>
+    <item name="buttonBarStyle">@style/AlertDialogButtonBarStyle</item>
+    <item name="colorAccent">@color/retro_green</item>
+    <item name="android:colorAccent">@color/retro_green</item>
+  </style>
+
+  <style name="AlertDialogCustomWithNegativeOnly" parent="AlertDialogCustom">
+    <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.OutlinedButton</item>
+  </style>
+
+  <style name="DialogFadeAnimation" parent="@android:style/Animation.Activity">
+    <item name="android:windowEnterAnimation">@anim/fade_in</item>
+    <item name="android:windowShowAnimation">@anim/fade_in</item>
+    <item name="android:windowExitAnimation">@anim/fade_out</item>
+    <item name="android:windowHideAnimation">@anim/fade_out</item>
+
+  </style>
+
+  <style name="AlertDialogNegativeButtonStyle" parent="Widget.Grocy.Button.OutlinedButton">
+    <item name="android:layout_marginEnd">8dp</item>
+  </style>
+
+  <style name="AlertDialogButtonBarStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <item name="android:layout_marginBottom">8dp</item>
+  </style>
+
 </resources>

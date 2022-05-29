@@ -20,6 +20,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical">
@@ -126,13 +127,10 @@
 
       </HorizontalScrollView>
 
-      <xyz.zedler.patrick.grocy.view.ExpandableCard
-        android:id="@+id/card_description"
+      <xyz.zedler.patrick.grocy.view.ProductDescriptionCard
+        android:id="@+id/description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="wrap_content"/>
 
       <LinearLayout
         android:id="@+id/linear_amount"

@@ -116,6 +116,7 @@
   <string name="action_track_chore_execution">Splnění povinnosti</string>
   <string name="action_skip_next_chore_schedule">Přeskočit aktuální datum splnění úkolu</string>
   <string name="action_reschedule_next_execution">Změna data příštího plnění povinnosti</string>
+  <string name="action_put_missing_products_on_shopping_list">Vložit produkty pod min. stavem zásoby</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
@@ -225,6 +226,23 @@
   <string name="msg_task_completed">Označený jako hotový</string>
   <string name="msg_task_not_completed">Označený jako nedokončený</string>
   <string name="msg_task_undo">Vrátit zpět</string>
+  <string name="msg_recipes_enough_in_stock">Dostatečná zásoba</string>
+  <string name="msg_recipes_enough_in_stock_filter">Dostatečná zásoba (%1$d)</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">Zásoba není dostatečná, ale je na nákupním seznamu (%1$d)</string>
+  <string name="msg_recipes_not_enough_filter">Nemá dostatečnou zásobu (%1$d)</string>
+  <string name="msg_recipes_not_enough">Nemá dostatečnou zásobu</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d ingredience chybí, ale je již v nákupním seznamu</item>
+    <item quantity="few">%1$d ingredience chybí, ale jsou již v nákupním seznamu</item>
+    <item quantity="many">%1$d ingrediencí chybí, ale jsou již v nákupním seznamu</item>
+    <item quantity="other">%1$d ingrediencí chybí, ale jsou již v nákupním seznamu</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d ingredience chybí</item>
+    <item quantity="few">%1$d ingredience chybí</item>
+    <item quantity="many">%1$d ingrediencí chybí</item>
+    <item quantity="other">%1$d ingrediencí chybí</item>
+  </plurals>
   <string name="msg_chore_executed">Splnění povinnosti zaznamenáno</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Nakoupeno %1$s %2$s produktu %3$s</string>
@@ -275,6 +293,9 @@
   <string name="msg_item_marked_as_undone">Stav položky byl vrácen</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
   <string name="option_synced_error">Volbu se nepodařilo zapsat na server</string>
+  <string name="msg_help_ingredient_list">Tlačítkem dole přidáte ingredienci. Přejetím po ingredienci vpravo se objeví symbol koše, kterým ji smažete.</string>
+  <string name="msg_recipe_added_to_cart">Všechny ingredience receptu jsou vloženy do nákupního košíku</string>
+  <string name="msg_recipe_consumed">Recept „%1$s“ je spotřebován</string>
   <string name="msg_stored_purchases_overview">Několik nákupů ještě nebylo zapsáno na server. Pro podrobnosti klepněte sem.</string>
   <string name="msg_stored_purchases">Tady jsou nákupy, které zatím nejsou uloženy na serveru. Jsou uloženy společně i s novými produkty, které tak nemusíte nejprve uložit do seznamu produktů</string>
   <string name="msg_stored_purchases_product_offline">Klepněte na produkt a zapište k němu informace. Poté se tu produkt zobrazí jako „online“ a zapsaný nákup produktu se uloží na server.</string>
@@ -317,6 +338,7 @@
   <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
   <string name="msg_port_connection_info_without_port">Aplikace se připojuje k portu %1$s.\nJestliže ji chcete připojit k jinému číslu portu, přidejte toto číslo (např. 81) k URL vašeho serveru.\nPříklad: http://mujserver.cz:81/</string>
   <string name="msg_port_connection_info_with_port">Aplikace se připojuje k portu č.: %1$s</string>
+  <string name="msg_clear_form_first">Nejprve smažte všechny údaje než začnete skenovat další čárový kód</string>
   <string name="msg_not_implemented_yet">Tato funkce zatím není implemetována. Zatím, prosím, použijte rozhraní svého serveru.</string>
   <string name="stock_disabled">V konfiguraci grocy na vašem serveru máte vypnutou funkci Přehled zásob. Ovšem tato aplikace je určena hlavně na správu produktů. Její funkčnost je teď značně omezená.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -406,6 +428,7 @@
   <string name="error_empty_unit_conversions">Žádné převody měrných jednotek</string>
   <string name="error_empty_chores">Žádné povinnosti</string>
   <string name="error_empty_chores_sub">Abyste měli s čím pracovat, musíte nejprve přidat nějaké informace v části Spravovat základní data</string>
+  <string name="error_empty_recipes">Ještě nebyl vytvořen žádný recept</string>
   <string name="error_search">Žádné výsledky hledání</string>
   <string name="error_search_sub">Zkuste jiná slova</string>
   <string name="error_filter">Nic k zobrazení</string>
@@ -455,6 +478,7 @@
   <string name="error_stock_entry_grocycode">Podle tohoto grocycode nebyl nalezen žádný produkt v zásobě</string>
   <string name="error_permission">Pro tuto akci nemáte přidělené oprávnění</string>
   <string name="error_undefined">Došlo k chybě</string>
+  <string name="error_invalid_base_servings">Počet porcí je nesprávný</string>
 
   <string name="title_overview">Přehled</string>
   <string name="title_stock_overview">Přehled zásob</string>
@@ -498,6 +522,9 @@
   <string name="title_stored_purchases">Uložené nákupy</string>
   <string name="title_chores">Povinnosti</string>
   <string name="title_chore">Povinnost</string>
+  <string name="title_recipes">Recepty</string>
+  <string name="title_recipe_create">Nový recept</string>
+  <string name="title_recipe_edit">Upravit recept</string>
 
   <string name="title_spoiled">Zkaženo</string>
   <string name="title_use_specific">Vybrat balení produktu ze zásob</string>
@@ -596,6 +623,9 @@
   <string name="subtitle_product_optional_properties">Stav, Nadřazený produkt, Popis, Skupina produktů, Energie, Obrázek</string>
   <string name="subtitle_product_quantity_unit">Výchozí hodnoty pro zásobu a nákup</string>
   <string name="subtitle_synced_with_server">Uloženo na server</string>
+  <string name="subtitle_recipe_not_on_server">Recept není uložen na serveru</string>
+  <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
+  <string name="subtitle_per_serving">na 1 porci</string>
 
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Vyberte si, jak pokračovat:</string>
@@ -882,6 +912,22 @@
   <string name="property_users">Uživatelé</string>
   <string name="property_last_done_by">Naposledy provedl(a)</string>
   <string name="property_last_tracked">Naposledy provedeno</string>
+  <string name="property_tracked_count">Zaznamenaný počet</string>
+  <string name="property_average_execution_frequency">Průměrná frekvence plnění této povinnosti</string>
+  <string name="property_next_estimated_tracking">Předpokládané datum provedení</string>
+  <string name="property_next_estimated_tracking_time">Předpokládaný čas provedení</string>
+  <string name="property_not_check_shopping_list">Přidat chybějící ingredience do nákupního seznamu, přestože v něm již jsou</string>
+  <string name="property_not_check_shopping_list_description">Kontrolovat jen stav zásob, ne produkty v nákupním seznamu</string>
+  <string name="property_preparation">Postup přípravy</string>
+  <string name="property_costs">Náklady</string>
+  <string name="property_due_score">Index min. trvanlivosti</string>
+  <string name="property_ingredients">Ingredience</string>
+  <string name="property_ingredients_subtitle">Přidat nebo upravit ingredience</string>
+  <string name="property_only_check_single_unit_in_stock">Pouze zkontrolovat, zda je v zásobě jakékoliv množství</string>
+  <string name="property_only_check_single_unit_in_stock_description">Např. je-li měrná jednotka jiná, než uvedená</string>
+  <string name="property_do_not_check_stock_fulfillment">Vypnout kontrolu stavu zásob pro tuto ingredienci</string>
+  <string name="property_ingredient_group">Skupina</string>
+  <string name="property_variable_amount">Proměnné množství</string>
 
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznámý</string>
@@ -1038,7 +1084,7 @@
   <string name="setting_smaller_font_description">aby se mohlo zobrazit více řádků</string>
   <string name="setting_show_product_description">Zobrazit popis produktu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="setting_due_soon_days">Trvanlivost brzy skončí</string>
+  <string name="setting_due_soon_days">Počet dní ve filtru produktů v Přehledu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="setting_default_amount_purchase">Výchozí množství k nákupu</string>
   <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -1054,10 +1100,10 @@
   <string name="setting_loading">Načítání dat</string>
   <string name="setting_not_loaded">Nepodařilo se načíst</string>
   <string name="setting_debug">Ukládat informací o chodu aplikace (logging)</string>
-  <string name="setting_debug_description">Zobrazit chyby v logu</string>
+  <string name="setting_debug_description">Pro účely hledání chyb v aplikaci</string>
   <string name="setting_log_level">Jaké systémové události zapisovat</string>
   <string name="setting_error_logs">Jen chyby</string>
-  <string name="setting_info_logs">Zobrazit info v logu</string>
+  <string name="setting_info_logs">Zobrazit informace (logy) o chodu aplikace</string>
   <string name="setting_logs_description">Zobrazit logcat tohoto procesu</string>
   <string name="setting_timeout">Časový limit pro načítání</string>
   <string name="setting_timeout_descriptions">po kterém se načítání zruší</string>
@@ -1083,9 +1129,22 @@
   <string name="setting_proxy_port">Číslo portu</string>
   <string name="setting_proxy_port_description">vašeho proxy serveru</string>
   <string name="setting_synchronized">Toto nastavení se ukládá na grocy server</string>
-  <string name="settings_synchronized">Tyto nastavení jsou synchronizována s vaším serverem.</string>
+  <string name="settings_synchronized">Tato nastavení se ukládají na váš grocy server</string>
   <string name="setting_message_duration">Na jak dlouho se objeví zprávy</string>
   <string name="setting_message_duration_description">o provedených akcích</string>
+  <string name="setting_notifications_enable">Zapnout upozorňování</string>
+  <string name="setting_notifications_due_soon">Povinnosti s blížícím se datem splnění</string>
+  <string name="setting_notifications_due_soon_description">Každý den vás informuje o blížící se min. trvanlivosti produktů</string>
+  <string name="setting_notifications_chores_description">Každý den vás informuje o povinnostech, které máte vykonat</string>
+  <string name="setting_notification_time">Čas upozornění</string>
+  <string name="setting_notification_time_description">Čas, kdy aplikace zobrazí informace o stavu zásob.</string>
+  <string name="setting_keep_screen_on_recipes_description">když je zobrazený recept</string>
+
+  <string name="notification_channel_due_soon">Blízké datum min. trvanlivosti</string>
+  <string name="notification_channel_due_soon_description">Informuje o produktech s blížící se min. trvanlivostí</string>
+  <string name="notification_due_soon_content">Spotřebujte je brzy, aby se nezkazily</string>
+  <string name="notification_channel_chores">Povinnosti</string>
+  <string name="notification_channel_chores_description">Zobrazí povinnosti, které mají být splněny dnes</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

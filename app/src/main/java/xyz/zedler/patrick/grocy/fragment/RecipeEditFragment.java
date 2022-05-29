@@ -21,22 +21,16 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.InputType;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditBinding;
@@ -50,7 +44,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
-import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
@@ -106,6 +100,21 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         activity.showMessage(R.string.subtitle_recipe_not_on_server);
       }
     });
+    binding.preparation.setOnClickListener(v -> {
+      if (viewModel.getFormData().getPreparationLive().getValue() != null) {
+        navigate(RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
+            .setHtmlText(viewModel.getFormData().getPreparationLive().getValue()));
+      } else {
+        navigate(RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2());
+      }
+    });
+    Object preparationEdited = getFromThisDestinationNow(ARGUMENT.DESCRIPTION);
+    if (preparationEdited != null) {
+      removeForThisDestination(ARGUMENT.DESCRIPTION);
+      viewModel.getFormData().getPreparationLive().setValue((String) preparationEdited);
+      viewModel.getFormData().getPreparationSpannedLive()
+          .setValue(Html.fromHtml((String) preparationEdited));
+    }
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -200,7 +209,6 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     activity.hideKeyboard();
     binding.dummyFocusView.requestFocus();
     binding.textInputName.clearFocus();
-    binding.textInputDescription.clearFocus();
   }
 
   public void clearBaseServingsFieldAndFocusIt() {

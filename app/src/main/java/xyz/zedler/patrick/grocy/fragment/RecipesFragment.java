@@ -38,12 +38,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
-import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipesBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
@@ -53,15 +51,11 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
-import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 
@@ -162,7 +156,8 @@ public class RecipesFragment extends BaseFragment implements
             items,
             viewModel.getRecipeFulfillments(),
             viewModel.getSortMode(),
-            viewModel.isSortAscending()
+            viewModel.isSortAscending(),
+            viewModel.getExtraField()
         );
       } else {
         binding.recycler.setAdapter(
@@ -173,7 +168,8 @@ public class RecipesFragment extends BaseFragment implements
                 viewModel.getRecipeFulfillments(),
                 this,
                 viewModel.getSortMode(),
-                viewModel.isSortAscending()
+                viewModel.isSortAscending(),
+                viewModel.getExtraField()
             )
         );
       }
@@ -278,6 +274,11 @@ public class RecipesFragment extends BaseFragment implements
       return;
     }
     viewModel.deleteRecipe(recipeId);
+  }
+
+  @Override
+  public void updateData() {
+    viewModel.downloadData();
   }
 
   private void updateUI(boolean animated) {
