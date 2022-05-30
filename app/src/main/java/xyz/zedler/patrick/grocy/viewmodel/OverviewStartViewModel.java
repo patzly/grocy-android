@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -70,6 +71,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final MutableLiveData<List<StockItem>> stockItemsLive;
   private final MutableLiveData<List<ShoppingListItem>> shoppingListItemsLive;
   private final MutableLiveData<List<Product>> productsLive;
+  private final MutableLiveData<List<Recipe>> recipesLive;
   private final MutableLiveData<List<Task>> tasksLive;
   private final MutableLiveData<List<ChoreEntry>> choreEntriesLive;
   private final MutableLiveData<Integer> itemsDueNextCountLive;
@@ -87,6 +89,7 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final LiveData<String> stockDescriptionMissingTextLive;
   private final LiveData<String> stockDescriptionMissingShoppingListTextLive;
   private final LiveData<String> shoppingListDescriptionTextLive;
+  private final LiveData<String> recipesDescriptionTextLive;
   private final MutableLiveData<Integer> choresDueSoonCountLive;
   private final MutableLiveData<Integer> choresOverdueCountLive;
   private final MutableLiveData<Integer> choresDueTodayCountLive;
@@ -125,6 +128,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     storedPurchasesOnDevice = new MutableLiveData<>(false);
     shoppingListItemsLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
+    recipesLive = new MutableLiveData<>();
     choresDueTodayCountLive = new MutableLiveData<>();
     choresDueSoonCountLive = new MutableLiveData<>();
     choresAssignedCountLive = new MutableLiveData<>();
@@ -265,6 +269,18 @@ public class OverviewStartViewModel extends BaseViewModel {
           }
         }
     );
+    recipesDescriptionTextLive = Transformations.map(
+        recipesLive,
+        recipes -> {
+          if (recipes == null) {
+            return null;
+          }
+          int size = recipes.size();
+          return getResources().getQuantityString(
+              R.plurals.description_overview_recipes, size, size
+          );
+        }
+    );
     choresDescriptionDueSoonTextLive = Transformations.map(
         choresDueSoonCountLive,
         count -> {
@@ -368,6 +384,7 @@ public class OverviewStartViewModel extends BaseViewModel {
       this.shoppingListItemsLive.setValue(data.getShoppingListItems());
       this.productsLive.setValue(data.getProducts());
       this.storedPurchasesOnDevice.setValue(data.getStoredPurchases().size() > 0);
+      this.recipesLive.setValue(data.getRecipes());
       this.choreEntriesLive.setValue(data.getChoreEntries());
       this.tasksLive.setValue(data.getTasks());
 
@@ -483,6 +500,7 @@ public class OverviewStartViewModel extends BaseViewModel {
         ShoppingList.class,
         Product.class,
         VolatileItem.class,
+        Recipe.class,
         ChoreEntry.class,
         Task.class
     );
@@ -495,6 +513,7 @@ public class OverviewStartViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LISTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_VOLATILE, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_RECIPES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, null);
     editPrefs.apply();
@@ -597,6 +616,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
   public LiveData<String> getShoppingListDescriptionTextLive() {
     return shoppingListDescriptionTextLive;
+  }
+
+  public LiveData<String> getRecipesDescriptionTextLive() {
+    return recipesDescriptionTextLive;
   }
 
   public LiveData<String> getChoresDescriptionAssignedTextLive() {

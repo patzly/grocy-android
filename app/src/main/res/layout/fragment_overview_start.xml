@@ -640,6 +640,45 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
+              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_recipesFragment)}"
+              app:clickUtil="@{clickUtil}">
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Title"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/title_recipes" />
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@{viewModel.recipesDescriptionTextLive}" />
+
+              </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <View
+              android:layout_width="70dp"
+              android:layout_height="1dp"
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
+              android:background="@color/stroke_secondary"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginBottom="16dp"
+              android:layout_marginTop="8dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card"
+              android:layout_marginStart="@dimen/main_side_margin"
+              android:layout_marginEnd="@dimen/main_side_margin"
+              android:layout_marginBottom="8dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_choresFragment)}"
               app:clickUtil="@{clickUtil}">
@@ -839,17 +878,85 @@
                   android:layout_height="wrap_content"
                   android:text="@string/title_tasks" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.Paragraph"
+                <LinearLayout
+                  android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="@{viewModel.tasksDescriptionTextLive}" />
+                  android:gravity="top"
+                  android:visibility="@{viewModel.tasksDescriptionTextLive != null ? View.VISIBLE : View.GONE}">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TooDeepLayout">
+
+                    <View
+                      android:layout_width="4dp"
+                      android:layout_height="4dp"
+                      android:layout_marginStart="6dp"
+                      android:layout_marginEnd="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="@drawable/shape_circle"
+                      android:backgroundTint="@color/on_background" />
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="E"
+                      android:visibility="invisible"
+                      tools:ignore="HardcodedText" />
+
+                  </FrameLayout>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.tasksDescriptionTextLive}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                  android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:text="@{viewModel.tasksUserDescriptionTextLive}" />
+                  android:gravity="top"
+                  android:visibility="@{viewModel.tasksUserDescriptionTextLive != null ? View.VISIBLE : View.GONE}">
+
+                  <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TooDeepLayout">
+
+                    <View
+                      android:layout_width="4dp"
+                      android:layout_height="4dp"
+                      android:layout_marginStart="6dp"
+                      android:layout_marginEnd="6dp"
+                      android:layout_gravity="center_vertical"
+                      android:background="@drawable/shape_circle"
+                      android:backgroundTint="@color/on_background" />
+
+                    <TextView
+                      style="@style/Widget.Grocy.TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="E"
+                      android:visibility="invisible"
+                      tools:ignore="HardcodedText" />
+
+                  </FrameLayout>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.Paragraph"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.tasksUserDescriptionTextLive}" />
+
+                </LinearLayout>
 
               </LinearLayout>
 

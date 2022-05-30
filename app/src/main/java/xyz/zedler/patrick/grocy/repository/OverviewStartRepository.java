@@ -21,19 +21,20 @@ package xyz.zedler.patrick.grocy.repository;
 
 import android.app.Application;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
+import xyz.zedler.patrick.grocy.util.RxJavaUtil;
 
 public class OverviewStartRepository {
 
@@ -54,6 +55,7 @@ public class OverviewStartRepository {
     private final List<ShoppingList> shoppingLists;
     private final List<Product> products;
     private final List<StoredPurchase> storedPurchases;
+    private final List<Recipe> recipes;
     private final List<ChoreEntry> choreEntries;
     private final List<Task> tasks;
     private final List<VolatileItem> volatileItems;
@@ -65,6 +67,7 @@ public class OverviewStartRepository {
         List<ShoppingList> shoppingLists,
         List<Product> products,
         List<StoredPurchase> storedPurchases,
+        List<Recipe> recipes,
         List<ChoreEntry> choreEntries,
         List<Task> tasks,
         List<VolatileItem> volatileItems,
@@ -75,6 +78,7 @@ public class OverviewStartRepository {
       this.shoppingLists = shoppingLists;
       this.products = products;
       this.storedPurchases = storedPurchases;
+      this.recipes = recipes;
       this.choreEntries = choreEntries;
       this.tasks = tasks;
       this.volatileItems = volatileItems;
@@ -101,6 +105,10 @@ public class OverviewStartRepository {
       return storedPurchases;
     }
 
+    public List<Recipe> getRecipes() {
+      return recipes;
+    }
+
     public List<ChoreEntry> getChoreEntries() {
       return choreEntries;
     }
@@ -119,13 +127,14 @@ public class OverviewStartRepository {
   }
 
   public void loadFromDatabase(DataListener listener) {
-    Single
+    RxJavaUtil
         .zip(
             appDatabase.stockItemDao().getStockItems(),
             appDatabase.shoppingListItemDao().getShoppingListItems(),
             appDatabase.shoppingListDao().getShoppingLists(),
             appDatabase.productDao().getProducts(),
             appDatabase.storedPurchaseDao().getStoredPurchases(),
+            appDatabase.recipeDao().getRecipes(),
             appDatabase.choreEntryDao().getChoreEntries(),
             appDatabase.taskDao().getTasks(),
             appDatabase.volatileItemDao().getVolatileItems(),

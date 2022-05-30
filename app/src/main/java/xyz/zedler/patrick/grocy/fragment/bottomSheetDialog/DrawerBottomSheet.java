@@ -238,6 +238,12 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       binding.linearDrawerTransfer.setVisibility(View.GONE);
       binding.transactionsContainer.setWeightSum(75f);
     }
+    if (!isFeatureEnabled(PREF.FEATURE_RECIPES)) {
+      binding.containerRecipes.setVisibility(View.GONE);
+    }
+    if (!isFeatureEnabled(PREF.FEATURE_RECIPES)) {
+      binding.linearDrawerRecipes.setVisibility(View.GONE);
+    }
     if (!isFeatureEnabled(PREF.FEATURE_TASKS) && !isFeatureEnabled(PREF.FEATURE_CHORES)) {
       binding.containerTasks.setVisibility(View.GONE);
     }
