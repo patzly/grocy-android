@@ -256,6 +256,14 @@ public class RecipesViewModel extends BaseViewModel {
     );
   }
 
+  public void copyRecipe(int recipeId) {
+    dlHelper.post(
+        grocyApi.copyRecipe(recipeId),
+        response -> downloadData(),
+        this::showErrorMessage
+    );
+  }
+
   public ArrayList<RecipeFulfillment> getRecipeFulfillments() {
     return new ArrayList<>(recipeFulfillments);
   }

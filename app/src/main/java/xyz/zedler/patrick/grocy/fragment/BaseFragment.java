@@ -154,6 +154,9 @@ public class BaseFragment extends Fragment {
   public void editRecipe(Recipe recipe) {
   }
 
+  public void copyRecipe(int recipeId) {
+  }
+
   public void deleteRecipe(int recipeId) {
   }
 

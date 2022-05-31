@@ -204,6 +204,15 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       return;
     }
 
+    binding.toolbar.setOnMenuItemClickListener(item -> {
+      if (item.getItemId() == R.id.action_copy_recipe) {
+        activity.getCurrentFragment().copyRecipe(recipe.getId());
+        dismiss();
+        return true;
+      }
+      return false;
+    });
+
     servingsDesiredLive = new MutableLiveData<>(NumUtil.trim(recipe.getDesiredServings()));
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
 
