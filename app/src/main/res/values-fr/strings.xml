@@ -34,6 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Tout consommer</string>
 
+  <string name="action_consume_spoiled">Consommer comme périmé</string>
   <string name="action_consume_one_spoiled">Consommer 1 comme périmé</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Consommer 1 %1$s de %2$s</string>
@@ -42,6 +43,9 @@
   <string name="action_open_one">Ouvrir 1 %1$s de %2$s</string>
   <string name="action_edit_product">Modifier le produit</string>
   <string name="action_shopping_list_add">Ajouter à la liste d\'achat</string>
+  <string name="action_consume_recipe">Consommer tous les ingrédients nécessaires à cette recette</string>
+  <string name="action_copy_recipe">Copier la recette</string>
+  <string name="action_apply_desired_servings">Appliquer les portions souhaitées pour cette recette et mettre à jour les données</string>
 
   <string name="action_back">Retour</string>
   <string name="action_search">Rechercher</string>
@@ -114,35 +118,43 @@
   <string name="action_show_done_tasks">Afficher les tâches terminées</string>
   <string name="action_track_chore_execution">Suivre l\'exécution des corvées</string>
   <string name="action_skip_next_chore_schedule">Sauter le prochain horaire de corvée</string>
+  <string name="action_reschedule_next_execution">Reprogrammer la prochaine réalisation</string>
+  <string name="action_put_missing_products_on_shopping_list">Mettre les produits manquants sur la liste de courses</string>
 
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d bientôt périmé</item>
+    <item quantity="many">%1$d bientôt périmés </item>
     <item quantity="other">%1$d bientôt périmés </item>
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
     <item quantity="one">%1$d périmé</item>
+    <item quantity="many">%1$d périmés</item>
     <item quantity="other">%1$d périmés</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
     <item quantity="one">%1$d expiré</item>
+    <item quantity="many">%1$d expirés</item>
     <item quantity="other">%1$d expirés</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d en dessous du stock min.</item>
+    <item quantity="many">%1$d en dessous du stock min.</item>
     <item quantity="other">%1$d en dessous du stock min.</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d en stock</item>
+    <item quantity="many">%1$d en stock</item>
     <item quantity="other">%1$d en stock</item>
   </plurals>
   <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
   <plurals name="msg_opened_products">
     <item quantity="one">%1$d ouvert</item>
+    <item quantity="many">%1$d ouverts</item>
     <item quantity="other">%1$d ouverts</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -154,47 +166,70 @@
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d décoché</item>
+    <item quantity="many">%1$d décochés</item>
     <item quantity="other">%1$d décochés</item>
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
     <item quantity="one">%1$d terminé</item>
+    <item quantity="many">%1$d terminés</item>
     <item quantity="other">%1$d terminés</item>
   </plurals>
   <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
   <plurals name="msg_done_tasks">
     <item quantity="one">%1$d terminée</item>
+    <item quantity="many">%1$d terminées</item>
     <item quantity="other">%1$d terminées</item>
   </plurals>
   <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
   <plurals name="msg_not_done_tasks">
     <item quantity="one">%1$d non terminée</item>
+    <item quantity="many">%1$d non terminées</item>
     <item quantity="other">%1$d non terminées</item>
   </plurals>
   <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
   <plurals name="msg_due_tasks">
     <item quantity="one">%1$d à faire prochainement</item>
+    <item quantity="many">%1$d à faire prochainement</item>
     <item quantity="other">%1$d à faire prochainement</item>
   </plurals>
   <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
   <plurals name="msg_due_today_tasks">
     <item quantity="one">%1$d à faire aujourd\'hui</item>
+    <item quantity="many">%1$d à faire aujourd\'hui</item>
     <item quantity="other">%1$d à faire aujourd\'hui</item>
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d en retard</item>
+    <item quantity="many">%1$d en retard</item>
     <item quantity="other">%1$d en retard</item>
   </plurals>
   <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
   <plurals name="msg_assigned_tasks">
     <item quantity="one">%1$d attribué</item>
+    <item quantity="many">%1$d attribués</item>
     <item quantity="other">%1$d attribués</item>
   </plurals>
   <string name="msg_task_mark">Marquer la tâche comme terminée</string>
   <string name="msg_task_completed">Tâche marquée comme terminée</string>
   <string name="msg_task_not_completed">Marquer la tâche comme non terminée</string>
   <string name="msg_task_undo">Annuler la tâche</string>
+  <string name="msg_recipes_enough_in_stock">Stock suffisant</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Stock suffisant</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Stock insuffisant mais sur la liste de courses</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) Stock insuffisant</string>
+  <string name="msg_recipes_not_enough">Stock insuffisant</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d ingrédient manquant mais déjà sur la liste de courses</item>
+    <item quantity="many">%1$d ingrédients manquants mais déjà sur la liste de courses</item>
+    <item quantity="other">%1$d ingrédients manquants mais déjà sur la liste de courses</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d ingrédient manquant</item>
+    <item quantity="many">%1$d ingrédients manquants</item>
+    <item quantity="other">%1$d ingrédients manquants</item>
+  </plurals>
   <string name="msg_chore_executed">Suivi de la réalisation de la corvée</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
@@ -210,6 +245,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Aucune entrée de stock pour %1$s</string>
   <string name="msg_not_found">Produit non trouvé</string>
+  <string name="msg_editor_hint">Écrivez ici</string>
   <string name="msg_undone_transaction">Transaction annulée</string>
   <string name="msg_failed_to_sync">Échec de synchronisation des entrées</string>
   <string name="msg_synced">Les entrées ont bien été synchronisées</string>
@@ -229,11 +265,13 @@
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
     <item quantity="one">%1$s %2$s sera ajouté au stock.</item>
+    <item quantity="many">%1$s %2$s seront ajoutés au stock.</item>
     <item quantity="other">%1$s %2$s seront ajoutés au stock.</item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
     <item quantity="one">%1$s %2$s sera retiré du stock.</item>
+    <item quantity="many">%1$s %2$s seront retirés du stock.</item>
     <item quantity="other">%1$s %2$s seront retirés du stock.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Le transfert des produits dont le poids de la tare est défini n\'est actuellement pas supporté.</string>
@@ -241,6 +279,9 @@
   <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
   <string name="option_synced_success">Option synchronisée avec succès</string>
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
+  <string name="msg_help_ingredient_list">Vous pouvez ajouter des ingrédients avec le bouton en bas, modifier les ingrédients en les sélectionnant et les supprimer en faisant glisser un ingrédient vers la droite puis en cliquant sur l\'icône de la corbeille.</string>
+  <string name="msg_recipe_added_to_cart">Ingrédients de la recette ajoutés au panier</string>
+  <string name="msg_recipe_consumed">Recette consommée \"%1$s\"</string>
   <string name="msg_stored_purchases_overview">Il y a des achats sur l\'appareil qui n\'ont pas encore été transférés sur le serveur. Appuyez ici pour plus de détails.</string>
   <string name="msg_stored_purchases">Les achats qui n\'ont pas encore été transférés sur le serveur sont affichés ici. Ils ont été enregistrés avec des produits temporaires dans cette application afin que vous puissiez scanner votre achat plus rapidement en mode rapide et ne pas avoir à créer immédiatement de nouveaux produits dans la base de données.</string>
   <string name="msg_stored_purchases_product_offline">Appuyez sur le produit et remplissez les données requises. Après cela, le produit sera affiché ici comme en ligne et les achats stockés pourront être envoyés au serveur.</string>
@@ -270,19 +311,23 @@
   <string name="msg_logout_demo">Vous utilisez le serveur public grocy de démonstration <u>https://grocy.info.</u>\n\n <b>Aucune de vos modifications n\'est enregistrée à long terme !\nElles restent publiques jusqu\'à ce que le serveur les écrase automatiquement une fois par jour.</b>\n\nSur l\'écran de connexion, vous pouvez entrer l\'adresse de votre propre serveur.</string>
   <string name="msg_logout_demo_short">Serveur public de démonstration. Appuyez pour plus de détails.</string>
   <string name="msg_restart">Un redémarrage de l\'application est nécessaire pour appliquer correctement la configuration actuelle. Voulez-vous redémarrer maintenant ?</string>
+  <string name="msg_full_description">Appuyez ici pour afficher la description complète.</string>
   <string name="msg_shortcuts">Vous pouvez activer jusqu\'à 4 raccourcis :</string>
   <string name="msg_shortcuts_not_supported">Les raccourcis ne sont pas supportés sur cette version d\'Android.</string>
   <string name="msg_barcode_formats">Vous pouvez améliorer la vitesse du détecteur de codes-barres en le configurant pour détecter uniquement les formats que vous avez l\'habitude de lire.</string>
   <string name="msg_features">Recommencer l\'intro à \"À propos\"</string>
   <string name="msg_feedback">Avez-vous des souhaits, des questions ou des erreurs ? Contactez-nous et laissez-nous vous aider !\nSinon, nous serions très heureux de recevoir une bonne critique sur le Play Store.</string>
   <string name="msg_point_at_barcode">Dirigez votre appareil photo vers un code-barres</string>
-  <string name="msg_press_hold_confirm">Laissez appuyé pour confirmer.</string>
+  <string name="msg_press_hold_confirm">Appuyez longuement pour confirmer la suppression</string>
+  <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (Les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
+  <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir ajouter tous les ingrédients manquants pour la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les ajouter à la liste de courses :</string>
   <string name="msg_welcome_to_grocy">Bienvenue sur Grocy Android !\n\nPour utiliser grocy de manière productive vous avez besoin de votre propre serveur ou de l\'add-on pour Home Assistant.\nSi vous voulez seulement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
   <string name="msg_choose_option_below">Merci de choisir une des options ci-dessous.</string>
   <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site web grocy et allez sur la page \"Clefs API\". Cliquez sur \"Ajouter\", puis cliquez sur la petite icône avec un code QR et scannez le code QR.</string>
   <string name="msg_qr_code_scan_token">Vous utilisez le module complémentaire Grocy Home Assistant. Créez un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Sous le champ du jeton, cliquez sur \"Générer le QR code\" et scannez-le ici.</string>
   <string name="msg_port_connection_info_without_port">L\'application se connectera au port %1$s.\nSi vous souhaitez qu\'elle se connecte à un autre port, vous pouvez en ajouter un à l\'URL.\nExemple : http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">L\'application se connectera au port %1$s.</string>
+  <string name="msg_clear_form_first">Effacez d\'abord le formulaire avant de scanner un autre code-barres connu.</string>
   <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
   <string name="stock_disabled">Vous avez désactivé la fonctionnalité de suivi de stock dans la configuration de votre serveur grocy, probablement parce que vous n\'en avez pas besoin. Cependant, cette application ne sert qu\'au suivi de stock pour le moment, elle ne vous sera donc pas d\'une grande utilité.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -305,6 +350,7 @@
   <string name="msg_help_default_due_days_thawing">En déplaçant ce produit depuis un congélateur (donc en le décongelant), la date de péremption sera remplacée par aujourd\'hui + ce nombre de jours.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_stock">Le format du stock ne peut pas être changé après le premier achat.</string>
+  <string name="msg_help_qu_stock_changeable">L\'unité de stockage ne peut être modifiée uniquement si une conversion entre l\'unité actuelle et la nouvelle existe.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_qu_purchase">Ceci est le format par défaut utilisé lorsqu\'un produit est ajouté à la liste de courses.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -368,6 +414,7 @@
   <string name="error_empty_unit_conversions">Pas de conversion d\'unité de quantité</string>
   <string name="error_empty_chores">Pas de corvées</string>
   <string name="error_empty_chores_sub">Accéder aux données de base pour en créer</string>
+  <string name="error_empty_recipes">Aucune recette</string>
   <string name="error_search">Aucun résultat trouvé</string>
   <string name="error_search_sub">Essayez d\'autres termes</string>
   <string name="error_filter">Rien à afficher</string>
@@ -417,6 +464,7 @@
   <string name="error_stock_entry_grocycode">Entrée de stock du grocycode introuvable</string>
   <string name="error_permission">Aucune autorisation pour cette action</string>
   <string name="error_undefined">Une erreur est survenue</string>
+  <string name="error_invalid_base_servings">Portions invalides</string>
 
   <string name="title_overview">Aperçu</string>
   <string name="title_stock_overview">Aperçu des stocks</string>
@@ -434,6 +482,7 @@
   <string name="title_task_add">Ajouter une tâche</string>
   <string name="title_master_data">Données de base</string>
   <string name="title_stock_entries">Entrées de stock</string>
+  <string name="title_stock_entry">Entrée de stock</string>
   <string name="title_shopping_list">Liste de courses</string>
   <string name="title_feedback">Retour d\'information</string>
   <string name="title_settings">Paramètres</string>
@@ -459,6 +508,9 @@
   <string name="title_stored_purchases">Achats stockés</string>
   <string name="title_chores">Corvées</string>
   <string name="title_chore">Corvée</string>
+  <string name="title_recipes">Recettes</string>
+  <string name="title_recipe_create">Créer une recette</string>
+  <string name="title_recipe_edit">Modifier la recette</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
@@ -557,6 +609,10 @@
   <string name="subtitle_product_optional_properties">État, Produit parent, Description, Groupe de produits, Énergie, Image</string>
   <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
   <string name="subtitle_synced_with_server">Synchronisé avec le serveur</string>
+  <string name="subtitle_recipe_not_on_server">La recette n\'est pas sur le serveur</string>
+  <string name="subtitle_recipe_due_score">Indice de péremption : %1$s</string>
+  <string name="subtitle_per_serving">par portion</string>
+  <string name="subtitle_tap_preparation_mode">Appuyez ici pour les instructions de préparation</string>
 
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
@@ -571,86 +627,109 @@
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
     <item quantity="one">Vous avez %1$d produit en stock.</item>
+    <item quantity="many">Vous avez %1$d produits en stock.</item>
     <item quantity="other">Vous avez %1$d produits en stock.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
     <item quantity="one">%1$d produit arrive à échéance dans les %2$d prochains jours.</item>
+    <item quantity="many">%1$d produits arrivent à échéance dans les %2$d prochains jours.</item>
     <item quantity="other">%1$d produits arrivent à échéance dans les %2$d prochains jours.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
     <item quantity="one">%1$d produit arrive à échéance.</item>
+    <item quantity="many">%1$d produits arrivent à échéance</item>
     <item quantity="other">%1$d produits arrivent à échéance</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
     <item quantity="one">%1$d produit est expiré.</item>
+    <item quantity="many">%1$d produits sont expirés.</item>
     <item quantity="other">%1$d produits sont expirés.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
     <item quantity="one">%1$d produit est en dessous du stock minimum.</item>
+    <item quantity="many">%1$d produits sont en dessous du stock minimum.</item>
     <item quantity="other">%1$d produits sont en dessous du stock minimum.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">%1$d d\'entre eux est dans votre liste de courses.</item>
+    <item quantity="many">%1$d d\'entre eux sont dans votre liste de courses.</item>
     <item quantity="other">%1$d d\'entre eux sont dans votre liste de courses.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
     <item quantity="one">%1$d d\'entre eux est dans vos listes de courses.</item>
+    <item quantity="many">%1$d d\'entre eux sont dans vos listes de courses.</item>
     <item quantity="other">%1$d d\'entre eux sont dans vos listes de courses.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">Vous avez %1$d produit en stock pour une valeur de %2$s%3$s.</item>
+    <item quantity="many">Vous avez %1$d produits en stock pour une valeur de %2$s%3$s.</item>
     <item quantity="other">Vous avez %1$d produits en stock pour une valeur de %2$s%3$s.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
     <item quantity="one">%1$d article est dans vos listes de course.</item>
+    <item quantity="many">%1$d articles sont dans vos listes de courses.</item>
     <item quantity="other">%1$d articles sont dans vos listes de courses.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
     <item quantity="one">%1$d article est dans votre liste de courses.</item>
+    <item quantity="many">%1$d articles sont dans votre liste de course.</item>
     <item quantity="other">%1$d articles sont dans votre liste de course.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">Vous avez %1$d recette.</item>
+    <item quantity="many">Vous avez %1$d recettes.</item>
+    <item quantity="other">Vous avez %1$d recettes.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
     <item quantity="one">%1$d corvée à faire dans les %2$d prochains jours.</item>
+    <item quantity="many">%1$d corvées à faire dans les %2$d prochains jours.</item>
     <item quantity="other">%1$d corvées à faire dans les %2$d prochains jours.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
     <item quantity="one">%1$d corvée en retard.</item>
+    <item quantity="many">%1$d corvées en retard.</item>
     <item quantity="other">%1$d corvées en retard.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_due_today">
     <item quantity="one">%1$d corvée à faire aujourd\'hui.</item>
+    <item quantity="many">%1$d corvées à faire aujourd\'hui.</item>
     <item quantity="other">%1$d corvées à faire aujourd\'hui.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
     <item quantity="one">%1$d tâche attribuée.</item>
+    <item quantity="many">%1$d tâches attribuées.</item>
     <item quantity="other">%1$d tâches attribuées.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
     <item quantity="one">%1$d tâche à accomplir.</item>
+    <item quantity="many">%1$d tâches à accomplir.</item>
     <item quantity="other">%1$d tâches à accomplir.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks_user">
     <item quantity="one">%1$d tâche attribuée.</item>
+    <item quantity="many">%1$d tâches attribuées.</item>
     <item quantity="other">%1$d tâches attribuées.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">Votre base de données contient %1$d produit.</item>
+    <item quantity="many">Votre base de données contient %1$d produits.</item>
     <item quantity="other">Votre base de données contient %1$d produits.</item>
   </plurals>
 
@@ -670,6 +749,7 @@
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
     <item quantity="one">%1$d seconde</item>
+    <item quantity="many">%1$d secondes</item>
     <item quantity="other">%1$d secondes</item>
   </plurals>
   <string name="property_amount_min_stock">Min. montant du stock</string>
@@ -727,6 +807,7 @@
   <string name="property_location">Emplacement</string>
   <string name="property_location_insert">Emplacement : %1$s</string>
   <string name="property_location_default">Emplacement par défaut</string>
+  <string name="property_location_default_insert">Localisation par défaut : %1$s</string>
   <string name="property_location_consume_default">Emplacement de consommation par défaut</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Emplacements</string>
@@ -804,6 +885,28 @@
   <string name="property_category">Catégorie</string>
   <string name="property_assigned_to">Assigné à</string>
   <string name="property_users">Utilisateurs</string>
+  <string name="property_last_done_by">Dernière réalisation par</string>
+  <string name="property_last_tracked">Dernière réalisation</string>
+  <string name="property_tracked_count">Nombre de réalisations</string>
+  <string name="property_average_execution_frequency">Fréquence moyenne de réalisation</string>
+  <string name="property_next_estimated_tracking">Prochain suivi estimé</string>
+  <string name="property_next_estimated_tracking_time">Durée du prochain suivi estimé</string>
+  <string name="property_servings">Portions</string>
+  <string name="property_servings_base_insert">Portions de base : %1$s</string>
+  <string name="property_servings_desired">Portions souhaitées</string>
+  <string name="property_not_check_shopping_list">Ne pas vérifier par rapport à la liste de courses</string>
+  <string name="property_not_check_shopping_list_description">Vérifier uniquement la quantité en stock, pas la liste de courses</string>
+  <string name="property_preparation">Préparation</string>
+  <string name="property_costs">Coûts</string>
+  <string name="property_due_score">Indice de péremption</string>
+  <string name="property_ingredients">Ingrédients</string>
+  <string name="property_ingredients_subtitle">Ajouter/Modifier des ingrédients</string>
+  <string name="property_only_check_single_unit_in_stock">Vérifier seulement qu\'une quantité non-nulle est en stock</string>
+  <string name="property_only_check_single_unit_in_stock_description">Par exemple, si l\'unité de quantité diffère de celle ci-dessous</string>
+  <string name="property_do_not_check_stock_fulfillment">Désactiver la vérification du stock</string>
+  <string name="property_ingredient_group">Groupe</string>
+  <string name="property_variable_amount">Quantité variable</string>
+  <string name="property_requirements_fulfilled">Prérequis remplis</string>
 
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>
@@ -814,44 +917,53 @@
 
   <plurals name="date_days">
     <item quantity="one">%d jour</item>
+    <item quantity="many">%d jours</item>
     <item quantity="other">%d jours</item>
   </plurals>
   <plurals name="date_months">
     <item quantity="one">%d mois</item>
+    <item quantity="many">%d mois</item>
     <item quantity="other">%d mois</item>
   </plurals>
   <plurals name="date_years">
     <item quantity="one">%d an</item>
+    <item quantity="many">%d ans</item>
     <item quantity="other">%d ans</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
     <item quantity="one">Il y a %d jour</item>
+    <item quantity="many">Il y a %d jours</item>
     <item quantity="other">Il y a %d jours</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
     <item quantity="one">il y a %d mois</item>
+    <item quantity="many">Il y a %d mois</item>
     <item quantity="other">Il y a %d mois</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
     <item quantity="one">Il y a %d an</item>
+    <item quantity="many">Il y a %d ans</item>
     <item quantity="other">Il y a %d ans</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
     <item quantity="one">Dans %d jour</item>
+    <item quantity="many">Dans %d jours</item>
     <item quantity="other">Dans %d jours</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
     <item quantity="one">Dans %d mois</item>
+    <item quantity="many">Dans %d mois</item>
     <item quantity="other">Dans %d mois</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_from_now">
     <item quantity="one">Dans %d an</item>
+    <item quantity="many">Dans %d ans</item>
     <item quantity="other">Dans %d ans</item>
   </plurals>
 
@@ -990,6 +1102,19 @@
   <string name="settings_synchronized">Ces paramètres sont synchronisés avec votre serveur.</string>
   <string name="setting_message_duration">Temps d\'affichage des messages</string>
   <string name="setting_message_duration_description">Concerne seulement les messages de transaction</string>
+  <string name="setting_notifications_enable">Activer les notifications</string>
+  <string name="setting_notifications_due_soon">Produits périmant bientôt</string>
+  <string name="setting_notifications_due_soon_description">Vérifie les stocks quotidiennement et vous avertit lorsque des produits sont bientôt périmés</string>
+  <string name="setting_notifications_chores_description">Vérifie les tâches quotidiennement et vous avertit lorsque des tâches doivent être effectuées aujourd\'hui</string>
+  <string name="setting_notification_time">Heure de notification</string>
+  <string name="setting_notification_time_description">Quand la vérification est faite</string>
+  <string name="setting_keep_screen_on_recipes_description">Pendant la consultation d\'une recette</string>
+
+  <string name="notification_channel_due_soon">Produits périmant bientôt</string>
+  <string name="notification_channel_due_soon_description">Signale les produits périmant bientôt</string>
+  <string name="notification_due_soon_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire.</string>
+  <string name="notification_channel_chores">Corvées</string>
+  <string name="notification_channel_chores_description">Informe sur les corvées qui doivent être faites aujourd\'hui.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

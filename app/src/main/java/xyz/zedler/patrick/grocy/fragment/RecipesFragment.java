@@ -269,6 +269,14 @@ public class RecipesFragment extends BaseFragment implements
   }
 
   @Override
+  public void copyRecipe(int recipeId) {
+    if (showOfflineError()) {
+      return;
+    }
+    viewModel.copyRecipe(recipeId);
+  }
+
+  @Override
   public void deleteRecipe(int recipeId) {
     if (showOfflineError()) {
       return;

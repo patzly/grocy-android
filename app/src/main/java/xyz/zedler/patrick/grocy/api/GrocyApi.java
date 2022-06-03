@@ -433,6 +433,10 @@ public class GrocyApi {
     return getUrl("/recipes/" + recipeId + "/add-not-fulfilled-products-to-shoppinglist");
   }
 
+  public String copyRecipe(int recipeId) {
+    return getUrl("/recipes/" + recipeId + "/copy");
+  }
+
   // FILES
 
   public String getRecipePicture(String filename) {
