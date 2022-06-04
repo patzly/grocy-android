@@ -137,8 +137,8 @@ public class MasterProductBottomSheet extends BaseBottomSheet {
     );
 
     // DESCRIPTION
-    String description = product.getDescription() != null
-        ? TextUtil.trimCharSequence(product.getDescription()).toString() : null;
+    CharSequence trimmedDescription = TextUtil.trimCharSequence(product.getDescription());
+    String description = trimmedDescription != null ? trimmedDescription.toString() : null;
     cardDescription.setDescriptionHtml(description);
 
     // LOCATION
