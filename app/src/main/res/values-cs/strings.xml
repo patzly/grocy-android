@@ -43,6 +43,9 @@
   <string name="action_open_one">Otevřít 1 %1$s produktu %2$s</string>
   <string name="action_edit_product">Upravit produkt</string>
   <string name="action_shopping_list_add">Přidat do nákupního seznamu</string>
+  <string name="action_consume_recipe">Spotřebovat všechny ingredience použité v tomto receptu</string>
+  <string name="action_copy_recipe">Vytvořit kopii receptu</string>
+  <string name="action_apply_desired_servings">Zadejte počet porcí tohoto receptu a aktualizujte data</string>
 
   <string name="action_back">Zpět</string>
   <string name="action_search">Hledat</string>
@@ -258,6 +261,7 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">Produkt %1$s nemá žádnou zásobu</string>
   <string name="msg_not_found">Produkt nenalezen</string>
+  <string name="msg_editor_hint">Zapište text</string>
   <string name="msg_undone_transaction">Vrácené transakce</string>
   <string name="msg_failed_to_sync">Synchronizace informací z aplikace se nezdařila</string>
   <string name="msg_synced">Data byla úspěšně synchronizována</string>
@@ -325,13 +329,16 @@
   <string name="msg_logout_demo">Používáte veřejně přístupný demo server <u>https://grocy.info</u>.\n\n<b>Žádné vaše změny nebudou trvalé!\nVše co zapíšete ale zůstane veřejné, dokud se server neuvede do výchozího stavu, což se děje jednou za den.</b>\n\nNa přihlašovací stránce můžete zadat adresu vlastního serveru.</string>
   <string name="msg_logout_demo_short">Toto je veřejný grocy demo server. Klepněte pro více informací.</string>
   <string name="msg_restart">Restartujte, prosím, aplikaci, aby se nová konfigurace grocy načetla celá.</string>
+  <string name="msg_full_description">Klepnutím zobrazíte kompletní popis</string>
   <string name="msg_shortcuts">Můžete použít až 4 zkratky:</string>
   <string name="msg_shortcuts_not_supported">Tato verze Androidu zkratky nepodporuje</string>
   <string name="msg_barcode_formats">Pokud vyberete jen ty druhy čárových (či jiných) kódů, které jsou u vámi nakupovaných produktů obvyklé, zrychlíte tak jejich přečtení</string>
   <string name="msg_features">Úvod si můžete znovu přehrát v sekci „O programu”</string>
   <string name="msg_feedback">Máte nějaké přání, otázky nebo jste našli chybu? Kontaktujte nás a my vám pomůžeme.\nRádi si od vás přečteme pěknou recenzi na Google Play.</string>
   <string name="msg_point_at_barcode">Namiřte kameru na čárový kód</string>
-  <string name="msg_press_hold_confirm">Podržte pro potvrzení</string>
+  <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
+  <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
+  <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
   <string name="msg_welcome_to_grocy">Vítejte v grocy klientu pro Android!\n\nChcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
   <string name="msg_choose_option_below">Prosím, vyberte jednu z možností.</string>
   <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pokud půjdete na web grocy na jiném zařízení, klikněte na ikonu QR kódu a API klíč naskenujte.</string>
@@ -626,6 +633,7 @@
   <string name="subtitle_recipe_not_on_server">Recept není uložen na serveru</string>
   <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
   <string name="subtitle_per_serving">na 1 porci</string>
+  <string name="subtitle_tap_preparation_mode">Klepnutím spustíte režim přípravy jídla z receptu</string>
 
   <string name="description_input_product_part1">Pole produktu obsahuje:</string>
   <string name="description_input_product_part2">Vyberte si, jak pokračovat:</string>
@@ -706,6 +714,13 @@
     <item quantity="few">V nákupním seznamu jsou %1$d položky</item>
     <item quantity="many">V nákupním seznamu je %1$d položek</item>
     <item quantity="other">V nákupním seznamu je %1$d položek</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">Máte %1$d recept</item>
+    <item quantity="few">Máte %1$d recepty</item>
+    <item quantity="many">Máte %1$d receptů</item>
+    <item quantity="other">Máte %1$d receptů</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_chores_due_soon">
@@ -916,6 +931,9 @@
   <string name="property_average_execution_frequency">Průměrná frekvence plnění této povinnosti</string>
   <string name="property_next_estimated_tracking">Předpokládané datum provedení</string>
   <string name="property_next_estimated_tracking_time">Předpokládaný čas provedení</string>
+  <string name="property_servings">Porce</string>
+  <string name="property_servings_base_insert">Výchozí počet porcí: %1$s</string>
+  <string name="property_servings_desired">Potřebný počet porcí</string>
   <string name="property_not_check_shopping_list">Přidat chybějící ingredience do nákupního seznamu, přestože v něm již jsou</string>
   <string name="property_not_check_shopping_list_description">Kontrolovat jen stav zásob, ne produkty v nákupním seznamu</string>
   <string name="property_preparation">Postup přípravy</string>
@@ -928,6 +946,7 @@
   <string name="property_do_not_check_stock_fulfillment">Vypnout kontrolu stavu zásob pro tuto ingredienci</string>
   <string name="property_ingredient_group">Skupina</string>
   <string name="property_variable_amount">Proměnné množství</string>
+  <string name="property_requirements_fulfilled">Všechny požadavky jsou splněny</string>
 
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznámý</string>
