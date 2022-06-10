@@ -1159,11 +1159,7 @@
   <string name="setting_notification_time_description">Čas, kdy aplikace zobrazí informace o stavu zásob.</string>
   <string name="setting_keep_screen_on_recipes_description">když je zobrazený recept</string>
 
-  <string name="notification_channel_due_soon">Blízké datum min. trvanlivosti</string>
-  <string name="notification_channel_due_soon_description">Informuje o produktech s blížící se min. trvanlivostí</string>
   <string name="notification_due_soon_content">Spotřebujte je brzy, aby se nezkazily</string>
-  <string name="notification_channel_chores">Povinnosti</string>
-  <string name="notification_channel_chores_description">Zobrazí povinnosti, které mají být splněny dnes</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->

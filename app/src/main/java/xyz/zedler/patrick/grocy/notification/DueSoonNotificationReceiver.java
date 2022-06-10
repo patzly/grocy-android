@@ -58,8 +58,8 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
       return;
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      CharSequence name = context.getString(R.string.notification_channel_due_soon);
-      String description = context.getString(R.string.notification_channel_due_soon_description);
+      CharSequence name = context.getString(R.string.setting_notifications_due_soon);
+      String description = context.getString(R.string.setting_notifications_due_soon_description);
       int importance = NotificationManager.IMPORTANCE_HIGH;
       NotificationChannel channel = new NotificationChannel(
           NOTIFICATIONS.DUE_SOON_CHANNEL, name, importance

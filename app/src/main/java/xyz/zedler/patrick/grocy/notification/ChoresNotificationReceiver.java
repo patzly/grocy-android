@@ -46,8 +46,8 @@ public class ChoresNotificationReceiver extends BroadcastReceiver {
       return;
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      CharSequence name = context.getString(R.string.notification_channel_due_soon);
-      String description = context.getString(R.string.notification_channel_due_soon_description);
+      CharSequence name = context.getString(R.string.title_chores);
+      String description = context.getString(R.string.setting_notifications_chores_description);
       int importance = NotificationManager.IMPORTANCE_HIGH;
       NotificationChannel channel = new NotificationChannel(
           NOTIFICATIONS.CHORES_CHANNEL, name, importance
