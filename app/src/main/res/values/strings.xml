@@ -1071,18 +1071,19 @@
   <string name="setting_message_duration">Display time for messages</string>
   <string name="setting_message_duration_description">Only concerns transaction messages</string>
   <string name="setting_notifications_enable">Enable notifications</string>
+  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
+  few days and therefore should be consumed in the next few days. -->
   <string name="setting_notifications_due_soon">Due soon items</string>
   <string name="setting_notifications_due_soon_description">Checks stock daily and notifies you when products are due soon</string>
   <string name="setting_notifications_chores_description">Checks chores daily and notifies you when chores are due to be done today</string>
   <string name="setting_notification_time">Notification time</string>
+  <!-- the description of the notification time preference.
+  With the "Due soon" check enabled, the user will be notified every day at the selected time how
+  many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">When the check is done</string>
   <string name="setting_keep_screen_on_recipes_description">While viewing a recipe</string>
 
-  <string name="notification_channel_due_soon">Due soon items</string>
-  <string name="notification_channel_due_soon_description">Informs about items which are due soon.</string>
   <string name="notification_due_soon_content">Consume them over the next few days to help reduce food waste.</string>
-  <string name="notification_channel_chores">Chores</string>
-  <string name="notification_channel_chores_description">Informs about chores which are due to be done today.</string>
 
   <string name="barcode_format_code128" translatable="false">Code 128</string>
   <string name="barcode_format_code39" translatable="false">Code 39</string>

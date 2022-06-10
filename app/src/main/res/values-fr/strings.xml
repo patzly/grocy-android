@@ -1103,18 +1103,19 @@
   <string name="setting_message_duration">Temps d\'affichage des messages</string>
   <string name="setting_message_duration_description">Concerne seulement les messages de transaction</string>
   <string name="setting_notifications_enable">Activer les notifications</string>
+  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
+  few days and therefore should be consumed in the next few days. -->
   <string name="setting_notifications_due_soon">Produits périmant bientôt</string>
   <string name="setting_notifications_due_soon_description">Vérifie les stocks quotidiennement et vous avertit lorsque des produits sont bientôt périmés</string>
   <string name="setting_notifications_chores_description">Vérifie les tâches quotidiennement et vous avertit lorsque des tâches doivent être effectuées aujourd\'hui</string>
   <string name="setting_notification_time">Heure de notification</string>
+  <!-- the description of the notification time preference.
+  With the "Due soon" check enabled, the user will be notified every day at the selected time how
+  many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">Quand la vérification est faite</string>
   <string name="setting_keep_screen_on_recipes_description">Pendant la consultation d\'une recette</string>
 
-  <string name="notification_channel_due_soon">Produits périmant bientôt</string>
-  <string name="notification_channel_due_soon_description">Signale les produits périmant bientôt</string>
   <string name="notification_due_soon_content">Consommez-les au cours des prochains jours pour aider à réduire le gaspillage alimentaire.</string>
-  <string name="notification_channel_chores">Corvées</string>
-  <string name="notification_channel_chores_description">Informe sur les corvées qui doivent être faites aujourd\'hui.</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
