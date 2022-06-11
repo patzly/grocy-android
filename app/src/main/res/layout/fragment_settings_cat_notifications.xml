@@ -178,10 +178,19 @@
           style="@style/Widget.Grocy.TextView.Category"
           android:text="@string/title_chores" />
 
+        <TextView
+          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_marginHorizontal="72dp"
+          android:layout_marginTop="16dp"
+          android:text="Coming soon..." />
+
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:visibility="gone"
           android:onClick="@{v -> switchChoresEnableNotifications.setChecked(!switchChoresEnableNotifications.isChecked())}">
 
           <ImageView
@@ -212,7 +221,7 @@
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           app:clickUtil="@{clickUtil}"
-          android:visibility="@{viewModel.choresNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
+          android:visibility="gone"
           android:onClick="@{() -> fragment.showChoresTimePickerDialog()}">
 
           <ImageView
