@@ -943,7 +943,6 @@
   <string name="property_ingredients_subtitle">Přidat nebo upravit ingredience</string>
   <string name="property_only_check_single_unit_in_stock">Pouze zkontrolovat, zda je v zásobě jakékoliv množství</string>
   <string name="property_only_check_single_unit_in_stock_description">Např. je-li měrná jednotka jiná, než uvedená</string>
-  <string name="property_do_not_check_stock_fulfillment">Vypnout kontrolu stavu zásob pro tuto ingredienci</string>
   <string name="property_ingredient_group">Skupina</string>
   <string name="property_variable_amount">Proměnné množství</string>
   <string name="property_requirements_fulfilled">Všechny požadavky jsou splněny</string>

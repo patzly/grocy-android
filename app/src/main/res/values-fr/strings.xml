@@ -903,7 +903,6 @@
   <string name="property_ingredients_subtitle">Ajouter/Modifier des ingrédients</string>
   <string name="property_only_check_single_unit_in_stock">Vérifier seulement qu\'une quantité non-nulle est en stock</string>
   <string name="property_only_check_single_unit_in_stock_description">Par exemple, si l\'unité de quantité diffère de celle ci-dessous</string>
-  <string name="property_do_not_check_stock_fulfillment">Désactiver la vérification du stock</string>
   <string name="property_ingredient_group">Groupe</string>
   <string name="property_variable_amount">Quantité variable</string>
   <string name="property_requirements_fulfilled">Prérequis remplis</string>

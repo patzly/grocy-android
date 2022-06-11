@@ -606,6 +606,7 @@
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
   <string name="subtitle_synced_with_server">Synced with server</string>
   <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
   <string name="subtitle_tap_preparation_mode">Tap here for preparation mode</string>
@@ -862,26 +863,39 @@
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_done_by">Last done by</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_tracked">Last tracked</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_tracked_count">Tracked count</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_average_execution_frequency">Average execution frequency</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
   <string name="property_next_estimated_tracking">Next estimated tracking</string>
   <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Servings</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
   <string name="property_servings_base_insert">Base servings: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Desired servings</string>
   <string name="property_not_check_shopping_list">Do not check against shopping list</string>
   <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Preparation</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costs</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Due score</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredients</string>
   <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
   <string name="property_only_check_single_unit_in_stock">Only check for any amount in stock</string>
   <string name="property_only_check_single_unit_in_stock_description">E.g. if the quantity unit differs from the one below</string>
-  <string name="property_do_not_check_stock_fulfillment">Disable stock fulfillment checking</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Group</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Variable amount</string>
   <string name="property_requirements_fulfilled">Requirements fulfilled</string>
 

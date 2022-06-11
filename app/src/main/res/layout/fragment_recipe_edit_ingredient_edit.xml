@@ -397,7 +397,7 @@
 
                 <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"
-                    android:text="@string/property_do_not_check_stock_fulfillment" />
+                    android:text="@string/property_disable_stock_check" />
 
               </LinearLayout>
 
