@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatConversionsViewModel extends BaseViewModel {
 
@@ -63,7 +64,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
   private List<QuantityUnit> quantityUnits;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public MasterProductCatConversionsViewModel(
@@ -116,7 +117,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateQuantityUnits(dbChangedTime, qUs -> {
           this.quantityUnits = qUs;
@@ -206,7 +207,7 @@ public class MasterProductCatConversionsViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

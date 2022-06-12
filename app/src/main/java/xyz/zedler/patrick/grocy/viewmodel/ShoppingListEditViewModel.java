@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingListEditViewModel extends AndroidViewModel {
 
@@ -65,7 +66,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
 
   private List<ShoppingList> shoppingLists;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final ShoppingList startupShoppingList;
   private final boolean debug;
 
@@ -131,7 +132,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
       this.shoppingLists = shoppingLists;
       formData.setShoppingListNames(getShoppingListNames(shoppingLists));
@@ -338,7 +339,7 @@ public class ShoppingListEditViewModel extends AndroidViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

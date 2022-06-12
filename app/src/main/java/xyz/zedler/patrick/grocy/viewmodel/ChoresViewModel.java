@@ -50,6 +50,7 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ChoresViewModel extends BaseViewModel {
 
@@ -74,7 +75,7 @@ public class ChoresViewModel extends BaseViewModel {
   private HashMap<Integer, Chore> choreHashMap;
   private HashMap<Integer, User> usersHashMap;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private String searchInput;
   private int choresDueTodayCount;
   private int choresDueSoonCount;
@@ -168,7 +169,7 @@ public class ChoresViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::updateFilteredChoreEntries, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::updateFilteredChoreEntries, this::onDownloadError);
     queue.append(
         dlHelper.updateChoreEntries(dbChangedTime, choreEntries -> {
           this.choreEntries = choreEntries;
@@ -409,7 +410,7 @@ public class ChoresViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

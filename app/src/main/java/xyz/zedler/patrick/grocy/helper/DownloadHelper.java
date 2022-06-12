@@ -84,6 +84,7 @@ import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
 import xyz.zedler.patrick.grocy.web.CustomJsonObjectRequest;
 import xyz.zedler.patrick.grocy.web.CustomStringRequest;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class DownloadHelper {
@@ -98,7 +99,7 @@ public class DownloadHelper {
   private final DateUtil dateUtil;
   private final AppDatabase appDatabase;
 
-  private final ArrayList<Queue> queueArrayList;
+  private final ArrayList<NetworkQueue> queueArrayList;
   private final String tag;
   private final String apiKey;
   private final String hassServerUrl;
@@ -182,7 +183,7 @@ public class DownloadHelper {
 
   // cancel all requests
   public void destroy() {
-    for (Queue queue : queueArrayList) {
+    for (NetworkQueue queue : queueArrayList) {
       queue.reset(true);
     }
     requestQueue.cancelAll(uuidHelper);
@@ -1109,15 +1110,15 @@ public class DownloadHelper {
     }
   }
 
-  public QueueItemJson addProductBarcode(
+  public QueueItem addProductBarcode(
       JSONObject jsonObject,
       OnResponseListener onResponseListener,
       OnErrorListener onErrorListener
   ) {
-    return new QueueItemJson() {
+    return new QueueItem() {
       @Override
       public void perform(
-          @Nullable OnJSONResponseListener responseListener,
+          @Nullable OnStringResponseListener responseListener,
           @Nullable OnErrorListener errorListener,
           @Nullable String uuid
       ) {
@@ -1132,7 +1133,7 @@ public class DownloadHelper {
                 onResponseListener.onResponse();
               }
               if (responseListener != null) {
-                responseListener.onResponse(response);
+                responseListener.onResponse(null);
               }
             },
             error -> {
@@ -2983,120 +2984,16 @@ public class DownloadHelper {
     );
   }
 
-  public class Queue {
-
-    private final ArrayList<BaseQueueItem> queueItems;
-    private final OnQueueEmptyListener onQueueEmptyListener;
-    private final OnErrorListener onErrorListener;
-    private final String uuidQueue;
-    private int queueSize;
-    private boolean isRunning;
-
-    public Queue(OnQueueEmptyListener onQueueEmptyListener, OnErrorListener onErrorListener) {
-      this.onQueueEmptyListener = onQueueEmptyListener;
-      this.onErrorListener = onErrorListener;
-      queueItems = new ArrayList<>();
-      uuidQueue = UUID.randomUUID().toString();
-      queueSize = 0;
-      isRunning = false;
-    }
-
-    public Queue append(BaseQueueItem... queueItems) {
-      for (BaseQueueItem queueItem : queueItems) {
-        if (queueItem == null) {
-          continue;
-        }
-        this.queueItems.add(queueItem);
-        queueSize++;
-      }
-      return this;
-    }
-
-    public void start() {
-      if (isRunning) {
-        return;
-      } else {
-        isRunning = true;
-      }
-      if (queueItems.isEmpty()) {
-        if (onQueueEmptyListener != null) {
-          onQueueEmptyListener.execute();
-        }
-        return;
-      }
-      while (!queueItems.isEmpty()) {
-        BaseQueueItem queueItem = queueItems.remove(0);
-        if (queueItem instanceof QueueItem) {
-          ((QueueItem) queueItem).perform(response -> {
-            queueSize--;
-            if (queueSize > 0) {
-              return;
-            }
-            isRunning = false;
-            if (onQueueEmptyListener != null) {
-              onQueueEmptyListener.execute();
-            }
-            reset(false);
-          }, error -> {
-            isRunning = false;
-            if (onErrorListener != null) {
-              onErrorListener.onError(error);
-            }
-            reset(true);
-          }, uuidQueue);
-        } else {
-          ((QueueItemJson) queueItem).perform(response -> {
-            queueSize--;
-            if (queueSize > 0) {
-              return;
-            }
-            isRunning = false;
-            if (onQueueEmptyListener != null) {
-              onQueueEmptyListener.execute();
-            }
-            reset(false);
-          }, error -> {
-            isRunning = false;
-            if (onErrorListener != null) {
-              onErrorListener.onError(error);
-            }
-            reset(true);
-          }, uuidQueue);
-        }
-      }
-    }
-
-    public int getSize() {
-      return queueSize;
-    }
-
-    public boolean isEmpty() {
-      return queueSize == 0;
-    }
-
-    public void reset(boolean cancelAll) {
-      if (cancelAll) {
-        requestQueue.cancelAll(uuidQueue);
-      }
-      queueItems.clear();
-      queueSize = 0;
-    }
-  }
-
-  public Queue newQueue(
+  public NetworkQueue newQueue(
       OnQueueEmptyListener onQueueEmptyListener,
       OnErrorListener onErrorListener
   ) {
-    Queue queue = new Queue(onQueueEmptyListener, onErrorListener);
+    NetworkQueue queue = new NetworkQueue(onQueueEmptyListener, onErrorListener, requestQueue);
     queueArrayList.add(queue);
     return queue;
   }
 
-  public abstract static class BaseQueueItem {
-
-  }
-
-  public abstract static class QueueItem extends BaseQueueItem {
+  public abstract static class QueueItem {
 
     public abstract void perform(
         OnStringResponseListener responseListener,
@@ -3108,20 +3005,7 @@ public class DownloadHelper {
       // UUID is for cancelling the requests; should be uuidHelper from above
       perform(null, null, uuid);
     }
-  }
 
-  public abstract static class QueueItemJson extends BaseQueueItem {
-
-    public abstract void perform(
-        OnJSONResponseListener responseListener,
-        OnErrorListener errorListener,
-        String uuid
-    );
-
-    public void perform(String uuid) {
-      // UUID is for cancelling the requests; should be uuidHelper from above
-      perform(null, null, uuid);
-    }
   }
 
   public void updateData(OnQueueEmptyListener onFinished,
@@ -3138,7 +3022,7 @@ public class DownloadHelper {
       );
       return;
     }
-    DownloadHelper.Queue queue = newQueue(onFinished, errorListener);
+    NetworkQueue queue = newQueue(onFinished, errorListener);
     for (Class<?> type : types) {
       if (type == ProductGroup.class) {
         queue.append(updateProductGroups(dbChangedTime, null));

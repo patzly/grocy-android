@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.repository.StoredPurchasesRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class StoredPurchasesViewModel extends BaseViewModel {
 
@@ -65,7 +66,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
   private final HashMap<Integer, List<StoredPurchase>> pendingPurchasesHashMap;
 
   private Runnable queueEmptyAction;
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public StoredPurchasesViewModel(@NonNull Application application) {
@@ -148,7 +149,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(dlHelper.updateProducts(dbChangedTime, products -> {
       this.products = products;
       productHashMap.clear();
@@ -274,7 +275,7 @@ public class StoredPurchasesViewModel extends BaseViewModel {
     return isLoadingLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

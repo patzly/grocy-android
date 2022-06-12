@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatOptionalViewModel extends BaseViewModel {
 
@@ -60,7 +61,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
   private List<ProductGroup> productGroups;
   private List<ProductBarcode> barcodes;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final boolean isActionEdit;
 
   public MasterProductCatOptionalViewModel(
@@ -121,7 +122,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
@@ -213,7 +214,7 @@ public class MasterProductCatOptionalViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

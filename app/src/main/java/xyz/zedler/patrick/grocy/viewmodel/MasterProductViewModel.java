@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.ConnectivityLiveData;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductViewModel extends BaseViewModel {
 
@@ -69,7 +70,7 @@ public class MasterProductViewModel extends BaseViewModel {
 
   private List<Product> products;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private DownloadHelper.QueueItem extraQueueItem;
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
@@ -190,7 +191,7 @@ public class MasterProductViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
     queue.append(
         dlHelper.updateProducts(dbChangedTime, products -> {
           this.products = products;
@@ -310,7 +311,7 @@ public class MasterProductViewModel extends BaseViewModel {
       onFinished.run();
       return;
     }
-    DownloadHelper.Queue queue = dlHelper.newQueue(
+    NetworkQueue queue = dlHelper.newQueue(
         () -> {
           pendingProductBarcodesLive.setValue(null);
           onFinished.run();
@@ -400,7 +401,7 @@ public class MasterProductViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

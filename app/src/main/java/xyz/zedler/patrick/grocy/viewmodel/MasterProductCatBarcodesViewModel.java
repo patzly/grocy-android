@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductCatBarcodesViewModel extends BaseViewModel {
 
@@ -62,7 +63,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
   private List<QuantityUnit> quantityUnits;
   private List<Store> stores;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public MasterProductCatBarcodesViewModel(
@@ -116,7 +117,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateProductBarcodes(
             dbChangedTime,
@@ -214,7 +215,7 @@ public class MasterProductCatBarcodesViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

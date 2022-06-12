@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
@@ -75,7 +76,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
   private List<User> users;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final Chore chore;
   private final boolean debug;
 
@@ -286,7 +287,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

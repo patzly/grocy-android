@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterObjectListViewModel extends BaseViewModel {
 
@@ -73,7 +74,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final HorizontalFilterBarMulti horizontalFilterBarMulti;
   private boolean sortAscending;
   private String search;
@@ -152,7 +153,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     if (entity.equals(GrocyApi.ENTITY.STORES)) {
       queue.append(dlHelper.updateStores(dbChangedTime, stores -> objects = stores));
     }
@@ -464,7 +465,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 
