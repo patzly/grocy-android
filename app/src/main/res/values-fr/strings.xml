@@ -904,7 +904,7 @@
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Portions souhaitées</string>
   <string name="property_not_check_shopping_list">Ne pas vérifier par rapport à la liste de courses</string>
-  <string name="property_not_check_shopping_list_description">Vérifier uniquement la quantité en stock, pas la liste de courses</string>
+  <string name="property_not_check_shopping_list_description">Vérifiez uniquement la quantité en stock, pas la liste de courses lorsque vous y ajoutez des articles manquants</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Préparation</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
