@@ -631,6 +631,7 @@
   <string name="subtitle_product_quantity_unit">Výchozí hodnoty pro zásobu a nákup</string>
   <string name="subtitle_synced_with_server">Uloženo na server</string>
   <string name="subtitle_recipe_not_on_server">Recept není uložen na serveru</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Index min. trvanlivosti: %1$s</string>
   <string name="subtitle_per_serving">na 1 porci</string>
   <string name="subtitle_tap_preparation_mode">Klepnutím spustíte režim přípravy jídla z receptu</string>
@@ -925,25 +926,39 @@
   <string name="property_category">Kategorie</string>
   <string name="property_assigned_to">Přiřazeno</string>
   <string name="property_users">Uživatelé</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_done_by">Naposledy provedl(a)</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_tracked">Naposledy provedeno</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_tracked_count">Zaznamenaný počet</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_average_execution_frequency">Průměrná frekvence plnění této povinnosti</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
   <string name="property_next_estimated_tracking">Předpokládané datum provedení</string>
   <string name="property_next_estimated_tracking_time">Předpokládaný čas provedení</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Porce</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
   <string name="property_servings_base_insert">Výchozí počet porcí: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Potřebný počet porcí</string>
   <string name="property_not_check_shopping_list">Přidat chybějící ingredience do nákupního seznamu, přestože v něm již jsou</string>
-  <string name="property_not_check_shopping_list_description">Kontrolovat jen stav zásob, ne produkty v nákupním seznamu</string>
+  <string name="property_not_check_shopping_list_description">Kontrolovat jen stav zásob, ne zda-li je produkt již v nákupním seznamu</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Postup přípravy</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Náklady</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Index min. trvanlivosti</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredience</string>
   <string name="property_ingredients_subtitle">Přidat nebo upravit ingredience</string>
   <string name="property_only_check_single_unit_in_stock">Pouze zkontrolovat, zda je v zásobě jakékoliv množství</string>
   <string name="property_only_check_single_unit_in_stock_description">Např. je-li měrná jednotka jiná, než uvedená</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Skupina</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Proměnné množství</string>
   <string name="property_requirements_fulfilled">Všechny požadavky jsou splněny</string>
 
@@ -1151,10 +1166,15 @@
   <string name="setting_message_duration">Na jak dlouho se objeví zprávy</string>
   <string name="setting_message_duration_description">o provedených akcích</string>
   <string name="setting_notifications_enable">Zapnout upozorňování</string>
+  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
+  few days and therefore should be consumed in the next few days. -->
   <string name="setting_notifications_due_soon">Povinnosti s blížícím se datem splnění</string>
   <string name="setting_notifications_due_soon_description">Každý den vás informuje o blížící se min. trvanlivosti produktů</string>
   <string name="setting_notifications_chores_description">Každý den vás informuje o povinnostech, které máte vykonat</string>
   <string name="setting_notification_time">Čas upozornění</string>
+  <!-- the description of the notification time preference.
+  With the "Due soon" check enabled, the user will be notified every day at the selected time how
+  many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">Čas, kdy aplikace zobrazí informace o stavu zásob.</string>
   <string name="setting_keep_screen_on_recipes_description">když je zobrazený recept</string>
 
