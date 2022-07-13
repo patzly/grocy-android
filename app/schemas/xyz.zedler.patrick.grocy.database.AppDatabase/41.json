@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 39,
-    "identityHash": "491dfedabddf8751097fab1fa92b7f76",
+    "version": 41,
+    "identityHash": "bcabaf5ada2b4771a026243437eb42a8",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -732,11 +732,11 @@
       },
       {
         "tableName": "stock_current_location_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `product_id` INTEGER NOT NULL, `amount` TEXT, `location_id` INTEGER NOT NULL, `location_name` TEXT, `location_is_freezer` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`autoId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `product_id` INTEGER NOT NULL, `amount` TEXT, `location_id` INTEGER NOT NULL, `location_name` TEXT, `location_is_freezer` TEXT)",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
+            "fieldPath": "autoId",
+            "columnName": "autoId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -773,7 +773,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "autoId"
           ],
           "autoGenerate": true
         },
@@ -1882,7 +1882,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '491dfedabddf8751097fab1fa92b7f76')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bcabaf5ada2b4771a026243437eb42a8')"
     ]
   }
 }

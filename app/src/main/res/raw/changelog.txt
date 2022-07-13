@@ -11,6 +11,7 @@
 - Improved: On transaction pages adding of known barcode is prevented (#541)
 - Fixed: Product 'purchase to stock' conversion is preferred to additional conversions (#490)
 - Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
+- Fixed: Location filter didn't work properly on stock overview page (#554)
 
 2.2.1:
 - New: Stock entries page (#403)
