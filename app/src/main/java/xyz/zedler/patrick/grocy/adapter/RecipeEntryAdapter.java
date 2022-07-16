@@ -38,6 +38,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -52,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEntryAdapter extends
     RecyclerView.Adapter<RecipeEntryAdapter.ViewHolder> {
@@ -65,6 +68,7 @@ public class RecipeEntryAdapter extends
   private final ArrayList<RecipeFulfillment> recipeFulfillments;
   private final RecipesItemAdapterListener listener;
   private final GrocyApi grocyApi;
+  private final LazyHeaders grocyAuthHeaders;
   private String sortMode;
   private boolean sortAscending;
   private String extraField;
@@ -85,6 +89,7 @@ public class RecipeEntryAdapter extends
     this.recipeFulfillments = new ArrayList<>(recipeFulfillments);
     this.listener = listener;
     this.grocyApi = new GrocyApi((Application) context.getApplicationContext());
+    this.grocyAuthHeaders = RequestHeaders.getGlideGrocyAuthHeaders(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.extraField = extraField;
@@ -237,9 +242,10 @@ public class RecipeEntryAdapter extends
 
     if (recipe.getPictureFileName() != null) {
       holder.binding.picture.layout(0, 0, 0, 0);
+
       Glide
           .with(context)
-          .load(grocyApi.getRecipePicture(recipe.getPictureFileName()))
+          .load(new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders))
           .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(context, 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<Drawable>() {
