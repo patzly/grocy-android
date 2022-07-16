@@ -55,6 +55,7 @@ public class ChoreEntryAdapter extends
   private final HashMap<Integer, Chore> choreHashMap;
   private final HashMap<Integer, User> usersHashMap;
   private final ChoreEntryAdapterListener listener;
+  private final DateUtil dateUtil;
   private String sortMode;
   private boolean sortAscending;
 
@@ -74,6 +75,7 @@ public class ChoreEntryAdapter extends
     this.choreHashMap = new HashMap<>(choreHashMap);
     this.usersHashMap = new HashMap<>(usersHashMap);
     this.listener = listener;
+    this.dateUtil = new DateUtil(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
   }
@@ -135,12 +137,20 @@ public class ChoreEntryAdapter extends
 
     if (days != null) {
       holder.binding.days.setVisibility(View.VISIBLE);
-      holder.binding.days.setText(new DateUtil(context).getHumanForDaysFromNow(date, true));
+      holder.binding.daysHuman.setVisibility(View.VISIBLE);
+      if (choreEntry.getTrackDateOnlyBoolean()) {
+        holder.binding.days.setText(dateUtil.getLocalizedDate(date, DateUtil.FORMAT_SHORT));
+        holder.binding.daysHuman.setText(dateUtil.getHumanForDaysFromNow(date, false));
+      } else {
+        holder.binding.days.setText(dateUtil.getLocalizedDate(date, DateUtil.FORMAT_SHORT_WITH_TIME));
+        holder.binding.daysHuman.setText(dateUtil.getHumanForDaysFromNow(date, true));
+      }
       if (days <= 5) {
         colorDays = true;
       }
     } else {
       holder.binding.days.setVisibility(View.GONE);
+      holder.binding.daysHuman.setVisibility(View.GONE);
     }
 
     if (colorDays) {
@@ -156,11 +166,15 @@ public class ChoreEntryAdapter extends
         color = R.color.retro_yellow;
       }
       holder.binding.days.setTextColor(ContextCompat.getColor(context, color));
+      holder.binding.daysHuman.setTextColor(ContextCompat.getColor(context, color));
     } else {
       holder.binding.days.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.days.setTextColor(
+          ContextCompat.getColor(context, R.color.on_background_secondary)
+      );
+      holder.binding.daysHuman.setTextColor(
           ContextCompat.getColor(context, R.color.on_background_secondary)
       );
     }

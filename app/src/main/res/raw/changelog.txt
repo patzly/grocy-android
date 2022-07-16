@@ -10,6 +10,7 @@
 - Improved: Price entered on inventory page is now related to selected quantity unit (#511)
 - Improved: On transaction pages adding of known barcode is prevented (#541)
 - Improved: On stock overview page you can search with grocy code (#547)
+- Improved: Chores page now displays time if necessary (#549)
 - Fixed: Product 'purchase to stock' conversion is preferred to additional conversions (#490)
 - Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
 - Fixed: Location filter didn't work properly on stock overview page (#554)

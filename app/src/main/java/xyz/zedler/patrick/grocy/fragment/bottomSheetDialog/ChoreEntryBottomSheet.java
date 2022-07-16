@@ -131,7 +131,9 @@ public class ChoreEntryBottomSheet extends BaseBottomSheet {
 
       binding.lastTracked.setText(
           getString(R.string.property_last_tracked),
-          choreDetails.getLastTracked(),
+          chore.getTrackDateOnlyBoolean()
+              ? dateUtil.getLocalizedDate(choreDetails.getLastTracked(), DateUtil.FORMAT_SHORT)
+              : dateUtil.getLocalizedDate(choreDetails.getLastTracked(), DateUtil.FORMAT_SHORT_WITH_TIME),
           chore.getTrackDateOnlyBoolean()
               ? dateUtil.getHumanForDaysFromNow(choreDetails.getLastTracked())
               : dateUtil.getHumanForDaysFromNow(choreDetails.getLastTracked(), true)
