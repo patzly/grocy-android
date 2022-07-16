@@ -120,13 +120,16 @@
             android:animateLayoutChanges="true"
             app:transitionTypeChanging="@{true}">
 
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_home"
-                tools:ignore="ContentDescription" />
+            <com.google.android.material.card.MaterialCardView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="16dp"
+              android:layout_marginBottom="8dp"
+              app:contentPadding="16dp"
+              app:cardElevation="0dp"
+              app:cardCornerRadius="12dp"
+              app:cardBackgroundColor="@color/on_background_variant">
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
@@ -140,7 +143,7 @@
 
               </LinearLayout>
 
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
               android:id="@+id/linear_due_date"
