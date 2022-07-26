@@ -356,7 +356,7 @@
   <string name="msg_help_consume_location">Produkty budou spotřebovávány nejprve z tohoto umístění, (nebude-li při spotřebě zadáno jiné umístění)</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Tento produkt nebude možné vybrat při nákupu. To je vhodné pro nadřazené produkty, které používáte jen jako sumář řady podřízených produktů.</string>
-  <string name="msg_help_due_date_type">Podle zvoleného typu data min. trvanlivosti bude styl zvýrazňování na stránce přehledu zásob rozdílný. „Minimální trvanlivost” znamená, že produkt je bezpečné konzumovat i po tomto datu. „Expirace” znamená, že produkt po tomto datu konzumovat nelze.</string>
+  <string name="msg_help_due_date_type">Podle zvoleného typu data bude styl zvýrazňování na stránce přehledu zásob rozdílný. „Datum minimální trvanlivosti” znamená, že produkt je bezpečné konzumovat i po tomto datu. „Datum použitelnosti” znamená, že konzumovat produkt po tomto datu není bezpečné.</string>
   <string name="msg_help_default_due_days_format">Dlouhým stiskem na položku zadat datum pomocí dialogu místo psaním</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">Tento počet dní bude přidán k dnešnímu datu jako návrh data minimální trvanlivosti Zadáním -1 bude min trvanlivost neomezená.</string>
@@ -669,10 +669,10 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
-    <item quantity="one">%1$d produkt expiroval</item>
-    <item quantity="few">%1$d produkty expirovaly</item>
-    <item quantity="many">%1$d produktů expirovalo</item>
-    <item quantity="other">%1$d produktů expirovalo</item>
+    <item quantity="one">%1$d produkt po době použitelnosti</item>
+    <item quantity="few">%1$d produkty po době použitelnosti</item>
+    <item quantity="many">%1$d produktů po době použitelnosti</item>
+    <item quantity="other">%1$d produktů po době použitelnosti</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
