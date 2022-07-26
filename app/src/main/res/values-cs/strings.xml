@@ -137,10 +137,10 @@
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
-    <item quantity="one">%1$d expiroval</item>
-    <item quantity="few">%1$d expirovaly</item>
-    <item quantity="many">%1$d expirovalo</item>
-    <item quantity="other">%1$d expirovalo</item>
+    <item quantity="one">%1$d po době použitelnosti</item>
+    <item quantity="few">%1$d po době použitelnosti</item>
+    <item quantity="many">%1$d po době použitelnosti</item>
+    <item quantity="other">%1$d po době použitelnosti</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
@@ -830,7 +830,7 @@
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_type_best_before">Datum min. trvanlivosti</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_type_expiration">Datum expirace</string>
+  <string name="property_due_type_expiration">Datum použitelnosti</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Datum min. trvanlivosti</string>
   <!-- %1$s is a due date-->
