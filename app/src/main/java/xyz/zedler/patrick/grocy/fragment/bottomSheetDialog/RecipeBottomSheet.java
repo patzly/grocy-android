@@ -227,7 +227,7 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     recipesRepository.loadFromDatabase(data -> {
       recipes = data.getRecipes();
       recipeFulfillments = data.getRecipeFulfillments();
-      recipePositions = data.getRecipePositions();
+      recipePositions = RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
 
