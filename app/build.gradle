@@ -24,7 +24,7 @@ plugins {
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     lint {
         abortOnError false
@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 41
         versionName "2.2.1"
 
@@ -80,22 +80,22 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
-    implementation 'androidx.navigation:navigation-fragment:2.4.2'
-    implementation 'androidx.navigation:navigation-ui:2.4.2'
+    implementation 'androidx.navigation:navigation-fragment:2.5.1'
+    implementation 'androidx.navigation:navigation-ui:2.5.1'
 
-    implementation 'androidx.room:room-runtime:2.4.2'
-    implementation 'androidx.room:room-rxjava3:2.4.2'
-    annotationProcessor 'androidx.room:room-compiler:2.4.2'
+    implementation 'androidx.room:room-runtime:2.4.3'
+    implementation 'androidx.room:room-rxjava3:2.4.3'
+    annotationProcessor 'androidx.room:room-compiler:2.4.3'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
-    implementation 'com.google.android.material:material:1.7.0-alpha01'
+    implementation 'com.google.android.material:material:1.7.0-alpha03'
 
     implementation 'com.android.volley:volley:1.2.1'
 
