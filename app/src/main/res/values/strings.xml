@@ -270,7 +270,7 @@
   <string name="option_synced_error">Option could not be synced</string>
   <string name="msg_help_ingredient_list">You can add ingredients with the button at the bottom, edit ingredients by selecting them and delete them by swiping an ingredient to the right and clicking the trash can icon.</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
-  <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
+  <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
