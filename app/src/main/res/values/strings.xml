@@ -268,7 +268,6 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
-  <string name="msg_help_ingredient_list">You can add ingredients with the button at the bottom, edit ingredients by selecting them and delete them by swiping an ingredient to the right and clicking the trash can icon.</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
   <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
@@ -882,7 +881,8 @@
   <string name="property_servings_base_insert">Base servings: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Desired servings</string>
-  <string name="property_not_check_shopping_list">Do not check against the shopping list when adding missing items to it</string>
+  <string name="property_not_check_shopping_list">Do not check against the shopping list</string>
+  <string name="property_not_check_shopping_list_description">When adding missing items to it</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Preparation</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
