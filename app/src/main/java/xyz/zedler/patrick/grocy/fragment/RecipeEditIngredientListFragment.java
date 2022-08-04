@@ -21,24 +21,16 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -50,12 +42,12 @@ import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientListBind
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
+import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientListViewModel;
 
 public class RecipeEditIngredientListFragment extends BaseFragment
@@ -124,6 +116,15 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     );
 
     viewModel.getRecipePositionsLive().observe(getViewLifecycleOwner(), items -> {
+      if (items == null) {
+        return;
+      }
+      if (items.isEmpty()) {
+        InfoFullscreen info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_INGREDIENTS);
+        viewModel.getInfoFullscreenLive().setValue(info);
+      } else {
+        viewModel.getInfoFullscreenLive().setValue(null);
+      }
       if (binding.recycler.getAdapter() instanceof RecipeEntryAdapter) {
         ((RecipeEditIngredientListEntryAdapter) binding.recycler.getAdapter()).updateData(
                 items,

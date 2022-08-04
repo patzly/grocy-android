@@ -369,6 +369,8 @@
   <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_not_check_shopping_list">By default the amount to be added to the shopping list is \"needed amount - stock amount - shopping list amount\". When this is enabled, it is only checked against the stock amount, not against what is already on the shopping list.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">When a product is selected, one unit (per serving in stock quantity unit) will be added to stock on consuming this recipe.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
@@ -406,6 +408,7 @@
   <string name="error_empty_chores">No chores</string>
   <string name="error_empty_chores_sub">Go to master data and create some</string>
   <string name="error_empty_recipes">No recipes</string>
+  <string name="error_empty_ingredients">No ingredients</string>
   <string name="error_search">No search results</string>
   <string name="error_search_sub">Try other terms</string>
   <string name="error_filter">Nothing to display</string>
@@ -891,7 +894,6 @@
   <string name="property_due_score">Due score</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredients</string>
-  <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
   <string name="property_only_check_single_unit_in_stock">Only check for any amount in stock</string>
   <string name="property_only_check_single_unit_in_stock_description">E.g. if the quantity unit differs from the one below</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
@@ -899,6 +901,7 @@
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Variable amount</string>
   <string name="property_requirements_fulfilled">Requirements fulfilled</string>
+  <string name="property_produces_product">Produces product</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

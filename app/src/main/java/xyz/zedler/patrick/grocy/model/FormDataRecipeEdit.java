@@ -188,11 +188,10 @@ public class FormDataRecipeEdit {
   }
 
   public boolean isProductNameValid() {
-    if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
-      if (productDetailsLive.getValue() != null) {
-        clearForm();
-        return false;
-      }
+    if (productNameLive.getValue() == null || productNameLive.getValue().isEmpty()) {
+      productDetailsLive.setValue(null);
+      productNameErrorLive.setValue(null);
+      return true;
     }
     if (productDetailsLive.getValue() == null || productNameLive.getValue().isEmpty()) {
       productNameErrorLive.setValue(R.string.error_invalid_product);

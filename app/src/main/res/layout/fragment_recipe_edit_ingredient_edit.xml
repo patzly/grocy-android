@@ -251,7 +251,7 @@
                   android:layout_width="0dp"
                   android:layout_weight="1"
                   android:paddingTop="8dp"
-                  android:paddingBottom="0dp"
+                  android:paddingBottom="8dp"
                   android:paddingStart="16dp"
                   android:paddingEnd="8dp"
                   android:animateLayoutChanges="true"
@@ -261,7 +261,6 @@
                     android:id="@+id/image_amount"
                     style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                     android:src="@drawable/ic_round_scatter_plot_anim"
-                    android:layout_marginBottom="4dp"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -294,7 +293,6 @@
                   android:id="@+id/amount_more"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_marginTop="4dp"
                   android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                   app:icon="@drawable/ic_round_expand_less"
                   app:tint="@color/icon"
@@ -304,7 +302,6 @@
                   android:id="@+id/amount_less"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_marginTop="4dp"
                   android:layout_marginEnd="12dp"
                   android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                   app:icon="@drawable/ic_round_expand_more"
@@ -340,22 +337,12 @@
 
               </LinearLayout>
 
-              <ImageView
-                  android:layout_marginStart="16dp"
-                  android:clickable="false"
-                  android:focusable="false"
-                  android:src="@drawable/ic_round_expand_more"
-                  android:rotation="-90"
-                  tools:ignore="ContentDescription"
-                  android:layout_height="wrap_content"
-                  android:layout_width="wrap_content" />
-
             </LinearLayout>
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem"
               android:paddingTop="8dp"
-              android:paddingBottom="0dp">
+              android:paddingBottom="8dp">
 
               <ImageView
                 android:id="@+id/image_note"
@@ -411,7 +398,7 @@
 
             <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
-                android:paddingTop="0dp"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp">
 
               <ImageView
@@ -443,8 +430,8 @@
 
             <LinearLayout
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp">
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
 
               <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"

@@ -21,19 +21,14 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.widget.ImageView;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-
 import java.util.ArrayList;
-
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.RecipeEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -98,7 +93,7 @@ public class FormDataRecipeEditIngredientEdit {
     amountLive = new MutableLiveData<>();
     amountErrorLive = new MutableLiveData<>();
     quantityUnitLive = new MutableLiveData<>();
-    quantityUnitLabelLive = new MutableLiveData<>(getString(R.string.error_empty_qu));
+    quantityUnitLabelLive = new MutableLiveData<>(getString(R.string.subtitle_none_selected));
     variableAmountLive = new MutableLiveData<>();
     notCheckStockFulfillmentLive = new MutableLiveData<>(false);
     ingredientGroupLive = new MutableLiveData<>();
@@ -156,7 +151,7 @@ public class FormDataRecipeEditIngredientEdit {
   public void setQuantityUnit(QuantityUnit quantityUnit) {
     quantityUnitLive.setValue(quantityUnit);
     quantityUnitLabelLive.setValue(
-            quantityUnit == null ? getString(R.string.error_empty_qu) : quantityUnit.getName()
+            quantityUnit == null ? getString(R.string.subtitle_none_selected) : quantityUnit.getName()
     );
   }
 
@@ -293,7 +288,7 @@ public class FormDataRecipeEditIngredientEdit {
     amountLive.setValue(null);
     amountErrorLive.setValue(null);
     quantityUnitLive.setValue(null);
-    quantityUnitLabelLive.setValue(null);
+    quantityUnitLabelLive.setValue(getString(R.string.subtitle_none_selected));
     variableAmountLive.setValue(null);
     notCheckStockFulfillmentLive.setValue(null);
     ingredientGroupLive.setValue(null);

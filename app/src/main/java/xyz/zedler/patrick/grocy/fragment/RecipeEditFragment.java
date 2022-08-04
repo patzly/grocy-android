@@ -207,8 +207,9 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
 
   public void clearInputFocus() {
     activity.hideKeyboard();
-    binding.dummyFocusView.requestFocus();
     binding.textInputName.clearFocus();
+    binding.scroll.clearFocus();
+    binding.dummyFocusView.requestFocus();
   }
 
   public void clearBaseServingsFieldAndFocusIt() {
