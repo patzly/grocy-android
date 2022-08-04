@@ -40,6 +40,7 @@ public class FormDataRecipeEditIngredientEdit {
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
+  private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<ArrayList<Product>> productsLive;
   private final MutableLiveData<ProductDetails> productDetailsLive;
   private final MutableLiveData<String> productNameLive;
@@ -67,6 +68,10 @@ public class FormDataRecipeEditIngredientEdit {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     pluralUtil = new PluralUtil(application);
+    displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+    ));
     productsLive = new MutableLiveData<>();
     productDetailsLive = new MutableLiveData<>();
     productDetailsLive.setValue(null);
@@ -102,6 +107,15 @@ public class FormDataRecipeEditIngredientEdit {
     priceFactorErrorLive = new MutableLiveData<>();
 
     filledWithRecipePosition = false;
+  }
+
+  public MutableLiveData<Boolean> getDisplayHelpLive() {
+    return displayHelpLive;
+  }
+
+  public void toggleDisplayHelpLive() {
+    assert displayHelpLive.getValue() != null;
+    displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
   public MutableLiveData<ArrayList<Product>> getProductsLive() {
