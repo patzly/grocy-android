@@ -974,7 +974,7 @@
   <string name="category_network">Netzwerk</string>
   <string name="category_network_proxy">Proxy</string>
   <string name="category_behavior">Verhalten</string>
-  <string name="category_debugging">Debugging</string>
+  <string name="category_debugging">Fehlersuche</string>
   <string name="category_new_product">Neues Produkt</string>
   <string name="category_existing_products">Vorhandene Produkte</string>
   <string name="category_existing_products_similar">Ähnliche vorhandene Produkte</string>
