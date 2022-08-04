@@ -1044,7 +1044,7 @@
   <string name="setting_loading">Wert wird geladen</string>
   <string name="setting_not_loaded">Konnte nicht geladen werden</string>
   <string name="setting_debug">Logging aktivieren</string>
-  <string name="setting_debug_description">Für Debugging-Zwecke</string>
+  <string name="setting_debug_description">Für das Fehlersuchen</string>
   <string name="setting_log_level">Log-Level</string>
   <string name="setting_error_logs">Nur Fehler-Logs anzeigen</string>
   <string name="setting_info_logs">Fehler- und Info-Logs anzeigen</string>
