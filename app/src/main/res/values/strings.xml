@@ -548,6 +548,7 @@
   <string name="title_product_cat_due_date">Due date</string>
   <string name="title_product_cat_amount">Amount</string>
   <string name="title_product_cat_quantity_unit">Quantity unit</string>
+  <string name="title_notifications">Notifications</string>
   <string name="title_product_cat_barcodes">Barcodes</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">QU conversions</string>

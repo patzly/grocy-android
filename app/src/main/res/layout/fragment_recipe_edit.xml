@@ -398,7 +398,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:maxLines="4"
+                  android:maxLines="5"
                   android:text="@string/property_not_check_shopping_list" />
 
                 <TextView

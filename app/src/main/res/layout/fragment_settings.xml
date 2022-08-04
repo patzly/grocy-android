@@ -331,7 +331,7 @@
               style="@style/Widget.Grocy.TextView.ListItem.Title"
               android:layout_width="0dp"
               android:layout_weight="1"
-              android:text="Notifications" />
+              android:text="@string/title_notifications" />
 
           <ImageView
               android:layout_height="24dp"
