@@ -297,9 +297,8 @@
   <string name="msg_item_marked_as_undone">Stav položky byl vrácen</string>
   <string name="option_synced_success">Volba byla zapsána na server</string>
   <string name="option_synced_error">Volbu se nepodařilo zapsat na server</string>
-  <string name="msg_help_ingredient_list">Tlačítkem dole přidáte ingredienci. Přejetím po ingredienci vpravo se objeví symbol koše, kterým ji smažete.</string>
   <string name="msg_recipe_added_to_cart">Všechny ingredience receptu jsou vloženy do nákupního košíku</string>
-  <string name="msg_recipe_consumed">Recept „%1$s“ je spotřebován</string>
+  <string name="msg_recipe_consumed">Všechny ingredience z receptu „%1$s“ byly odebrány ze zásob</string>
   <string name="msg_stored_purchases_overview">Několik nákupů ještě nebylo zapsáno na server. Pro podrobnosti klepněte sem.</string>
   <string name="msg_stored_purchases">Tady jsou nákupy, které zatím nejsou uloženy na serveru. Jsou uloženy společně i s novými produkty, které tak nemusíte nejprve uložit do seznamu produktů</string>
   <string name="msg_stored_purchases_product_offline">Klepněte na produkt a zapište k němu informace. Poté se tu produkt zobrazí jako „online“ a zapsaný nákup produktu se uloží na server.</string>
@@ -399,6 +398,13 @@
 – dříve nakoupeno, dříve spotřebováno</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Určeno pouze pro statistické účely</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Normálně je množství produktu vložené do nákupního seznamu výsledkem vzorce: potřebné množství – dostupné množství – množství produktu již v nákupním seznamu.
+Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Pokud tu vyberete produkt, bude po kliknutí na „Spotřebovat všechny suroviny použité v tomto receptu“ receptu přidán do stavu zásob a to v množství odpovídajícím počtu porcí při spotřebování receptu.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Je-li zaškrtnuto, smíte vybrat jakoukoliv měrnou jednotku produktu. V receptu se pak objeví, že je produkt v zásobě, je-li k dispozici jakékoliv jeho množství.</string>
   <string name="msg_help_date_chooser">Můžete si nastavit i vkládání dat klávesnicí. Urychlí to práci.</string>
   <string name="msg_help_date_chooser_keyboard">Můžete si změnit formát zápisu data na DDMMRR.\nPomocí klávesy Done (Hotovo, Enter...) na klávesnici tuto stránku uložíte a zavřete.</string>
   <string name="msg_help_quick_mode">Podržením prstu na titulku se přepnete do zrychleného režimu. Pokud jsou k produktu nebo k jeho čárovému kódu vyplněny všechny informace, pak stačí naskenovat jeho čárový kód a přidání do zásoby se provede z těchto dat.</string>
@@ -425,17 +431,18 @@
   <string name="error_empty_barcodes_sub">Tlačítkem přidejte čárový kód</string>
   <string name="error_empty_master_data_sub">Tlačítkem nějaké vytvoříte</string>
   <string name="error_empty_product_barcodes">Produkt nemá čárové kódy</string>
-  <string name="error_empty_locations">Žádné umístění</string>
-  <string name="error_empty_product_groups">Žádná skupina produktů</string>
-  <string name="error_empty_products">Žádný produkt</string>
-  <string name="error_empty_qu">Žádné měrné jednotky</string>
-  <string name="error_empty_stores">Žádné obchody</string>
-  <string name="error_empty_tasks">Žádné úkoly</string>
-  <string name="error_empty_task_categories">Žádné kategorie úkolů</string>
-  <string name="error_empty_unit_conversions">Žádné převody měrných jednotek</string>
-  <string name="error_empty_chores">Žádné povinnosti</string>
+  <string name="error_empty_locations">Zatím není vytvořeno žádné umístění</string>
+  <string name="error_empty_product_groups">Zatím není vytvořena žádná skupina produktů</string>
+  <string name="error_empty_products">Zatím není vytvořen žádný produkt</string>
+  <string name="error_empty_qu">Zatím nejsou vytvořeny žádné měrné jednotky</string>
+  <string name="error_empty_stores">Zatím není vytvořeny žádné obchody</string>
+  <string name="error_empty_tasks">Zatím nejsou vytvořeny žádné úkoly</string>
+  <string name="error_empty_task_categories">Zatím nejsou vytvořeny žádné kategorie úkolů</string>
+  <string name="error_empty_unit_conversions">Zatím nejsou vytvořeny žádné převody měrných jednotek</string>
+  <string name="error_empty_chores">Zatím není vytvořeny žádné povinnosti</string>
   <string name="error_empty_chores_sub">Abyste měli s čím pracovat, musíte nejprve přidat nějaké informace v části Spravovat základní data</string>
-  <string name="error_empty_recipes">Ještě nebyl vytvořen žádný recept</string>
+  <string name="error_empty_recipes">Zatím nebyl vytvořen žádný recept</string>
+  <string name="error_empty_ingredients">Zatím nebyly přidány žádné ingredience</string>
   <string name="error_search">Žádné výsledky hledání</string>
   <string name="error_search_sub">Zkuste jiná slova</string>
   <string name="error_filter">Nic k zobrazení</string>
@@ -567,6 +574,7 @@
   <string name="title_product_cat_due_date">Datum min. trvanlivosti</string>
   <string name="title_product_cat_amount">Množství</string>
   <string name="title_product_cat_quantity_unit">Měrná jednotka</string>
+  <string name="title_notifications">Upozornění</string>
   <string name="title_product_cat_barcodes">Čárové kódy</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">Převody měr. jednotek</string>
@@ -943,8 +951,8 @@
   <string name="property_servings_base_insert">Výchozí počet porcí: %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Potřebný počet porcí</string>
-  <string name="property_not_check_shopping_list">Přidat chybějící ingredience do nákupního seznamu, přestože v něm již jsou</string>
-  <string name="property_not_check_shopping_list_description">Kontrolovat jen stav zásob, ne zda-li je produkt již v nákupním seznamu</string>
+  <string name="property_not_check_shopping_list">Nekontrolovat, jestli je produkt v nákupním seznamu</string>
+  <string name="property_not_check_shopping_list_description">Pokud přidáváte chybějící produkt</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Postup přípravy</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -953,14 +961,13 @@
   <string name="property_due_score">Index min. trvanlivosti</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredience</string>
-  <string name="property_ingredients_subtitle">Přidat nebo upravit ingredience</string>
   <string name="property_only_check_single_unit_in_stock">Pouze zkontrolovat, zda je v zásobě jakékoliv množství</string>
-  <string name="property_only_check_single_unit_in_stock_description">Např. je-li měrná jednotka jiná, než uvedená</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Skupina</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Proměnné množství</string>
   <string name="property_requirements_fulfilled">Všechny požadavky jsou splněny</string>
+  <string name="property_produces_product">Recept vyrobí produkt</string>
 
   <string name="date_today">Dnes</string>
   <string name="date_unknown">Neznámý</string>
