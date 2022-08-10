@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -421,9 +422,34 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
       }
     }
 
-    if (!allNeededPermissions.isEmpty()) {
+    if (allNeededPermissions.isEmpty()) return;
+
+    if (allNeededPermissions.contains("android.permission.GET_ACCOUNTS")) {
+      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity, R.style.AlertDialogCustom);
+      alertBuilder.setTitle("Attention: Contacts permission");
+      alertBuilder.setMessage("In the next step, when you are asked if you want to give the "
+          + "app access to your contacts, you must tap 'Allow' for the ML Kit barcode scanner "
+          + "to work. Permission is requested by ML Kit on some devices when Google Play Services "
+          + "are present.\n\nHowever, this does not transfer any contacts from your device to Google "
+          + "because internally the app only asks for access to your Google Account and the "
+          + "Android system has permission groups where the account permission belongs to "
+          + "the contacts permission.");
+
+      alertBuilder.setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        dialog.dismiss();
+        ActivityCompat.requestPermissions(
+            activity,
+            allNeededPermissions.toArray(new String[0]),
+            PERMISSION_REQUESTS
+        );
+      });
+      alertBuilder.show();
+    } else {
       ActivityCompat.requestPermissions(
-          activity, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
+          activity,
+          allNeededPermissions.toArray(new String[0]),
+          PERMISSION_REQUESTS
+      );
     }
   }
 
