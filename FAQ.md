@@ -13,7 +13,7 @@ Credits for the layout and some text of this FAQ go to [M66B](https://github.com
 * [Frequently Asked Questions](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-frequently-asked-questions)
 * [Support](https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-support)
 
-<a name="howto">
+<a name="howto"></a>
 
 ## How to
 

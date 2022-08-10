@@ -32,11 +32,9 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 @Entity(tableName = "stock_current_location_table")
 public class StockLocation implements Parcelable {
 
-  @ColumnInfo(name = "id")
-  @SerializedName("id")
-  private int id;
+  @PrimaryKey(autoGenerate = true)
+  private int autoId;
 
-  @PrimaryKey
   @ColumnInfo(name = "product_id")
   @SerializedName("product_id")
   private int productId;
@@ -61,7 +59,7 @@ public class StockLocation implements Parcelable {
   }  // for room
 
   private StockLocation(Parcel parcel) {
-    id = parcel.readInt();
+    autoId = parcel.readInt();
     productId = parcel.readInt();
     amount = parcel.readString();
     locationId = parcel.readInt();
@@ -71,7 +69,7 @@ public class StockLocation implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
-    dest.writeInt(id);
+    dest.writeInt(autoId);
     dest.writeInt(productId);
     dest.writeString(amount);
     dest.writeInt(locationId);
@@ -92,12 +90,12 @@ public class StockLocation implements Parcelable {
     }
   };
 
-  public int getId() {
-    return id;
+  public int getAutoId() {
+    return autoId;
   }
 
-  public void setId(int id) {
-    this.id = id;
+  public void setAutoId(int id) {
+    this.autoId = id;
   }
 
   public int getProductId() {

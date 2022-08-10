@@ -268,9 +268,8 @@
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
   <string name="option_synced_error">Option could not be synced</string>
-  <string name="msg_help_ingredient_list">You can add ingredients with the button at the bottom, edit ingredients by selecting them and delete them by swiping an ingredient to the right and clicking the trash can icon.</string>
   <string name="msg_recipe_added_to_cart">Added recipe ingredients to cart</string>
-  <string name="msg_recipe_consumed">Consumed recipe \"%1$s\"</string>
+  <string name="msg_recipe_consumed">Removed all ingredients of recipe \"%1$s\" from stock</string>
   <string name="msg_stored_purchases_overview">There are purchases on the device that have not yet been transferred to the server. Tap here for details.</string>
   <string name="msg_stored_purchases">Purchases that have not yet been transferred to the server are displayed here. They were saved together with temporary products in this app so that you could scan your purchase faster in quick mode and not have to create new products for the master data directly.</string>
   <string name="msg_stored_purchases_product_offline">Tap on the product and fill in the required data. After that, the product will be shown here as online and the stored purchases can be sent to the server.</string>
@@ -368,6 +367,12 @@
   <string name="msg_help_specific_item">The first item in this list would be picked by the default rule which is \"Opened first, then first due first, then first in first out\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">This is for statistical purposes only.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">By default the amount to be added to the shopping list is \"needed amount - stock amount - shopping list amount\". When this is enabled, it is only checked against the stock amount, not against what is already on the shopping list.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">When a product is selected, one unit (per serving in stock quantity unit) will be added to stock on consuming this recipe.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">A different amount/unit can then be used below while for stock fulfillment checking it is sufficient when any amount of the product in stock.</string>
   <string name="msg_help_date_chooser">You can switch to keyboard input in settings, this could increase input speed for you.</string>
   <string name="msg_help_date_chooser_keyboard">You can activate reverse date format in settings if DDMMYY is preferred in your country.\nTo apply input and close this page you can use the Done key on your keyboard.</string>
   <string name="msg_help_quick_mode">You can long tap on the title bar above to activate the quick mode. In this mode, a transaction will be executed immediately if a product has been entered or scanned and all fields could be automatically populated (by product and/or barcode defaults).</string>
@@ -405,6 +410,7 @@
   <string name="error_empty_chores">No chores</string>
   <string name="error_empty_chores_sub">Go to master data and create some</string>
   <string name="error_empty_recipes">No recipes</string>
+  <string name="error_empty_ingredients">No ingredients</string>
   <string name="error_search">No search results</string>
   <string name="error_search_sub">Try other terms</string>
   <string name="error_filter">Nothing to display</string>
@@ -542,6 +548,7 @@
   <string name="title_product_cat_due_date">Due date</string>
   <string name="title_product_cat_amount">Amount</string>
   <string name="title_product_cat_quantity_unit">Quantity unit</string>
+  <string name="title_notifications">Notifications</string>
   <string name="title_product_cat_barcodes">Barcodes</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">QU conversions</string>
@@ -606,6 +613,7 @@
   <string name="subtitle_product_quantity_unit">Stock, Purchase default</string>
   <string name="subtitle_synced_with_server">Synced with server</string>
   <string name="subtitle_recipe_not_on_server">Recipe is not on server</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
   <string name="subtitle_tap_preparation_mode">Tap here for preparation mode</string>
@@ -862,28 +870,40 @@
   <string name="property_category">Category</string>
   <string name="property_assigned_to">Assigned to</string>
   <string name="property_users">Users</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_done_by">Last done by</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_tracked">Last tracked</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_tracked_count">Tracked count</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_average_execution_frequency">Average execution frequency</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
   <string name="property_next_estimated_tracking">Next estimated tracking</string>
   <string name="property_next_estimated_tracking_time">Next estimated tracking time</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Servings</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
   <string name="property_servings_base_insert">Base servings: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Desired servings</string>
-  <string name="property_not_check_shopping_list">Do not check against shopping list</string>
-  <string name="property_not_check_shopping_list_description">Check only stock amount, not shopping list</string>
+  <string name="property_not_check_shopping_list">Do not check against the shopping list</string>
+  <string name="property_not_check_shopping_list_description">When adding missing items to it</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Preparation</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Costs</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Due score</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingredients</string>
-  <string name="property_ingredients_subtitle">Add / Edit ingredients</string>
-  <string name="property_only_check_single_unit_in_stock">Only check for any amount in stock</string>
-  <string name="property_only_check_single_unit_in_stock_description">E.g. if the quantity unit differs from the one below</string>
-  <string name="property_do_not_check_stock_fulfillment">Disable stock fulfillment checking</string>
+  <string name="property_only_check_single_unit_in_stock">Only check if any amount is in stock</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Group</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Variable amount</string>
   <string name="property_requirements_fulfilled">Requirements fulfilled</string>
+  <string name="property_produces_product">Produces product</string>
 
   <string name="date_today">Today</string>
   <string name="date_unknown">Unknown</string>

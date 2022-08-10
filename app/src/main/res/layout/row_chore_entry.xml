@@ -61,6 +61,15 @@
         android:layout_height="wrap_content"
         android:singleLine="true"/>
 
+      <TextView
+        android:id="@+id/days_human"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:singleLine="true"
+        android:textStyle="italic"/>
+
       <ImageView
         android:id="@+id/image_reschedule"
         android:layout_width="24dp"

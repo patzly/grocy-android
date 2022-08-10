@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -72,7 +73,12 @@ public class LoginIntroFragment extends BaseFragment {
   }
 
   public void loginOwnInstance() {
-    navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment());
+    PackageManager pm = activity.getPackageManager();
+    if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+      navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiQrCodeFragment());
+    } else {
+      navigate(LoginIntroFragmentDirections.actionLoginIntroFragmentToLoginApiFormFragment());
+    }
   }
 
   public void openHelpWebsite() {

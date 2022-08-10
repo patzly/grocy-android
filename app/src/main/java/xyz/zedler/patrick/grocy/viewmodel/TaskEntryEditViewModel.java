@@ -52,6 +52,7 @@ import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class TaskEntryEditViewModel extends BaseViewModel {
 
@@ -71,7 +72,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
   private List<TaskCategory> taskCategories;
   private List<User> users;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
@@ -126,7 +127,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
           this.taskCategories = taskCategories;
@@ -340,7 +341,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
     this.queueEmptyAction = queueEmptyAction;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

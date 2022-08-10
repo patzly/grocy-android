@@ -610,6 +610,7 @@
   <string name="subtitle_product_quantity_unit">Stock, Format à l\'achat par défaut</string>
   <string name="subtitle_synced_with_server">Synchronisé avec le serveur</string>
   <string name="subtitle_recipe_not_on_server">La recette n\'est pas sur le serveur</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="subtitle_recipe_due_score">Indice de péremption : %1$s</string>
   <string name="subtitle_per_serving">par portion</string>
   <string name="subtitle_tap_preparation_mode">Appuyez ici pour les instructions de préparation</string>
@@ -885,26 +886,39 @@
   <string name="property_category">Catégorie</string>
   <string name="property_assigned_to">Assigné à</string>
   <string name="property_users">Utilisateurs</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_done_by">Dernière réalisation par</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_last_tracked">Dernière réalisation</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_tracked_count">Nombre de réalisations</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
   <string name="property_average_execution_frequency">Fréquence moyenne de réalisation</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
   <string name="property_next_estimated_tracking">Prochain suivi estimé</string>
   <string name="property_next_estimated_tracking_time">Durée du prochain suivi estimé</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
   <string name="property_servings">Portions</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
   <string name="property_servings_base_insert">Portions de base : %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Portions souhaitées</string>
   <string name="property_not_check_shopping_list">Ne pas vérifier par rapport à la liste de courses</string>
-  <string name="property_not_check_shopping_list_description">Vérifier uniquement la quantité en stock, pas la liste de courses</string>
+  <string name="property_not_check_shopping_list_description">Vérifiez uniquement la quantité en stock, pas la liste de courses lorsque vous y ajoutez des articles manquants</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Préparation</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Coûts</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
   <string name="property_due_score">Indice de péremption</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingrédients</string>
   <string name="property_ingredients_subtitle">Ajouter/Modifier des ingrédients</string>
   <string name="property_only_check_single_unit_in_stock">Vérifier seulement qu\'une quantité non-nulle est en stock</string>
   <string name="property_only_check_single_unit_in_stock_description">Par exemple, si l\'unité de quantité diffère de celle ci-dessous</string>
-  <string name="property_do_not_check_stock_fulfillment">Désactiver la vérification du stock</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Groupe</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Quantité variable</string>
   <string name="property_requirements_fulfilled">Prérequis remplis</string>
 

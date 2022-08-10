@@ -29,6 +29,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ConfigUtil {
 
@@ -47,7 +48,7 @@ public class ConfigUtil {
         Constants.SETTINGS_DEFAULT.DEBUGGING.ENABLE_DEBUGGING
     );
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> {
+    NetworkQueue queue = dlHelper.newQueue(() -> {
       if (onSuccessAction != null) {
         onSuccessAction.run();
       }

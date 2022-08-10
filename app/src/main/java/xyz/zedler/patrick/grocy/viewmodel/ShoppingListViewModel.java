@@ -55,6 +55,7 @@ import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingListViewModel extends BaseViewModel {
 
@@ -90,7 +91,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   private ArrayList<ShoppingListItem> itemsToSyncTemp;
   private HashMap<Integer, ShoppingListItem> serverItemHashMapTemp;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private String searchInput;
   private final boolean debug;
 
@@ -266,7 +267,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateShoppingListItems(
             dbChangedTime,
@@ -368,7 +369,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       showMessage(getString(R.string.msg_failed_to_sync));
       downloadData();
     };
-    DownloadHelper.Queue queue = dlHelper.newQueue(emptyListener, errorListener);
+    NetworkQueue queue = dlHelper.newQueue(emptyListener, errorListener);
     for (ShoppingListItem itemToSync : itemsToSyncTemp) {
       JSONObject body = new JSONObject();
       try {
@@ -412,7 +413,7 @@ public class ShoppingListViewModel extends BaseViewModel {
       listIds.add(1);  // id of first and single shopping list
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(
+    NetworkQueue queue = dlHelper.newQueue(
         () -> {
           if (onFinished != null) {
             onFinished.run(true);
@@ -686,7 +687,7 @@ public class ShoppingListViewModel extends BaseViewModel {
   }
 
   public void clearDoneItems(ShoppingList shoppingList) {
-    DownloadHelper.Queue queue = dlHelper.newQueue(
+    NetworkQueue queue = dlHelper.newQueue(
         () -> {
           showMessage(getApplication().getString(
               R.string.msg_shopping_list_cleared,
@@ -829,7 +830,7 @@ public class ShoppingListViewModel extends BaseViewModel {
     return infoFullscreenLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ShoppingListItemEditViewModel extends BaseViewModel {
 
@@ -78,7 +79,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private List<QuantityUnitConversion> unitConversions;
   private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
@@ -140,7 +141,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
         dlHelper.updateShoppingLists(dbChangedTime, shoppingLists -> {
           this.shoppingLists = shoppingLists;
@@ -490,7 +491,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     this.queueEmptyAction = queueEmptyAction;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

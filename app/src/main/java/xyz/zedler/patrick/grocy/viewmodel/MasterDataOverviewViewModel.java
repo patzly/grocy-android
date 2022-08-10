@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.repository.MasterDataOverviewRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterDataOverviewViewModel extends BaseViewModel {
 
@@ -59,7 +60,7 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
   private final MutableLiveData<List<Product>> productsLive;
   private final MutableLiveData<List<TaskCategory>> taskCategoriesLive;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public MasterDataOverviewViewModel(@NonNull Application application) {
@@ -110,7 +111,7 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
     queue.append(
         dlHelper.updateStores(dbChangedTime, this.storesLive::setValue),
         dlHelper.updateLocations(dbChangedTime, this.locationsLive::setValue),
@@ -202,7 +203,7 @@ public class MasterDataOverviewViewModel extends BaseViewModel {
     return taskCategoriesLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

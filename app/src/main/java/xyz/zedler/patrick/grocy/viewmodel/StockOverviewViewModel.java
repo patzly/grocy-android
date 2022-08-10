@@ -68,6 +68,8 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
+import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -307,9 +309,16 @@ public class StockOverviewViewModel extends BaseViewModel {
   public void updateFilteredStockItems() {
     ArrayList<StockItem> filteredStockItems = new ArrayList<>();
 
+    Product productSearch = null;
     ProductBarcode productBarcodeSearch = null;
     if (searchInput != null && !searchInput.isEmpty()) {
-      productBarcodeSearch = productBarcodeHashMap.get(searchInput);
+      Grocycode grocycode = GrocycodeUtil.getGrocycode(searchInput);
+      if (grocycode != null && grocycode.isProduct()) {
+        productSearch = productHashMap.get(grocycode.getObjectId());
+      }
+      if (productSearch == null) {
+        productBarcodeSearch = productBarcodeHashMap.get(searchInput);
+      }
     }
 
     for (StockItem item : this.stockItems) {
@@ -334,8 +343,14 @@ public class StockOverviewViewModel extends BaseViewModel {
           searchContainsItem = searchResultsFuzzy.contains(productName);
         }
       }
-      if (!searchContainsItem && productBarcodeSearch == null
-          || !searchContainsItem && productBarcodeSearch.getProductIdInt() != item.getProductId()) {
+      if (!searchContainsItem && productSearch == null && productBarcodeSearch == null) {
+        continue;
+      }
+      if (!searchContainsItem && productSearch == null
+          && productBarcodeSearch.getProductIdInt() != item.getProductId()) {
+        continue;
+      }
+      if (productSearch != null && productSearch.getId() != item.getProductId()) {
         continue;
       }
 

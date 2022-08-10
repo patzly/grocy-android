@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.repository.ChooseProductRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ChooseProductViewModel extends BaseViewModel {
 
@@ -74,7 +75,7 @@ public class ChooseProductViewModel extends BaseViewModel {
   private final boolean pendingProductsActive;
   private String nameFromOnlineSource;
 
-  private DownloadHelper.Queue currentQueueLoading;
+  private NetworkQueue currentQueueLoading;
   private final boolean debug;
 
   public ChooseProductViewModel(
@@ -154,7 +155,7 @@ public class ChooseProductViewModel extends BaseViewModel {
       return;
     }
 
-    DownloadHelper.Queue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(dlHelper.updateProducts(dbChangedTime, products -> {
       this.products = products;
       productHashMap.clear();
@@ -388,7 +389,7 @@ public class ChooseProductViewModel extends BaseViewModel {
     return isLoadingLive;
   }
 
-  public void setCurrentQueueLoading(DownloadHelper.Queue queueLoading) {
+  public void setCurrentQueueLoading(NetworkQueue queueLoading) {
     currentQueueLoading = queueLoading;
   }
 

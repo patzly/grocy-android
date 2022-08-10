@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class ChoreEntryBottomSheet extends BaseBottomSheet {
@@ -114,13 +115,25 @@ public class ChoreEntryBottomSheet extends BaseBottomSheet {
           getString(R.string.property_tracked_count),
           String.valueOf(choreDetails.getTrackedCount())
       );
-      binding.trackedCount.setText(
-          getString(R.string.property_average_execution_frequency),
-          choreDetails.getAverageExecutionFrequencyHours()
-      );
+      if (NumUtil.isStringDouble(choreDetails.getAverageExecutionFrequencyHours())) {
+        double avgFreq = NumUtil.toDouble(choreDetails.getAverageExecutionFrequencyHours());
+        int avgFreqDays = (int) Math.round(avgFreq / 24);
+        binding.trackedCount.setText(
+            getString(R.string.property_average_execution_frequency),
+            dateUtil.getHumanDuration(avgFreqDays)
+        );
+      } else {
+        binding.trackedCount.setText(
+            getString(R.string.property_average_execution_frequency),
+            getString(R.string.subtitle_none)
+        );
+      }
+
       binding.lastTracked.setText(
           getString(R.string.property_last_tracked),
-          choreDetails.getLastTracked(),
+          chore.getTrackDateOnlyBoolean()
+              ? dateUtil.getLocalizedDate(choreDetails.getLastTracked(), DateUtil.FORMAT_SHORT)
+              : dateUtil.getLocalizedDate(choreDetails.getLastTracked(), DateUtil.FORMAT_SHORT_WITH_TIME),
           chore.getTrackDateOnlyBoolean()
               ? dateUtil.getHumanForDaysFromNow(choreDetails.getLastTracked())
               : dateUtil.getHumanForDaysFromNow(choreDetails.getLastTracked(), true)

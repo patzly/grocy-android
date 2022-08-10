@@ -175,7 +175,8 @@ public class DateUtil {
     } else if (format == FORMAT_SHORT) {
       localized = android.text.format.DateFormat.getDateFormat(context).format(date);
     } else {
-      localized = DATE_FORMAT_WITH_TIME.format(date);
+      localized = android.text.format.DateFormat.getDateFormat(context).format(date)
+          + " " + android.text.format.DateFormat.getTimeFormat(context).format(date);
     }
     return localized;
   }

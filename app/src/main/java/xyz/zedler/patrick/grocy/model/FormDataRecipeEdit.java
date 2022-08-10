@@ -45,6 +45,7 @@ public class FormDataRecipeEdit {
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
+  private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<String> nameLive;
   private final MutableLiveData<Integer> nameErrorLive;
   private final MutableLiveData<String> baseServingsLive;
@@ -68,6 +69,10 @@ public class FormDataRecipeEdit {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
     pluralUtil = new PluralUtil(application);
+    displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
+        Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
+        Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
+    ));
     nameLive = new MutableLiveData<>();
     nameErrorLive = new MutableLiveData<>();
     baseServingsLive = new MutableLiveData<>();
@@ -98,6 +103,15 @@ public class FormDataRecipeEdit {
     }
 
     filledWithRecipe = false;
+  }
+
+  public MutableLiveData<Boolean> getDisplayHelpLive() {
+    return displayHelpLive;
+  }
+
+  public void toggleDisplayHelpLive() {
+    assert displayHelpLive.getValue() != null;
+    displayHelpLive.setValue(!displayHelpLive.getValue());
   }
 
   public MutableLiveData<String> getNameLive() {
@@ -174,11 +188,10 @@ public class FormDataRecipeEdit {
   }
 
   public boolean isProductNameValid() {
-    if (productNameLive.getValue() != null && productNameLive.getValue().isEmpty()) {
-      if (productDetailsLive.getValue() != null) {
-        clearForm();
-        return false;
-      }
+    if (productNameLive.getValue() == null || productNameLive.getValue().isEmpty()) {
+      productDetailsLive.setValue(null);
+      productNameErrorLive.setValue(null);
+      return true;
     }
     if (productDetailsLive.getValue() == null || productNameLive.getValue().isEmpty()) {
       productNameErrorLive.setValue(R.string.error_invalid_product);

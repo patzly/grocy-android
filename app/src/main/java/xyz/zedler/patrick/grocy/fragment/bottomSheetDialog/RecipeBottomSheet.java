@@ -46,6 +46,7 @@ import androidx.transition.TransitionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -77,6 +78,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
+import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeBottomSheet extends BaseBottomSheet implements
         RecipePositionAdapter.RecipePositionsItemAdapterListener {
@@ -225,7 +227,7 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     recipesRepository.loadFromDatabase(data -> {
       recipes = data.getRecipes();
       recipeFulfillments = data.getRecipeFulfillments();
-      recipePositions = data.getRecipePositions();
+      recipePositions = RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
 
@@ -449,7 +451,10 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       binding.picture.layout(0, 0, 0, 0);
       Glide
           .with(requireContext())
-          .load(grocyApi.getRecipePicture(recipe.getPictureFileName()))
+          .load(new GlideUrl(
+              grocyApi.getRecipePicture(recipe.getPictureFileName()),
+              RequestHeaders.getGlideGrocyAuthHeaders(requireContext()))
+          )
           .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(requireContext(), 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<Drawable>() {
