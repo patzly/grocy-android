@@ -522,6 +522,10 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
     );
   }
 
+  public void openPreparationMode() {
+    showToast(R.string.msg_coming_soon);
+  }
+
   public MutableLiveData<String> getServingsDesiredLive() {
     return servingsDesiredLive;
   }

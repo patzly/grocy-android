@@ -11,6 +11,7 @@
 - Improved: On transaction pages adding of known barcode is prevented (#541)
 - Improved: On stock overview page you can search with grocy code (#547)
 - Improved: Chores page now displays time if necessary (#549)
+- Improved: (not F-Droid) Add explanation for contacts permission on devices with GPlay services
 - Fixed: Product 'purchase to stock' conversion is preferred to additional conversions (#490)
 - Fixed: Quantity units from default conversions are now selectable on transaction pages (#530)
 - Fixed: Location filter didn't work properly on stock overview page (#554)

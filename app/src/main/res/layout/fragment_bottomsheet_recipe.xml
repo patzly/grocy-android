@@ -50,7 +50,8 @@
         android:paddingVertical="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="8dp"
-        android:weightSum="4">
+        android:weightSum="4"
+        android:onClick="@{v -> bottomSheet.openPreparationMode()}">
 
         <LinearLayout
           android:id="@+id/header_text_container"
