@@ -1,0 +1,6 @@
+Update your grocy server to benefit from the latest changes.
+- New: Support for grocy server v3.3.1
+- New: Receipes feature (huge thanks @Tim-Otte for your great work!) (#148)
+- New: HTML viewer and editor for product description which can load pictures
+- New: Notification for due soon items in stock (#108)
+Full changelog is available in the app.
