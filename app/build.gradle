@@ -40,8 +40,8 @@ android {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 41
-        versionName "2.2.1"
+        versionCode 42
+        versionName "2.3.0"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -80,36 +80,46 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
+    // Navigation framework for easy navigation control using XML
     implementation 'androidx.navigation:navigation-fragment:2.5.1'
     implementation 'androidx.navigation:navigation-ui:2.5.1'
 
+    // Android Room for database and RxJava for Async access of database
     implementation 'androidx.room:room-runtime:2.4.3'
     implementation 'androidx.room:room-rxjava3:2.4.3'
     annotationProcessor 'androidx.room:room-compiler:2.4.3'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
+    // Nice material views
     implementation 'com.google.android.material:material:1.7.0-alpha03'
 
+    // Volley for all general network requests and Glide for image loading
+    // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
+    // GSON for converting JSON responses to Java objects
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    // Wordpress Aztec for HTML editor view
     api "org.wordpress:aztec:v1.5.4"
 
+    // FuzzyWuzzy for fuzzy search in product names and autocompletion
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-
+    // Work for daily notifications
     implementation 'androidx.work:work-runtime:2.7.1'
-    implementation 'net.danlew:android.joda:2.10.14'
 
+    // ZXing for barcode scanning
     //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
@@ -123,8 +133,4 @@ dependencies {
     implementation 'androidx.camera:camera-view:1.1.0-beta03'
     implementation 'com.google.mlkit:camera:16.0.0-beta3'
     implementation 'com.google.mlkit:barcode-scanning:17.0.2'
-
-    implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
-
-    implementation 'org.conscrypt:conscrypt-android:2.5.2'
 }
