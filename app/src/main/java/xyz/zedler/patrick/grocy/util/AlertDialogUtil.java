@@ -52,9 +52,9 @@ public class AlertDialogUtil {
 
     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     FrameLayout linearLayout = (FrameLayout) inflater.inflate(R.layout.view_alert_dialog_scroll_content, null);
-    LinearLayout webViewContainer = (LinearLayout) linearLayout.findViewById(R.id.webview_container);
+    LinearLayout webViewContainer = linearLayout.findViewById(R.id.webview_container);
     webViewContainer.addView(webView);
-    MaterialButton buttonClose = (MaterialButton) linearLayout.findViewById(R.id.button_close);
+    MaterialButton buttonClose = linearLayout.findViewById(R.id.button_close);
 
     alertBuilder.setView(linearLayout);
     AlertDialog alert = alertBuilder.create();

@@ -1136,6 +1136,12 @@
       app:argType="string"
       app:nullable="true"
       android:defaultValue="@null" />
+    <action
+      android:id="@+id/action_stockOverviewFragment_to_stockJournalFragment"
+      app:destination="@id/stockJournalFragment"
+      app:enterAnim="@anim/slide_in_up"
+      app:exitAnim="@anim/slide_no"
+      app:popExitAnim="@anim/slide_out_down"/>
   </fragment>
   <fragment
     android:id="@+id/chooseProductFragment"
@@ -1347,4 +1353,9 @@
       app:nullable="true"
       android:defaultValue="@null" />
   </fragment>
+  <fragment
+    android:id="@+id/stockJournalFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.StockJournalFragment"
+    android:label="StockJournalFragment"
+    tools:layout="@layout/fragment_stock_journal"/>
 </navigation>

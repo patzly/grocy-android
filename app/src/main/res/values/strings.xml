@@ -49,6 +49,12 @@
   <string name="action_consume_recipe">Consume all ingredients needed by this recipe</string>
   <string name="action_copy_recipe">Copy recipe</string>
   <string name="action_apply_desired_servings">Apply desired servings for this recipe and update data</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Product opened</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Transfer From</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Transfer To</string>
 
   <string name="action_back">Back</string>
   <string name="action_search">Search</string>
@@ -238,7 +244,10 @@
   <string name="msg_not_found">Product not found</string>
   <string name="msg_editor_hint">Write text here</string>
   <string name="msg_coming_soon">This feature will be available soon</string>
+  <string name="msg_undo_transaction">Undo transaction?</string>
   <string name="msg_undone_transaction">Undone transaction</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Undone on %1$s</string>
   <string name="msg_failed_to_sync">Failed to sync entries</string>
   <string name="msg_synced">Entries synced successfully</string>
   <!-- %1$s is a shopping list name -->
@@ -480,6 +489,7 @@
   <string name="title_master_data">Master data</string>
   <string name="title_stock_entries">Stock entries</string>
   <string name="title_stock_entry">Stock entry</string>
+  <string name="title_stock_journal">Stock journal</string>
   <string name="title_shopping_list">Shopping list</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Settings</string>
