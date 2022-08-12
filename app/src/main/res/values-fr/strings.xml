@@ -46,6 +46,12 @@
   <string name="action_consume_recipe">Consommer tous les ingrédients nécessaires à cette recette</string>
   <string name="action_copy_recipe">Copier la recette</string>
   <string name="action_apply_desired_servings">Appliquer les portions souhaitées pour cette recette et mettre à jour les données</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Produit ouvert</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Transfert depuis</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Transfert vers</string>
 
   <string name="action_back">Retour</string>
   <string name="action_search">Rechercher</string>
@@ -247,7 +253,10 @@
   <string name="msg_not_found">Produit non trouvé</string>
   <string name="msg_editor_hint">Écrivez ici</string>
   <string name="msg_coming_soon">Cette fonctionnalité sera bientôt disponible</string>
+  <string name="msg_undo_transaction">Annuler la transaction ?</string>
   <string name="msg_undone_transaction">Transaction annulée</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Annulé le %1$s</string>
   <string name="msg_failed_to_sync">Échec de synchronisation des entrées</string>
   <string name="msg_synced">Les entrées ont bien été synchronisées</string>
   <!-- %1$s is a shopping list name -->
@@ -490,6 +499,7 @@
   <string name="title_master_data">Données de base</string>
   <string name="title_stock_entries">Entrées de stock</string>
   <string name="title_stock_entry">Entrée de stock</string>
+  <string name="title_stock_journal">Journal du stock</string>
   <string name="title_shopping_list">Liste de courses</string>
   <string name="title_feedback">Retour d\'information</string>
   <string name="title_settings">Paramètres</string>
