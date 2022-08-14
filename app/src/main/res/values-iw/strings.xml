@@ -43,7 +43,6 @@
   <string name="action_open_one">פתיחת %1$s אחד מתוך %2$s</string>
   <string name="action_edit_product">עריכת מוצר</string>
   <string name="action_shopping_list_add">הוספה לרשימת הקניות</string>
-
   <string name="action_back">חזרה</string>
   <string name="action_search">חיפוש</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
@@ -115,6 +114,8 @@
   <string name="action_show_done_tasks">הצגת מטלות שבוצעו</string>
   <string name="action_track_chore_execution">מעקב אחר הוצאת מטלה לפועל</string>
   <string name="action_skip_next_chore_schedule">דילוג על תזמון המטלה הבאה</string>
+  <string name="action_reschedule_next_execution">תזמון הביצוע הבא מחדש</string>
+  <string name="action_put_missing_products_on_shopping_list">הוספת המוצרים החסרים לרשימת הקניות</string>
 
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
@@ -140,6 +141,8 @@
   <string name="msg_task_completed">משימה סומנה כהושלמה</string>
   <string name="msg_task_not_completed">סימון המשימה כלא הושלמה</string>
   <string name="msg_task_undo">ביטול משימה</string>
+  <string name="msg_recipes_enough_in_stock">מספיק במלאי</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) מספיק במלאי</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -215,7 +218,6 @@
   <string name="msg_features">להתחיל את ההיכרות שוב תחת „על אודות”</string>
   <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
   <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
-  <string name="msg_press_hold_confirm">יש ללחוץ ולהחזיק כדי לאשר</string>
   <string name="msg_welcome_to_grocy">ברוך בואך ל־Grocy עבור Android!\n\nכדי להשתמש ב־grocy ביעילות רצוי שיהיה לך שרת משלך או את התוסף של grocy ל־Home Assistant.\nאם מעניין אותך רק להתנסות ביישומון הזה אפשר להשתמש בשרת ההדגמה שיצר ברנד בסטל, היוצר של grocy.</string>
   <string name="msg_choose_option_below">נא לבחור אפשרות אחת מלמטה.</string>
   <string name="msg_qr_code_scan">במכשיר אחר, עליך לבקר באתר של grocy ולגשת לעמוד ‚מפתחות API’. יש ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
@@ -262,6 +264,7 @@
   <string name="msg_help_normal_login">יש לגעת בכרטיס זה אם יש לך את התוספת של grocy ל־Home Assistant.</string>
   <string name="msg_help_home_assistant_login_help_show">יש לגעת כאן כדי להציג הודעות עזרה.</string>
   <string name="msg_help_home_assistant_login_help_hide">יש לגעת כאן כדי להסתיר הודעות עזרה.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">יש לנווט בחזרה או לגעת בכרטיס הזה כדי לסרוק קוד QR שממלא את השדות שלהלן.</string>
   <string name="msg_share">ממליצים לעיין ביישומון ה־Android הזה למיזם grocy המדהים: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">מפתח ה־API לא עובד</string>
@@ -284,6 +287,7 @@
   <string name="error_empty_task_categories">אין קטגוריות משימות</string>
   <string name="error_empty_unit_conversions">אין המרות יחידות כמות</string>
   <string name="error_empty_chores">אין מטלות</string>
+  <string name="error_empty_chores_sub">ניתן לעבור לנתונים העיקריים וליצור כאלה</string>
   <string name="error_search">אין תוצאות חיפוש</string>
   <string name="error_search_sub">נא לנסות ביטויים אחרים</string>
   <string name="error_filter">אין מה להציג</string>
@@ -333,7 +337,6 @@
   <string name="error_stock_entry_grocycode">לא נמצאה רשומת מלאי מ־grocycode</string>
   <string name="error_permission">אין הרשאות לפעולה הזאת</string>
   <string name="error_undefined">אירעה שגיאה</string>
-
   <string name="title_overview">סקירה</string>
   <string name="title_stock_overview">סקירת מלאי</string>
   <string name="title_purchase">רכישה</string>
@@ -376,7 +379,6 @@
   <string name="title_stored_purchases">רכישות שמורות</string>
   <string name="title_chores">מטלות</string>
   <string name="title_chore">מטלה</string>
-
   <string name="title_spoiled">מקולקל</string>
   <string name="title_use_specific">להשתמש בפריט מסוים מהמלאי</string>
   <string name="title_specific">פריט מסוים במלאי</string>
@@ -470,9 +472,9 @@
   <string name="subtitle_date_from_input">תאריך מקלט:\n%1$s</string>
   <string name="subtitle_product_default_location">מיקום, חנות</string>
   <string name="subtitle_product_due_date">סוג, ימי ברירת מחדל (לאחר הפתיחה, הקפאה, הפשרה)</string>
+  <string name="subtitle_product_optional_properties">מצב, מוצר הורה, תיאור, קבוצת מוצרים, אנרגיה, תמונה</string>
   <string name="subtitle_product_quantity_unit">מלאי, רכישת ברירת מחדל</string>
   <string name="subtitle_synced_with_server">מסונכרן עם שרת</string>
-
   <string name="description_input_product_part1">שדה המוצר מכיל:</string>
   <string name="description_input_product_part2">נא לבחור כיצד להמשיך:</string>
   <string name="description_input_product_option1">ליצור מוצר חדש ולהשתמש בקלט כשם</string>
@@ -689,7 +691,6 @@
   <string name="property_category">קטגוריה</string>
   <string name="property_assigned_to">מוקצה לטובת</string>
   <string name="property_users">משתמשים</string>
-
   <string name="date_today">היום</string>
   <string name="date_unknown">לא ידוע</string>
   <!-- This means the 'time' context -->
@@ -892,7 +893,6 @@
   <string name="settings_synchronized">הגדרות אלו מסונכרנות מול השרת שלך.</string>
   <string name="setting_message_duration">הצגת זמן להודעות</string>
   <string name="setting_message_duration_description">נוגע רק להודעות תנועה</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://he.demo.grocy.info</string>

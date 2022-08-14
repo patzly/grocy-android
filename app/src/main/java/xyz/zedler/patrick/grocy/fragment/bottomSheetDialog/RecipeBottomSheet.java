@@ -354,12 +354,18 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
       binding.ingredientContainer.setVisibility(View.GONE);
     } else {
       if (binding.recycler.getAdapter() instanceof RecipePositionAdapter) {
-        ((RecipePositionAdapter) binding.recycler.getAdapter()).updateData(recipePositions, products, quantityUnits);
+        ((RecipePositionAdapter) binding.recycler.getAdapter()).updateData(
+            recipe,
+            recipePositions,
+            products,
+            quantityUnits
+        );
       } else {
         binding.recycler.setAdapter(
             new RecipePositionAdapter(
                 requireContext(),
                 (LinearLayoutManager) binding.recycler.getLayoutManager(),
+                recipe,
                 recipePositions,
                 products,
                 quantityUnits,

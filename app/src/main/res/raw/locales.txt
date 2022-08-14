@@ -1,6 +1,6 @@
 cs
 cs.demo.grocy.info
-InToSSH, Radimek
+PavelP, Radimek, InToSSH
 
 de
 de.demo.grocy.info
@@ -12,15 +12,19 @@ Dominic Zedler, Patrick Zedler
 
 es
 es.demo.grocy.info
-netsyder, recognitium, SackCastellon, rubensancor, tmllull, xuko, martinvolantin, ami232, adrigrillo
+recognitium, adrigrillo, rubensancor, tmllull, netsyder, xuko, SackCastellon, martinvolantin, amilustre, ami232
 
 fr
 fr.demo.grocy.info
-Keiishu, Zorvalt, voslin, choukajohn, aleskx, Clem844, prohand, Mquiles, MrAlucardDante, erobertc, tesseract241, Stack_it_up, lapourgagner
+erobertc, Keeh, prohand, a_nayrat, pellegrin.guillaume, Stack_it_up, choukajohn, aleskx, Clem844, Mquiles, MrAlucardDante, Keiishu, lapourgagner, tesseract241, Zorvalt, voslin
+
+hu
+hu.demo.grocy.info
+Tallyrald, cr0ssmind, infeeeee, jandras, vrnagy
 
 it
 it.demo.grocy.info
-bonerserk, AlessandroSechi, iglox, loviuz, lucanomax, wisewtf, silkevicious, sandman91, mellotanica, tesseract241, alex.bernocchi.ab, nuraiman, racerider, Matte23
+nuraiman, wisewtf, silkevicious, sandman91, mellotanica, igi, alex.bernocchi.ab, bonerserk, lucanomax, racerider, iglox, AlessandroSechi, loviuz, tesseract241, Matte23
 
 iw
 en.demo.grocy.info
@@ -32,15 +36,11 @@ teitrand, Ziggiz
 
 nl
 nl.demo.grocy.info
-decramy, emielverstegen, knnnrd, Llewy, 4lloyd, mcbloch, Wazzaaam, MaartenSiersema
+MaartenSiersema, maarten.paul, 4lloyd, knnnrd, decramy, mcbloch, Llewy, emielverstegen, Wazzaaam
 
 pl
 pl.demo.grocy.info
-smiglo, micwoj92, smigima
-
-pt_BR
-pt-br.demo.grocy.info
-jeffersantoss, recognitium, JST, alemoh1234
+hazelnutfox, Moarc, smigima, micwoj92, smiglo
 
 pt_PT
 pt-pt.demo.grocy.info
@@ -48,11 +48,15 @@ zedascouves, JST
 
 ru
 ru.demo.grocy.info
-unwarkz, rrader, Dside, SergeyKodolov, iluhis
+SergeyKodolov, iluhis, Moarc, unwarkz, rrader, Dside
+
+sk
+sk.demo.grocy.info
+LiJu09, PatrikKT, aasami
 
 sv
 sv.demo.grocy.info
-Bllstc, Joakim_S, duxleon, Busan15, googleoo, bexov
+Bllstc, Busan15, duxleon, googleoo, Joakim_S, bexov
 
 uk
 en.demo.grocy.info
@@ -60,4 +64,8 @@ NazimUa, rrader
 
 zh_CN
 zh-cn.demo.grocy.info
-LuLuX
+alei643, LuLuX
+
+zh_TW
+zh-tw.demo.grocy.info
+Stillu, knfu, zobuwei, alexli1205, LuLuX

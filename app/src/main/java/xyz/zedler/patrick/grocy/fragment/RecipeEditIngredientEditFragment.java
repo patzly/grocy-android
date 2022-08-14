@@ -26,16 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientEditBinding;
@@ -46,7 +41,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
@@ -123,6 +117,16 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       }
     });
 
+    if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
+      if (binding.autoCompleteProduct.getText() == null
+          || binding.autoCompleteProduct.getText().length() == 0) {
+        new Handler().postDelayed(
+            () -> activity.showKeyboard(binding.autoCompleteProduct),
+            50
+        );
+      }
+    }
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     viewModel.getInfoFullscreenLive().observe(
         getViewLifecycleOwner(),
@@ -175,7 +179,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
 
   public void clearInputFocus() {
     activity.hideKeyboard();
-    binding.dummyFocusView.requestFocus();
+    binding.container.requestFocus();
     binding.autoCompleteProduct.clearFocus();
     binding.switchOnlyCheckSingleUnitInStock.clearFocus();
     binding.textInputAmount.clearFocus();

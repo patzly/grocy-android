@@ -215,14 +215,14 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/on_background"
                     android:inputType="text|textCapSentences|textNoSuggestions"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:completionThreshold="1"
                     android:popupBackground="@drawable/bg_auto_complete"
                     android:text="@={formData.productNameLive}"
                     android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
                     android:afterTextChanged="@{() -> formData.isProductNameValid()}"
                     app:productList="@{formData.productsLive}"
-                    app:onNextClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearFocusAndCheckProductInput()}"
                     app:onTabPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}"
                     app:onEnterPressListener="@{() -> fragment.clearFocusAndCheckProductInputExternal()}" />
 
@@ -403,6 +403,8 @@
                   android:layout_height="wrap_content"
                   android:textColor="@color/on_background"
                   android:text="@={formData.variableAmountLive}"
+                  android:inputType="textCapSentences"
+                  android:imeOptions="actionDone"
                   app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 
               </com.google.android.material.textfield.TextInputLayout>

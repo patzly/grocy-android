@@ -122,16 +122,27 @@ public class RecipeEditIngredientListEntryAdapter extends
 
     holder.binding.title.setText(product.getName());
 
-    // AMOUNT
-    holder.binding.quantity.setText(
-            context.getString(
-                    R.string.subtitle_amount,
-                    NumUtil.trim(recipePosition.getAmount()),
-                    pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount())
-            )
-    );
+    if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
+      holder.binding.quantity.setText(
+          context.getString(
+              R.string.subtitle_amount,
+              NumUtil.trim(recipePosition.getAmount()),
+              pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount())
+          )
+      );
+      holder.binding.variableAmount.setVisibility(View.GONE);
+    } else {
+      holder.binding.quantity.setText(
+          context.getString(
+              R.string.subtitle_amount,
+              recipePosition.getVariableAmount(),
+              pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount())
+          )
+      );
+      holder.binding.variableAmount.setVisibility(View.VISIBLE);
+    }
 
-    // CONTAINER
+
 
     holder.binding.linearRecipeIngredientContainer.setOnClickListener(
             view -> listener.onItemRowClicked(recipePosition, position)

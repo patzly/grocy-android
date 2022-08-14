@@ -38,12 +38,17 @@
       android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_weight="1">
 
-      <TextView
+      <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
           android:id="@+id/amount"
           style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
           android:layout_width="wrap_content"
@@ -51,13 +56,24 @@
           android:layout_gravity="center_vertical"
           android:layout_marginEnd="7dp" />
 
-      <TextView
+        <TextView
           android:id="@+id/quantity_unit"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_gravity="center_vertical"
-          android:paddingTop="1dp" />
+          android:layout_gravity="center_vertical" />
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/variable_amount"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:textSize="12sp"
+        android:text="@string/property_variable_amount"
+        />
+
     </LinearLayout>
 
     <LinearLayout
@@ -70,7 +86,8 @@
           android:id="@+id/title"
           style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
+          android:layout_height="wrap_content"
+          android:textAlignment="viewEnd"/>
 
     </LinearLayout>
   </LinearLayout>

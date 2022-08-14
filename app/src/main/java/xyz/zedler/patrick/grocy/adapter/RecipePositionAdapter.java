@@ -31,9 +31,11 @@ import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -46,6 +48,7 @@ public class RecipePositionAdapter extends
 
   private Context context;
   private final LinearLayoutManager linearLayoutManager;
+  private Recipe recipe;
   private final List<RecipePosition> recipePositions;
   private final List<Product> products;
   private final List<QuantityUnit> quantityUnits;
@@ -56,6 +59,7 @@ public class RecipePositionAdapter extends
   public RecipePositionAdapter(
       Context context,
       LinearLayoutManager linearLayoutManager,
+      Recipe recipe,
       List<RecipePosition> recipePositions,
       List<Product> products,
       List<QuantityUnit> quantityUnits,
@@ -63,6 +67,7 @@ public class RecipePositionAdapter extends
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
+    this.recipe = recipe;
     this.recipePositions = new ArrayList<>(recipePositions);
     this.products = new ArrayList<>(products);
     this.quantityUnits = new ArrayList<>(quantityUnits);
@@ -115,10 +120,19 @@ public class RecipePositionAdapter extends
     QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
 
     // AMOUNT
-    holder.binding.amount.setText(NumUtil.trim(recipePosition.getAmount()));
+    if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
+      holder.binding.amount.setText(NumUtil.trim(recipePosition.getAmount() * recipe.getDesiredServings()));
+      holder.binding.variableAmount.setVisibility(View.GONE);
+    } else {
+      holder.binding.amount.setText(recipePosition.getVariableAmount());
+      holder.binding.variableAmount.setVisibility(View.VISIBLE);
+    }
 
     // QUANTITY UNIT
-    holder.binding.quantityUnit.setText(pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount()));
+    holder.binding.quantityUnit.setText(pluralUtil.getQuantityUnitPlural(
+        quantityUnit,
+        recipePosition.getAmount() * recipe.getDesiredServings()
+    ));
 
     // NAME
     holder.binding.title.setText(product.getName());
@@ -128,6 +142,7 @@ public class RecipePositionAdapter extends
       holder.binding.note.setVisibility(View.GONE);
     } else {
       holder.binding.note.setText(recipePosition.getNote());
+      holder.binding.note.setVisibility(View.VISIBLE);
     }
 
     if (recipePosition.isChecked()) {
@@ -157,12 +172,15 @@ public class RecipePositionAdapter extends
   }
 
   public void updateData(
+      Recipe recipe,
       List<RecipePosition> newList,
       List<Product> newProducts,
       List<QuantityUnit> newQuantityUnits
   ) {
 
     RecipePositionAdapter.DiffCallback diffCallback = new RecipePositionAdapter.DiffCallback(
+        this.recipe,
+        recipe,
         this.recipePositions,
         newList,
         this.products,
@@ -171,6 +189,7 @@ public class RecipePositionAdapter extends
         newQuantityUnits
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+    this.recipe = recipe;
     this.recipePositions.clear();
     this.recipePositions.addAll(newList);
     this.products.clear();
@@ -182,6 +201,8 @@ public class RecipePositionAdapter extends
 
   static class DiffCallback extends DiffUtil.Callback {
 
+    Recipe oldRecipe;
+    Recipe newRecipe;
     List<RecipePosition> oldItems;
     List<RecipePosition> newItems;
     List<Product> oldProducts;
@@ -190,6 +211,8 @@ public class RecipePositionAdapter extends
     List<QuantityUnit> newQuantityUnits;
 
     public DiffCallback(
+        Recipe oldRecipe,
+        Recipe newRecipe,
         List<RecipePosition> oldItems,
         List<RecipePosition> newItems,
         List<Product> oldProducts,
@@ -197,6 +220,8 @@ public class RecipePositionAdapter extends
         List<QuantityUnit> oldQuantityUnits,
         List<QuantityUnit> newQuantityUnits
     ) {
+      this.oldRecipe = oldRecipe;
+      this.newRecipe = newRecipe;
       this.oldItems = oldItems;
       this.newItems = newItems;
       this.oldProducts = oldProducts;
@@ -226,6 +251,9 @@ public class RecipePositionAdapter extends
     }
 
     private boolean compare(int oldItemPos, int newItemPos, boolean compareContent) {
+      if (!Objects.equals(newRecipe.getDesiredServings(), oldRecipe.getDesiredServings())) {
+        return false;
+      }
       RecipePosition newItem = newItems.get(newItemPos);
       RecipePosition oldItem = oldItems.get(oldItemPos);
       Product newItemProduct = Product.getProductFromId(newProducts, newItem.getProductId());
@@ -237,11 +265,11 @@ public class RecipePositionAdapter extends
         return newItem.getId() == oldItem.getId();
       }
 
-      if (newItemProduct == null || oldItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
+      if (newItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
         return false;
       }
 
-      if (newQuantityUnit == null || oldQuantityUnit == null || !newQuantityUnit.equals(oldQuantityUnit)) {
+      if (newQuantityUnit == null || !newQuantityUnit.equals(oldQuantityUnit)) {
         return false;
       }
 

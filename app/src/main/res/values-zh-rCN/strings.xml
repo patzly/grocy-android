@@ -43,7 +43,6 @@
   <string name="action_open_one">打开%2$s中的1%1$s</string>
   <string name="action_edit_product">编辑产品</string>
   <string name="action_shopping_list_add">加入购物清单</string>
-
   <string name="action_back">返回</string>
   <string name="action_search">搜索</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
@@ -115,7 +114,6 @@
   <string name="action_show_done_tasks">‎显示已完成的任务‎</string>
   <string name="action_track_chore_execution">‎跟踪家务执行‎</string>
   <string name="action_skip_next_chore_schedule">‎跳过下一个家务时间表‎</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="other">%1$d即将到期</item>
@@ -261,7 +259,6 @@
   <string name="msg_features">再次启动介绍“关于”</string>
   <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
   <string name="msg_point_at_barcode">将相机对准条形码</string>
-  <string name="msg_press_hold_confirm">按住确认</string>
   <string name="msg_welcome_to_grocy">欢迎使用Groyny Android！\n\n 要高效地使用Grocy，需要您的私有服务器或者基于HomeAssistant的Grocy add-on插件。\n 如果您只想试用这个app，您可以使用创建者Bernd Bestel的演示服务器。</string>
   <string name="msg_choose_option_below">请从下面选择一个选项。</string>
   <string name="msg_qr_code_scan">在另一个设备上，访问您的Groy网站并转到“API键”页面。单击“添加”，然后单击Little QR码符号并扫描QR码。</string>
@@ -402,7 +399,6 @@
   <string name="error_stock_entry_grocycode">‎未找到来自 grocycode 的库存条目‎</string>
   <string name="error_permission">‎没有此操作的权限‎</string>
   <string name="error_undefined">发生错误</string>
-
   <string name="title_overview">概述</string>
   <string name="title_stock_overview">库存总览</string>
   <string name="title_purchase">采购</string>
@@ -445,7 +441,6 @@
   <string name="title_stored_purchases">‎存储的购买项目‎</string>
   <string name="title_chores">家务</string>
   <string name="title_chore">家务</string>
-
   <string name="title_spoiled">损坏</string>
   <string name="title_use_specific">使用特定的库存物料</string>
   <string name="title_specific">具体库存项目</string>
@@ -543,7 +538,6 @@
   <string name="subtitle_product_optional_properties">状态，父产品，描述，产品分组、能量、图片</string>
   <string name="subtitle_product_quantity_unit">‎库存，购买默认‎</string>
   <string name="subtitle_synced_with_server">‎与服务器同步‎</string>
-
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>
@@ -773,7 +767,6 @@
   <string name="property_category">分类</string>
   <string name="property_assigned_to">‎分配给‎</string>
   <string name="property_users">用户</string>
-
   <string name="date_today">今天</string>
   <string name="date_unknown">未知</string>
   <!-- This means the 'time' context -->
@@ -950,7 +943,6 @@
   <string name="settings_synchronized">这些设置与您的服务器同步。</string>
   <string name="setting_message_duration">‎消息的显示时间‎</string>
   <string name="setting_message_duration_description">‎仅涉及交易消息‎</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://zh-tw.demo.grocy.info</string>
