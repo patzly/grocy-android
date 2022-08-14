@@ -266,7 +266,7 @@
   <string name="msg_quick_mode_confirm_inventory">即將執行:\n\n將%1$s的庫存設為%2$s%3$s\n套用至物品\n到期日:%4$s\n價格:%5$s\n店家:%6$s\n位置:%7$s</string>
   <string name="msg_compatibility">此版本的應用程式與伺服器上的grocy版本不相容。 \n\n目前伺服器版本:%1$s\n\n支援的伺服器版本:\n%2$s\n如果目前伺服器器版本的主要版本號碼(第一個數字)高於所支援的版本，而您忽略此警告，則可能發生資料遺失(較少發生)或崩潰(較常發生)。如果版本差異較小(例如第三位數字或更以後)，則您可以忽略這個警告。</string>
   <string name="msg_logout">您的伺服器上的所有內容都不會被更改。 您將被重新導向至登入頁面</string>
-  <string name="msg_logout_demo">您正在使用公開的測試伺服器<u>https://grocy.info</u>.\n\n<b>在伺服器每天自動重設之前，您所做的任何變更都會維持公開狀態\n\n您可以在登入畫面上輸入自己的伺服器位址</string>
+  <string name="msg_logout_demo">您正在使用公開的測試伺服器<u>https://grocy.info</u>.\n\n<b>在伺服器每天自動重設之前，您所做的任何變更都會維持公開狀態</b>\n\n您可以在登入畫面上輸入自己的伺服器位址</string>
   <string name="msg_logout_demo_short">公開的測試伺服器，點擊查看詳細資訊</string>
   <string name="msg_restart">Grocy需要重新啟動以套用目前的設定。是否立即重啟?</string>
   <string name="msg_full_description">點擊以顯示完整資訊</string>
