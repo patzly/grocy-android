@@ -18,6 +18,10 @@ fr
 fr.demo.grocy.info
 Keiishu, Zorvalt, voslin, choukajohn, aleskx, Clem844, prohand, Mquiles, MrAlucardDante, erobertc, tesseract241, Stack_it_up, lapourgagner
 
+hu
+hu.demo.grocy.info
+Tallyrald, cr0ssmind, infeeeee, jandras, vrnagy
+
 it
 it.demo.grocy.info
 bonerserk, AlessandroSechi, iglox, loviuz, lucanomax, wisewtf, silkevicious, sandman91, mellotanica, tesseract241, alex.bernocchi.ab, nuraiman, racerider, Matte23
@@ -38,10 +42,6 @@ pl
 pl.demo.grocy.info
 smiglo, micwoj92, smigima
 
-pt_BR
-pt-br.demo.grocy.info
-jeffersantoss, recognitium, JST, alemoh1234
-
 pt_PT
 pt-pt.demo.grocy.info
 zedascouves, JST
@@ -49,6 +49,10 @@ zedascouves, JST
 ru
 ru.demo.grocy.info
 unwarkz, rrader, Dside, SergeyKodolov, iluhis
+
+sk
+sk.demo.grocy.info
+LiJu09, PatrikKT, aasami
 
 sv
 sv.demo.grocy.info
