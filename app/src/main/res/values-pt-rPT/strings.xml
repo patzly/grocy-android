@@ -42,7 +42,6 @@
   <string name="action_open_one">Abrir 1 %1$s de %2$s</string>
   <string name="action_edit_product">Editar produto</string>
   <string name="action_shopping_list_add">Adicionar à lista de compras</string>
-
   <string name="action_back">Voltar</string>
   <string name="action_search">Procurar</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
@@ -114,31 +113,37 @@
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d a expirar</item>
+    <item quantity="many">%1$d a expirar</item>
     <item quantity="other">%1$d a expirar</item>
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
     <item quantity="one">%1$d data ultrapassada</item>
+    <item quantity="many">%1$d data ultrapassada</item>
     <item quantity="other">%1$d data ultrapassada</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
     <item quantity="one">%1$d expirado</item>
+    <item quantity="many">%1$d expirados</item>
     <item quantity="other">%1$d expirados</item>
   </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d a baixo do stock minimo</item>
+    <item quantity="many">%1$d a baixo do stock minimo</item>
     <item quantity="other">%1$d a baixo do stock minimo</item>
   </plurals>
   <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
   <plurals name="msg_in_stock_products">
     <item quantity="one">%1$d em stock</item>
+    <item quantity="many">%1$d em stock</item>
     <item quantity="other">%1$d em stock</item>
   </plurals>
   <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
   <plurals name="msg_opened_products">
     <item quantity="one">%1$d aberto</item>
+    <item quantity="many">%1$d abertos</item>
     <item quantity="other">%1$d abertos</item>
   </plurals>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -150,31 +155,37 @@
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
   <plurals name="msg_undone_items">
     <item quantity="one">%1$d não concluído</item>
+    <item quantity="many">%1$d não concluídos</item>
     <item quantity="other">%1$d não concluídos</item>
   </plurals>
   <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
   <plurals name="msg_done_items">
     <item quantity="one">%1$d concluído</item>
+    <item quantity="many">%1$d concluídos</item>
     <item quantity="other">%1$d concluídos</item>
   </plurals>
   <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
   <plurals name="msg_done_tasks">
     <item quantity="one">%1$d concluída</item>
+    <item quantity="many">%1$d concluídas</item>
     <item quantity="other">%1$d concluídas</item>
   </plurals>
   <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
   <plurals name="msg_not_done_tasks">
     <item quantity="one">%1$d não concluída</item>
+    <item quantity="many">%1$d não concluídas</item>
     <item quantity="other">%1$d não concluídas</item>
   </plurals>
   <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
   <plurals name="msg_due_tasks">
     <item quantity="one">%1$d a vencer</item>
+    <item quantity="many">%1$d a vencerem</item>
     <item quantity="other">%1$d a vencerem</item>
   </plurals>
   <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_tasks">
     <item quantity="one">%1$d atrasada</item>
+    <item quantity="many">%1$d atrasadas</item>
     <item quantity="other">%1$d atrasadas</item>
   </plurals>
   <string name="msg_task_mark">Marcar tarefa como concluída</string>
@@ -214,11 +225,13 @@
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_add">
     <item quantity="one">%1$s %2$s será adicionado ao stock.</item>
+    <item quantity="many">%1$s %2$s serão adicionados ao stock.</item>
     <item quantity="other">%1$s %2$s serão adicionados ao stock.</item>
   </plurals>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
   <plurals name="msg_inventory_transaction_remove">
     <item quantity="one">%1$s %2$s será removido do stock.</item>
+    <item quantity="many">%1$s %2$s serão removidos do stock.</item>
     <item quantity="other">%1$s %2$s serão removidos do stock.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Não é possivel tranferir produtos com peso de tara activo.</string>
@@ -255,7 +268,6 @@
   <string name="msg_features">Iniciar introdução novamente em \"Acerca\"</string>
   <string name="msg_feedback">Têm alguns pedidos, questões ou erros? Contacte-nos e deixe-nos ajudar!\nDe qualquer forma, ficariamos muito contentes com uma boa crítica na Play Store.</string>
   <string name="msg_point_at_barcode">Aponte a camara para um código de barras</string>
-  <string name="msg_press_hold_confirm">Mantenha pressionado para confirmar</string>
   <string name="msg_welcome_to_grocy">Bem-vindo ao Grocy Android!\n\nPara usar o grocy de forma mais produtiva precisa do seu próprio servidor ou do add-on do grocy para o Home Assistant.\nSe apenas pretende experimentar esta aplicação pode usar o servidor de demonstração de Bernd Bestel, o criador do grocy.</string>
   <string name="msg_choose_option_below">Por favor seleccione uma das seguintes opções.</string>
   <string name="msg_qr_code_scan">Noutro dispositivo, visite o seu website do grocy e navegue até à página \'API keys\'. Seleccione \"Adicionar\", depois seleccione o pequeno símbolo de código QR e digitalize o código QR.</string>
@@ -391,7 +403,6 @@
   <string name="error_stock_entry_grocycode">Entrada de stock do grocycode não encontrada</string>
   <string name="error_permission">Não tem permissão para esta acção</string>
   <string name="error_undefined">Ocorreu um erro</string>
-
   <string name="title_overview">Visão geral</string>
   <string name="title_stock_overview">Visão geral de stock</string>
   <string name="title_purchase">Comprar</string>
@@ -532,56 +543,67 @@
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock">
     <item quantity="one">Você tem %1$d produto em stock.</item>
+    <item quantity="many">Você tem %1$d produtos em stock.</item>
     <item quantity="other">Você tem %1$d produtos em stock.</item>
   </plurals>
   <!-- %1$s and %2$s are numbers -->
   <plurals name="description_overview_stock_due_soon">
     <item quantity="one">%1$d produto atinge a data limite nos próximos %2$d dias.</item>
+    <item quantity="many">%1$d produtos atingem a data limite nos próximos %2$d dias.</item>
     <item quantity="other">%1$d produtos atingem a data limite nos próximos %2$d dias.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_overdue">
     <item quantity="one">%1$d produto com data ultrapassada.</item>
+    <item quantity="many">%1$d produtos com data ultrapassada.</item>
     <item quantity="other">%1$d produtos com data ultrapassada.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_expired">
     <item quantity="one">%1$d produto expirado.</item>
+    <item quantity="many">%1$d produtos expirados.</item>
     <item quantity="other">%1$d produtos expirados.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing">
     <item quantity="one">%1$d produto abaixo do stock min. defenido.</item>
+    <item quantity="many">%1$d produtos abaixo do stock min. defenido.</item>
     <item quantity="other">%1$d produtos abaixo do stock min. defenido.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_single">
     <item quantity="one">%1$d deles está na sua lista de compras.</item>
+    <item quantity="many">%1$d deles estão na sua lista de compras.</item>
     <item quantity="other">%1$d deles estão na sua lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_stock_missing_shopping_list_multi">
     <item quantity="one">%1$d deles está nas suas listas de compras.</item>
+    <item quantity="many">%1$d deles estão nas suas listas de compras.</item>
     <item quantity="other">%1$d deles estão nas suas listas de compras.</item>
   </plurals>
   <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
   <plurals name="description_overview_stock_value">
     <item quantity="one">Você tem %1$d produto em stock com um valor total de %2$s %3$s.</item>
+    <item quantity="many">Você tem %1$d produtos em stock com um valor total de %2$s %3$s.</item>
     <item quantity="other">Você tem %1$d produtos em stock com um valor total de %2$s %3$s.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list_multi">
     <item quantity="one">%1$d item está nas suas listas de compras.</item>
+    <item quantity="many">%1$d itens estão nas suas listas de compras.</item>
     <item quantity="other">%1$d itens estão nas suas listas de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
     <item quantity="one">Está %1$d item na sua lista de compras.</item>
+    <item quantity="many">Estão %1$d itens na sua lista de compras.</item>
     <item quantity="other">Estão %1$d itens na sua lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_master_data">
     <item quantity="one">A sua base de dados contém %1$d produto.</item>
+    <item quantity="many">A sua base de dados contém %1$d produtos.</item>
     <item quantity="other">A sua base de dados contém %1$d produtos.</item>
   </plurals>
 
@@ -601,6 +623,7 @@
   <!-- %1$s is a number (amount of seconds) -->
   <plurals name="property_seconds_num">
     <item quantity="one">%1$d segundo</item>
+    <item quantity="many">%1$d segundos</item>
     <item quantity="other">%1$d segundos</item>
   </plurals>
   <string name="property_amount_min_stock">Quantidade min. stock</string>
@@ -720,44 +743,53 @@
 
   <plurals name="date_days">
     <item quantity="one">%d dia</item>
+    <item quantity="many">%d dias</item>
     <item quantity="other">%d dias</item>
   </plurals>
   <plurals name="date_months">
     <item quantity="one">%d mês</item>
+    <item quantity="many">%d meses</item>
     <item quantity="other">%d meses</item>
   </plurals>
   <plurals name="date_years">
     <item quantity="one">%d ano</item>
+    <item quantity="many">%d anos</item>
     <item quantity="other">%d anos</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
     <item quantity="one">%d dia atrás</item>
+    <item quantity="many">%d dias atrás</item>
     <item quantity="other">%d dias atrás</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
     <item quantity="one">%d mês atrás</item>
+    <item quantity="many">%d meses atrás</item>
     <item quantity="other">%d meses atrás</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_ago">
     <item quantity="one">%d ano atrás</item>
+    <item quantity="many">%d anos atrás</item>
     <item quantity="other">%d anos atrás</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
     <item quantity="one">%d dia a partir de hoje</item>
+    <item quantity="many">%d dias a partir de hoje</item>
     <item quantity="other">%d dias a partir de hoje</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
     <item quantity="one">%d mês a partir de hoje</item>
+    <item quantity="many">%d meses a partir de hoje</item>
     <item quantity="other">%d meses a partir de hoje</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_years_from_now">
     <item quantity="one">%d ano a partir de hoje</item>
+    <item quantity="many">%d anos a partir de hoje</item>
     <item quantity="other">%d anos a partir de hoje</item>
   </plurals>
 
@@ -893,7 +925,6 @@
   <string name="settings_synchronized">Estas definições são sincronizadas com o seu servidor.</string>
   <string name="setting_message_duration">Mostrar hora nas mensagens</string>
   <string name="setting_message_duration_description">Apenas diz respeito a mensagens de transacções</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://pt-pt.demo.grocy.info</string>
