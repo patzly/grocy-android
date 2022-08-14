@@ -56,3 +56,8 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
   *** rewind();
 }
+
+# This was generated automatically by the Android Gradle plugin to hide warnings
+# Only has effected these pre-KitKat two compatibility classes
+-dontwarn com.android.org.conscrypt.SSLParametersImpl
+-dontwarn org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
