@@ -34,6 +34,7 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">Использовать все</string>
 
+  <string name="action_consume_spoiled">Списать как испорченный</string>
   <string name="action_consume_one_spoiled">Списать 1 испорченный</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">Использовать %1$s %2$s</string>
@@ -42,7 +43,6 @@
   <string name="action_open_one">Вскрыть %1$s %2$s </string>
   <string name="action_edit_product">Изменить продукт</string>
   <string name="action_shopping_list_add">Добавить в список покупок</string>
-
   <string name="action_back">Назад</string>
   <string name="action_search">Поиск</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
@@ -114,7 +114,6 @@
   <string name="action_show_done_tasks">Показать выполненные задачи</string>
   <string name="action_track_chore_execution">Отслеживание выполнения работы по дому</string>
   <string name="action_skip_next_chore_schedule">Пропустить следующий график работы по дому</string>
-
   <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
   <plurals name="msg_due_products">
     <item quantity="one">%1$d скоро испортится</item>
@@ -308,7 +307,6 @@
   <string name="msg_features">Запустить введение еще раз можно в разделе \"О программе\"</string>
   <string name="msg_feedback">У вас есть пожелания, вопросы или ошибки? Свяжитесь с нами и мы поможем!\nесли нет. мы будем рады положительному отзыву в Play Store</string>
   <string name="msg_point_at_barcode">Направьте камеру на штрихкод</string>
-  <string name="msg_press_hold_confirm">Нажмите и удерживайте для подтверждения</string>
   <string name="msg_welcome_to_grocy">Добро пожаловать в Grocy Android! \n\nДля продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
   <string name="msg_choose_option_below">Пожалуйста, выберите один вариант снизу</string>
   <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
@@ -449,7 +447,6 @@
   <string name="error_stock_entry_grocycode">Запись о запасе по Grocycode не найдена</string>
   <string name="error_permission">Нет разрешения на это действие</string>
   <string name="error_undefined">Возникла ошибка</string>
-
   <string name="title_overview">Обзор</string>
   <string name="title_stock_overview">Обзор запасов</string>
   <string name="title_purchase">Купить</string>
@@ -491,7 +488,6 @@
   <string name="title_stored_purchases">Сохраненные покупки</string>
   <string name="title_chores">Работы по дому</string>
   <string name="title_chore">Работа по дому</string>
-
   <string name="title_spoiled">Испорчено</string>
   <string name="title_use_specific">Использовать конкретный запас</string>
   <string name="title_specific">Конкретный продукт в запасах</string>
@@ -587,7 +583,6 @@
   <string name="subtitle_product_optional_properties">Состояние, Родительский продукт, Описание, Группа продукта, Энергетическая ценность, Изображение</string>
   <string name="subtitle_product_quantity_unit">В запасах, При покупках</string>
   <string name="subtitle_synced_with_server">Синхронизировано с сервером</string>
-
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
   <string name="description_input_product_option1">Создать новый продукт и использовать ввод в качестве названия</string>
@@ -866,7 +861,6 @@
   <string name="property_category">Категория</string>
   <string name="property_assigned_to">Назначено на</string>
   <string name="property_users">Пользователи</string>
-
   <string name="date_today">Сегодня</string>
   <string name="date_unknown">Неизвестно</string>
   <!-- This means the 'time' context -->
@@ -1070,7 +1064,6 @@
   <string name="settings_synchronized">Эти настройки синхронизируются с вашим сервером.</string>
   <string name="setting_message_duration">Время отображения сообщений</string>
   <string name="setting_message_duration_description">Касается только сообщений о транзакциях</string>
-
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
   Examples: 'de' for German; 'fr' for French -->
   <string name="url_grocy_demo">https://ru.demo.grocy.info</string>
