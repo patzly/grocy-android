@@ -345,6 +345,9 @@ public class StockOverviewFragment extends BaseFragment implements
       ViewUtil.startIcon(item);
       setUpSearch();
       return true;
+    } else if (item.getItemId() == R.id.action_stock_journal) {
+      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment());
+      return true;
     } else if (item.getItemId() == R.id.action_stock_entries) {
       navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment());
       return true;

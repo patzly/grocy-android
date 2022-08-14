@@ -46,6 +46,12 @@
   <string name="action_consume_recipe">Consommer tous les ingrédients nécessaires à cette recette</string>
   <string name="action_copy_recipe">Copier la recette</string>
   <string name="action_apply_desired_servings">Appliquer les portions souhaitées pour cette recette et mettre à jour les données</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Produit ouvert</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Transfert depuis</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Transfert vers</string>
 
   <string name="action_back">Retour</string>
   <string name="action_search">Rechercher</string>
@@ -246,7 +252,11 @@
   <string name="msg_no_stock_entries">Aucune entrée de stock pour %1$s</string>
   <string name="msg_not_found">Produit non trouvé</string>
   <string name="msg_editor_hint">Écrivez ici</string>
+  <string name="msg_coming_soon">Cette fonctionnalité sera bientôt disponible</string>
+  <string name="msg_undo_transaction">Annuler la transaction ?</string>
   <string name="msg_undone_transaction">Transaction annulée</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Annulé le %1$s</string>
   <string name="msg_failed_to_sync">Échec de synchronisation des entrées</string>
   <string name="msg_synced">Les entrées ont bien été synchronisées</string>
   <!-- %1$s is a shopping list name -->
@@ -279,9 +289,8 @@
   <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
   <string name="option_synced_success">Option synchronisée avec succès</string>
   <string name="option_synced_error">L\'option n\'a pas pu être synchronisée</string>
-  <string name="msg_help_ingredient_list">Vous pouvez ajouter des ingrédients avec le bouton en bas, modifier les ingrédients en les sélectionnant et les supprimer en faisant glisser un ingrédient vers la droite puis en cliquant sur l\'icône de la corbeille.</string>
   <string name="msg_recipe_added_to_cart">Ingrédients de la recette ajoutés au panier</string>
-  <string name="msg_recipe_consumed">Recette consommée \"%1$s\"</string>
+  <string name="msg_recipe_consumed">Tous les ingrédients de la recette \"%1$s\" ont été retirés du stock</string>
   <string name="msg_stored_purchases_overview">Il y a des achats sur l\'appareil qui n\'ont pas encore été transférés sur le serveur. Appuyez ici pour plus de détails.</string>
   <string name="msg_stored_purchases">Les achats qui n\'ont pas encore été transférés sur le serveur sont affichés ici. Ils ont été enregistrés avec des produits temporaires dans cette application afin que vous puissiez scanner votre achat plus rapidement en mode rapide et ne pas avoir à créer immédiatement de nouveaux produits dans la base de données.</string>
   <string name="msg_stored_purchases_product_offline">Appuyez sur le produit et remplissez les données requises. Après cela, le produit sera affiché ici comme en ligne et les achats stockés pourront être envoyés au serveur.</string>
@@ -378,6 +387,12 @@
   <string name="msg_help_specific_item">Le premier élément de cette liste est choisi en suivant la règle par défaut : \"Ouvert en premier, puis premier périmé en premier, puis plus ancien ajouté\"</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Ceci est uniquement à des fins statistiques.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Par défaut, la quantité à ajouter à la liste de courses est \"quantité nécessaire - quantité en stock - quantité dans la liste de courses\". Lorsque cette option est activée, la quantité à ajouter n\'est vérifiée que par rapport à la quantité en stock, et non par rapport à ce qui figure déjà sur la liste de courses.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Lorsqu\'un produit est sélectionné, une unité (par portion en unité de quantité du stock) sera ajoutée au stock lors de la consommation de cette recette.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Une quantité/unité différente peut être utilisée ci-dessous, tandis que pour la vérification des stocks,  n\'importe quelle quantité du produit en stock est suffisante.</string>
   <string name="msg_help_date_chooser">Vous pouvez passer à la saisie au clavier dans les paramètres, cela pourrait augmenter la vitesse de saisie pour vous.</string>
   <string name="msg_help_date_chooser_keyboard">Vous pouvez activer le format de date inversé dans les paramètres si JJMMAA est préféré dans votre pays.\nPour appliquer la saisie et fermer cette page, vous pouvez utiliser la touche Entrée de votre clavier.</string>
   <string name="msg_help_quick_mode">Vous pouvez appuyer longuement sur la barre de titre ci-dessus afin d\'activer le mode rapide. Dans ce mode, une opération sera exécutée immédiatement si un produit a été entré ou scanné et que tous les champs ont pu être automatiquement remplis (grâce aux paramètres par défaut du produit ou du code-barres).</string>
@@ -415,6 +430,7 @@
   <string name="error_empty_chores">Pas de corvées</string>
   <string name="error_empty_chores_sub">Accéder aux données de base pour en créer</string>
   <string name="error_empty_recipes">Aucune recette</string>
+  <string name="error_empty_ingredients">Aucun ingrédient</string>
   <string name="error_search">Aucun résultat trouvé</string>
   <string name="error_search_sub">Essayez d\'autres termes</string>
   <string name="error_filter">Rien à afficher</string>
@@ -483,6 +499,7 @@
   <string name="title_master_data">Données de base</string>
   <string name="title_stock_entries">Entrées de stock</string>
   <string name="title_stock_entry">Entrée de stock</string>
+  <string name="title_stock_journal">Journal du stock</string>
   <string name="title_shopping_list">Liste de courses</string>
   <string name="title_feedback">Retour d\'information</string>
   <string name="title_settings">Paramètres</string>
@@ -546,6 +563,7 @@
   <string name="title_product_cat_due_date">Date de péremption</string>
   <string name="title_product_cat_amount">Quantité</string>
   <string name="title_product_cat_quantity_unit">Unité de quantité</string>
+  <string name="title_notifications">Notifications</string>
   <string name="title_product_cat_barcodes">Code-barres</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">Conversions d\'UQ</string>
@@ -903,8 +921,8 @@
   <string name="property_servings_base_insert">Portions de base : %1$s</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">Portions souhaitées</string>
-  <string name="property_not_check_shopping_list">Ne pas vérifier par rapport à la liste de courses</string>
-  <string name="property_not_check_shopping_list_description">Vérifiez uniquement la quantité en stock, pas la liste de courses lorsque vous y ajoutez des articles manquants</string>
+  <string name="property_not_check_shopping_list">Ne pas vérifier la liste de courses</string>
+  <string name="property_not_check_shopping_list_description">Lorsque vous y ajoutez des éléments manquants</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">Préparation</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -913,14 +931,13 @@
   <string name="property_due_score">Indice de péremption</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Ingrédients</string>
-  <string name="property_ingredients_subtitle">Ajouter/Modifier des ingrédients</string>
-  <string name="property_only_check_single_unit_in_stock">Vérifier seulement qu\'une quantité non-nulle est en stock</string>
-  <string name="property_only_check_single_unit_in_stock_description">Par exemple, si l\'unité de quantité diffère de celle ci-dessous</string>
+  <string name="property_only_check_single_unit_in_stock">Vérifier uniquement que n\'importe quelle quantité soit en stock</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_ingredient_group">Groupe</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Quantité variable</string>
   <string name="property_requirements_fulfilled">Prérequis remplis</string>
+  <string name="property_produces_product">Crée un produit</string>
 
   <string name="date_today">Aujourd\'hui</string>
   <string name="date_unknown">Inconnue</string>

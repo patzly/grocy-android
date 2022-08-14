@@ -72,6 +72,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
+import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
@@ -1723,6 +1724,57 @@ public class DownloadHelper {
     return getStockEntries(productId, onResponseListener, null);
   }
 
+  public QueueItem getStockLogEntries(
+      int limit,
+      int offset,
+      OnStockLogEntriesResponseListener onResponseListener,
+      OnErrorListener onErrorListener
+  ) {
+    return new QueueItem() {
+      @Override
+      public void perform(
+          @Nullable OnStringResponseListener responseListener,
+          @Nullable OnErrorListener errorListener,
+          @Nullable String uuid
+      ) {
+        get(
+            grocyApi.getStockLogEntries(limit, offset),
+            uuid,
+            response -> {
+              Type type = new TypeToken<ArrayList<StockLogEntry>>() {
+              }.getType();
+              ArrayList<StockLogEntry> stockLogEntries = new Gson().fromJson(response, type);
+              if (debug) {
+                Log.i(tag, "download StockLogEntry: " + stockLogEntries);
+              }
+              if (onResponseListener != null) {
+                onResponseListener.onResponse(stockLogEntries);
+              }
+              if (responseListener != null) {
+                responseListener.onResponse(response);
+              }
+            },
+            error -> {
+              if (onErrorListener != null) {
+                onErrorListener.onError(error);
+              }
+              if (errorListener != null) {
+                errorListener.onError(error);
+              }
+            }
+        );
+      }
+    };
+  }
+
+  public QueueItem getStockLogEntries(
+      int limit,
+      int offset,
+      OnStockLogEntriesResponseListener onResponseListener
+  ) {
+    return getStockLogEntries(limit, offset, onResponseListener, null);
+  }
+
   public QueueItem updateShoppingListItems(
       String dbChangedTime,
       OnShoppingListItemsResponseListener onResponseListener
@@ -3160,6 +3212,11 @@ public class DownloadHelper {
   public interface OnStockEntriesResponseListener {
 
     void onResponse(ArrayList<StockEntry> stockEntries);
+  }
+
+  public interface OnStockLogEntriesResponseListener {
+
+    void onResponse(ArrayList<StockLogEntry> stockLogEntries);
   }
 
   public interface OnShoppingListItemsResponseListener {

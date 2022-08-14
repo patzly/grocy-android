@@ -30,6 +30,12 @@
     tools:ignore="AlwaysShowAction" />
 
   <item
+    android:id="@+id/action_stock_journal"
+    android:title="@string/title_stock_journal"
+    app:showAsAction="never"
+    tools:ignore="AlwaysShowAction" />
+
+  <item
     android:id="@+id/action_stock_entries"
     android:title="@string/title_stock_entries"
     app:showAsAction="never"

@@ -46,6 +46,12 @@
   <string name="action_consume_recipe">Spotřebovat všechny ingredience použité v tomto receptu</string>
   <string name="action_copy_recipe">Vytvořit kopii receptu</string>
   <string name="action_apply_desired_servings">Zadejte počet porcí tohoto receptu a aktualizujte data</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Balení otevřeno</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Přesun z</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Přesun do</string>
 
   <string name="action_back">Zpět</string>
   <string name="action_search">Hledat</string>
@@ -262,7 +268,11 @@
   <string name="msg_no_stock_entries">Produkt %1$s nemá žádnou zásobu</string>
   <string name="msg_not_found">Produkt nenalezen</string>
   <string name="msg_editor_hint">Zapište text</string>
+  <string name="msg_coming_soon">Tato funkce bude v dalších verzích...</string>
+  <string name="msg_undo_transaction">Vrátit transakci?</string>
   <string name="msg_undone_transaction">Vrácené transakce</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Vráceno zpět %1$s</string>
   <string name="msg_failed_to_sync">Synchronizace informací z aplikace se nezdařila</string>
   <string name="msg_synced">Data byla úspěšně synchronizována</string>
   <!-- %1$s is a shopping list name -->
@@ -511,6 +521,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_master_data">Základní data</string>
   <string name="title_stock_entries">Položky zásob</string>
   <string name="title_stock_entry">Položka zásob</string>
+  <string name="title_stock_journal">Deník zásob</string>
   <string name="title_shopping_list">Nákupní seznam</string>
   <string name="title_feedback">Zpětná vazba</string>
   <string name="title_settings">Nastavení</string>

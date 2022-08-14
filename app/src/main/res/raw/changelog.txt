@@ -2,6 +2,7 @@
 - New: Support for grocy server v3.3.1
 - New: Receipes feature (huge thanks @Tim-Otte for your great work!) (#148)
 - New: HTML viewer and editor for product description which can load pictures
+- New: Stock journal page (#140)
 - New: Server v3.3.0 feature "Notes for stock entries" (#511)
 - New: Stock quantity unit now can be changed with server v3.3.0 (#511)
 - New: Notification for due soon items in stock (thanks @igor-cali for the initial work) (#108)

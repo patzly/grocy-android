@@ -72,8 +72,8 @@ android {
     
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility 11
+        targetCompatibility 11
     }
     buildToolsVersion '32.1.0-rc1'
     namespace 'xyz.zedler.patrick.grocy'
@@ -98,17 +98,17 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     // Nice material views
-    implementation 'com.google.android.material:material:1.7.0-alpha03'
+    implementation 'com.google.android.material:material:1.6.1'
 
     // Volley for all general network requests and Glide for image loading
     // Netcipher for Tor support and Conscrypt for new TLS support on old Android devices
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
     implementation 'info.guardianproject.netcipher:netcipher:2.1.0'
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     // GSON for converting JSON responses to Java objects
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
 
     // Wordpress Aztec for HTML editor view
     api "org.wordpress:aztec:v1.5.4"

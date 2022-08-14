@@ -31,6 +31,7 @@ import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.Store;
+import xyz.zedler.patrick.grocy.model.User;
 
 public class StockEntriesRepository {
 
@@ -52,6 +53,7 @@ public class StockEntriesRepository {
     private final List<ProductBarcode> productBarcodes;
     private final List<Location> locations;
     private final List<Store> stores;
+    private final List<User> users;
 
     public StockOverviewData(
         List<QuantityUnit> quantityUnits,
@@ -59,7 +61,8 @@ public class StockEntriesRepository {
         List<Product> products,
         List<ProductBarcode> productBarcodes,
         List<Location> locations,
-        List<Store> stores
+        List<Store> stores,
+        List<User> users
     ) {
       this.quantityUnits = quantityUnits;
       this.stockEntries = stockEntries;
@@ -67,6 +70,7 @@ public class StockEntriesRepository {
       this.productBarcodes = productBarcodes;
       this.locations = locations;
       this.stores = stores;
+      this.users = users;
     }
 
     public List<QuantityUnit> getQuantityUnits() {
@@ -92,6 +96,10 @@ public class StockEntriesRepository {
     public List<Store> getStores() {
       return stores;
     }
+
+    public List<User> getUsers() {
+      return users;
+    }
   }
 
   public void loadFromDatabase(StockOverviewDataListener listener) {
@@ -103,6 +111,7 @@ public class StockEntriesRepository {
             appDatabase.productBarcodeDao().getProductBarcodes(),
             appDatabase.locationDao().getLocations(),
             appDatabase.storeDao().getStores(),
+            appDatabase.userDao().getUsers(),
             StockOverviewData::new
         )
         .subscribeOn(Schedulers.io())

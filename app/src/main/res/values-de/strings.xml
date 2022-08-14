@@ -46,6 +46,12 @@
   <string name="action_consume_recipe">Alle Zutaten, die von diesem Rezept benötigt werden, aus dem Bestand entfernen</string>
   <string name="action_copy_recipe">Rezept kopieren</string>
   <string name="action_apply_desired_servings">Gewünschte Portionen für dieses Rezept anwenden und Daten aktualisieren</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Produkt geöffnet</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Umlagerung von</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Umlagerung nach</string>
 
   <string name="action_back">Zurück</string>
   <string name="action_search">Suche</string>
@@ -231,7 +237,10 @@
   <string name="msg_not_found">Produkt nicht gefunden</string>
   <string name="msg_editor_hint">Hier Text schreiben</string>
   <string name="msg_coming_soon">Dieses Feature wird bald verfügbar sein</string>
+  <string name="msg_undo_transaction">Transaktion rückgängig machen?</string>
   <string name="msg_undone_transaction">Transaktion rückgängig gemacht</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Rückgängig gemacht am %1$s</string>
   <string name="msg_failed_to_sync">Synchronisation von Einträgen fehlgeschlagen</string>
   <string name="msg_synced">Einträge erfolgreich synchronisiert</string>
   <!-- %1$s is a shopping list name -->
@@ -472,6 +481,7 @@
   <string name="title_master_data">Stammdaten</string>
   <string name="title_stock_entries">Bestandseinträge</string>
   <string name="title_stock_entry">Bestandseintrag</string>
+  <string name="title_stock_journal">Bestandsjournal</string>
   <string name="title_shopping_list">Einkaufszettel</string>
   <string name="title_feedback">Feedback</string>
   <string name="title_settings">Einstellungen</string>

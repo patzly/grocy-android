@@ -272,6 +272,15 @@ public class GrocyApi {
     );
   }
 
+  public String getStockLogEntries(int limit, int offset) {
+    return getUrl(
+        "/objects/stock_log",
+        "limit=" + limit,
+        "offset=" + offset,
+        "order=id%3Adesc"
+    );
+  }
+
   /**
    * Returns all products which are currently in stock incl. the next due date per product
    */
