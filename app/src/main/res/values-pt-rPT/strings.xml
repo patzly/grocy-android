@@ -1139,7 +1139,7 @@
   few days and therefore should be consumed in the next few days. -->
   <string name="setting_notifications_due_soon">Itens a expirar em breve</string>
   <string name="setting_notifications_due_soon_description">Valida o stock diariamente e notifica quando produtos estão prestes a expirar</string>
-  <string name="setting_notifications_chores_description">Valida as tarefas diariamente e notifica quando existem tarefas a concluir hoje</string>
+  <string name="setting_notifications_chores_description">Valida as tarefas diariamente e notifica quando existem tarefas domésticas a concluir hoje</string>
   <string name="setting_notification_time">Hora de notificação</string>
   <!-- the description of the notification time preference.
   With the "Due soon" check enabled, the user will be notified every day at the selected time how
