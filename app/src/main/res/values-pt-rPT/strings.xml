@@ -726,7 +726,7 @@
   <plurals name="description_overview_chores_due_today">
     <item quantity="one">%1$d tarefa deverá ser realizada hoje.</item>
     <item quantity="many">%1$d tarefas deverão ser realizadas hoje.</item>
-    <item quantity="other">%1$d tarefas deverão ser realizadas hoje.</item>
+    <item quantity="other">%1$d tarefas domésticas deverão ser realizadas hoje.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_assigned">
