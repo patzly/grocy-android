@@ -428,7 +428,7 @@
   <string name="error_empty_tasks">Sem tarefas</string>
   <string name="error_empty_task_categories">Sem categorias de tarefas</string>
   <string name="error_empty_unit_conversions">Sem conversões de quantidades unitárias</string>
-  <string name="error_empty_chores">Sem tarefas</string>
+  <string name="error_empty_chores">Sem tarefas domésticas</string>
   <string name="error_empty_chores_sub">Ir aos dados mestre e criar algumas</string>
   <string name="error_empty_recipes">Sem receitas</string>
   <string name="error_empty_ingredients">Sem ingredientes</string>
