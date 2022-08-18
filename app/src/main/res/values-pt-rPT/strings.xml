@@ -732,7 +732,7 @@
   <plurals name="description_overview_chores_assigned">
     <item quantity="one">%1$d tarefa foi-lhe atribuida.</item>
     <item quantity="many">%1$d tarefas foram-lhe atríbuidas.</item>
-    <item quantity="other">%1$d tarefas foram-lhe atribuídas.</item>
+    <item quantity="other">%1$d tarefas atribuídas a si.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_tasks">
