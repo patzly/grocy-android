@@ -718,8 +718,8 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_chores_overdue">
-    <item quantity="one">%1$d tarefa ultrapassou a data.</item>
-    <item quantity="many">%1$d tarefas ultrapassaram a data.</item>
+    <item quantity="one">%1$d tarefa doméstica por fazer.</item>
+    <item quantity="many">%1$d tarefas domésticas por fazer.</item>
     <item quantity="other">%1$d tarefas domésticas por fazer.</item>
   </plurals>
   <!-- %1$s is a number -->
