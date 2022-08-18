@@ -122,7 +122,7 @@
   <string name="action_share_description">Partilha o Grocy Android com os teus amigos</string>
   <string name="action_no_filter">Sem filtro</string>
   <string name="action_show_done_tasks">Mostrar tarefas concluídas</string>
-  <string name="action_track_chore_execution">Seguir execução da tarefa</string>
+  <string name="action_track_chore_execution">Seguir execução da tarefa doméstica</string>
   <string name="action_skip_next_chore_schedule">Saltar o próximo horário de tarefas</string>
   <string name="action_reschedule_next_execution">Reagendar próxima execução</string>
   <string name="action_put_missing_products_on_shopping_list">Colocar produtos em falta na lista de compras</string>
