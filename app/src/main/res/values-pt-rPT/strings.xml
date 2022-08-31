@@ -135,9 +135,9 @@
   </plurals>
   <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
   <plurals name="msg_overdue_products">
-    <item quantity="one">%1$d data ultrapassada</item>
-    <item quantity="many">%1$d data ultrapassada</item>
-    <item quantity="other">%1$d data ultrapassada</item>
+    <item quantity="one">%1$d com prazo de validade ultrapassado</item>
+    <item quantity="many">%1$d com prazo de validade ultrapassado</item>
+    <item quantity="other">%1$dcom prazo de validade ultrapassado</item>
   </plurals>
   <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
   <plurals name="msg_expired_products">
@@ -590,7 +590,7 @@
   <string name="subtitle_undone">Não concluído</string>
   <string name="subtitle_uncategorized">Não categorizado</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="subtitle_never_overdue">Nunca atrasado</string>
+  <string name="subtitle_never_overdue">Nunca expira</string>
   <string name="subtitle_selected">Seleccionado</string>
   <string name="subtitle_stock_entry_no_specific">Abertos no topo, depois primeiros a expirar no topo, depois por ordem de entrada</string>
   <!-- %1$s is a purchase date -->
@@ -700,9 +700,9 @@
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_shopping_list">
-    <item quantity="one">Está %1$d item na sua lista de compras.</item>
-    <item quantity="many">Estão %1$d itens na sua lista de compras.</item>
-    <item quantity="other">Estão %1$d itens na sua lista de compras.</item>
+    <item quantity="one">Tem %1$d item na sua lista de compras.</item>
+    <item quantity="many">Tem %1$d itens na sua lista de compras.</item>
+    <item quantity="other">Tem %1$d itens na sua lista de compras.</item>
   </plurals>
   <!-- %1$s is a number -->
   <plurals name="description_overview_recipes">
@@ -817,7 +817,7 @@
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date_next">Próximo prazo de validade</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="property_due_days_default">Dias de agendamento por defeito</string>
+  <string name="property_due_days_default">Dias de prazo de validade por defeito</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_days_default_opened">Prazo de validade quando aberto</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -964,9 +964,9 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_ago">
-    <item quantity="one">%d dia atrás</item>
-    <item quantity="many">%d dias atrás</item>
-    <item quantity="other">%d dias atrás</item>
+    <item quantity="one">Há %d dia atrás</item>
+    <item quantity="many">Há %d dias atrás</item>
+    <item quantity="other">Há %d dias atrás</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_ago">
@@ -982,9 +982,9 @@
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_days_from_now">
-    <item quantity="one">%d dia a partir de hoje</item>
-    <item quantity="many">%d dias a partir de hoje</item>
-    <item quantity="other">%d dias a partir de hoje</item>
+    <item quantity="one">Daqui a %d dia</item>
+    <item quantity="many">Daqui a %d dias</item>
+    <item quantity="other">Daqui a %d dias</item>
   </plurals>
   <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
   <plurals name="date_months_from_now">
