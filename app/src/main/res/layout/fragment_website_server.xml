@@ -81,36 +81,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:text="Editor" />
+            android:text="Server Website" />
 
         </LinearLayout>
-
-        <org.wordpress.aztec.toolbar.AztecToolbar
-          android:id="@+id/formatting_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="48dp"
-          aztec:mediaToolbarAvailable="false"
-          aztec:toolbarBackgroundColor="@color/primary"/>
 
       </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <org.wordpress.aztec.AztecText
-      android:id="@+id/visual"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_marginTop="104dp"
-      android:layout_marginBottom="?attr/actionBarSize"
-      android:padding="16dp"
-      android:scrollbars="vertical"
-      android:imeOptions="flagNoExtractUi"
-      android:gravity="start"
-      android:hint="@string/msg_editor_hint"
-      android:minLines="5"
-      aztec:historyEnable="false"
-      aztec:textColor="@color/on_primary"
-      aztec:backgroundColor="@color/background"/>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

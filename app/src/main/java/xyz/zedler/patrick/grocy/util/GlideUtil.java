@@ -31,79 +31,7 @@ import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import org.wordpress.aztec.Html;
 
 public class GlideUtil {
-  public static class GlideImageLoader implements Html.ImageGetter {
 
-    private final Context context;
-
-    public GlideImageLoader(Context context) {
-      this.context = context;
-    }
-
-    @Override
-    public void loadImage(String source, Callbacks callbacks, int maxWidth) {
-      loadImage(source, callbacks, maxWidth, 0);
-    }
-
-    @Override
-    public void loadImage(String source, Callbacks callbacks, int maxWidth, int minWidth) {
-      Glide.with(context).asBitmap().load(source).into(new Target<Bitmap>() {
-        public void onLoadStarted(Drawable placeholder) {
-          callbacks.onImageLoading(placeholder);
-        }
-
-        public void onLoadFailed(Drawable errorDrawable) {
-          callbacks.onImageFailed();
-        }
-
-        private Bitmap upscaleTo(Bitmap bitmap, int desiredWidth) {
-          float ratio = (float) bitmap.getHeight() / (float) bitmap.getWidth();
-          float proportionateHeight = ratio * desiredWidth;
-          int finalHeight = (int) Math.rint(proportionateHeight);
-          return Bitmap.createScaledBitmap(bitmap, desiredWidth, finalHeight, true);
-        }
-
-        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-          //Upscaling bitmap only for demonstration purposes.
-          //This should probably be done somewhere more appropriate for Glide (?).
-          if (resource.getWidth() < minWidth) {
-            callbacks.onImageLoaded(new BitmapDrawable(context.getResources(), upscaleTo(resource, minWidth)));
-            return;
-          }
-
-          // By default, BitmapFactory.decodeFile sets the bitmap's density to the device default so, we need
-          // to correctly set the input density to 160 ourselves.
-          resource.setDensity(DisplayMetrics.DENSITY_DEFAULT);
-          callbacks.onImageLoaded(new BitmapDrawable(context.getResources(), resource));
-        }
-
-        public void onLoadCleared(Drawable placeholder) {}
-
-        public void getSize(@NonNull SizeReadyCallback cb) {
-          cb.onSizeReady(maxWidth, Target.SIZE_ORIGINAL);
-        }
-
-        public void removeCallback(@NonNull SizeReadyCallback cb) {
-        }
-
-        public void setRequest(Request request) {
-        }
-
-        public Request getRequest() {
-          return null;
-        }
-
-        public void onStart() {
-        }
-
-        public void onStop() {
-        }
-
-        public void onDestroy() {
-        }
-      });
-    }
-  }
 }
