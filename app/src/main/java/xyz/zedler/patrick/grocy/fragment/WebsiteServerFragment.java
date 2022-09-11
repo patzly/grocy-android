@@ -23,24 +23,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import org.wordpress.aztec.Aztec;
-import org.wordpress.aztec.ITextFormat;
-import org.wordpress.aztec.toolbar.IAztecToolbarClickListener;
+
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
+import xyz.zedler.patrick.grocy.databinding.FragmentWebsiteServerBinding;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
-import xyz.zedler.patrick.grocy.util.GlideUtil.GlideImageLoader;
 
-public class EditorHtmlFragment extends BaseFragment {
+public class WebsiteServerFragment extends BaseFragment {
 
-  private final static String TAG = EditorHtmlFragment.class.getSimpleName();
+  private final static String TAG = WebsiteServerFragment.class.getSimpleName();
 
-  private FragmentEditorHtmlBinding binding;
+  private FragmentWebsiteServerBinding binding;
   private MainActivity activity;
 
   @Override
@@ -49,7 +47,7 @@ public class EditorHtmlFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentEditorHtmlBinding.inflate(inflater, container, false);
+    binding = FragmentWebsiteServerBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
@@ -75,52 +73,13 @@ public class EditorHtmlFragment extends BaseFragment {
         FAB.TAG.DONE,
         true,
         () -> {
-          setForPreviousDestination(ARGUMENT.DESCRIPTION, binding.visual.toHtml(false));
           activity.navigateUp();
         }
     );
 
-    binding.visual.setCalypsoMode(false);
-    Aztec.with(binding.visual, binding.formattingToolbar, new IAztecToolbarClickListener() {
-          @Override
-          public void onToolbarCollapseButtonClicked() {
-
-          }
-
-          @Override
-          public void onToolbarExpandButtonClicked() {
-
-          }
-
-          @Override
-          public void onToolbarFormatButtonClicked(@NonNull ITextFormat iTextFormat, boolean b) {
-
-          }
-
-          @Override
-          public void onToolbarHeadingButtonClicked() {
-
-          }
-
-          @Override
-          public void onToolbarHtmlButtonClicked() {
-
-          }
-
-          @Override
-          public void onToolbarListButtonClicked() {
-
-          }
-
-          @Override
-          public boolean onToolbarMediaButtonClicked() {
-            return false;
-          }
-        }).setImageGetter(new GlideImageLoader(requireContext()));
-
-    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
+    /*EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
     if (args.getHtmlText() != null && savedInstanceState == null) {
       binding.visual.fromHtml(args.getHtmlText(), true);
-    }
+    }*/
   }
 }

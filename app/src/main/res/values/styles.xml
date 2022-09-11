@@ -548,14 +548,6 @@
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <style name="AztecToolbarStyle">
-    <item name="advanced">false</item>
-    <item name="toolbarBorderColor">@color/primary</item>
-    <item name="toolbarIconNormalColor">@color/on_primary</item>
-    <item name="toolbarIconHighlightColor">@color/retro_blue</item>
-    <item name="toolbarIconDisabledColor">@color/material_on_primary_disabled</item>
-  </style>
-
   <style name="AlertDialogCustom" parent="Theme.MaterialComponents.Dialog.Alert">
     <item name="android:colorBackground">@color/surface</item>
     <item name="android:textColor">@color/on_surface</item>
