@@ -20,40 +20,37 @@
 <textarea id="summernote" style="width:100%;height:100%"></textarea>
 <script>
 $(document).ready(function() {
- $('#summernote').summernote({
-  height: 1200,
-  focus: true,
-  placeholder: 'write here...',
-  // set focus to editable area after initializing summernote
-  toolbar: [
-    ['style', ['style']],
-    ['font', ['bold', 'italic', 'underline', 'clear']],
-    ['fontname', ['fontname']],
-    ['color', ['color']],
-    ['para', ['ul', 'ol', 'paragraph']],
-    ['height', ['height']],
-    ['table', ['table']],
-    ['insert', ['link', 'picture','video','hr']],
-    ['view', ['codeview']],
-    ['help', ['help']]
-  ],
-  callbacks: {
-    onInit: function(e) {
-      $("#summernote").summernote("fullscreen.toggle");
-    }
-  }
-});
-});
 
-$(document).ready(function() {
-    $(".note-editable").keydown(function (e) {
-        if (e.keyCode == 222) {
-            e.preventDefault();
-        }else {
+  $('#summernote').summernote({
+    focus: true,
+    placeholder: 'Write here...',
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['table', ['table']],
+      ['insert', ['link', 'picture','video']],
+      ['view', ['codeview']],
+      ['help', ['help']]
+    ],
+    callbacks: {
+      onInit: function(e) {
+        $("#summernote").summernote("fullscreen.toggle");
+      }
+    }
+  });
+
+  $(".note-editable").keydown(function (e) {
+    if (e.keyCode == 222) {
+      e.preventDefault();
+    } else {
 			return;
 		}
-    });
+  });
+
 });
+
 </script>
 </body>
 </html>
