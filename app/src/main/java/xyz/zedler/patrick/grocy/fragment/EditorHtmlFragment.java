@@ -29,16 +29,16 @@ import androidx.annotation.Nullable;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentWebsiteServerBinding;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
+import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 
-public class WebsiteServerFragment extends BaseFragment {
+public class EditorHtmlFragment extends BaseFragment {
 
-  private final static String TAG = WebsiteServerFragment.class.getSimpleName();
+  private final static String TAG = EditorHtmlFragment.class.getSimpleName();
 
-  private FragmentWebsiteServerBinding binding;
+  private FragmentEditorHtmlBinding binding;
   private MainActivity activity;
 
   @Override
@@ -47,7 +47,7 @@ public class WebsiteServerFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentWebsiteServerBinding.inflate(inflater, container, false);
+    binding = FragmentEditorHtmlBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
@@ -73,13 +73,16 @@ public class WebsiteServerFragment extends BaseFragment {
         FAB.TAG.DONE,
         true,
         () -> {
+          setForPreviousDestination(Constants.ARGUMENT.DESCRIPTION, binding.summernote.getText());
           activity.navigateUp();
         }
     );
 
-    /*EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
-    if (args.getHtmlText() != null && savedInstanceState == null) {
-      binding.visual.fromHtml(args.getHtmlText(), true);
-    }*/
+
+    EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
+    if (args.getText() != null && savedInstanceState == null) {
+      binding.summernote.setText(args.getText());
+    }
   }
+
 }

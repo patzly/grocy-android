@@ -116,6 +116,8 @@ dependencies {
     // Work for daily notifications
     implementation 'androidx.work:work-runtime:2.7.1'
 
+    implementation 'androidx.webkit:webkit:1.5.0'
+
     // ZXing for barcode scanning
     //noinspection GradleDependency
     implementation 'com.google.zxing:core:3.3.0'

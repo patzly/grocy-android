@@ -89,6 +89,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <xyz.zedler.patrick.grocy.view.Summernote
+        android:id="@+id/summernote"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="?actionBarSize"/>
+
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
