@@ -47,6 +47,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -586,6 +587,12 @@ public class MainActivity extends AppCompatActivity {
 
   public boolean isOnline() {
     return netUtil.isOnline();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    getCurrentFragment().getActivityResult(requestCode, resultCode, data);
   }
 
   public void showSnackbar(Snackbar snackbar) {

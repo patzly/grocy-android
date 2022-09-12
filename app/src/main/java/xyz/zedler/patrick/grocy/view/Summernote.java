@@ -12,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import androidx.webkit.WebSettingsCompat;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 /**
@@ -19,7 +20,7 @@ import xyz.zedler.patrick.grocy.util.UnitUtil;
  */
 public class Summernote extends WebView  {
     String text = "";
-    private int REQUEST_FILE_PICKER = 1;
+    private final int REQUEST_FILE_PICKER = 9;
     private ValueCallback<Uri> mFilePathCallback4;
     private ValueCallback<Uri[]> mFilePathCallback5;
     Context context;
@@ -54,30 +55,6 @@ public class Summernote extends WebView  {
         this.loadUrl("file:///android_asset/summernote/summernote.html");
 
         setWebChromeClient(new WebChromeClient() {
-            public void openFileChooser(ValueCallback<Uri> filePathCallback) {
-                mFilePathCallback4 = filePathCallback;
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                ((Activity) context).startActivityForResult(Intent.createChooser(intent, "File Chooser"), REQUEST_FILE_PICKER);
-            }
-
-            public void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType) {
-                mFilePathCallback4 = filePathCallback;
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                ((Activity) context).startActivityForResult(Intent.createChooser(intent, "File Chooser"), REQUEST_FILE_PICKER);
-            }
-
-            public void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType, String capture) {
-                mFilePathCallback4 = filePathCallback;
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                ((Activity) context).startActivityForResult(Intent.createChooser(intent, "File Chooser"), REQUEST_FILE_PICKER);
-            }
-
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
                 mFilePathCallback5 = filePathCallback;
@@ -114,6 +91,7 @@ public class Summernote extends WebView  {
         this.loadUrl("javascript:$('#summernote').summernote('code', '" + html.replace("'","\\'") + "');");
 
     }
+
     public String getText() {
         text = "P/%TE5XpkAijBc%LjA;_-pZcbiU25E6feX5y/n6qxCTmhprLrqC3H%^hU!%q2,k'm`SHheoW^'mQ~zW93,C?~GtYk!wi/&'3KxW8";
         this.loadUrl("javascript:window.android.getText" + "(document.getElementsByClassName('note-editable')[0].innerHTML);");
@@ -125,27 +103,25 @@ public class Summernote extends WebView  {
                 Thread.sleep(200);
             }
         } catch (Exception e) {
-            text = "Unable get the Text";
+            text = "Unable to get Text";
         }
         return text;
     }
-    public void setRequestCodeforFilepicker(int i) {
-        REQUEST_FILE_PICKER=i;
-    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if(requestCode==REQUEST_FILE_PICKER) {
-            if(mFilePathCallback4!=null) {
-                Uri result = intent==null || resultCode!=Activity.RESULT_OK ? null : intent.getData();
-                if (result!=null) {
+        if(requestCode == REQUEST_FILE_PICKER) {
+            if(mFilePathCallback4 != null) {
+                Uri result = intent == null || resultCode != Activity.RESULT_OK ? null : intent.getData();
+                if (result != null) {
                     Uri path = intent.getData();
                     mFilePathCallback4.onReceiveValue(path);
                 } else {
                     mFilePathCallback4.onReceiveValue(null);
                 }
             }
-            if(mFilePathCallback5!=null) {
-                Uri result = intent==null || resultCode!=Activity.RESULT_OK ? null : intent.getData();
-                if(result!=null) {
+            if(mFilePathCallback5 != null) {
+                Uri result = intent == null || resultCode != Activity.RESULT_OK ? null : intent.getData();
+                if(result != null) {
                     Uri path = intent.getData();
                     mFilePathCallback5.onReceiveValue(new Uri[]{path});
                 } else {

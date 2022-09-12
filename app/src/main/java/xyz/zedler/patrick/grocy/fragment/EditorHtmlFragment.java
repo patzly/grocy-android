@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,4 +86,8 @@ public class EditorHtmlFragment extends BaseFragment {
     }
   }
 
+  @Override
+  public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    binding.summernote.onActivityResult(requestCode, resultCode, data);
+  }
 }
