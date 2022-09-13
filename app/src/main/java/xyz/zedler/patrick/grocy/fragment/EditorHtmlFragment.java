@@ -83,7 +83,15 @@ public class EditorHtmlFragment extends BaseFragment {
     EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
     if (args.getText() != null && savedInstanceState == null) {
       binding.summernote.setText(args.getText());
+    } else if (savedInstanceState != null) {
+      binding.summernote.setText(savedInstanceState.getString("text"));
     }
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    outState.putString("text", binding.summernote.getText());
+    super.onSaveInstanceState(outState);
   }
 
   @Override

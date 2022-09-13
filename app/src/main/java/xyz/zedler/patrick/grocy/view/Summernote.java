@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
@@ -87,6 +88,18 @@ public class Summernote extends WebView  {
         this.loadUrl("javascript:(function f() {"
             + "document.getElementsByClassName('note-editable')[0].style.padding = '16px 16px 120px 16px';"
             + "})()");
+
+        int nightModeFlags = getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            this.loadUrl("javascript:(function f() {"
+                + "changeCSS('bootstrap-slate.min.css');"
+                + "})()");
+            this.loadUrl("javascript:(function f() {"
+                + "document.getElementsByClassName('note-editable')[0].style.backgroundColor = 'rgb(40, 40, 40)';"
+                + "document.getElementsByClassName('note-editable')[0].style.color = 'white';"
+                + "})()");
+        }
+
         this.loadUrl("javascript:$('#summernote').summernote('reset');");
         this.loadUrl("javascript:$('#summernote').summernote('code', '" + html.replace("'","\\'") + "');");
 

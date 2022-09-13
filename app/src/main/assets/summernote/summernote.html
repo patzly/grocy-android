@@ -9,7 +9,7 @@
 	<title>Android Summernote</title>
 
 <!-- include libraries(jQuery, bootstrap) -->
-<link href="bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap.min.css" id="bootstrapcss" rel="stylesheet">
 <script src="jquery.min.js"></script>
 <script src="bootstrap.min.js"></script> 
 <!-- include summernote css/js-->
@@ -29,7 +29,6 @@ $(document).ready(function() {
       ['font', ['bold', 'underline', 'clear']],
       ['color', ['color']],
       ['para', ['ul', 'ol', 'paragraph']],
-      ['table', ['table']],
       ['insert', ['link', 'picture','video']],
       ['view', ['codeview']],
       ['help', ['help']]
@@ -50,6 +49,19 @@ $(document).ready(function() {
   });
 
 });
+
+function changeCSS(cssFile) {
+
+    var oldlink = document.getElementById("bootstrapcss");
+
+    var newlink = document.createElement("link");
+    newlink.setAttribute("rel", "stylesheet");
+    newlink.setAttribute("type", "text/css");
+    newlink.setAttribute("href", cssFile);
+    newlink.setAttribute("id", "bootstrapcss");
+
+    document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+}
 
 </script>
 </body>
