@@ -24,7 +24,7 @@ plugins {
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     lint {
         abortOnError false
@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 42
         versionName "2.3.0"
 

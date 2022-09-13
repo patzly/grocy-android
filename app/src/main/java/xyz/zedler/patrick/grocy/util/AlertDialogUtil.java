@@ -23,6 +23,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -43,7 +44,7 @@ public class AlertDialogUtil {
     WebView webView = new WebView(context);
     webView.getSettings().setJavaScriptEnabled(false);
     webView.getSettings().setDomStorageEnabled(false);
-    webView.getSettings().setAppCacheEnabled(false);
+    webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     webView.getSettings().setAllowFileAccess(false);
     webView.loadData(html, "text/html; charset=utf-8", "UTF-8");
     webView.setBackgroundColor(
