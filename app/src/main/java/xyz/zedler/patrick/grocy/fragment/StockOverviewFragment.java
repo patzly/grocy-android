@@ -228,6 +228,7 @@ public class StockOverviewFragment extends BaseFragment implements
               && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
           ) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                activity,
                 R.drawable.ic_round_consume_product,
                 pos -> {
                   if (pos >= groupedListItems.size()) {
@@ -247,6 +248,7 @@ public class StockOverviewFragment extends BaseFragment implements
               && viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING)
           ) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                activity,
                 R.drawable.ic_round_open,
                 pos -> {
                   if (pos >= groupedListItems.size()) {
@@ -262,6 +264,7 @@ public class StockOverviewFragment extends BaseFragment implements
           }
           if (underlayButtons.isEmpty()) {
             underlayButtons.add(new SwipeBehavior.UnderlayButton(
+                activity,
                 R.drawable.ic_round_close,
                 pos -> swipeBehavior.recoverLatestSwipedItem()
             ));

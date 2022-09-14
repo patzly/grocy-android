@@ -207,6 +207,7 @@ public class TasksFragment extends BaseFragment implements
             return;
           }
           underlayButtons.add(new UnderlayButton(
+              activity,
               R.drawable.ic_round_done,
               pos -> {
                 if (pos >= displayedItems.size()) {

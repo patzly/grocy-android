@@ -21,21 +21,21 @@ package xyz.zedler.patrick.grocy.behavior;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -45,22 +45,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
   private final Context context;
-  private RecyclerView recyclerView;
-  private List<UnderlayButton> buttons;
   private final GestureDetector gestureDetector;
-  private int swipedPos = -1;
-  private float swipeThreshold = 0.5f;
   private final Map<Integer, List<UnderlayButton>> buttonsBuffer;
   private final Queue<Integer> recoverQueue;
   private final int buttonWidth;
   private final OnSwipeListener onSwipeListener;
+  private RecyclerView recyclerView;
+  private List<UnderlayButton> buttons;
   private boolean swiping = false;
+  private int swipedPos = -1;
+  private float swipeThreshold = 0.5f;
 
   private final View.OnTouchListener onTouchListener = new View.OnTouchListener() {
     @Override
@@ -112,7 +112,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
   protected SwipeBehavior(Context context, OnSwipeListener onSwipeListener) {
     super(0, ItemTouchHelper.RIGHT);
     this.context = context;
-    this.buttons = new ArrayList<>();
+    buttons = new ArrayList<>();
     buttonWidth = UnitUtil.dpToPx(context, 66);
     GestureDetector.SimpleOnGestureListener gestureListener
         = new GestureDetector.SimpleOnGestureListener() {
@@ -126,9 +126,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         return true;
       }
     };
-    this.gestureDetector = new GestureDetector(context, gestureListener);
+    gestureDetector = new GestureDetector(context, gestureListener);
     buttonsBuffer = new HashMap<>();
-    recoverQueue = new LinkedList<Integer>() {
+    recoverQueue = new LinkedList<>() {
       @Override
       public boolean add(Integer o) {
         if (contains(o)) {
@@ -152,8 +152,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
   @Override
   public int getSwipeDirs(
-      @NonNull RecyclerView recyclerView,
-      @NonNull RecyclerView.ViewHolder viewHolder
+      @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder
   ) {
     List<UnderlayButton> buffer = new ArrayList<>();
     instantiateUnderlayButton(viewHolder, buffer);
@@ -187,7 +186,6 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     }
 
     buttonsBuffer.clear();
-    assert buttons != null;
     swipeThreshold = 0.5f * buttons.size() * buttonWidth;
     recoverSwipedItem();
   }
@@ -209,11 +207,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
   @Override
   public void onChildDraw(
-      @NonNull Canvas c,
+      @NonNull Canvas canvas,
       @NonNull RecyclerView recyclerView,
       RecyclerView.ViewHolder viewHolder,
-      float dX,
-      float dY,
+      float dX, float dY,
       int actionState,
       boolean isCurrentlyActive
   ) {
@@ -240,17 +237,17 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
         translationX = dX * buffer.size() * buttonWidth / itemView.getWidth();
 
-                /*int limit = UnitUtil.getDp(context, 24);
-                if(translationX < limit && itemView.getElevation() > 0) {
-                    itemView.setElevation(UnitUtil.getDp(context, 2) * (translationX / limit));
-                } else if(isCurrentlyActive) {
-                    itemView.setElevation(UnitUtil.getDp(context, 2));
-                } else {
-                    itemView.setElevation(0);
-                }*/
+        /*int limit = UnitUtil.getDp(context, 24);
+        if(translationX < limit && itemView.getElevation() > 0) {
+            itemView.setElevation(UnitUtil.getDp(context, 2) * (translationX / limit));
+        } else if(isCurrentlyActive) {
+            itemView.setElevation(UnitUtil.getDp(context, 2));
+        } else {
+            itemView.setElevation(0);
+        }*/
         itemView.setElevation(0);
 
-        drawButtons(c, itemView, buffer, pos, translationX);
+        drawButtons(canvas, itemView, buffer, pos, translationX);
       } else if (swipedPos == pos && dX == 0) {
         swipedPos = -1;
         itemView.setElevation(0);
@@ -258,13 +255,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     }
 
     super.onChildDraw(
-        c,
-        recyclerView,
-        viewHolder,
-        translationX,
-        dY,
-        actionState,
-        isCurrentlyActive
+        canvas, recyclerView, viewHolder, translationX, dY, actionState, isCurrentlyActive
     );
   }
 
@@ -287,11 +278,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
   }
 
   private void drawButtons(
-      Canvas canvas,
-      View itemView,
-      List<UnderlayButton> buttons,
-      int pos,
-      float dX
+      Canvas canvas, View itemView, List<UnderlayButton> buttons, int pos, float dX
   ) {
     float left = itemView.getLeft();
 
@@ -310,21 +297,14 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     // draw background
 
-    canvas.drawRect(
-        left,
-        itemView.getTop(),
-        itemView.getRight(),
-        itemView.getBottom(),
-        paint
-    );
+    canvas.drawRect(left, itemView.getTop(), itemView.getRight(), itemView.getBottom(), paint);
 
     // draw actions
 
     float buttonLeft = left;
     for (int i = 0; i < buttons.size(); i++) {
       float right = buttonLeft + buttonWidth;
-      buttons.get(i).onDraw(
-          recyclerView.getContext(),
+      buttons.get(i).draw(
           canvas,
           new RectF(buttonLeft, itemView.getTop(), right, itemView.getBottom()),
           i,
@@ -348,27 +328,43 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       List<UnderlayButton> underlayButtons
   );
 
-  public interface UnderlayButtonClickListener {
-
-    void onClick(int position);
-  }
-
   public static class UnderlayButton {
 
-    private final int resId;
+    private final Context context;
+    private final Drawable drawable;
+    private final int iconSize;
     private int pos;
     private RectF clickRegion;
     private final UnderlayButtonClickListener clickListener;
+    private Paint paintBg;
+    private int bgRadius;
 
     public UnderlayButton(
-        @DrawableRes int resId,
-        UnderlayButtonClickListener clickListener
+        Context context, @DrawableRes int resId, UnderlayButtonClickListener clickListener
     ) {
-      this.resId = resId;
+      this.context = context;
       this.clickListener = clickListener;
+
+      iconSize = UiUtil.dpToPx(context, 24);
+
+      drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
+      if (drawable == null) {
+        return;
+      }
+      drawable.setColorFilter(
+          ContextCompat.getColor(context, R.color.on_secondary), Mode.SRC_ATOP
+      );
+
+      bgRadius = UiUtil.dpToPx(
+          context, context.getResources().getInteger(R.integer.swipe_action_bg_radius)
+      );
+
+      paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
+      paintBg.setColor(Color.BLACK);
+      paintBg.setAlpha(20);
     }
 
-    boolean onClick(float x, float y) {
+    private boolean onClick(float x, float y) {
       if (clickRegion != null && clickRegion.contains(x, y)) {
         clickListener.onClick(pos);
         return true;
@@ -376,14 +372,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       return false;
     }
 
-    void onDraw(
-        Context context,
-        Canvas canvas,
-        RectF rect,
-        int nr,
-        int count,
-        int pos
-    ) {
+    private void draw(Canvas canvas, RectF rect, int nr, int count, int pos) {
       // push actions towards each other if there are two
       float offsetX = count == 2
           ? nr == 0 ? UnitUtil.dpToPx(context, 4) : -UnitUtil.dpToPx(context, 4)
@@ -391,41 +380,28 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
       // DRAW ROUND BACKGROUND
 
-      Paint paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
-      paintBg.setColor(Color.BLACK);
-      paintBg.setAlpha(20);
-      canvas.drawCircle(
-          rect.centerX() + offsetX,
-          rect.centerY(),
-          UnitUtil.dpToPx(
-              context,
-              context.getResources().getInteger(R.integer.swipe_action_bg_radius)
-          ),
-          paintBg
-      );
+      canvas.drawCircle(rect.centerX() + offsetX, rect.centerY(), bgRadius, paintBg);
 
       // DRAW ICON
 
-      Paint paintIcon = new Paint();
-      paintIcon.setColorFilter(
-          new PorterDuffColorFilter(
-              ContextCompat.getColor(context, R.color.on_secondary),
-              PorterDuff.Mode.SRC_IN
-          )
-      );
-      Bitmap icon = ResUtil.getBitmapFromDrawable(context, resId);
-      if (icon != null) {
-        canvas.drawBitmap(
-            icon,
-            rect.centerX() - icon.getWidth() / 2f + offsetX,
-            rect.top + (rect.bottom - rect.top - icon.getHeight()) / 2,
-            paintIcon
+      if (drawable != null) {
+        drawable.setBounds(
+            (int) (rect.centerX() - iconSize / 2f + offsetX),
+            (int) (rect.top + (rect.bottom - rect.top - iconSize) / 2),
+            (int) ((rect.centerX() - iconSize / 2f + offsetX) + iconSize),
+            (int) ((rect.top + (rect.bottom - rect.top - iconSize) / 2) + iconSize)
         );
+        drawable.draw(canvas);
       }
 
       clickRegion = rect;
       this.pos = pos;
     }
+  }
+
+  public interface UnderlayButtonClickListener {
+
+    void onClick(int position);
   }
 
   public interface OnSwipeListener {
