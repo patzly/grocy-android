@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
 import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implements
     BarcodeListener {
@@ -79,14 +79,14 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     int width;
     int height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UnitUtil.dpToPx(fragment.requireContext(), 250);
-      height = UnitUtil.dpToPx(fragment.requireContext(), 250);
+      width = UiUtil.dpToPx(fragment.requireContext(), 250);
+      height = UiUtil.dpToPx(fragment.requireContext(), 250);
     } else if (qrCodeFormat) {
-      width = UnitUtil.dpToPx(fragment.requireContext(), 180);
-      height = UnitUtil.dpToPx(fragment.requireContext(), 180);
+      width = UiUtil.dpToPx(fragment.requireContext(), 180);
+      height = UiUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UnitUtil.dpToPx(fragment.requireContext(), 350);
-      height = UnitUtil.dpToPx(fragment.requireContext(), 160);
+      width = UiUtil.dpToPx(fragment.requireContext(), 350);
+      height = UiUtil.dpToPx(fragment.requireContext(), 160);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
       LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);

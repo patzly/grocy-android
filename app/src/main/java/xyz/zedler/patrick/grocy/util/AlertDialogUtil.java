@@ -81,10 +81,10 @@ public class AlertDialogUtil {
 
     TextView title = new TextView(context);
     title.setTextAppearance(context, R.style.Widget_Grocy_TextView);
-    int paddingTitle = UnitUtil.dpToPx(context, 8);
+    int paddingTitle = UiUtil.dpToPx(context, 8);
     title.setPadding(paddingTitle*3, paddingTitle*2, paddingTitle*3, 0);
     title.setText(question);
-    title.setTextSize(UnitUtil.spToPx(context, 6));
+    title.setTextSize(UiUtil.spToPx(context, 6));
     alertBuilder.setCustomTitle(title);
 
     if (multiChoiceItems != null) {

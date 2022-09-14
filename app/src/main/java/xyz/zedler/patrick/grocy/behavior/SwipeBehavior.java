@@ -46,7 +46,6 @@ import java.util.Map;
 import java.util.Queue;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.UiUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
@@ -113,7 +112,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     super(0, ItemTouchHelper.RIGHT);
     this.context = context;
     buttons = new ArrayList<>();
-    buttonWidth = UnitUtil.dpToPx(context, 66);
+    buttonWidth = UiUtil.dpToPx(context, 66);
     GestureDetector.SimpleOnGestureListener gestureListener
         = new GestureDetector.SimpleOnGestureListener() {
       @Override
@@ -284,9 +283,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
     Paint paint = new Paint();
     paint.setColor(ContextCompat.getColor(context, R.color.retro_green_bg_white));
-    if (dX < UnitUtil.dpToPx(context, 24)) {
+    if (dX < UiUtil.dpToPx(context, 24)) {
       if (dX > 0) {
-        float friction = dX / UnitUtil.dpToPx(context, 24);
+        float friction = dX / UiUtil.dpToPx(context, 24);
         paint.setAlpha((int) (255 * friction));
       } else {
         paint.setAlpha(0);
@@ -375,7 +374,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     private void draw(Canvas canvas, RectF rect, int nr, int count, int pos) {
       // push actions towards each other if there are two
       float offsetX = count == 2
-          ? nr == 0 ? UnitUtil.dpToPx(context, 4) : -UnitUtil.dpToPx(context, 4)
+          ? nr == 0 ? UiUtil.dpToPx(context, 4) : -UiUtil.dpToPx(context, 4)
           : 0;
 
       // DRAW ROUND BACKGROUND

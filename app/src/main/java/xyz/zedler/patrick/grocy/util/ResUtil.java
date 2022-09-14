@@ -140,7 +140,7 @@ public class ResUtil {
     }
 
     int color = ContextCompat.getColor(context, R.color.on_background);
-    int margin = UnitUtil.spToPx(context, 6);
+    int margin = UiUtil.spToPx(context, 6);
 
     String[] lines = text.split("\n");
     SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -154,7 +154,7 @@ public class ResUtil {
 
       BulletSpan bulletSpan;
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        bulletSpan = new BulletSpan(margin, color, UnitUtil.spToPx(context, 2));
+        bulletSpan = new BulletSpan(margin, color, UiUtil.spToPx(context, 2));
       } else {
         bulletSpan = new BulletSpan(margin, color);
       }
@@ -226,7 +226,7 @@ public class ResUtil {
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     paint.setColor(ContextCompat.getColor(context, R.color.icon));
-    paint.setTextSize(UnitUtil.dpToPx(context, textSize));
+    paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
     paint.setLetterSpacing(0.1f);
 
@@ -242,8 +242,8 @@ public class ResUtil {
 
     canvas.drawText(
             String.valueOf(number),
-            x + UnitUtil.dpToPx(context, textOffsetX),
-            y - UnitUtil.dpToPx(context, textOffsetY),
+            x + UiUtil.dpToPx(context, textOffsetX),
+            y - UiUtil.dpToPx(context, textOffsetY),
             paint
     );
     return bitmap;

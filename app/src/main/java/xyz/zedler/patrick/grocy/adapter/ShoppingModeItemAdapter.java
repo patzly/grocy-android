@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ShoppingModeItemAdapter extends
     RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
@@ -331,7 +331,7 @@ public class ShoppingModeItemAdapter extends
     RowShoppingItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
 
     if (useSmallerFonts) {
-      int px4 = UnitUtil.dpToPx(binding.name.getContext(), 4f);
+      int px4 = UiUtil.dpToPx(binding.name.getContext(), 4f);
       binding.card.setContentPadding(px4*2, px4, px4*2, px4);
       LinearLayout.LayoutParams paramsCard = new LinearLayout.LayoutParams(
           LayoutParams.MATCH_PARENT,
