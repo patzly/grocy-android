@@ -75,7 +75,7 @@ android {
         sourceCompatibility 11
         targetCompatibility 11
     }
-    buildToolsVersion '32.1.0-rc1'
+    buildToolsVersion '33.0.0'
     namespace 'xyz.zedler.patrick.grocy'
 }
 
