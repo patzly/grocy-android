@@ -550,6 +550,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_recipes">Recepty</string>
   <string name="title_recipe_create">Nový recept</string>
   <string name="title_recipe_edit">Upravit recept</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Úpravy</string>
 
   <string name="title_spoiled">Zkaženo</string>
   <string name="title_use_specific">Vybrat balení produktu ze zásob</string>
