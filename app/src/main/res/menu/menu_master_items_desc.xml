@@ -23,10 +23,16 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/action_delete"
-    android:title="@string/action_delete"
-    android:icon="@drawable/ic_round_delete_anim_menu"
+    android:id="@+id/action_search"
+    android:title="@string/action_search"
+    android:icon="@drawable/ic_round_search_anim"
     app:showAsAction="always"
     tools:ignore="AlwaysShowAction" />
+
+  <item
+    android:id="@+id/action_sort_ascending"
+    android:title="@string/action_ascending"
+    android:icon="@drawable/ic_round_sort_asc_to_desc"
+    app:showAsAction="always" />
 
 </menu>

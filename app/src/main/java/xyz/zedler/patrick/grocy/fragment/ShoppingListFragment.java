@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
@@ -269,7 +270,7 @@ public class ShoppingListFragment extends BaseFragment implements
     activity.updateBottomAppBar(
         viewModel.isOffline() ? Constants.FAB.POSITION.GONE : Constants.FAB.POSITION.CENTER,
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
-        this::setUpBottomMenu
+        getBottomMenuClickListener()
     );
     activity.updateFab(
         R.drawable.ic_round_add_anim,
@@ -396,40 +397,21 @@ public class ShoppingListFragment extends BaseFragment implements
     activity.showBottomSheet(new ShoppingListsBottomSheet());
   }
 
-  public void setUpBottomMenu() {
-    if (activity == null) {
-      return; // Fixes crash on theme change
-    }
-    MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
-    if (search != null) {
-      search.setOnMenuItemClickListener(item -> {
+  public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_search) {
         ViewUtil.startIcon(item);
         setUpSearch();
         return true;
-      });
-    }
-
-    MenuItem shoppingMode = activity.getBottomMenu().findItem(R.id.action_shopping_mode);
-    if (shoppingMode != null) {
-      shoppingMode.setOnMenuItemClickListener(item -> {
+      } else if (item.getItemId() == R.id.action_shopping_mode) {
         navigate(ShoppingListFragmentDirections
             .actionShoppingListFragmentToShoppingModeFragment());
         return true;
-      });
-    }
-
-    MenuItem addMissing = activity.getBottomMenu().findItem(R.id.action_add_missing);
-    if (addMissing != null) {
-      addMissing.setOnMenuItemClickListener(item -> {
+      } else if (item.getItemId() == R.id.action_add_missing) {
         ViewUtil.startIcon(item);
         viewModel.addMissingItems();
         return true;
-      });
-    }
-
-    MenuItem purchaseAllItems = activity.getBottomMenu().findItem(R.id.action_purchase_all_items);
-    if (purchaseAllItems != null) {
-      purchaseAllItems.setOnMenuItemClickListener(item -> {
+      } else if (item.getItemId() == R.id.action_purchase_all_items) {
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
@@ -457,12 +439,7 @@ public class ShoppingListFragment extends BaseFragment implements
                 .setShoppingListItems(array)
                 .setCloseWhenFinished(true).build().toBundle());
         return true;
-      });
-    }
-
-    MenuItem purchaseDoneItems = activity.getBottomMenu().findItem(R.id.action_purchase_done_items);
-    if (purchaseDoneItems != null) {
-      purchaseDoneItems.setOnMenuItemClickListener(item -> {
+      } else if (item.getItemId() == R.id.action_purchase_done_items) {
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
@@ -498,20 +475,14 @@ public class ShoppingListFragment extends BaseFragment implements
                 .setShoppingListItems(array)
                 .setCloseWhenFinished(true).build().toBundle());
         return true;
-      });
-    }
-
-    MenuItem editNotes = activity.getBottomMenu().findItem(R.id.action_edit_notes);
-    if (editNotes != null) {
-      editNotes.setOnMenuItemClickListener(item -> {
+      } else if (item.getItemId() == R.id.action_shopping_mode) {
+        navigate(ShoppingListFragmentDirections
+            .actionShoppingListFragmentToShoppingModeFragment());
+        return true;
+      } else if (item.getItemId() == R.id.action_edit_notes) {
         showNotesEditor();
         return true;
-      });
-    }
-
-    MenuItem clear = activity.getBottomMenu().findItem(R.id.action_clear);
-    if (clear != null) {
-      clear.setOnMenuItemClickListener(item -> {
+      } else if (item.getItemId() == R.id.action_clear) {
         ViewUtil.startIcon(item);
         ShoppingList shoppingList = viewModel.getSelectedShoppingList();
         if (shoppingList == null) {
@@ -522,8 +493,9 @@ public class ShoppingListFragment extends BaseFragment implements
         bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST, shoppingList);
         activity.showBottomSheet(new ShoppingListClearBottomSheet(), bundle);
         return true;
-      });
-    }
+      }
+      return false;
+    };
   }
 
   @Override
@@ -577,7 +549,7 @@ public class ShoppingListFragment extends BaseFragment implements
       activity.updateBottomAppBar(
           Constants.FAB.POSITION.CENTER,
           R.menu.menu_shopping_list,
-          this::setUpBottomMenu
+          getBottomMenuClickListener()
       );
     }
   }

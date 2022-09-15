@@ -95,12 +95,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     );
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.updateBottomAppBar(
-          Constants.FAB.POSITION.GONE,
-          R.menu.menu_empty,
-          () -> {
-          }
-      );
+      activity.updateBottomAppBar(Constants.FAB.POSITION.GONE, R.menu.menu_empty);
       activity.getScrollBehavior().setUpScroll(binding.scrollAbout);
       activity.getScrollBehavior().setHideOnScroll(true);
       activity.binding.fabMain.hide();

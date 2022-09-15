@@ -63,11 +63,7 @@ public class EditorHtmlFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
-    activity.updateBottomAppBar(
-        POSITION.END,
-        R.menu.menu_empty,
-        () -> {}
-    );
+    activity.updateBottomAppBar(POSITION.END, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_done,
         R.string.action_back,
