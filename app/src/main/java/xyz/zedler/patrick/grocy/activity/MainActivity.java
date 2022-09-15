@@ -64,6 +64,7 @@ import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
@@ -80,7 +81,6 @@ import org.conscrypt.Conscrypt;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
-import xyz.zedler.patrick.grocy.bottomappbar.BottomAppBar;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
@@ -435,12 +435,13 @@ public class MainActivity extends AppCompatActivity {
         scrollBehavior.setTopScrollVisibility(true);
         break;
     }
-    binding.bottomAppBar.setFabAlignmentModeAndReplaceMenu(mode, newMenuId, null);
+    binding.bottomAppBar.setFabAlignmentMode(mode);
+    binding.bottomAppBar.replaceMenu(newMenuId);
     binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
   }
 
   public void updateBottomAppBar(int newFabPosition, @MenuRes int newMenuId) {
-    updateBottomAppBar(newFabPosition, newMenuId, (OnMenuItemClickListener) null);
+    updateBottomAppBar(newFabPosition, newMenuId, null);
   }
 
   public void updateFab(
