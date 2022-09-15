@@ -176,17 +176,18 @@ public class RecipeEditIngredientListFragment extends BaseFragment
           }
 
           underlayButtons.add(new UnderlayButton(
-                  R.drawable.ic_round_delete_anim,
-                  pos -> {
-                    if (pos >= displayedItems.size()) {
-                      return;
-                    }
-                    swipeBehavior.recoverLatestSwipedItem();
-                    new Handler().postDelayed(() -> {
-                      RecipePosition recipePosition = displayedItems.get(pos);
-                      deleteRecipePosition(recipePosition.getId());
-                    }, 100);
-                  }
+              activity,
+              R.drawable.ic_round_delete_anim,
+              pos -> {
+                if (pos >= displayedItems.size()) {
+                  return;
+                }
+                swipeBehavior.recoverLatestSwipedItem();
+                new Handler().postDelayed(() -> {
+                  RecipePosition recipePosition = displayedItems.get(pos);
+                  deleteRecipePosition(recipePosition.getId());
+                }, 100);
+              }
           ));
         }
       };

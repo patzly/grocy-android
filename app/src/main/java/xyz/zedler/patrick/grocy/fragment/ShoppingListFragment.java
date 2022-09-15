@@ -240,6 +240,7 @@ public class ShoppingListFragment extends BaseFragment implements
           }
           ShoppingListItem shoppingListItem = (ShoppingListItem) item;
           underlayButtons.add(new SwipeBehavior.UnderlayButton(
+              activity,
               R.drawable.ic_round_done,
               pos -> {
                 if (position >= groupedListItems.size()) {

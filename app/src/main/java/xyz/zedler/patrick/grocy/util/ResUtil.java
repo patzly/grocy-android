@@ -1,26 +1,27 @@
 /*
- * This file is part of Doodle Android.
+ * This file is part of Grocy Android.
  *
- * Doodle Android is free software: you can redistribute it and/or modify
+ * Grocy Android is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Doodle Android is distributed in the hope that it will be useful,
+ * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Doodle Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
- * Copyright (c) 2020-2022 by Patrick Zedler
+ * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -35,8 +36,11 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BulletSpan;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import androidx.annotation.AttrRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +48,7 @@ import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.databinding.BindingAdapter;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -59,7 +64,7 @@ public class ResUtil {
   @NonNull
   public static String getRawText(Context context, @RawRes int resId) {
     InputStream inputStream = context.getResources().openRawResource(resId);
-    BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream));
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
     StringBuilder text = new StringBuilder();
     try {
       for (String line; (line = bufferedReader.readLine()) != null; ) {
@@ -68,7 +73,7 @@ public class ResUtil {
       text.deleteCharAt(text.length() - 1);
       inputStream.close();
     } catch (Exception e) {
-      Log.e(TAG, "getRawText: ", e);
+      Log.e(TAG, "getRawText", e);
     }
     return text.toString();
   }
@@ -80,6 +85,42 @@ public class ResUtil {
     context.startActivity(Intent.createChooser(intent, null));
   }
 
+  public static int getColorAttr(Context context, @AttrRes int resId) {
+    TypedValue typedValue = new TypedValue();
+    context.getTheme().resolveAttribute(resId, typedValue, true);
+    return typedValue.data;
+  }
+
+  public static int getColorAttr(Context context, @AttrRes int resId, float alpha) {
+    return ColorUtils.setAlphaComponent(getColorAttr(context, resId), (int) (alpha * 255));
+  }
+
+  public static int getColorBg(Context context) {
+    return getColorAttr(context, android.R.attr.colorBackground);
+  }
+
+  public static int getColorOutline(Context context) {
+    return getColorAttr(context, R.attr.colorOutline);
+  }
+
+  public static int getColorOutlineSecondary(Context context) {
+    return getColorAttr(context, R.attr.colorOutline, 0.4f);
+  }
+
+  public static int getColorHighlight(Context context) {
+    return getColorAttr(context, R.attr.colorSecondary, 0.09f);
+  }
+
+  public static void tintMenuItemIcon(Context context, MenuItem item) {
+    if (item == null || item.getIcon() == null) {
+      return;
+    }
+    item.getIcon().setTintList(
+        ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
+    );
+  }
+
+  @Deprecated
   public static CharSequence getBulletList(
       Context context, String prefixToReplace, @Nullable String text, String... highlights
   ) {
@@ -99,7 +140,7 @@ public class ResUtil {
     }
 
     int color = ContextCompat.getColor(context, R.color.on_background);
-    int margin = UnitUtil.spToPx(context, 6);
+    int margin = UiUtil.spToPx(context, 6);
 
     String[] lines = text.split("\n");
     SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -113,7 +154,7 @@ public class ResUtil {
 
       BulletSpan bulletSpan;
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        bulletSpan = new BulletSpan(margin, color, UnitUtil.spToPx(context, 2));
+        bulletSpan = new BulletSpan(margin, color, UiUtil.spToPx(context, 2));
       } else {
         bulletSpan = new BulletSpan(margin, color);
       }
@@ -185,7 +226,7 @@ public class ResUtil {
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     paint.setColor(ContextCompat.getColor(context, R.color.icon));
-    paint.setTextSize(UnitUtil.dpToPx(context, textSize));
+    paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
     paint.setLetterSpacing(0.1f);
 
@@ -201,8 +242,8 @@ public class ResUtil {
 
     canvas.drawText(
             String.valueOf(number),
-            x + UnitUtil.dpToPx(context, textOffsetX),
-            y - UnitUtil.dpToPx(context, textOffsetY),
+            x + UiUtil.dpToPx(context, textOffsetX),
+            y - UiUtil.dpToPx(context, textOffsetY),
             paint
     );
     return bitmap;

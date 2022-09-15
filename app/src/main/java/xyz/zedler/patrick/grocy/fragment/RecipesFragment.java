@@ -203,33 +203,35 @@ public class RecipesFragment extends BaseFragment implements
           }
 
           underlayButtons.add(new UnderlayButton(
-            R.drawable.ic_round_restaurant_menu,
-            pos -> {
-              if (pos >= displayedItems.size()) {
-                return;
+              activity,
+              R.drawable.ic_round_restaurant_menu,
+              pos -> {
+                if (pos >= displayedItems.size()) {
+                  return;
+                }
+                swipeBehavior.recoverLatestSwipedItem();
+                new Handler().postDelayed(() -> {
+                  Recipe recipe = displayedItems.get(pos);
+                  consumeRecipe(recipe.getId());
+                  activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
+                }, 100);
               }
-              swipeBehavior.recoverLatestSwipedItem();
-              new Handler().postDelayed(() -> {
-                Recipe recipe = displayedItems.get(pos);
-                consumeRecipe(recipe.getId());
-                activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
-              }, 100);
-            }
           ));
 
           underlayButtons.add(new UnderlayButton(
-            R.drawable.ic_round_add_shopping_cart,
-            pos -> {
-              if (pos >= displayedItems.size()) {
-                return;
+              activity,
+              R.drawable.ic_round_add_shopping_cart,
+              pos -> {
+                if (pos >= displayedItems.size()) {
+                  return;
+                }
+                swipeBehavior.recoverLatestSwipedItem();
+                new Handler().postDelayed(() -> {
+                  Recipe recipe = displayedItems.get(pos);
+                  addNotFulfilledProductsToCartForRecipe(recipe.getId());
+                  activity.showMessage(getString(R.string.msg_recipe_added_to_cart));
+                }, 100);
               }
-              swipeBehavior.recoverLatestSwipedItem();
-              new Handler().postDelayed(() -> {
-                Recipe recipe = displayedItems.get(pos);
-                addNotFulfilledProductsToCartForRecipe(recipe.getId());
-                activity.showMessage(getString(R.string.msg_recipe_added_to_cart));
-              }, 100);
-            }
           ));
         }
       };

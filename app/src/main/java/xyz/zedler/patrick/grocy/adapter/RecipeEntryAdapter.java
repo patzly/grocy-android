@@ -53,7 +53,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeEntryAdapter extends
@@ -246,7 +246,7 @@ public class RecipeEntryAdapter extends
       Glide
           .with(context)
           .load(new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders))
-          .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(context, 12)))
+          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<Drawable>() {
             @Override

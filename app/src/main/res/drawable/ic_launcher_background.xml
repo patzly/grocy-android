@@ -1,57 +1,18 @@
-<!--
-  ~ This file is part of Grocy Android.
-  ~
-  ~ Grocy Android is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ Grocy Android is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
-  ~
-  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
-  -->
-
-<vector
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:width="108dp"
-  android:height="108dp"
-  android:viewportWidth="108"
-  android:viewportHeight="108">
-  <group
-    android:scaleX="0.7125"
-    android:scaleY="0.7125"
-    android:translateX="2.7"
-    android:translateY="2.7">
-    <path
-      android:pathData="M0,144h144V0H0z"
-      android:fillColor="#ffffff"
-      android:fillAlpha="0.99647886" />
-    <path
-      android:pathData="m78.546,61.505a8.148,8.148 0,0 1,-8.148 8.148,8.148 8.148,0 0,1 -8.148,-8.148 8.148,8.148 0,0 1,8.148 -8.148,8.148 8.148,0 0,1 8.148,8.148z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="6.75248"
-      android:fillColor="#debb63"
-      android:strokeColor="#00000000"
-      android:strokeLineCap="round" />
-    <path
-      android:pathData="m88.323,46.839a6.519,6.519 0,0 0,-6.519 6.519,6.519 6.519,0 0,0 -6.519,6.519 6.519,6.519 0,0 0,6.519 6.519,6.519 6.519,0 0,0 6.519,6.519 6.519,6.519 0,0 0,6.519 -6.519,6.519 6.519,0 0,0 6.519,-6.519 6.519,6.519 0,0 0,-6.519 -6.519,6.519 6.519,0 0,0 -6.519,-6.519z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="5.2148"
-      android:fillColor="#ce6e56"
-      android:strokeColor="#00000000"
-      android:strokeLineCap="round" />
-    <path
-      android:pathData="M65.509,61.505A11.407,11.407 0,0 1,54.101 72.913,11.407 11.407,0 0,1 42.694,61.505 11.407,11.407 0,0 1,54.101 50.098,11.407 11.407,0 0,1 65.509,61.505Z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="9.12591"
-      android:fillColor="#d5cfad"
-      android:strokeColor="#00000000"
-      android:strokeLineCap="round" />
-  </group>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <path
+      android:pathData="M0,108h108V0H0Z"
+      android:fillColor="#fff"/>
+  <path
+      android:pathData="M59.83,48.75a6.42,6.42 0,0 1,-6.41 6.42A6.42,6.42 0,0 1,47 48.75a6.42,6.42 0,0 1,6.42 -6.42,6.42 6.42,0 0,1 6.41,6.42Z"
+      android:fillColor="#d7c950"/>
+  <path
+      android:pathData="M66.83,38.25a4.08,4.08 0,0 0,-4.08 4.08,4.08 4.08,0 0,0 -4.08,4.09 4.08,4.08 0,0 0,4.08 4.08,4.08 4.08,0 0,0 4.08,4.08 4.08,4.08 0,0 0,4.09 -4.08A4.08,4.08 0,0 0,75 46.42a4.08,4.08 0,0 0,-4.08 -4.09,4.08 4.08,0 0,0 -4.09,-4.08Z"
+      android:fillColor="#e96b33"/>
+  <path
+      android:pathData="M49.33,48.17a8.17,8.17 0,0 1,-8.16 8.16A8.17,8.17 0,0 1,33 48.17,8.17 8.17,0 0,1 41.17,40a8.17,8.17 0,0 1,8.16 8.17z"
+      android:fillColor="#bdcbb0"/>
 </vector>

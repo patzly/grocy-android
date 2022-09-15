@@ -31,7 +31,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ExpandableCard extends LinearLayout {
 
@@ -66,11 +66,11 @@ public class ExpandableCard extends LinearLayout {
         new ViewTreeObserver.OnGlobalLayoutListener() {
           @Override
           public void onGlobalLayout() {
-            heightCollapsed = textViewCollapsed.getHeight() + UnitUtil.dpToPx(
+            heightCollapsed = textViewCollapsed.getHeight() + UiUtil.dpToPx(
                 context,
                 32
             );
-            heightExpanded = textViewExpanded.getHeight() + UnitUtil.dpToPx(
+            heightExpanded = textViewExpanded.getHeight() + UiUtil.dpToPx(
                 context,
                 32
             );

@@ -204,6 +204,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
           StockLogEntry entry = stockLogEntries.get(position);
           if (entry.getUndoneBoolean()) return;
           underlayButtons.add(new UnderlayButton(
+              activity,
               R.drawable.ic_round_undo,
               pos -> {
                 if (pos >= stockLogEntries.size()) {
