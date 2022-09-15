@@ -2645,6 +2645,13 @@ public class DownloadHelper {
                     if (debug) {
                       Log.i(tag, "download RecipePositions: " + recipePositions);
                     }
+                    // fix crash, amount can be NaN according to a user
+                    for (int i = 0; i < recipePositions.size(); i++) {
+                      RecipePosition recipePos = recipePositions.get(i);
+                      if (Double.isNaN(recipePos.getAmount())) {
+                        recipePos.setAmount(0);
+                      }
+                    }
                     Single.concat(
                             appDatabase.recipePositionDao().deleteRecipePositions(),
                             appDatabase.recipePositionDao().insertRecipePositions(recipePositions)

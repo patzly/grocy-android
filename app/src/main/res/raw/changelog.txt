@@ -2,6 +2,7 @@
 - New: Material You redesign with dynamic colors for Android 12 and later
 - New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)
 - Fixed: F-Droid build should work again (#566)
+- Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
 
 2.3.0:
 - New: Support for grocy server v3.3.1
