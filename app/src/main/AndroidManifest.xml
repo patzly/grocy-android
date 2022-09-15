@@ -38,14 +38,13 @@
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:supportsRtl="true"
-    android:theme="@style/Theme.Grocy"
+    android:theme="@style/Theme.GrocyM3"
     android:hardwareAccelerated="true"
     android:networkSecurityConfig="@xml/network_security_configuration"
     tools:ignore="UnusedAttribute">
 
     <activity
       android:name=".activity.SplashActivity"
-      android:theme="@style/Theme.Grocy.Splash"
       android:exported="true">
 
       <intent-filter>
@@ -57,7 +56,6 @@
 
     <activity
       android:name=".activity.MainActivity"
-      android:theme="@style/Theme.Grocy.BottomAppBar"
       android:windowSoftInputMode="adjustPan" />
 
     <receiver

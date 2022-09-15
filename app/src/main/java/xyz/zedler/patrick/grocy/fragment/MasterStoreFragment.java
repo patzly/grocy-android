@@ -233,7 +233,7 @@ public class MasterStoreFragment extends BaseFragment {
       binding.swipeMasterStore.setRefreshing(false);
       activity.showSnackbar(
           Snackbar.make(
-              activity.findViewById(R.id.frame_main_container),
+              activity.findViewById(R.id.coordinator_main),
               activity.getString(R.string.msg_no_connection),
               Snackbar.LENGTH_SHORT
           ).setAction(
@@ -276,7 +276,7 @@ public class MasterStoreFragment extends BaseFragment {
           binding.swipeMasterStore.setRefreshing(false);
           activity.showSnackbar(
               Snackbar.make(
-                  activity.findViewById(R.id.frame_main_container),
+                  activity.findViewById(R.id.coordinator_main),
                   getErrorMessage(error),
                   Snackbar.LENGTH_SHORT
               ).setAction(
@@ -433,7 +433,7 @@ public class MasterStoreFragment extends BaseFragment {
   private void showErrorMessage(VolleyError volleyError) {
     activity.showSnackbar(
         Snackbar.make(
-            activity.findViewById(R.id.frame_main_container),
+            activity.findViewById(R.id.coordinator_main),
             getErrorMessage(volleyError),
             Snackbar.LENGTH_SHORT
         )

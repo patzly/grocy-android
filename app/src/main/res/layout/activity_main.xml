@@ -21,22 +21,16 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/coordinator_main"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <FrameLayout
-    android:id="@+id/frame_main_container"
+  <androidx.fragment.app.FragmentContainerView
+    android:id="@+id/fragment_main_nav_host"
+    android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.fragment.app.FragmentContainerView
-      android:id="@+id/nav_host_fragment"
-      android:name="androidx.navigation.fragment.NavHostFragment"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      app:defaultNavHost="true" />
-
-  </FrameLayout>
+    android:layout_height="match_parent"
+    app:defaultNavHost="true" />
 
   <xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar
     android:id="@+id/bottom_app_bar"
@@ -44,7 +38,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     app:contentInsetStartWithNavigation="0dp"
-    app:backgroundTint="@color/primary"
     app:navigationIcon="@drawable/ic_round_menu_anim"
     app:menu="@menu/menu_empty"
     app:fabCradleRoundedCornerRadius="32dp"
@@ -55,25 +48,22 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ic_round_barcode_scan"
-    android:tint="@color/on_secondary"
     android:contentDescription="@string/action_scan"
-    app:backgroundTint="@color/retro_green_bg_white"
     app:layout_anchor="@id/bottom_app_bar"
-    app:rippleColor="@color/highlight_on_secondary"
     app:fabSize="auto" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/fab_scroll"
+    android:id="@+id/fab_main_scroll"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="73dp"
+    android:layout_marginBottom="94dp"
     android:layout_marginEnd="16dp"
     android:layout_gravity="bottom|end"
     android:src="@drawable/ic_round_expand_less"
     android:tooltipText="@string/action_top_scroll"
     android:visibility="gone"
-    app:backgroundTint="@color/primary"
-    app:tint="@color/icon"
+    app:backgroundTint="?attr/colorSurface"
+    app:tint="?attr/colorOnSurface"
     app:rippleColor="@color/highlight"
     app:fabCustomSize="32dp"
     app:elevation="3dp"

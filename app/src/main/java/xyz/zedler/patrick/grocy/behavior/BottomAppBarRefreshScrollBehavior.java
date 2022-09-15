@@ -359,7 +359,8 @@ public class BottomAppBarRefreshScrollBehavior {
           activity, visible ? R.color.primary : R.color.background
       );
       if (navBarCurrentColor != navBarTargetColor) {
-        ValueAnimator valueAnimator = ValueAnimator.ofArgb(
+        // TODO: remove all of this stuff for edge-to-edge behavior
+        /*ValueAnimator valueAnimator = ValueAnimator.ofArgb(
             navBarCurrentColor, navBarTargetColor
         );
         valueAnimator.addUpdateListener(
@@ -368,7 +369,7 @@ public class BottomAppBarRefreshScrollBehavior {
             )
         );
         valueAnimator.setStartDelay(visible ? 0 : 100);
-        valueAnimator.setDuration(visible ? 70 : 100).start();
+        valueAnimator.setDuration(visible ? 70 : 100).start();*/
       } else if (DEBUG) {
         Log.i(
             TAG, "onChangeBottomBarVisibility("

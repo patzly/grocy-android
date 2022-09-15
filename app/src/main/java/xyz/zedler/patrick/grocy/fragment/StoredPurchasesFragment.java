@@ -128,7 +128,7 @@ public class StoredPurchasesFragment extends BaseFragment
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snackbar);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;

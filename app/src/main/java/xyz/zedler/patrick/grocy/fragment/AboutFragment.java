@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
@@ -68,6 +69,13 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
     binding.setFragment(this);
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBarAbout);
+    systemBarBehavior.setScroll(binding.scrollAbout, binding.linearAboutContainer);
+    systemBarBehavior.setUp();
+
+    binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navigateUp());
 
     setOnClickListeners(
         view,

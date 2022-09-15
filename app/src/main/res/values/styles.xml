@@ -23,13 +23,13 @@
   <!-- SNACKBAR -->
   <!-- TODO: try to set button text color in style instead of programmatically -->
 
-  <style
+  <!--style
     name="Widget.Grocy.Button.TextButton.Snackbar"
     parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
     <item name="android:fontFamily">@font/jost_bold</item>
     <item name="android:textSize">14.5sp</item>
     <item name="cornerRadius">8dp</item>
-  </style>
+  </style-->
 
   <!-- TOOLBAR MENU BUTTON -->
 
@@ -174,13 +174,13 @@
 
   <!-- SWITCH -->
 
-  <style name="Widget.Grocy.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+  <!--style name="Widget.Grocy.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginStart">16dp</item>
     <item name="android:minWidth">0dp</item>
     <item name="android:minHeight">0dp</item>
-  </style>
+  </style-->
 
   <!-- TAB LAYOUT -->
 
@@ -195,7 +195,7 @@
 
   <!-- BUTTON -->
 
-  <style
+  <!--style
     name="Widget.Grocy.Button.OutlinedButton"
     parent="Widget.MaterialComponents.Button.OutlinedButton">
     <item name="rippleColor">@color/secondary_translucent</item>
@@ -206,9 +206,9 @@
     <item name="strokeColor">@color/stroke_secondary</item>
     <item name="strokeWidth">1dp</item>
     <item name="cornerRadius">10dp</item>
-  </style>
+  </style-->
 
-  <style
+  <!--style
     name="Widget.Grocy.Button.UnelevatedButton"
     parent="Widget.MaterialComponents.Button.UnelevatedButton">
     <item name="rippleColor">@color/highlight_on_secondary</item>
@@ -217,15 +217,15 @@
     <item name="android:fontFamily">@font/jost_bold</item>
     <item name="backgroundTint">@color/button_bg_color_selector</item>
     <item name="cornerRadius">10dp</item>
-  </style>
+  </style-->
 
-  <style name="Widget.Grocy.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+  <!--style name="Widget.Grocy.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
     <item name="rippleColor">@color/secondary_translucent</item>
     <item name="android:textColor">@color/button_text_color_secondary_selector</item>
     <item name="android:textStyle">bold</item>
     <item name="android:fontFamily">@font/jost_bold</item>
     <item name="cornerRadius">10dp</item>
-  </style>
+  </style-->
 
   <!-- PROGRESS BAR -->
 
@@ -257,7 +257,7 @@
 
   <!-- LIST -->
 
-  <style name="Widget.Grocy.LinearLayout.ListItem" parent="">
+  <!--style name="Widget.Grocy.LinearLayout.ListItem" parent="">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:paddingStart">16dp</item>
@@ -346,7 +346,7 @@
     <item name="android:layout_gravity">start|center_vertical</item>
     <item name="android:layout_marginEnd">32dp</item>
     <item name="android:importantForAccessibility">no</item>
-  </style>
+  </style-->
 
   <style
     name="Widget.Grocy.ImageView.ListItem.Icon.Top"
@@ -378,14 +378,14 @@
 
   <!-- CHECK BOX -->
 
-  <style name="Widget.Grocy.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+  <!--style name="Widget.Grocy.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">15sp</item>
     <item name="android:paddingStart">16dp</item>
     <item name="android:textColor">@color/on_background</item>
     <item name="android:textAlignment">viewStart</item>
-  </style>
+  </style-->
 
   <style name="Widget.Grocy.CheckBox.Dense" parent="Widget.Grocy.CheckBox">
     <item name="android:minHeight">24dp</item>
@@ -393,10 +393,10 @@
 
   <!-- TOOLTIP -->
 
-  <style name="Widget.Grocy.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+  <!--style name="Widget.Grocy.Tooltip" parent="Widget.MaterialComponents.Tooltip">
     <item name="backgroundTint">@color/tooltip_background</item>
     <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
-  </style>
+  </style-->
 
   <!-- SHAPE -->
 
@@ -406,7 +406,7 @@
 
   <!-- TEXT -->
 
-  <style name="Widget.Grocy.TextView" parent="Widget.MaterialComponents.TextView">
+  <!--style name="Widget.Grocy.TextView" parent="Widget.MaterialComponents.TextView">
     <item name="android:textSize">15.5sp</item>
     <item name="android:lineSpacingExtra">-1.5sp</item>
     <item name="android:textColor">@color/on_background</item>
@@ -414,7 +414,7 @@
     <item name="android:fontFamily">@font/jost_book</item>
     <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
     <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
-  </style>
+  </style-->
 
   <!-- This style is overridden in the Hebrew res (iw) folder
   Fallback to system font, extra styling needed for non-latin languages
@@ -424,20 +424,20 @@
     <item name="android:fontFamily">@font/jost_medium</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView">
+  <!--style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView">
     <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
-  </style>
+  </style-->
 
   <style name="Widget.Grocy.TextView.Paragraph.Fix" parent="Widget.Grocy.TextView.Paragraph">
     <item name="android:breakStrategy" tools:targetApi="m">simple</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
+  <!--style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
     <item name="android:textColor">@color/on_primary</item>
     <item name="android:textSize" tools:ignore="SpUsage">21.5dp</item>
     <item name="android:fontFamily">@font/jost_bold</item>
     <item name="android:singleLine">true</item>
-  </style>
+  </style-->
 
   <style name="Widget.Grocy.TextView.Toolbar.BottomSheet" parent="Widget.Grocy.TextView.Toolbar">
     <item name="android:layout_width">match_parent</item>
@@ -480,7 +480,7 @@
     <item name="android:fontFamily">@font/jost_bold</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.Category" parent="Widget.Grocy.TextView">
+  <!--style name="Widget.Grocy.TextView.Category" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginStart">72dp</item>
@@ -507,7 +507,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">16.5sp</item>
     <item name="android:maxLines">2</item>
-  </style>
+  </style-->
 
   <style name="Widget.Grocy.TextView.ListItem.Title.Stock" parent="Widget.Grocy.TextView.Title">
     <item name="android:layout_width">match_parent</item>
@@ -516,13 +516,13 @@
     <item name="android:maxLines">2</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.ListItem.Description" parent="Widget.Grocy.TextView">
+  <!--style name="Widget.Grocy.TextView.ListItem.Description" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">15sp</item>
     <item name="android:textColor">@color/on_background_secondary</item>
     <item name="android:maxLines">10</item>
-  </style>
+  </style-->
 
   <style name="Widget.Grocy.TextView.DrawerItem" parent="Widget.Grocy.TextView.Medium">
     <item name="android:layout_width">wrap_content</item>
@@ -534,11 +534,11 @@
 
   <!-- TEXT APPEARANCE -->
 
-  <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
+  <!--style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
     <item name="android:textColor">@color/tooltip_text</item>
     <item name="android:textSize">16sp</item>
     <item name="fontFamily">@font/jost_book</item>
-  </style>
+  </style-->
 
   <style name="TextAppearance.Grocy.Error" parent="TextAppearance.Design.Error">
     <item name="fontFamily">@font/jost_medium</item>

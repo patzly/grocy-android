@@ -115,7 +115,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.CONSUME_SUCCESS) {
         assert getArguments() != null;

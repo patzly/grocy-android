@@ -27,8 +27,11 @@ import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
@@ -37,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
@@ -84,13 +88,26 @@ public class OverviewStartFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    new ScrollBehavior(activity).setUpScroll(
+        binding.appBar, binding.scroll, false
+    );
+
+    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
+    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+
     clickUtil = new ClickUtil(1000);
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });

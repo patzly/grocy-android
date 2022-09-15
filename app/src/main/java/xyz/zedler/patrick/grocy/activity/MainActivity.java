@@ -64,6 +64,10 @@ import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
+import com.google.android.material.color.HarmonizedColors;
+import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.security.NoSuchAlgorithmException;
@@ -94,6 +98,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.Constants.THEME;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -187,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
       }
     }
 
-    /*switch (sharedPrefs.getString(PREF.THEME, DEF.THEME)) {
+    switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
       case THEME.RED:
         setTheme(R.style.Theme_Grocy_Red);
         break;
@@ -220,10 +225,10 @@ public class MainActivity extends AppCompatActivity {
               ).build()
           );
         } else {
-          setTheme(R.style.Theme_Grocy_Yellow);
+          setTheme(R.style.Theme_Grocy_Green);
         }
         break;
-    }*/
+    }
 
     Bundle bundleInstanceState = getIntent().getBundleExtra(ARGUMENT.INSTANCE_STATE);
     super.onCreate(bundleInstanceState != null ? bundleInstanceState : savedInstanceState);
@@ -238,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     networkReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
-        Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
+        Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
         assert navHostFragment != null;
         if (navHostFragment.getChildFragmentManager().getFragments().size() == 0) {
           return;
@@ -269,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
     fragmentManager = getSupportFragmentManager();
 
     NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.nav_host_fragment);
+        .findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     navController = navHostFragment.getNavController();
 
@@ -301,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
     scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
     scrollBehavior.setUpBottomAppBar(binding.bottomAppBar);
-    scrollBehavior.setUpTopScroll(R.id.fab_scroll);
+    scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
     scrollBehavior.setHideOnScroll(true);
 
     Runnable onSuccessConfigLoad = () -> {
@@ -577,7 +582,7 @@ public class MainActivity extends AppCompatActivity {
 
   public void navigateUp() {
     NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.nav_host_fragment);
+        .findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     NavController navController = navHostFragment.getNavController();
     navController.navigateUp();
@@ -614,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showMessage(String message) {
-    showMessage(message, binding.frameMainContainer);
+    showMessage(message, binding.coordinatorMain);
   }
 
   public void showMessage(@StringRes int message) {
@@ -675,7 +680,7 @@ public class MainActivity extends AppCompatActivity {
 
   @NonNull
   public BaseFragment getCurrentFragment() {
-    Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
+    Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
   }

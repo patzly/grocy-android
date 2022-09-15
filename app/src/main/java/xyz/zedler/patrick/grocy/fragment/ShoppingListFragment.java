@@ -209,7 +209,7 @@ public class ShoppingListFragment extends BaseFragment implements
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });
@@ -650,7 +650,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
   private void showMessage(String msg) {
     activity.showSnackbar(
-        Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
+        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
     );
   }
 

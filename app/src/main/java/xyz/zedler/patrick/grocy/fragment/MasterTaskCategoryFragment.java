@@ -235,7 +235,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
       binding.swipe.setRefreshing(false);
       activity.showSnackbar(
           Snackbar.make(
-              activity.binding.frameMainContainer,
+              activity.binding.coordinatorMain,
               activity.getString(R.string.msg_no_connection),
               Snackbar.LENGTH_SHORT
           ).setAction(
@@ -278,7 +278,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
           binding.swipe.setRefreshing(false);
           activity.showSnackbar(
               Snackbar.make(
-                  activity.binding.frameMainContainer,
+                  activity.binding.coordinatorMain,
                   getErrorMessage(error),
                   Snackbar.LENGTH_SHORT
               ).setAction(
@@ -425,7 +425,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
   private void showErrorMessage(VolleyError volleyError) {
     activity.showSnackbar(
         Snackbar.make(
-            activity.binding.frameMainContainer,
+            activity.binding.coordinatorMain,
             getErrorMessage(volleyError),
             Snackbar.LENGTH_SHORT
         )

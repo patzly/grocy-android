@@ -180,7 +180,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });

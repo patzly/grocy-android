@@ -39,18 +39,15 @@
       type="xyz.zedler.patrick.grocy.util.ClickUtil" />
   </data>
 
-  <RelativeLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:minHeight="?attr/actionBarSize"
-      android:background="@color/primary"
-      android:layout_alignParentTop="true"
       android:orientation="vertical"
       android:animateLayoutChanges="true">
 
@@ -129,12 +126,10 @@
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@id/app_bar"
+      android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       android:animateLayoutChanges="true"
       app:transitionTypeChanging="@{true}"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -150,6 +145,7 @@
           android:overScrollMode="never">
 
           <LinearLayout
+            android:id="@+id/linear_container_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="16dp"
@@ -168,7 +164,7 @@
               android:visibility="@{viewModel.beginnerModeEnabled || viewModel.isDemoInstance || !viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK) ? View.VISIBLE : View.GONE}">
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Filled"
+                style="@style/Widget.Grocy.Card.Text"
                 android:layout_marginBottom="8dp"
                 android:visibility="@{viewModel.beginnerModeEnabled ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> fragment.navigateToSettingsCatBehavior()}"
@@ -178,12 +174,13 @@
                   style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
                   android:text="@string/msg_help_start" />
 
               </com.google.android.material.card.MaterialCardView>
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Filled"
+                style="@style/Widget.Grocy.Card.Text.Error"
                 android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> fragment.navigateToSettingsCatServer()}"
                 android:layout_marginBottom="8dp"
@@ -193,14 +190,13 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/retro_red_fg"
-                  android:fontFamily="@font/jost_medium"
+                  android:textColor="?attr/colorOnErrorContainer"
                   android:text="@string/msg_logout_demo_short" />
 
               </com.google.android.material.card.MaterialCardView>
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Filled"
+                style="@style/Widget.Grocy.Card.Text"
                 android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK) ? View.GONE : View.VISIBLE}"
                 android:layout_marginBottom="8dp">
 
@@ -208,22 +204,22 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
                   android:text="@string/stock_disabled" />
 
               </com.google.android.material.card.MaterialCardView>
 
-              <View
-                android:layout_width="70dp"
-                android:layout_height="1dp"
-                android:background="@color/stroke_secondary"
-                android:layout_gravity="center_horizontal"
+              <com.google.android.material.divider.MaterialDivider
+                android:layout_width="56dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp" />
 
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card"
+              style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
@@ -428,7 +424,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Filled"
+              style="@style/Widget.Grocy.Card.Text.Error"
               android:visibility="@{viewModel.storedPurchasesOnDevice ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
               android:layout_marginBottom="8dp"
@@ -439,14 +435,13 @@
                 style="@style/Widget.Grocy.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/retro_red_fg"
-                android:fontFamily="@font/jost_medium"
+                android:textColor="?attr/colorOnErrorContainer"
                 android:text="@string/msg_stored_purchases_overview" />
 
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card"
+              style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
@@ -487,7 +482,7 @@
               android:clipChildren="false">
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card"
+                style="@style/Widget.Grocy.Card.Outlined"
                 android:layout_width="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
@@ -519,7 +514,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card"
+                style="@style/Widget.Grocy.Card.Outlined"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
@@ -562,7 +557,7 @@
               android:clipChildren="false">
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card"
+                style="@style/Widget.Grocy.Card.Outlined"
                 android:layout_width="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
@@ -595,7 +590,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card"
+                style="@style/Widget.Grocy.Card.Outlined"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:onClick="@{() -> fragment.navigate(R.id.inventoryFragment)}"
@@ -627,16 +622,15 @@
 
             </LinearLayout>
 
-            <View
-              android:layout_width="70dp"
-              android:layout_height="1dp"
-              android:background="@color/stroke_secondary"
-              android:layout_gravity="center_horizontal"
-              android:layout_marginBottom="16dp"
-              android:layout_marginTop="8dp"/>
+            <com.google.android.material.divider.MaterialDivider
+              android:layout_width="56dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="8dp"
+              android:layout_marginBottom="16dp" />
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card"
+              style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
@@ -665,17 +659,16 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <View
-              android:layout_width="70dp"
-              android:layout_height="1dp"
-              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
-              android:background="@color/stroke_secondary"
-              android:layout_gravity="center_horizontal"
+            <com.google.android.material.divider.MaterialDivider
+              android:layout_width="56dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="8dp"
               android:layout_marginBottom="16dp"
-              android:layout_marginTop="8dp"/>
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card"
+              style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
@@ -859,7 +852,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card"
+              style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
@@ -962,17 +955,16 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <View
-              android:layout_width="70dp"
-              android:layout_height="1dp"
-              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) || viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}"
-              android:background="@color/stroke_secondary"
-              android:layout_gravity="center_horizontal"
+            <com.google.android.material.divider.MaterialDivider
+              android:layout_width="56dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginTop="8dp"
               android:layout_marginBottom="16dp"
-              android:layout_marginTop="8dp"/>
+              android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) || viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}" />
 
             <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card"
+              style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="16dp"
@@ -1008,5 +1000,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-  </RelativeLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>
