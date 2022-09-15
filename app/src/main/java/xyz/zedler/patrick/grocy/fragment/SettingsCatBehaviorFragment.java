@@ -94,12 +94,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(binding.scroll);
       activity.getScrollBehavior().setHideOnScroll(true);
-      activity.updateBottomAppBar(
-          Constants.FAB.POSITION.GONE,
-          R.menu.menu_empty,
-          () -> {
-          }
-      );
+      activity.updateBottomAppBar(Constants.FAB.POSITION.GONE, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }
 

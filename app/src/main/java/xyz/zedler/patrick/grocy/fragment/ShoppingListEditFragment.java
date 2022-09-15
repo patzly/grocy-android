@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -38,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListEditViewModel;
 
 public class ShoppingListEditFragment extends BaseFragment {
@@ -134,8 +136,9 @@ public class ShoppingListEditFragment extends BaseFragment {
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        R.menu.menu_shopping_list_edit,
-        this::setUpBottomMenu
+        startUpShoppingList != null && startUpShoppingList.getId() != 1
+            ? R.menu.menu_shopping_list_edit : R.menu.menu_empty,
+        getBottomMenuClickListener()
     );
     activity.updateFab(
         R.drawable.ic_round_backup,
@@ -154,17 +157,15 @@ public class ShoppingListEditFragment extends BaseFragment {
     binding.textInputName.clearFocus();
   }
 
-  public void setUpBottomMenu() {
-    MenuItem menuItemDelete;
-    menuItemDelete = activity.getBottomMenu().findItem(R.id.action_delete);
-    if (menuItemDelete != null && startUpShoppingList != null && startUpShoppingList.getId() != 1) {
-      menuItemDelete.setVisible(true);
-      menuItemDelete.setOnMenuItemClickListener(item -> {
-        ((Animatable) menuItemDelete.getIcon()).start();
+  public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_delete) {
+        ViewUtil.startIcon(item);
         viewModel.safeDeleteShoppingList();
         return true;
-      });
-    }
+      }
+      return false;
+    };
   }
 
   @Override

@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
@@ -176,8 +177,8 @@ public class MasterProductGroupFragment extends BaseFragment {
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.END,
-        R.menu.menu_master_item_edit,
-        this::setUpBottomMenu
+        editProductGroup != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
+        getBottomMenuClickListener()
     );
     activity.updateFab(
         R.drawable.ic_round_backup,
@@ -457,16 +458,15 @@ public class MasterProductGroupFragment extends BaseFragment {
     );
   }
 
-  public void setUpBottomMenu() {
-    MenuItem delete = activity.getBottomMenu().findItem(R.id.action_delete);
-    if (delete != null) {
-      delete.setOnMenuItemClickListener(item -> {
+  public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
         deleteProductGroupSafely();
         return true;
-      });
-      delete.setVisible(editProductGroup != null);
-    }
+      }
+      return false;
+    };
   }
 
   @NonNull

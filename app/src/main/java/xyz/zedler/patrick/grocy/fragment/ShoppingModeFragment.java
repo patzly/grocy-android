@@ -255,12 +255,6 @@ public class ShoppingModeFragment extends BaseFragment implements
   private void updateUI() {
     activity.getScrollBehavior().setUpScroll(null);
     activity.getScrollBehavior().setHideOnScroll(false);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.GONE,
-        R.menu.menu_shopping_list,
-        () -> {
-        }
-    );
   }
 
   @Override
