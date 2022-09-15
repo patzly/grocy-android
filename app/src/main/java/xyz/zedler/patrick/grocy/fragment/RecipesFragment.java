@@ -55,7 +55,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 
@@ -294,11 +293,7 @@ public class RecipesFragment extends BaseFragment implements
   private void updateUI(boolean animated) {
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        POSITION.CENTER,
-        R.menu.menu_recipes,
-        this::onMenuItemClick
-    );
+    activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
         R.string.action_add,

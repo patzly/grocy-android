@@ -50,7 +50,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
 
 public class StoredPurchasesFragment extends BaseFragment
@@ -166,7 +165,7 @@ public class StoredPurchasesFragment extends BaseFragment
     activity.getScrollBehavior().setUpScroll(binding.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        POSITION.GONE,
+        false,
         R.menu.menu_empty,
         (OnMenuItemClickListener) null
     );

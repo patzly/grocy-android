@@ -129,7 +129,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
   private void updateUI(boolean animated) {
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(Constants.FAB.POSITION.END, R.menu.menu_empty);
+    activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_backup,
         R.string.action_save,

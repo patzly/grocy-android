@@ -249,7 +249,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         args.getShoppingListItems() != null
             ? R.menu.menu_purchase_batch
             : R.menu.menu_purchase,

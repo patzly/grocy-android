@@ -154,7 +154,7 @@ public class TaskEntryEditFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         viewModel.isActionEdit()
             ? R.menu.menu_task_entry_edit_edit
             : R.menu.menu_task_entry_edit_create,

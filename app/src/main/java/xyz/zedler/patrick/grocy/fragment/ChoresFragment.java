@@ -50,7 +50,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ChoresViewModel;
@@ -249,11 +248,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
   private void updateUI() {
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        POSITION.GONE,
-        R.menu.menu_tasks,
-        this::onMenuItemClick
-    );
+    activity.updateBottomAppBar(false, R.menu.menu_tasks, this::onMenuItemClick);
   }
 
   @Override

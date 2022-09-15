@@ -287,7 +287,7 @@ public class StockOverviewFragment extends BaseFragment implements
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.GONE,
+        false,
         R.menu.menu_stock,
         this::onMenuItemClick
     );

@@ -35,7 +35,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
@@ -212,7 +211,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
   private void updateUI() {
     activity.getScrollBehavior().setUpScroll(binding.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(Constants.FAB.POSITION.GONE, R.menu.menu_empty);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 
   private void hideDisabledFeatures() {

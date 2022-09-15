@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockJournalViewModel;
 
@@ -230,7 +229,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.GONE,
+        false,
         R.menu.menu_empty,
         this::onMenuItemClick
     );

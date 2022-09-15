@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -163,7 +162,7 @@ public class MasterStoreFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(R.id.scroll_master_store);
     activity.getScrollBehavior().setHideOnScroll(false);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         editStore != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
         getBottomMenuClickListener()
     );

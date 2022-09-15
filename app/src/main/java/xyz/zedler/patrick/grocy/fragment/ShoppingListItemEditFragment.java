@@ -194,7 +194,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     activity.getScrollBehavior().setUpScroll(R.id.scroll_shopping_list_item_edit);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         viewModel.isActionEdit()
             ? R.menu.menu_shopping_list_item_edit_edit
             : R.menu.menu_shopping_list_item_edit_create,

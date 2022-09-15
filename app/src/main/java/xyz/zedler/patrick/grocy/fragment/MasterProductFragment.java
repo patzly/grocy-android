@@ -199,7 +199,7 @@ public class MasterProductFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         viewModel.isActionEdit()
             ? R.menu.menu_master_product_edit
             : R.menu.menu_master_product_create,

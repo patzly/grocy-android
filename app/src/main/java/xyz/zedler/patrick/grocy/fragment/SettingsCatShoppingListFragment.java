@@ -35,7 +35,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
@@ -88,7 +87,7 @@ public class SettingsCatShoppingListFragment extends BaseFragment {
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(binding.scroll);
       activity.getScrollBehavior().setHideOnScroll(true);
-      activity.updateBottomAppBar(Constants.FAB.POSITION.GONE, R.menu.menu_empty);
+      activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }
 

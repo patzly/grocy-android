@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatConversionsViewModel;
 
 public class MasterProductCatConversionsFragment extends BaseFragment implements
@@ -162,7 +161,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        POSITION.CENTER,
+        true,
         R.menu.menu_master_product_edit,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {

@@ -32,16 +32,14 @@
     android:layout_height="match_parent"
     app:defaultNavHost="true" />
 
-  <xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar
+  <com.google.android.material.bottomappbar.BottomAppBar
     android:id="@+id/bottom_app_bar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    app:contentInsetStartWithNavigation="0dp"
+    app:elevation="0dp"
     app:navigationIcon="@drawable/ic_round_menu_anim"
-    app:menu="@menu/menu_empty"
-    app:fabCradleRoundedCornerRadius="32dp"
-    app:fabAnimationMode="scale" />
+    app:menu="@menu/menu_empty" />
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/fab_main"

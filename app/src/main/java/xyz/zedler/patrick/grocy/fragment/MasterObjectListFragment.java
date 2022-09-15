@@ -25,7 +25,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -283,7 +282,7 @@ public class MasterObjectListFragment extends BaseFragment
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.CENTER,
+        true,
         !entity.equals(GrocyApi.ENTITY.PRODUCTS)
             ? viewModel.isSortAscending() ? R.menu.menu_master_items_asc : R.menu.menu_master_items_desc
             : viewModel.isSortAscending() ? R.menu.menu_master_products_asc : R.menu.menu_master_products_desc,

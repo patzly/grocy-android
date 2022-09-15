@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -268,7 +267,7 @@ public class ShoppingListFragment extends BaseFragment implements
     activity.getScrollBehavior().setUpScroll(binding.recycler);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        viewModel.isOffline() ? Constants.FAB.POSITION.GONE : Constants.FAB.POSITION.CENTER,
+        !viewModel.isOffline(),
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
         getBottomMenuClickListener()
     );
@@ -547,7 +546,7 @@ public class ShoppingListFragment extends BaseFragment implements
     }
     if (isOnline) {
       activity.updateBottomAppBar(
-          Constants.FAB.POSITION.CENTER,
+          true,
           R.menu.menu_shopping_list,
           getBottomMenuClickListener()
       );

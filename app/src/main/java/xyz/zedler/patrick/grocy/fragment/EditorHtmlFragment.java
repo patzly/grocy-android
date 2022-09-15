@@ -24,16 +24,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.FAB;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 
 public class EditorHtmlFragment extends BaseFragment {
 
@@ -63,7 +60,7 @@ public class EditorHtmlFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
-    activity.updateBottomAppBar(POSITION.END, R.menu.menu_empty);
+    activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_done,
         R.string.action_back,

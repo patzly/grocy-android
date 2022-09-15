@@ -19,11 +19,9 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -135,7 +133,7 @@ public class ShoppingListEditFragment extends BaseFragment {
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         startUpShoppingList != null && startUpShoppingList.getId() != 1
             ? R.menu.menu_shopping_list_edit : R.menu.menu_empty,
         getBottomMenuClickListener()

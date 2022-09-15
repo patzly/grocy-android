@@ -185,11 +185,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   private void updateUI(boolean animated) {
     activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
     activity.getScrollBehavior().setHideOnScroll(false);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
-        R.menu.menu_consume,
-        this::onMenuItemClick
-    );
+    activity.updateBottomAppBar(true, R.menu.menu_consume, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_consume_product,
         R.string.action_consume,

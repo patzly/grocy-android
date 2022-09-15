@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -48,7 +47,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.ChooseProductViewModel;
 
 public class ChooseProductFragment extends BaseFragment
@@ -190,11 +188,7 @@ public class ChooseProductFragment extends BaseFragment
     // UPDATE UI
     activity.getScrollBehavior().setUpScroll(binding.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        POSITION.GONE,
-        R.menu.menu_empty,
-        (OnMenuItemClickListener) null
-    );
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 
   public void clearInputFocus() {

@@ -52,7 +52,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -70,6 +69,7 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
+import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.security.NoSuchAlgorithmException;
@@ -304,10 +304,13 @@ public class MainActivity extends AppCompatActivity {
       ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
       navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
     });
+    binding.bottomAppBar.setHideOnScroll(true);
+    binding.bottomAppBar.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(this));
 
+    // TODO: remake behavior for new BottomAppBar
     scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
-    scrollBehavior.setUpBottomAppBar(binding.bottomAppBar);
-    scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
+    scrollBehavior.setUpBottomAppBar(new BottomAppBar(this));
+    //scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
     scrollBehavior.setHideOnScroll(true);
 
     Runnable onSuccessConfigLoad = () -> {
@@ -414,39 +417,26 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void updateBottomAppBar(
-      int newFabPosition,
+      boolean showFab,
       @MenuRes int newMenuId,
       @Nullable Toolbar.OnMenuItemClickListener onMenuItemClickListener
   ) {
-    int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
-    switch (newFabPosition) {
-      case Constants.FAB.POSITION.CENTER:
-        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-          binding.fabMain.show();
-        }
-        scrollBehavior.setTopScrollVisibility(true);
-        break;
-      case Constants.FAB.POSITION.END:
-        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-          binding.fabMain.show();
-        }
-        mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
-        scrollBehavior.setTopScrollVisibility(false);
-        break;
-      case Constants.FAB.POSITION.GONE:
-        if (binding.fabMain.isShown()) {
-          binding.fabMain.hide();
-        }
-        scrollBehavior.setTopScrollVisibility(true);
-        break;
+    scrollBehavior.setTopScrollVisibility(true);
+    if (showFab) {
+      if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+        binding.fabMain.show();
+      }
+    } else {
+      if (binding.fabMain.isShown()) {
+        binding.fabMain.hide();
+      }
     }
-    binding.bottomAppBar.setFabAlignmentMode(mode);
     binding.bottomAppBar.replaceMenu(newMenuId);
     binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
   }
 
-  public void updateBottomAppBar(int newFabPosition, @MenuRes int newMenuId) {
-    updateBottomAppBar(newFabPosition, newMenuId, null);
+  public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {
+    updateBottomAppBar(showFab, newMenuId, null);
   }
 
   public void updateFab(
@@ -527,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
       }
       if (!isServerUrlEmpty()) {
-        binding.bottomAppBar.show();
+        binding.bottomAppBar.performShow();
         //isScrollRestored = true;
       }
     }
@@ -562,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
     assert navHostFragment != null;
     NavController navController = navHostFragment.getNavController();
     navController.navigateUp();
-    binding.bottomAppBar.show();
+    binding.bottomAppBar.performShow();
     hideKeyboard();
   }
 
