@@ -165,8 +165,8 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         .build();
 
     picker.addOnPositiveButtonClickListener(v -> viewModel.getNextTrackingTimeLive().setValue(
-        String.format(Locale.getDefault(), "%02d:%02d",
-            picker.getHour(), picker.getMinute())
+        String.format(Locale.getDefault(), "%02d:%02d:%02d",
+            picker.getHour(), picker.getMinute(), 0)
     ));
     picker.show(getParentFragmentManager(), "time_picker_dialog");
   }

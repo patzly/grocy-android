@@ -132,7 +132,7 @@ public class ChoreEntryAdapter extends
     Integer days = null;
     boolean colorDays = false;
     if (date != null && !date.isEmpty() && !date.equals(DATE.NEVER_OVERDUE_WITH_TIME)) {
-      days = DateUtil.getDaysFromNowWithTime(date);
+      days = DateUtil.getDaysFromNow(date);
     }
 
     if (days != null) {
@@ -140,11 +140,10 @@ public class ChoreEntryAdapter extends
       holder.binding.daysHuman.setVisibility(View.VISIBLE);
       if (choreEntry.getTrackDateOnlyBoolean()) {
         holder.binding.days.setText(dateUtil.getLocalizedDate(date, DateUtil.FORMAT_SHORT));
-        holder.binding.daysHuman.setText(dateUtil.getHumanForDaysFromNow(date, false));
       } else {
         holder.binding.days.setText(dateUtil.getLocalizedDate(date, DateUtil.FORMAT_SHORT_WITH_TIME));
-        holder.binding.daysHuman.setText(dateUtil.getHumanForDaysFromNow(date, true));
       }
+      holder.binding.daysHuman.setText(dateUtil.getHumanForDaysFromNow(date));
       if (days <= 5) {
         colorDays = true;
       }

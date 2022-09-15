@@ -155,8 +155,7 @@ public class StockLogEntryAdapter extends
           )
       ));
       stockLogViewHolder.binding.undoneTimeHuman.setText(dateUtil.getHumanForDaysFromNow(
-          stockLogEntry.getUndoneTimestamp(),
-          true
+          stockLogEntry.getUndoneTimestamp()
       ));
       stockLogViewHolder.binding.undoneTimeContainer.setVisibility(View.VISIBLE);
     }
@@ -177,9 +176,8 @@ public class StockLogEntryAdapter extends
         DateUtil.FORMAT_SHORT_WITH_TIME)
     );
     stockLogViewHolder.binding.transactionTimeHuman.setText(dateUtil.getHumanForDaysFromNow(
-        stockLogEntry.getRowCreatedTimestamp(),
-        true)
-    );
+        stockLogEntry.getRowCreatedTimestamp()
+    ));
 
     String transactionType;
     switch (stockLogEntry.getTransactionType()) {

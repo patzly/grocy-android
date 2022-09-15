@@ -192,7 +192,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.nextTrackingTimeLive ?? @string/subtitle_none_selected}" />
+                  android:text="@{viewModel.nextTrackingTimeHumanTextLive ?? @string/subtitle_none_selected}" />
 
               </LinearLayout>
 

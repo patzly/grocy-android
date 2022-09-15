@@ -128,8 +128,7 @@ public class ChoresViewModel extends BaseViewModel {
             || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
           continue;
         }
-        int daysFromNow = DateUtil
-            .getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
+        int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
         if (daysFromNow < 0) {
           choresOverdueCount++;
         }
@@ -182,8 +181,7 @@ public class ChoresViewModel extends BaseViewModel {
                 || choreEntry.getNextEstimatedExecutionTime().isEmpty()) {
               continue;
             }
-            int daysFromNow = DateUtil
-                .getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
+            int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
             if (daysFromNow < 0) {
               choresOverdueCount++;
             }
@@ -255,7 +253,7 @@ public class ChoresViewModel extends BaseViewModel {
         continue;
       }
 
-      int daysFromNow = DateUtil.getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
+      int daysFromNow = DateUtil.getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_OVERDUE
           && daysFromNow >= 0
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataChoresStatus.STATUS_DUE_TODAY
