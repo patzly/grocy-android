@@ -138,7 +138,7 @@ public class LoginApiFormFragment extends BaseFragment {
   public void openHelpWebsite() {
     boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
     if (!success) {
-      activity.showMessage(R.string.error_no_browser);
+      activity.showSnackbar(R.string.error_no_browser);
     }
   }
 

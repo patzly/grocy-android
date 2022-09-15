@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.adapter.StockEntrySelectionAdapter;
 import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class StockEntriesBottomSheet extends BaseBottomSheet
+public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
     implements StockEntrySelectionAdapter.StockEntrySelectionAdapterListener {
 
   private final static String TAG = StockEntriesBottomSheet.class.getSimpleName();

@@ -109,7 +109,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     if(pageStatus == SCAN_GROCY_KEY) {
       String[] resultSplit = rawValue.split("\\|");
       if (resultSplit.length != 2) {
-        activity.showMessage(R.string.error_api_qr_code);
+        activity.showSnackbar(R.string.error_api_qr_code);
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }
@@ -140,7 +140,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     } else if (pageStatus == SCAN_HASS_TOKEN) {
       String[] resultSplit = rawValue.split("\\.");
       if (resultSplit.length != 3) {
-        activity.showMessage(R.string.error_token_qr_code);
+        activity.showSnackbar(R.string.error_token_qr_code);
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }
@@ -165,7 +165,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
   public void openHelpWebsite() {
     boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
     if (!success) {
-      activity.showMessage(R.string.error_no_browser);
+      activity.showSnackbar(R.string.error_no_browser);
     }
   }
 

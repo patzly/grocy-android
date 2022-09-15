@@ -41,7 +41,7 @@
 
     <!-- Dialog themes -->
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.Grocy.AlertDialog</item>
-    <item name="bottomSheetDialogTheme">@style/Theme.Grocy.BottomSheetDialog</item>
+    <item name="bottomSheetDialogTheme">@style/Theme.GrocyM3.BottomSheetDialog</item>
   </style>
 
   <style name="Theme.GrocyM3" parent="Base.GrocyM3" />

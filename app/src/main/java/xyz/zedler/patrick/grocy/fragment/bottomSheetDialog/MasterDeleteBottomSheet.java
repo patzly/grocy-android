@@ -33,7 +33,7 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class MasterDeleteBottomSheet extends BaseBottomSheet {
+public class MasterDeleteBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = MasterDeleteBottomSheet.class.getSimpleName();
 

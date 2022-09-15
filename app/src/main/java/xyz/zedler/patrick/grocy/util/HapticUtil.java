@@ -21,8 +21,12 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.VibratorManager;
+import android.provider.Settings;
 
 public class HapticUtil {
 
@@ -34,7 +38,13 @@ public class HapticUtil {
   public static final long HEAVY = 50;
 
   public HapticUtil(Context context) {
-    vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+      VibratorManager manager =
+          (VibratorManager) context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+      vibrator = manager.getDefaultVibrator();
+    } else {
+      vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    }
     enabled = hasVibrator();
   }
 
@@ -76,6 +86,7 @@ public class HapticUtil {
       vibrate(VibrationEffect.EFFECT_DOUBLE_CLICK);
     } else {
       vibrate(CLICK);
+      new Handler(Looper.getMainLooper()).postDelayed(() -> vibrate(CLICK), 100);
     }
   }
 
@@ -93,5 +104,12 @@ public class HapticUtil {
 
   public boolean hasVibrator() {
     return vibrator.hasVibrator();
+  }
+
+  public static boolean areSystemHapticsTurnedOn(Context context) {
+    int hapticFeedbackEnabled = Settings.System.getInt(
+        context.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ENABLED, 0
+    );
+    return hapticFeedbackEnabled != 0;
   }
 }

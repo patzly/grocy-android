@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputProductBindi
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 
-public class InputProductBottomSheet extends BaseBottomSheet {
+public class InputProductBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = InputProductBottomSheet.class.getSimpleName();
 

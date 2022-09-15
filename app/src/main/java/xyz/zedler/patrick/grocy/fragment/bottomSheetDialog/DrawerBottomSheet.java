@@ -56,7 +56,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
-public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickListener {
+public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements View.OnClickListener {
 
   private final static String TAG = DrawerBottomSheet.class.getSimpleName();
 
@@ -182,7 +182,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
       dismiss();
     } else if (v.getId() == R.id.linear_drawer_help) {
       if (!NetUtil.openURL(activity, Constants.URL.HELP)) {
-        activity.showMessage(R.string.error_no_browser);
+        activity.showSnackbar(R.string.error_no_browser);
       }
       dismiss();
     } else if (v.getId() == R.id.linear_drawer_recipes) {
@@ -205,7 +205,7 @@ public class DrawerBottomSheet extends BaseBottomSheet implements View.OnClickLi
   }
 
   @Override
-  void navigateDeepLink(@StringRes int uri) {
+  public void navigateDeepLink(@StringRes int uri) {
     NavOptions.Builder builder = new NavOptions.Builder();
     builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
     builder.setPopUpTo(R.id.overviewStartFragment, false);

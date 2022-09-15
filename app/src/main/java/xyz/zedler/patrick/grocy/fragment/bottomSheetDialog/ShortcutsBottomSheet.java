@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 
-public class ShortcutsBottomSheet extends BaseBottomSheet {
+public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = ShortcutsBottomSheet.class.getSimpleName();
 

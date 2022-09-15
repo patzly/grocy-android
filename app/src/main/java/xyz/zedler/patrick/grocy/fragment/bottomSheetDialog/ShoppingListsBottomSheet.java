@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
-public class ShoppingListsBottomSheet extends BaseBottomSheet
+public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     implements ShoppingListAdapter.ShoppingListAdapterListener {
 
   private final static String TAG = ShoppingListsBottomSheet.class.getSimpleName();

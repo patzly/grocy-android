@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetFeedbackBinding;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-public class FeedbackBottomSheet extends BaseBottomSheet {
+public class FeedbackBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = "FeedbackBottomSheet";
 

@@ -212,7 +212,7 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   consumeRecipe(recipe.getId());
-                  activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
+                  activity.showSnackbar(getString(R.string.msg_recipe_consumed, recipe.getName()));
                 }, 100);
               }
           ));
@@ -228,7 +228,7 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   addNotFulfilledProductsToCartForRecipe(recipe.getId());
-                  activity.showMessage(getString(R.string.msg_recipe_added_to_cart));
+                  activity.showSnackbar(getString(R.string.msg_recipe_added_to_cart));
                 }, 100);
               }
           ));

@@ -165,7 +165,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
         R.menu.menu_master_product_edit,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
-            activity.showMessage(R.string.msg_not_implemented_yet);
+            activity.showSnackbar(R.string.msg_not_implemented_yet);
 
             return true;
           }

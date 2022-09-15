@@ -31,7 +31,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetChangelogBinding;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 
-public class ChangelogBottomSheet extends BaseBottomSheet {
+public class ChangelogBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = ChangelogBottomSheet.class.getSimpleName();
 

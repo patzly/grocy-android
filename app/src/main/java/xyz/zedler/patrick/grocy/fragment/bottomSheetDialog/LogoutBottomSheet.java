@@ -31,7 +31,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 
-public class LogoutBottomSheet extends BaseBottomSheet {
+public class LogoutBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = LogoutBottomSheet.class.getSimpleName();
 

@@ -351,7 +351,7 @@ public class MasterObjectListFragment extends BaseFragment
             });
           }
         } else {
-          activity.showMessage(R.string.error_undefined);
+          activity.showSnackbar(R.string.error_undefined);
         }
         return true;
       } else if (item.getItemId() == R.id.action_sort_ascending) {

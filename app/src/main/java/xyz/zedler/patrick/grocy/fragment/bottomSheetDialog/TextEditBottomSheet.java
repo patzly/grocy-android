@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
-public class TextEditBottomSheet extends BaseBottomSheet {
+public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = TextEditBottomSheet.class.getSimpleName();
 

@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 
-public class TaskEntryBottomSheet extends BaseBottomSheet {
+public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static int DELETE_CONFIRMATION_DURATION = 1000;
   private final static String TAG = TaskEntryBottomSheet.class.getSimpleName();

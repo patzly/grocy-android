@@ -130,23 +130,23 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
   }
 
   @NonNull
-  NavController findNavController() {
+  public NavController findNavController() {
     return NavHostFragment.findNavController(this);
   }
 
-  void navigate(NavDirections directions) {
+  public void navigate(NavDirections directions) {
     findNavController().navigate(directions);
   }
 
-  void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
+  public void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
     findNavController().navigate(directions, navOptions);
   }
 
-  void navigateDeepLink(@StringRes int uri) {
+  public void navigateDeepLink(@StringRes int uri) {
     navigateDeepLink(Uri.parse(getString(uri)));
   }
 
-  void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
     navigateDeepLink(getUriWithArgs(getString(uri), args));
   }
 
@@ -187,7 +187,7 @@ public class BaseBottomSheet extends BottomSheetDialogFragment {
   }
 
   void showMessage(@StringRes int msg) {
-    ((MainActivity) requireActivity()).showMessage(msg);
+    ((MainActivity) requireActivity()).showSnackbar(msg);
   }
 
   void showToast(@StringRes int msg) {

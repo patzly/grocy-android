@@ -418,6 +418,7 @@ public final class Constants {
     public final static String LINK = "link";
     public final static String HTML = "html";
     public final static String TITLE = "title";
+    public final static String HIGHLIGHTS = "highlights";
     public final static String HINT = "hint";
     public final static String CURRENCY = "currency";
     public final static String SUPPORTED_VERSIONS = "supported_versions";

@@ -42,7 +42,7 @@ import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 
-public class BarcodeFormatsBottomSheet extends BaseBottomSheet {
+public class BarcodeFormatsBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = BarcodeFormatsBottomSheet.class.getSimpleName();
 

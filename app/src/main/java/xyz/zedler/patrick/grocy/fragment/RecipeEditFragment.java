@@ -97,7 +97,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
                 .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
                 .setRecipe(viewModel.getRecipe()));
       } else {
-        activity.showMessage(R.string.subtitle_recipe_not_on_server);
+        activity.showSnackbar(R.string.subtitle_recipe_not_on_server);
       }
     });
     binding.preparation.setOnClickListener(v -> {

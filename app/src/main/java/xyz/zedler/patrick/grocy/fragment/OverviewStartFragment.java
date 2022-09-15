@@ -27,13 +27,13 @@ import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -100,6 +100,7 @@ public class OverviewStartFragment extends BaseFragment {
 
     binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
     binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+    binding.swipe.setSize(CircularProgressDrawable.LARGE);
 
     clickUtil = new ClickUtil(1000);
 
@@ -129,7 +130,7 @@ public class OverviewStartFragment extends BaseFragment {
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());
       } else if (id == R.id.action_changelog) {
-        activity.showBottomSheet(new ChangelogBottomSheet());
+        activity.showChangelogBottomSheet();
       }
       return false;
     });

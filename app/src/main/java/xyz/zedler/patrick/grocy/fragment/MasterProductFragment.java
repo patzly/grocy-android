@@ -106,7 +106,7 @@ public class MasterProductFragment extends BaseFragment {
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showMessage(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server);
         return;
       }
       navigate(MasterProductFragmentDirections
@@ -115,7 +115,7 @@ public class MasterProductFragment extends BaseFragment {
     });
     binding.categoryQuConversions.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showMessage(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server);
         return;
       }
       navigate(MasterProductFragmentDirections
