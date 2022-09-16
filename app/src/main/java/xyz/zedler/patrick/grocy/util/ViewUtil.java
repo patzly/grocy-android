@@ -32,6 +32,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -296,6 +297,23 @@ public class ViewUtil {
     );
   }
 
+  public static Drawable getBgListItemSelected(Context context) {
+    float[] radii = new float[8];
+    Arrays.fill(radii, UiUtil.dpToPx(context, 16));
+    RoundRectShape rect = new RoundRectShape(radii, null, null);
+    ShapeDrawable shape = new ShapeDrawable(rect);
+    shape.getPaint().setColor(ResUtil.getColorAttr(context, R.attr.colorSecondaryContainer));
+    LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
+    layers.setLayerInset(
+        0,
+        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, 2),
+        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, 2)
+    );
+    return layers;
+  }
+
   public static Drawable getRippleBgListItemSurfaceRecyclerItem(Context context) {
     float[] radii = new float[8];
     Arrays.fill(radii, UiUtil.dpToPx(context, 16));
@@ -324,6 +342,14 @@ public class ViewUtil {
         view.setAlpha(enabled ? 1 : 0.5f);
       }
     }
+  }
+
+  public static void setOnlyOverScrollStretchEnabled(ViewGroup group) {
+    group.setOverScrollMode(
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            ? View.OVER_SCROLL_IF_CONTENT_SCROLLS
+            : View.OVER_SCROLL_NEVER
+    );
   }
 
   // TouchProgressBar

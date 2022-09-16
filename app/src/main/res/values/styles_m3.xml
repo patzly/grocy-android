@@ -143,9 +143,18 @@
     <item name="android:fontFamily">@font/jost_medium</item>
   </style>
 
+  <style
+    name="Widget.Grocy.Button.IconButton"
+    parent="Widget.Material3.Button.IconButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    <item name="iconSize">24dp</item>
+  </style>
+
   <!-- CardView -->
 
-  <style name="Widget.Grocy.Card.Text" parent="@style/Widget.Material3.CardView.Filled">
+  <style name="Widget.Grocy.Card.Text" parent="Widget.Material3.CardView.Filled">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="contentPadding">16dp</item>
@@ -154,18 +163,32 @@
     <item name="rippleColor">@color/selector_highlight</item>
   </style>
 
-  <style name="Widget.Grocy.Card.Text.Error" parent="@style/Widget.Grocy.Card.Text">
+  <style name="Widget.Grocy.Card.Text.Error" parent="Widget.Grocy.Card.Text">
     <item name="cardBackgroundColor">?attr/colorErrorContainer</item>
     <item name="rippleColor">@color/selector_highlight_error</item>
   </style>
 
-  <style name="Widget.Grocy.Card.Outlined" parent="@style/Widget.Material3.CardView.Outlined">
+  <style name="Widget.Grocy.Card.Outlined" parent="Widget.Material3.CardView.Outlined">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="contentPadding">16dp</item>
     <item name="cardElevation">0dp</item>
     <item name="cardCornerRadius">16dp</item>
     <item name="rippleColor">@color/selector_highlight</item>
+  </style>
+
+  <!-- Divider -->
+
+  <style name="Widget.Grocy.Divider" parent="Widget.Material3.MaterialDivider">
+    <item name="android:layout_width">56dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:layout_marginTop">8dp</item>
+    <item name="android:layout_marginBottom">8dp</item>
+  </style>
+
+  <style name="Widget.Grocy.Divider.FullWidth" parent="Widget.Grocy.Divider">
+    <item name="android:layout_width">match_parent</item>
   </style>
 
   <!-- CheckBox -->
@@ -460,6 +483,20 @@
 
   <!-- Localized style -->
   <style name="Widget.Grocy.TextView.Category" parent="Base.Grocy.TextView.Category">
+    <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
+  <!-- Base style -->
+  <style name="Base.Grocy.TextView.DrawerItem" parent="Widget.Grocy.TextView">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:textColor">@color/on_surface</item>
+  </style>
+
+  <!-- Localized style -->
+  <style name="Widget.Grocy.TextView.DrawerItem" parent="Base.Grocy.TextView.DrawerItem">
     <item name="android:fontFamily">@font/jost_medium</item>
   </style>
 

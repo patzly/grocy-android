@@ -65,30 +65,12 @@
           android:src="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <TextView
+          style="@style/Widget.Grocy.TextView.Toolbar"
+          android:text="@string/app_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:layout_gravity="center"
-          tools:ignore="UseCompoundDrawables">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Toolbar"
-            android:text="@string/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_vertical" />
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="4dp"
-            android:layout_gravity="center_vertical"
-            android:visibility="gone"
-            android:src="@drawable/ic_round_dev"
-            tools:ignore="ContentDescription" />
-
-        </LinearLayout>
+          android:layout_gravity="center" />
 
         <androidx.appcompat.widget.Toolbar
           android:id="@+id/toolbar"
@@ -209,10 +191,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <com.google.android.material.divider.MaterialDivider
-                android:layout_width="56dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
+                style="@style/Widget.Grocy.Divider"
                 android:layout_marginBottom="16dp" />
 
             </LinearLayout>
@@ -622,10 +601,7 @@
             </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider
-              android:layout_width="56dp"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginTop="8dp"
+              style="@style/Widget.Grocy.Divider"
               android:layout_marginBottom="16dp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -659,10 +635,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.divider.MaterialDivider
-              android:layout_width="56dp"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginTop="8dp"
+              style="@style/Widget.Grocy.Divider"
               android:layout_marginBottom="16dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}" />
 
@@ -955,10 +928,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.divider.MaterialDivider
-              android:layout_width="56dp"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginTop="8dp"
+              style="@style/Widget.Grocy.Divider"
               android:layout_marginBottom="16dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) || viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}" />
 

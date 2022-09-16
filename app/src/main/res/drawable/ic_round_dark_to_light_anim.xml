@@ -34,12 +34,12 @@
         <path
           android:name="circle"
           android:pathData="M 11.01 3.05 C 6.51 3.54 3 7.36 3 12 C 3 16.97 7.03 21 12 21 C 16.63 21 20.45 17.5 20.95 13 C 21.04 12.21 20.17 11.58 19.41 12.05 C 18.57 12.59 17.57 12.9 16.5 12.9 C 15.01 12.9 13.66 12.295 12.682 11.318 C 11.705 10.34 11.1 8.99 11.1 7.5 C 11.1 6.44 11.41 5.44 11.94 4.61 C 12.39 3.94 11.9 2.98 11.01 3.05 Z"
-          android:fillColor="@color/icon"
+          android:fillColor="#000000"
           android:strokeWidth="1" />
         <path
           android:name="stroke1"
           android:pathData="M 22 12 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -48,7 +48,7 @@
         <path
           android:name="stroke2"
           android:pathData="M 19.071 4.929 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -57,7 +57,7 @@
         <path
           android:name="stroke3"
           android:pathData="M 12 2 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -66,7 +66,7 @@
         <path
           android:name="stroke4"
           android:pathData="M 4.929 4.929 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -75,7 +75,7 @@
         <path
           android:name="stroke5"
           android:pathData="M 2 12 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -84,7 +84,7 @@
         <path
           android:name="stroke6"
           android:pathData="M 4.929 19.071 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -93,7 +93,7 @@
         <path
           android:name="stroke7"
           android:pathData="M 12 22 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
@@ -102,7 +102,7 @@
         <path
           android:name="stroke8"
           android:pathData="M 19.071 19.071 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeAlpha="0"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"

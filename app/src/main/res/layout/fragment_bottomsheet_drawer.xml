@@ -17,24 +17,22 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<com.google.android.material.card.MaterialCardView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  app:cardElevation="0dp"
-  app:strokeWidth="0dp"
-  app:cardBackgroundColor="@color/transparent"
-  app:cardCornerRadius="16dp"
   tools:ignore="UseCompoundDrawables">
 
   <androidx.core.widget.NestedScrollView
+    android:id="@+id/scroll_drawer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:overScrollMode="never">
 
     <LinearLayout
+      android:id="@+id/linear_drawer_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -43,12 +41,13 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_stock"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
         <ImageView
-          style="@style/Widget.Grocy.ImageView.Drawer"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_kitchen" />
+          android:id="@+id/image_drawer_stock"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+          android:src="@drawable/ic_round_kitchen"
+          tools:ignore="ContentDescription" />
 
         <TextView
           android:id="@+id/text_drawer_stock"
@@ -64,10 +63,11 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_shopping_list"
-          style="@style/Widget.Grocy.LinearLayout.Drawer">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
           <ImageView
-            style="@style/Widget.Grocy.ImageView.Drawer"
+            android:id="@+id/image_drawer_shopping_list"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_round_shopping_list" />
 
@@ -78,23 +78,20 @@
 
         </LinearLayout>
 
-        <xyz.zedler.patrick.grocy.view.ActionButton
+        <com.google.android.material.button.MaterialButton
           android:id="@+id/button_drawer_shopping_mode"
+          style="@style/Widget.Grocy.Button.IconButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_gravity="end|center_vertical"
           android:layout_marginEnd="4dp"
-          app:icon="@drawable/ic_round_storefront"
-          app:tint="@color/icon" />
+          android:layout_gravity="end|center_vertical"
+          app:icon="@drawable/ic_round_storefront" />
 
       </FrameLayout>
 
       <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_drawer_shopping_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        style="@style/Widget.Grocy.Divider.FullWidth" />
 
       <LinearLayout
         android:id="@+id/transactions_container"
@@ -102,22 +99,22 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="100"
-        android:paddingHorizontal="16dp"
         android:baselineAligned="false">
 
         <LinearLayout
           android:id="@+id/linear_drawer_consume"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:paddingVertical="10dp"
           android:orientation="vertical"
-          android:gravity="center_horizontal"
-          android:background="@drawable/bg_drawer_item_multirow_ripple">
+          android:gravity="center_horizontal">
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            android:id="@+id/image_drawer_consume"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:layout_marginEnd="0dp"
+            android:layout_gravity="center"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_round_consume_product"/>
 
@@ -125,55 +122,58 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_purchase"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:paddingVertical="10dp"
           android:orientation="vertical"
-          android:gravity="center_horizontal"
-          android:background="@drawable/bg_drawer_item_multirow_ripple">
+          android:gravity="center_horizontal">
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            android:id="@+id/image_drawer_purchase"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:layout_marginEnd="0dp"
+            android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_local_grocery_store" />
+            android:src="@drawable/ic_round_local_grocery_store"/>
 
         </LinearLayout>
 
         <LinearLayout
           android:id="@+id/linear_drawer_transfer"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:paddingVertical="10dp"
           android:orientation="vertical"
-          android:gravity="center_horizontal"
-          android:background="@drawable/bg_drawer_item_multirow_ripple">
+          android:gravity="center_horizontal">
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            android:id="@+id/image_drawer_transfer"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:layout_marginEnd="0dp"
+            android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_swap_horiz" />
+            android:src="@drawable/ic_round_swap_horiz"/>
 
         </LinearLayout>
 
         <LinearLayout
           android:id="@+id/linear_drawer_inventory"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:paddingVertical="10dp"
           android:orientation="vertical"
-          android:gravity="center_horizontal"
-          android:background="@drawable/bg_drawer_item_multirow_ripple">
+          android:gravity="center_horizontal">
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            android:id="@+id/image_drawer_inventory"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:layout_marginEnd="0dp"
+            android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_inventory" />
+            android:src="@drawable/ic_round_inventory"/>
 
         </LinearLayout>
 
@@ -186,17 +186,15 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="8dp" />
+          style="@style/Widget.Grocy.Divider.FullWidth" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_recipes"
-          style="@style/Widget.Grocy.LinearLayout.Drawer">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
           <ImageView
-            style="@style/Widget.Grocy.ImageView.Drawer"
+            android:id="@+id/image_drawer_recipes"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_round_pasta" />
 
@@ -216,17 +214,15 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="8dp" />
+          style="@style/Widget.Grocy.Divider.FullWidth" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_chores"
-          style="@style/Widget.Grocy.LinearLayout.Drawer">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
           <ImageView
-            style="@style/Widget.Grocy.ImageView.Drawer"
+            android:id="@+id/image_drawer_chores"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_round_home" />
 
@@ -239,10 +235,11 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_tasks"
-          style="@style/Widget.Grocy.LinearLayout.Drawer">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
           <ImageView
-            style="@style/Widget.Grocy.ImageView.Drawer"
+            android:id="@+id/image_drawer_tasks"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_round_checklist" />
 
@@ -256,17 +253,15 @@
       </LinearLayout>
 
       <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        style="@style/Widget.Grocy.Divider.FullWidth" />
 
       <LinearLayout
         android:id="@+id/linear_drawer_master_data"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
         <ImageView
-          style="@style/Widget.Grocy.ImageView.Drawer"
+          android:id="@+id/image_drawer_master_data"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
           android:src="@drawable/ic_round_view_list" />
 
@@ -278,18 +273,15 @@
       </LinearLayout>
 
       <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+        style="@style/Widget.Grocy.Divider.FullWidth" />
 
       <LinearLayout
         android:id="@+id/linear_drawer_settings"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_settings"
-          style="@style/Widget.Grocy.ImageView.Drawer"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
           android:src="@drawable/ic_round_settings_anim" />
 
@@ -302,11 +294,11 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_feedback"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_feedback"
-          style="@style/Widget.Grocy.ImageView.Drawer"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
           android:src="@drawable/ic_round_feedback_anim" />
 
@@ -318,11 +310,11 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_help"
-        style="@style/Widget.Grocy.LinearLayout.Drawer">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_help"
-          style="@style/Widget.Grocy.ImageView.Drawer"
+          style="@style/Widget.Grocy.ImageView.ListItem.Icon.Colored"
           android:importantForAccessibility="no"
           android:src="@drawable/ic_round_help_anim" />
 
@@ -336,4 +328,4 @@
 
   </androidx.core.widget.NestedScrollView>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

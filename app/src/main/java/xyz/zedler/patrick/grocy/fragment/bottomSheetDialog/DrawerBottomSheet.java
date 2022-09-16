@@ -25,11 +25,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
@@ -53,6 +55,8 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NetUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements View.OnClickListener {
 
@@ -77,6 +81,48 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
+    ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollDrawer);
+
+    binding.linearDrawerStock.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerShoppingList.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerConsume.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerPurchase.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerTransfer.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerInventory.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerRecipes.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerChores.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerTasks.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerMasterData.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerSettings.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerFeedback.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerHelp.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+
     binding.buttonDrawerShoppingMode.setOnClickListener(
         v -> navigateDeepLink(R.string.deep_link_shoppingModeFragment)
     );
@@ -100,27 +146,35 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
 
     BaseFragment currentFragment = activity.getCurrentFragment();
     if (currentFragment instanceof StockOverviewFragment) {
-      select(binding.linearDrawerStock, binding.textDrawerStock, false);
+      select(binding.linearDrawerStock, binding.textDrawerStock, binding.imageDrawerStock);
     } else if (currentFragment instanceof ShoppingListFragment) {
-      select(binding.linearDrawerShoppingList, binding.textDrawerShoppingList, false);
+      select(
+          binding.linearDrawerShoppingList,
+          binding.textDrawerShoppingList,
+          binding.imageDrawerShoppingList
+      );
     } else if (currentFragment instanceof ConsumeFragment) {
-      select(binding.linearDrawerConsume, null, true);
+      select(binding.linearDrawerConsume, null, binding.imageDrawerConsume);
     } else if (currentFragment instanceof PurchaseFragment) {
-      select(binding.linearDrawerPurchase, null, true);
+      select(binding.linearDrawerPurchase, null, binding.imageDrawerPurchase);
     } else if (currentFragment instanceof TransferFragment) {
-      select(binding.linearDrawerTransfer, null, true);
+      select(binding.linearDrawerTransfer, null, binding.imageDrawerTransfer);
     } else if (currentFragment instanceof InventoryFragment) {
-      select(binding.linearDrawerInventory, null, true);
+      select(binding.linearDrawerInventory, null, binding.imageDrawerInventory);
     } else if (currentFragment instanceof ChoresFragment) {
-      select(binding.linearDrawerChores, binding.textDrawerChores, false);
+      select(binding.linearDrawerChores, binding.textDrawerChores, binding.imageDrawerChores);
     } else if (currentFragment instanceof TasksFragment) {
-      select(binding.linearDrawerTasks, binding.textDrawerTasks, false);
+      select(binding.linearDrawerTasks, binding.textDrawerTasks, binding.imageDrawerTasks);
     } else if (currentFragment instanceof RecipesFragment) {
-      select(binding.linearDrawerRecipes, binding.textDrawerRecipes, false);
+      select(binding.linearDrawerRecipes, binding.textDrawerRecipes, binding.imageDrawerRecipes);
     } else if (currentFragment instanceof MasterObjectListFragment) {
-      select(binding.linearDrawerMasterData, binding.textDrawerMasterData, false);
+      select(
+          binding.linearDrawerMasterData,
+          binding.textDrawerMasterData,
+          binding.imageDrawerMasterData
+      );
     } else if (currentFragment instanceof SettingsFragment) {
-      select(binding.linearDrawerSettings, binding.textDrawerSettings, false);
+      select(binding.linearDrawerSettings, binding.textDrawerSettings, binding.imageDrawerSettings);
     }
 
     hideDisabledFeatures();
@@ -184,74 +238,117 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   private void navigateCustom(NavDirections directions) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-    builder.setPopUpTo(R.id.overviewStartFragment, false);
-    if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
-      builder.setExitAnim(R.anim.slide_out_down);
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
+      builder.setPopUpTo(R.id.overviewStartFragment, false);
+      if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
+        builder.setExitAnim(R.anim.slide_out_down);
+      } else {
+        builder.setExitAnim(R.anim.slide_no);
+      }
+      navigate(directions, builder.build());
     } else {
-      builder.setExitAnim(R.anim.slide_no);
+      navigate(directions, getNavOptionsFragmentFade());
     }
     dismiss();
-    navigate(directions, builder.build());
   }
 
   @Override
   public void navigateDeepLink(@StringRes int uri) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-    builder.setPopUpTo(R.id.overviewStartFragment, false);
-    if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
-      builder.setExitAnim(R.anim.slide_out_down);
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
+      builder.setPopUpTo(R.id.overviewStartFragment, false);
+      if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
+        builder.setExitAnim(R.anim.slide_out_down);
+      } else {
+        builder.setExitAnim(R.anim.slide_no);
+      }
+      findNavController().navigate(Uri.parse(getString(uri)), builder.build());
     } else {
-      builder.setExitAnim(R.anim.slide_no);
+      findNavController().navigate(Uri.parse(getString(uri)), getNavOptionsFragmentFade());
     }
     dismiss();
-    findNavController().navigate(Uri.parse(getString(uri)), builder.build());
   }
 
-  private void select(LinearLayout linearLayout, TextView textView, boolean multiRowItem) {
-    linearLayout.setBackgroundResource(
-        multiRowItem
-            ? R.drawable.bg_drawer_item_multirow_selected
-            : R.drawable.bg_drawer_item_selected
+  private void select(
+      LinearLayout linearLayout, @Nullable TextView textView, @Nullable ImageView imageView
+  ) {
+    linearLayout.setBackground(
+        ViewUtil.getBgListItemSelected(requireContext())
     );
     linearLayout.setClickable(false);
     if (textView != null) {
-      textView.setTextColor(ContextCompat.getColor(activity, R.color.retro_green_fg));
+      textView.setTextColor(
+          ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary)
+      );
+    }
+    if (imageView != null) {
+      imageView.setColorFilter(
+          ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary)
+      );
     }
   }
 
+  private void select(LinearLayout linearLayout, @Nullable TextView textView) {
+    select(linearLayout, textView, null);
+  }
+
   private void hideDisabledFeatures() {
-    if (!isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST)) {
+    if (isFeatureDisabled(PREF.FEATURE_SHOPPING_LIST)) {
       binding.frameShoppingList.setVisibility(View.GONE);
     }
-    if (!isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+    if (isFeatureDisabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       binding.linearDrawerTransfer.setVisibility(View.GONE);
       binding.transactionsContainer.setWeightSum(75f);
     }
-    if (!isFeatureEnabled(PREF.FEATURE_RECIPES)) {
+    if (isFeatureDisabled(PREF.FEATURE_RECIPES)) {
       binding.containerRecipes.setVisibility(View.GONE);
     }
-    if (!isFeatureEnabled(PREF.FEATURE_RECIPES)) {
+    if (isFeatureDisabled(PREF.FEATURE_RECIPES)) {
       binding.linearDrawerRecipes.setVisibility(View.GONE);
     }
-    if (!isFeatureEnabled(PREF.FEATURE_TASKS) && !isFeatureEnabled(PREF.FEATURE_CHORES)) {
+    if (isFeatureDisabled(PREF.FEATURE_TASKS) && isFeatureDisabled(PREF.FEATURE_CHORES)) {
       binding.containerTasks.setVisibility(View.GONE);
     }
-    if (!isFeatureEnabled(PREF.FEATURE_TASKS)) {
+    if (isFeatureDisabled(PREF.FEATURE_TASKS)) {
       binding.linearDrawerTasks.setVisibility(View.GONE);
     }
-    if (!isFeatureEnabled(PREF.FEATURE_CHORES)) {
+    if (isFeatureDisabled(PREF.FEATURE_CHORES)) {
       binding.linearDrawerChores.setVisibility(View.GONE);
     }
   }
 
-  private boolean isFeatureEnabled(String pref) {
+  private boolean isFeatureDisabled(String pref) {
     if (pref == null) {
-      return true;
+      return false;
     }
-    return sharedPrefs.getBoolean(pref, true);
+    return !sharedPrefs.getBoolean(pref, true);
+  }
+
+  private NavOptions getNavOptionsFragmentFade() {
+    return new NavOptions.Builder()
+        .setEnterAnim(R.anim.enter_end_fade)
+        .setExitAnim(R.anim.exit_start_fade)
+        .setPopEnterAnim(R.anim.enter_start_fade)
+        .setPopExitAnim(R.anim.exit_end_fade)
+        .build();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, bottom);
+    binding.linearDrawerContainer.setLayoutParams(params);
   }
 
   @NonNull

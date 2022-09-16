@@ -35,7 +35,7 @@
           <path
             android:name="package_lines"
             android:pathData="M 16 10 C 15.735 10 15.48 10.105 15.293 10.293 C 15.105 10.48 15 10.735 15 11 C 15 11.6 15.5 12 16 12 C 15.735 12 15.48 12.105 15.293 12.293 C 15.105 12.48 15 12.735 15 13 C 15 13.6 15.5 14 16 14 C 15.735 14 15.48 14.105 15.293 14.293 C 15.105 14.48 15 14.735 15 15 C 15 15.6 15.5 16 16 16 L 21 16 C 21.6 16 22 15.5 22 15 C 22 14.4 21.5 14 21 14 C 21.6 14 22 13.5 22 13 C 22 12.4 21.5 12 21 12 C 21.6 12 22 11.5 22 11 C 22 10.4 21.5 10 21 10 Z"
-            android:fillColor="@color/icon"
+            android:fillColor="#000000"
             android:fillAlpha="0"
             android:strokeWidth="1" />
         </group>
@@ -43,7 +43,7 @@
           <path
             android:name="line_top"
             android:pathData="M 16 9 L 21 9"
-            android:strokeColor="@color/icon"
+            android:strokeColor="#000000"
             android:strokeWidth="2"
             android:strokeLineCap="round" />
         </group>
@@ -51,7 +51,7 @@
           <path
             android:name="line_middle"
             android:pathData="M 16 13 L 20 13"
-            android:strokeColor="@color/icon"
+            android:strokeColor="#000000"
             android:strokeWidth="2"
             android:strokeLineCap="round" />
         </group>
@@ -59,7 +59,7 @@
           <path
             android:name="line_bottom"
             android:pathData="M 16 17 L 18 17"
-            android:strokeColor="@color/icon"
+            android:strokeColor="#000000"
             android:strokeWidth="2"
             android:strokeLineCap="round" />
         </group>
@@ -67,7 +67,7 @@
       <path
         android:name="bin"
         android:pathData="M 3 18 C 3 19.1 3.9 20 5 20 L 11 20 C 11.53 20 12.039 19.789 12.414 19.414 C 12.789 19.039 13 18.53 13 18 L 13 8 L 3 8 Z"
-        android:fillColor="@color/icon"
+        android:fillColor="#000000"
         android:strokeWidth="1" />
       <group
         android:name="group_lid"
@@ -76,27 +76,27 @@
         <path
           android:name="lid"
           android:pathData="M 13 5 L 11 5 L 10.3 4.3 C 10.115 4.112 9.864 4.004 9.6 4 L 6.4 4 C 6.136 4.004 5.885 4.112 5.7 4.3 L 5 5 L 3 5 C 2.735 5 2.48 5.105 2.293 5.293 C 2.105 5.48 2 5.735 2 6 C 2 6.5 2.5 7 3 7 L 13 7 C 13.6 7 14 6.5 14 6 C 14 5.5 13.6 5 13 5 Z"
-          android:fillColor="@color/icon"
+          android:fillColor="#000000"
           android:strokeWidth="1" />
       </group>
       <path
         android:name="line_top_new"
         android:pathData="M 8 9 L 21 9"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:trimPathEnd="0.3"
         android:strokeLineCap="round" />
       <path
         android:name="line_middle_new"
         android:pathData="M 8 13 L 20 13"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:trimPathEnd="0.3"
         android:strokeLineCap="round" />
       <path
         android:name="line_bottom_new"
         android:pathData="M 8 17 L 18 17"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:trimPathEnd="0.3"
         android:strokeLineCap="round" />

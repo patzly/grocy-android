@@ -35,61 +35,61 @@
         <path
           android:name="circle"
           android:pathData="M 12 7 C 9.24 7 7 9.24 7 12 C 7 14.76 9.24 17 12 17 C 14.76 17 17 14.76 17 12 C 17 9.24 14.76 7 12 7 Z"
-          android:fillColor="@color/icon"
+          android:fillColor="#000000"
           android:strokeWidth="1" />
         <path
           android:name="stroke1"
           android:pathData="M 22 12 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke2"
           android:pathData="M 19.071 4.929 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke3"
           android:pathData="M 12 2 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke4"
           android:pathData="M 4.929 4.929 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke5"
           android:pathData="M 2 12 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke6"
           android:pathData="M 4.929 19.071 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke7"
           android:pathData="M 12 22 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
         <path
           android:name="stroke8"
           android:pathData="M 19.071 19.071 L 12 12"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:trimPathEnd="0.2"
           android:strokeLineCap="round" />
