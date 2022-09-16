@@ -19,7 +19,7 @@
 
 <resources>
 
-  <style name="Theme.Doodle" parent="Base.Grocy">
+  <style name="Theme.GrocyM3" parent="Base.GrocyM3">
     <item name="android:windowSplashScreenBackground">@android:color/system_neutral1_900</item>
     <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_anim</item>
     <item name="android:windowSplashScreenAnimationDuration">970</item>
