@@ -52,11 +52,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
@@ -554,6 +554,18 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  public void navigate(NavDirections directions) {
+    if (navController == null || directions == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(directions);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
   public void navigateUp() {
     NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
         .findFragmentById(R.id.fragment_main_nav_host);
@@ -759,13 +771,14 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  @Deprecated
   public void setStatusBarColor(@ColorRes int color) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
         && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
     ) {
       color = R.color.black;
     }
-    getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), color, null));
+    //getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), color, null));
   }
 
   public void startIconAnimation(View view, boolean hasFocus) {

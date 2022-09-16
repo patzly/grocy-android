@@ -207,7 +207,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     bundle.putInt(Constants.ARGUMENT.TITLE, title);
     bundle.putInt(Constants.ARGUMENT.FILE, file);
     if (link != 0) {
-      bundle.putString(Constants.ARGUMENT.LINK, getString(link));
+      bundle.putInt(Constants.ARGUMENT.LINK, link);
     }
     activity.showBottomSheet(new TextBottomSheet(), bundle);
   }
