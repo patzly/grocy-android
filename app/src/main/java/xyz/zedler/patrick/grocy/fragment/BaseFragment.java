@@ -322,20 +322,16 @@ public class BaseFragment extends Fragment {
     return anim;
   }
 
-  void onEnterAnimationEnd() {
+  protected void onEnterAnimationEnd() {
   }
 
   @NonNull
-  NavController findNavController() {
+  public NavController findNavController() {
     return NavHostFragment.findNavController(this);
   }
 
-  void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
+  public void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
     findNavController().navigate(directions, navigatorExtras);
-  }
-
-  public void navigate(NavDirections directions) {
-    activity.navigate(directions);
   }
 
   private NavOptions getNavOptionsFragmentFade() {
@@ -371,7 +367,23 @@ public class BaseFragment extends Fragment {
     }
   }
 
-  void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
+  public void navigate(NavDirections directions) {
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_in_up)
+          .setPopExitAnim(R.anim.slide_out_down)
+          .setExitAnim(R.anim.slide_no);
+      findNavController().navigate(directions, builder.build());
+    } else {
+      findNavController().navigate(directions, getNavOptionsFragmentFade());
+    }
+  }
+
+  public void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
     findNavController().navigate(destination, null, navOptions);
   }
 
@@ -379,11 +391,11 @@ public class BaseFragment extends Fragment {
     navigateDeepLink(Uri.parse(uri));
   }
 
-  void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
     navigateDeepLink(getUriWithArgs(getString(uri), args));
   }
 
-  void navigateDeepLinkSlideStartEnd(@StringRes int uri, @NonNull Bundle args) {
+  public void navigateDeepLinkSlideStartEnd(@StringRes int uri, @NonNull Bundle args) {
     navigateDeepLinkSlideStartEnd(getUriWithArgs(getString(uri), args));
   }
 
@@ -455,7 +467,7 @@ public class BaseFragment extends Fragment {
    * @param key              (String): identifier for value
    * @param observerListener (ObserverListener): observer for callback after value was received
    */
-  void getFromThisDestination(String key, ObserverListener observerListener) {
+  public void getFromThisDestination(String key, ObserverListener observerListener) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
@@ -481,7 +493,7 @@ public class BaseFragment extends Fragment {
    * @return Object: the value or null, if no data was set
    */
   @Nullable
-  Object getFromThisDestinationNow(String key) {
+  public Object getFromThisDestinationNow(String key) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     return backStackEntry.getSavedStateHandle().get(key);
@@ -493,7 +505,7 @@ public class BaseFragment extends Fragment {
    * @param key   (String): identifier for value
    * @param value (Object): the value to store
    */
-  void setForPreviousDestination(String key, Object value) {
+  public void setForPreviousDestination(String key, Object value) {
     NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().set(key, value);
@@ -505,7 +517,7 @@ public class BaseFragment extends Fragment {
    * @param key   (String): identifier for value
    * @param value (Object): the value to store
    */
-  void setForThisDestination(String key, Object value) {
+  public void setForThisDestination(String key, Object value) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().set(key, value);
@@ -518,7 +530,7 @@ public class BaseFragment extends Fragment {
    * @param key           (String): identifier for value
    * @param value         (Object): the value to store
    */
-  void setForDestination(@IdRes int destinationId, String key, Object value) {
+  public void setForDestination(@IdRes int destinationId, String key, Object value) {
     NavBackStackEntry backStackEntry;
     try {
       backStackEntry = findNavController().getBackStackEntry(destinationId);
@@ -536,7 +548,7 @@ public class BaseFragment extends Fragment {
    *
    * @param key (String): identifier for value
    */
-  void removeForThisDestination(String key) {
+  public void removeForThisDestination(String key) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().remove(key);

@@ -105,7 +105,7 @@ public class LoginRequestFragment extends BaseFragment {
   }
 
   @Override
-  void onEnterAnimationEnd() {
+  protected void onEnterAnimationEnd() {
     login(true);
   }
 

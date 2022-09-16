@@ -151,7 +151,7 @@ public class LoginApiFormFragment extends BaseFragment {
   }
 
   @Override
-  void onEnterAnimationEnd() {
+  protected void onEnterAnimationEnd() {
     if (!viewModel.isAutoProceedDoneWasDone() && args.getServerUrl() != null
         && args.getGrocyApiKey() != null && args.getGrocyIngressProxyId() != null
         && args.getHomeAssistantToken() != null && viewModel.getFormData().isFormValid()) {
