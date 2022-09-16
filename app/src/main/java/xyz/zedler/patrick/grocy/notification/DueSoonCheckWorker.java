@@ -119,7 +119,7 @@ public class DueSoonCheckWorker extends Worker {
 
       NotificationCompat.Builder builder = new NotificationCompat
           .Builder(getApplicationContext(), "xyz.zedler.patrick.grocy.due_soon")
-          .setSmallIcon(R.drawable.ic_round_grocy)
+          .setSmallIcon(R.drawable.ic_round_grocy_notification)
           .setContentTitle(titleText)
           .setContentText(getApplicationContext().getString(R.string.notification_due_soon_content))
           .setLargeIcon(bitmap)

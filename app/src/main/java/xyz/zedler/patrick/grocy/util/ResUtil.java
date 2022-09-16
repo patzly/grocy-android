@@ -41,6 +41,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.databinding.BindingAdapter;
+import com.google.android.material.color.HarmonizedColors;
+import com.google.android.material.color.HarmonizedColorsOptions;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -74,6 +76,18 @@ public class ResUtil {
     intent.putExtra(Intent.EXTRA_TEXT, context.getString(resId));
     intent.setType("text/plain");
     context.startActivity(Intent.createChooser(intent, null));
+  }
+
+  public static void applyColorHarmonization(Context context) {
+    int[] resIds = new int[] {
+        R.color.logo_yellow,
+        R.color.logo_green,
+        R.color.logo_red
+    };
+    HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
+        .setColorResourceIds(resIds)
+        .build();
+    HarmonizedColors.applyToContextIfAvailable(context, options);
   }
 
   public static int getColorAttr(Context context, @AttrRes int resId) {

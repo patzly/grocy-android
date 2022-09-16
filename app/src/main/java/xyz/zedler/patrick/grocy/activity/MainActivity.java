@@ -103,6 +103,7 @@ import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
@@ -240,6 +241,10 @@ public class MainActivity extends AppCompatActivity {
     hapticUtil = new HapticUtil(this);
     clickUtil = new ClickUtil();
     netUtil = new NetUtil(this);
+
+    // COLOR
+
+    ResUtil.applyColorHarmonization(this);
 
     // WEB
 

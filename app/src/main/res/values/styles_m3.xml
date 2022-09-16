@@ -108,6 +108,36 @@
 
   <!-- Base style -->
   <style
+    name="Base.Grocy.Button.TonalButton"
+    parent="Widget.Material3.Button.TonalButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <!-- Localized style -->
+  <style
+    name="Widget.Grocy.Button.TonalButton"
+    parent="Base.Grocy.Button.TonalButton">
+    <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
+  <!-- Base style -->
+  <style
+    name="Base.Grocy.Button.TonalButton.Icon"
+    parent="Widget.Material3.Button.TonalButton.Icon">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <!-- Localized style -->
+  <style
+    name="Widget.Grocy.Button.TonalButton.Icon"
+    parent="Base.Grocy.Button.TonalButton.Icon">
+    <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
+  <!-- Base style -->
+  <style
     name="Base.Grocy.Button.OutlinedButton"
     parent="Widget.Material3.Button.OutlinedButton">
     <item name="android:layout_width">wrap_content</item>
@@ -118,6 +148,22 @@
   <style
     name="Widget.Grocy.Button.OutlinedButton"
     parent="Base.Grocy.Button.OutlinedButton">
+    <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
+  <!-- Base style -->
+  <style
+    name="Base.Grocy.Button.OutlinedButton.Icon"
+    parent="Widget.Material3.Button.OutlinedButton.Icon">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="iconPadding">8dp</item>
+  </style>
+
+  <!-- Localized style -->
+  <style
+    name="Widget.Grocy.Button.OutlinedButton.Icon"
+    parent="Base.Grocy.Button.OutlinedButton.Icon">
     <item name="android:fontFamily">@font/jost_medium</item>
   </style>
 
@@ -136,6 +182,22 @@
     <item name="android:fontFamily">@font/jost_medium</item>
   </style>
 
+  <!-- Base style -->
+  <style
+    name="Base.Grocy.Button.TextButton.Icon"
+    parent="Widget.Material3.Button.TextButton.Icon">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="iconPadding">8dp</item>
+  </style>
+
+  <!-- Localized style -->
+  <style
+    name="Widget.Grocy.Button.TextButton.Icon"
+    parent="Base.Grocy.Button.TextButton.Icon">
+    <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog"
@@ -146,6 +208,15 @@
   <style
     name="Widget.Grocy.Button.IconButton"
     parent="Widget.Material3.Button.IconButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    <item name="iconSize">24dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.Button.IconButton.Outlined"
+    parent="Widget.Material3.Button.IconButton.Outlined">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconTint">?attr/colorOnSurfaceVariant</item>
@@ -189,6 +260,11 @@
 
   <style name="Widget.Grocy.Divider.Small" parent="Widget.Grocy.Divider">
     <item name="android:layout_width">56dp</item>
+  </style>
+
+  <style name="Widget.Grocy.Divider.NoMargins" parent="Widget.Grocy.Divider">
+    <item name="android:layout_marginTop">0dp</item>
+    <item name="android:layout_marginBottom">0dp</item>
   </style>
 
   <!-- CheckBox -->

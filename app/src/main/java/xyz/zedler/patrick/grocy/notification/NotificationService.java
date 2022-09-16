@@ -78,7 +78,7 @@ public class NotificationService extends Service {
         .setContentTitle("App is running in background")
         .setCategory(Notification.CATEGORY_SERVICE)
         .setPriority(Notification.PRIORITY_MIN)
-        .setSmallIcon(R.drawable.ic_round_grocy)
+        .setSmallIcon(R.drawable.ic_round_grocy_notification)
         .setLargeIcon(scaledBitmap)
         .build();
     /*builder.setContentText("This is the text");

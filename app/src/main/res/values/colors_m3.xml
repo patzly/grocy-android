@@ -23,6 +23,19 @@
   <color name="white">#fff</color>
   <color name="transparent">#00000000</color>
 
+  <color name="logo_yellow">@color/custom_yellow_80</color>
+  <color name="logo_green">@color/custom_green_80</color>
+  <color name="logo_red">@color/custom_red_60</color>
+
+  <color name="custom_yellow_80">#eac400</color>
+  <color name="custom_yellow_50">#8d7500</color>
+
+  <color name="custom_green_80">#bdcbb0</color>
+  <color name="custom_green_50">#6e7b63</color>
+
+  <color name="custom_red_60">#ff5449</color>
+  <color name="custom_red_35">#a8060f</color>
+
   <!-- RED -->
 
   <color name="red_primary_90">#ffdadb</color>

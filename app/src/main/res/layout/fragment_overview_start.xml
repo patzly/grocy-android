@@ -202,7 +202,10 @@
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
               android:onClick="@{() -> fragment.navigate(R.id.stockOverviewFragment)}"
-              app:clickUtil="@{clickUtil}">
+              app:clickUtil="@{clickUtil}"
+              app:contentPaddingLeft="0dp"
+              app:contentPaddingRight="0dp"
+              app:contentPaddingBottom="12dp">
 
               <LinearLayout
                 android:layout_width="match_parent"
@@ -213,6 +216,9 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginEnd="16dp"
+                  android:layout_marginBottom="4dp"
                   android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_stock_overview" />
 
@@ -220,11 +226,16 @@
                   style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginEnd="16dp"
+                  android:layout_marginBottom="4dp"
                   android:text="@{viewModel.stockDescriptionTextLive}" />
 
                 <LinearLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginEnd="16dp"
                   android:orientation="vertical"
                   android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING) ? View.VISIBLE : View.GONE}">
 
@@ -354,6 +365,8 @@
                   android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginEnd="16dp"
                   android:gravity="top"
                   android:visibility="@{viewModel.stockDescriptionMissingTextLive != null ? View.VISIBLE : View.GONE}">
 
@@ -394,9 +407,61 @@
                   style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:layout_marginStart="16dp"
+                  android:layout_marginStart="32dp"
+                  android:layout_marginEnd="16dp"
                   android:visibility="@{viewModel.stockDescriptionMissingTextLive != null &amp;&amp; viewModel.stockDescriptionMissingShoppingListTextLive != null ? View.VISIBLE : View.GONE}"
                   android:text="@{viewModel.stockDescriptionMissingShoppingListTextLive}" />
+
+                <HorizontalScrollView
+                  android:id="@+id/scroll_horiz_actions"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:overScrollMode="never"
+                  android:layout_marginTop="8dp"
+                  android:scrollbars="none">
+
+                  <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                      android:layout_marginEnd="8dp"
+                      android:text="@string/title_inventory"
+                      android:onClick="@{() -> fragment.navigate(R.id.inventoryFragment)}"
+                      app:clickUtil="@{clickUtil}"
+                      app:icon="@drawable/ic_round_inventory" />
+
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
+                      android:layout_marginEnd="8dp"
+                      android:text="@string/title_transfer"
+                      android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
+                      android:onClick="@{() -> fragment.navigate(R.id.transferFragment)}"
+                      app:clickUtil="@{clickUtil}"
+                      app:icon="@drawable/ic_round_swap_horiz" />
+
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                      android:layout_marginEnd="8dp"
+                      android:text="@string/title_consume"
+                      android:onClick="@{() -> fragment.navigate(R.id.consumeFragment)}"
+                      app:clickUtil="@{clickUtil}"
+                      app:icon="@drawable/ic_round_consume_product" />
+
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.TonalButton.Icon"
+                      android:text="@string/title_purchase"
+                      android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
+                      app:clickUtil="@{clickUtil}"
+                      app:icon="@drawable/ic_round_local_grocery_store" />
+
+                  </LinearLayout>
+
+                </HorizontalScrollView>
 
               </LinearLayout>
 
@@ -438,6 +503,7 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="4dp"
                   android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_shopping_list" />
 
@@ -450,157 +516,6 @@
               </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingStart="@dimen/main_side_margin"
-              android:paddingEnd="@dimen/main_side_margin"
-              android:paddingBottom="8dp"
-              android:clipToPadding="false"
-              android:clipChildren="false">
-
-              <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Outlined"
-                android:layout_width="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> fragment.navigate(R.id.consumeFragment)}"
-                app:clickUtil="@{clickUtil}">
-
-                <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  tools:ignore="UseCompoundDrawables">
-
-                  <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginBottom="4dp"
-                    android:src="@drawable/ic_round_consume_product"
-                    tools:ignore="ContentDescription,TooDeepLayout" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.TitleMedium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_consume" />
-
-                </LinearLayout>
-
-              </com.google.android.material.card.MaterialCardView>
-
-              <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Outlined"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
-                app:clickUtil="@{clickUtil}">
-
-                <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  tools:ignore="UseCompoundDrawables">
-
-                  <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginBottom="4dp"
-                    android:src="@drawable/ic_round_local_grocery_store"
-                    tools:ignore="ContentDescription,TooDeepLayout" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.TitleMedium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_purchase" />
-
-                </LinearLayout>
-
-              </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingStart="@dimen/main_side_margin"
-              android:paddingEnd="@dimen/main_side_margin"
-              android:paddingBottom="8dp"
-              android:clipToPadding="false"
-              android:clipChildren="false">
-
-              <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Outlined"
-                android:layout_width="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> fragment.navigate(R.id.transferFragment)}"
-                app:clickUtil="@{clickUtil}">
-
-                <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  tools:ignore="UseCompoundDrawables">
-
-                  <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:src="@drawable/ic_round_swap_horiz"
-                    tools:ignore="ContentDescription,TooDeepLayout" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.TitleMedium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_transfer" />
-
-                </LinearLayout>
-
-              </com.google.android.material.card.MaterialCardView>
-
-              <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Grocy.Card.Outlined"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:onClick="@{() -> fragment.navigate(R.id.inventoryFragment)}"
-                app:clickUtil="@{clickUtil}">
-
-                <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  tools:ignore="UseCompoundDrawables">
-
-                  <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginBottom="4dp"
-                    android:src="@drawable/ic_round_inventory"
-                    tools:ignore="ContentDescription,TooDeepLayout" />
-
-                  <TextView
-                    style="@style/Widget.Grocy.TextView.TitleMedium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_inventory" />
-
-                </LinearLayout>
-
-              </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider
               style="@style/Widget.Grocy.Divider.Small"
@@ -624,6 +539,7 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="4dp"
                   android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_recipes" />
 
@@ -660,6 +576,7 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="4dp"
                   android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_chores" />
 
@@ -845,6 +762,7 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="4dp"
                   android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_tasks" />
 
@@ -954,6 +872,7 @@
                   style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:layout_marginBottom="4dp"
                   android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_master_data" />
 

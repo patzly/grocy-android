@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.HorizontalScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -102,6 +103,11 @@ public class OverviewStartFragment extends BaseFragment {
     binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
     binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
     binding.swipe.setSize(CircularProgressDrawable.LARGE);
+
+    ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
+    binding.scrollHorizActions.post(
+        () -> binding.scrollHorizActions.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+    );
 
     clickUtil = new ClickUtil(1000);
 

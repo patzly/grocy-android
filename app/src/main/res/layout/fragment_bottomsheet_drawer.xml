@@ -81,8 +81,6 @@
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_drawer_shopping_mode"
           style="@style/Widget.Grocy.Button.IconButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginEnd="4dp"
           android:layout_gravity="end|center_vertical"
           app:icon="@drawable/ic_round_storefront" />
