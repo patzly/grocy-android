@@ -40,9 +40,11 @@ public class SystemBarBehavior {
 
   private final Activity activity;
   private final Window window;
-  int containerPaddingTop;
-  int containerPaddingBottom;
-  int scrollContentPaddingBottom;
+  private int containerPaddingTop;
+  private int containerPaddingBottom;
+  private int scrollContentPaddingBottom;
+  private int statusBarInset;
+  private int navBarInset;
   private AppBarLayout appBarLayout;
   private ViewGroup container;
   private NestedScrollView scrollView;
@@ -95,7 +97,7 @@ public class SystemBarBehavior {
     // TOP INSET
     if (appBarLayout != null) {
       ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insets) -> {
-        int statusBarInset = insets.getInsets(Type.systemBars()).top;
+        statusBarInset = insets.getInsets(Type.systemBars()).top;
 
         // STATUS BAR INSET
         appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
@@ -108,7 +110,6 @@ public class SystemBarBehavior {
           params.topMargin = appBarLayout.getMeasuredHeight();
           container.setLayoutParams(params);
         } else if (container != null) {
-          //
           container.setPadding(
               container.getPaddingLeft(),
               containerPaddingTop + (applyStatusBarInsetOnContainer ? statusBarInset : 0),
@@ -121,7 +122,7 @@ public class SystemBarBehavior {
     } else if (container != null) {
       // if no app bar exists, status bar inset is applied to container
       ViewCompat.setOnApplyWindowInsetsListener(container, (v, insets) -> {
-        int statusBarInset = applyStatusBarInsetOnContainer
+        statusBarInset = applyStatusBarInsetOnContainer
             ? insets.getInsets(Type.systemBars()).top
             : 0;
 
@@ -140,6 +141,7 @@ public class SystemBarBehavior {
     if (UiUtil.isOrientationPortrait(activity) && hasContainer()) {
       View container = hasScrollView ? scrollContent : this.container;
       ViewCompat.setOnApplyWindowInsetsListener(container, (v, insets) -> {
+        navBarInset = insets.getInsets(Type.systemBars()).bottom;
         int paddingBottom = hasScrollView
             ? scrollContentPaddingBottom
             : containerPaddingBottom;
@@ -147,7 +149,7 @@ public class SystemBarBehavior {
             container.getPaddingLeft(),
             container.getPaddingTop(),
             container.getPaddingRight(),
-            paddingBottom + addBottomInset + insets.getInsets(Type.systemBars()).bottom
+            paddingBottom + addBottomInset + navBarInset
         );
         return insets;
       });
@@ -155,6 +157,7 @@ public class SystemBarBehavior {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
         View container = hasScrollView ? scrollContent : this.container;
         ViewCompat.setOnApplyWindowInsetsListener(container, (v, insets) -> {
+          navBarInset = insets.getInsets(Type.systemBars()).bottom;
           int paddingBottom = hasScrollView
               ? scrollContentPaddingBottom
               : containerPaddingBottom;
@@ -162,21 +165,107 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              paddingBottom + addBottomInset + insets.getInsets(Type.systemBars()).bottom
+              paddingBottom + addBottomInset + navBarInset
           );
           return insets;
         });
       } else {
         View root = window.getDecorView().findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+          navBarInset = insets.getInsets(Type.systemBars()).right;
           root.setPadding(
               root.getPaddingLeft(),
               root.getPaddingTop(),
-              insets.getInsets(Type.systemBars()).right,
+              navBarInset,
               root.getPaddingBottom()
           );
           return insets;
         });
+        View container = hasScrollView ? scrollContent : this.container;
+        if (container != null) {
+          container.setPadding(
+              container.getPaddingLeft(),
+              container.getPaddingTop(),
+              container.getPaddingRight(),
+              container.getPaddingBottom() + addBottomInset
+          );
+        }
+      }
+    }
+
+    if (hasScrollView) {
+      // call viewThreeObserver, this updates the system bar appearance
+      measureScrollView();
+    } else {
+      // call directly because there won't be any changes caused by scroll content
+      updateSystemBars();
+    }
+  }
+
+  public void refresh() {
+    // TOP INSET
+    if (appBarLayout != null) {
+      // STATUS BAR INSET
+      appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
+      appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+
+      // APP BAR INSET
+      if (container != null && applyAppBarInsetOnContainer) {
+        ViewGroup.MarginLayoutParams params
+            = (ViewGroup.MarginLayoutParams) container.getLayoutParams();
+        params.topMargin = appBarLayout.getMeasuredHeight();
+        container.setLayoutParams(params);
+      } else if (container != null) {
+        container.setPadding(
+            container.getPaddingLeft(),
+            containerPaddingTop + (applyStatusBarInsetOnContainer ? statusBarInset : 0),
+            container.getPaddingRight(),
+            container.getPaddingBottom()
+        );
+      }
+    } else if (container != null) {
+      // if no app bar exists, status bar inset is applied to container
+      // STATUS BAR INSET
+      container.setPadding(
+          container.getPaddingLeft(),
+          containerPaddingTop + statusBarInset,
+          container.getPaddingRight(),
+          container.getPaddingBottom()
+      );
+    }
+
+    // NAV BAR INSET
+    if (UiUtil.isOrientationPortrait(activity) && hasContainer()) {
+      View container = hasScrollView ? scrollContent : this.container;
+      int paddingBottom = hasScrollView
+          ? scrollContentPaddingBottom
+          : containerPaddingBottom;
+      container.setPadding(
+          container.getPaddingLeft(),
+          container.getPaddingTop(),
+          container.getPaddingRight(),
+          paddingBottom + addBottomInset + navBarInset
+      );
+    } else {
+      if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
+        View container = hasScrollView ? scrollContent : this.container;
+        int paddingBottom = hasScrollView
+            ? scrollContentPaddingBottom
+            : containerPaddingBottom;
+        container.setPadding(
+            container.getPaddingLeft(),
+            container.getPaddingTop(),
+            container.getPaddingRight(),
+            paddingBottom + addBottomInset + navBarInset
+        );
+      } else {
+        View root = window.getDecorView().findViewById(android.R.id.content);
+        root.setPadding(
+            root.getPaddingLeft(),
+            root.getPaddingTop(),
+            navBarInset,
+            root.getPaddingBottom()
+        );
         View container = hasScrollView ? scrollContent : this.container;
         if (container != null) {
           container.setPadding(

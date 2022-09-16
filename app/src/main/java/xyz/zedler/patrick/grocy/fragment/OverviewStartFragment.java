@@ -53,6 +53,7 @@ public class OverviewStartFragment extends BaseFragment {
   private OverviewStartViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private ClickUtil clickUtil;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -88,7 +89,7 @@ public class OverviewStartFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
@@ -219,6 +220,9 @@ public class OverviewStartFragment extends BaseFragment {
       return;
     }
     binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
+    if (systemBarBehavior != null) {
+      systemBarBehavior.refresh();
+    }
   }
 
   @Override

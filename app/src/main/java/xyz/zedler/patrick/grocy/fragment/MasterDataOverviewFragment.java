@@ -26,16 +26,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -46,6 +50,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
   private FragmentMasterDataOverviewBinding binding;
   private MasterDataOverviewViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -78,7 +83,21 @@ public class MasterDataOverviewFragment extends BaseFragment {
     viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
 
-    binding.back.setOnClickListener(v -> activity.navigateUp());
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    new ScrollBehavior(activity).setUpScroll(
+        binding.appBar, binding.scroll, false
+    );
+
+    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
+    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+    binding.swipe.setSize(CircularProgressDrawable.LARGE);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     binding.linearProducts.setOnClickListener(v -> navigate(
         MasterDataOverviewFragmentDirections
@@ -127,10 +146,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
       }
     });
     binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-    binding.swipe.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -244,6 +259,9 @@ public class MasterDataOverviewFragment extends BaseFragment {
       return;
     }
     binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
+    if (systemBarBehavior != null) {
+      systemBarBehavior.refresh();
+    }
   }
 
   @NonNull
