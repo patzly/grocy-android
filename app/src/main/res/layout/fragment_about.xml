@@ -50,7 +50,6 @@
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll_about"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize">
@@ -64,20 +63,18 @@
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
+          style="@style/Widget.Grocy.Card.Text"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginBottom="8dp"
-          app:contentPadding="16dp"
-          app:cardElevation="0dp"
-          app:cardCornerRadius="12dp"
-          app:cardBackgroundColor="@color/on_background_variant">
+          android:layout_marginBottom="8dp">
 
           <TextView
             style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:text="@string/info_acknowledgement" />
 
         </com.google.android.material.card.MaterialCardView>

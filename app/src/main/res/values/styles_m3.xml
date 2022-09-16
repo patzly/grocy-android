@@ -441,6 +441,12 @@
     <item name="android:fontFamily">@font/jost_medium</item>
   </style>
 
+  <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView">
+    <item name="android:textAppearance">@style/TextAppearance.Grocy.LabelLarge</item>
+    <item name="android:textColor">?attr/colorOnError</item>
+    <item name="fontFamily">@font/jost_medium</item>
+  </style>
+
   <!-- Base style -->
   <style name="Base.Grocy.TextView.Category" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">wrap_content</item>

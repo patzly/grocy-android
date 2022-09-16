@@ -25,16 +25,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
@@ -74,6 +73,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     systemBarBehavior.setAppBar(binding.appBarAbout);
     systemBarBehavior.setScroll(binding.scrollAbout, binding.linearAboutContainer);
     systemBarBehavior.setUp();
+
+    new ScrollBehavior(activity).setUpScroll(
+        binding.appBarAbout, binding.scrollAbout, true
+    );
+
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbarAbout);
 
     binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -119,7 +124,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
       navigate(R.id.onboardingFragment);
     } else if (v.getId() == R.id.linear_changelog) {
       ViewUtil.startIcon(binding.imageChangelog);
-      activity.showBottomSheet(new ChangelogBottomSheet());
+      activity.showChangelogBottomSheet();
     } else if (v.getId() == R.id.linear_developers) {
       ViewUtil.startIcon(binding.imageDevelopers);
       startActivity(new Intent(
@@ -199,16 +204,11 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
   private void showTextBottomSheet(int file, @StringRes int title, @StringRes int link) {
     Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.TITLE, getString(title));
+    bundle.putInt(Constants.ARGUMENT.TITLE, title);
     bundle.putInt(Constants.ARGUMENT.FILE, file);
     if (link != 0) {
       bundle.putString(Constants.ARGUMENT.LINK, getString(link));
     }
     activity.showBottomSheet(new TextBottomSheet(), bundle);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

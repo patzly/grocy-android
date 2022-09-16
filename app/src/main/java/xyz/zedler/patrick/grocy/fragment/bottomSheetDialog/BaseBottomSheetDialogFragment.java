@@ -100,7 +100,7 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
 
             backgroundColor = SurfaceColors.SURFACE_3.getColor(activity);
             PaintDrawable background = new PaintDrawable(backgroundColor);
-            int radius = UiUtil.dpToPx(requireContext(), 16);
+            int radius = UiUtil.dpToPx(requireContext(), 28);
             setCornerRadius(background, radius);
             sheet.setBackground(background);
 

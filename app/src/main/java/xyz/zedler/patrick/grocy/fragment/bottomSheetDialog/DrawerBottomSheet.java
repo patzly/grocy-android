@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import androidx.core.content.ContextCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDrawerBinding;
@@ -64,12 +62,6 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   private MainActivity activity;
   private SharedPreferences sharedPrefs;
   private final ClickUtil clickUtil = new ClickUtil();
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(

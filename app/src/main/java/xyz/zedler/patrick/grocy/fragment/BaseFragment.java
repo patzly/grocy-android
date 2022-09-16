@@ -475,6 +475,7 @@ public class BaseFragment extends Fragment {
     return backStackEntry.getDestination();
   }
 
+  @Deprecated
   @Nullable
   public Animation setStatusBarColor(
       int transit,
@@ -515,6 +516,7 @@ public class BaseFragment extends Fragment {
     return anim;
   }
 
+  @Deprecated
   @Nullable
   public Animation setStatusBarColor(
       int transit,

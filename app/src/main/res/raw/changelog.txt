@@ -69,6 +69,7 @@
 - Fixed: Crash with ZXing scanner on Android versions below Android 7 (#425)
 
 ## 2.1.0
+
 - New: Barcodes are now editable on master product page (thanks @DHM47 for the initial work) (#391)
 - New: Quantity unit conversions are now editable on master product page (#396)
 - New: Grouping feature for stock overview like on server
@@ -91,7 +92,7 @@
 
 ## 2.0.0
 
-### Major changes since 1.10.1
+#### Major changes since 1.10.1
 
 - Compatibility with grocy v3.x.x
 - Incompatibility with grocy v2.7.x
@@ -100,7 +101,7 @@
 - Rewritten pages: Settings, Purchase, Consume & more
 - Additional better barcode scanner: ML Kit (not in F-Droid version)
 
-### Changes since 2.0.0-beta05
+#### Changes since 2.0.0-beta05
 
 - Improved: Ability to enter dates with keyboard with new option (#394)
 - Improved: Option to use smaller font on shopping mode page (#379)

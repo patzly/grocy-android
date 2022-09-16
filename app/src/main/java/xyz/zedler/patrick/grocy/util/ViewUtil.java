@@ -24,8 +24,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -34,6 +40,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -43,30 +50,68 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.elevation.SurfaceColors;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import xyz.zedler.patrick.grocy.R;
 
 public class ViewUtil {
 
   private final static String TAG = ViewUtil.class.getSimpleName();
 
+  private final long idle;
+  private final LinkedList<Timestamp> timestamps;
   private long lastClick;
-  private long idle = 500;
+
+  private static class Timestamp {
+
+    private final int id;
+    private long time;
+
+    public Timestamp(int id, long time) {
+      this.id = id;
+      this.time = time;
+    }
+  }
 
   // Prevent multiple clicks
 
-  public ViewUtil() {
-    lastClick = 0;
-  }
-
   public ViewUtil(long minClickIdle) {
-    lastClick = 0;
     idle = minClickIdle;
+    timestamps = new LinkedList<>();
+    lastClick = 0;
   }
 
+  public ViewUtil() {
+    idle = 500;
+    timestamps = new LinkedList<>();
+    lastClick = 0;
+  }
+
+  public boolean isClickDisabled(int id) {
+    for (int i = 0; i < timestamps.size(); i++) {
+      if (timestamps.get(i).id == id) {
+        if (SystemClock.elapsedRealtime() - timestamps.get(i).time < idle) {
+          return true;
+        } else {
+          timestamps.get(i).time = SystemClock.elapsedRealtime();
+          return false;
+        }
+      }
+    }
+    timestamps.add(new Timestamp(id, SystemClock.elapsedRealtime()));
+    return false;
+  }
+
+  @Deprecated
   public boolean isClickDisabled() {
     if (SystemClock.elapsedRealtime() - lastClick < idle) {
       return true;
@@ -75,18 +120,32 @@ public class ViewUtil {
     return false;
   }
 
+  public boolean isClickEnabled(int id) {
+    return !isClickDisabled(id);
+  }
+
+  @Deprecated
   public boolean isClickEnabled() {
     return !isClickDisabled();
   }
 
-  // Layout direction
-
-  public static boolean isLayoutRtl(View view) {
-    return ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL;
+  public void cleanUp() {
+    for (Iterator<Timestamp> iterator = timestamps.iterator(); iterator.hasNext(); ) {
+      Timestamp timestamp = iterator.next();
+      if (SystemClock.elapsedRealtime() - timestamp.time > idle) {
+        iterator.remove();
+      }
+    }
   }
 
   // Show keyboard for EditText
 
+  public static void requestFocusAndShowKeyboard(@NonNull Window window, @NonNull View view) {
+    WindowCompat.getInsetsController(window, view).show(Type.ime());
+    view.requestFocus();
+  }
+
+  @Deprecated
   public static void requestFocusAndShowKeyboard(@NonNull final View view) {
     view.requestFocus();
     view.post(() -> {
@@ -111,6 +170,25 @@ public class ViewUtil {
   ) {
     for (CompoundButton view : compoundButtons) {
       view.setOnCheckedChangeListener(listener);
+    }
+  }
+
+  public static void setChecked(boolean checked, MaterialCardView... cardViews) {
+    for (MaterialCardView cardView : cardViews) {
+      if (cardView != null) {
+        cardView.setChecked(checked);
+      }
+    }
+  }
+
+  public static void uncheckAllChildren(ViewGroup... viewGroups) {
+    for (ViewGroup viewGroup : viewGroups) {
+      for (int i = 0; i < viewGroup.getChildCount(); i++) {
+        View child = viewGroup.getChildAt(i);
+        if (child instanceof MaterialCardView) {
+          ((MaterialCardView) child).setChecked(false);
+        }
+      }
     }
   }
 
@@ -187,6 +265,68 @@ public class ViewUtil {
       Log.e(TAG, "resetting animated icon requires AnimVectorDrawable");
     }
   }
+
+  // Toolbar
+
+  public static void centerToolbarTitleOnLargeScreens(MaterialToolbar toolbar) {
+    Resources resources = toolbar.getContext().getResources();
+    int maxWidth = resources.getDimensionPixelSize(R.dimen.max_content_width);
+    boolean isFullWidth = maxWidth >= UiUtil.getDisplayWidth(toolbar.getContext());
+    toolbar.setTitleCentered(!isFullWidth);
+  }
+
+  // Ripple background for surface list items
+
+  public static Drawable getRippleBgListItemSurface(Context context) {
+    float[] radii = new float[8];
+    Arrays.fill(radii, UiUtil.dpToPx(context, 16));
+    RoundRectShape rect = new RoundRectShape(radii, null, null);
+    ShapeDrawable shape = new ShapeDrawable(rect);
+    shape.getPaint().setColor(SurfaceColors.SURFACE_3.getColor(context));
+    LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
+    layers.setLayerInset(
+        0,
+        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, 2),
+        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, 2)
+    );
+    return new RippleDrawable(
+        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
+    );
+  }
+
+  public static Drawable getRippleBgListItemSurfaceRecyclerItem(Context context) {
+    float[] radii = new float[8];
+    Arrays.fill(radii, UiUtil.dpToPx(context, 16));
+    RoundRectShape rect = new RoundRectShape(radii, null, null);
+    ShapeDrawable shape = new ShapeDrawable(rect);
+    shape.getPaint().setColor(SurfaceColors.SURFACE_3.getColor(context));
+    return new RippleDrawable(
+        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, shape
+    );
+  }
+
+  // Enable/disable views
+
+  public static void setEnabled(boolean enabled, View... views) {
+    for (View view : views) {
+      view.setEnabled(enabled);
+    }
+  }
+
+  public static void setEnabledAlpha(boolean enabled, boolean animated, View... views) {
+    for (View view : views) {
+      view.setEnabled(enabled);
+      if (animated) {
+        view.animate().alpha(enabled ? 1 : 0.5f).setDuration(200).start();
+      } else {
+        view.setAlpha(enabled ? 1 : 0.5f);
+      }
+    }
+  }
+
+  // TouchProgressBar
 
   public static class TouchProgressBarUtil {
     private final ProgressBar progressConfirm;

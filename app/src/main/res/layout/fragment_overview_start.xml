@@ -105,17 +105,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/retro_red_bg_black"
+        android:background="?attr/colorError"
         android:gravity="center"
-        android:alpha="0.9"
         android:visibility="gone">
 
         <TextView
           style="@style/Widget.Grocy.TextView.OfflineIndicator"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="6dp"
-          android:layout_marginBottom="6dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
           android:text="@string/error_offline" />
 
       </LinearLayout>
