@@ -91,7 +91,7 @@
 
       <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_drawer_shopping_list"
-        style="@style/Widget.Grocy.Divider.FullWidth" />
+        style="@style/Widget.Grocy.Divider" />
 
       <LinearLayout
         android:id="@+id/transactions_container"
@@ -107,7 +107,6 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:orientation="vertical"
           android:gravity="center_horizontal">
 
           <ImageView
@@ -126,7 +125,6 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:orientation="vertical"
           android:gravity="center_horizontal">
 
           <ImageView
@@ -145,7 +143,6 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:orientation="vertical"
           android:gravity="center_horizontal">
 
           <ImageView
@@ -164,7 +161,6 @@
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="25"
-          android:orientation="vertical"
           android:gravity="center_horizontal">
 
           <ImageView
@@ -186,7 +182,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
-          style="@style/Widget.Grocy.Divider.FullWidth" />
+          style="@style/Widget.Grocy.Divider" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_recipes"
@@ -214,7 +210,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
-          style="@style/Widget.Grocy.Divider.FullWidth" />
+          style="@style/Widget.Grocy.Divider" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_chores"
@@ -253,7 +249,7 @@
       </LinearLayout>
 
       <com.google.android.material.divider.MaterialDivider
-        style="@style/Widget.Grocy.Divider.FullWidth" />
+        style="@style/Widget.Grocy.Divider" />
 
       <LinearLayout
         android:id="@+id/linear_drawer_master_data"
@@ -273,7 +269,7 @@
       </LinearLayout>
 
       <com.google.android.material.divider.MaterialDivider
-        style="@style/Widget.Grocy.Divider.FullWidth" />
+        style="@style/Widget.Grocy.Divider" />
 
       <LinearLayout
         android:id="@+id/linear_drawer_settings"

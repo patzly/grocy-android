@@ -191,7 +191,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <com.google.android.material.divider.MaterialDivider
-                style="@style/Widget.Grocy.Divider"
+                style="@style/Widget.Grocy.Divider.Small"
                 android:layout_marginBottom="16dp" />
 
             </LinearLayout>
@@ -210,9 +210,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.Title"
+                  style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_stock_overview" />
 
                 <TextView
@@ -434,9 +435,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.Title"
+                  style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_shopping_list" />
 
                 <TextView
@@ -482,7 +484,7 @@
                     tools:ignore="ContentDescription,TooDeepLayout" />
 
                   <TextView
-                    style="@style/Widget.Grocy.TextView.Title"
+                    style="@style/Widget.Grocy.TextView.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_consume" />
@@ -513,7 +515,7 @@
                     tools:ignore="ContentDescription,TooDeepLayout" />
 
                   <TextView
-                    style="@style/Widget.Grocy.TextView.Title"
+                    style="@style/Widget.Grocy.TextView.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_purchase" />
@@ -558,7 +560,7 @@
                     tools:ignore="ContentDescription,TooDeepLayout" />
 
                   <TextView
-                    style="@style/Widget.Grocy.TextView.Title"
+                    style="@style/Widget.Grocy.TextView.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_transfer" />
@@ -589,7 +591,7 @@
                     tools:ignore="ContentDescription,TooDeepLayout" />
 
                   <TextView
-                    style="@style/Widget.Grocy.TextView.Title"
+                    style="@style/Widget.Grocy.TextView.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_inventory" />
@@ -601,7 +603,7 @@
             </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider
-              style="@style/Widget.Grocy.Divider"
+              style="@style/Widget.Grocy.Divider.Small"
               android:layout_marginBottom="16dp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -619,9 +621,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.Title"
+                  style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_recipes" />
 
                 <TextView
@@ -635,7 +638,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.divider.MaterialDivider
-              style="@style/Widget.Grocy.Divider"
+              style="@style/Widget.Grocy.Divider.Small"
               android:layout_marginBottom="16dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}" />
 
@@ -654,9 +657,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.Title"
+                  style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_chores" />
 
                 <LinearLayout
@@ -838,9 +842,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.Title"
+                  style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_tasks" />
 
                 <LinearLayout
@@ -928,7 +933,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.divider.MaterialDivider
-              style="@style/Widget.Grocy.Divider"
+              style="@style/Widget.Grocy.Divider.Small"
               android:layout_marginBottom="16dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) || viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}" />
 
@@ -946,9 +951,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.Title"
+                  style="@style/Widget.Grocy.TextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_master_data" />
 
                 <TextView

@@ -90,16 +90,16 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
     binding.linearDrawerConsume.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext())
+        ViewUtil.getRippleBgListItemSurface(requireContext(), 8, 4)
     );
     binding.linearDrawerPurchase.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext())
+        ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 4)
     );
     binding.linearDrawerTransfer.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext())
+        ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 4)
     );
     binding.linearDrawerInventory.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext())
+        ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 8)
     );
     binding.linearDrawerRecipes.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
@@ -154,13 +154,33 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
           binding.imageDrawerShoppingList
       );
     } else if (currentFragment instanceof ConsumeFragment) {
-      select(binding.linearDrawerConsume, null, binding.imageDrawerConsume);
+      select(
+          binding.linearDrawerConsume,
+          null,
+          binding.imageDrawerConsume,
+          8, 4
+      );
     } else if (currentFragment instanceof PurchaseFragment) {
-      select(binding.linearDrawerPurchase, null, binding.imageDrawerPurchase);
+      select(
+          binding.linearDrawerPurchase,
+          null,
+          binding.imageDrawerPurchase,
+          4, 4
+      );
     } else if (currentFragment instanceof TransferFragment) {
-      select(binding.linearDrawerTransfer, null, binding.imageDrawerTransfer);
+      select(
+          binding.linearDrawerTransfer,
+          null,
+          binding.imageDrawerTransfer,
+          4, 4
+      );
     } else if (currentFragment instanceof InventoryFragment) {
-      select(binding.linearDrawerInventory, null, binding.imageDrawerInventory);
+      select(
+          binding.linearDrawerInventory,
+          null,
+          binding.imageDrawerInventory,
+          4, 8
+      );
     } else if (currentFragment instanceof ChoresFragment) {
       select(binding.linearDrawerChores, binding.textDrawerChores, binding.imageDrawerChores);
     } else if (currentFragment instanceof TasksFragment) {
@@ -281,15 +301,19 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   private void select(
-      LinearLayout linearLayout, @Nullable TextView textView, @Nullable ImageView imageView
+      @NonNull LinearLayout linearLayout,
+      @Nullable TextView textView,
+      @Nullable ImageView imageView,
+      float paddingStart,
+      float paddingEnd
   ) {
     linearLayout.setBackground(
-        ViewUtil.getBgListItemSelected(requireContext())
+        ViewUtil.getBgListItemSelected(requireContext(), paddingStart, paddingEnd)
     );
     linearLayout.setClickable(false);
     if (textView != null) {
       textView.setTextColor(
-          ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary)
+          ResUtil.getColorAttr(requireContext(), R.attr.colorOnSecondaryContainer)
       );
     }
     if (imageView != null) {
@@ -299,8 +323,12 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     }
   }
 
-  private void select(LinearLayout linearLayout, @Nullable TextView textView) {
-    select(linearLayout, textView, null);
+  private void select(
+      @NonNull LinearLayout linearLayout,
+      @Nullable TextView textView,
+      @Nullable ImageView imageView
+  ) {
+    select(linearLayout, textView, imageView, 8, 8);
   }
 
   private void hideDisabledFeatures() {
