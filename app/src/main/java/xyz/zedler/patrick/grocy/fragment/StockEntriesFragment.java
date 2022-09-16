@@ -213,6 +213,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
           }
           StockEntry stockEntry = (StockEntry) item;
           underlayButtons.add(new UnderlayButton(
+              activity,
               R.drawable.ic_round_consume_product,
               pos -> {
                 if (pos >= groupedListItems.size()) {
@@ -228,6 +229,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
               && stockEntry.getOpen() == 0
           ) {
             underlayButtons.add(new UnderlayButton(
+                activity,
                 R.drawable.ic_round_open,
                 pos -> {
                   if (pos >= groupedListItems.size()) {

@@ -40,7 +40,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BezierCurveChart extends View {
 
@@ -99,12 +99,12 @@ public class BezierCurveChart extends View {
 
     this.context = context;
 
-    cornerRadius = UnitUtil.dpToPx(context, 6);
-    dotRadius = UnitUtil.dpToPx(context, 3);
+    cornerRadius = UiUtil.dpToPx(context, 6);
+    dotRadius = UiUtil.dpToPx(context, 3);
 
     paintCurve.setStyle(Paint.Style.STROKE);
     paintCurve.setStrokeCap(Paint.Cap.ROUND);
-    paintCurve.setStrokeWidth(UnitUtil.dpToPx(context, CURVE_LINE_WIDTH));
+    paintCurve.setStrokeWidth(UiUtil.dpToPx(context, CURVE_LINE_WIDTH));
     paintCurve.setAntiAlias(true);
 
     curveColors.add(getColor(R.color.retro_blue_bg));
@@ -135,11 +135,11 @@ public class BezierCurveChart extends View {
 
     paintBadgeText.setColor(Color.BLACK);
     paintBadgeText.setAntiAlias(true);
-    paintBadgeText.setTextSize(UnitUtil.spToPx(context, 14));
+    paintBadgeText.setTextSize(UiUtil.spToPx(context, 14));
     paintBadgeText.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
 
     paintLabel.setColor(getColor(R.color.on_background_secondary));
-    paintLabel.setTextSize(UnitUtil.spToPx(context, 13));
+    paintLabel.setTextSize(UiUtil.spToPx(context, 13));
     paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.jost_book));
     paintLabel.setAntiAlias(true);
   }

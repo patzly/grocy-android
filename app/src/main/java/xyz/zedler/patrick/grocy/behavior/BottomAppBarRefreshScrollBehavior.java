@@ -38,7 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.bottomappbar.CustomBottomAppBar;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BottomAppBarRefreshScrollBehavior {
 
@@ -71,8 +71,8 @@ public class BottomAppBarRefreshScrollBehavior {
       Log.e(TAG, "constructor: activity is null!");
       return;
     }
-    topScrollLimit = UnitUtil.dpToPx(activity, 100);
-    scrollLimitY = UnitUtil.dpToPx(activity, 24);
+    topScrollLimit = UiUtil.dpToPx(activity, 100);
+    scrollLimitY = UiUtil.dpToPx(activity, 24);
   }
 
   /**

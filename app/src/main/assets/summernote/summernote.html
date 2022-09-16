@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Android Summernote">
+    <meta name="author" content="Avinash S Karanth">
+	<title>Android Summernote</title>
+
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="bootstrap.min.css" id="bootstrapcss" rel="stylesheet">
+<script src="jquery.min.js"></script>
+<script src="bootstrap.min.js"></script> 
+<!-- include summernote css/js-->
+<link href="summernote.css" rel="stylesheet">
+<script src="summernote.min.js"></script>
+</head>
+<body>
+<textarea id="summernote" style="width:100%;height:100%"></textarea>
+<script>
+$(document).ready(function() {
+
+  $('#summernote').summernote({
+    focus: true,
+    placeholder: 'Write here...',
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['insert', ['link', 'picture','video']],
+      ['view', ['codeview']],
+      ['help', ['help']]
+    ],
+    callbacks: {
+      onInit: function(e) {
+        $("#summernote").summernote("fullscreen.toggle");
+      }
+    }
+  });
+
+  $(".note-editable").keydown(function (e) {
+    if (e.keyCode == 222) {
+      e.preventDefault();
+    } else {
+			return;
+		}
+  });
+
+});
+
+function changeCSS(cssFile) {
+
+    var oldlink = document.getElementById("bootstrapcss");
+
+    var newlink = document.createElement("link");
+    newlink.setAttribute("rel", "stylesheet");
+    newlink.setAttribute("type", "text/css");
+    newlink.setAttribute("href", cssFile);
+    newlink.setAttribute("id", "bootstrapcss");
+
+    document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+}
+
+</script>
+</body>
+</html>

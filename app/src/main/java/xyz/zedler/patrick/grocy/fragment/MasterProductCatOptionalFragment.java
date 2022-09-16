@@ -239,12 +239,12 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   public void navigateToHtmlEditor() {
-    /*if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
+    if (viewModel.getFormData().getDescriptionLive().getValue() != null) {
       navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment()
-          .setHtmlText(viewModel.getFormData().getDescriptionLive().getValue()));
+          .setText(viewModel.getFormData().getDescriptionLive().getValue()));
     } else {
       navigate(MasterProductCatOptionalFragmentDirections.actionMasterProductCatOptionalFragmentToEditorHtmlFragment());
-    }*/
+    }
   }
 
   @Override

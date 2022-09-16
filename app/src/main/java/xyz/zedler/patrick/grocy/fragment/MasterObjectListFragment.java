@@ -33,6 +33,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -284,9 +285,9 @@ public class MasterObjectListFragment extends BaseFragment
     activity.updateBottomAppBar(
         Constants.FAB.POSITION.CENTER,
         !entity.equals(GrocyApi.ENTITY.PRODUCTS)
-            ? R.menu.menu_master_items
-            : R.menu.menu_master_products,
-        this::setUpBottomMenu
+            ? viewModel.isSortAscending() ? R.menu.menu_master_items_asc : R.menu.menu_master_items_desc
+            : viewModel.isSortAscending() ? R.menu.menu_master_products_asc : R.menu.menu_master_products_desc,
+        getBottomMenuClickListener()
     );
     activity.updateFab(
         R.drawable.ic_round_add_anim,
@@ -324,68 +325,50 @@ public class MasterObjectListFragment extends BaseFragment
     );
   }
 
-  public void setUpBottomMenu() {
-    // sorting
-    MenuItem itemSort = activity.getBottomMenu().findItem(R.id.action_sort_ascending);
-    itemSort.setIcon(
-        viewModel.isSortAscending()
-            ? R.drawable.ic_round_sort_desc_to_asc_anim
-            : R.drawable.ic_round_sort_asc_to_desc
-    );
-    itemSort.getIcon().setAlpha(255);
-    itemSort.setOnMenuItemClickListener(item -> {
-      viewModel.setSortAscending(!viewModel.isSortAscending());
-      item.setIcon(
-          viewModel.isSortAscending()
-              ? R.drawable.ic_round_sort_asc_to_desc
-              : R.drawable.ic_round_sort_desc_to_asc_anim
-      );
-      item.getIcon().setAlpha(255);
-      ViewUtil.startIcon(item);
-      return true;
-    });
-
-    // search
-    MenuItem search = activity.getBottomMenu().findItem(R.id.action_search);
-    if (search == null) {
-      return;
-    }
-    search.setOnMenuItemClickListener(item -> {
-      ViewUtil.startIcon(item);
-      setUpSearch();
-      return true;
-    });
-
-    // product group filter
-    if (entity.equals(GrocyApi.ENTITY.PRODUCTS)) {
-      MenuItem menuItem = activity.getBottomMenu().findItem(R.id.action_filter);
-      if (menuItem == null) {
-        return;
-      }
-      SubMenu menuProductGroups = menuItem.getSubMenu();
-      menuProductGroups.clear();
-      List<ProductGroup> productGroups = viewModel.getProductGroups();
-      if (productGroups != null && !productGroups.isEmpty()) {
-        ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
-        SortUtil.sortProductGroupsByName(requireContext(), sorted, true);
-        for (ProductGroup pg : sorted) {
-          menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(item -> {
-            if (binding.recycler.getAdapter() == null) {
-              return false;
-            }
-            viewModel.getHorizontalFilterBarMulti().addFilter(
-                HorizontalFilterBarMulti.PRODUCT_GROUP,
-                new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
-            );
-            binding.recycler.getAdapter().notifyItemChanged(0);
-            return true;
-          });
+  public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
+    return item -> {
+      if (item.getItemId() == R.id.action_search) {
+        ViewUtil.startIcon(item);
+        setUpSearch();
+        return true;
+      } else if (item.getItemId() == R.id.action_filter) {
+        SubMenu menuProductGroups = item.getSubMenu();
+        menuProductGroups.clear();
+        List<ProductGroup> productGroups = viewModel.getProductGroups();
+        if (productGroups != null && !productGroups.isEmpty()) {
+          ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
+          SortUtil.sortProductGroupsByName(requireContext(), sorted, true);
+          for (ProductGroup pg : sorted) {
+            menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(itemTemp -> {
+              if (binding.recycler.getAdapter() == null) {
+                return false;
+              }
+              viewModel.getHorizontalFilterBarMulti().addFilter(
+                  HorizontalFilterBarMulti.PRODUCT_GROUP,
+                  new HorizontalFilterBarMulti.Filter(pg.getName(), pg.getId())
+              );
+              binding.recycler.getAdapter().notifyItemChanged(0);
+              return true;
+            });
+          }
+        } else {
+          activity.showMessage(R.string.error_undefined);
         }
-        menuItem.setVisible(true);
-      } else {
-        menuItem.setVisible(false);
+        return true;
+      } else if (item.getItemId() == R.id.action_sort_ascending) {
+        viewModel.setSortAscending(!viewModel.isSortAscending());
+        item.setIcon(
+            viewModel.isSortAscending()
+                ? R.drawable.ic_round_sort_asc_to_desc
+                : R.drawable.ic_round_sort_desc_to_asc_anim
+        );
+        item.getIcon().setAlpha(255);
+        item.setChecked(viewModel.isSortAscending());
+        ViewUtil.startIcon(item);
+        return true;
       }
-    }
+      return false;
+    };
   }
 
   @Override

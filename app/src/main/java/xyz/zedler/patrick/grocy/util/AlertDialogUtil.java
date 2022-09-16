@@ -23,6 +23,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -43,7 +44,7 @@ public class AlertDialogUtil {
     WebView webView = new WebView(context);
     webView.getSettings().setJavaScriptEnabled(false);
     webView.getSettings().setDomStorageEnabled(false);
-    webView.getSettings().setAppCacheEnabled(false);
+    webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     webView.getSettings().setAllowFileAccess(false);
     webView.loadData(html, "text/html; charset=utf-8", "UTF-8");
     webView.setBackgroundColor(
@@ -80,10 +81,10 @@ public class AlertDialogUtil {
 
     TextView title = new TextView(context);
     title.setTextAppearance(context, R.style.Widget_Grocy_TextView);
-    int paddingTitle = UnitUtil.dpToPx(context, 8);
+    int paddingTitle = UiUtil.dpToPx(context, 8);
     title.setPadding(paddingTitle*3, paddingTitle*2, paddingTitle*3, 0);
     title.setText(question);
-    title.setTextSize(UnitUtil.spToPx(context, 6));
+    title.setTextSize(UiUtil.spToPx(context, 6));
     alertBuilder.setCustomTitle(title);
 
     if (multiChoiceItems != null) {

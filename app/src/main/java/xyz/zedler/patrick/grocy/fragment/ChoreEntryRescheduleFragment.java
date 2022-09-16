@@ -129,11 +129,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
   private void updateUI(boolean animated) {
     activity.getScrollBehavior().setUpScroll(R.id.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
-        R.menu.menu_empty,
-        () -> {}
-    );
+    activity.updateBottomAppBar(Constants.FAB.POSITION.END, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_backup,
         R.string.action_save,
@@ -169,8 +165,8 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         .build();
 
     picker.addOnPositiveButtonClickListener(v -> viewModel.getNextTrackingTimeLive().setValue(
-        String.format(Locale.getDefault(), "%02d:%02d",
-            picker.getHour(), picker.getMinute())
+        String.format(Locale.getDefault(), "%02d:%02d:%02d",
+            picker.getHour(), picker.getMinute(), 0)
     ));
     picker.show(getParentFragmentManager(), "time_picker_dialog");
   }

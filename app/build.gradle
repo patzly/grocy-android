@@ -24,7 +24,7 @@ plugins {
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     lint {
         abortOnError false
@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "xyz.zedler.patrick.grocy"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 42
         versionName "2.3.0"
 
@@ -75,12 +75,12 @@ android {
         sourceCompatibility 11
         targetCompatibility 11
     }
-    buildToolsVersion '32.1.0-rc1'
+    buildToolsVersion '33.0.0'
     namespace 'xyz.zedler.patrick.grocy'
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.browser:browser:1.4.0'
@@ -88,8 +88,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
     // Navigation framework for easy navigation control using XML
-    implementation 'androidx.navigation:navigation-fragment:2.5.1'
-    implementation 'androidx.navigation:navigation-ui:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment:2.5.2'
+    implementation 'androidx.navigation:navigation-ui:2.5.2'
 
     // Android Room for database and RxJava for Async access of database
     implementation 'androidx.room:room-runtime:2.4.3'
@@ -115,6 +115,8 @@ dependencies {
 
     // Work for daily notifications
     implementation 'androidx.work:work-runtime:2.7.1'
+
+    implementation 'androidx.webkit:webkit:1.5.0'
 
     // ZXing for barcode scanning
     //noinspection GradleDependency

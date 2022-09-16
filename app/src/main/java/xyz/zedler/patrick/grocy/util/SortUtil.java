@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -235,8 +236,12 @@ public class SortUtil {
           } else if (time2 == null || time2.isEmpty()) {
             return 1; // or -1 when items without BBD should be last
           }
-          return DateUtil.getDate(time1, true)
-              .compareTo(DateUtil.getDate(time2, true));
+          Date date1 = DateUtil.getDate(time1);
+          Date date2 = DateUtil.getDate(time2);
+          if (date1 == null || date2 == null) {
+            return 0;
+          }
+          return DateUtil.getDate(time1).compareTo(DateUtil.getDate(time2));
         }
     );
   }

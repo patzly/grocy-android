@@ -130,12 +130,7 @@ public class OverviewStartFragment extends BaseFragment {
   private void updateUI(boolean animated) {
     activity.getScrollBehavior().setUpScroll(binding.scroll);
     activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.CENTER,
-        R.menu.menu_empty,
-        () -> {
-        }
-    );
+    activity.updateBottomAppBar(Constants.FAB.POSITION.CENTER, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_barcode_scan,
         R.string.action_scan,

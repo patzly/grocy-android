@@ -75,7 +75,7 @@ import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
@@ -461,7 +461,7 @@ public class RecipeBottomSheet extends BaseBottomSheet implements
               grocyApi.getRecipePicture(recipe.getPictureFileName()),
               RequestHeaders.getGlideGrocyAuthHeaders(requireContext()))
           )
-          .transform(new CenterCrop(), new RoundedCorners(UnitUtil.dpToPx(requireContext(), 12)))
+          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(requireContext(), 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
           .listener(new RequestListener<Drawable>() {
             @Override

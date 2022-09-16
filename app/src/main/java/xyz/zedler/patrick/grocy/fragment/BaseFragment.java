@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
@@ -70,6 +71,10 @@ public class BaseFragment extends Fragment {
       }
     }
     return getString(R.string.error_undefined);
+  }
+
+  public void getActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
   }
 
   public boolean isSearchVisible() {

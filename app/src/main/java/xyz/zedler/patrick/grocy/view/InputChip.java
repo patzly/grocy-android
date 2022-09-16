@@ -39,7 +39,7 @@ import androidx.databinding.InverseBindingListener;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class InputChip extends LinearLayout {
 
@@ -164,10 +164,10 @@ public class InputChip extends LinearLayout {
   @Override
   public void setPadding(int left, int top, int right, int bottom) {
     frameLayoutContainer.setPadding(
-        UnitUtil.dpToPx(context, left),
-        UnitUtil.dpToPx(context, top),
-        UnitUtil.dpToPx(context, right),
-        UnitUtil.dpToPx(context, bottom)
+        UiUtil.dpToPx(context, left),
+        UiUtil.dpToPx(context, top),
+        UiUtil.dpToPx(context, right),
+        UiUtil.dpToPx(context, bottom)
     );
   }
 

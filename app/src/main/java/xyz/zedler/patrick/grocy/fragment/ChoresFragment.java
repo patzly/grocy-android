@@ -202,6 +202,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
             return;
           }
           underlayButtons.add(new UnderlayButton(
+              activity,
               R.drawable.ic_round_play_arrow,
               pos -> {
                 if (pos >= displayedItems.size()) {
@@ -217,6 +218,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
           if (VersionUtil.isGrocyServerMin320(viewModel.getSharedPrefs())
               && !viewModel.hasManualScheduling(displayedItems.get(position).getChoreId())) {
             underlayButtons.add(new UnderlayButton(
+                activity,
                 R.drawable.ic_round_skip_next,
                 pos -> {
                   if (pos >= displayedItems.size()) {

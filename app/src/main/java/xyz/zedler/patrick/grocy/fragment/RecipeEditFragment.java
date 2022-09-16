@@ -101,12 +101,12 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
       }
     });
     binding.preparation.setOnClickListener(v -> {
-      /*if (viewModel.getFormData().getPreparationLive().getValue() != null) {
+      if (viewModel.getFormData().getPreparationLive().getValue() != null) {
         navigate(RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
-            .setHtmlText(viewModel.getFormData().getPreparationLive().getValue()));
+            .setText(viewModel.getFormData().getPreparationLive().getValue()));
       } else {
         navigate(RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2());
-      }*/
+      }
     });
     Object preparationEdited = getFromThisDestinationNow(ARGUMENT.DESCRIPTION);
     if (preparationEdited != null) {

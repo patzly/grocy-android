@@ -38,10 +38,11 @@ import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.animation.AnimationUtils;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class CustomBottomAppBar extends BottomAppBar {
 
@@ -91,7 +92,7 @@ public class CustomBottomAppBar extends BottomAppBar {
    */
   public void hide() {
     MarginLayoutParams params = (MarginLayoutParams) getLayoutParams();
-    int addOffset = /*Build.VERSION.SDK_INT == 27 ? 0 :*/ UnitUtil.dpToPx(getContext(), 10);
+    int addOffset = /*Build.VERSION.SDK_INT == 27 ? 0 :*/ UiUtil.dpToPx(getContext(), 10);
     isOrWillBeShown = false;
     animateTo(
         getMeasuredHeight()
