@@ -161,9 +161,9 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
 
   public void setScannerVisibilityLive(
       LiveData<Boolean> scannerVisibilityLive,
-      boolean supressNextScanStart
+      boolean suppressNextScanStart
   ) {
-    this.suppressNextScanStart = supressNextScanStart;
+    this.suppressNextScanStart = suppressNextScanStart;
     if (scannerVisibilityLive.hasObservers()) {
       scannerVisibilityLive.removeObservers(fragment.getViewLifecycleOwner());
     }
