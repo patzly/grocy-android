@@ -407,7 +407,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switch_do_not_check_shopping_list"
                 style="@style/Widget.Grocy.Switch"
                 android:onCheckedChanged="@{() -> activity.startIconAnimation(imageDoNotCheckShoppingList, true)}"

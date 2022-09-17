@@ -33,6 +33,8 @@ import androidx.preference.PreferenceManager;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatBehaviorBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -42,6 +44,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatBehaviorFragment extends BaseFragment {
@@ -78,6 +81,18 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
     binding.setSharedPrefs(PreferenceManager.getDefaultSharedPreferences(activity));
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setUp();
+
+    new ScrollBehavior(activity).setUpScroll(
+        binding.appBar, binding.scroll, true
+    );
+
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {

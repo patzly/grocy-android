@@ -133,7 +133,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_auto_add"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setAutoAddToShoppingListEnabled(checked)}"

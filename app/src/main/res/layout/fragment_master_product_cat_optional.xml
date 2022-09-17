@@ -171,7 +171,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.isActiveLive}" />
 
@@ -385,7 +385,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.neverShowOnStockLive}" />
 
@@ -433,7 +433,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.noOwnStockLive}" />
 

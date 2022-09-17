@@ -137,7 +137,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_logging"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageBug, true)}"
