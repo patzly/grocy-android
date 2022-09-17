@@ -33,6 +33,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import androidx.annotation.AttrRes;
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
@@ -41,8 +42,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.databinding.BindingAdapter;
+import com.google.android.material.color.ColorRoles;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
+import com.google.android.material.color.MaterialColors;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -88,6 +91,13 @@ public class ResUtil {
         .setColorResourceIds(resIds)
         .build();
     HarmonizedColors.applyToContextIfAvailable(context, options);
+  }
+
+  public static ColorRoles getHarmonizedRoles(Context context, @ColorRes int resId) {
+    return MaterialColors.getColorRoles(
+        context,
+        MaterialColors.harmonizeWithPrimary(context,  ContextCompat.getColor(context, resId))
+    );
   }
 
   public static int getColorAttr(Context context, @AttrRes int resId) {

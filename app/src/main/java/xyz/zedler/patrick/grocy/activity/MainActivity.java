@@ -41,7 +41,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
@@ -774,16 +773,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "replaceFabIcon: not replaced, tags are identical");
       }
     }
-  }
-
-  @Deprecated
-  public void setStatusBarColor(@ColorRes int color) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-        && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
-    ) {
-      color = R.color.black;
-    }
-    //getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), color, null));
   }
 
   public void startIconAnimation(View view, boolean hasFocus) {

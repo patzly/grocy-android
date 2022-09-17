@@ -218,7 +218,7 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
-      public final static String THEME = "";
+      public final static String THEME = Constants.THEME.GREEN;
       public final static int DARK_MODE = SettingsViewModel.DARK_MODE_SYSTEM;
       public final static String LANGUAGE = null;
       public static final boolean USE_SLIDING = false;

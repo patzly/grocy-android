@@ -22,6 +22,7 @@
   <color name="black">#000</color>
   <color name="white">#fff</color>
   <color name="transparent">#00000000</color>
+  <color name="green">#60837a</color>
 
   <color name="logo_yellow">@color/custom_yellow_80</color>
   <color name="logo_green">@color/custom_green_80</color>

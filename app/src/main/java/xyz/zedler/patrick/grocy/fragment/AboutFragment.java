@@ -79,7 +79,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     );
 
     ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbarAbout);
-
     binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navigateUp());
 
     setOnClickListeners(

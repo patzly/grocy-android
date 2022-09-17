@@ -29,9 +29,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -65,6 +68,18 @@ public class SettingsFragment extends BaseFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setUp();
+
+    new ScrollBehavior(activity).setUpScroll(
+        binding.appBar, binding.scroll, true
+    );
+
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(binding.scroll);
       activity.getScrollBehavior().setHideOnScroll(true);

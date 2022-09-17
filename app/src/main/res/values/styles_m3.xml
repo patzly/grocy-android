@@ -33,6 +33,15 @@
     <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
   </style>
 
+  <style name="ThemeOverlay.Grocy.AlertDialog.Caution" parent="ThemeOverlay.Grocy.AlertDialog">
+    <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.UnelevatedButton.Dialog.Caution</item>
+    <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog.Caution</item>
+  </style>
+
+  <style name="Theme.Grocy.AlertDialog.Caution" parent="">
+    <item name="materialAlertDialogTheme">@style/ThemeOverlay.Grocy.AlertDialog.Caution</item>
+  </style>
+
   <!-- Toolbar -->
 
   <style
@@ -104,6 +113,14 @@
     name="Widget.Grocy.Button.UnelevatedButton"
     parent="Base.Grocy.Button.UnelevatedButton">
     <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
+  <!-- Localized style, no empty base style needed -->
+  <style
+    name="Widget.Grocy.Button.UnelevatedButton.Dialog.Caution"
+    parent="Widget.Grocy.Button.TextButton.Dialog">
+    <item name="android:textColor">?attr/colorOnError</item>
+    <item name="backgroundTint">?attr/colorError</item>
   </style>
 
   <!-- Base style -->
@@ -203,6 +220,13 @@
     name="Widget.Grocy.Button.TextButton.Dialog"
     parent="Widget.Material3.Button.TextButton.Dialog">
     <item name="android:fontFamily">@font/jost_medium</item>
+  </style>
+
+  <!-- Localized style, no empty base style needed -->
+  <style
+    name="Widget.Grocy.Button.TextButton.Dialog.Caution"
+    parent="Widget.Grocy.Button.TextButton.Dialog">
+    <item name="android:textColor">?attr/colorError</item>
   </style>
 
   <style
