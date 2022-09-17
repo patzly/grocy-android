@@ -19,52 +19,38 @@
 
 package xyz.zedler.patrick.grocy.scanner;
 
-import android.annotation.SuppressLint;
-import android.app.Application;
-import android.content.Context;
+import android.Manifest;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.util.Size;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.Preview;
 import androidx.camera.core.TorchState;
-import androidx.camera.core.UseCaseGroup;
-import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.mlkit.vision.MlKitAnalyzer;
+import androidx.camera.view.CameraController;
+import androidx.camera.view.LifecycleCameraController;
 import androidx.camera.view.PreviewView;
+import androidx.camera.view.PreviewView.ImplementationMode;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
-import androidx.lifecycle.ViewModelProvider.Factory;
 import com.google.android.material.card.MaterialCardView;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PurchasePromptBottomSheet;
@@ -73,7 +59,7 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
@@ -82,25 +68,17 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
   private static final int PERMISSION_REQUESTS = 1;
 
-  @Nullable
-  private ProcessCameraProvider cameraProvider;
-  @Nullable private BarcodeScannerProcessor imageProcessor;
-  private final GraphicOverlay graphicOverlay;
-  private final PreviewView previewView;
-  private boolean needUpdateGraphicOverlayImageSourceInfo;
+  private final LifecycleCameraController cameraController;
   private final BarcodeScannerOptions barcodeScannerOptions;
   private final SharedPreferences sharedPrefs;
-  private final LiveData<ProcessCameraProvider> processCameraProvider;
   private boolean isScannerVisible;
-  private final int lensFacing;
-  private final CameraSelector cameraSelector;
-  private Camera camera;
+  private BarcodeScanner barcodeScanner;
+  private final PreviewView previewView;
   private final Fragment fragment;
   private final MainActivity activity;
   private final BarcodeListener barcodeListener;
-  private final boolean cropImageToPreviewRect;
-  private boolean supressNextScanStart = false;
-  private boolean qrCodeFormat;
+  private boolean suppressNextScanStart = false;
+  private final boolean qrCodeFormat;
 
   public EmbeddedFragmentScannerMLKit(
       Fragment fragment,
@@ -114,25 +92,20 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     this.activity = (MainActivity) fragment.requireActivity();
     this.barcodeListener = barcodeListener;
     this.qrCodeFormat = qrCodeFormat;
-
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
-    cropImageToPreviewRect = sharedPrefs.getBoolean(
-        SCANNER.CROP_CAMERA_STREAM,
-        SETTINGS_DEFAULT.SCANNER.CROP_CAMERA_STREAM
-    );
 
     // set container size
     int width;
     int height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UnitUtil.dpToPx(fragment.requireContext(), 250);
-      height = UnitUtil.dpToPx(fragment.requireContext(), 250);
+      width = UiUtil.dpToPx(fragment.requireContext(), 250);
+      height = UiUtil.dpToPx(fragment.requireContext(), 250);
     } else if (qrCodeFormat) {
-      width = UnitUtil.dpToPx(fragment.requireContext(), 180);
-      height = UnitUtil.dpToPx(fragment.requireContext(), 180);
+      width = UiUtil.dpToPx(fragment.requireContext(), 180);
+      height = UiUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UnitUtil.dpToPx(fragment.requireContext(), 350);
-      height = UnitUtil.dpToPx(fragment.requireContext(), 160);
+      width = UiUtil.dpToPx(fragment.requireContext(), 350);
+      height = UiUtil.dpToPx(fragment.requireContext(), 160);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
       LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
@@ -148,26 +121,24 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     // fill container with necessary views
     int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
     LayoutParams layoutParamsPreview = new LayoutParams(matchParent, matchParent);
-    int size16dp = UnitUtil.dpToPx(fragment.requireContext(), 16);
+    int size16dp = UiUtil.dpToPx(fragment.requireContext(), 16);
     layoutParamsPreview.setMargins(size16dp, size16dp, size16dp, size16dp);
     previewView = new PreviewView(fragment.requireContext());
     previewView.setLayoutParams(layoutParamsPreview);
+    previewView.setImplementationMode(ImplementationMode.COMPATIBLE);
     containerScanner.addView(previewView);
-    graphicOverlay = new GraphicOverlay(fragment.requireContext());
-    graphicOverlay.setLayoutParams(layoutParamsPreview);
-    containerScanner.addView(graphicOverlay);
     LayoutParams layoutParamsCard = new LayoutParams(matchParent, matchParent);
-    int size12dp = UnitUtil.dpToPx(fragment.requireContext(), 12);
+    int size12dp = UiUtil.dpToPx(fragment.requireContext(), 12);
     layoutParamsCard.setMargins(size12dp, size12dp, size12dp, size12dp);
     MaterialCardView cardView = new MaterialCardView(fragment.requireContext());
     cardView.setLayoutParams(layoutParamsCard);
     cardView.setCardElevation(0);
     int backgroundColor = ContextCompat.getColor(fragment.requireContext(), R.color.transparent);
     cardView.setCardBackgroundColor(backgroundColor);
-    cardView.setStrokeWidth(UnitUtil.dpToPx(fragment.requireContext(), 5));
+    cardView.setStrokeWidth(UiUtil.dpToPx(fragment.requireContext(), 5));
     int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.grey800);
     cardView.setStrokeColor(strokeColor);
-    cardView.setRadius(UnitUtil.dpToPx(fragment.requireContext(), 10));
+    cardView.setRadius(UiUtil.dpToPx(fragment.requireContext(), 10));
     containerScanner.addView(cardView);
 
     ArrayList<Integer> enabledBarcodeFormats = getEnabledBarcodeFormats();
@@ -188,16 +159,21 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
           }
         });
 
-    processCameraProvider = new ViewModelProvider(fragment, (Factory) AndroidViewModelFactory
-        .getInstance(fragment.requireActivity().getApplication()))
-        .get(CameraXViewModel.class)
-        .getProcessCameraProvider();
+    cameraController = new LifecycleCameraController(fragment.requireContext());
+    CameraSelector cameraSelector = sharedPrefs
+        .getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM)
+        ? CameraSelector.DEFAULT_FRONT_CAMERA
+        : CameraSelector.DEFAULT_BACK_CAMERA;
+    previewView.setController(cameraController);
 
-    lensFacing = sharedPrefs.getBoolean(SCANNER.FRONT_CAM, SETTINGS_DEFAULT.SCANNER.FRONT_CAM)
-        ? CameraSelector.LENS_FACING_FRONT
-        : CameraSelector.LENS_FACING_BACK;
-
-    cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
+    cameraController.getInitializationFuture().addListener(
+        () -> {
+          if (cameraController.hasCamera(cameraSelector)) {
+            cameraController.setCameraSelector(cameraSelector);
+          }
+        },
+        ContextCompat.getMainExecutor(fragment.requireContext())
+    );
   }
 
   @Override
@@ -207,25 +183,20 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
   public void setScannerVisibilityLive(
       LiveData<Boolean> scannerVisibilityLive,
-      boolean supressNextScanStart
+      boolean suppressNextScanStart
   ) {
-    this.supressNextScanStart = supressNextScanStart;
+    this.suppressNextScanStart = suppressNextScanStart;
     if (scannerVisibilityLive.hasObservers()) {
       scannerVisibilityLive.removeObservers(fragment.getViewLifecycleOwner());
     }
     scannerVisibilityLive.observe(fragment.getViewLifecycleOwner(), visible -> {
       isScannerVisible = visible;
       if (visible) {
-        processCameraProvider.observe(
-            fragment.getViewLifecycleOwner(),
-            provider -> {
-              cameraProvider = provider;
-              if (this.supressNextScanStart) {
-                this.supressNextScanStart = false;
-                return;
-              }
-              startScannerIfVisible();
-            });
+        if (this.suppressNextScanStart) {
+          this.suppressNextScanStart = false;
+          return;
+        }
+        startScannerIfVisible();
       } else {
         stopScanner();
       }
@@ -243,224 +214,100 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
   public void onDestroy() {
     stopScanner();
-    if (camera != null && camera.getCameraInfo().hasFlashUnit()) {
-      camera.getCameraControl().enableTorch(false);
+    if (cameraController != null && cameraController.getCameraInfo() != null
+        && cameraController.getCameraInfo().hasFlashUnit()) {
+      cameraController.enableTorch(false);
     }
     lockOrUnlockRotation(false);
   }
 
   void stopScanner() {
     keepScreenOn(false);
-    if (imageProcessor != null) {
-      imageProcessor.stop();
-    }
-    if (cameraProvider != null) {
-      cameraProvider.unbindAll();
+    cameraController.unbind();
+    if (barcodeScanner != null) {
+      barcodeScanner.close();
     }
   }
 
-  @SuppressLint("UnsafeOptInUsageError")
   public void startScannerIfVisible() {
-    if (cameraProvider == null || !isScannerVisible) return;
-    if (!allPermissionsGranted()) {
-      getRuntimePermissions();
+    if (!isScannerVisible) return;
+    if (ContextCompat.checkSelfPermission(fragment.requireContext(), Manifest.permission.CAMERA)
+        == PackageManager.PERMISSION_DENIED) {
+      ActivityCompat.requestPermissions(
+          activity, new String[] {Manifest.permission.CAMERA}, PERMISSION_REQUESTS
+      );
       return;
     }
-    // As required by CameraX API, unbinds all use cases before trying to re-bind any of them.
 
-    previewView.postDelayed(() -> {
-      cameraProvider.unbindAll();
+    cameraController.bindToLifecycle(fragment.getViewLifecycleOwner());
 
-      UseCaseGroup.Builder useCaseGroupBuilder = new UseCaseGroup.Builder();
-      bindPreviewUseCase(useCaseGroupBuilder);
-      bindAnalysisUseCase(useCaseGroupBuilder);
-      camera = cameraProvider.bindToLifecycle(fragment, cameraSelector, useCaseGroupBuilder.build());
-    }, 100);  // wait until animation is finished and previewView has height and width != 0
+    if (barcodeScanner != null) {
+      barcodeScanner.close();
+    }
+    barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions);
+
+    cameraController.clearImageAnalysisAnalyzer();
+    cameraController.setImageAnalysisAnalyzer(
+        ContextCompat.getMainExecutor(fragment.requireContext()),
+        new MlKitAnalyzer(
+            List.of(barcodeScanner),
+            CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
+            ContextCompat.getMainExecutor(fragment.requireContext()),
+            result -> onScanSuccess(result.getValue(barcodeScanner))
+        )
+    );
 
     keepScreenOn(true);
   }
 
-  @SuppressLint("UnsafeOptInUsageError")
-  private void bindPreviewUseCase(UseCaseGroup.Builder useCaseGroupBuilder) {
-    if (cameraProvider == null) {
+  private void onScanSuccess(List<Barcode> barcodes) {
+    if (barcodes == null || barcodes.size() != 1 || barcodes.get(0) == null
+        || barcodes.get(0).getRawValue() == null
+        || Objects.equals(barcodes.get(0).getRawValue(), "")) {
       return;
     }
 
-    Preview.Builder builder = new Preview.Builder();
-    Size targetResolution = new Size(1280, 720);
-    builder.setTargetResolution(targetResolution);
-    Preview previewUseCase = builder.build();
-    previewUseCase.setSurfaceProvider(previewView.getSurfaceProvider());
+    Point[] cornerPoints = barcodes.get(0).getCornerPoints();
+    if (cornerPoints == null) return;
 
-    useCaseGroupBuilder.setViewPort(previewView.getViewPort());
-    useCaseGroupBuilder.addUseCase(previewUseCase);
-  }
-
-  @SuppressLint("UnsafeOptInUsageError")
-  private void bindAnalysisUseCase(UseCaseGroup.Builder useCaseGroupBuilder) {
-    if (cameraProvider == null) {
-      return;
-    }
-    if (imageProcessor != null) {
-      imageProcessor.stop();
+    for (Point point : cornerPoints) {
+      if (point.x < 0 || point.y < 0
+          || point.x > previewView.getWidth()
+          || point.y > previewView.getHeight()
+      ) {
+        return;
+      }
     }
 
-    try {
-      imageProcessor = new BarcodeScannerProcessor(barcodeScannerOptions, cropImageToPreviewRect) {
-        @Override
-        protected void onSuccess(@NonNull List<Barcode> barcodes,
-            @NonNull GraphicOverlay graphicOverlay) {
-          if (barcodes.isEmpty() || barcodes.get(0) == null || barcodes.get(0).getRawValue() == null
-              || Objects.equals(barcodes.get(0).getRawValue(), "")) {
-            return;
-          }
-          new HapticUtil(fragment.requireContext()).tick();
-          //super.onSuccess(barcodes, graphicOverlay);
-          stopScanner();
+    new HapticUtil(fragment.requireContext()).tick();
+    stopScanner();
 
-          int promptCount = sharedPrefs.getInt(PREF.PURCHASE_PROMPT, 1);
-          if (UnlockUtil.isKeyInstalled(activity) && UnlockUtil.isPlayStoreInstalled(activity)) {
-            if (!sharedPrefs.getBoolean(PREF.PURCHASED, false) && promptCount > 0) {
-              if (promptCount < 50) {
-                sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, promptCount + 1).apply();
-              } else {
-                activity.showBottomSheet(new PurchasePromptBottomSheet());
-              }
-            } else if (promptCount > 1) {
-              sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
-            }
-          } else if (promptCount > 1) {
-            sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
-          }
-
-          if (barcodeListener != null) {
-            barcodeListener.onBarcodeRecognized(barcodes.get(0).getRawValue());
-          }
+    int promptCount = sharedPrefs.getInt(PREF.PURCHASE_PROMPT, 1);
+    if (UnlockUtil.isKeyInstalled(activity) && UnlockUtil.isPlayStoreInstalled(activity)) {
+      if (!sharedPrefs.getBoolean(PREF.PURCHASED, false) && promptCount > 0) {
+        if (promptCount < 50) {
+          sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, promptCount + 1).apply();
+        } else {
+          activity.showBottomSheet(new PurchasePromptBottomSheet());
         }
-      };
-    } catch (Exception e) {
-      Log.e(TAG, "Cannot create image processor. ", e);
-      Toast.makeText(
-          activity.getApplicationContext(),
-          "Cannot create image processor: " + e.getLocalizedMessage(),
-          Toast.LENGTH_LONG)
-          .show();
-      return;
+      } else if (promptCount > 1) {
+        sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
+      }
+    } else if (promptCount > 1) {
+      sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
     }
 
-    ImageAnalysis.Builder builder = new ImageAnalysis.Builder();
-    Size targetResolution = new Size(1280, 720);
-    builder.setTargetResolution(targetResolution);
-    ImageAnalysis analysisUseCase = builder.build();
-
-    needUpdateGraphicOverlayImageSourceInfo = true;
-    analysisUseCase.setAnalyzer(
-        // imageProcessor.processImageProxy will use another thread to run the detection underneath,
-        // thus we can just runs the analyzer itself on main thread.
-        ContextCompat.getMainExecutor(fragment.requireContext()),
-        imageProxy -> {
-          if (needUpdateGraphicOverlayImageSourceInfo) {
-            boolean isImageFlipped = lensFacing == CameraSelector.LENS_FACING_FRONT;
-            int rotationDegrees = imageProxy.getImageInfo().getRotationDegrees();
-            if (rotationDegrees == 0 || rotationDegrees == 180) {
-              graphicOverlay.setImageSourceInfo(
-                  imageProxy.getWidth(), imageProxy.getHeight(), isImageFlipped);
-            } else {
-              graphicOverlay.setImageSourceInfo(
-                  imageProxy.getHeight(), imageProxy.getWidth(), isImageFlipped);
-            }
-            needUpdateGraphicOverlayImageSourceInfo = false;
-          }
-          try {
-            imageProcessor.processImageProxy(imageProxy, graphicOverlay);
-          } catch (Exception e) {
-            Log.e(TAG, "Failed to process image. Error: " + e.getLocalizedMessage());
-            Toast.makeText(activity.getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT)
-                .show();
-          }
-        });
-
-    useCaseGroupBuilder.addUseCase(analysisUseCase);
+    if (barcodeListener != null) {
+      barcodeListener.onBarcodeRecognized(barcodes.get(0).getRawValue());
+    }
   }
 
   public void toggleTorch() {
-    if (camera == null || !camera.getCameraInfo().hasFlashUnit()) return;
-    assert camera.getCameraInfo().getTorchState().getValue() != null;
-    int state = camera.getCameraInfo().getTorchState().getValue();
-    camera.getCameraControl().enableTorch(state == TorchState.OFF);
-  }
-
-  private String[] getRequiredPermissions() {
-    try {
-      PackageInfo info = activity.getPackageManager()
-              .getPackageInfo(activity.getPackageName(), PackageManager.GET_PERMISSIONS);
-      String[] ps = info.requestedPermissions;
-      if (ps != null && ps.length > 0) {
-        return ps;
-      } else {
-        return new String[0];
-      }
-    } catch (Exception e) {
-      return new String[0];
-    }
-  }
-
-  private boolean allPermissionsGranted() {
-    for (String permission : getRequiredPermissions()) {
-      if (isPermissionNotGranted(fragment.requireContext(), permission)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private void getRuntimePermissions() {
-    List<String> allNeededPermissions = new ArrayList<>();
-    for (String permission : getRequiredPermissions()) {
-      if (isPermissionNotGranted(fragment.requireContext(), permission)) {
-        allNeededPermissions.add(permission);
-      }
-    }
-
-    if (allNeededPermissions.isEmpty()) return;
-
-    if (allNeededPermissions.contains("android.permission.GET_ACCOUNTS")) {
-      AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity, R.style.AlertDialogCustom);
-      alertBuilder.setTitle("Attention: Contacts permission");
-      alertBuilder.setMessage("In the next step, when you are asked if you want to give the "
-          + "app access to your contacts, you must tap 'Allow' for the ML Kit barcode scanner "
-          + "to work. Permission is requested by ML Kit on some devices when Google Play Services "
-          + "are present.\n\nHowever, this does not transfer any contacts from your device to Google "
-          + "because internally the app only asks for access to your Google Account and the "
-          + "Android system has permission groups where the account permission belongs to "
-          + "the contacts permission.");
-
-      alertBuilder.setPositiveButton(R.string.action_proceed, (dialog, which) -> {
-        dialog.dismiss();
-        ActivityCompat.requestPermissions(
-            activity,
-            allNeededPermissions.toArray(new String[0]),
-            PERMISSION_REQUESTS
-        );
-      });
-      alertBuilder.show();
-    } else {
-      ActivityCompat.requestPermissions(
-          activity,
-          allNeededPermissions.toArray(new String[0]),
-          PERMISSION_REQUESTS
-      );
-    }
-  }
-
-  private static boolean isPermissionNotGranted(Context context, String permission) {
-    if (ContextCompat.checkSelfPermission(context, permission)
-        == PackageManager.PERMISSION_GRANTED) {
-      Log.i(TAG, "Permission granted: " + permission);
-      return false;
-    }
-    Log.i(TAG, "Permission NOT granted: " + permission);
-    return true;
+    if (cameraController.getCameraInfo() == null
+        || !cameraController.getCameraInfo().hasFlashUnit()) return;
+    assert cameraController.getCameraInfo().getTorchState().getValue() != null;
+    int state = cameraController.getCameraInfo().getTorchState().getValue();
+    cameraController.enableTorch(state == TorchState.OFF);
   }
 
   private ArrayList<Integer> getEnabledBarcodeFormats() {
@@ -469,7 +316,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (enabledBarcodeFormatsSet != null && !enabledBarcodeFormatsSet.isEmpty()) {
+    if (!enabledBarcodeFormatsSet.isEmpty()) {
       for (String barcodeFormat : enabledBarcodeFormatsSet) {
         switch (barcodeFormat) {
           case BarcodeFormats.BARCODE_FORMAT_CODE128:
@@ -526,39 +373,5 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
       ret[i] = integers.get(i);
     }
     return ret;
-  }
-
-  public static final class CameraXViewModel extends AndroidViewModel {
-
-    private static final String TAG = "CameraXViewModel";
-    private MutableLiveData<ProcessCameraProvider> cameraProviderLiveData;
-
-    /**
-     * Create an instance which interacts with the camera service via the given application context.
-     */
-    public CameraXViewModel(@NonNull Application application) {
-      super(application);
-    }
-
-    public LiveData<ProcessCameraProvider> getProcessCameraProvider() {
-      if (cameraProviderLiveData == null) {
-        cameraProviderLiveData = new MutableLiveData<>();
-
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
-            ProcessCameraProvider.getInstance(getApplication());
-        cameraProviderFuture.addListener(
-            () -> {
-              try {
-                cameraProviderLiveData.setValue(cameraProviderFuture.get());
-              } catch (ExecutionException | InterruptedException e) {
-                // Handle any errors (including cancellation) here.
-                Log.e(TAG, "Unhandled exception", e);
-              }
-            },
-            ContextCompat.getMainExecutor(getApplication()));
-      }
-
-      return cameraProviderLiveData;
-    }
   }
 }
