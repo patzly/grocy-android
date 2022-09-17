@@ -838,7 +838,7 @@
   <string name="property_not_opened">not opened</string>
   <string name="property_is_freezer">Is freezer</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energy (kcal)</string>
+  <string name="property_energy">Energy (kcal) per stock quantity unit</string>
   <string name="property_active">Active</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Never show on stock overview</string>
