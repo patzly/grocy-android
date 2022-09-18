@@ -59,6 +59,11 @@
     <item name="navigationContentDescription">@string/action_back</item>
   </style>
 
+  <style name="Widget.Grocy.Toolbar.Close" parent="@style/Widget.Grocy.Toolbar">
+    <item name="navigationIcon">@drawable/ic_round_close</item>
+    <item name="navigationContentDescription">@string/action_close</item>
+  </style>
+
   <style name="Widget.Grocy.Toolbar.Centered" parent="@style/Widget.Grocy.Toolbar">
     <item name="titleCentered">true</item>
   </style>

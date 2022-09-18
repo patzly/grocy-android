@@ -34,12 +34,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.Timer;
 import java.util.TimerTask;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
@@ -55,6 +59,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
 public class ShoppingModeFragment extends BaseFragment implements
@@ -71,6 +76,7 @@ public class ShoppingModeFragment extends BaseFragment implements
   private Timer timer;
   private TimerTask timerTask;
   private Handler handler;
+  private SystemBarBehavior systemBarBehavior;
 
   private boolean debug = false;
 
@@ -110,6 +116,20 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    //systemBarBehavior.setScroll(binding.recycler, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    new ScrollBehavior(activity).setUpScroll(
+        binding.appBar, null, false
+    );
+
+    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
+    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+    binding.swipe.setSize(CircularProgressDrawable.LARGE);
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();

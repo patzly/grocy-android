@@ -31,11 +31,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -61,6 +62,7 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 public class ShoppingModeItemAdapter extends
     RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
 
+  private final Context context;
   private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
@@ -69,7 +71,6 @@ public class ShoppingModeItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
   private final PluralUtil pluralUtil;
-  private String groupingMode;
   private final boolean useSmallerFonts;
   private final boolean showProductDescription;
   private final boolean showDoneItems;
@@ -92,6 +93,7 @@ public class ShoppingModeItemAdapter extends
       boolean showProductDescription,
       boolean showDoneItems
   ) {
+    this.context = context;
     this.linearLayoutManager = linearLayoutManager;
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -102,7 +104,6 @@ public class ShoppingModeItemAdapter extends
     this.showProductDescription = showProductDescription;
     this.showDoneItems = showDoneItems;
     this.pluralUtil = new PluralUtil(context);
-    this.groupingMode = groupingMode;
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
         shoppingListNotes, groupingMode, showDoneItems);
@@ -290,8 +291,11 @@ public class ShoppingModeItemAdapter extends
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
-
     GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
+
+    ColorRoles colorRolesGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
+    ColorRoles colorRolesBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
+    ColorRoles colorRolesYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
@@ -304,18 +308,14 @@ public class ShoppingModeItemAdapter extends
       if (!productGroupName.equals(holder.binding.name.getContext()
           .getString(R.string.subtitle_done))
       ) {
-        holder.binding.name.setTextColor(ContextCompat.getColor(
-            holder.binding.name.getContext(), R.color.retro_green_fg
-        ));
+        holder.binding.name.setTextColor(colorRolesGreen.getAccent());
         holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
-            ContextCompat.getColor(holder.binding.name.getContext(), R.color.retro_green_fg)
+            colorRolesGreen.getAccent()
         ));
       } else {
-        holder.binding.name.setTextColor(ContextCompat.getColor(
-            holder.binding.name.getContext(), R.color.retro_yellow_fg
-        ));
+        holder.binding.name.setTextColor(colorRolesYellow.getAccent());
         holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
-            ContextCompat.getColor(holder.binding.name.getContext(), R.color.retro_yellow_fg)
+            colorRolesYellow.getAccent()
         ));
       }
       return;
@@ -329,6 +329,8 @@ public class ShoppingModeItemAdapter extends
 
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
     RowShoppingItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
+
+    binding.amount.setTextColor(colorRolesBlue.getAccent());
 
     if (useSmallerFonts) {
       int px4 = UiUtil.dpToPx(binding.name.getContext(), 4f);
@@ -471,7 +473,7 @@ public class ShoppingModeItemAdapter extends
       }
     }
 
-    binding.containerRow.setAlpha(item.getDoneInt() == 1 ? 0.4f : 1);
+    binding.containerRow.setAlpha(item.getDoneInt() == 1 ? 0.61f : 1);
 
     // CONTAINER
 

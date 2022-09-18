@@ -446,15 +446,6 @@
     <item name="android:layout_gravity">center</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.ShoppingModeGroup" parent="Widget.Grocy.TextView">
-    <item name="android:textSize">18sp</item>
-    <item name="android:fontFamily">@font/jost_bold</item>
-    <item name="android:textColor">@color/retro_green_fg</item>
-    <item name="android:letterSpacing">0.06</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:singleLine">true</item>
-  </style>
-
   <style name="Widget.Grocy.TextView.Title" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textSize">18sp</item>
     <item name="singleLine">true</item>

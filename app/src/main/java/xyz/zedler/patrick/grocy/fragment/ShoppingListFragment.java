@@ -64,7 +64,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class ShoppingListFragment extends BaseFragment implements
@@ -304,9 +303,10 @@ public class ShoppingListFragment extends BaseFragment implements
     );
   }
 
+  // TODO: change View type of buttonLists to MaterialButton when ActionButtons are replaced
   public static void changeAppBarTitle(
       TextView textTitle,
-      ActionButton buttonLists,
+      View buttonLists,
       ShoppingList shoppingList
   ) {
     // change app bar title to shopping list name
