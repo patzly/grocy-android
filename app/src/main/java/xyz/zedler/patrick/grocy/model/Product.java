@@ -156,6 +156,10 @@ public class Product extends GroupedListItem implements Parcelable {
   @SerializedName("default_consume_location_id")
   private String defaultConsumeLocationId;
 
+  @ColumnInfo(name = "move_on_open")
+  @SerializedName("move_on_open")
+  private String moveOnOpen;
+
   @Ignore
   private Integer pendingProductId;
 
@@ -218,6 +222,7 @@ public class Product extends GroupedListItem implements Parcelable {
     hideOnStockOverview = "0";
     noOwnStock = "0";
     defaultConsumeLocationId = null;
+    moveOnOpen = "0";
   }
 
   @Ignore
@@ -250,6 +255,7 @@ public class Product extends GroupedListItem implements Parcelable {
     hideOnStockOverview = parcel.readString();
     noOwnStock = parcel.readString();
     defaultConsumeLocationId = parcel.readString();
+    moveOnOpen = parcel.readString();
   }
 
   @Override
@@ -282,9 +288,10 @@ public class Product extends GroupedListItem implements Parcelable {
     dest.writeString(hideOnStockOverview);
     dest.writeString(noOwnStock);
     dest.writeString(defaultConsumeLocationId);
+    dest.writeString(moveOnOpen);
   }
 
-  public static final Creator<Product> CREATOR = new Creator<Product>() {
+  public static final Creator<Product> CREATOR = new Creator<>() {
 
     @Override
     public Product createFromParcel(Parcel in) {
@@ -635,6 +642,22 @@ public class Product extends GroupedListItem implements Parcelable {
     this.defaultConsumeLocationId = defaultConsumeLocationId;
   }
 
+  public String getMoveOnOpen() {
+    return moveOnOpen;
+  }
+
+  public boolean getMoveOnOpenBoolean() {
+    return NumUtil.isStringInt(moveOnOpen) && Integer.parseInt(moveOnOpen) == 1;
+  }
+
+  public void setMoveOnOpen(String moveOnOpen) {
+    this.moveOnOpen = moveOnOpen;
+  }
+
+  public void setMoveOnOpenBoolean(boolean moveOnOpen) {
+    this.moveOnOpen = moveOnOpen ? "1" : "0";
+  }
+
   public Integer getPendingProductId() {
     return pendingProductId;
   }
@@ -683,6 +706,7 @@ public class Product extends GroupedListItem implements Parcelable {
       String noOwnStock = product.noOwnStock;
       Object defaultConsumeLocationId = product.defaultConsumeLocationId != null
           ? product.defaultConsumeLocationId : JSONObject.NULL;
+      String moveOnOpen = product.moveOnOpen;
 
       json.put("name", name);
       json.put("description", description);
@@ -716,6 +740,9 @@ public class Product extends GroupedListItem implements Parcelable {
       }
       if (VersionUtil.isGrocyServerMin330(prefs)) {
         json.put("default_consume_location_id", defaultConsumeLocationId);
+      }
+      if (moveOnOpen != null && VersionUtil.isGrocyServerMin331(prefs)) {
+        json.put("move_on_open", moveOnOpen);
       }
     } catch (JSONException e) {
       if (debug) {
@@ -831,6 +858,7 @@ public class Product extends GroupedListItem implements Parcelable {
         .equals(hideOnStockOverview, product.hideOnStockOverview) && Objects
         .equals(noOwnStock, product.noOwnStock) && Objects
         .equals(defaultConsumeLocationId, product.defaultConsumeLocationId) && Objects
+        .equals(moveOnOpen, product.moveOnOpen) && Objects
         .equals(pendingProductId, product.pendingProductId);
   }
 
@@ -844,7 +872,7 @@ public class Product extends GroupedListItem implements Parcelable {
             notCheckStockFulfillmentForRecipes,
             parentProductId, calories, accumulateSubProductsMinStockAmount, treatOpenedAsOutOfStock,
             dueDateType, quickConsumeAmount, hideOnStockOverview, noOwnStock,
-            defaultConsumeLocationId, pendingProductId, displayDivider);
+            defaultConsumeLocationId, moveOnOpen, pendingProductId, displayDivider);
   }
 
   @NonNull
