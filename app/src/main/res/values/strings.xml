@@ -336,6 +336,8 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">Stock entries at the location below will be consumed first.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">When enabled, on marking this product as opened, the corresponding amount will be moved to the default consume location.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">When enabled, the corresponding product can\'t have own stock, means it will not be selectable on purchase (useful for parent products which are just used as a summary/total view of the sub products).</string>
   <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
   <string name="msg_help_default_due_days_format">You can long press on an item below to enter a date instead of a number.</string>
@@ -807,6 +809,7 @@
   <string name="property_location_default">Default location</string>
   <string name="property_location_default_insert">Default location: %1$s</string>
   <string name="property_location_consume_default">Default consume location</string>
+  <string name="property_move_on_open">Move on open</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Locations</string>
   <string name="property_store">Store</string>
