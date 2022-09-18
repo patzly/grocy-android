@@ -79,6 +79,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
   private final BarcodeListener barcodeListener;
   private boolean suppressNextScanStart = false;
   private final boolean qrCodeFormat;
+  private final int strokeWidth;
 
   public EmbeddedFragmentScannerMLKit(
       Fragment fragment,
@@ -135,7 +136,8 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     cardView.setCardElevation(0);
     int backgroundColor = ContextCompat.getColor(fragment.requireContext(), R.color.transparent);
     cardView.setCardBackgroundColor(backgroundColor);
-    cardView.setStrokeWidth(UiUtil.dpToPx(fragment.requireContext(), 5));
+    strokeWidth = UiUtil.dpToPx(fragment.requireContext(), 5);
+    cardView.setStrokeWidth(strokeWidth);
     int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.grey800);
     cardView.setStrokeColor(strokeColor);
     cardView.setRadius(UiUtil.dpToPx(fragment.requireContext(), 10));
@@ -270,12 +272,14 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     Point[] cornerPoints = barcodes.get(0).getCornerPoints();
     if (cornerPoints == null) return;
 
+    int pointsOutsidePreview = 0;
     for (Point point : cornerPoints) {
-      if (point.x < 0 || point.y < 0
-          || point.x > previewView.getWidth()
-          || point.y > previewView.getHeight()
+      if (point.x < strokeWidth*2 || point.y < strokeWidth*2
+          || point.x > previewView.getWidth()-strokeWidth*2
+          || point.y > previewView.getHeight()-strokeWidth*2
       ) {
-        return;
+        pointsOutsidePreview++;
+        if (pointsOutsidePreview > 2) return;
       }
     }
 
