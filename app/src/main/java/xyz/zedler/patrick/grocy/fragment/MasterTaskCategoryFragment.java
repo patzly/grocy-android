@@ -166,8 +166,8 @@ public class MasterTaskCategoryFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
         true,
         editTaskCategory != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,

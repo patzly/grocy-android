@@ -159,8 +159,8 @@ public class MasterStoreFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_master_store);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_master_store);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
         true,
         editStore != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,

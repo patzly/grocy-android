@@ -179,8 +179,8 @@ public class MasterLocationFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_master_location);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_master_location);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
         true,
         editLocation != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,

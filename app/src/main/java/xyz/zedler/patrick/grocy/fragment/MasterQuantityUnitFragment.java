@@ -187,8 +187,8 @@ public class MasterQuantityUnitFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_master_quantity_unit);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_master_quantity_unit);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
         true,
         editQuantityUnit != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,

@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,8 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -113,8 +110,8 @@ public class SettingsCatServerFragment extends BaseFragment {
     });
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(binding.scroll);
-      activity.getScrollBehavior().setHideOnScroll(true);
+      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
+      activity.getScrollBehaviorOld().setHideOnScroll(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }
@@ -131,11 +128,10 @@ public class SettingsCatServerFragment extends BaseFragment {
   }
 
   public void showLogoutDialog(boolean isDemoInstance) {
-    Context context = new ContextThemeWrapper(
-        activity, R.style.Theme_Grocy_AlertDialog_Caution
+    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
     );
-    AlertDialog logoutDialog = new MaterialAlertDialogBuilder(context)
-        .setTitle(isDemoInstance ? R.string.title_logout_demo : R.string.title_logout)
+    builder.setTitle(isDemoInstance ? R.string.title_logout_demo : R.string.title_logout)
         .setMessage(isDemoInstance ? R.string.msg_logout_demo : R.string.msg_logout)
         .setPositiveButton(R.string.action_logout, (dialog, which) -> {
           performHapticHeavyClick();
@@ -143,6 +139,6 @@ public class SettingsCatServerFragment extends BaseFragment {
         }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
         .setOnCancelListener(dialog -> performHapticClick())
         .create();
-    logoutDialog.show();
+    builder.show();
   }
 }

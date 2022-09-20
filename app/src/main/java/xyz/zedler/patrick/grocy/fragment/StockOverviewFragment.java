@@ -284,13 +284,11 @@ public class StockOverviewFragment extends BaseFragment implements
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        false,
-        R.menu.menu_stock,
-        this::onMenuItemClick
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
     );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_stock, this::onMenuItemClick);
   }
 
   @Override

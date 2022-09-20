@@ -191,8 +191,8 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_shopping_list_item_edit);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_shopping_list_item_edit);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()

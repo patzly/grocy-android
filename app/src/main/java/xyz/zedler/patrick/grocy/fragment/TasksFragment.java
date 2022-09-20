@@ -232,8 +232,8 @@ public class TasksFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         true,
         R.menu.menu_tasks,

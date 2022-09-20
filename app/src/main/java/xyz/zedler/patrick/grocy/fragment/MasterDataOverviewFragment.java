@@ -224,8 +224,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 

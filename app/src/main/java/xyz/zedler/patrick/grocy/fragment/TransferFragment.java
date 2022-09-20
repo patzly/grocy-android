@@ -188,8 +188,8 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_transfer);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_transfer);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(true, R.menu.menu_transfer, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_swap_horiz,

@@ -37,6 +37,7 @@ import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 
+@Deprecated
 public class ScrollBehavior {
 
   private static final String TAG = ScrollBehavior.class.getSimpleName();
@@ -58,11 +59,13 @@ public class ScrollBehavior {
   private NestedScrollView scrollView;
   private ValueAnimator valueAnimator;
 
+  @Deprecated
   public ScrollBehavior(@NonNull Activity activity) {
     this.activity = activity;
   }
 
-  public void setUpScroll(@NonNull AppBarLayout appBarLayout,
+  public void setUpScroll(
+      @NonNull AppBarLayout appBarLayout,
       NestedScrollView scrollView,
       boolean liftOnScroll,
       boolean noOverScroll,

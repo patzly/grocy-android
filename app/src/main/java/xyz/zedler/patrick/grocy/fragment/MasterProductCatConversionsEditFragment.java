@@ -124,8 +124,8 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()

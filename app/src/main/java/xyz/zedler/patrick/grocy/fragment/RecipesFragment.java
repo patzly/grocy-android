@@ -291,8 +291,8 @@ public class RecipesFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,

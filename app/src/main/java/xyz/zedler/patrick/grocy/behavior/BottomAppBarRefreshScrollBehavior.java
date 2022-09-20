@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
+@Deprecated
 public class BottomAppBarRefreshScrollBehavior {
 
   private final static String TAG = "BottomBarScrollBehavior";
@@ -106,6 +107,7 @@ public class BottomAppBarRefreshScrollBehavior {
   /**
    * Initializes the scroll view behavior like liftOnScroll etc.
    */
+  @Deprecated // Use setUpScroll(View) instead
   public void setUpScroll(@IdRes int nestedScrollViewId) {
     if (activity == null) {
       if (DEBUG) {

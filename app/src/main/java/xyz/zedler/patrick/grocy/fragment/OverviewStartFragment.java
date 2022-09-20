@@ -32,7 +32,6 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
@@ -96,10 +95,6 @@ public class OverviewStartFragment extends BaseFragment {
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
 
-    new ScrollBehavior(activity).setUpScroll(
-        binding.appBar, binding.scroll, false
-    );
-
     binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
     binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
     binding.swipe.setSize(CircularProgressDrawable.LARGE);
@@ -153,8 +148,8 @@ public class OverviewStartFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_barcode_scan,

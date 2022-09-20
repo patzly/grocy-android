@@ -88,8 +88,8 @@ public class SettingsCatShoppingModeFragment extends BaseFragment {
     });
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(binding.scroll);
-      activity.getScrollBehavior().setHideOnScroll(true);
+      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
+      activity.getScrollBehaviorOld().setHideOnScroll(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }

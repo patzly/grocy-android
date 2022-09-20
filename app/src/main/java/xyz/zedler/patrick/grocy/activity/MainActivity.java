@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
@@ -82,6 +83,7 @@ import org.conscrypt.Conscrypt;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
@@ -120,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
   private NetUtil netUtil;
   private NavController navController;
   private BroadcastReceiver networkReceiver;
-  private BottomAppBarRefreshScrollBehavior scrollBehavior;
+  private BottomAppBarRefreshScrollBehavior scrollBehaviorOld;
+  private BottomScrollBehavior scrollBehavior;
   private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
 
@@ -307,14 +310,19 @@ public class MainActivity extends AppCompatActivity {
       ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
       navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
     });
-    binding.bottomAppBar.setHideOnScroll(true);
     binding.bottomAppBar.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(this));
+    binding.fabMainScroll.setBackgroundTintList(
+        ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
+    );
 
-    // TODO: remake behavior for new BottomAppBar
-    scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
-    scrollBehavior.setUpBottomAppBar(new BottomAppBar(this));
+    scrollBehavior = new BottomScrollBehavior(
+        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
+    );
+
+    // TODO: remove old behavior
+    scrollBehaviorOld = new BottomAppBarRefreshScrollBehavior(this);
+    scrollBehaviorOld.setUpBottomAppBar(new BottomAppBar(this));
     //scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
-    scrollBehavior.setHideOnScroll(true);
 
     Runnable onSuccessConfigLoad = () -> {
       String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
@@ -424,8 +432,13 @@ public class MainActivity extends AppCompatActivity {
     navController.setGraph(graph);
   }
 
-  public BottomAppBarRefreshScrollBehavior getScrollBehavior() {
+  public BottomScrollBehavior getScrollBehavior() {
     return scrollBehavior;
+  }
+
+  @Deprecated
+  public BottomAppBarRefreshScrollBehavior getScrollBehaviorOld() {
+    return scrollBehaviorOld;
   }
 
   public void updateBottomAppBar(
@@ -433,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
       @MenuRes int newMenuId,
       @Nullable Toolbar.OnMenuItemClickListener onMenuItemClickListener
   ) {
-    scrollBehavior.setTopScrollVisibility(true);
+    //scrollBehaviorOld.setTopScrollVisibility(true);
     if (showFab) {
       if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
         binding.fabMain.show();

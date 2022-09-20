@@ -31,6 +31,7 @@
     <item name="android:backgroundDimAmount">0.7</item>
     <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
     <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
+    <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Grocy.Title.Text</item>
   </style>
 
   <style name="ThemeOverlay.Grocy.AlertDialog.Caution" parent="ThemeOverlay.Grocy.AlertDialog">
@@ -38,8 +39,12 @@
     <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog.Caution</item>
   </style>
 
-  <style name="Theme.Grocy.AlertDialog.Caution" parent="">
-    <item name="materialAlertDialogTheme">@style/ThemeOverlay.Grocy.AlertDialog.Caution</item>
+  <!-- Prevents title from being displayed with smaller text size when it's long -->
+  <style name="MaterialAlertDialog.Grocy.Title.Text" parent="MaterialAlertDialog.Material3.Title.Text">
+    <item name="android:textAppearance">?attr/textAppearanceHeadlineSmall</item>
+    <item name="android:capitalize">none</item>
+    <item name="android:singleLine">false</item>
+    <item name="android:maxLines">4</item>
   </style>
 
   <!-- Toolbar -->
@@ -631,7 +636,7 @@
   <style name="Widget.Grocy.TextView.ListItem.Title" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <!-- <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item> -->
+    <!--item name="android:textAppearance">?attr/textAppearanceTitleLarge</item-->
     <!-- Too large, instead use slightly smaller custom size -->
     <item name="android:textSize">18sp</item>
   </style>

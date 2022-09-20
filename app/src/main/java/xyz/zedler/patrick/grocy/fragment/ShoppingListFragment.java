@@ -263,8 +263,8 @@ public class ShoppingListFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         !viewModel.isOffline(),
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,

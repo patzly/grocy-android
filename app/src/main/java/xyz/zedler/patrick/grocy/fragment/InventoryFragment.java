@@ -181,8 +181,8 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_inventory);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_inventory);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(true, R.menu.menu_inventory, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_inventory,

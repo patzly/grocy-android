@@ -253,8 +253,8 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         false,
         viewModel.hasProductFilter() ? R.menu.menu_empty : R.menu.menu_stock_entries,

@@ -226,8 +226,8 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         false,
         R.menu.menu_empty,

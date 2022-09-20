@@ -279,8 +279,8 @@ public class MasterObjectListFragment extends BaseFragment
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
         true,
         !entity.equals(GrocyApi.ENTITY.PRODUCTS)

@@ -31,7 +31,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentAboutBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
@@ -74,10 +73,6 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     systemBarBehavior.setScroll(binding.scrollAbout, binding.linearAboutContainer);
     systemBarBehavior.setUp();
 
-    new ScrollBehavior(activity).setUpScroll(
-        binding.appBarAbout, binding.scrollAbout, true
-    );
-
     ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbarAbout);
     binding.toolbarAbout.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -98,10 +93,14 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         R.id.linear_license_xzing_android
     );
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBarAbout, true, binding.scrollAbout
+    );
+    boolean showBottomBar = activity.binding.bottomAppBar.getVisibility() == View.VISIBLE;
+    activity.getScrollBehavior().setBottomBarVisibility(showBottomBar, !showBottomBar);
+    if (showBottomBar) {
       activity.updateBottomAppBar(false, R.menu.menu_empty);
-      activity.getScrollBehavior().setUpScroll(binding.scrollAbout);
-      activity.getScrollBehavior().setHideOnScroll(true);
+    } else {
       activity.binding.fabMain.hide();
     }
   }
