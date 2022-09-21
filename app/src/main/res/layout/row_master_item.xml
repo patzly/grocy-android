@@ -20,21 +20,11 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/linear_master_item_container"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="48dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/bg_list_item"
-  android:padding="16dp"
-  android:gravity="center_vertical">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
   <TextView
     android:id="@+id/text_master_item_name"
     style="@style/Widget.Grocy.TextView.ListItem.Title"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:layout_gravity="center_vertical|start" />
 
 </LinearLayout>

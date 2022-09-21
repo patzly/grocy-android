@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
-import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
@@ -100,8 +99,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     }
     if (binding != null) {
       binding.recycler.animate().cancel();
-      binding.buttonShoppingListLists.animate().cancel();
-      binding.textShoppingListTitle.animate().cancel();
       binding.recycler.setAdapter(null);
       binding = null;
     }
@@ -120,12 +117,8 @@ public class ShoppingModeFragment extends BaseFragment implements
     systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    //systemBarBehavior.setScroll(binding.recycler, binding.linearContainerScroll);
+    systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
-
-    new ScrollBehavior(activity).setUpScroll(
-        binding.appBar, null, false
-    );
 
     binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
     binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
@@ -234,7 +227,11 @@ public class ShoppingModeFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI();
+    // UPDATE UI
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 
   @Override
@@ -272,11 +269,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     timer.schedule(timerTask, 2000, seconds * 1000L);
   }
 
-  private void updateUI() {
-    activity.getScrollBehaviorOld().setUpScroll(null);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
-  }
-
   @Override
   public void selectShoppingList(ShoppingList shoppingList) {
     viewModel.selectShoppingList(shoppingList);
@@ -287,11 +279,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (shoppingList == null) {
       return;
     }
-    ShoppingListFragment.changeAppBarTitle(
-        binding.textShoppingListTitle,
-        binding.buttonShoppingListLists,
-        shoppingList
-    );
+    binding.toolbar.setTitle(shoppingList.getName());
   }
 
   public void toggleDoneStatus(ShoppingListItem shoppingListItem) {
@@ -362,7 +350,6 @@ public class ShoppingModeFragment extends BaseFragment implements
   private void hideDisabledFeatures() {
     if (isFeatureMultipleListsDisabled()) {
       binding.buttonShoppingListLists.setVisibility(View.GONE);
-      binding.textShoppingListTitle.setOnClickListener(null);
     }
   }
 

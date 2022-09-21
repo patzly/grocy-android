@@ -31,7 +31,7 @@
       type="xyz.zedler.patrick.grocy.fragment.ShoppingModeFragment" />
   </data>
 
-  <RelativeLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -45,72 +45,27 @@
       android:orientation="vertical"
       android:animateLayoutChanges="true">
 
-      <LinearLayout
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
-        android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-          android:id="@+id/frame_shopping_list_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:layout_gravity="start|center_vertical"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Close"
+          app:title="@string/title_shopping_list"
+          app:titleCentered="true"
+          app:titleMarginEnd="48dp" />
 
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_close" />
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/button_shopping_list_lists"
+          style="@style/Widget.Grocy.Button.IconButton"
+          android:layout_marginStart="20dp"
+          android:layout_marginEnd="4dp"
+          android:layout_gravity="end|center_vertical"
+          android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}"
+          app:icon="@drawable/ic_round_expand_more" />
 
-        </FrameLayout>
-
-        <FrameLayout
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_weight="1">
-
-          <TextView
-            android:id="@+id/text_shopping_list_title"
-            style="@style/Widget.Grocy.TextView.Toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:text="@string/title_shopping_list" />
-
-        </FrameLayout>
-
-        <FrameLayout
-          android:layout_width="72dp"
-          android:layout_height="match_parent">
-
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_shopping_list_lists"
-            style="@style/Widget.Grocy.Button.IconButton"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="4dp"
-            android:layout_gravity="end|center_vertical"
-            android:enabled="false"
-            android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}"
-            app:icon="@drawable/ic_round_expand_more" />
-
-        </FrameLayout>
-
-      </LinearLayout>
+      </FrameLayout>
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -118,7 +73,6 @@
         android:orientation="horizontal"
         android:background="?attr/colorError"
         android:gravity="center"
-        android:alpha="0.9"
         android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
 
         <TextView
@@ -137,8 +91,8 @@
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      android:layout_below="@id/app_bar"
       android:animateLayoutChanges="true"
       app:transitionTypeChanging="@{true}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
@@ -155,14 +109,13 @@
           android:layout_height="match_parent"
           android:paddingTop="8dp"
           android:paddingBottom="8dp"
-          android:overScrollMode="never"
+          android:overScrollMode="ifContentScrolls"
           android:clipToPadding="false"
-          android:scrollbarStyle="outsideOverlay"
           android:layoutAnimation="@anim/recycler_layout" />
 
       </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-  </RelativeLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

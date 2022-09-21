@@ -293,9 +293,8 @@ public class ShoppingModeItemAdapter extends
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
     GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
 
-    ColorRoles colorRolesGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
-    ColorRoles colorRolesBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-    ColorRoles colorRolesYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+    int colorPrimary = ResUtil.getColorAttr(context, R.attr.colorPrimary);
+    int colorTertiary = ResUtil.getColorAttr(context, R.attr.colorTertiary);
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
@@ -305,19 +304,14 @@ public class ShoppingModeItemAdapter extends
         holder.binding.name.setTextSize(14.5f);
       }
       holder.binding.name.setText(productGroupName);
-      if (!productGroupName.equals(holder.binding.name.getContext()
-          .getString(R.string.subtitle_done))
-      ) {
-        holder.binding.name.setTextColor(colorRolesGreen.getAccent());
-        holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
-            colorRolesGreen.getAccent()
-        ));
-      } else {
-        holder.binding.name.setTextColor(colorRolesYellow.getAccent());
-        holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
-            colorRolesYellow.getAccent()
-        ));
-      }
+
+      boolean isDone = productGroupName.equals(
+          holder.binding.name.getContext().getString(R.string.subtitle_done)
+      );
+      holder.binding.name.setTextColor(isDone ? colorTertiary : colorPrimary);
+      holder.binding.separator.setBackgroundTintList(
+          ColorStateList.valueOf(isDone ? colorTertiary : colorPrimary)
+      );
       return;
     }
     if (type == GroupedListItem.TYPE_BOTTOM_NOTES) {
@@ -330,6 +324,7 @@ public class ShoppingModeItemAdapter extends
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
     RowShoppingItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
 
+    ColorRoles colorRolesBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
     binding.amount.setTextColor(colorRolesBlue.getAccent());
 
     if (useSmallerFonts) {
@@ -473,7 +468,7 @@ public class ShoppingModeItemAdapter extends
       }
     }
 
-    binding.containerRow.setAlpha(item.getDoneInt() == 1 ? 0.61f : 1);
+    binding.card.setAlpha(item.getDoneInt() == 1 ? 0.61f : 1);
 
     // CONTAINER
 

@@ -294,7 +294,8 @@ public class MainActivity extends AppCompatActivity {
       if (isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment
           || dest.getId() == R.id.onboardingFragment
       ) {
-        binding.bottomAppBar.setVisibility(View.GONE);
+        // TODO: overthink this when finished
+        //binding.bottomAppBar.setVisibility(View.GONE);
         binding.fabMain.hide();
       } else {
         binding.bottomAppBar.setVisibility(View.VISIBLE);

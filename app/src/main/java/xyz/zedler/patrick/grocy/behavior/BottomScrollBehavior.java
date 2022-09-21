@@ -38,12 +38,13 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BottomScrollBehavior {
 
   private static final String TAG = "BottomScrollBehavior";
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = false;
 
   private static final int STATE_SCROLLED_DOWN = 1;
   private static final int STATE_SCROLLED_UP = 2;
@@ -116,6 +117,17 @@ public class BottomScrollBehavior {
     });
 
     topScrollLimit = UiUtil.dpToPx(context, 150);
+  }
+
+  private void test(MainActivity activity) {
+    activity.getScrollBehavior().setUpScroll(
+        appBar, liftOnScroll, scrollView, provideTopScroll, false
+    );
+    activity.getScrollBehavior().setUpScroll(appBar, liftOnScroll, scrollView, false);
+    activity.getScrollBehavior().setUpScroll(appBar, liftOnScroll, scrollView);
+    activity.getScrollBehavior().setBottomBarVisibility(true, false, false);
+    activity.getScrollBehavior().setBottomBarVisibility(true, true);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
   }
 
   /**
@@ -259,7 +271,11 @@ public class BottomScrollBehavior {
     }
     if (Build.VERSION.SDK_INT >= 31) {
       // Stretch effect is always nice
-      scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+      if (scrollView instanceof RecyclerView) {
+        ((RecyclerView) scrollView).setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+      } else {
+        scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+      }
     } else {
       scrollView.setOverScrollMode(
           enabled ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER

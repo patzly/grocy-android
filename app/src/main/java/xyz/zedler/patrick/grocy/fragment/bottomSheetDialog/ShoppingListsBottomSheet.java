@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,40 +26,33 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 
 public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     implements ShoppingListAdapter.ShoppingListAdapterListener {
 
   private final static String TAG = ShoppingListsBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetListSelectionBinding binding;
   private MainActivity activity;
   private TouchProgressBarUtil touchProgressBarUtil;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -68,8 +60,8 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_list_selection, container, false
+    binding = FragmentBottomsheetListSelectionBinding.inflate(
+        inflater, container, false
     );
 
     activity = (MainActivity) requireActivity();
@@ -85,29 +77,28 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
         ? getArguments().getInt(ARGUMENT.SELECTED_ID, -1) : -1;
     if (selectedIdLive == null && selectedId == -1) {
       dismiss();
-      return view;
+      return binding.getRoot();
     }
 
     ShoppingListRepository repository = new ShoppingListRepository(activity.getApplication());
 
-    TextView textViewTitle = view.findViewById(R.id.text_list_selection_title);
-    textViewTitle.setText(activity.getString(R.string.property_shopping_lists));
+    binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
 
-    RecyclerView recyclerView = view.findViewById(R.id.recycler_list_selection);
-    recyclerView.setLayoutManager(
+    binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(new ShoppingPlaceholderAdapter());
+    binding.recyclerListSelection.setItemAnimator(new DefaultItemAnimator());
+    binding.recyclerListSelection.setAdapter(new ShoppingPlaceholderAdapter());
+    ViewUtil.setOnlyOverScrollStretchEnabled(binding.recyclerListSelection);
 
     repository.getShoppingListsLive().observe(getViewLifecycleOwner(), shoppingLists -> {
       if (shoppingLists == null) {
         return;
       }
-      if (recyclerView.getAdapter() == null
-          || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
+      if (binding.recyclerListSelection.getAdapter() == null
+          || !(binding.recyclerListSelection.getAdapter() instanceof ShoppingListAdapter)
       ) {
-        recyclerView.setAdapter(new ShoppingListAdapter(
+        binding.recyclerListSelection.setAdapter(new ShoppingListAdapter(
             shoppingLists,
             selectedIdLive != null && selectedIdLive.getValue() != null
                 ? selectedIdLive.getValue() : selectedId,
@@ -116,7 +107,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
                 && activity.isOnline()
         ));
       } else {
-        ((ShoppingListAdapter) recyclerView.getAdapter()).updateData(
+        ((ShoppingListAdapter) binding.recyclerListSelection.getAdapter()).updateData(
             shoppingLists,
             selectedIdLive != null && selectedIdLive.getValue() != null
                 ? selectedIdLive.getValue() : selectedId
@@ -126,21 +117,22 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
 
     if (selectedIdLive != null) {
       selectedIdLive.observe(getViewLifecycleOwner(), selectedIdNew -> {
-        if (recyclerView.getAdapter() == null
-            || !(recyclerView.getAdapter() instanceof ShoppingListAdapter)
+        if (binding.recyclerListSelection.getAdapter() == null
+            || !(binding.recyclerListSelection.getAdapter() instanceof ShoppingListAdapter)
         ) {
           return;
         }
-        ((ShoppingListAdapter) recyclerView.getAdapter()).updateSelectedId(selectedIdNew);
+        ((ShoppingListAdapter) binding.recyclerListSelection.getAdapter()).updateSelectedId(
+            selectedIdNew
+        );
       });
     }
 
-    ActionButton buttonNew = view.findViewById(R.id.button_list_selection_new);
     if (activity.isOnline() && multipleListsFeature
         && activity.getCurrentFragment() instanceof ShoppingListFragment
     ) {
-      buttonNew.setVisibility(View.VISIBLE);
-      buttonNew.setOnClickListener(v -> {
+      binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
+      binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
         navigate(ShoppingListFragmentDirections
             .actionShoppingListFragmentToShoppingListEditFragment());
@@ -148,12 +140,12 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     }
 
     touchProgressBarUtil = new TouchProgressBarUtil(
-        view.findViewById(R.id.progress_confirmation),
+        binding.progressConfirmation,
         null,
         object -> activity.getCurrentFragment().deleteShoppingList((ShoppingList) object)
     );
 
-    return view;
+    return binding.getRoot();
   }
 
   @Override
@@ -163,6 +155,12 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       touchProgressBarUtil = null;
     }
     super.onDestroyView();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
   }
 
   @Override
@@ -198,6 +196,16 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       }
       touchProgressBarUtil.hideAndStopProgress();
     }
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        binding.recyclerListSelection.getPaddingLeft(),
+        binding.recyclerListSelection.getPaddingTop(),
+        binding.recyclerListSelection.getPaddingRight(),
+        binding.recyclerListSelection.getPaddingBottom() + bottom
+    );
   }
 
   @Override

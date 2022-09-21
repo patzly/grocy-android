@@ -334,8 +334,16 @@ public class ViewUtil {
     RoundRectShape rect = new RoundRectShape(radii, null, null);
     ShapeDrawable shape = new ShapeDrawable(rect);
     shape.getPaint().setColor(SurfaceColors.SURFACE_3.getColor(context));
+    LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
+    layers.setLayerInset(
+        0,
+        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, 2),
+        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, 2)
+    );
     return new RippleDrawable(
-        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, shape
+        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
     );
   }
 

@@ -103,24 +103,6 @@
   <!-- TODO: remove unused attributes -->
 
   <style
-    name="Widget.Grocy.TextInputLayout.FilledBox"
-    parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="boxCornerRadiusTopStart">12dp</item>
-    <item name="boxCornerRadiusTopEnd">12dp</item>
-    <item name="boxBackgroundColor">@color/on_background_tertiary</item>
-    <item name="boxStrokeColor">@color/secondary</item>
-    <item name="hintTextColor">@color/secondary</item>
-    <item name="android:textColorHint">@color/on_background_secondary</item>
-    <item name="errorTextColor">@color/error</item>
-    <item name="errorIconTint">@color/error</item>
-    <item name="errorIconDrawable">@drawable/ic_round_error</item>
-    <item name="errorTextAppearance">@style/TextAppearance.Grocy.Error</item>
-    <item name="boxStrokeErrorColor">@color/error</item>
-  </style>
-
-  <style
     name="Widget.Grocy.TextInputLayout.FilledBox.DropDown"
     parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
     <item name="android:layout_width">match_parent</item>

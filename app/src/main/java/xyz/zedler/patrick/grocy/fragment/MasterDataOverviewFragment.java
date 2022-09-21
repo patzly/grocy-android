@@ -32,7 +32,6 @@ import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -40,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -89,15 +89,12 @@ public class MasterDataOverviewFragment extends BaseFragment {
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
 
-    new ScrollBehavior(activity).setUpScroll(
-        binding.appBar, binding.scroll, false
-    );
-
     binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
     binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
     binding.swipe.setSize(CircularProgressDrawable.LARGE);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
 
     binding.linearProducts.setOnClickListener(v -> navigate(
         MasterDataOverviewFragmentDirections
@@ -224,8 +221,10 @@ public class MasterDataOverviewFragment extends BaseFragment {
   }
 
   private void updateUI() {
-    activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 

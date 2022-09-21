@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -51,7 +52,7 @@ public class SystemBarBehavior {
   private ViewGroup scrollContent;
   private boolean applyAppBarInsetOnContainer;
   private boolean applyStatusBarInsetOnContainer;
-  private boolean hasScrollView;
+  private boolean hasScrollView, hasRecycler;
   private boolean isScrollable;
   private int addBottomInset;
 
@@ -65,6 +66,7 @@ public class SystemBarBehavior {
     applyAppBarInsetOnContainer = true;
     applyStatusBarInsetOnContainer = true;
     hasScrollView = false;
+    hasRecycler = false;
     isScrollable = false;
   }
 
@@ -86,6 +88,16 @@ public class SystemBarBehavior {
 
     if (container == null) {
       setContainer(scrollView);
+    }
+  }
+
+  public void setRecycler(@NonNull RecyclerView recycler) {
+    this.scrollContent = recycler;
+    scrollContentPaddingBottom = scrollContent.getPaddingBottom();
+    hasRecycler = true;
+
+    if (container == null) {
+      throw new RuntimeException("Container has to be set before calling setRecycler()");
     }
   }
 
@@ -139,10 +151,10 @@ public class SystemBarBehavior {
 
     // NAV BAR INSET
     if (UiUtil.isOrientationPortrait(activity) && hasContainer()) {
-      View container = hasScrollView ? scrollContent : this.container;
+      View container = hasScrollView || hasRecycler ? scrollContent : this.container;
       ViewCompat.setOnApplyWindowInsetsListener(container, (v, insets) -> {
         navBarInset = insets.getInsets(Type.systemBars()).bottom;
-        int paddingBottom = hasScrollView
+        int paddingBottom = hasScrollView || hasRecycler
             ? scrollContentPaddingBottom
             : containerPaddingBottom;
         container.setPadding(
@@ -155,10 +167,10 @@ public class SystemBarBehavior {
       });
     } else {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
-        View container = hasScrollView ? scrollContent : this.container;
+        View container = hasScrollView || hasRecycler ? scrollContent : this.container;
         ViewCompat.setOnApplyWindowInsetsListener(container, (v, insets) -> {
           navBarInset = insets.getInsets(Type.systemBars()).bottom;
-          int paddingBottom = hasScrollView
+          int paddingBottom = hasScrollView || hasRecycler
               ? scrollContentPaddingBottom
               : containerPaddingBottom;
           container.setPadding(
@@ -181,7 +193,7 @@ public class SystemBarBehavior {
           );
           return insets;
         });
-        View container = hasScrollView ? scrollContent : this.container;
+        View container = hasScrollView || hasRecycler ? scrollContent : this.container;
         if (container != null) {
           container.setPadding(
               container.getPaddingLeft(),
@@ -236,8 +248,8 @@ public class SystemBarBehavior {
 
     // NAV BAR INSET
     if (UiUtil.isOrientationPortrait(activity) && hasContainer()) {
-      View container = hasScrollView ? scrollContent : this.container;
-      int paddingBottom = hasScrollView
+      View container = hasScrollView || hasRecycler ? scrollContent : this.container;
+      int paddingBottom = hasScrollView || hasRecycler
           ? scrollContentPaddingBottom
           : containerPaddingBottom;
       container.setPadding(
@@ -248,8 +260,8 @@ public class SystemBarBehavior {
       );
     } else {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
-        View container = hasScrollView ? scrollContent : this.container;
-        int paddingBottom = hasScrollView
+        View container = hasScrollView || hasRecycler ? scrollContent : this.container;
+        int paddingBottom = hasScrollView || hasRecycler
             ? scrollContentPaddingBottom
             : containerPaddingBottom;
         container.setPadding(
@@ -266,7 +278,7 @@ public class SystemBarBehavior {
             navBarInset,
             root.getPaddingBottom()
         );
-        View container = hasScrollView ? scrollContent : this.container;
+        View container = hasScrollView || hasRecycler ? scrollContent : this.container;
         if (container != null) {
           container.setPadding(
               container.getPaddingLeft(),

@@ -31,7 +31,8 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      android:baselineAligned="false">
 
       <LinearLayout
         android:layout_width="0dp"
@@ -42,9 +43,11 @@
 
         <TextView
           android:id="@+id/text_list_selection_title"
-          style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+          style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:paddingStart="0dp"
+          android:paddingEnd="0dp"
           android:singleLine="true" />
 
         <TextView
@@ -64,27 +67,20 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-        <xyz.zedler.patrick.grocy.view.ActionButton
+        <com.google.android.material.button.MaterialButton
           android:id="@+id/button_list_selection_new"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:layout_gravity="end"
-          android:visibility="gone"
-          app:icon="@drawable/ic_round_add_anim"
-          app:tint="@color/icon" />
+          style="@style/Widget.Grocy.Button.IconButton"
+          android:layout_marginEnd="4dp"
+          android:layout_gravity="end|center_vertical"
+          app:icon="@drawable/ic_round_add_anim" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_list_selection_discard"
           style="@style/Widget.Grocy.Button.TextButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
           android:layout_gravity="end"
           android:visibility="gone"
-          android:textColor="@color/on_background_secondary"
-          android:text="@string/action_discard"
-          app:rippleColor="@color/highlight" />
+          android:text="@string/action_discard" />
 
       </LinearLayout>
 
