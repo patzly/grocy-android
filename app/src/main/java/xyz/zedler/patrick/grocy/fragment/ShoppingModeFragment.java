@@ -124,6 +124,8 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
     binding.swipe.setSize(CircularProgressDrawable.LARGE);
 
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);

@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 
@@ -80,9 +81,10 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       return binding.getRoot();
     }
 
-    ShoppingListRepository repository = new ShoppingListRepository(activity.getApplication());
-
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
+    if (!UiUtil.isFullWidth(activity)) {
+      binding.textListSelectionTitle.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+    }
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -91,6 +93,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     binding.recyclerListSelection.setAdapter(new ShoppingPlaceholderAdapter());
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.recyclerListSelection);
 
+    ShoppingListRepository repository = new ShoppingListRepository(activity.getApplication());
     repository.getShoppingListsLive().observe(getViewLifecycleOwner(), shoppingLists -> {
       if (shoppingLists == null) {
         return;

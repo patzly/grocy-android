@@ -203,11 +203,13 @@ public class BottomScrollBehavior {
 
   public void setBottomBarVisibility(boolean visible, boolean stay, boolean animated) {
     bottomAppBar.setHideOnScroll(!stay);
-    if (visible) {
-      bottomAppBar.performShow(animated);
-    } else {
-      bottomAppBar.performHide(animated);
-    }
+    new Handler(Looper.getMainLooper()).post(() -> {
+      if (visible) {
+        bottomAppBar.performShow(animated);
+      } else {
+        bottomAppBar.performHide(animated);
+      }
+    });
   }
 
   public void setBottomBarVisibility(boolean visible, boolean stay) {

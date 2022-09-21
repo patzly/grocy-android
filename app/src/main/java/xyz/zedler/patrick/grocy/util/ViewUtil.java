@@ -25,7 +25,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -270,10 +269,7 @@ public class ViewUtil {
   // Toolbar
 
   public static void centerToolbarTitleOnLargeScreens(MaterialToolbar toolbar) {
-    Resources resources = toolbar.getContext().getResources();
-    int maxWidth = resources.getDimensionPixelSize(R.dimen.max_content_width);
-    boolean isFullWidth = maxWidth >= UiUtil.getDisplayWidth(toolbar.getContext());
-    toolbar.setTitleCentered(!isFullWidth);
+    toolbar.setTitleCentered(!UiUtil.isFullWidth(toolbar.getContext()));
   }
 
   // Ripple background for surface list items
@@ -329,6 +325,13 @@ public class ViewUtil {
   }
 
   public static Drawable getRippleBgListItemSurfaceRecyclerItem(Context context) {
+    return getRippleBgListItemSurfaceRecyclerItem(context, 8, 8);
+  }
+
+  public static Drawable getRippleBgListItemSurfaceRecyclerItem(
+      Context context, float paddingStart, float paddingEnd
+  ) {
+    boolean isRtl = UiUtil.isLayoutRtl(context);
     float[] radii = new float[8];
     Arrays.fill(radii, UiUtil.dpToPx(context, 16));
     RoundRectShape rect = new RoundRectShape(radii, null, null);
@@ -337,9 +340,9 @@ public class ViewUtil {
     LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
     layers.setLayerInset(
         0,
-        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, isRtl ? paddingEnd : paddingStart),
         UiUtil.dpToPx(context, 2),
-        UiUtil.dpToPx(context, 8),
+        UiUtil.dpToPx(context, isRtl ? paddingStart : paddingEnd),
         UiUtil.dpToPx(context, 2)
     );
     return new RippleDrawable(

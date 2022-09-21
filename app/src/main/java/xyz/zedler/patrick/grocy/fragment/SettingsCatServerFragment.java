@@ -32,7 +32,6 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.behavior.ScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatServerBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -84,10 +83,6 @@ public class SettingsCatServerFragment extends BaseFragment {
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
     systemBarBehavior.setUp();
 
-    new ScrollBehavior(activity).setUpScroll(
-        binding.appBar, binding.scroll, true
-    );
-
     ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -109,9 +104,11 @@ public class SettingsCatServerFragment extends BaseFragment {
       }
     });
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-      activity.getScrollBehaviorOld().setHideOnScroll(true);
+    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
+      activity.getScrollBehavior().setUpScroll(
+          binding.appBar, true, binding.scroll, false
+      );
+      activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }

@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.view.WindowMetrics;
 import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
+import xyz.zedler.patrick.grocy.R;
 
 public class UiUtil {
 
@@ -109,6 +110,11 @@ public class UiUtil {
   public static boolean isLayoutRtl(Context context) {
     int direction = context.getResources().getConfiguration().getLayoutDirection();
     return direction == View.LAYOUT_DIRECTION_RTL;
+  }
+
+  public static boolean isFullWidth(Context context) {
+    int maxWidth = context.getResources().getDimensionPixelSize(R.dimen.max_content_width);
+    return maxWidth >= getDisplayWidth(context);
   }
 
   // Unit conversions
