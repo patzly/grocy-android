@@ -127,6 +127,7 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     previewView = new PreviewView(fragment.requireContext());
     previewView.setLayoutParams(layoutParamsPreview);
     previewView.setImplementationMode(ImplementationMode.COMPATIBLE);
+    previewView.setOnClickListener(v -> toggleTorch());
     containerScanner.addView(previewView);
     LayoutParams layoutParamsCard = new LayoutParams(matchParent, matchParent);
     int size12dp = UiUtil.dpToPx(fragment.requireContext(), 12);
