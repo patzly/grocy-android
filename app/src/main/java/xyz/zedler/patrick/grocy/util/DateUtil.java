@@ -45,6 +45,9 @@ public class DateUtil {
   private static final SimpleDateFormat DATE_FORMAT_WITH_TIME = new SimpleDateFormat(
       "yyyy-MM-dd HH:mm:ss", Locale.ENGLISH
   );
+  private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
+      "HH:mm:ss", Locale.ENGLISH
+  );
   private final Context context;
 
   public DateUtil(Context context) {
@@ -52,16 +55,12 @@ public class DateUtil {
   }
 
   public static Date getDate(String dateString) {
-    return getDate(dateString, false);
-  }
-
-  public static Date getDate(String dateString, boolean withTime) {
     if (dateString == null) {
       return null;
     }
     Date date = null;
     try {
-      date = withTime ? DATE_FORMAT_WITH_TIME.parse(dateString) : DATE_FORMAT.parse(dateString);
+      date = dateString.split(" ").length == 2 ? DATE_FORMAT_WITH_TIME.parse(dateString) : DATE_FORMAT.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getDate: ");
     }
@@ -73,17 +72,10 @@ public class DateUtil {
   }
 
   public static int getDaysFromNow(String dateString) {
-    return getDaysFromNow(dateString, DATE_FORMAT);
-  }
-
-  public static int getDaysFromNowWithTime(String dateString) {
-    return getDaysFromNow(dateString, DATE_FORMAT_WITH_TIME);
-  }
-
-  public static int getDaysFromNow(String dateString, SimpleDateFormat format) {
     if (dateString == null || dateString.isEmpty()) {
       return 0;
     }
+    SimpleDateFormat format = dateString.split(" ").length == 2 ? DATE_FORMAT_WITH_TIME : DATE_FORMAT;
     Date date = null;
     try {
       date = format.parse(dateString);
@@ -158,9 +150,9 @@ public class DateUtil {
     }
     Date date = null;
     try {
-      date = format != FORMAT_SHORT_WITH_TIME
-          ? DATE_FORMAT.parse(dateString)
-          : DATE_FORMAT_WITH_TIME.parse(dateString);
+      date = dateString.split(" ").length == 2
+          ? DATE_FORMAT_WITH_TIME.parse(dateString)
+          : DATE_FORMAT.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getLocalizedDate: " + e);
     }
@@ -185,19 +177,32 @@ public class DateUtil {
     return getLocalizedDate(dateString, FORMAT_LONG);
   }
 
-  public String getHumanForDaysFromNow(String dateString) {
-    return getHumanForDaysFromNow(dateString, false);
+  public String getLocalizedTime(String timeString) { // format is 00:00:00
+    if (timeString == null || timeString.isEmpty()) {
+      return context.getString(R.string.date_unknown);
+    }
+    Date date = null;
+    try {
+      date = TIME_FORMAT.parse(timeString);
+    } catch (ParseException e) {
+      Log.e(TAG, "getLocalizedTime: " + e);
+    }
+    if (date == null) {
+      return "";
+    }
+    return android.text.format.DateFormat.getTimeFormat(context).format(date);
   }
 
-  public String getHumanForDaysFromNow(String dateString, boolean withTime) {
+  public String getHumanForDaysFromNow(String dateString) {
     if (dateString == null || dateString.isEmpty()) {
       return context.getString(R.string.date_unknown);
-    } else if (withTime && dateString.equals(DATE.NEVER_OVERDUE_WITH_TIME)
-        || !withTime && dateString.equals(Constants.DATE.NEVER_OVERDUE)) {
+    } else if (dateString.split(" ").length == 2
+        ? dateString.equals(DATE.NEVER_OVERDUE_WITH_TIME)
+        : dateString.equals(Constants.DATE.NEVER_OVERDUE)
+    ) {
       return context.getString(R.string.date_never);
     } else {
-      return getHumanFromToday(withTime ? getDaysFromNowWithTime(dateString)
-          : getDaysFromNow(dateString));
+      return getHumanFromToday(getDaysFromNow(dateString));
     }
   }
 

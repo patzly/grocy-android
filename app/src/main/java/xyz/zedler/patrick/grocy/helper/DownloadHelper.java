@@ -56,6 +56,7 @@ import xyz.zedler.patrick.grocy.model.ChoreDetails;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
+import xyz.zedler.patrick.grocy.model.OpenFoodFactsProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductAveragePrice;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -2645,6 +2646,13 @@ public class DownloadHelper {
                     if (debug) {
                       Log.i(tag, "download RecipePositions: " + recipePositions);
                     }
+                    // fix crash, amount can be NaN according to a user
+                    for (int i = 0; i < recipePositions.size(); i++) {
+                      RecipePosition recipePos = recipePositions.get(i);
+                      if (Double.isNaN(recipePos.getAmount())) {
+                        recipePos.setAmount(0);
+                      }
+                    }
                     Single.concat(
                             appDatabase.recipePositionDao().deleteRecipePositions(),
                             appDatabase.recipePositionDao().insertRecipePositions(recipePositions)
@@ -2801,37 +2809,29 @@ public class DownloadHelper {
     );
   }
 
-  public void getOpenFoodFactsProductName(
+  public void getOpenFoodFactsProduct(
       String barcode,
-      OnStringResponseListener successListener,
+      OnOpenFoodFactsProductResponseListener successListener,
       OnErrorListener errorListener
   ) {
     get(
         OpenFoodFactsApi.getProduct(barcode),
         response -> {
-          String language = application.getResources().getConfiguration().locale.getLanguage();
-          String country = application.getResources().getConfiguration().locale.getCountry();
-          String both = language + "_" + country;
-          if(debug) Log.i(tag, "getOpenFoodFactsProductName: locale = " + both);
           try {
             JSONObject jsonObject = new JSONObject(response);
-            JSONObject product = jsonObject.getJSONObject("product");
-            String name = product.optString("product_name_" + both);
-            if(name.isEmpty()) {
-              name = product.optString("product_name_" + language);
-            }
-            if(name.isEmpty()) {
-              name = product.optString("product_name");
-            }
-            successListener.onResponse(name);
-            if(debug) Log.i(tag, "getOpenFoodFactsProductName: OpenFoodFacts = " + name);
+            JSONObject jsonProduct = jsonObject.getJSONObject("product");
+            Type type = new TypeToken<OpenFoodFactsProduct>(){}.getType();
+            OpenFoodFactsProduct product = new Gson().fromJson(jsonProduct.toString(), type);
+            product.setProductJson(jsonProduct);
+            successListener.onResponse(product);
+            if(debug) Log.i(tag, "getOpenFoodFactsProduct: " + product);
           } catch (JSONException e) {
-            if(debug) Log.e(tag, "getOpenFoodFactsProductName: " + e);
+            if(debug) Log.e(tag, "getOpenFoodFactsProduct: " + e);
             successListener.onResponse(null);
           }
         },
         error -> {
-          if(debug) Log.e(tag, "getOpenFoodFactsProductName: can't get OpenFoodFacts product");
+          if(debug) Log.e(tag, "getOpenFoodFactsProduct: can't get OpenFoodFacts product");
           errorListener.onError(error);
         },
         OpenFoodFactsApi.getUserAgent(application)
@@ -3286,6 +3286,11 @@ public class DownloadHelper {
   public interface OnUsersResponseListener {
 
     void onResponse(ArrayList<User> users);
+  }
+
+  public interface OnOpenFoodFactsProductResponseListener {
+
+    void onResponse(OpenFoodFactsProduct product);
   }
 
   public interface OnStringResponseListener {

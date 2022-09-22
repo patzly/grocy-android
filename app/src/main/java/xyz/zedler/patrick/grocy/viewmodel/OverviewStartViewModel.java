@@ -465,7 +465,7 @@ public class OverviewStartViewModel extends BaseViewModel {
           continue;
         }
         int daysFromNow = DateUtil
-            .getDaysFromNowWithTime(choreEntry.getNextEstimatedExecutionTime());
+            .getDaysFromNow(choreEntry.getNextEstimatedExecutionTime());
         if (daysFromNow < 0) {
           choresOverdueCount++;
         }

@@ -20,17 +20,19 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 import java.util.List;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class FormDataMasterProductCatLocation {
 
-  private final Application application;
   private final MutableLiveData<Boolean> displayHelpLive;
   private final MutableLiveData<List<Location>> locationsLive;
   private final MutableLiveData<Location> locationLive;
@@ -38,15 +40,16 @@ public class FormDataMasterProductCatLocation {
   private final LiveData<Boolean> locationErrorLive;
   private final MutableLiveData<Location> locationConsumeLive;
   private final LiveData<String> locationConsumeNameLive;
+  private final MutableLiveData<Boolean> moveOnOpenLive;
+  private final MutableLiveData<Boolean> moveOnOpenDisabledLive;
   private final MutableLiveData<List<Store>> storesLive;
   private final MutableLiveData<Store> storeLive;
   private final LiveData<String> storeNameLive;
 
-  private final MutableLiveData<Product> productLive;
+  private final boolean showMoveOnOpen;
   private boolean filledWithProduct;
 
   public FormDataMasterProductCatLocation(Application application, boolean beginnerMode) {
-    this.application = application;
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     locationsLive = new MutableLiveData<>();
     locationLive = new MutableLiveData<>();
@@ -64,6 +67,8 @@ public class FormDataMasterProductCatLocation {
         locationConsumeLive,
         location -> location != null ? location.getName() : null
     );
+    moveOnOpenLive = new MutableLiveData<>(false);
+    moveOnOpenDisabledLive = new MutableLiveData<>(false);
     storesLive = new MutableLiveData<>();
     storeLive = new MutableLiveData<>();
     storeNameLive = Transformations.map(
@@ -71,7 +76,8 @@ public class FormDataMasterProductCatLocation {
         store -> store != null ? store.getName() : null
     );
 
-    productLive = new MutableLiveData<>();
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    showMoveOnOpen = VersionUtil.isGrocyServerMin330(sharedPrefs);
     filledWithProduct = false;
   }
 
@@ -106,6 +112,32 @@ public class FormDataMasterProductCatLocation {
 
   public LiveData<String> getLocationConsumeNameLive() {
     return locationConsumeNameLive;
+  }
+
+  public boolean isShowMoveOnOpen() {
+    return showMoveOnOpen;
+  }
+
+  public MutableLiveData<Boolean> getMoveOnOpenLive() {
+    return moveOnOpenLive;
+  }
+
+  public void toggleMoveOnOpenLive() {
+    assert moveOnOpenLive.getValue() != null;
+    moveOnOpenLive.setValue(!moveOnOpenLive.getValue());
+  }
+
+  public MutableLiveData<Boolean> getMoveOnOpenDisabledLive() {
+    return moveOnOpenDisabledLive;
+  }
+
+  public void disableMoveOnOpenIfNecessary() {
+    moveOnOpenDisabledLive.setValue(locationLive.getValue() == locationConsumeLive.getValue()
+        || locationConsumeLive.getValue() == null);
+    assert moveOnOpenDisabledLive.getValue() != null;
+    if (moveOnOpenDisabledLive.getValue()) {
+      moveOnOpenLive.setValue(false);
+    }
   }
 
   public MutableLiveData<List<Store>> getStoresLive() {
@@ -178,6 +210,10 @@ public class FormDataMasterProductCatLocation {
     product.setLocationId(location != null ? String.valueOf(location.getId()) : null);
     product.setDefaultConsumeLocationId(locationConsume != null
         ? String.valueOf(locationConsume.getId()) : null);
+    assert moveOnOpenLive.getValue() != null;
+    assert moveOnOpenDisabledLive.getValue() != null;
+    product.setMoveOnOpenBoolean(!moveOnOpenDisabledLive.getValue()
+        ? moveOnOpenLive.getValue() : false);
     product.setStoreId(store != null ? String.valueOf(store.getId()) : null);
     return product;
   }
@@ -189,6 +225,9 @@ public class FormDataMasterProductCatLocation {
 
     locationLive.setValue(getLocationFromId(product.getLocationId()));
     locationConsumeLive.setValue(getLocationFromId(product.getDefaultConsumeLocationId()));
+    moveOnOpenLive.setValue(product.getMoveOnOpenBoolean());
+    moveOnOpenDisabledLive.setValue(locationLive.getValue()
+        == locationConsumeLive.getValue() || locationConsumeLive.getValue() == null);
     storeLive.setValue(getStoreFromId(product.getStoreId()));
     filledWithProduct = true;
   }

@@ -346,6 +346,8 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">Les entrées de stock à l\'emplacement ci-dessous seront consommées en premier.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Lorsque activé, en marquant ce produit comme ouvert, le montant correspondant sera déplacé vers l\'emplacement de consommation par défaut.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Lorsque activé, le produit correspondant ne peut pas avoir son propre stock, ce qui signifie qu\'il ne sera pas sélectionnable à l\'achat (utile pour les produits parents qui ne sont utilisés que comme vue récapitulative/totale des sous-produits).</string>
   <string name="msg_help_due_date_type">D\'après le type d\'échéance sélectionné, la coloration de la page d\'aperçu du stock sera différente. \"À consommer de préférence avant le\" signifie que le produit est peut-être toujours consommable après la date limite. \"À consommer jusqu\'au\" signifie que le produit n\'est plus consommable après la date limite.</string>
   <string name="msg_help_default_due_days_format">Vous pouvez appuyer longuement sur un élément ci-dessous pour entrer une date au lieu d\'un nombre.</string>
@@ -528,6 +530,8 @@
   <string name="title_recipes">Recettes</string>
   <string name="title_recipe_create">Créer une recette</string>
   <string name="title_recipe_edit">Modifier la recette</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Éditeur</string>
 
   <string name="title_spoiled">Périmé</string>
   <string name="title_use_specific">Utiliser un article en stock spécifique</string>
@@ -828,6 +832,7 @@
   <string name="property_location_default">Emplacement par défaut</string>
   <string name="property_location_default_insert">Localisation par défaut : %1$s</string>
   <string name="property_location_consume_default">Emplacement de consommation par défaut</string>
+  <string name="property_move_on_open">Déplacer lors de l\'ouverture</string>
   <string name="property_notes">Notes</string>
   <string name="property_locations">Emplacements</string>
   <string name="property_store">Magasin</string>
@@ -859,7 +864,7 @@
   <string name="property_not_opened">pas ouvert</string>
   <string name="property_is_freezer">Est un congélateur</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Énergie (kcal)</string>
+  <string name="property_energy">Énergie (kcal) par unité de quantité en stock</string>
   <string name="property_active">Actif</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Ne jamais afficher sur l\'aperçu du stock</string>
@@ -1055,10 +1060,6 @@
   <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
   <string name="setting_choose_barcode_scanner">Choisissez un lecteur de codes-barres</string>
   <string name="setting_choose_barcode_scanner_description">Pour scanner les codes-barres avec l\'appareil photo</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">Rogner le flux de l\'appareil photo au format de la prévisualisation</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Empêche le scanner de détecter les codes-barres en dehors de l\'aperçu. Ne fonctionne pas sur tous les appareils.</string>
   <string name="setting_use_front_cam">Utiliser la caméra frontale</string>
   <string name="setting_use_front_cam_description">Pour scanner un code-barres</string>
   <string name="setting_use_2d_scanner_format">Utiliser le format de lecteur de codes-barres 2D</string>

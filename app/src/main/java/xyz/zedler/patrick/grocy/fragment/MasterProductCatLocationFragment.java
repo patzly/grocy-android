@@ -211,7 +211,9 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   @Override
   public void selectLocation(Location location, Bundle args) {
     if (args.getBoolean(IS_CONSUME_LOCATION, false)) {
-      viewModel.getFormData().getLocationConsumeLive().setValue(location);
+      viewModel.getFormData().getLocationConsumeLive().setValue(location != null
+          && location.getId() != -1 ? location : null);
+      viewModel.getFormData().disableMoveOnOpenIfNecessary();
     } else {
       viewModel.getFormData().getLocationLive().setValue(location);
     }

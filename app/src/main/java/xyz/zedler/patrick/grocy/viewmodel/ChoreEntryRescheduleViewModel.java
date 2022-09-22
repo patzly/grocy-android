@@ -71,6 +71,7 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
   private final LiveData<String> nextTrackingDateTextLive;
   private final LiveData<String> nextTrackingDateHumanTextLive;
   private final MutableLiveData<String> nextTrackingTimeLive;
+  private final LiveData<String> nextTrackingTimeHumanTextLive;
   private final MutableLiveData<User> userLive;
   private final LiveData<String> userTextLive;
 
@@ -107,7 +108,14 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
         nextTrackingDateLive,
         date -> date != null ? dateUtil.getHumanForDaysFromNow(date) : null
     );
-    nextTrackingTimeLive = new MutableLiveData<>();
+    nextTrackingTimeLive = new MutableLiveData<>(chore.getRescheduledDate() != null
+        && chore.getRescheduledDate().split(" ").length == 2
+        ? chore.getRescheduledDate().split(" ")[1]
+        : null);
+    nextTrackingTimeHumanTextLive = Transformations.map(
+        nextTrackingTimeLive,
+        time -> time != null ? dateUtil.getLocalizedTime(time) : null
+    );
     userLive = new MutableLiveData<>();
     userTextLive = Transformations.map(
         userLive,
@@ -179,8 +187,10 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
       return;
     }
     Object date = JSONObject.NULL;
-    if (nextTrackingDateLive.getValue() != null) {
+    if (nextTrackingDateLive.getValue() != null && chore.getTrackDateOnlyBoolean()) {
       date = nextTrackingDateLive.getValue();
+    } else if (nextTrackingDateLive.getValue() != null && nextTrackingTimeLive.getValue() != null) {
+      date = nextTrackingDateLive.getValue() + " " + nextTrackingTimeLive.getValue();
     }
     Object userId = JSONObject.NULL;
     if (userLive.getValue() != null && userLive.getValue().getId() != -1
@@ -246,6 +256,10 @@ public class ChoreEntryRescheduleViewModel extends BaseViewModel {
 
   public MutableLiveData<String> getNextTrackingTimeLive() {
     return nextTrackingTimeLive;
+  }
+
+  public LiveData<String> getNextTrackingTimeHumanTextLive() {
+    return nextTrackingTimeHumanTextLive;
   }
 
   public MutableLiveData<User> getUserLive() {

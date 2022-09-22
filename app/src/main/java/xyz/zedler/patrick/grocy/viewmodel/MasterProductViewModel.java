@@ -337,6 +337,10 @@ public class MasterProductViewModel extends BaseViewModel {
       return;
     }
     Product product = formData.getProductLive().getValue();
+    if (product == null) {
+      showErrorMessage();
+      return;
+    }
     Bundle argsBundle = new Bundle();
     argsBundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCTS);
     argsBundle.putInt(Constants.ARGUMENT.OBJECT_ID, product.getId());

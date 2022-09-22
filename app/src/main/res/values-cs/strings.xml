@@ -550,6 +550,8 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="title_recipes">Recepty</string>
   <string name="title_recipe_create">Nový recept</string>
   <string name="title_recipe_edit">Upravit recept</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Úpravy</string>
 
   <string name="title_spoiled">Zkaženo</string>
   <string name="title_use_specific">Vybrat balení produktu ze zásob</string>
@@ -1105,10 +1107,6 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_open_food_facts_description">Získat informace z čárových kódů</string>
   <string name="setting_choose_barcode_scanner">Vyberte skener čárových kódů</string>
   <string name="setting_choose_barcode_scanner_description">Pro kameru jako skener čárových kódů</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">Oblast detekce čárových kódů</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Čárové kódy jsou čteny jen ve vybrané oblasti obrazu. Nemusí to fungovat na všech zařízeních.</string>
   <string name="setting_use_front_cam">Použij přední kameru</string>
   <string name="setting_use_front_cam_description">Pro skenování čárových kódů</string>
   <string name="setting_use_2d_scanner_format">2D skener čárových kódů</string>
