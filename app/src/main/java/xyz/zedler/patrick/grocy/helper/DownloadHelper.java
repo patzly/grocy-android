@@ -2827,7 +2827,7 @@ public class DownloadHelper {
             if(debug) Log.i(tag, "getOpenFoodFactsProduct: " + product);
           } catch (JSONException e) {
             if(debug) Log.e(tag, "getOpenFoodFactsProduct: " + e);
-            successListener.onResponse(null);
+            errorListener.onError(null);
           }
         },
         error -> {
