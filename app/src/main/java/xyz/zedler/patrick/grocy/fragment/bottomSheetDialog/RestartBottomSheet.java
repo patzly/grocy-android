@@ -30,7 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 
-public class RestartBottomSheet extends BaseBottomSheet {
+public class RestartBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = RestartBottomSheet.class.getSimpleName();
 

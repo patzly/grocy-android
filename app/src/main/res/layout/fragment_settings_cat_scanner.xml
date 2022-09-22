@@ -142,7 +142,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_front_cam"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageFrontCam, true)}"
@@ -173,7 +173,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_scanner_format"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.scannerFormat2dEnabled}" />
@@ -234,7 +234,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_external_scanner"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageExternalScanner, true)}"

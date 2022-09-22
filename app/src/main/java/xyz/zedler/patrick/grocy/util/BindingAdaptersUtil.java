@@ -32,7 +32,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.List;
@@ -182,7 +182,7 @@ public class BindingAdaptersUtil {
   }
 
   @BindingAdapter(value = {"android:onCheckedChanged", "iconToAnimate", "initialChecked"}, requireAll = false)
-  public static void setOnCheckedChangedListener(SwitchMaterial view, CompoundButton.OnCheckedChangeListener listener, View iconToAnimate, Boolean initialChecked) {
+  public static void setOnCheckedChangedListener(MaterialSwitch view, CompoundButton.OnCheckedChangeListener listener, View iconToAnimate, Boolean initialChecked) {
     if (initialChecked != null) {
       view.setChecked(initialChecked);
     }

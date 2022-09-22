@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
@@ -38,7 +38,7 @@ import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.StockItem;
@@ -96,7 +96,7 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
             dueItems.size(), dueItems.size(), daysInt
         );
 
-        Uri uri = BaseBottomSheet.getUriWithArgs(
+        Uri uri = BaseBottomSheetDialogFragment.getUriWithArgs(
             context.getString(R.string.deep_link_stockOverviewFragment),
             new StockOverviewFragmentArgs.Builder()
                 .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_DUE_SOON))

@@ -1,14 +1,35 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
 <vector
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:width="108dp"
   android:height="108dp"
   android:viewportWidth="108"
   android:viewportHeight="108">
-  <path
-    android:fillColor="#FF000000"
-    android:pathData="M66.83,38.25a4.08,4.08 0,0 0,-4.08 4.08,4.08 4.08,0 0,0 -3.91,2.99 6.42,6.42 0,0 0,-5.42 -2.99,6.42 6.42,0 0,0 -4.9,2.28A8.17,8.17 0,0 0,41.17 40a8.17,8.17 0,0 0,-8.08 7.3H74.9a4.08,4.08 0,0 0,0.1 -0.88,4.08 4.08,0 0,0 -4.08,-4.09 4.08,4.08 0,0 0,-4.09 -4.08z"
-    android:fillAlpha="0.4" />
-  <path
-    android:fillColor="#FF000000"
-    android:pathData="M54,33.87v0.01c-5.96,0 -10.8,4.83 -10.8,10.79v0.87L33,45.54c-3.67,0.03 -6.32,3.51 -5.38,7.05l3.96,14.47a12.79,12.79 0,0 0,12.33 9.4h20.18a12.8,12.8 0,0 0,12.32 -9.4l3.97,-14.47c0.95,-3.55 -1.71,-7.03 -5.38,-7.05L64.8,45.54v-0.87c0,-5.97 -4.84,-10.8 -10.8,-10.8zM54,36.79a7.83,7.83 0,0 1,7.88 7.88v0.87L46.12,45.54v-0.87A7.83,7.83 0,0 1,54 36.79zM33,48.46h42c1.8,0 3.04,1.63 2.57,3.36L73.6,66.29a9.85,9.85 0,0 1,-9.51 7.25L43.9,73.54a9.85,9.85 0,0 1,-9.51 -7.25l-3.97,-14.47A2.62,2.62 0,0 1,33 48.46zM49.75,52.47a2.92,2.92 0,0 0,-2.92 2.92v11.17c0,0.77 0.31,1.51 0.85,2.06 0.54,0.54 1.27,0.84 2.03,0.85v0h8.76a2.92,2.92 0,0 0,2.92 -2.92h0v-4.17a2.92,2.92 0,0 0,-2.92 -2.92h-3.26a1.46,1.46 0,0 0,0 2.92h3.26v4.17h-8.73L49.75,55.38l8.73,0a1.46,1.46 0,1 0,0 -2.92h-8.73z" />
+  <group android:translateY="-1.5">
+    <path
+      android:fillColor="#FF000000"
+      android:pathData="M66.83,38.25a4.08,4.08 0,0 0,-4.08 4.08,4.08 4.08,0 0,0 -3.91,2.99 6.42,6.42 0,0 0,-5.42 -2.99,6.42 6.42,0 0,0 -4.9,2.28A8.17,8.17 0,0 0,41.17 40a8.17,8.17 0,0 0,-8.08 7.3H74.9a4.08,4.08 0,0 0,0.1 -0.88,4.08 4.08,0 0,0 -4.08,-4.09 4.08,4.08 0,0 0,-4.09 -4.08z"
+      android:fillAlpha="0.4" />
+    <path
+      android:fillColor="#FF000000"
+      android:pathData="M54,33.87v0.01c-5.96,0 -10.8,4.83 -10.8,10.79v0.87L33,45.54c-3.67,0.03 -6.32,3.51 -5.38,7.05l3.96,14.47a12.79,12.79 0,0 0,12.33 9.4h20.18a12.8,12.8 0,0 0,12.32 -9.4l3.97,-14.47c0.95,-3.55 -1.71,-7.03 -5.38,-7.05L64.8,45.54v-0.87c0,-5.97 -4.84,-10.8 -10.8,-10.8zM54,36.79a7.83,7.83 0,0 1,7.88 7.88v0.87L46.12,45.54v-0.87A7.83,7.83 0,0 1,54 36.79zM33,48.46h42c1.8,0 3.04,1.63 2.57,3.36L73.6,66.29a9.85,9.85 0,0 1,-9.51 7.25L43.9,73.54a9.85,9.85 0,0 1,-9.51 -7.25l-3.97,-14.47A2.62,2.62 0,0 1,33 48.46zM49.75,52.47a2.92,2.92 0,0 0,-2.92 2.92v11.17c0,0.77 0.31,1.51 0.85,2.06 0.54,0.54 1.27,0.84 2.03,0.85v0h8.76a2.92,2.92 0,0 0,2.92 -2.92h0v-4.17a2.92,2.92 0,0 0,-2.92 -2.92h-3.26a1.46,1.46 0,0 0,0 2.92h3.26v4.17h-8.73L49.75,55.38l8.73,0a1.46,1.46 0,1 0,0 -2.92h-8.73z" />
+  </group>
 </vector>

@@ -21,15 +21,15 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
@@ -51,6 +51,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StockOverviewItemAdapter extends
@@ -289,7 +290,6 @@ public class StockOverviewItemAdapter extends
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
-
     GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
@@ -307,6 +307,11 @@ public class StockOverviewItemAdapter extends
     StockItem stockItem = (StockItem) groupedListItem;
     StockItemViewHolder holder = (StockItemViewHolder) viewHolder;
 
+    Context context = holder.binding.textAmount.getContext();
+    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
+    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+    ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
+
     // NAME
 
     holder.binding.textName.setText(stockItem.getProduct().getName());
@@ -316,11 +321,12 @@ public class StockOverviewItemAdapter extends
     if (shoppingListItemsProductIds.contains(String.valueOf(stockItem.getProduct().getId()))
         && shoppingListFeatureEnabled) {
       holder.binding.viewOnShoppingList.setVisibility(View.VISIBLE);
+      holder.binding.viewOnShoppingList.setBackgroundTintList(
+          ColorStateList.valueOf(colorBlue.getAccent())
+      );
     } else {
       holder.binding.viewOnShoppingList.setVisibility(View.GONE);
     }
-
-    Context context = holder.binding.textAmount.getContext();
 
     // AMOUNT
 
@@ -332,16 +338,16 @@ public class StockOverviewItemAdapter extends
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
-      holder.binding.textAmount.setTextColor(
-          ContextCompat.getColor(context, R.color.retro_blue_fg)
-      );
+      holder.binding.textAmount.setTextColor(colorBlue.getAccent());
+      holder.binding.textAmount.setAlpha(1);
     } else {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.textAmount.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
+          ResUtil.getColorAttr(context, R.attr.colorOnBackground)
       );
+      holder.binding.textAmount.setAlpha(0.61f);
     }
 
     // BEST BEFORE
@@ -373,22 +379,24 @@ public class StockOverviewItemAdapter extends
       holder.binding.textDays.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
-      @ColorRes int color;
+      int color;
       if (Integer.parseInt(days) >= 0) {
-        color = R.color.retro_yellow_fg;
+        color = colorYellow.getAccent();
       } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-        color = R.color.retro_dirt_fg;
+        color = colorOrange.getAccent(); // formally DIRT
       } else {
-        color = R.color.retro_red_fg;
+        color = ResUtil.getColorAttr(context, R.attr.colorError);
       }
-      holder.binding.textDays.setTextColor(ContextCompat.getColor(context, color));
+      holder.binding.textDays.setTextColor(color);
+      holder.binding.textDays.setAlpha(1);
     } else {
       holder.binding.textDays.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.textDays.setTextColor(
-          ContextCompat.getColor(context, R.color.on_background_secondary)
+          ResUtil.getColorAttr(context, R.attr.colorOnBackground)
       );
+      holder.binding.textDays.setAlpha(0.61f);
     }
 
     double factorPurchaseToStock = stockItem.getProduct().getQuFactorPurchaseToStockDouble();

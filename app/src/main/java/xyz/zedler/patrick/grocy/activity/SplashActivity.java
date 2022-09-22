@@ -28,24 +28,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.color.DynamicColors;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.Constants.THEME;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
@@ -53,7 +51,7 @@ public class SplashActivity extends MainActivity {
 
   @Override
   public void onCreate(Bundle bundle) {
-    /*if (Build.VERSION.SDK_INT >= 31) {
+    if (Build.VERSION.SDK_INT >= 31) {
       super.onCreate(bundle);
 
       getSplashScreen().setOnExitAnimationListener(view -> {
@@ -72,20 +70,19 @@ public class SplashActivity extends MainActivity {
         });
         set.start();
       });
-    } else*/ {
+    } else {
       SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
       // DARK MODE
 
       int modeNight = sharedPrefs.getInt(
-          SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
-      );
+          SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
       int uiMode = getResources().getConfiguration().uiMode;
       switch (modeNight) {
-        case SettingsViewModel.DARK_MODE_NO:
+        case AppCompatDelegate.MODE_NIGHT_NO:
           uiMode = Configuration.UI_MODE_NIGHT_NO;
           break;
-        case SettingsViewModel.DARK_MODE_YES:
+        case AppCompatDelegate.MODE_NIGHT_YES:
           uiMode = Configuration.UI_MODE_NIGHT_YES;
           break;
       }
@@ -98,7 +95,7 @@ public class SplashActivity extends MainActivity {
 
       // THEME
 
-      /*switch (sharedPrefs.getString(PREF.THEME, DEF.THEME)) {
+      switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
         case THEME.RED:
           setTheme(R.style.Theme_Grocy_Red);
           break;
@@ -110,6 +107,9 @@ public class SplashActivity extends MainActivity {
           break;
         case THEME.GREEN:
           setTheme(R.style.Theme_Grocy_Green);
+          break;
+        case THEME.TURQUOISE:
+          setTheme(R.style.Theme_Grocy_Turquoise);
           break;
         case THEME.TEAL:
           setTheme(R.style.Theme_Grocy_Teal);
@@ -124,10 +124,10 @@ public class SplashActivity extends MainActivity {
           if (DynamicColors.isDynamicColorAvailable()) {
             DynamicColors.applyToActivityIfAvailable(this);
           } else {
-            setTheme(R.style.Theme_Grocy_Yellow);
+            setTheme(R.style.Theme_Grocy_Green);
           }
           break;
-      }*/
+      }
 
       if (bundle == null) {
         bundle = new Bundle();
@@ -135,7 +135,7 @@ public class SplashActivity extends MainActivity {
       bundle.putBoolean(ARGUMENT.RUN_AS_SUPER_CLASS, true);
       super.onCreate(bundle);
 
-      // new SystemBarBehavior(this).setUp();
+      new SystemBarBehavior(this).setUp();
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         boolean speedUpStart = sharedPrefs.getBoolean(
@@ -146,18 +146,13 @@ public class SplashActivity extends MainActivity {
         LayerDrawable splashContent = (LayerDrawable) ResourcesCompat.getDrawable(
             getResources(), R.drawable.splash_content, getTheme()
         );
-        // TODO: Uncomment this here when Android 12 splash screen is properly implemented
-        // getWindow().getDecorView().setBackground(splashContent);
-
+        getWindow().getDecorView().setBackground(splashContent);
         try {
           if (speedUpStart) {
             new Handler(Looper.getMainLooper()).postDelayed(
                 this::startNewMainActivity, 50
             );
           } else {
-            // TODO: Remove the next line when Android 12 splash screen is properly implemented
-            getWindow().getDecorView().setBackground(splashContent);
-
             assert splashContent != null;
             ViewUtil.startIcon(splashContent.findDrawableByLayerId(R.id.splash_logo));
             new Handler(Looper.getMainLooper()).postDelayed(
@@ -206,7 +201,7 @@ public class SplashActivity extends MainActivity {
     Intent intent = new Intent(this, MainActivity.class);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     startActivity(intent);
-    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    overridePendingTransition(0, R.anim.fade_out);
     finish();
   }
 }

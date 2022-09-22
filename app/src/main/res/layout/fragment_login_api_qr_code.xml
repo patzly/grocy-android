@@ -59,7 +59,7 @@
           android:layout_width="56dp"
           android:layout_height="56dp"
           android:scaleType="centerCrop"
-          android:src="@drawable/ic_round_grocy"
+          android:src="@drawable/ic_round_grocy_anim"
           android:layout_marginBottom="16dp"
           tools:ignore="ContentDescription" />
 

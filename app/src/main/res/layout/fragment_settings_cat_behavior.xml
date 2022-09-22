@@ -50,66 +50,28 @@
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{v -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/app_bar_title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="@string/category_behavior" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/category_behavior" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
       <LinearLayout
-        android:id="@+id/linear_body"
+        android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="88dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -136,7 +98,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_beginner"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageHelp, true)}"
@@ -195,7 +157,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_open_food_facts"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.useOpenFoodFactsEnabled}"/>
@@ -226,7 +188,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_expand"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageExpand, true)}"
@@ -257,7 +219,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_speed_up_start"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.speedUpStartEnabled}" />
@@ -287,7 +249,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_date_keyboard_input"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.dateKeyboardInputEnabled}" />
@@ -317,7 +279,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_date_keyboard_reverse"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.dateKeyboardReverseEnabled}" />
@@ -347,7 +309,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_keep_screen_on_recipes"
               style="@style/Widget.Grocy.Switch"
               android:checked="@={viewModel.keepScreenOnRecipesEnabled}" />

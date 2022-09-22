@@ -19,19 +19,19 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <TextView
-    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet.Center"
-    android:text="@string/title_feedback" />
+  <com.google.android.material.appbar.MaterialToolbar
+    style="@style/Widget.Grocy.Toolbar.Centered"
+    app:title="@string/title_feedback" />
 
-  <View
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp" />
+  <com.google.android.material.divider.MaterialDivider
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
@@ -39,9 +39,11 @@
     android:scrollbars="none">
 
     <LinearLayout
+      android:id="@+id/linear_feedback_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
+      android:paddingTop="16dp"
       android:paddingBottom="8dp"
       android:gravity="center_horizontal">
 
@@ -49,16 +51,17 @@
         style="@style/Widget.Grocy.TextView.Paragraph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
+        android:layout_marginBottom="12dp"
         android:text="@string/msg_feedback"
-        android:padding="16dp" />
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
 
       <LinearLayout
         android:id="@+id/linear_feedback_issue"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-        android:background="@drawable/bg_list_item_surface">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
 
         <ImageView
+          android:id="@+id/image_feedback_issue"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:src="@drawable/ic_round_github"
           tools:ignore="ContentDescription" />
@@ -79,8 +82,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_rate"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-        android:background="@drawable/bg_list_item_surface">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
 
         <ImageView
           android:id="@+id/image_feedback_rate"
@@ -104,11 +106,9 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_share"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-        android:background="@drawable/bg_list_item_surface">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
 
         <ImageView
-          android:id="@+id/image_feedback_share"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:src="@drawable/ic_round_share"
           tools:ignore="ContentDescription" />

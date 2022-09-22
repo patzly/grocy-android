@@ -31,11 +31,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -54,6 +54,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
@@ -61,6 +62,7 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 public class ShoppingModeItemAdapter extends
     RecyclerView.Adapter<ShoppingModeItemAdapter.ViewHolder> {
 
+  private final Context context;
   private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<GroupedListItem> groupedListItems;
   private final HashMap<Integer, Product> productHashMap;
@@ -69,7 +71,6 @@ public class ShoppingModeItemAdapter extends
   private final ArrayList<Integer> missingProductIds;
   private final ShoppingModeItemClickListener listener;
   private final PluralUtil pluralUtil;
-  private String groupingMode;
   private final boolean useSmallerFonts;
   private final boolean showProductDescription;
   private final boolean showDoneItems;
@@ -92,6 +93,7 @@ public class ShoppingModeItemAdapter extends
       boolean showProductDescription,
       boolean showDoneItems
   ) {
+    this.context = context;
     this.linearLayoutManager = linearLayoutManager;
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -102,7 +104,6 @@ public class ShoppingModeItemAdapter extends
     this.showProductDescription = showProductDescription;
     this.showDoneItems = showDoneItems;
     this.pluralUtil = new PluralUtil(context);
-    this.groupingMode = groupingMode;
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
         shoppingListNotes, groupingMode, showDoneItems);
@@ -120,7 +121,9 @@ public class ShoppingModeItemAdapter extends
       boolean showDoneItems
   ) {
     if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
-      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(
+          context, shoppingListItems, productNamesHashMap, true
+      );
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
       ArrayList<ShoppingListItem> doneItems = new ArrayList<>();
       for (ShoppingListItem shoppingListItem : shoppingListItems) {
@@ -168,7 +171,9 @@ public class ShoppingModeItemAdapter extends
     SortUtil.sortStringsByName(context, groupsSorted, true);
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      SortUtil.sortShoppingListItemsByName(context, ungroupedItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(
+          context, ungroupedItems, productNamesHashMap, true
+      );
       groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
@@ -177,7 +182,9 @@ public class ShoppingModeItemAdapter extends
       GroupHeader groupHeader = new GroupHeader(group);
       groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
-      SortUtil.sortShoppingListItemsByName(context, itemsFromGroup, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(
+          context, itemsFromGroup, productNamesHashMap, true
+      );
       groupedListItems.addAll(itemsFromGroup);
     }
     if (showDoneItems && !doneItems.isEmpty()) {
@@ -290,34 +297,34 @@ public class ShoppingModeItemAdapter extends
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int positionDoNotUse) {
-
     GroupedListItem groupedListItem = groupedListItems.get(viewHolder.getAdapterPosition());
+
+    int colorPrimary = ResUtil.getColorAttr(context, R.attr.colorPrimary);
+    int colorTertiary = ResUtil.getColorAttr(context, R.attr.colorTertiary);
 
     int type = getItemViewType(viewHolder.getAdapterPosition());
     if (type == GroupedListItem.TYPE_HEADER) {
-      ShoppingGroupViewHolder holder = (ShoppingGroupViewHolder) viewHolder;
+      RowShoppingGroupBinding binding = ((ShoppingGroupViewHolder) viewHolder).binding;
       String productGroupName = ((GroupHeader) groupedListItem).getGroupName();
       if (useSmallerFonts) {
-        holder.binding.name.setTextSize(14.5f);
+        binding.name.setTextSize(16); // textAppearanceTitleMedium (Category)
+        boolean isRtl = UiUtil.isLayoutRtl(binding.name.getContext());
+        int dp8 = UiUtil.dpToPx(binding.name.getContext(), 8);
+        LinearLayout.LayoutParams paramsGroup = new LinearLayout.LayoutParams(
+            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
+        );
+        paramsGroup.setMargins(isRtl ? 0 : dp8 * 2, dp8, isRtl ? dp8 * 2 : 0, dp8 * 2);
+        binding.container.setLayoutParams(paramsGroup);
       }
-      holder.binding.name.setText(productGroupName);
-      if (!productGroupName.equals(holder.binding.name.getContext()
-          .getString(R.string.subtitle_done))
-      ) {
-        holder.binding.name.setTextColor(ContextCompat.getColor(
-            holder.binding.name.getContext(), R.color.retro_green_fg
-        ));
-        holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
-            ContextCompat.getColor(holder.binding.name.getContext(), R.color.retro_green_fg)
-        ));
-      } else {
-        holder.binding.name.setTextColor(ContextCompat.getColor(
-            holder.binding.name.getContext(), R.color.retro_yellow_fg
-        ));
-        holder.binding.separator.setBackgroundTintList(ColorStateList.valueOf(
-            ContextCompat.getColor(holder.binding.name.getContext(), R.color.retro_yellow_fg)
-        ));
-      }
+      binding.name.setText(productGroupName);
+
+      boolean isDone = productGroupName.equals(
+          binding.name.getContext().getString(R.string.subtitle_done)
+      );
+      binding.name.setTextColor(isDone ? colorTertiary : colorPrimary);
+      binding.separator.setBackgroundTintList(
+          ColorStateList.valueOf(isDone ? colorTertiary : colorPrimary)
+      );
       return;
     }
     if (type == GroupedListItem.TYPE_BOTTOM_NOTES) {
@@ -330,25 +337,26 @@ public class ShoppingModeItemAdapter extends
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
     RowShoppingItemBinding binding = ((ShoppingItemViewHolder) viewHolder).binding;
 
+    ColorRoles colorRolesBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
+    binding.amount.setTextColor(colorRolesBlue.getAccent());
+
     if (useSmallerFonts) {
-      int px4 = UiUtil.dpToPx(binding.name.getContext(), 4f);
-      binding.card.setContentPadding(px4*2, px4, px4*2, px4);
+      int dp8 = UiUtil.dpToPx(binding.name.getContext(), 8);
+      binding.card.setContentPadding(dp8 * 2, dp8, dp8 * 2, dp8);
       LinearLayout.LayoutParams paramsCard = new LinearLayout.LayoutParams(
-          LayoutParams.MATCH_PARENT,
-          LayoutParams.WRAP_CONTENT
+          LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
       );
-      paramsCard.setMargins(px4*4, px4, px4*4, px4);
+      paramsCard.setMargins(dp8 * 2, 0, dp8 * 2, dp8);
       binding.card.setLayoutParams(paramsCard);
 
       LinearLayout.LayoutParams paramsRow = new LinearLayout.LayoutParams(
-          LayoutParams.MATCH_PARENT,
-          LayoutParams.WRAP_CONTENT
+          LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT
       );
       paramsRow.setMargins(0, 0, 0, 0);
       binding.name.setLayoutParams(paramsRow);
-      binding.name.setTextSize(18f);
+      binding.name.setTextSize(18); // ListItem.Title
       binding.noteAsName.setLayoutParams(paramsRow);
-      binding.noteAsName.setTextSize(18f);
+      binding.noteAsName.setTextSize(18); // ListItem.Title
     }
 
     // NAME
@@ -471,13 +479,11 @@ public class ShoppingModeItemAdapter extends
       }
     }
 
-    binding.containerRow.setAlpha(item.getDoneInt() == 1 ? 0.4f : 1);
+    binding.card.setAlpha(item.getDoneInt() == 1 ? 0.61f : 1);
 
     // CONTAINER
 
-    binding.card.setOnClickListener(
-        view -> listener.onItemRowClicked(groupedListItem)
-    );
+    binding.card.setOnClickListener(view -> listener.onItemRowClicked(groupedListItem));
   }
 
   public void updateData(

@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -160,10 +159,10 @@ public class MasterStoreFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_master_store);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_master_store);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         editStore != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
         getBottomMenuClickListener()
     );
@@ -234,7 +233,7 @@ public class MasterStoreFragment extends BaseFragment {
       binding.swipeMasterStore.setRefreshing(false);
       activity.showSnackbar(
           Snackbar.make(
-              activity.findViewById(R.id.frame_main_container),
+              activity.findViewById(R.id.coordinator_main),
               activity.getString(R.string.msg_no_connection),
               Snackbar.LENGTH_SHORT
           ).setAction(
@@ -277,7 +276,7 @@ public class MasterStoreFragment extends BaseFragment {
           binding.swipeMasterStore.setRefreshing(false);
           activity.showSnackbar(
               Snackbar.make(
-                  activity.findViewById(R.id.frame_main_container),
+                  activity.findViewById(R.id.coordinator_main),
                   getErrorMessage(error),
                   Snackbar.LENGTH_SHORT
               ).setAction(
@@ -434,7 +433,7 @@ public class MasterStoreFragment extends BaseFragment {
   private void showErrorMessage(VolleyError volleyError) {
     activity.showSnackbar(
         Snackbar.make(
-            activity.findViewById(R.id.frame_main_container),
+            activity.findViewById(R.id.coordinator_main),
             getErrorMessage(volleyError),
             Snackbar.LENGTH_SHORT
         )

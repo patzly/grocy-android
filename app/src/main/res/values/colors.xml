@@ -19,10 +19,6 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-  <color name="white">#fff</color>
-  <color name="black">#000</color>
-  <color name="transparent">#00000000</color>
-
   <color name="retro_red">#e06a4e</color>
   <color name="retro_red_fg">#af513a</color>
   <color name="retro_red_bg_black">#ee7e62</color>

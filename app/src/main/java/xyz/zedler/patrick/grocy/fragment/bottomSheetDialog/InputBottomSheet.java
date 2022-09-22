@@ -36,7 +36,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputBinding;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class InputBottomSheet extends BaseBottomSheet {
+public class InputBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = InputBottomSheet.class.getSimpleName();
 

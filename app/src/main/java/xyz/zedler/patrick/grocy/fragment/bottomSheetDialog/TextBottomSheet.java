@@ -19,70 +19,66 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
-public class TextBottomSheet extends BaseBottomSheet {
+public class TextBottomSheet extends BaseBottomSheetDialogFragment {
 
-  private final static String TAG = TextBottomSheet.class.getSimpleName();
-  private boolean debug;
+  private static final String TAG = "TextBottomSheet";
 
   private FragmentBottomsheetTextBinding binding;
 
-  @NonNull
   @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle state) {
+    binding = FragmentBottomsheetTextBinding.inflate(inflater, container, false);
 
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
-
-    binding = FragmentBottomsheetTextBinding.inflate(
-        inflater, container, false
-    );
-
-    Context context = requireContext();
     Bundle bundle = requireArguments();
 
-    debug = PrefsUtil.isDebuggingEnabled(requireActivity());
+    binding.toolbarText.setTitle(getString(bundle.getInt(Constants.ARGUMENT.TITLE)));
 
-    binding.textTextTitle.setText(
-        bundle.getString(Constants.ARGUMENT.TITLE)
-    );
-
-    String link = bundle.getString(Constants.ARGUMENT.LINK);
+    int linkResId = bundle.getInt(Constants.ARGUMENT.LINK);
+    String link = linkResId != 0 ? getString(linkResId) : null;
     if (link != null) {
-      binding.frameTextOpenLink.setOnClickListener(v -> {
-        ViewUtil.startIcon(binding.imageTextOpenLink);
-        new Handler().postDelayed(
-            () -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))),
-            500
-        );
+      binding.toolbarText.inflateMenu(R.menu.menu_link);
+      ResUtil.tintMenuItemIcon(
+          requireContext(), binding.toolbarText.getMenu().findItem(R.id.action_open_link)
+      );
+      binding.toolbarText.setOnMenuItemClickListener(item -> {
+        int id = item.getItemId();
+        if (id == R.id.action_open_link && getViewUtil().isClickEnabled()) {
+          performHapticClick();
+          ViewUtil.startIcon(item.getIcon());
+          new Handler(Looper.getMainLooper()).postDelayed(
+              () -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))), 500
+          );
+          return true;
+        } else {
+          return false;
+        }
       });
     } else {
-      binding.frameTextOpenLink.setVisibility(View.GONE);
+      binding.toolbarText.setTitleCentered(true);
     }
 
+    String[] highlights = bundle.getStringArray(Constants.ARGUMENT.HIGHLIGHTS);
+    if (highlights == null) {
+      highlights = new String[]{};
+    }
     int file = bundle.getInt(Constants.ARGUMENT.FILE);
-    binding.textText.setText(ResUtil.getRawText(context, file));
+    binding.formattedText.setText(ResUtil.getRawText(requireContext(), file), highlights);
 
     return binding.getRoot();
   }
@@ -91,6 +87,13 @@ public class TextBottomSheet extends BaseBottomSheet {
   public void onDestroy() {
     super.onDestroy();
     binding = null;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, bottom);
+    binding.formattedText.setLayoutParams(params);
   }
 
   @NonNull

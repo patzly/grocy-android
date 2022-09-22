@@ -17,33 +17,26 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/bg_list_item"
-    android:padding="16dp"
-    android:gravity="center_vertical">
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/container"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+  tools:ignore="UseCompoundDrawables">
 
   <TextView
     android:id="@+id/name"
     style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|start"/>
+    android:layout_gravity="center_vertical|start" />
 
   <ImageView
-      android:id="@+id/image_pending"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
-      android:layout_marginStart="16dp"
-      android:src="@drawable/ic_round_cloud_pending"
-      android:visibility="gone"
-      tools:ignore="ContentDescription" />
+    android:id="@+id/image_pending"
+    style="@style/Widget.Grocy.ImageView.Icon"
+    android:layout_marginStart="16dp"
+    android:src="@drawable/ic_round_cloud_pending"
+    android:visibility="gone"
+    tools:ignore="ContentDescription" />
 
 </LinearLayout>

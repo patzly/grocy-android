@@ -106,7 +106,7 @@ public class MasterProductFragment extends BaseFragment {
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showMessage(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server);
         return;
       }
       navigate(MasterProductFragmentDirections
@@ -115,7 +115,7 @@ public class MasterProductFragment extends BaseFragment {
     });
     binding.categoryQuConversions.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showMessage(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server);
         return;
       }
       navigate(MasterProductFragmentDirections
@@ -132,7 +132,7 @@ public class MasterProductFragment extends BaseFragment {
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -196,10 +196,10 @@ public class MasterProductFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         viewModel.isActionEdit()
             ? R.menu.menu_master_product_edit
             : R.menu.menu_master_product_create,

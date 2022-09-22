@@ -99,7 +99,7 @@
             android:layout_height="56dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_round_grocy"
+            android:src="@drawable/ic_round_grocy_anim"
             tools:ignore="ContentDescription" />
 
           <com.google.android.material.button.MaterialButton

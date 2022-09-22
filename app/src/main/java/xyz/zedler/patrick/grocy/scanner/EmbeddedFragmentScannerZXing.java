@@ -59,8 +59,8 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
   private final BarcodeListener barcodeListener;
   private final DecoratedBarcodeView barcodeView;
   private final ZXingScanCaptureManager capture;
-  private boolean supressNextScanStart = false;
-  private boolean qrCodeFormat;
+  private boolean suppressNextScanStart = false;
+  private final boolean qrCodeFormat;
 
   public EmbeddedFragmentScannerZXing(
       Fragment fragment,
@@ -156,17 +156,17 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
 
   public void setScannerVisibilityLive(
       LiveData<Boolean> scannerVisibilityLive,
-      boolean supressNextScanStart
+      boolean suppressNextScanStart
   ) {
-    this.supressNextScanStart = supressNextScanStart;
+    this.suppressNextScanStart = suppressNextScanStart;
     if (scannerVisibilityLive.hasObservers()) {
       scannerVisibilityLive.removeObservers(fragment.getViewLifecycleOwner());
     }
     scannerVisibilityLive.observe(fragment.getViewLifecycleOwner(), visible -> {
       isScannerVisible = visible;
       if (visible) {
-        if (this.supressNextScanStart) {
-          this.supressNextScanStart = false;
+        if (this.suppressNextScanStart) {
+          this.suppressNextScanStart = false;
           return;
         }
         startScannerIfVisible();
@@ -229,7 +229,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (enabledBarcodeFormatsSet != null && !enabledBarcodeFormatsSet.isEmpty()) {
+    if (!enabledBarcodeFormatsSet.isEmpty()) {
       for (String barcodeFormat : enabledBarcodeFormatsSet) {
         switch (barcodeFormat) {
           case BarcodeFormats.BARCODE_FORMAT_CODE128:

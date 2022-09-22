@@ -53,7 +53,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
@@ -184,7 +183,7 @@ public class TasksFragment extends BaseFragment implements
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });
@@ -233,10 +232,10 @@ public class TasksFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        POSITION.CENTER,
+        true,
         R.menu.menu_tasks,
         this::onMenuItemClick
     );
@@ -354,7 +353,7 @@ public class TasksFragment extends BaseFragment implements
 
   private void showMessage(String msg) {
     activity.showSnackbar(
-        Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
+        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
     );
   }
 

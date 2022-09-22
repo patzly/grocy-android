@@ -34,7 +34,7 @@
         <path
           android:name="path"
           android:pathData="M 20 2 L 4.01 2 C 2.91 2 2.01 2.9 2.01 4 L 2.01 22 L 6 18 L 20 18 C 21.1 18 22 17.1 22 16 L 22 4 C 22 2.9 21.1 2 20 2 Z M 13 14 L 11 14 L 11 12 L 13 12 L 13 14 Z M 13 9 C 13 9.55 12.55 10 12 10 C 11.45 10 11 9.55 11 9 L 11 7 C 11 6.45 11.45 6 12 6 C 12.55 6 13 6.45 13 7 L 13 9 Z"
-          android:fillColor="@color/icon"
+          android:fillColor="#000000"
           android:strokeWidth="1" />
       </group>
     </vector>

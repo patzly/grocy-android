@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
 import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockJournalViewModel;
 
@@ -176,7 +175,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -227,10 +226,10 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.GONE,
+        false,
         R.menu.menu_empty,
         this::onMenuItemClick
     );

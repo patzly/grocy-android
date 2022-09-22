@@ -30,21 +30,21 @@
       <path
         android:name="line_top"
         android:pathData="M 4 7 L 21 7"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:trimPathEnd="0.223"
         android:strokeLineCap="round" />
       <path
         android:name="line_center"
         android:pathData="M 4 12 L 20 12"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:trimPathEnd="0.625"
         android:strokeLineCap="round" />
       <path
         android:name="line_bottom"
         android:pathData="M 4 17 L 20 17"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
     </vector>

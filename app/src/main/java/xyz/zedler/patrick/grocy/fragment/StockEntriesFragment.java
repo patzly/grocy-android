@@ -180,7 +180,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -253,10 +253,10 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.GONE,
+        false,
         viewModel.hasProductFilter() ? R.menu.menu_empty : R.menu.menu_stock_entries,
         this::onMenuItemClick
     );

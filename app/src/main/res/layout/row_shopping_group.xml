@@ -19,6 +19,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/container"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal"
@@ -30,14 +31,17 @@
     android:id="@+id/separator"
     android:layout_width="4dp"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/retro_green_fg"
+    android:backgroundTint="?attr/colorPrimary"
     android:background="@drawable/bg_group_divider" />
 
   <TextView
     android:id="@+id/name"
-    style="@style/Widget.Grocy.TextView.ShoppingModeGroup"
+    style="@style/Widget.Grocy.TextView.TitleMedium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="13dp" />
+    android:layout_marginStart="13dp"
+    android:textColor="?attr/colorPrimary"
+    android:textSize="22sp"
+    android:maxLines="1" />
 
 </LinearLayout>

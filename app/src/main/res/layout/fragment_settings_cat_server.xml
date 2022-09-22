@@ -50,81 +50,43 @@
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{v -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/app_bar_title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="@string/category_server" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/category_server" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
       <LinearLayout
-        android:id="@+id/linear_body"
+        android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="80dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="88dp"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Filled"
-          app:strokeWidth="2dp"
-          app:strokeColor="@color/retro_red_fg"
+          style="@style/Widget.Grocy.Card.Text.Error"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginBottom="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
           android:visibility="@{viewModel.isDemoInstance ? View.VISIBLE : View.GONE}">
 
           <TextView
             style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnErrorContainer"
             android:text="@string/msg_logout_demo" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -157,7 +119,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
           android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -180,10 +142,11 @@
               android:text="@{sharedPrefs.getString(Constants.PREF.GROCY_VERSION, fragment.getString(R.string.subtitle_unknown))}" />
 
             <TextView
+              android:id="@+id/text_compatible"
               style="@style/Widget.Grocy.TextView.ListItem.Description"
               android:text="@{viewModel.versionCompatible ? @string/subtitle_supported : @string/subtitle_not_supported}"
-              android:textColor="@{viewModel.versionCompatible ? @color/retro_green_fg : @color/retro_red_fg}"
-              android:textStyle="bold" />
+              android:fontFamily="@font/jost_medium"
+              android:alpha="1" />
 
           </LinearLayout>
 
@@ -221,7 +184,7 @@
           android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> viewModel.showLogoutBottomSheet()}"
+          android:onClick="@{v -> fragment.showLogoutDialog(viewModel.isDemoInstance)}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView

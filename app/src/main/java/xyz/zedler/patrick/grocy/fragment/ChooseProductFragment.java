@@ -27,11 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ChooseProductAdapter;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentChooseProductBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -48,7 +49,7 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ChooseProductViewModel;
 
 public class ChooseProductFragment extends BaseFragment
@@ -86,6 +87,12 @@ public class ChooseProductFragment extends BaseFragment
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     boolean forbidCreateProduct = ChooseProductFragmentArgs.fromBundle(requireArguments())
         .getForbidCreateProduct();
@@ -119,10 +126,9 @@ public class ChooseProductFragment extends BaseFragment
       }
     });
     binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-    binding.swipe.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
+    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
+    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+    binding.swipe.setSize(CircularProgressDrawable.LARGE);
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), products -> {
       if (products == null) {
@@ -141,7 +147,7 @@ public class ChooseProductFragment extends BaseFragment
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snackbar);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -153,7 +159,7 @@ public class ChooseProductFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.back.setOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 
     binding.recycler.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -188,13 +194,11 @@ public class ChooseProductFragment extends BaseFragment
     }
 
     // UPDATE UI
-    activity.getScrollBehavior().setUpScroll(binding.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        POSITION.GONE,
-        R.menu.menu_empty,
-        (OnMenuItemClickListener) null
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll
     );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 
   public void clearInputFocus() {

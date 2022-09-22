@@ -30,13 +30,13 @@
       <path
         android:name="stroke"
         android:pathData="M 5 5 L 19 5 C 19.55 5 20 4.55 20 4 C 20 3.45 19.55 3 19 3 L 5 3 C 4.45 3 4 3.45 4 4 C 4 4.55 4.45 5 5 5 Z"
-        android:fillColor="@color/icon"
+        android:fillColor="#000000"
         android:strokeWidth="1" />
       <group android:name="group">
         <path
           android:name="arrow"
           android:pathData="M 15.15 10.15 L 12.36 7.36 C 12.16 7.16 11.85 7.16 11.65 7.36 L 8.86 10.15 C 8.54 10.46 8.76 11 9.21 11 L 11 11 L 11 20 C 11 20.55 11.45 21 12 21 C 12.55 21 13 20.55 13 20 L 13 11 L 14.79 11 C 15.24 11 15.46 10.46 15.15 10.15 Z"
-          android:fillColor="@color/icon"
+          android:fillColor="#000000"
           android:strokeWidth="1" />
       </group>
     </vector>

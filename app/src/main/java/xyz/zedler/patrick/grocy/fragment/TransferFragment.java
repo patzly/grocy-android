@@ -118,7 +118,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.CONSUME_SUCCESS) {
         assert getArguments() != null;
@@ -188,13 +188,9 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_transfer);
-    activity.getScrollBehavior().setHideOnScroll(false);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
-        R.menu.menu_transfer,
-        this::onMenuItemClick
-    );
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_transfer);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.updateBottomAppBar(true, R.menu.menu_transfer, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_swap_horiz,
         R.string.action_transfer,

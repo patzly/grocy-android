@@ -27,13 +27,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -42,30 +42,32 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
+import androidx.navigation.NavDirections;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
+import com.google.android.material.color.HarmonizedColors;
+import com.google.android.material.color.HarmonizedColorsOptions;
+import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
 import java.security.NoSuchAlgorithmException;
@@ -81,9 +83,11 @@ import org.conscrypt.Conscrypt;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
@@ -95,9 +99,12 @@ import xyz.zedler.patrick.grocy.util.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.Constants.THEME;
+import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
@@ -115,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
   private NetUtil netUtil;
   private NavController navController;
   private BroadcastReceiver networkReceiver;
-  private BottomAppBarRefreshScrollBehavior scrollBehavior;
+  private BottomAppBarRefreshScrollBehavior scrollBehaviorOld;
+  private BottomScrollBehavior scrollBehavior;
+  private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
 
   public boolean isScrollRestored = false;
@@ -188,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
       }
     }
 
-    /*switch (sharedPrefs.getString(PREF.THEME, DEF.THEME)) {
+    switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
       case THEME.RED:
         setTheme(R.style.Theme_Grocy_Red);
         break;
@@ -221,25 +230,30 @@ public class MainActivity extends AppCompatActivity {
               ).build()
           );
         } else {
-          setTheme(R.style.Theme_Grocy_Yellow);
+          setTheme(R.style.Theme_Grocy_Green);
         }
         break;
-    }*/
+    }
 
     Bundle bundleInstanceState = getIntent().getBundleExtra(ARGUMENT.INSTANCE_STATE);
     super.onCreate(bundleInstanceState != null ? bundleInstanceState : savedInstanceState);
 
     // UTILS
 
+    hapticUtil = new HapticUtil(this);
     clickUtil = new ClickUtil();
     netUtil = new NetUtil(this);
+
+    // COLOR
+
+    ResUtil.applyColorHarmonization(this);
 
     // WEB
 
     networkReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
-        Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
+        Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
         assert navHostFragment != null;
         if (navHostFragment.getChildFragmentManager().getFragments().size() == 0) {
           return;
@@ -270,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
     fragmentManager = getSupportFragmentManager();
 
     NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.nav_host_fragment);
+        .findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     navController = navHostFragment.getNavController();
 
@@ -280,14 +294,12 @@ public class MainActivity extends AppCompatActivity {
       if (isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment
           || dest.getId() == R.id.onboardingFragment
       ) {
-        binding.bottomAppBar.setVisibility(View.GONE);
+        // TODO: overthink this when finished
+        //binding.bottomAppBar.setVisibility(View.GONE);
         binding.fabMain.hide();
-        new Handler().postDelayed(() -> setNavBarColor(R.color.background), 10);
       } else {
         binding.bottomAppBar.setVisibility(View.VISIBLE);
-        setNavBarColor(R.color.primary);
       }
-      setProperNavBarDividerColor(dest);
     });
 
     // BOTTOM APP BAR
@@ -299,11 +311,19 @@ public class MainActivity extends AppCompatActivity {
       ViewUtil.startIcon(binding.bottomAppBar.getNavigationIcon());
       navController.navigate(R.id.action_global_drawerBottomSheetDialogFragment);
     });
+    binding.bottomAppBar.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(this));
+    binding.fabMainScroll.setBackgroundTintList(
+        ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
+    );
 
-    scrollBehavior = new BottomAppBarRefreshScrollBehavior(this);
-    scrollBehavior.setUpBottomAppBar(binding.bottomAppBar);
-    scrollBehavior.setUpTopScroll(R.id.fab_scroll);
-    scrollBehavior.setHideOnScroll(true);
+    scrollBehavior = new BottomScrollBehavior(
+        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
+    );
+
+    // TODO: remove old behavior
+    scrollBehaviorOld = new BottomAppBarRefreshScrollBehavior(this);
+    scrollBehaviorOld.setUpBottomAppBar(new BottomAppBar(this));
+    //scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
 
     Runnable onSuccessConfigLoad = () -> {
       String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
@@ -347,6 +367,15 @@ public class MainActivity extends AppCompatActivity {
       unregisterReceiver(networkReceiver);
     }
     super.onDestroy();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (runAsSuperClass) {
+      return;
+    }
+    hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
   }
 
   @Override
@@ -404,44 +433,36 @@ public class MainActivity extends AppCompatActivity {
     navController.setGraph(graph);
   }
 
-  public BottomAppBarRefreshScrollBehavior getScrollBehavior() {
+  public BottomScrollBehavior getScrollBehavior() {
     return scrollBehavior;
   }
 
+  @Deprecated
+  public BottomAppBarRefreshScrollBehavior getScrollBehaviorOld() {
+    return scrollBehaviorOld;
+  }
+
   public void updateBottomAppBar(
-      int newFabPosition,
+      boolean showFab,
       @MenuRes int newMenuId,
       @Nullable Toolbar.OnMenuItemClickListener onMenuItemClickListener
   ) {
-    int mode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
-    switch (newFabPosition) {
-      case Constants.FAB.POSITION.CENTER:
-        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-          binding.fabMain.show();
-        }
-        scrollBehavior.setTopScrollVisibility(true);
-        break;
-      case Constants.FAB.POSITION.END:
-        if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
-          binding.fabMain.show();
-        }
-        mode = BottomAppBar.FAB_ALIGNMENT_MODE_END;
-        scrollBehavior.setTopScrollVisibility(false);
-        break;
-      case Constants.FAB.POSITION.GONE:
-        if (binding.fabMain.isShown()) {
-          binding.fabMain.hide();
-        }
-        scrollBehavior.setTopScrollVisibility(true);
-        break;
+    //scrollBehaviorOld.setTopScrollVisibility(true);
+    if (showFab) {
+      if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+        binding.fabMain.show();
+      }
+    } else {
+      if (binding.fabMain.isShown()) {
+        binding.fabMain.hide();
+      }
     }
-    binding.bottomAppBar.setFabAlignmentMode(mode);
     binding.bottomAppBar.replaceMenu(newMenuId);
     binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
   }
 
-  public void updateBottomAppBar(int newFabPosition, @MenuRes int newMenuId) {
-    updateBottomAppBar(newFabPosition, newMenuId, null);
+  public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {
+    updateBottomAppBar(showFab, newMenuId, null);
   }
 
   public void updateFab(
@@ -522,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
       }
       if (!isServerUrlEmpty()) {
-        binding.bottomAppBar.show();
+        binding.bottomAppBar.performShow();
         //isScrollRestored = true;
       }
     }
@@ -551,13 +572,25 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  public void navigate(NavDirections directions) {
+    if (navController == null || directions == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(directions);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
   public void navigateUp() {
     NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.nav_host_fragment);
+        .findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     NavController navController = navHostFragment.getNavController();
     navController.navigateUp();
-    binding.bottomAppBar.show();
+    binding.bottomAppBar.performShow();
     hideKeyboard();
   }
 
@@ -571,34 +604,25 @@ public class MainActivity extends AppCompatActivity {
     getCurrentFragment().getActivityResult(requestCode, resultCode, data);
   }
 
+  public Snackbar getSnackbar(@StringRes int resId, int duration) {
+    return Snackbar.make(binding.coordinatorMain, getString(resId), duration);
+  }
+
   public void showSnackbar(Snackbar snackbar) {
     if (binding.fabMain.isOrWillBeShown()) {
       snackbar.setAnchorView(binding.fabMain);
     } else if (binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       snackbar.setAnchorView(binding.bottomAppBar);
     }
-    snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.retro_green_fg_invert));
     snackbar.show();
   }
 
-  public void showMessage(String message, View view) {
-    Snackbar bar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
-    View v = bar.getView();
-    TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
-    text.setMaxLines(4);
-    showSnackbar(bar);
+  public void showSnackbar(String message) {
+    showSnackbar(Snackbar.make(binding.coordinatorMain, message, Snackbar.LENGTH_LONG));
   }
 
-  public void showMessage(String message) {
-    showMessage(message, binding.frameMainContainer);
-  }
-
-  public void showMessage(@StringRes int message) {
-    showMessage(getString(message));
-  }
-
-  public void showMessage(@StringRes int message, View view) {
-    showMessage(getString(message), view);
+  public void showSnackbar(@StringRes int resId) {
+    showSnackbar(getString(resId));
   }
 
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {
@@ -612,6 +636,39 @@ public class MainActivity extends AppCompatActivity {
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet, Bundle bundle) {
     bottomSheet.setArguments(bundle);
     showBottomSheet(bottomSheet);
+  }
+
+  public void showTextBottomSheet(@RawRes int file, @StringRes int title) {
+    showTextBottomSheet(file, title, 0);
+  }
+
+  public void showTextBottomSheet(@RawRes int file, @StringRes int title, @StringRes int link) {
+    Bundle bundle = new Bundle();
+    bundle.putInt(Constants.ARGUMENT.TITLE, title);
+    bundle.putInt(Constants.ARGUMENT.FILE, file);
+    if (link != 0) {
+      bundle.putString(Constants.ARGUMENT.LINK, getString(link));
+    }
+    showBottomSheet(new TextBottomSheet(), bundle);
+  }
+
+  public void showChangelogBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(Constants.ARGUMENT.TITLE, R.string.info_changelog);
+    bundle.putInt(Constants.ARGUMENT.FILE, R.raw.changelog);
+    bundle.putStringArray(
+        Constants.ARGUMENT.HIGHLIGHTS,
+        new String[]{"New:", "Improved:", "Fixed:"}
+    );
+    showBottomSheet(new TextBottomSheet(), bundle);
+  }
+
+  public SharedPreferences getSharedPrefs() {
+    if (sharedPrefs != null) {
+      return sharedPrefs;
+    } else {
+      return PreferenceManager.getDefaultSharedPreferences(this);
+    }
   }
 
   public void showKeyboard(EditText editText) {
@@ -651,7 +708,7 @@ public class MainActivity extends AppCompatActivity {
 
   @NonNull
   public BaseFragment getCurrentFragment() {
-    Fragment navHostFragment = fragmentManager.findFragmentById(R.id.nav_host_fragment);
+    Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
     assert navHostFragment != null;
     return (BaseFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
   }
@@ -732,59 +789,6 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  public void setNavBarColor(@ColorRes int color) {
-    int nightModeFlags = getResources().getConfiguration().uiMode
-        & Configuration.UI_MODE_NIGHT_MASK;
-    if (Build.VERSION.SDK_INT <= VERSION_CODES.O
-        && nightModeFlags != Configuration.UI_MODE_NIGHT_YES
-    ) {
-      color = R.color.black;
-    }
-    getWindow().setNavigationBarColor(ResourcesCompat.getColor(getResources(), color, null));
-  }
-
-  public void setStatusBarColor(@ColorRes int color) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-        && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES
-    ) {
-      color = R.color.black;
-    }
-    getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), color, null));
-  }
-
-  /**
-   * If SDK version is 28 or higher this tints the navBarDivider.
-   */
-  private void setNavBarDividerColor(@ColorRes int color) {
-    if (Build.VERSION.SDK_INT >= 28) {
-      getWindow().setNavigationBarDividerColor(ContextCompat.getColor(this, color));
-    } else if (debug) {
-      Log.i(TAG, "setNavBarDividerColor: activity is null or SDK < 28");
-    }
-  }
-
-  private void setProperNavBarDividerColor(NavDestination dest) {
-    if (binding.bottomAppBar.getVisibility() == View.GONE) {
-      int orientation = getResources().getConfiguration().orientation;
-      if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-        if (dest.getId() == R.id.loginIntroFragment
-            || dest.getId() == R.id.loginRequestFragment
-            || dest.getId() == R.id.loginApiFormFragment
-            || dest.getId() == R.id.loginApiQrCodeFragment
-        ) {
-          setNavBarDividerColor(R.color.transparent);
-        } else {
-          new Handler().postDelayed(
-              () -> setNavBarDividerColor(R.color.stroke_secondary),
-              10
-          );
-        }
-      } else {
-        setNavBarDividerColor(R.color.stroke_secondary);
-      }
-    }
-  }
-
   public void startIconAnimation(View view, boolean hasFocus) {
     if (!hasFocus) {
       return;
@@ -818,5 +822,13 @@ public class MainActivity extends AppCompatActivity {
       Log.e(TAG, "insertConscrypt: NoSuchAlgorithmException");
       Log.e(TAG, e.getMessage() != null ? e.getMessage() : e.toString());
     }
+  }
+
+  public void performHapticClick() {
+    hapticUtil.click();
+  }
+
+  public void performHapticHeavyClick() {
+    hapticUtil.heavyClick();
   }
 }

@@ -30,7 +30,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
@@ -113,11 +113,11 @@ public class BaseViewModel extends AndroidViewModel {
     eventHandler.setValue(snackbarMessage);
   }
 
-  void showBottomSheet(@NonNull BaseBottomSheet bottomSheet, Bundle bundle) {
+  void showBottomSheet(@NonNull BaseBottomSheetDialogFragment bottomSheet, Bundle bundle) {
     eventHandler.setValue(new BottomSheetEvent(bottomSheet, bundle));
   }
 
-  void showBottomSheet(@NonNull BaseBottomSheet bottomSheet) {
+  void showBottomSheet(@NonNull BaseBottomSheetDialogFragment bottomSheet) {
     eventHandler.setValue(new BottomSheetEvent(bottomSheet));
   }
 

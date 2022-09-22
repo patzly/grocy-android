@@ -19,10 +19,13 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-  <integer name="app_bar_elevation_anim_duration" tools:override="true">200</integer>
-
   <integer name="default_anim_duration">300</integer>
 
   <integer name="swipe_action_bg_radius">20</integer>
+
+  <integer name="navigation_slide_duration">400</integer>
+
+  <integer name="app_bar_elevation_anim_duration" tools:ignore="PrivateResource">200</integer>
+  <integer name="design_snackbar_text_max_lines" tools:ignore="PrivateResource">4</integer>
 
 </resources>

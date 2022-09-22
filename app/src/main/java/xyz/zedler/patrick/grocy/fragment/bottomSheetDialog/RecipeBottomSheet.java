@@ -80,7 +80,7 @@ import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
-public class RecipeBottomSheet extends BaseBottomSheet implements
+public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         RecipePositionAdapter.RecipePositionsItemAdapterListener {
 
   private final static String TAG = RecipeBottomSheet.class.getSimpleName();

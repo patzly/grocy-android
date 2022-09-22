@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 41,
-    "identityHash": "bcabaf5ada2b4771a026243437eb42a8",
+    "identityHash": "83e5a587018223e943548ebbcaf5241a",
     "entities": [
       {
         "tableName": "shopping_list_table",
@@ -106,7 +106,7 @@
       },
       {
         "tableName": "product_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_group_id` TEXT, `active` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `qu_id_purchase` TEXT, `qu_id_stock` TEXT, `qu_factor_purchase_to_stock` TEXT, `min_stock_amount` TEXT, `default_best_before_days` TEXT, `default_best_before_days_after_open` TEXT, `default_best_before_days_after_freezing` TEXT, `default_best_before_days_after_thawing` TEXT, `picture_file_name` TEXT, `enable_tare_weight_handling` TEXT, `tare_weight` TEXT, `not_check_stock_fulfillment_for_recipes` TEXT, `parent_product_id` TEXT, `calories` TEXT, `cumulate_min_stock_amount_of_sub_products` TEXT, `treat_opened_as_out_of_stock` TEXT, `due_type` TEXT, `quick_consume_amount` TEXT, `hide_on_stock_overview` TEXT, `no_own_stock` TEXT, `default_consume_location_id` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `description` TEXT, `product_group_id` TEXT, `active` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `qu_id_purchase` TEXT, `qu_id_stock` TEXT, `qu_factor_purchase_to_stock` TEXT, `min_stock_amount` TEXT, `default_best_before_days` TEXT, `default_best_before_days_after_open` TEXT, `default_best_before_days_after_freezing` TEXT, `default_best_before_days_after_thawing` TEXT, `picture_file_name` TEXT, `enable_tare_weight_handling` TEXT, `tare_weight` TEXT, `not_check_stock_fulfillment_for_recipes` TEXT, `parent_product_id` TEXT, `calories` TEXT, `cumulate_min_stock_amount_of_sub_products` TEXT, `treat_opened_as_out_of_stock` TEXT, `due_type` TEXT, `quick_consume_amount` TEXT, `hide_on_stock_overview` TEXT, `no_own_stock` TEXT, `default_consume_location_id` TEXT, `move_on_open` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -273,6 +273,12 @@
           {
             "fieldPath": "defaultConsumeLocationId",
             "columnName": "default_consume_location_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "moveOnOpen",
+            "columnName": "move_on_open",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -958,7 +964,7 @@
       },
       {
         "tableName": "pending_product_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `name_is_from_off` INTEGER NOT NULL, `description` TEXT, `product_group_id` TEXT, `active` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `qu_id_purchase` TEXT, `qu_id_stock` TEXT, `qu_factor_purchase_to_stock` TEXT, `min_stock_amount` TEXT, `default_best_before_days` TEXT, `default_best_before_days_after_open` TEXT, `default_best_before_days_after_freezing` TEXT, `default_best_before_days_after_thawing` TEXT, `picture_file_name` TEXT, `enable_tare_weight_handling` TEXT, `tare_weight` TEXT, `not_check_stock_fulfillment_for_recipes` TEXT, `parent_product_id` TEXT, `calories` TEXT, `cumulate_min_stock_amount_of_sub_products` TEXT, `treat_opened_as_out_of_stock` TEXT, `due_type` TEXT, `quick_consume_amount` TEXT, `hide_on_stock_overview` TEXT, `no_own_stock` TEXT, `default_consume_location_id` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `name_is_from_off` INTEGER NOT NULL, `description` TEXT, `product_group_id` TEXT, `active` TEXT, `location_id` TEXT, `shopping_location_id` TEXT, `qu_id_purchase` TEXT, `qu_id_stock` TEXT, `qu_factor_purchase_to_stock` TEXT, `min_stock_amount` TEXT, `default_best_before_days` TEXT, `default_best_before_days_after_open` TEXT, `default_best_before_days_after_freezing` TEXT, `default_best_before_days_after_thawing` TEXT, `picture_file_name` TEXT, `enable_tare_weight_handling` TEXT, `tare_weight` TEXT, `not_check_stock_fulfillment_for_recipes` TEXT, `parent_product_id` TEXT, `calories` TEXT, `cumulate_min_stock_amount_of_sub_products` TEXT, `treat_opened_as_out_of_stock` TEXT, `due_type` TEXT, `quick_consume_amount` TEXT, `hide_on_stock_overview` TEXT, `no_own_stock` TEXT, `default_consume_location_id` TEXT, `move_on_open` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1131,6 +1137,12 @@
           {
             "fieldPath": "defaultConsumeLocationId",
             "columnName": "default_consume_location_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "moveOnOpen",
+            "columnName": "move_on_open",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -1882,7 +1894,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bcabaf5ada2b4771a026243437eb42a8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83e5a587018223e943548ebbcaf5241a')"
     ]
   }
 }

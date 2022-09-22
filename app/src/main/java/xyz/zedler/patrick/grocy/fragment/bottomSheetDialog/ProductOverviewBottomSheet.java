@@ -67,7 +67,7 @@ import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.BezierCurveChart;
 
-public class ProductOverviewBottomSheet extends BaseBottomSheet {
+public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = ProductOverviewBottomSheet.class.getSimpleName();
 

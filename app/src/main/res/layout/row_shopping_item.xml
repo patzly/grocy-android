@@ -19,19 +19,17 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
   <com.google.android.material.card.MaterialCardView
     android:id="@+id/card"
-    style="@style/Widget.Grocy.Card"
+    style="@style/Widget.Grocy.Card.Outlined"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    app:strokeWidth="1.5dp">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="8dp">
 
     <LinearLayout
       android:id="@+id/container_row"
@@ -41,40 +39,36 @@
 
       <TextView
         android:id="@+id/name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:textSize="26sp" />
-
-      <TextView
-        android:id="@+id/note_as_name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:textStyle="italic"
-        android:visibility="gone"
-        android:textSize="26sp" />
-
-      <TextView
-        android:id="@+id/amount"
         style="@style/Widget.Grocy.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/retro_blue_fg"
+        android:textAppearance="@style/TextAppearance.Grocy.HeadlineMedium" />
+
+      <TextView
+        android:id="@+id/note_as_name"
+        style="@style/Widget.Grocy.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:textAppearance="@style/TextAppearance.Grocy.HeadlineMedium"
+        android:textStyle="italic"
+        android:visibility="gone" />
+
+      <TextView
+        android:id="@+id/amount"
+        style="@style/Widget.Grocy.TextView.TitleMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:singleLine="true" />
 
       <TextView
         android:id="@+id/note"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        style="@style/Widget.Grocy.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:visibility="gone"
-        android:textSize="18sp"
-        android:textColor="@color/retro_red_fg" />
+        android:textColor="?attr/colorError" />
 
       <xyz.zedler.patrick.grocy.view.ExpandableCard
         android:id="@+id/card_description"

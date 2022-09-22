@@ -194,32 +194,12 @@ public class ChooseProductViewModel extends BaseViewModel {
     boolean productNameFilled = productNameLive.getValue() != null
         && !productNameLive.getValue().isEmpty();
     if(isOpenFoodFactsEnabled() && !productNameFilled) {
-      dlHelper.getOpenFoodFactsProductName(
+      dlHelper.getOpenFoodFactsProduct(
           barcode,
-          productName -> {
-            if (productName != null && !productName.isEmpty()) {
-              productNameLive.setValue(productName);
-              nameFromOnlineSource = productName;
-              offHelpText.setValue(getString(R.string.msg_product_name_off));
-            } else {
-              dlHelper.getOpenBeautyFactsProductName(
-                  barcode,
-                  productName1 -> {
-                    if (productName1 != null && !productName1.isEmpty()) {
-                      productNameLive.setValue(productName1);
-                      nameFromOnlineSource = productName1;
-                      offHelpText.setValue(getString(R.string.msg_product_name_obf));
-                    } else {
-                      offHelpText.setValue(getString(R.string.msg_product_name_lookup_empty));
-                      sendEvent(Event.FOCUS_INVALID_VIEWS);
-                    }
-                  },
-                  error1 -> {
-                    offHelpText.setValue(getString(R.string.msg_product_name_lookup_error));
-                    sendEvent(Event.FOCUS_INVALID_VIEWS);
-                  }
-              );
-            }
+          product -> {
+            productNameLive.setValue(product.getProductName());
+            nameFromOnlineSource = product.getProductName();
+            offHelpText.setValue(getString(R.string.msg_product_name_off));
           },
           error -> dlHelper.getOpenBeautyFactsProductName(
               barcode,

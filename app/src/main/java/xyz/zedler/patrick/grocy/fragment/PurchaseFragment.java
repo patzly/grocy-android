@@ -131,7 +131,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
@@ -246,10 +246,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_purchase);
-    activity.getScrollBehavior().setHideOnScroll(false);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_purchase);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         args.getShoppingListItems() != null
             ? R.menu.menu_purchase_batch
             : R.menu.menu_purchase,

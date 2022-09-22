@@ -34,7 +34,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BarcodeFormatsBottomS
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LogoutBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductGroupsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RestartBottomSheet;
@@ -53,11 +52,11 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
@@ -182,10 +181,6 @@ public class SettingsViewModel extends BaseViewModel {
         () -> showBottomSheet(new RestartBottomSheet(), null),
         this::showErrorMessage
     );
-  }
-
-  public void showLogoutBottomSheet() {
-    showBottomSheet(new LogoutBottomSheet());
   }
 
   public void showShortcutsBottomSheet() {

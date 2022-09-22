@@ -30,7 +30,7 @@
       <path
         android:name="line"
         android:pathData="M 3.41 4.26 L 17.72 18.58"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
       <group android:name="group">
@@ -40,7 +40,7 @@
         <path
           android:name="path"
           android:pathData="M 7 3 L 7 12 C 7 12.55 7.45 13 8 13 L 10 13 L 10 20.15 C 10 20.66 10.67 20.84 10.93 20.4 L 16.12 11.5 C 16.51 10.83 16.03 10 15.26 10 L 13 10 L 15.49 3.35 C 15.74 2.7 15.26 2 14.56 2 L 8 2 C 7.45 2 7 2.45 7 3 Z"
-          android:fillColor="@color/icon" />
+          android:fillColor="#000000" />
       </group>
     </vector>
   </aapt:attr>
