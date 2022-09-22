@@ -310,6 +310,7 @@ public class StockOverviewItemAdapter extends
     Context context = holder.binding.textAmount.getContext();
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+    ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
 
     // NAME
 
@@ -382,7 +383,7 @@ public class StockOverviewItemAdapter extends
       if (Integer.parseInt(days) >= 0) {
         color = colorYellow.getAccent();
       } else if (stockItem.getDueTypeInt() == StockItem.DUE_TYPE_BEST_BEFORE) {
-        color = ResUtil.getColorAttr(context, R.attr.colorError); // formally DIRT
+        color = colorOrange.getAccent(); // formally DIRT
       } else {
         color = ResUtil.getColorAttr(context, R.attr.colorError);
       }

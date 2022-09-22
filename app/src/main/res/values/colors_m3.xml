@@ -22,22 +22,24 @@
   <color name="black">#000</color>
   <color name="white">#fff</color>
   <color name="transparent">#00000000</color>
-  <color name="green">#3a8b5c</color>
-  <color name="blue">#4480b9</color>
-  <color name="yellow">#8d7500</color>
+  <color name="blue">#3a608d</color>
+  <color name="green">#4c662d</color>
+  <color name="yellow">#715c10</color>
+  <color name="orange">#885122</color>
+  <color name="red">#8f4b49</color>
 
   <color name="logo_yellow">@color/custom_yellow_80</color>
   <color name="logo_green">@color/custom_green_80</color>
   <color name="logo_red">@color/custom_red_60</color>
 
-  <color name="custom_yellow_80">#eac400</color>
-  <color name="custom_yellow_50">#8d7500</color>
+  <color name="custom_yellow_80">#e8c349</color>
+  <color name="custom_yellow_50">#907400</color>
 
-  <color name="custom_green_80">#bdcbb0</color>
-  <color name="custom_green_50">#6e7b63</color>
+  <color name="custom_green_80">#a8d473</color>
+  <color name="custom_green_50">#5b822c</color>
 
-  <color name="custom_red_60">#f56133</color>
-  <color name="custom_red_35">#9a2900</color>
+  <color name="custom_red_60">#db716f</color>
+  <color name="custom_red_35">#8d3535</color>
 
   <!-- RED -->
 
