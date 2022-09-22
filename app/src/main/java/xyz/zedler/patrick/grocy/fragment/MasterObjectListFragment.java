@@ -25,7 +25,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -206,7 +205,7 @@ public class MasterObjectListFragment extends BaseFragment
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snackbar);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -280,10 +279,10 @@ public class MasterObjectListFragment extends BaseFragment
   }
 
   private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.CENTER,
+        true,
         !entity.equals(GrocyApi.ENTITY.PRODUCTS)
             ? viewModel.isSortAscending() ? R.menu.menu_master_items_asc : R.menu.menu_master_items_desc
             : viewModel.isSortAscending() ? R.menu.menu_master_products_asc : R.menu.menu_master_products_desc,
@@ -352,7 +351,7 @@ public class MasterObjectListFragment extends BaseFragment
             });
           }
         } else {
-          activity.showMessage(R.string.error_undefined);
+          activity.showSnackbar(R.string.error_undefined);
         }
         return true;
       } else if (item.getItemId() == R.id.action_sort_ascending) {

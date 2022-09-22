@@ -161,7 +161,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_front_cam"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageScreenOn, true)}"
@@ -193,7 +193,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_show_done"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{() -> activity.startIconAnimation(imageShowDone, true)}"
@@ -225,7 +225,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_smaller_font"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.useSmallerFontEnabled}" />
@@ -251,7 +251,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_product_description"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.shoppingModeShowProductDescriptionEnabled}" />

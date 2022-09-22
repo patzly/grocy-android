@@ -203,7 +203,7 @@
 
             </LinearLayout>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_accumulate_amount"
               style="@style/Widget.Grocy.Switch"
               android:checked="@={formData.accumulateMinAmount}"
@@ -254,7 +254,7 @@
 
             </LinearLayout>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_treat_opened"
               style="@style/Widget.Grocy.Switch"
               android:checked="@={formData.treatOpenedAsOutOfStock}"
@@ -373,7 +373,7 @@
 
             </LinearLayout>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_tare_weight"
               style="@style/Widget.Grocy.Switch"
               android:checked="@={formData.enableTareWeightHandlingLive}"
@@ -447,7 +447,7 @@
 
             </LinearLayout>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
               android:id="@+id/switch_stock_check"
               style="@style/Widget.Grocy.Switch"
               android:checked="@={formData.disableStockCheckLive}" />

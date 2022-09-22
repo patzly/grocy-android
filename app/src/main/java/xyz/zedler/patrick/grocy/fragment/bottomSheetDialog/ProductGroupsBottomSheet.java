@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class ProductGroupsBottomSheet extends BaseBottomSheet
+public class ProductGroupsBottomSheet extends BaseBottomSheetDialogFragment
     implements ProductGroupAdapter.ProductGroupAdapterListener {
 
   private final static String TAG = ProductGroupsBottomSheet.class.getSimpleName();

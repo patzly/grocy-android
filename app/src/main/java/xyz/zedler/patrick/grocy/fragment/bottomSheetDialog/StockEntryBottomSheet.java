@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 
-public class StockEntryBottomSheet extends BaseBottomSheet {
+public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = StockEntryBottomSheet.class.getSimpleName();
 

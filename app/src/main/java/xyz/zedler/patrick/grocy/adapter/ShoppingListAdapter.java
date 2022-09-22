@@ -29,11 +29,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
@@ -61,8 +63,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     private final LinearLayout container;
     private final TextView name;
     private final ImageView imageSelected;
-    private final ActionButton edit;
-    private final ActionButton delete;
+    private final MaterialButton edit;
+    private final MaterialButton delete;
 
     public ViewHolder(View view) {
       super(view);
@@ -99,9 +101,22 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     if (shoppingList.getId() == selectedId) {
       holder.imageSelected.setVisibility(View.VISIBLE);
+      holder.name.setTextColor(
+          ResUtil.getColorAttr(holder.container.getContext(), R.attr.colorOnSecondaryContainer)
+      );
+      holder.container.setBackground(
+          ViewUtil.getBgListItemSelected(holder.container.getContext())
+      );
+    } else {
+      holder.imageSelected.setVisibility(View.INVISIBLE);
+      holder.name.setTextColor(
+          ResUtil.getColorAttr(holder.container.getContext(), R.attr.colorOnSurface)
+      );
+      holder.container.setOnClickListener(view -> listener.onItemRowClicked(shoppingList));
+      holder.container.setBackground(
+          ViewUtil.getRippleBgListItemSurfaceRecyclerItem(holder.container.getContext())
+      );
     }
-
-    holder.container.setOnClickListener(view -> listener.onItemRowClicked(shoppingList));
 
     if (shoppingList.getId() == 1) {
       holder.delete.setVisibility(View.GONE);

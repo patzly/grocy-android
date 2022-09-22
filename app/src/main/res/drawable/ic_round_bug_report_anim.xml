@@ -30,7 +30,7 @@
       <path
         android:name="body"
         android:pathData="M 12 5 C 10.409 5 8.882 5.633 7.757 6.757 C 6.633 7.882 6 9.409 6 11 L 6 15 C 6 16.591 6.633 18.118 7.757 19.243 C 8.882 20.367 10.409 21 12 21 C 13.591 21 15.118 20.367 16.243 19.243 C 17.367 18.118 18 16.591 18 15 L 18 11 C 18 9.409 17.367 7.882 16.243 6.757 C 15.118 5.633 13.591 5 12 5 Z M 11 10 L 13 10 C 13.265 10 13.52 10.105 13.707 10.293 C 13.895 10.48 14 10.735 14 11 C 14 11.265 13.895 11.52 13.707 11.707 C 13.52 11.895 13.265 12 13 12 L 11 12 C 10.735 12 10.48 11.895 10.293 11.707 C 10.105 11.52 10 11.265 10 11 C 10 10.735 10.105 10.48 10.293 10.293 C 10.48 10.105 10.735 10 11 10 Z M 11 14 L 13 14 C 13.265 14 13.52 14.105 13.707 14.293 C 13.895 14.48 14 14.735 14 15 C 14 15.265 13.895 15.52 13.707 15.707 C 13.52 15.895 13.265 16 13 16 L 11 16 C 10.735 16 10.48 15.895 10.293 15.707 C 10.105 15.52 10 15.265 10 15 C 10 14.735 10.105 14.48 10.293 14.293 C 10.48 14.105 10.735 14 11 14 Z"
-        android:fillColor="@color/icon" />
+        android:fillColor="#000000" />
       <group
         android:name="group_feeler_left"
         android:pivotX="11"
@@ -38,7 +38,7 @@
         <path
           android:name="feeler_left"
           android:pathData="M 11 7 L 8.4 4.4"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -49,7 +49,7 @@
         <path
           android:name="feeler_right"
           android:pathData="M 13 7 L 15.6 4.4"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -60,7 +60,7 @@
         <path
           android:name="left_top"
           android:pathData="M 5 9 L 9 9"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -71,7 +71,7 @@
         <path
           android:name="right_top"
           android:pathData="M 15 9 L 19 9"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -82,7 +82,7 @@
         <path
           android:name="left_middle"
           android:pathData="M 5 13 L 9 13"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -93,7 +93,7 @@
         <path
           android:name="right_middle"
           android:pathData="M 15 13 L 19 13"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -104,7 +104,7 @@
         <path
           android:name="left_bottom"
           android:pathData="M 5 17 L 9 17"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>
@@ -115,7 +115,7 @@
         <path
           android:name="right_bottom"
           android:pathData="M 15 17 L 19 17"
-          android:strokeColor="@color/icon"
+          android:strokeColor="#000000"
           android:strokeWidth="2"
           android:strokeLineCap="round" />
       </group>

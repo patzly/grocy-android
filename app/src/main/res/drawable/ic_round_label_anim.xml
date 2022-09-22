@@ -30,7 +30,7 @@
       <path
         android:name="path"
         android:pathData="M 17.63 5.84 C 17.27 5.33 16.67 5 16 5 L 5 5.01 C 3.9 5.01 3 5.9 3 7 L 3 17 C 3 18.1 3.9 18.99 5 18.99 L 16 19 C 16.67 19 17.27 18.67 17.63 18.16 L 21.59 12.58 C 21.84 12.23 21.84 11.77 21.59 11.42 L 17.63 5.84 Z"
-        android:fillColor="@color/icon"
+        android:fillColor="#000000"
         android:strokeWidth="1" />
     </vector>
   </aapt:attr>

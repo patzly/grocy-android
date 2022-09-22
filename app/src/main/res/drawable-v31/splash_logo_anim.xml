@@ -1,0 +1,395 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<animated-vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:aapt="http://schemas.android.com/aapt">
+  <aapt:attr name="android:drawable">
+    <vector
+      android:name="vector"
+      android:width="288dp"
+      android:height="288dp"
+      android:viewportWidth="288"
+      android:viewportHeight="288">
+      <group
+        android:name="group_citrus"
+        android:pivotX="62"
+        android:pivotY="207">
+        <path
+          android:name="citrus"
+          android:pathData="M 160.667 129 C 160.667 132.218 159.82 135.38 158.211 138.167 C 156.602 140.954 154.287 143.268 151.5 144.877 C 148.713 146.486 145.551 147.333 142.333 147.333 C 137.473 147.333 132.806 145.4 129.37 141.963 C 125.933 138.527 124 133.86 124 129 C 124 124.14 125.933 119.473 129.37 116.037 C 132.806 112.6 137.473 110.667 142.333 110.667 C 145.551 110.667 148.713 111.514 151.5 113.123 C 154.287 114.732 156.602 117.046 158.211 119.833 C 159.82 122.62 160.667 125.782 160.667 129 Z"
+          android:fillColor="@color/logo_yellow"
+          android:strokeWidth="1" />
+      </group>
+      <group
+        android:name="group_melon"
+        android:pivotX="62"
+        android:pivotY="207">
+        <path
+          android:name="melon"
+          android:pathData="M 130.667 127.333 C 130.667 131.429 129.589 135.453 127.541 139 C 125.493 142.547 122.547 145.493 119 147.541 C 115.453 149.589 111.429 150.667 107.333 150.667 C 103.237 150.667 99.213 149.589 95.666 147.541 C 92.119 145.493 89.173 142.547 87.126 139 C 85.078 135.453 84 131.429 84 127.333 C 84 121.147 86.46 115.208 90.834 110.834 C 95.208 106.46 101.147 104 107.333 104 C 111.429 104 115.453 105.078 119 107.126 C 122.547 109.173 125.493 112.119 127.541 115.666 C 129.589 119.213 130.667 123.237 130.667 127.333 Z"
+          android:fillColor="@color/logo_green"
+          android:strokeWidth="1" />
+      </group>
+      <group
+        android:name="group_tomatoes"
+        android:pivotX="62"
+        android:pivotY="207">
+        <path
+          android:name="tomatoes"
+          android:pathData="M 180.667 99 C 177.574 99 174.604 100.23 172.417 102.417 C 170.23 104.604 169 107.574 169 110.667 C 165.907 110.667 162.938 111.897 160.751 114.084 C 158.563 116.271 157.333 119.24 157.333 122.333 C 157.333 125.426 158.563 128.396 160.75 130.583 C 162.937 132.77 165.907 134 169 134 C 169 137.093 170.23 140.063 172.417 142.25 C 174.604 144.437 177.574 145.667 180.667 145.667 C 183.76 145.667 186.729 144.437 188.916 142.249 C 191.103 140.062 192.333 137.093 192.333 134 C 195.426 134 198.396 132.77 200.583 130.583 C 202.77 128.396 204 125.426 204 122.333 C 204 119.24 202.77 116.271 200.582 114.084 C 198.395 111.897 195.426 110.667 192.333 110.667 C 192.333 107.574 191.103 104.605 188.916 102.418 C 186.729 100.23 183.76 99 180.667 99 Z"
+          android:fillColor="@color/logo_red"
+          android:strokeWidth="1" />
+      </group>
+      <group
+        android:name="group_basket"
+        android:pivotX="62"
+        android:pivotY="207">
+        <path
+          android:name="path_11"
+          android:pathData="M 144 90.667 L 143.999 90.667 C 151.069 90.667 157.856 93.478 162.855 98.478 C 167.855 103.477 170.666 110.264 170.666 117.334 L 170.666 137.333 C 170.666 144.403 167.855 151.19 162.855 156.189 C 157.856 161.189 151.069 164 143.999 164 L 144 164 C 136.93 164 130.143 161.189 125.144 156.189 C 120.144 151.19 117.333 144.403 117.333 137.333 L 117.333 117.334 C 117.333 110.264 120.144 103.477 125.144 98.478 C 130.143 93.478 136.93 90.667 144 90.667"
+          android:strokeColor="@android:color/system_neutral1_900"
+          android:strokeWidth="6.833"
+          android:strokeLineCap="round" />
+        <path
+          android:name="path_12"
+          android:pathData="M 72.647 138.869 L 83.975 180.209 C 85.847 187.043 89.915 193.075 95.548 197.373 C 101.182 201.67 108.074 204 115.16 204 L 172.817 204 C 179.903 204 186.797 201.672 192.431 197.375 C 198.066 193.078 202.135 187.046 204.01 180.212 L 215.351 138.868 C 215.991 136.534 215.896 134.058 215.077 131.78 C 214.258 129.503 212.756 127.532 210.776 126.14 C 208.797 124.748 206.434 124 204.014 124 L 83.99 124 C 81.569 124 79.206 124.747 77.226 126.139 C 75.245 127.531 73.742 129.502 72.923 131.78 C 72.103 134.058 72.007 136.534 72.647 138.869 Z"
+          android:fillColor="@android:color/system_accent1_100"
+          android:strokeColor="@android:color/system_neutral1_900"
+          android:strokeWidth="6.833" />
+        <path
+          android:name="path_13"
+          android:pathData="M 157.333 137.333 L 134 137.333 C 126.867 137.333 120.667 143.533 120.667 150.667 L 120.667 177.333 C 120.667 179.673 121.283 181.973 122.453 184 C 123.623 186.027 125.306 187.71 127.333 188.881 C 129.36 190.051 131.66 190.667 134 190.667 L 154 190.667 C 156.34 190.667 158.64 190.051 160.667 188.881 C 162.694 187.71 164.377 186.027 165.547 184 C 166.717 181.973 167.333 179.673 167.333 177.333 L 167.333 170.667 C 167.4 163.467 161.133 157.333 153.933 157.333 L 147.333 157.333 C 138.333 157.333 138.667 170.667 147.333 170.667 L 154 170.667 L 154 177.333 L 134 177.333 L 133.933 150.667 L 157.333 150.667 C 166.333 150.667 166.2 137.333 157.333 137.333 Z"
+          android:fillColor="@android:color/system_accent1_900"
+          android:fillAlpha="0.8"
+          android:strokeWidth="1" />
+      </group>
+    </vector>
+  </aapt:attr>
+  <target android:name="group_basket">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:duration="200"
+          android:valueFrom="0"
+          android:valueTo="-10"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="200"
+          android:duration="200"
+          android:valueFrom="-10"
+          android:valueTo="8"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="400"
+          android:duration="200"
+          android:valueFrom="8"
+          android:valueTo="-6"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="600"
+          android:duration="200"
+          android:valueFrom="-6"
+          android:valueTo="4"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="800"
+          android:duration="200"
+          android:valueFrom="4"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="200"
+          android:duration="200"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="400"
+          android:duration="200"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="600"
+          android:duration="200"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="800"
+          android:duration="200"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+  <target android:name="group_melon">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="50"
+          android:duration="200"
+          android:valueFrom="0"
+          android:valueTo="-8"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="250"
+          android:duration="200"
+          android:valueFrom="-8"
+          android:valueTo="7"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="450"
+          android:duration="200"
+          android:valueFrom="7"
+          android:valueTo="-6"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="650"
+          android:duration="175"
+          android:valueFrom="-6"
+          android:valueTo="4"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="825"
+          android:duration="175"
+          android:valueFrom="4"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="250"
+          android:duration="200"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="450"
+          android:duration="200"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="650"
+          android:duration="175"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="825"
+          android:duration="175"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+  <target android:name="group_tomatoes">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:duration="225"
+          android:valueFrom="0"
+          android:valueTo="-10"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="225"
+          android:duration="225"
+          android:valueFrom="-10"
+          android:valueTo="7"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="450"
+          android:duration="200"
+          android:valueFrom="7"
+          android:valueTo="-6"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="650"
+          android:duration="200"
+          android:valueFrom="-6"
+          android:valueTo="4"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="850"
+          android:duration="150"
+          android:valueFrom="4"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="225"
+          android:duration="225"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="450"
+          android:duration="200"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="650"
+          android:duration="200"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="850"
+          android:duration="150"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+  <target android:name="group_citrus">
+    <aapt:attr name="android:animation">
+      <set>
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="225"
+          android:duration="200"
+          android:valueFrom="-15"
+          android:valueTo="12"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="25"
+          android:duration="200"
+          android:valueFrom="0"
+          android:valueTo="-15"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="425"
+          android:duration="200"
+          android:valueFrom="12"
+          android:valueTo="-6"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="625"
+          android:duration="175"
+          android:valueFrom="-6"
+          android:valueTo="4"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="rotation"
+          android:startOffset="800"
+          android:duration="200"
+          android:valueFrom="4"
+          android:valueTo="0"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="225"
+          android:duration="200"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="425"
+          android:duration="200"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="625"
+          android:duration="175"
+          android:valueFrom="62"
+          android:valueTo="226"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+        <objectAnimator
+          android:propertyName="pivotX"
+          android:startOffset="800"
+          android:duration="200"
+          android:valueFrom="226"
+          android:valueTo="62"
+          android:valueType="floatType"
+          android:interpolator="@android:interpolator/fast_out_slow_in" />
+      </set>
+    </aapt:attr>
+  </target>
+</animated-vector>

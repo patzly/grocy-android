@@ -189,7 +189,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_loading_circle"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.loadingCircleEnabled}" />
@@ -261,7 +261,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_tor"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.torEnabledLive}" />
@@ -290,7 +290,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_proxy"
             style="@style/Widget.Grocy.Switch"
             android:checked="@={viewModel.proxyEnabledLive}" />

@@ -88,7 +88,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -127,9 +127,9 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(Constants.FAB.POSITION.END, R.menu.menu_empty);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_backup,
         R.string.action_save,

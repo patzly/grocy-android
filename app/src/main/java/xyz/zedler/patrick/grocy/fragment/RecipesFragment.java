@@ -55,7 +55,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 
@@ -179,7 +178,7 @@ public class RecipesFragment extends BaseFragment implements
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });
@@ -213,7 +212,7 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   consumeRecipe(recipe.getId());
-                  activity.showMessage(getString(R.string.msg_recipe_consumed, recipe.getName()));
+                  activity.showSnackbar(getString(R.string.msg_recipe_consumed, recipe.getName()));
                 }, 100);
               }
           ));
@@ -229,7 +228,7 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   addNotFulfilledProductsToCartForRecipe(recipe.getId());
-                  activity.showMessage(getString(R.string.msg_recipe_added_to_cart));
+                  activity.showSnackbar(getString(R.string.msg_recipe_added_to_cart));
                 }, 100);
               }
           ));
@@ -292,13 +291,9 @@ public class RecipesFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        POSITION.CENTER,
-        R.menu.menu_recipes,
-        this::onMenuItemClick
-    );
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
         R.string.action_add,
@@ -396,7 +391,7 @@ public class RecipesFragment extends BaseFragment implements
 
   private void showMessage(String msg) {
     activity.showSnackbar(
-        Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
+        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
     );
   }
 

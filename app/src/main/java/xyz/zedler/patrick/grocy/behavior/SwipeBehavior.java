@@ -23,18 +23,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
@@ -60,6 +62,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
   private boolean swiping = false;
   private int swipedPos = -1;
   private float swipeThreshold = 0.5f;
+  private final Paint paintBg, paintDivider;
 
   private final View.OnTouchListener onTouchListener = new View.OnTouchListener() {
     @Override
@@ -113,6 +116,12 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     this.context = context;
     buttons = new ArrayList<>();
     buttonWidth = UiUtil.dpToPx(context, 66);
+
+    paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
+    paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorPrimary));
+    paintDivider = new Paint(Paint.ANTI_ALIAS_FLAG);
+    paintDivider.setColor(ResUtil.getColorAttr(context, R.attr.colorOutline));
+
     GestureDetector.SimpleOnGestureListener gestureListener
         = new GestureDetector.SimpleOnGestureListener() {
       @Override
@@ -279,28 +288,54 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
   private void drawButtons(
       Canvas canvas, View itemView, List<UnderlayButton> buttons, int pos, float dX
   ) {
-    float left = itemView.getLeft();
-
-    Paint paint = new Paint();
-    paint.setColor(ContextCompat.getColor(context, R.color.retro_green_bg_white));
     if (dX < UiUtil.dpToPx(context, 24)) {
       if (dX > 0) {
         float friction = dX / UiUtil.dpToPx(context, 24);
-        paint.setAlpha((int) (255 * friction));
+        int alpha = (int) (255 * friction);
+        paintBg.setAlpha(alpha);
+        paintDivider.setAlpha(alpha);
       } else {
-        paint.setAlpha(0);
+        paintBg.setAlpha(0);
+        paintDivider.setAlpha(0);
       }
     } else {
-      paint.setAlpha(255);
+      paintBg.setAlpha(255);
+      paintDivider.setAlpha(255);
     }
 
     // draw background
 
-    canvas.drawRect(left, itemView.getTop(), itemView.getRight(), itemView.getBottom(), paint);
+    canvas.drawRect(
+        itemView.getLeft(), itemView.getTop(), itemView.getRight(), itemView.getBottom(),
+        paintBg
+    );
+
+    // draw dividers at top and bottom starting at the current horizontal offset
+
+    float dividerLeft = itemView.getLeft() + dX + UiUtil.dpToPx(context, 8);
+    int gradientWidth = UiUtil.dpToPx(context, 16);
+    int strokeWidth = UiUtil.dpToPx(context, 1);
+
+    paintDivider.setShader(
+        new LinearGradient(
+            dividerLeft, 0, dividerLeft + gradientWidth, 0,
+            Color.TRANSPARENT, paintDivider.getColor(),
+            Shader.TileMode.CLAMP
+        )
+    );
+    canvas.drawRect(
+        dividerLeft, itemView.getTop(), itemView.getRight(), itemView.getTop() + strokeWidth,
+        paintDivider
+    );
+    canvas.drawRect(
+        dividerLeft, itemView.getBottom() - strokeWidth,
+        itemView.getRight(), itemView.getBottom(),
+        paintDivider
+    );
 
     // draw actions
 
-    float buttonLeft = left;
+    float buttonLeft = itemView.getLeft();
     for (int i = 0; i < buttons.size(); i++) {
       float right = buttonLeft + buttonWidth;
       buttons.get(i).draw(
@@ -350,17 +385,15 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       if (drawable == null) {
         return;
       }
-      drawable.setColorFilter(
-          ContextCompat.getColor(context, R.color.on_secondary), Mode.SRC_ATOP
-      );
+      drawable.setColorFilter(ResUtil.getColorAttr(context, R.attr.colorOnPrimary), Mode.SRC_ATOP);
 
       bgRadius = UiUtil.dpToPx(
           context, context.getResources().getInteger(R.integer.swipe_action_bg_radius)
       );
 
       paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
-      paintBg.setColor(Color.BLACK);
-      paintBg.setAlpha(20);
+      paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorOnPrimary));
+      paintBg.setAlpha(15);
     }
 
     private boolean onClick(float x, float y) {

@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
-public class TextEditBottomSheet extends BaseBottomSheet {
+public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = TextEditBottomSheet.class.getSimpleName();
 
@@ -102,7 +102,7 @@ public class TextEditBottomSheet extends BaseBottomSheet {
 
   private void dismissWithMessage(String msg) {
     activity.showSnackbar(
-        Snackbar.make(activity.findViewById(R.id.frame_main_container), msg, Snackbar.LENGTH_SHORT)
+        Snackbar.make(activity.findViewById(R.id.coordinator_main), msg, Snackbar.LENGTH_SHORT)
     );
     dismiss();
   }

@@ -38,7 +38,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
-public class SettingInputBottomSheet extends BaseBottomSheet {
+public class SettingInputBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = SettingInputBottomSheet.class.getSimpleName();
 

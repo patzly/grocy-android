@@ -24,9 +24,9 @@
   android:width="24dp"
   xmlns:android="http://schemas.android.com/apk/res/android">
   <path
-    android:fillColor="@color/icon"
+    android:fillColor="#000000"
     android:pathData="m5,5h6c0.55,0 1,-0.45 1,-1V4C12,3.45 11.55,3 11,3H5C3.9,3 3,3.9 3,5v14c0,1.1 0.9,2 2,2h6c0.55,0 1,-0.45 1,-1v0c0,-0.55 -0.45,-1 -1,-1H5Z" />
   <path
-    android:fillColor="@color/icon"
+    android:fillColor="#000000"
     android:pathData="m16.7175,7.6606v0c-0.39,0.39 -0.39,1.01 0,1.4l1.9,1.9h-9.2c-0.55,0 -1,0.45 -1,1v0c0,0.55 0.45,1 1,1h9.2l-1.9,1.9c-0.39,0.39 -0.39,1.01 0,1.4v0c0.39,0.39 1.01,0.39 1.4,0l3.59,-3.59c0.39,-0.39 0.39,-1.02 0,-1.41l-3.59,-3.6c-0.39,-0.39 -1.01,-0.39 -1.4,0z" />
 </vector>

@@ -115,7 +115,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.CONSUME_SUCCESS) {
         assert getArguments() != null;
@@ -183,13 +183,9 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_consume);
-    activity.getScrollBehavior().setHideOnScroll(false);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
-        R.menu.menu_consume,
-        this::onMenuItemClick
-    );
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_consume);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.updateBottomAppBar(true, R.menu.menu_consume, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_consume_product,
         R.string.action_consume,

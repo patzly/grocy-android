@@ -30,7 +30,7 @@
       <path
         android:name="path"
         android:pathData="M 14.575 7.415 L 9.99 12 L 14.575 16.585"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />

@@ -23,19 +23,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Insets;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
+import xyz.zedler.patrick.grocy.R;
 
 public class UiUtil {
 
@@ -113,6 +112,11 @@ public class UiUtil {
     return direction == View.LAYOUT_DIRECTION_RTL;
   }
 
+  public static boolean isFullWidth(Context context) {
+    int maxWidth = context.getResources().getDimensionPixelSize(R.dimen.max_content_width);
+    return maxWidth >= getDisplayWidth(context);
+  }
+
   // Unit conversions
 
   public static int dpToPx(@NonNull Context context, @Dimension(unit = Dimension.DP) float dp) {
@@ -139,13 +143,10 @@ public class UiUtil {
     WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     if (Build.VERSION.SDK_INT >= VERSION_CODES.R) {
       WindowMetrics windowMetrics = windowManager.getCurrentWindowMetrics();
-      Insets insets = windowMetrics.getWindowInsets().getInsetsIgnoringVisibility(
-          WindowInsets.Type.systemBars()
-      );
       if (useWidth) {
-        return windowMetrics.getBounds().width() - insets.left - insets.right;
+        return windowMetrics.getBounds().width();
       } else {
-        return windowMetrics.getBounds().height() - insets.top - insets.bottom;
+        return windowMetrics.getBounds().height();
       }
     } else {
       DisplayMetrics displayMetrics = new DisplayMetrics();

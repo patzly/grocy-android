@@ -50,7 +50,6 @@ import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
 
 public class StoredPurchasesFragment extends BaseFragment
@@ -128,7 +127,7 @@ public class StoredPurchasesFragment extends BaseFragment
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snackbar);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -163,10 +162,10 @@ public class StoredPurchasesFragment extends BaseFragment
     }
 
     // UPDATE UI
-    activity.getScrollBehavior().setUpScroll(binding.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        POSITION.GONE,
+        false,
         R.menu.menu_empty,
         (OnMenuItemClickListener) null
     );

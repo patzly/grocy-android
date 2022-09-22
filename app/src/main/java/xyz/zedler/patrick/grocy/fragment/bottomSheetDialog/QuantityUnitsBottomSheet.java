@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class QuantityUnitsBottomSheet extends BaseBottomSheet
+public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
     implements QuantityUnitAdapter.QuantityUnitAdapterListener {
 
   private final static String TAG = QuantityUnitsBottomSheet.class.getSimpleName();

@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
-public class ChoreEntryBottomSheet extends BaseBottomSheet {
+public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = ChoreEntryBottomSheet.class.getSimpleName();
 

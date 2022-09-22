@@ -42,7 +42,6 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.FAB.POSITION;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatConversionsViewModel;
 
 public class MasterProductCatConversionsFragment extends BaseFragment implements
@@ -101,7 +100,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -159,14 +158,14 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        POSITION.CENTER,
+        true,
         R.menu.menu_master_product_edit,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
-            activity.showMessage(R.string.msg_not_implemented_yet);
+            activity.showSnackbar(R.string.msg_not_implemented_yet);
 
             return true;
           }

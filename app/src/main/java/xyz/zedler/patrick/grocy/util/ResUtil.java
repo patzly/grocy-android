@@ -28,28 +28,24 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.BulletSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import androidx.annotation.AttrRes;
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.databinding.BindingAdapter;
+import com.google.android.material.color.ColorRoles;
+import com.google.android.material.color.HarmonizedColors;
+import com.google.android.material.color.HarmonizedColorsOptions;
+import com.google.android.material.color.MaterialColors;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -83,6 +79,25 @@ public class ResUtil {
     intent.putExtra(Intent.EXTRA_TEXT, context.getString(resId));
     intent.setType("text/plain");
     context.startActivity(Intent.createChooser(intent, null));
+  }
+
+  public static void applyColorHarmonization(Context context) {
+    int[] resIds = new int[] {
+        R.color.logo_yellow,
+        R.color.logo_green,
+        R.color.logo_red
+    };
+    HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
+        .setColorResourceIds(resIds)
+        .build();
+    HarmonizedColors.applyToContextIfAvailable(context, options);
+  }
+
+  public static ColorRoles getHarmonizedRoles(Context context, @ColorRes int resId) {
+    return MaterialColors.getColorRoles(
+        context,
+        MaterialColors.harmonizeWithPrimary(context,  ContextCompat.getColor(context, resId))
+    );
   }
 
   public static int getColorAttr(Context context, @AttrRes int resId) {

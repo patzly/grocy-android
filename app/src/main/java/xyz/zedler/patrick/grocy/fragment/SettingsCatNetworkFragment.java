@@ -87,7 +87,7 @@ public class SettingsCatNetworkFragment extends BaseFragment {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -114,9 +114,9 @@ public class SettingsCatNetworkFragment extends BaseFragment {
     proxyPortLive = new MutableLiveData<>(String.valueOf(viewModel.getProxyPort()));
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(binding.scroll);
-      activity.getScrollBehavior().setHideOnScroll(true);
-      activity.updateBottomAppBar(Constants.FAB.POSITION.GONE, R.menu.menu_empty);
+      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
+      activity.getScrollBehaviorOld().setHideOnScroll(true);
+      activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }
 

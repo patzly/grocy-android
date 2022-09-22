@@ -30,19 +30,19 @@
       <path
         android:name="line_top"
         android:pathData="M 4 7 L 20 7"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
       <path
         android:name="line_middle"
         android:pathData="M 7 12 L 17 12"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
       <path
         android:name="line_bottom"
         android:pathData="M 11 17 L 13 17"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
     </vector>

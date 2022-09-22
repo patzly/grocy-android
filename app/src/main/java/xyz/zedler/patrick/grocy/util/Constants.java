@@ -109,6 +109,7 @@ public final class Constants {
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
+    public static final String RUN_AS_SUPER_CLASS = "run_as_super_class";
     public final static String PURCHASED = "purchased";
     public final static String ZXING_PROMPT = "zxing_prompt";
     public final static String PURCHASE_PROMPT = "purchase_prompt";
@@ -122,8 +123,10 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
+      public final static String THEME = "app_theme"; // theme identifier is already used
       public final static String DARK_MODE = "theme";
       public final static String LANGUAGE = "language";
+      public static final String USE_SLIDING = "use_sliding_transition";
     }
 
     public final static class NETWORK {
@@ -219,8 +222,10 @@ public final class Constants {
 
     public final static class APPEARANCE {
 
+      public final static String THEME = "";
       public final static int DARK_MODE = SettingsViewModel.DARK_MODE_SYSTEM;
       public final static String LANGUAGE = null;
+      public static final boolean USE_SLIDING = false;
     }
 
     public final static class NETWORK {
@@ -418,6 +423,7 @@ public final class Constants {
     public final static String LINK = "link";
     public final static String HTML = "html";
     public final static String TITLE = "title";
+    public final static String HIGHLIGHTS = "highlights";
     public final static String HINT = "hint";
     public final static String CURRENCY = "currency";
     public final static String SUPPORTED_VERSIONS = "supported_versions";
@@ -461,5 +467,18 @@ public final class Constants {
       public final static String SAVE = "save";
       public final static String DONE = "done";
     }
+  }
+
+  public static final class THEME {
+
+    public static final String DYNAMIC = "dynamic";
+    public static final String RED = "red";
+    public static final String YELLOW = "yellow";
+    public static final String LIME = "lime";
+    public static final String GREEN = "green";
+    public static final String TURQUOISE = "turquoise";
+    public static final String TEAL = "teal";
+    public static final String BLUE = "blue";
+    public static final String PURPLE = "purple";
   }
 }

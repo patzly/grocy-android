@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class TaskCategoriesBottomSheet extends BaseBottomSheet
+public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
     implements TaskCategoryAdapterListener {
 
   private final static String TAG = TaskCategoriesBottomSheet.class.getSimpleName();

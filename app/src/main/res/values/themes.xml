@@ -48,8 +48,8 @@
   </style>
 
   <style name="Theme.Grocy" parent="Base.Grocy">
-    <item name="android:statusBarColor">@color/status_bar_lollipop</item>
-    <item name="android:navigationBarColor">@color/black</item>
+    <!--item name="android:statusBarColor">@color/status_bar_lollipop</item>
+    <item name="android:navigationBarColor">@color/black</item-->
   </style>
 
   <style name="Theme.Grocy.NoNavBarDivider" parent="Theme.Grocy" />

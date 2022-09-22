@@ -34,12 +34,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.Timer;
 import java.util.TimerTask;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingModeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextEditBottomSheet;
@@ -55,6 +58,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
 public class ShoppingModeFragment extends BaseFragment implements
@@ -71,6 +75,7 @@ public class ShoppingModeFragment extends BaseFragment implements
   private Timer timer;
   private TimerTask timerTask;
   private Handler handler;
+  private SystemBarBehavior systemBarBehavior;
 
   private boolean debug = false;
 
@@ -94,8 +99,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     }
     if (binding != null) {
       binding.recycler.animate().cancel();
-      binding.buttonShoppingListLists.animate().cancel();
-      binding.textShoppingListTitle.animate().cancel();
       binding.recycler.setAdapter(null);
       binding = null;
     }
@@ -110,6 +113,18 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
+    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+    binding.swipe.setSize(CircularProgressDrawable.LARGE);
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
@@ -203,7 +218,7 @@ public class ShoppingModeFragment extends BaseFragment implements
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });
@@ -214,7 +229,11 @@ public class ShoppingModeFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI();
+    // UPDATE UI
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 
   @Override
@@ -252,11 +271,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     timer.schedule(timerTask, 2000, seconds * 1000L);
   }
 
-  private void updateUI() {
-    activity.getScrollBehavior().setUpScroll(null);
-    activity.getScrollBehavior().setHideOnScroll(false);
-  }
-
   @Override
   public void selectShoppingList(ShoppingList shoppingList) {
     viewModel.selectShoppingList(shoppingList);
@@ -267,11 +281,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (shoppingList == null) {
       return;
     }
-    ShoppingListFragment.changeAppBarTitle(
-        binding.textShoppingListTitle,
-        binding.buttonShoppingListLists,
-        shoppingList
-    );
+    binding.toolbar.setTitle(shoppingList.getName());
   }
 
   public void toggleDoneStatus(ShoppingListItem shoppingListItem) {
@@ -342,7 +352,6 @@ public class ShoppingModeFragment extends BaseFragment implements
   private void hideDisabledFeatures() {
     if (isFeatureMultipleListsDisabled()) {
       binding.buttonShoppingListLists.setVisibility(View.GONE);
-      binding.textShoppingListTitle.setOnClickListener(null);
     }
   }
 

@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class StoresBottomSheet extends BaseBottomSheet
+public class StoresBottomSheet extends BaseBottomSheetDialogFragment
     implements StoreAdapter.StoreAdapterListener {
 
   private final static String TAG = StoresBottomSheet.class.getSimpleName();

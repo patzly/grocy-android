@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class LocationsBottomSheet extends BaseBottomSheet
+public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     implements LocationAdapter.LocationAdapterListener {
 
   private final static String TAG = LocationsBottomSheet.class.getSimpleName();

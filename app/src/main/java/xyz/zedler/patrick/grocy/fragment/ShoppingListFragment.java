@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -65,7 +64,6 @@ import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListViewModel;
 
 public class ShoppingListFragment extends BaseFragment implements
@@ -210,7 +208,7 @@ public class ShoppingListFragment extends BaseFragment implements
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });
@@ -265,10 +263,10 @@ public class ShoppingListFragment extends BaseFragment implements
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.recycler);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        viewModel.isOffline() ? Constants.FAB.POSITION.GONE : Constants.FAB.POSITION.CENTER,
+        !viewModel.isOffline(),
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
         getBottomMenuClickListener()
     );
@@ -305,9 +303,10 @@ public class ShoppingListFragment extends BaseFragment implements
     );
   }
 
+  // TODO: change View type of buttonLists to MaterialButton when ActionButtons are replaced
   public static void changeAppBarTitle(
       TextView textTitle,
-      ActionButton buttonLists,
+      View buttonLists,
       ShoppingList shoppingList
   ) {
     // change app bar title to shopping list name
@@ -547,7 +546,7 @@ public class ShoppingListFragment extends BaseFragment implements
     }
     if (isOnline) {
       activity.updateBottomAppBar(
-          Constants.FAB.POSITION.CENTER,
+          true,
           R.menu.menu_shopping_list,
           getBottomMenuClickListener()
       );
@@ -622,7 +621,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
   private void showMessage(String msg) {
     activity.showSnackbar(
-        Snackbar.make(activity.binding.frameMainContainer, msg, Snackbar.LENGTH_SHORT)
+        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
     );
   }
 

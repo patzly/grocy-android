@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
@@ -59,11 +60,46 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 @SuppressWarnings("EmptyMethod")
 public class BaseFragment extends Fragment {
 
-  String getErrorMessage(VolleyError volleyError) {
+  private MainActivity activity;
+  private ViewUtil viewUtil;
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    activity = (MainActivity) requireActivity();
+    viewUtil = new ViewUtil();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    viewUtil.cleanUp();
+  }
+
+  public SharedPreferences getSharedPrefs() {
+    return activity.getSharedPrefs();
+  }
+
+  public ViewUtil getViewUtil() {
+    return viewUtil;
+  }
+
+  public void performHapticClick() {
+    activity.performHapticClick();
+  }
+
+  public void performHapticHeavyClick() {
+    activity.performHapticHeavyClick();
+  }
+
+  protected String getErrorMessage(VolleyError volleyError) {
     // similar method is also in BaseViewmodel
     if (volleyError != null && volleyError.networkResponse != null) {
       if (volleyError.networkResponse.statusCode == 403) {
@@ -286,20 +322,29 @@ public class BaseFragment extends Fragment {
     return anim;
   }
 
-  void onEnterAnimationEnd() {
+  protected void onEnterAnimationEnd() {
   }
 
   @NonNull
-  NavController findNavController() {
+  public NavController findNavController() {
     return NavHostFragment.findNavController(this);
   }
 
-  public void navigate(NavDirections directions) {
-    findNavController().navigate(directions);
+  public void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
+    findNavController().navigate(directions, navigatorExtras);
   }
 
-  void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
-    findNavController().navigate(directions, navigatorExtras);
+  private NavOptions getNavOptionsFragmentFade() {
+    return new NavOptions.Builder()
+        .setEnterAnim(R.anim.enter_end_fade)
+        .setExitAnim(R.anim.exit_start_fade)
+        .setPopEnterAnim(R.anim.enter_start_fade)
+        .setPopExitAnim(R.anim.exit_end_fade)
+        .build();
+  }
+
+  public void navigateUp() {
+    activity.navigateUp();
   }
 
   public void navigate(@IdRes int destination) {
@@ -307,14 +352,38 @@ public class BaseFragment extends Fragment {
   }
 
   void navigate(@IdRes int destination, Bundle arguments) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_in_up)
-        .setPopExitAnim(R.anim.slide_out_down)
-        .setExitAnim(R.anim.slide_no);
-    findNavController().navigate(destination, arguments, builder.build());
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_in_up)
+          .setPopExitAnim(R.anim.slide_out_down)
+          .setExitAnim(R.anim.slide_no);
+      findNavController().navigate(destination, arguments, builder.build());
+    } else {
+      findNavController().navigate(destination, arguments, getNavOptionsFragmentFade());
+    }
   }
 
-  void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
+  public void navigate(NavDirections directions) {
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_in_up)
+          .setPopExitAnim(R.anim.slide_out_down)
+          .setExitAnim(R.anim.slide_no);
+      findNavController().navigate(directions, builder.build());
+    } else {
+      findNavController().navigate(directions, getNavOptionsFragmentFade());
+    }
+  }
+
+  public void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
     findNavController().navigate(destination, null, navOptions);
   }
 
@@ -322,29 +391,45 @@ public class BaseFragment extends Fragment {
     navigateDeepLink(Uri.parse(uri));
   }
 
-  void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
     navigateDeepLink(getUriWithArgs(getString(uri), args));
   }
 
-  void navigateDeepLinkSlideStartEnd(@StringRes int uri, @NonNull Bundle args) {
+  public void navigateDeepLinkSlideStartEnd(@StringRes int uri, @NonNull Bundle args) {
     navigateDeepLinkSlideStartEnd(getUriWithArgs(getString(uri), args));
   }
 
   private void navigateDeepLink(@NonNull Uri uri) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_in_up)
-        .setPopExitAnim(R.anim.slide_out_down)
-        .setExitAnim(R.anim.slide_no);
-    findNavController().navigate(uri, builder.build());
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_in_up)
+          .setPopExitAnim(R.anim.slide_out_down)
+          .setExitAnim(R.anim.slide_no);
+      findNavController().navigate(uri, builder.build());
+    } else {
+      findNavController().navigate(uri, getNavOptionsFragmentFade());
+    }
   }
 
   private void navigateDeepLinkSlideStartEnd(@NonNull Uri uri) {
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_from_end)
-        .setPopExitAnim(R.anim.slide_to_end)
-        .setPopEnterAnim(R.anim.slide_from_start)
-        .setExitAnim(R.anim.slide_to_start);
-    findNavController().navigate(uri, builder.build());
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      NavOptions.Builder builder = new NavOptions.Builder();
+      builder.setEnterAnim(R.anim.slide_from_end)
+          .setPopExitAnim(R.anim.slide_to_end)
+          .setPopEnterAnim(R.anim.slide_from_start)
+          .setExitAnim(R.anim.slide_to_start);
+      findNavController().navigate(uri, builder.build());
+    } else {
+      findNavController().navigate(uri, getNavOptionsFragmentFade());
+    }
   }
 
   private Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
@@ -382,7 +467,7 @@ public class BaseFragment extends Fragment {
    * @param key              (String): identifier for value
    * @param observerListener (ObserverListener): observer for callback after value was received
    */
-  void getFromThisDestination(String key, ObserverListener observerListener) {
+  public void getFromThisDestination(String key, ObserverListener observerListener) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().getLiveData(key).removeObservers(
@@ -408,7 +493,7 @@ public class BaseFragment extends Fragment {
    * @return Object: the value or null, if no data was set
    */
   @Nullable
-  Object getFromThisDestinationNow(String key) {
+  public Object getFromThisDestinationNow(String key) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     return backStackEntry.getSavedStateHandle().get(key);
@@ -420,7 +505,7 @@ public class BaseFragment extends Fragment {
    * @param key   (String): identifier for value
    * @param value (Object): the value to store
    */
-  void setForPreviousDestination(String key, Object value) {
+  public void setForPreviousDestination(String key, Object value) {
     NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().set(key, value);
@@ -432,7 +517,7 @@ public class BaseFragment extends Fragment {
    * @param key   (String): identifier for value
    * @param value (Object): the value to store
    */
-  void setForThisDestination(String key, Object value) {
+  public void setForThisDestination(String key, Object value) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().set(key, value);
@@ -445,7 +530,7 @@ public class BaseFragment extends Fragment {
    * @param key           (String): identifier for value
    * @param value         (Object): the value to store
    */
-  void setForDestination(@IdRes int destinationId, String key, Object value) {
+  public void setForDestination(@IdRes int destinationId, String key, Object value) {
     NavBackStackEntry backStackEntry;
     try {
       backStackEntry = findNavController().getBackStackEntry(destinationId);
@@ -463,7 +548,7 @@ public class BaseFragment extends Fragment {
    *
    * @param key (String): identifier for value
    */
-  void removeForThisDestination(String key) {
+  public void removeForThisDestination(String key) {
     NavBackStackEntry backStackEntry = findNavController().getCurrentBackStackEntry();
     assert backStackEntry != null;
     backStackEntry.getSavedStateHandle().remove(key);
@@ -475,6 +560,7 @@ public class BaseFragment extends Fragment {
     return backStackEntry.getDestination();
   }
 
+  @Deprecated
   @Nullable
   public Animation setStatusBarColor(
       int transit,
@@ -489,7 +575,7 @@ public class BaseFragment extends Fragment {
     }
     if (nextAnim == 0) {
       // set color of statusBar immediately after popBackStack, when previous fragment appears
-      activity.setStatusBarColor(color);
+      // activity.setStatusBarColor(color);
       return super.onCreateAnimation(transit, true, nextAnim);
     }
     // set color of statusBar after transition is finished (when shown)
@@ -505,7 +591,7 @@ public class BaseFragment extends Fragment {
 
       @Override
       public void onAnimationEnd(Animation animation) {
-        activity.setStatusBarColor(color);
+        //activity.setStatusBarColor(color);
         if (onAnimationEnd != null) {
           onAnimationEnd.run();
         }
@@ -515,6 +601,7 @@ public class BaseFragment extends Fragment {
     return anim;
   }
 
+  @Deprecated
   @Nullable
   public Animation setStatusBarColor(
       int transit,

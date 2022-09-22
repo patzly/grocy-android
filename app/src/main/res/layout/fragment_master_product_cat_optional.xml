@@ -171,7 +171,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.isActiveLive}" />
 
@@ -385,7 +385,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.neverShowOnStockLive}" />
 
@@ -433,7 +433,7 @@
 
               </LinearLayout>
 
-              <com.google.android.material.switchmaterial.SwitchMaterial
+              <com.google.android.material.materialswitch.MaterialSwitch
                 style="@style/Widget.Grocy.Switch"
                 android:checked="@={formData.noOwnStockLive}" />
 
@@ -445,7 +445,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:alpha="@{viewModel.actionEdit ? 1.0f : 0.4f}"
-              android:onClick="@{v -> activity.showMessage(@string/msg_not_implemented_yet)}">
+              android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet)}">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"

@@ -22,23 +22,23 @@ package xyz.zedler.patrick.grocy.model;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheetDialogFragment;
 
 public class BottomSheetEvent extends Event {
 
-  private final BaseBottomSheet bottomSheet;
+  private final BaseBottomSheetDialogFragment bottomSheet;
   private final Bundle bundle;
 
-  public BottomSheetEvent(@NonNull BaseBottomSheet bottomSheet, @Nullable Bundle bundle) {
+  public BottomSheetEvent(@NonNull BaseBottomSheetDialogFragment bottomSheet, @Nullable Bundle bundle) {
     this.bottomSheet = bottomSheet;
     this.bundle = bundle;
   }
 
-  public BottomSheetEvent(@NonNull BaseBottomSheet bottomSheet) {
+  public BottomSheetEvent(@NonNull BaseBottomSheetDialogFragment bottomSheet) {
     this(bottomSheet, null);
   }
 
-  public BaseBottomSheet getBottomSheet() {
+  public BaseBottomSheetDialogFragment getBottomSheet() {
     return bottomSheet;
   }
 

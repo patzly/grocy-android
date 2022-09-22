@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
@@ -78,7 +78,7 @@ public class NotificationService extends Service {
         .setContentTitle("App is running in background")
         .setCategory(Notification.CATEGORY_SERVICE)
         .setPriority(Notification.PRIORITY_MIN)
-        .setSmallIcon(R.drawable.ic_round_grocy)
+        .setSmallIcon(R.drawable.ic_round_grocy_notification)
         .setLargeIcon(scaledBitmap)
         .build();
     /*builder.setContentText("This is the text");

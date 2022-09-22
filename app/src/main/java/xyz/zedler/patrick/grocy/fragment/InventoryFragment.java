@@ -118,7 +118,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
         assert getArguments() != null;
@@ -181,13 +181,9 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll_inventory);
-    activity.getScrollBehavior().setHideOnScroll(false);
-    activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
-        R.menu.menu_inventory,
-        this::onMenuItemClick
-    );
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_inventory);
+    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.updateBottomAppBar(true, R.menu.menu_inventory, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_inventory,
         R.string.action_inventory,

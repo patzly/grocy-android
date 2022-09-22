@@ -40,7 +40,7 @@ import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
-public class UsersBottomSheet extends BaseBottomSheet
+public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     implements UserAdapterListener {
 
   private final static String TAG = UsersBottomSheet.class.getSimpleName();

@@ -24,19 +24,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.HorizontalScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ChangelogBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
@@ -49,6 +53,7 @@ public class OverviewStartFragment extends BaseFragment {
   private OverviewStartViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private ClickUtil clickUtil;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -84,13 +89,28 @@ public class OverviewStartFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
+    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
+    binding.swipe.setSize(CircularProgressDrawable.LARGE);
+
+    ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
+    binding.scrollHorizActions.post(
+        () -> binding.scrollHorizActions.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+    );
+
     clickUtil = new ClickUtil(1000);
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
             activity,
-            activity.binding.frameMainContainer
+            activity.binding.coordinatorMain
         ));
       }
     });
@@ -112,7 +132,7 @@ public class OverviewStartFragment extends BaseFragment {
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());
       } else if (id == R.id.action_changelog) {
-        activity.showBottomSheet(new ChangelogBottomSheet());
+        activity.showChangelogBottomSheet();
       }
       return false;
     });
@@ -128,9 +148,9 @@ public class OverviewStartFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(binding.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
-    activity.updateBottomAppBar(Constants.FAB.POSITION.CENTER, R.menu.menu_empty);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_barcode_scan,
         R.string.action_scan,
@@ -201,6 +221,9 @@ public class OverviewStartFragment extends BaseFragment {
       return;
     }
     binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
+    if (systemBarBehavior != null) {
+      systemBarBehavior.refresh();
+    }
   }
 
   @Override

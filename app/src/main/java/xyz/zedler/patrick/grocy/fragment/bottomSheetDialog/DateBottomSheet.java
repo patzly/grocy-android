@@ -61,7 +61,7 @@ import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.view.ActionButton;
 
-public class DateBottomSheet extends BaseBottomSheet {
+public class DateBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = DateBottomSheet.class.getSimpleName();
 
@@ -315,7 +315,7 @@ public class DateBottomSheet extends BaseBottomSheet {
         }
       } catch (ParseException e) {
         fillDatePickerForm(null);
-        activity.showMessage(activity.getString(R.string.error_undefined));
+        activity.showSnackbar(activity.getString(R.string.error_undefined));
         return;
       }
       binding.datePicker.setEnabled(true);

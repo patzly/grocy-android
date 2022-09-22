@@ -25,16 +25,15 @@
   android:orientation="vertical">
 
   <com.google.android.material.card.MaterialCardView
+    style="@style/Widget.Grocy.Card.Outlined"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/surface_secondary"
-    app:contentPadding="16dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp">
+    app:cardBackgroundColor="@color/transparent"
+    app:cardElevation="0dp">
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -49,14 +48,14 @@
         android:singleLine="true"
         android:textSize="26sp"
         android:background="@drawable/bg_placeholder_text"
-        android:backgroundTint="@color/on_background_tertiary" />
+        android:backgroundTint="?attr/colorSurfaceVariant" />
 
       <TextView
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:background="@drawable/bg_placeholder_text"
-        android:backgroundTint="@color/on_background_tertiary"
+        android:backgroundTint="?attr/colorSurfaceVariant"
         android:singleLine="true" />
 
     </LinearLayout>

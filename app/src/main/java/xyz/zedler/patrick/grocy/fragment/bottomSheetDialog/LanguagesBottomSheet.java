@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 
-public class LanguagesBottomSheet extends BaseBottomSheet
+public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
     implements LanguageAdapter.LanguageAdapterListener {
 
   private final static String TAG = LanguagesBottomSheet.class.getSimpleName();

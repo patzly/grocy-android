@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
 import xyz.zedler.patrick.grocy.view.ProductDescriptionCard;
 
-public class MasterProductBottomSheet extends BaseBottomSheet {
+public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = MasterProductBottomSheet.class.getSimpleName();
 

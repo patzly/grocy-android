@@ -8,11 +8,11 @@
  *
  * Grocy Android is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Grocy Android. If not, see <http://www.gnu.org/licenses/>.
+ * along with Grocy Android. If not, see http://www.gnu.org/licenses/.
  *
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
@@ -86,7 +86,7 @@ public class TaskEntryEditFragment extends BaseFragment {
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -151,10 +151,10 @@ public class TaskEntryEditFragment extends BaseFragment {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         viewModel.isActionEdit()
             ? R.menu.menu_task_entry_edit_edit
             : R.menu.menu_task_entry_edit_create,

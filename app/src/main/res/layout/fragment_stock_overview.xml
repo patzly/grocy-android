@@ -33,43 +33,37 @@
       type="xyz.zedler.patrick.grocy.fragment.StockOverviewFragment" />
   </data>
 
-  <RelativeLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:minHeight="?attr/actionBarSize"
-      android:background="@color/primary"
-      android:layout_alignParentTop="true"
       android:orientation="vertical"
       android:animateLayoutChanges="true"
       transitionTypeChanging="@{true}">
 
       <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize">
 
-        <LinearLayout
+        <FrameLayout
           android:id="@+id/app_bar_default"
           android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          android:gravity="center_vertical"
-          android:orientation="horizontal"
-          android:baselineAligned="false">
+          android:layout_height="?attr/actionBarSize">
 
           <FrameLayout
             android:id="@+id/frame_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"
-            android:layout_marginEnd="20dp"
+            android:layout_gravity="start|center_vertical"
             android:background="?attr/actionBarItemBackground"
             android:clickable="true"
             android:gravity="center"
@@ -80,9 +74,7 @@
             android:onClick="@{() -> activity.navigateUp()}">
 
             <ImageView
-              android:layout_width="24dp"
-              android:layout_height="24dp"
-              android:layout_gravity="center"
+              style="@style/Widget.Grocy.ImageView.Icon.Navigation"
               android:importantForAccessibility="no"
               android:src="@drawable/ic_round_arrow_back" />
 
@@ -93,17 +85,15 @@
             style="@style/Widget.Grocy.TextView.Toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:ellipsize="end"
+            android:layout_gravity="center"
             android:text="@string/title_stock_overview" />
 
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
           android:id="@+id/app_bar_search"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:minHeight="?attr/actionBarSize"
           android:orientation="vertical"
           android:visibility="gone">
 
@@ -129,9 +119,7 @@
               android:onClick="@{() -> fragment.dismissSearch()}">
 
               <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
+                style="@style/Widget.Grocy.ImageView.Icon.Navigation"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_round_close" />
 
@@ -155,7 +143,6 @@
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
                 android:singleLine="true"
-                android:textColor="@color/on_background"
                 android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
                 app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}" />
 
@@ -177,8 +164,7 @@
               tools:targetApi="o">
 
               <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_round_barcode_scan" />
@@ -202,17 +188,16 @@
       <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="ifContentScrolls">
 
         <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:orientation="horizontal"
           android:paddingStart="12dp"
-          android:paddingEnd="12dp"
-          android:layout_marginTop="6dp"
-          android:layout_marginBottom="8dp">
+          android:paddingEnd="12dp">
 
           <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
@@ -236,7 +221,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_gravity="center_vertical"
-            android:background="@color/filter_chip_stroke_inactive"/>
+            android:background="?attr/colorOutline"/>
 
           <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
@@ -260,18 +245,16 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/retro_red_bg_black"
+        android:background="?attr/colorError"
         android:gravity="center"
-        android:alpha="0.9"
         android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
 
         <TextView
           style="@style/Widget.Grocy.TextView.OfflineIndicator"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="6dp"
-          android:layout_marginBottom="6dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
           android:text="@string/error_offline" />
 
       </LinearLayout>
@@ -282,12 +265,10 @@
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      android:layout_below="@id/app_bar"
       android:animateLayoutChanges="true"
       app:transitionTypeChanging="@{true}"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -301,8 +282,8 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
-          android:paddingBottom="120dp"
-          android:overScrollMode="never"
+          android:paddingBottom="88dp"
+          android:overScrollMode="ifContentScrolls"
           android:clipToPadding="false"
           android:layoutAnimation="@anim/recycler_layout"
           android:scrollbarStyle="outsideOverlay"/>
@@ -311,6 +292,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-  </RelativeLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

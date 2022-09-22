@@ -232,7 +232,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_treat_opened"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setTreatOpenedAsOutOfStockEnabled(checked)}"
@@ -291,7 +291,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_indicator"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setListIndicatorEnabled(checked)}"
@@ -372,7 +372,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_purchase_date"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setPurchasedDateEnabled(checked)}"
@@ -429,7 +429,7 @@
 
           </LinearLayout>
 
-          <com.google.android.material.switchmaterial.SwitchMaterial
+          <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_quick_consume_amount"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setUseQuickConsumeAmountEnabled(checked)}"

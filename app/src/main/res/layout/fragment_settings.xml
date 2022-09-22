@@ -43,74 +43,34 @@
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/app_bar_title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="@string/title_settings" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/title_settings" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
       <LinearLayout
-        android:id="@+id/linear_body"
+        android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="88dp"
         android:orientation="vertical">
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
-          android:background="@{fragment.shouldNavigateToServer ? @drawable/bg_list_item_selected : @drawable/bg_list_item}"
+          android:background="@{fragment.shouldNavigateToServer ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -127,10 +87,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -138,8 +96,6 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatUserSettingsFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -157,10 +113,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -168,8 +122,6 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -187,10 +139,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -198,8 +148,6 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -217,10 +165,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -228,10 +174,8 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
-          android:background="@{fragment.shouldNavigateToBehavior ? @drawable/bg_list_item_selected : @drawable/bg_list_item}"
+          android:background="@{fragment.shouldNavigateToBehavior ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -248,10 +192,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -259,8 +201,6 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatScannerFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -278,10 +218,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -289,8 +227,6 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -306,10 +242,8 @@
             android:text="@string/title_shopping_mode" />
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -317,8 +251,6 @@
 
         <LinearLayout
             style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
             app:clickUtil="@{clickUtil}">
 
@@ -334,19 +266,15 @@
               android:text="@string/title_notifications" />
 
           <ImageView
-              android:layout_height="24dp"
-              android:layout_width="24dp"
-              android:layout_marginStart="16dp"
-              android:clickable="false"
-              android:src="@drawable/ic_round_chevron_right"
-              tools:ignore="ContentDescription" />
+            style="@style/Widget.Grocy.ImageView.Icon"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_round_chevron_right"
+            tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatDebuggingFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -364,10 +292,8 @@
           </LinearLayout>
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
@@ -375,8 +301,6 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())}"
           app:clickUtil="@{clickUtil}">
 
@@ -392,10 +316,8 @@
             android:text="@string/title_about" />
 
           <ImageView
-            android:layout_height="24dp"
-            android:layout_width="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
             android:src="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 

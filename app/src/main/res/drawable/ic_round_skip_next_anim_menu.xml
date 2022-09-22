@@ -34,13 +34,13 @@
         <path
           android:name="arrow"
           android:pathData="M 7.58 16.89 L 13.35 12.82 C 13.91 12.42 13.91 11.58 13.35 11.19 L 7.58 7.11 C 6.91 6.65 6 7.12 6 7.93 L 6 16.07 C 6 16.88 6.91 17.35 7.58 16.89 Z"
-          android:fillColor="@color/icon"
+          android:fillColor="#000000"
           android:strokeWidth="1" />
       </group>
       <path
         android:name="line"
         android:pathData="M 17 7 L 17 17"
-        android:strokeColor="@color/icon"
+        android:strokeColor="#000000"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
     </vector>

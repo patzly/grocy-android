@@ -29,9 +29,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -65,10 +67,20 @@ public class SettingsFragment extends BaseFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(binding.scroll);
-      activity.getScrollBehavior().setHideOnScroll(true);
-      activity.updateBottomAppBar(Constants.FAB.POSITION.GONE, R.menu.menu_empty);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setUp();
+
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
+    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
+      activity.getScrollBehavior().setUpScroll(
+          binding.appBar, true, binding.scroll, false
+      );
+      activity.getScrollBehavior().setBottomBarVisibility(true);
+      activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);

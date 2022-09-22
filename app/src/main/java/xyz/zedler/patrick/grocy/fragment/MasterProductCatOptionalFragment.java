@@ -100,7 +100,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.frameMainContainer);
+        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -145,10 +145,10 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehavior().setUpScroll(R.id.scroll);
-    activity.getScrollBehavior().setHideOnScroll(true);
+    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
+    activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
-        Constants.FAB.POSITION.END,
+        true,
         viewModel.isActionEdit()
             ? R.menu.menu_master_product_edit
             : R.menu.menu_master_product_create,
