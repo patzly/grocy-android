@@ -411,6 +411,7 @@ public class StockOverviewFragment extends BaseFragment implements
       return;
     }
     viewModel.setOfflineLive(!isOnline);
+    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }
