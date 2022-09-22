@@ -19,10 +19,10 @@
 
 package xyz.zedler.patrick.grocy.view;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +33,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.MenuCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.Observer;
@@ -44,6 +43,7 @@ import xyz.zedler.patrick.grocy.databinding.ViewFilterChipBinding;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemData;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveData.MenuItemGroup;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 
 public class FilterChip extends LinearLayout {
 
@@ -78,15 +78,12 @@ public class FilterChip extends LinearLayout {
 
     // background color
     int bgColorFrom = binding.card.getCardBackgroundColor().getColorForState(
-        EMPTY_STATE_SET,
-        ContextCompat.getColor(getContext(), R.color.filter_chip_background_inactive)
+        EMPTY_STATE_SET, Color.TRANSPARENT
     );
-    int bgColorTo = ContextCompat.getColor(getContext(), data.isActive()
-        ? R.color.filter_chip_background_active
-        : R.color.filter_chip_background_inactive
-    );
-    ValueAnimator colorAnimation = ValueAnimator
-        .ofObject(new ArgbEvaluator(), bgColorFrom, bgColorTo);
+    int bgColorTo = data.isActive()
+        ? ResUtil.getColorAttr(getContext(), R.attr.colorSecondaryContainer)
+        : Color.TRANSPARENT;
+    ValueAnimator colorAnimation = ValueAnimator.ofArgb(bgColorFrom, bgColorTo);
     colorAnimation.setDuration(250);
     colorAnimation.addUpdateListener(
         animation -> binding.card.setCardBackgroundColor((int) animation.getAnimatedValue())
@@ -97,30 +94,25 @@ public class FilterChip extends LinearLayout {
     binding.text.setText(data.getText());
 
     // text color
-    binding.text.setTextColor(ContextCompat.getColor(getContext(), data.isActive()
-        ? R.color.filter_chip_text_active
-        : R.color.filter_chip_text_inactive
+    binding.text.setTextColor(ResUtil.getColorAttr(getContext(), data.isActive()
+        ? R.attr.colorOnSecondaryContainer
+        : R.attr.colorOnSurface
     ));
 
     // expand icon color
-    Drawable expandDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_round_expand_more);
-    assert expandDrawable != null;
-    DrawableCompat.setTint(expandDrawable, ContextCompat.getColor(getContext(), data.isActive()
-        ? R.color.filter_chip_expand_active
-        : R.color.filter_chip_expand_inactive
-    ));
-    binding.imageIconExpand.setImageDrawable(expandDrawable);
-
-    // stroke color
-    binding.card.setStrokeColor(ContextCompat.getColor(getContext(), data.isActive()
-        ? R.color.filter_chip_stroke_active
-        : R.color.filter_chip_stroke_inactive
+    binding.imageIconExpand.setImageTintList(ColorStateList.valueOf(
+        ResUtil.getColorAttr(getContext(), data.isActive()
+                ? R.attr.colorOnSecondaryContainer
+                : R.attr.colorOnSurfaceVariant
+        )
     ));
 
     if (data.getDrawable() == -1) {
       binding.frameIcon.setVisibility(GONE);
     } else {
-      binding.imageIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), data.getDrawable()));
+      binding.imageIcon.setImageDrawable(
+          ContextCompat.getDrawable(getContext(), data.getDrawable())
+      );
       binding.frameIcon.setVisibility(View.VISIBLE);
     }
 
@@ -152,6 +144,7 @@ public class FilterChip extends LinearLayout {
         }
       }
       binding.card.setOnClickListener(v -> popupMenu.show());
+      binding.container.setOnClickListener(v -> popupMenu.show());
     }
   }
 

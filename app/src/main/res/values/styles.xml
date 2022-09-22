@@ -120,30 +120,6 @@
     <item name="boxStrokeErrorColor">@color/error</item>
   </style>
 
-  <style
-    name="Widget.Grocy.TextInputLayout.FilledBox.Dense"
-    parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="boxBackgroundColor">@color/on_background_tertiary</item>
-    <item name="boxStrokeColor">@color/secondary</item>
-    <item name="android:textColorHint">@color/on_background_secondary</item>
-    <item name="errorTextColor">@color/error</item>
-    <item name="errorIconTint">@color/error</item>
-    <item name="errorIconDrawable">@drawable/ic_round_error</item>
-    <item name="errorTextAppearance">@style/TextAppearance.Grocy.Error</item>
-    <item name="hintTextColor">@color/transparent</item>
-    <item name="boxCollapsedPaddingTop">0dp</item>
-    <item name="boxCornerRadiusTopStart">12dp</item>
-    <item name="boxCornerRadiusTopEnd">12dp</item>
-  </style>
-
-  <style
-    name="Widget.Grocy.TextInputEditText.FilledBox.Dense"
-    parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox">
-    <item name="android:padding">8dp</item>
-  </style>
-
   <!-- SWITCH -->
 
   <!--style name="Widget.Grocy.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">

@@ -305,6 +305,31 @@
     <item name="boxStrokeErrorColor">@color/error</item-->
   </style>
 
+  <style
+    name="Widget.Grocy.TextInputLayout.FilledBox.Dense"
+    parent="Widget.Material3.TextInputLayout.FilledBox.Dense">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="boxCornerRadiusTopStart">16dp</item>
+    <item name="boxCornerRadiusTopEnd">16dp</item>
+    <item name="boxCollapsedPaddingTop">0dp</item>
+    <!--item name="boxBackgroundColor">@color/on_background_tertiary</item>
+    <item name="boxStrokeColor">@color/secondary</item>
+    <item name="android:textColorHint">@color/on_background_secondary</item>
+    <item name="errorTextColor">@color/error</item>
+    <item name="errorIconTint">@color/error</item>
+    <item name="errorIconDrawable">@drawable/ic_round_error</item>
+    <item name="errorTextAppearance">@style/TextAppearance.Grocy.Error</item>
+    <item name="hintTextColor">@color/transparent</item>
+    <item name="boxCollapsedPaddingTop">0dp</item-->
+  </style>
+
+  <style
+    name="Widget.Grocy.TextInputEditText.FilledBox.Dense"
+    parent="ThemeOverlay.Material3.TextInputEditText.FilledBox.Dense">
+    <item name="android:paddingTop">8dp</item>
+  </style>
+
   <!-- Divider -->
 
   <style name="Widget.Grocy.Divider" parent="Widget.Material3.MaterialDivider">
@@ -689,6 +714,8 @@
   <style name="TextAppearance.Grocy.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
     <item name="fontFamily">@font/jost_book</item>
   </style>
+
+  <style name="TextAppearance.Grocy.BodySmall" parent="TextAppearance.Material3.BodySmall"/>
 
   <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
     <item name="android:textColor">?android:attr/colorBackground</item>

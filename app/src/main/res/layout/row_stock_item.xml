@@ -26,10 +26,11 @@
   android:minHeight="64dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
+  android:background="@drawable/ripple_list_item_swipeable"
   android:padding="16dp"
   android:gravity="center_vertical"
-  android:weightSum="1">
+  android:weightSum="1"
+  android:baselineAligned="false">
 
   <LinearLayout
     android:layout_width="0dp"
@@ -44,7 +45,7 @@
 
       <TextView
           android:id="@+id/text_name"
-          style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+          style="@style/Widget.Grocy.TextView.ListItem.Title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
@@ -58,8 +59,7 @@
           android:layout_marginTop="1dp"
           android:layout_marginStart="6dp"
           android:visibility="gone"
-          android:background="@drawable/shape_circle"
-          android:backgroundTint="@color/retro_blue_fg" />
+          android:background="@drawable/shape_circle" />
 
     </LinearLayout>
 
@@ -119,7 +119,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="end"
-      android:textSize="11sp"
+      android:textAppearance="@style/TextAppearance.Grocy.BodySmall"
       android:visibility="gone"/>
 
   </LinearLayout>

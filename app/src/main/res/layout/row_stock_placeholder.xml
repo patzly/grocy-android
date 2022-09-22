@@ -24,7 +24,6 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:minHeight="64dp"
-  android:background="@color/background"
   android:padding="16dp">
 
   <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
