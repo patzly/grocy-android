@@ -28,10 +28,11 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
+import android.graphics.Path.FillType;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -43,23 +44,31 @@ import android.view.animation.LinearInterpolator;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.google.android.material.elevation.SurfaceColors;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Objects;
 
 public class CircularProgressDrawable extends Drawable implements Animatable {
+
   private static final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
   private static final Interpolator MATERIAL_INTERPOLATOR = new FastOutSlowInInterpolator();
 
-  /** @hide */
+  /**
+   * @hide
+   */
   @RestrictTo(LIBRARY_GROUP_PREFIX)
   @Retention(RetentionPolicy.SOURCE)
   @IntDef({LARGE, DEFAULT})
   public @interface ProgressDrawableSize {
+
   }
 
-  /** Maps to ProgressBar.Large style. */
+  /**
+   * Maps to ProgressBar.Large style.
+   */
   public static final int LARGE = 0;
 
   private static final float CENTER_RADIUS_LARGE = 11f;
@@ -67,7 +76,9 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   private static final int ARROW_WIDTH_LARGE = 12;
   private static final int ARROW_HEIGHT_LARGE = 6;
 
-  /** Maps to ProgressBar default style. */
+  /**
+   * Maps to ProgressBar default style.
+   */
   public static final int DEFAULT = 1;
 
   private static final float CENTER_RADIUS = 7.5f;
@@ -76,38 +87,52 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   private static final int ARROW_HEIGHT = 5;
 
   /**
-   * This is the default set of colors that's used in spinner. {@link
-   * #setColorSchemeColors(int...)} allows modifying colors.
+   * This is the default set of colors that's used in spinner. {@link #setColorSchemeColors(int...)}
+   * allows modifying colors.
    */
   private static final int[] COLORS = new int[]{
       Color.BLACK
   };
 
   /**
-   * The value in the linear interpolator for animating the drawable at which
-   * the color transition should start
+   * The value in the linear interpolator for animating the drawable at which the color transition
+   * should start
    */
   private static final float COLOR_CHANGE_OFFSET = 0.75f;
   private static final float SHRINK_OFFSET = 0.5f;
 
-  /** The duration of a single progress spin in milliseconds. */
+  /**
+   * The duration of a single progress spin in milliseconds.
+   */
   private static final int ANIMATION_DURATION = 1332;
 
-  /** Full rotation that's done for the animation duration in degrees. */
+  /**
+   * Full rotation that's done for the animation duration in degrees.
+   */
   private static final float GROUP_FULL_ROTATION = 1080f / 5f;
 
-  /** The indicator ring, used to manage animation state. */
+  /**
+   * The indicator ring, used to manage animation state.
+   */
   private final Ring mRing;
 
-  /** Canvas rotation in degrees. */
+  /**
+   * Canvas rotation in degrees.
+   */
   private float mRotation;
 
-  /** Maximum length of the progress arc during the animation. */
+  /**
+   * Maximum length of the progress arc during the animation.
+   */
   private static final float MAX_PROGRESS_ARC = .8f;
-  /** Minimum length of the progress arc during the animation. */
+  /**
+   * Minimum length of the progress arc during the animation.
+   */
   private static final float MIN_PROGRESS_ARC = .01f;
 
-  /** Rotation applied to ring during the animation, to complete it to a full circle. */
+  /**
+   * Rotation applied to ring during the animation, to complete it to a full circle.
+   */
   private static final float RING_ROTATION = 1f - (MAX_PROGRESS_ARC - MIN_PROGRESS_ARC);
 
   private final Resources mResources;
@@ -126,11 +151,15 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     mRing = new Ring();
     mRing.setColors(COLORS);
 
+    setBackgroundColor(SurfaceColors.SURFACE_1.getColor(context));
+
     setStrokeWidth(STROKE_WIDTH);
     setupAnimators();
   }
 
-  /** Sets all parameters at once in dp. */
+  /**
+   * Sets all parameters at once in dp.
+   */
   private void setSizeParameters(float centerRadius, float strokeWidth, float arrowWidth,
       float arrowHeight) {
     final Ring ring = mRing;
@@ -138,15 +167,14 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     final float screenDensity = metrics.density;
 
     ring.setStrokeWidth(strokeWidth * screenDensity);
-    ring.setStrokeCap(Cap.ROUND);
     ring.setCenterRadius(centerRadius * screenDensity);
     ring.setColorIndex(0);
     ring.setArrowDimensions(arrowWidth * screenDensity, arrowHeight * screenDensity);
   }
 
   /**
-   * Sets the overall size for the progress spinner. This updates the radius
-   * and stroke width of the ring, and arrow dimensions.
+   * Sets the overall size for the progress spinner. This updates the radius and stroke width of the
+   * ring, and arrow dimensions.
    *
    * @param size one of {@link #LARGE} or {@link #DEFAULT}
    */
@@ -189,8 +217,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   }
 
   /**
-   * Sets the center radius for the progress spinner in pixels. If set to 0, this drawable will
-   * fill the bounds when drawn.
+   * Sets the center radius for the progress spinner in pixels. If set to 0, this drawable will fill
+   * the bounds when drawn.
    *
    * @param centerRadius center radius in pixels
    */
@@ -240,7 +268,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   /**
    * Sets the dimensions of the arrow at the end of the spinner in pixels.
    *
-   * @param width width of the baseline of the arrow in pixels
+   * @param width  width of the baseline of the arrow in pixels
    * @param height distance from tip of the arrow to its baseline in pixels
    */
   public void setArrowDimensions(float width, float height) {
@@ -305,12 +333,11 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   }
 
   /**
-   * Sets the start and end trim for the progress spinner arc. 0 corresponds to the geometric
-   * angle of 0 degrees (3 o'clock on a watch) and it increases clockwise, coming to a full circle
-   * at 1.
+   * Sets the start and end trim for the progress spinner arc. 0 corresponds to the geometric angle
+   * of 0 degrees (3 o'clock on a watch) and it increases clockwise, coming to a full circle at 1.
    *
    * @param start starting position of the arc from [0..1]
-   * @param end ending position of the arc from [0..1]
+   * @param end   ending position of the arc from [0..1]
    */
   public void setStartEndTrim(float start, float end) {
     mRing.setStartTrim(start);
@@ -347,9 +374,9 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   }
 
   /**
-   * Sets the background color of the circle inside the drawable. Calling {@link
-   * #setAlpha(int)} does not affect the visibility background color, so it should be set
-   * separately if it needs to be hidden or visible.
+   * Sets the background color of the circle inside the drawable. Calling {@link #setAlpha(int)}
+   * does not affect the visibility background color, so it should be set separately if it needs to
+   * be hidden or visible.
    *
    * @param color an ARGB color
    */
@@ -369,8 +396,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   }
 
   /**
-   * Sets the colors used in the progress animation from a color list. The first color will also
-   * be the color to be used if animation is not started yet.
+   * Sets the colors used in the progress animation from a color list. The first color will also be
+   * the color to be used if animation is not started yet.
    *
    * @param colors list of ARGB colors to be used in the spinner
    */
@@ -477,9 +504,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   }
 
   /**
-   * Update the ring color if this is within the last 25% of the animation.
-   * The new ring color will be a translation from the starting ring color to
-   * the next color.
+   * Update the ring color if this is within the last 25% of the animation. The new ring color will
+   * be a translation from the starting ring color to the next color.
    */
   @SuppressWarnings("WeakerAccess") /* synthetic access */
   void updateRingColor(float interpolatedTime, Ring ring) {
@@ -493,8 +519,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
   }
 
   /**
-   * Update the ring start and end trim if the animation is finishing (i.e. it started with
-   * already visible progress, so needs to shrink back down before starting the spinner).
+   * Update the ring start and end trim if the animation is finishing (i.e. it started with already
+   * visible progress, so needs to shrink back down before starting the spinner).
    */
   private void applyFinishTranslation(float interpolatedTime, Ring ring) {
     // shrink back down and complete a full rotation before
@@ -604,6 +630,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
    * progress spinner and the arrow. This class is to separate drawing from animation.
    */
   private static class Ring {
+
     final RectF mTempBounds = new RectF();
     final Paint mPaint = new Paint();
     final Paint mArrowPaint = new Paint();
@@ -645,7 +672,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     /**
      * Sets the dimensions of the arrowhead.
      *
-     * @param width width of the hypotenuse of the arrow head
+     * @param width  width of the hypotenuse of the arrow head
      * @param height height of the arrow point
      */
     void setArrowDimensions(float width, float height) {
@@ -689,8 +716,9 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
       final float endAngle = (mEndTrim + mRotation) * 360;
       float sweepAngle = endAngle - startAngle;
 
-      mPaint.setColor(mCurrentColor);
-      mPaint.setAlpha(mAlpha);
+      int colorWithAlpha = ColorUtils.setAlphaComponent(mCurrentColor, mAlpha);
+      int colorFinal = ColorUtils.compositeColors(colorWithAlpha, getBackgroundColor());
+      mPaint.setColor(colorFinal);
 
       // Draw the background first
       float inset = mStrokeWidth / 2f; // Calculate inset to draw inside the arc
@@ -699,7 +727,10 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
           mCirclePaint);
       arcBounds.inset(-inset, -inset); // Revert the inset
 
-      c.drawArc(arcBounds, startAngle, sweepAngle, false, mPaint);
+      c.drawArc(
+          arcBounds, startAngle, sweepAngle + (mArrowHeight * 0.3f),
+          false, mPaint
+      );
 
       drawTriangle(c, startAngle, sweepAngle, arcBounds);
     }
@@ -708,7 +739,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
       if (mShowArrow) {
         if (mArrow == null) {
           mArrow = new android.graphics.Path();
-          mArrow.setFillType(android.graphics.Path.FillType.EVEN_ODD);
+          mArrow.setFillType(FillType.EVEN_ODD);
         } else {
           mArrow.reset();
         }
@@ -720,14 +751,15 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
         // been fixed as of API 21.
         mArrow.moveTo(0, 0);
         mArrow.lineTo(mArrowWidth * mArrowScale, 0);
-        mArrow.lineTo((mArrowWidth * mArrowScale / 2), (mArrowHeight
-            * mArrowScale));
+        mArrow.lineTo((mArrowWidth * mArrowScale / 2), (mArrowHeight * mArrowScale));
         mArrow.offset(centerRadius + bounds.centerX() - inset,
             bounds.centerY() + mStrokeWidth / 2f);
         mArrow.close();
         // draw a triangle
-        mArrowPaint.setColor(mCurrentColor);
-        mArrowPaint.setAlpha(mAlpha);
+        int colorWithAlpha = ColorUtils.setAlphaComponent(mCurrentColor, mAlpha);
+        int colorFinal = ColorUtils.compositeColors(colorWithAlpha, getBackgroundColor());
+        mArrowPaint.setColor(colorFinal);
+        mArrowPaint.setPathEffect(new CornerPathEffect(mArrowHeight * 0.4f)); // M3 CUSTOM
         c.save();
         c.rotate(startAngle + sweepAngle, bounds.centerX(),
             bounds.centerY());
@@ -752,9 +784,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     }
 
     /**
-     * Sets the absolute color of the progress spinner. This is should only
-     * be used when animating between current and next color when the
-     * spinner is rotating.
+     * Sets the absolute color of the progress spinner. This is should only be used when animating
+     * between current and next color when the spinner is rotating.
      *
      * @param color an ARGB color
      */
@@ -774,8 +805,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     }
 
     /**
-     * @param index index into the color array of the color to display in
-     *              the progress spinner.
+     * @param index index into the color array of the color to display in the progress spinner.
      */
     void setColorIndex(int index) {
       mColorIndex = index;
@@ -794,8 +824,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     }
 
     /**
-     * Proceed to the next available ring color. This will automatically
-     * wrap back to the beginning of colors.
+     * Proceed to the next available ring color. This will automatically wrap back to the beginning
+     * of colors.
      */
     void goToNextColor() {
       setColorIndex(getNextColorIndex());
@@ -912,8 +942,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     }
 
     /**
-     * If the start / end trim are offset to begin with, store them so that animation starts
-     * from that offset.
+     * If the start / end trim are offset to begin with, store them so that animation starts from
+     * that offset.
      */
     void storeOriginals() {
       mStartingStartTrim = mStartTrim;

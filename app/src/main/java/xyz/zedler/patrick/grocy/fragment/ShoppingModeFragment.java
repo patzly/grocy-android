@@ -34,8 +34,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.Timer;
 import java.util.TimerTask;
 import xyz.zedler.patrick.grocy.R;
@@ -58,7 +56,6 @@ import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
 public class ShoppingModeFragment extends BaseFragment implements
@@ -120,11 +117,8 @@ public class ShoppingModeFragment extends BaseFragment implements
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
 
-    binding.swipe.setProgressBackgroundColorSchemeColor(SurfaceColors.SURFACE_1.getColor(activity));
-    binding.swipe.setColorSchemeColors(ResUtil.getColorAttr(activity, R.attr.colorPrimary));
-    binding.swipe.setSize(CircularProgressDrawable.LARGE);
-
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();

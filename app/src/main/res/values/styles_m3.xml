@@ -131,6 +131,7 @@
     parent="Widget.Grocy.Button.TextButton.Dialog">
     <item name="android:textColor">?attr/colorOnError</item>
     <item name="backgroundTint">?attr/colorError</item>
+    <item name="rippleColor">@color/selector_highlight_error_container</item>
   </style>
 
   <!-- Base style -->
@@ -237,6 +238,7 @@
     name="Widget.Grocy.Button.TextButton.Dialog.Caution"
     parent="Widget.Grocy.Button.TextButton.Dialog">
     <item name="android:textColor">?attr/colorError</item>
+    <item name="rippleColor">@color/selector_highlight_error</item>
   </style>
 
   <style

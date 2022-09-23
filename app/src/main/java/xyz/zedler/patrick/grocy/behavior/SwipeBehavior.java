@@ -115,7 +115,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     super(0, ItemTouchHelper.RIGHT);
     this.context = context;
     buttons = new ArrayList<>();
-    buttonWidth = UiUtil.dpToPx(context, 66);
+    buttonWidth = UiUtil.dpToPx(context, 72);
 
     paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
     paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorPrimary));

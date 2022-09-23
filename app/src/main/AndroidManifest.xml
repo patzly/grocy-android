@@ -25,13 +25,13 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.VIBRATE" />
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
   <queries>
-    <package android:name="org.torproject.android"/>
-    <package android:name="xyz.zedler.patrick.grocy.unlock"/>
+    <package android:name="org.torproject.android" />
+    <package android:name="xyz.zedler.patrick.grocy.unlock" />
   </queries>
 
   <application
@@ -56,23 +56,26 @@
     </activity>
 
     <activity
-        android:name=".activity.MainActivity"
-        android:windowSoftInputMode="adjustPan"
-        android:exported="true">
+      android:name=".activity.MainActivity"
+      android:windowSoftInputMode="adjustPan"
+      android:exported="true">
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="grocy"
-            android:host="shoppingmodefragment" />
+
+        <data
+          android:scheme="grocy"
+          android:host="shoppingmodefragment" />
       </intent-filter>
 
     </activity>
 
     <receiver
       android:name=".notification.DueSoonNotificationReceiver"
-      android:enabled="true"/>
+      android:enabled="true" />
 
     <receiver
       android:name=".notification.BootReceiver"

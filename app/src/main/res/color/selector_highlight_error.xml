@@ -22,7 +22,7 @@
 
   <item
     android:color="?attr/colorError"
-    android:alpha="0.09"
+    android:alpha="0.1"
     android:state_enabled="true" />
 
   <item android:color="@android:color/transparent"/>

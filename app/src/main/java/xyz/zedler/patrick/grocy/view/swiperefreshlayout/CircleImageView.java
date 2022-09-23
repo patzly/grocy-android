@@ -19,27 +19,23 @@
 
 package xyz.zedler.patrick.grocy.view.swiperefreshlayout;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.view.animation.Animation;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.ViewCompat;
-import xyz.zedler.patrick.grocy.R;
 
 /**
- * Private class created to work around issues with AnimationListeners being
- * called before the animation is actually complete and support shadows on older
- * platforms.
+ * Private class created to work around issues with AnimationListeners being called before the
+ * animation is actually complete and support shadows on older platforms.
  */
 public class CircleImageView extends AppCompatImageView {
 
   private static final int DEFAULT_BACKGROUND_COLOR = 0xFFFAFAFA;
 
   // PX
-  private static final int SHADOW_ELEVATION = 0; // originally 4
+  private static final int SHADOW_ELEVATION = 1; // originally 4
 
   private Animation.AnimationListener mListener;
   private int mBackgroundColor;
@@ -48,15 +44,6 @@ public class CircleImageView extends AppCompatImageView {
     super(context);
 
     final float density = getContext().getResources().getDisplayMetrics().density;
-
-    // The style attribute is named SwipeRefreshLayout instead of CircleImageView because
-    // CircleImageView is not part of the public api.
-    @SuppressLint("CustomViewStyleable")
-    TypedArray colorArray = getContext().obtainStyledAttributes(R.styleable.SwipeRefreshLayout);
-    mBackgroundColor = colorArray.getColor(
-        R.styleable.SwipeRefreshLayout_swipeRefreshLayoutProgressSpinnerBackgroundColor,
-        DEFAULT_BACKGROUND_COLOR);
-    colorArray.recycle();
 
     ShapeDrawable circle = new ShapeDrawable(new OvalShape());
     ViewCompat.setElevation(this, SHADOW_ELEVATION * density);
