@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.view.swiperefreshlayout;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Paint.Cap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -150,7 +151,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
   int mCustomSlingshotDistance;
 
-  CircularProgressDrawable mProgress;
+  private CircularProgressDrawable mProgress;
 
   private Animation mScaleAnimation;
 
@@ -449,6 +450,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
     mCircleView = new CircleImageView(getContext());
     mProgress = new CircularProgressDrawable(getContext());
     mProgress.setStyle(CircularProgressDrawable.DEFAULT);
+    mProgress.setStrokeCap(Cap.ROUND); // M3 CUSTOM
     mCircleView.setImageDrawable(mProgress);
     mCircleView.setVisibility(View.GONE);
     addView(mCircleView);

@@ -28,22 +28,26 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
-import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
+import android.graphics.Path.FillType;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.google.android.material.elevation.SurfaceColors;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Objects;
@@ -126,6 +130,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     mRing = new Ring();
     mRing.setColors(COLORS);
 
+    setBackgroundColor(SurfaceColors.SURFACE_1.getColor(context));
+
     setStrokeWidth(STROKE_WIDTH);
     setupAnimators();
   }
@@ -138,7 +144,6 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
     final float screenDensity = metrics.density;
 
     ring.setStrokeWidth(strokeWidth * screenDensity);
-    ring.setStrokeCap(Cap.ROUND);
     ring.setCenterRadius(centerRadius * screenDensity);
     ring.setColorIndex(0);
     ring.setArrowDimensions(arrowWidth * screenDensity, arrowHeight * screenDensity);
@@ -689,8 +694,9 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
       final float endAngle = (mEndTrim + mRotation) * 360;
       float sweepAngle = endAngle - startAngle;
 
-      mPaint.setColor(mCurrentColor);
-      mPaint.setAlpha(mAlpha);
+      int colorWithAlpha = ColorUtils.setAlphaComponent(mCurrentColor, mAlpha);
+      int colorFinal = ColorUtils.compositeColors(colorWithAlpha, getBackgroundColor());
+      mPaint.setColor(colorFinal);
 
       // Draw the background first
       float inset = mStrokeWidth / 2f; // Calculate inset to draw inside the arc
@@ -699,7 +705,10 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
           mCirclePaint);
       arcBounds.inset(-inset, -inset); // Revert the inset
 
-      c.drawArc(arcBounds, startAngle, sweepAngle, false, mPaint);
+      c.drawArc(
+          arcBounds, startAngle, sweepAngle + (mArrowHeight * 0.3f),
+          false, mPaint
+      );
 
       drawTriangle(c, startAngle, sweepAngle, arcBounds);
     }
@@ -708,7 +717,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
       if (mShowArrow) {
         if (mArrow == null) {
           mArrow = new android.graphics.Path();
-          mArrow.setFillType(android.graphics.Path.FillType.EVEN_ODD);
+          mArrow.setFillType(FillType.EVEN_ODD);
         } else {
           mArrow.reset();
         }
@@ -720,14 +729,15 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
         // been fixed as of API 21.
         mArrow.moveTo(0, 0);
         mArrow.lineTo(mArrowWidth * mArrowScale, 0);
-        mArrow.lineTo((mArrowWidth * mArrowScale / 2), (mArrowHeight
-            * mArrowScale));
+        mArrow.lineTo((mArrowWidth * mArrowScale / 2), (mArrowHeight * mArrowScale));
         mArrow.offset(centerRadius + bounds.centerX() - inset,
             bounds.centerY() + mStrokeWidth / 2f);
         mArrow.close();
         // draw a triangle
-        mArrowPaint.setColor(mCurrentColor);
-        mArrowPaint.setAlpha(mAlpha);
+        int colorWithAlpha = ColorUtils.setAlphaComponent(mCurrentColor, mAlpha);
+        int colorFinal = ColorUtils.compositeColors(colorWithAlpha, getBackgroundColor());
+        mArrowPaint.setColor(colorFinal);
+        mArrowPaint.setPathEffect(new CornerPathEffect(mArrowHeight * 0.4f)); // M3 CUSTOM
         c.save();
         c.rotate(startAngle + sweepAngle, bounds.centerX(),
             bounds.centerY());

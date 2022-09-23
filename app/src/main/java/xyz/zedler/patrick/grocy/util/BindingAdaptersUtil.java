@@ -30,7 +30,6 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -39,6 +38,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.adapter.MatchProductsArrayAdapter;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout;
 
 public class BindingAdaptersUtil {
 
@@ -61,12 +61,13 @@ public class BindingAdaptersUtil {
   }
 
   @BindingAdapter({"progressBackgroundColor"})
-  public static void setProgressBackgroundColor(SwipeRefreshLayout view, @ColorInt int color) {
+  public static void setProgressBackgroundColor(
+      CustomSwipeRefreshLayout view, @ColorInt int color) {
     view.setProgressBackgroundColorSchemeColor(color);
   }
 
   @BindingAdapter({"progressForegroundColor"})
-  public static void setColorSchemeColors(SwipeRefreshLayout view, @ColorInt int color) {
+  public static void setColorSchemeColors(CustomSwipeRefreshLayout view, @ColorInt int color) {
     view.setColorSchemeColors(color);
   }
 
