@@ -27,9 +27,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.ViewCompat;
 
 /**
- * Private class created to work around issues with AnimationListeners being
- * called before the animation is actually complete and support shadows on older
- * platforms.
+ * Private class created to work around issues with AnimationListeners being called before the
+ * animation is actually complete and support shadows on older platforms.
  */
 public class CircleImageView extends AppCompatImageView {
 

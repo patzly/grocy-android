@@ -21,7 +21,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
   <item
-    android:color="?attr/colorSecondary"
+    android:color="?attr/colorOnError"
     android:alpha="0.1"
     android:state_enabled="true" />
 

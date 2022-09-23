@@ -134,7 +134,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   // refresh was triggered.
   private boolean mReturningToStart;
   private final DecelerateInterpolator mDecelerateInterpolator;
-  private static final int[] LAYOUT_ATTRS = new int[] {
+  private static final int[] LAYOUT_ATTRS = new int[]{
       android.R.attr.enabled
   };
 
@@ -172,7 +172,9 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
   private OnChildScrollUpCallback mChildScrollUpCallback;
 
-  /** @see #setLegacyRequestDisallowInterceptTouchEventEnabled */
+  /**
+   * @see #setLegacyRequestDisallowInterceptTouchEventEnabled
+   */
   private boolean mEnableLegacyRequestDisallowInterceptTouch;
 
   private final Animation.AnimationListener mRefreshListener = new Animation.AnimationListener() {
@@ -225,6 +227,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   static class SavedState extends View.BaseSavedState {
+
     final boolean mRefreshing;
 
     /**
@@ -288,23 +291,21 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * The refresh indicator starting and resting position is always positioned
-   * near the top of the refreshing content. This position is a consistent
-   * location, but can be adjusted in either direction based on whether or not
-   * there is a toolbar or actionbar present.
+   * The refresh indicator starting and resting position is always positioned near the top of the
+   * refreshing content. This position is a consistent location, but can be adjusted in either
+   * direction based on whether or not there is a toolbar or actionbar present.
    * <p>
    * <strong>Note:</strong> Calling this will reset the position of the refresh indicator to
    * <code>start</code>.
    * </p>
    *
    * @param scale Set to true if there is no view at a higher z-order than where the progress
-   *              spinner is set to appear. Setting it to true will cause indicator to be scaled
-   *              up rather than clipped.
-   * @param start The offset in pixels from the top of this view at which the
-   *              progress spinner should appear.
-   * @param end The offset in pixels from the top of this view at which the
-   *            progress spinner should come to rest after a successful swipe
-   *            gesture.
+   *              spinner is set to appear. Setting it to true will cause indicator to be scaled up
+   *              rather than clipped.
+   * @param start The offset in pixels from the top of this view at which the progress spinner
+   *              should appear.
+   * @param end   The offset in pixels from the top of this view at which the progress spinner
+   *              should come to rest after a successful swipe gesture.
    */
   public void setProgressViewOffset(boolean scale, int start, int end) {
     mScale = scale;
@@ -317,7 +318,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
   /**
    * @return The offset in pixels from the top of this view at which the progress spinner should
-   *         appear.
+   * appear.
    */
   public int getProgressViewStartOffset() {
     return mOriginalOffsetTop;
@@ -325,24 +326,22 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
   /**
    * @return The offset in pixels from the top of this view at which the progress spinner should
-   *         come to rest after a successful swipe gesture.
+   * come to rest after a successful swipe gesture.
    */
   public int getProgressViewEndOffset() {
     return mSpinnerOffsetEnd;
   }
 
   /**
-   * The refresh indicator resting position is always positioned near the top
-   * of the refreshing content. This position is a consistent location, but
-   * can be adjusted in either direction based on whether or not there is a
-   * toolbar or actionbar present.
+   * The refresh indicator resting position is always positioned near the top of the refreshing
+   * content. This position is a consistent location, but can be adjusted in either direction based
+   * on whether or not there is a toolbar or actionbar present.
    *
    * @param scale Set to true if there is no view at a higher z-order than where the progress
-   *              spinner is set to appear. Setting it to true will cause indicator to be scaled
-   *              up rather than clipped.
-   * @param end The offset in pixels from the top of this view at which the
-   *            progress spinner should come to rest after a successful swipe
-   *            gesture.
+   *              spinner is set to appear. Setting it to true will cause indicator to be scaled up
+   *              rather than clipped.
+   * @param end   The offset in pixels from the top of this view at which the progress spinner
+   *              should come to rest after a successful swipe gesture.
    */
   public void setProgressViewEndTarget(boolean scale, int end) {
     mSpinnerOffsetEnd = end;
@@ -351,11 +350,11 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Sets the distance that the refresh indicator can be pulled beyond its resting position during
-   * a swipe gesture. The default is {@link #DEFAULT_SLINGSHOT_DISTANCE}.
+   * Sets the distance that the refresh indicator can be pulled beyond its resting position during a
+   * swipe gesture. The default is {@link #DEFAULT_SLINGSHOT_DISTANCE}.
    *
-   * @param slingshotDistance The distance in pixels that the refresh indicator can be pulled
-   *                          beyond its resting position.
+   * @param slingshotDistance The distance in pixels that the refresh indicator can be pulled beyond
+   *                          its resting position.
    */
   public void setSlingshotDistance(@Px int slingshotDistance) {
     mCustomSlingshotDistance = slingshotDistance;
@@ -457,16 +456,15 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Set the listener to be notified when a refresh is triggered via the swipe
-   * gesture.
+   * Set the listener to be notified when a refresh is triggered via the swipe gesture.
    */
   public void setOnRefreshListener(@Nullable OnRefreshListener listener) {
     mListener = listener;
   }
 
   /**
-   * Notify the widget that refresh state has changed. Do not call this when
-   * refresh is triggered by a swipe gesture.
+   * Notify the widget that refresh state has changed. Do not call this when refresh is triggered by
+   * a swipe gesture.
    *
    * @param refreshing Whether or not the view should show refresh progress.
    */
@@ -596,9 +594,8 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Set the color resources used in the progress animation from color resources.
-   * The first color will also be the color of the bar that grows in response
-   * to a user swipe gesture.
+   * Set the color resources used in the progress animation from color resources. The first color
+   * will also be the color of the bar that grows in response to a user swipe gesture.
    */
   public void setColorSchemeResources(@ColorRes int... colorResIds) {
     final Context context = getContext();
@@ -610,9 +607,8 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Set the colors used in the progress animation. The first
-   * color will also be the color of the bar that grows in response to a user
-   * swipe gesture.
+   * Set the colors used in the progress animation. The first color will also be the color of the
+   * bar that grows in response to a user swipe gesture.
    */
   public void setColorSchemeColors(@ColorInt int... colors) {
     ensureTarget();
@@ -620,8 +616,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * @return Whether the SwipeRefreshWidget is actively showing refresh
-   *         progress.
+   * @return Whether the SwipeRefreshWidget is actively showing refresh progress.
    */
   public boolean isRefreshing() {
     return mRefreshing;
@@ -699,8 +694,8 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Get the diameter of the progress circle that is displayed as part of the
-   * swipe to refresh layout.
+   * Get the diameter of the progress circle that is displayed as part of the swipe to refresh
+   * layout.
    *
    * @return Diameter in pixels of the progress circle view.
    */
@@ -709,8 +704,8 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * @return Whether it is possible for the child view of this layout to
-   *         scroll up. Override this if the child view is a custom view.
+   * @return Whether it is possible for the child view of this layout to scroll up. Override this if
+   * the child view is a custom view.
    */
   public boolean canChildScrollUp() {
     if (mChildScrollUpCallback != null) {
@@ -723,8 +718,9 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Set a callback to override {@link #canChildScrollUp()} method. Non-null
-   * callback will return the value provided by the callback and ignore all internal logic.
+   * Set a callback to override {@link #canChildScrollUp()} method. Non-null callback will return
+   * the value provided by the callback and ignore all internal logic.
+   *
    * @param callback Callback that should be called when canChildScrollUp() is called.
    */
   public void setOnChildScrollUpCallback(@Nullable OnChildScrollUpCallback callback) {
@@ -791,8 +787,8 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
 
   /**
    * Enables the legacy behavior of {@link #requestDisallowInterceptTouchEvent} from before
-   * 1.1.0-alpha03, where the request is not propagated up to its parents in either of the
-   * following two cases:
+   * 1.1.0-alpha03, where the request is not propagated up to its parents in either of the following
+   * two cases:
    * <ul>
    *     <li>The child as an {@link AbsListView} and the runtime is API < 21</li>
    *     <li>The child has nested scrolling disabled</li>
@@ -806,9 +802,9 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
    * </ul>
    *
    * @param enabled {@code true} to enable the legacy behavior, {@code false} for default behavior
-   * @deprecated Only use this method if the changes introduced in
-   *             {@link #requestDisallowInterceptTouchEvent} in version 1.1.0-alpha03 are breaking
-   *             your application.
+   * @deprecated Only use this method if the changes introduced in {@link
+   * {@link #requestDisallowInterceptTouchEvent} in version 1.1.0-alpha03 are breaking your
+   * application.
    */
   @Deprecated
   public void setLegacyRequestDisallowInterceptTouchEventEnabled(boolean enabled) {
@@ -1363,7 +1359,7 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
     mScaleDownToStartAnimation = new Animation() {
       @Override
       public void applyTransformation(float interpolatedTime, Transformation t) {
-        float targetScale = (mStartingScale + (-mStartingScale  * interpolatedTime));
+        float targetScale = (mStartingScale + (-mStartingScale * interpolatedTime));
         setAnimationProgress(targetScale);
         moveToStart(interpolatedTime);
       }
@@ -1394,10 +1390,11 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Classes that wish to be notified when the swipe gesture correctly
-   * triggers a refresh should implement this interface.
+   * Classes that wish to be notified when the swipe gesture correctly triggers a refresh should
+   * implement this interface.
    */
   public interface OnRefreshListener {
+
     /**
      * Called when a swipe gesture triggers a refresh.
      */
@@ -1405,17 +1402,17 @@ public class CustomSwipeRefreshLayout extends ViewGroup implements NestedScrolli
   }
 
   /**
-   * Classes that wish to override {@link #canChildScrollUp()} method
-   * behavior should implement this interface.
+   * Classes that wish to override {@link #canChildScrollUp()} method behavior should implement this
+   * interface.
    */
   public interface OnChildScrollUpCallback {
+
     /**
-     * Callback that will be called when {@link #canChildScrollUp()} method
-     * is called to allow the implementer to override its behavior.
+     * Callback that will be called when {@link #canChildScrollUp()} method is called to allow the
+     * implementer to override its behavior.
      *
      * @param parent SwipeRefreshLayout that this callback is overriding.
-     * @param child The child view of SwipeRefreshLayout.
-     *
+     * @param child  The child view of SwipeRefreshLayout.
      * @return Whether it is possible for the child view of parent layout to scroll up.
      */
     boolean canChildScrollUp(@NonNull CustomSwipeRefreshLayout parent, @Nullable View child);
