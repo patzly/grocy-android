@@ -4,6 +4,7 @@
 - New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)
 - New: Product option "Move on open" (#569)
 - Improved: (not F-Droid) ML Kit scanner now only recognizes barcodes in preview field
+- Improved: Shopping mode page now can be opened with deeplink "grocy://shoppingmodepage" (#519)
 - Fixed: F-Droid build should work again (#566)
 - Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
 - Fixed: Crash on chores overview page with wrong rescheduled date format (#564)
