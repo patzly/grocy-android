@@ -40,7 +40,7 @@
 
       <TextView
         android:id="@+id/text_name"
-        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+        style="@style/Widget.Grocy.TextView.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -65,9 +65,7 @@
   </LinearLayout>
 
   <com.google.android.material.divider.MaterialDivider
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp" />
+    style="@style/Widget.Grocy.Divider" />
 
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
@@ -86,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="ifContentScrolls">
 
         <com.google.android.material.chip.ChipGroup
           android:layout_width="wrap_content"
@@ -101,25 +99,25 @@
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_consume"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_consume"
             app:chipIcon="@drawable/ic_round_consume_product"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_purchase"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_purchase"
             app:chipIcon="@drawable/ic_round_local_grocery_store"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_transfer"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_transfer"
             app:chipIcon="@drawable/ic_round_swap_horiz"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_inventory"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_inventory"
             app:chipIcon="@drawable/ic_round_inventory"/>
 

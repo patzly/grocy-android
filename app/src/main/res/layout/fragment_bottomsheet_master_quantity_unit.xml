@@ -46,10 +46,8 @@
 
   </LinearLayout>
 
-  <View
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp" />
+  <com.google.android.material.divider.MaterialDivider
+    style="@style/Widget.Grocy.Divider" />
 
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"

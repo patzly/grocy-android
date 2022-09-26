@@ -122,10 +122,8 @@
 
     </FrameLayout>
 
-    <View
-      style="@style/Widget.Grocy.Divider"
-      android:layout_marginTop="0dp"
-      android:layout_marginBottom="0dp" />
+    <com.google.android.material.divider.MaterialDivider
+      style="@style/Widget.Grocy.Divider" />
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scrollView"
@@ -383,7 +381,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
 
-          <View
+          <com.google.android.material.divider.MaterialDivider
               style="@style/Widget.Grocy.Divider"
               android:layout_marginVertical="12dp" />
 

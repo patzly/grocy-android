@@ -33,7 +33,7 @@ public class ListItem extends LinearLayout {
 
   private final Context context;
   private TextView textViewProperty, textViewValue, textViewExtra;
-  private LinearLayout linearLayoutContainer, linearLayoutExtra;
+  private LinearLayout linearLayoutContainer;
   private int height = 0;
 
   public ListItem(Context context) {
@@ -60,7 +60,6 @@ public class ListItem extends LinearLayout {
     textViewProperty = findViewById(R.id.text_list_item_property);
     textViewValue = findViewById(R.id.text_list_item_value);
     textViewExtra = findViewById(R.id.text_list_item_extra);
-    linearLayoutExtra = findViewById(R.id.linear_list_item_extra);
   }
 
   public void setText(String property, String value) {
@@ -79,9 +78,9 @@ public class ListItem extends LinearLayout {
     // extra
     if (extra != null) {
       textViewExtra.setText(extra);
-      linearLayoutExtra.setVisibility(VISIBLE);
+      textViewExtra.setVisibility(VISIBLE);
     } else {
-      linearLayoutExtra.setVisibility(GONE);
+      textViewExtra.setVisibility(GONE);
     }
     if (getVisibility() == GONE) {
       // expand

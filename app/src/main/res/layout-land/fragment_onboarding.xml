@@ -34,10 +34,8 @@
     android:scrollbars="none"
     android:overScrollMode="never" />
 
-  <View
-    style="@style/Widget.Grocy.Divider"
-    android:layout_width="1.5dp"
-    android:layout_height="match_parent"
+  <com.google.android.material.divider.MaterialDivider
+    style="@style/Widget.Grocy.Divider.Margin"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp" />
 

@@ -89,7 +89,7 @@
 
       <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_drawer_shopping_list"
-        style="@style/Widget.Grocy.Divider" />
+        style="@style/Widget.Grocy.Divider.Margin" />
 
       <LinearLayout
         android:id="@+id/transactions_container"
@@ -180,7 +180,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
-          style="@style/Widget.Grocy.Divider" />
+          style="@style/Widget.Grocy.Divider.Margin" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_recipes"
@@ -208,7 +208,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
-          style="@style/Widget.Grocy.Divider" />
+          style="@style/Widget.Grocy.Divider.Margin" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_chores"
@@ -247,7 +247,7 @@
       </LinearLayout>
 
       <com.google.android.material.divider.MaterialDivider
-        style="@style/Widget.Grocy.Divider" />
+        style="@style/Widget.Grocy.Divider.Margin" />
 
       <LinearLayout
         android:id="@+id/linear_drawer_master_data"
@@ -267,7 +267,7 @@
       </LinearLayout>
 
       <com.google.android.material.divider.MaterialDivider
-        style="@style/Widget.Grocy.Divider" />
+        style="@style/Widget.Grocy.Divider.Margin" />
 
       <LinearLayout
         android:id="@+id/linear_drawer_settings"

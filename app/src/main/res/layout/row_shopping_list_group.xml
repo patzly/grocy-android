@@ -27,10 +27,9 @@
   android:layout_marginStart="16dp"
   android:gravity="center_vertical">
 
-  <View
+  <com.google.android.material.divider.MaterialDivider
     android:id="@+id/divider"
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="8dp"
+    style="@style/Widget.Grocy.Divider.Margin"
     android:layout_marginBottom="0dp" />
 
   <TextView

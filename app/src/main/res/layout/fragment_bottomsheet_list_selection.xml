@@ -99,7 +99,7 @@
   </FrameLayout>
 
   <com.google.android.material.divider.MaterialDivider
-    style="@style/Widget.Grocy.Divider.NoMargins" />
+    style="@style/Widget.Grocy.Divider" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_list_selection"
