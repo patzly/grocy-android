@@ -34,8 +34,8 @@
   <!-- This is an action – in English, it contains a verb. -->
   <string name="action_consume_all">消耗全部</string>
 
-  <string name="action_consume_spoiled">‎作为变质食用‎</string>
-  <string name="action_consume_one_spoiled">消耗1作为损耗</string>
+  <string name="action_consume_spoiled">‎消耗 腐败的</string>
+  <string name="action_consume_one_spoiled">消耗1为腐败的</string>
   <!-- %1$s is a quantity unit and %2$s is a product name -->
   <string name="action_consume_one">消耗%2$s中的1%1$s</string>
   <string name="action_open">标记为已打开</string>
@@ -43,6 +43,13 @@
   <string name="action_open_one">打开%2$s中的1%1$s</string>
   <string name="action_edit_product">编辑产品</string>
   <string name="action_shopping_list_add">加入购物清单</string>
+  <string name="action_consume_recipe">消耗本食谱需要的所有食材</string>
+  <string name="action_copy_recipe">复制食谱</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">转移来自</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">转移到</string>
+
   <string name="action_back">返回</string>
   <string name="action_search">搜索</string>
   <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
@@ -141,7 +148,7 @@
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_consumed">消耗%3$s中的%1$s%2$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
-  <string name="msg_consumed_spoiled">消耗%3$s中的%1$s%2$s作为损耗</string>
+  <string name="msg_consumed_spoiled">消耗%3$s中的%1$s%2$s为已变质</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_opened">标记%3$s中的%1$s%2$s为已打开</string>
   <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
@@ -259,6 +266,7 @@
   <string name="msg_features">再次启动介绍“关于”</string>
   <string name="msg_feedback">您有任何愿望，疑问或错误吗？请与我们联系，让我们为您提供帮助！\n我们会对Play商店中的出色评论感到非常高兴。</string>
   <string name="msg_point_at_barcode">将相机对准条形码</string>
+  <string name="msg_press_hold_confirm">长按确认删除</string>
   <string name="msg_welcome_to_grocy">欢迎使用Groyny Android！\n\n 要高效地使用Grocy，需要您的私有服务器或者基于HomeAssistant的Grocy add-on插件。\n 如果您只想试用这个app，您可以使用创建者Bernd Bestel的演示服务器。</string>
   <string name="msg_choose_option_below">请从下面选择一个选项。</string>
   <string name="msg_qr_code_scan">在另一个设备上，访问您的Groy网站并转到“API键”页面。单击“添加”，然后单击Little QR码符号并扫描QR码。</string>
@@ -441,7 +449,7 @@
   <string name="title_stored_purchases">‎存储的购买项目‎</string>
   <string name="title_chores">家务</string>
   <string name="title_chore">家务</string>
-  <string name="title_spoiled">损坏</string>
+  <string name="title_spoiled">已变质</string>
   <string name="title_use_specific">使用特定的库存物料</string>
   <string name="title_specific">具体库存项目</string>
   <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -711,7 +719,7 @@
   <string name="property_price_insert">价格：%1$s</string>
   <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_average_shelf_life">平均保质期</string>
-  <string name="property_spoil_rate">损坏率</string>
+  <string name="property_spoil_rate">变质率</string>
   <string name="property_price_history">历史价格</string>
   <string name="property_product_group">产品组</string>
   <string name="property_product_groups">产品组</string>
@@ -721,8 +729,6 @@
   <string name="property_opened">打开</string>
   <string name="property_not_opened">没开</string>
   <string name="property_is_freezer">是冰柜</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">能量（kcal）</string>
   <string name="property_active">活动</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">从不显示库存概述</string>
@@ -865,10 +871,6 @@
   <string name="setting_open_food_facts_description">从条形码获取信息</string>
   <string name="setting_choose_barcode_scanner">选择条码扫描器</string>
   <string name="setting_choose_barcode_scanner_description">‎用于相机条形码扫描‎</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">‎裁剪相机流以预览格式‎</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">‎防止扫描仪在预览之外检测条形码;可能无法在您的设备上工作！‎</string>
   <string name="setting_use_front_cam">使用前置摄像头</string>
   <string name="setting_use_front_cam_description">用于条形码扫描</string>
   <string name="setting_use_2d_scanner_format">‎使用二维条码扫描器格式‎</string>
