@@ -69,7 +69,7 @@
   <string name="action_email_description">聯絡開發人員</string>
   <string name="action_new_issue">於 GitHub 上新增 Issue</string>
   <string name="action_new_issue_description">回報 Bugs 或建議新功能</string>
-  <string name="action_get_started">入門</string>
+  <string name="action_get_started">開始</string>
   <string name="action_ascending">升冪</string>
   <string name="action_filter">篩選</string>
   <string name="action_sort">排列</string>
@@ -211,6 +211,8 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">%1$s 無庫存條目</string>
   <string name="msg_not_found">找不到此物品</string>
+  <string name="msg_editor_hint">輸入文字</string>
+  <string name="msg_coming_soon">此功能即將實裝</string>
   <string name="msg_undone_transaction">處理未完成</string>
   <string name="msg_failed_to_sync">同步條目失敗</string>
   <string name="msg_synced">同步條目完成</string>
@@ -224,7 +226,7 @@
   <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
   <string name="msg_master_delete">確定要刪除%1$s\"%2$s\"嗎?</string>
   <!-- %1$s is a product name -->
-  <string name="msg_master_delete_product">確定要刪除物品“%1$s”？ \n\n 這也會刪除此物品的所有庫存，紀錄和所有其他資料 - 如果想要保留但隱藏此物品，請考慮停用它。</string>
+  <string name="msg_master_delete_product">確定要刪除物品“%1$s”？ \n\n 這也會刪除此物品的所有庫存，紀錄和所有其他資料 - 如果想要保留但隱藏此物品，請考慮停用它</string>
   <!-- %1$s is a master data type like "location" or "product" -->
   <string name="msg_master_delete_usage">此 %1$s 仍在使用中</string>
   <!-- %1$s is an amount and %2$s is a quantity unit.  -->
@@ -241,8 +243,8 @@
   <string name="option_synced_success">選項同步成功</string>
   <string name="option_synced_error">選項無法同步</string>
   <string name="msg_stored_purchases_overview">裝置上存在未同步到伺服器的購買物品，點擊以了解</string>
-  <string name="msg_stored_purchases">尚未同步到伺服器的購買物品將顯示在這裡。它們與臨時物品一起保存在此應用程式中，以便您可以在快速模式下更快地掃描購買，而不需直接在主資料中新增物品。 ‎</string>
-  <string name="msg_stored_purchases_product_offline">點擊物品並填寫需要的資料。之後產品將在此處顯示為在線，而且已儲存的購買可以被同步到伺服器。</string>
+  <string name="msg_stored_purchases">尚未同步到伺服器的購買物品將顯示在這裡。它們與臨時物品一起保存在此應用程式中，以便您可以在快速模式下更快地掃描購買，而不需直接在主資料中新增物品</string>
+  <string name="msg_stored_purchases_product_offline">點擊物品並填寫需要的資料。之後產品將在此處顯示為在線，而且已儲存的購買可以被同步到伺服器</string>
   <string name="msg_stored_purchases_product_online">點擊這裡將儲存的購買物品同步到伺服器</string>
   <string name="msg_choose_product">您掃描的條碼尚無對應物品。您可以將其對應到現有物品或是新增物品</string>
   <string name="msg_product_name_off">條碼的物品名稱來自於Open Food Facts</string>
@@ -264,11 +266,11 @@
   <string name="msg_quick_mode_confirm_transfer">即將執行:\n\n將%1$s%2$s%3$s\n從%4$s\n移至%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
   <string name="msg_quick_mode_confirm_inventory">即將執行:\n\n將%1$s的庫存設為%2$s%3$s\n套用至物品\n到期日:%4$s\n價格:%5$s\n店家:%6$s\n位置:%7$s</string>
-  <string name="msg_compatibility">此版本的應用程式與伺服器上的grocy版本不相容。 \n\n目前伺服器版本:%1$s\n\n支援的伺服器版本:\n%2$s\n如果目前伺服器器版本的主要版本號碼(第一個數字)高於所支援的版本，而您忽略此警告，則可能發生資料遺失(較少發生)或崩潰(較常發生)。如果版本差異較小(例如第三位數字或更以後)，則您可以忽略這個警告。</string>
+  <string name="msg_compatibility">此版本的應用程式與伺服器上的grocy版本不相容。 \n\n目前伺服器版本:%1$s\n\n支援的伺服器版本:\n%2$s\n如果目前伺服器器版本的主要版本號碼(第一個數字)高於所支援的版本，而您忽略此警告，則可能發生資料遺失(較少發生)或崩潰(較常發生)。如果版本差異較小(例如第三位數字或更以後)，則您可以忽略這個警告</string>
   <string name="msg_logout">您的伺服器上的所有內容都不會被更改。 您將被重新導向至登入頁面</string>
   <string name="msg_logout_demo">您正在使用公開的測試伺服器<u>https://grocy.info</u>.\n\n<b>在伺服器每天自動重設之前，您所做的任何變更都會維持公開狀態</b>\n\n您可以在登入畫面上輸入自己的伺服器位址</string>
   <string name="msg_logout_demo_short">公開的測試伺服器，點擊查看詳細資訊</string>
-  <string name="msg_restart">Grocy需要重新啟動以套用目前的設定。是否立即重啟?</string>
+  <string name="msg_restart">Grocy需要重新啟動以套用目前的設定。是否立即重啟？</string>
   <string name="msg_full_description">點擊以顯示完整資訊</string>
   <string name="msg_shortcuts">您最多可以啟用4個捷徑:</string>
   <string name="msg_shortcuts_not_supported">此Android版本不支援捷徑</string>
@@ -279,24 +281,26 @@
   <string name="msg_press_hold_confirm">按住以確認</string>
   <string name="msg_recipe_consume_ask">確定要消耗食譜「%1$s」中需要的所有食材嗎（被標記為「僅檢查有無存貨」的食材將被忽略）？</string>
   <string name="msg_recipe_shopping_list_ask">確定要將食譜「%1$s」中所有庫存不足的食材加入購物清單嗎？\n\n取消勾選不加入購物清單的食材：</string>
-  <string name="msg_welcome_to_grocy">歡迎使用Grocy Android！\n\n如果要使用Grocy，您需要有自己的伺服器或是Home Assistant的Grocy add-on插件。 \n 如果您只是想試用這個應用程式，可以使用Grocy作者Bernd Bestel的測試伺服器。</string>
+  <string name="msg_welcome_to_grocy">歡迎使用Grocy Android！\n\n如果要使用Grocy，您需要有自己的伺服器或是Home Assistant的Grocy add-on插件。 \n 如果您只是想試用這個應用程式，可以使用Grocy作者Bernd Bestel的測試伺服器</string>
   <string name="msg_choose_option_below">請從以下選項中選擇一個</string>
-  <string name="msg_qr_code_scan">在其他裝置上開啟Grocy中的\"API 金鑰\"。依序點擊\"新增\"和二維條碼圖示，並且掃描條碼。</string>
-  <string name="msg_qr_code_scan_token">您正在使用Home Assistant中的Grocy add-on插件。在Home Assistant側邊欄的個人設定頁面最底部新增一個永久有效存取權杖。創建權杖後，點擊「Generate QR code」並掃描。</string>
+  <string name="msg_qr_code_scan">在其他裝置上開啟Grocy中的\"API 金鑰\"。依序點擊\"新增\"和二維條碼圖示，並且掃描條碼</string>
+  <string name="msg_qr_code_scan_token">您正在使用Home Assistant中的Grocy add-on插件。在Home Assistant側邊欄的個人設定頁面最底部新增一個永久有效存取權杖。創建權杖後，點擊「Generate QR code」並掃描</string>
   <string name="msg_port_connection_info_without_port">此應用程式將連線至連接埠%1$s\n如果想要使用其他連接埠，您可以新增一個到URL\n範例:http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">此應用程式將連線至連接埠%1$s</string>
   <string name="msg_clear_form_first">在掃描其他已知的二維條碼之前清空表單</string>
   <string name="msg_not_implemented_yet">本功能即將實裝，請暫時使用伺服器的網頁介面</string>
-  <string name="stock_disabled">庫存功能已在您的Grocy設定中被停用。但是此應用程式目前只有庫存管理的功能，所以對您可能沒有太大的幫助。</string>
+  <string name="stock_disabled">庫存功能已在您的Grocy設定中被停用。但是此應用程式目前只有庫存管理的功能，所以對您可能沒有太大的幫助</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_hide_on_stock">庫存總覽頁面會列出庫存中的所有物品。啟用此選項以在庫存總覽頁面中永久隱藏此物品。</string>
+  <string name="msg_help_hide_on_stock">庫存總覽頁面會列出庫存中的所有物品。啟用此選項以在庫存總覽頁面中永久隱藏此物品</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_parent_product_deactivated">已為另一物品的母物品，故無法完成。</string>
+  <string name="msg_help_parent_product_deactivated">已為另一物品的母物品，故無法完成</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">在以下位置的庫存將會先被消耗</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_disable_own_stock">啟用後，此物品將不會有獨立的庫存，在購買時也無法被選取(適用於僅作為子物品概覽的母物品)</string>
-  <string name="msg_help_due_date_type">庫存總覽頁面會標記出不同的所選類型。「賞味期限」代表逾期後物品可能仍可正常使用。「有效期限」代表逾期後物品無法正常使用。</string>
+  <string name="msg_help_move_on_open">啟用後，當此物品被標記為已開封，對應數量的物品將被移動到預設消耗位置</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">啟用後，此物品將不會有獨立的庫存，在購買時也無法被選取（適用於僅作為子物品概覽的母物品）</string>
+  <string name="msg_help_due_date_type">庫存總覽頁面會標記出不同的所選類型。「賞味期限」代表逾期後物品可能仍可正常使用。「有效期限」代表逾期後物品無法正常使用</string>
   <string name="msg_help_default_due_days_format">長按以下的欄位以輸入日期而不是數字</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_due_days">所購買物品的建議到期日期為今天的日期加上此天數(-1表示此物品永不逾期)</string>
@@ -316,11 +320,11 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_treat_opened_as_out_of_stock">啟用後，已開封的物品將在計算庫存數量時被排除</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_quick_consume_amount">此數量用於庫存總覽的「快速消耗/開封按鈕」(使用庫存數量單位)</string>
+  <string name="msg_help_quick_consume_amount">此數量用於庫存總覽的「快速消耗/開封按鈕」（使用庫存數量單位）</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight">皮重處理很有用。例如：罐中的麵粉在購買/消耗/調整庫存時可整罐秤重，該差值將按庫存及空罐重自動算出。</string>
+  <string name="msg_help_tare_weight">皮重處理很有用。例如：罐中的麵粉在購買/消耗/調整庫存時可整罐秤重，該差值將按庫存及空罐重自動算出</string>
   <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_tare_weight_purchase">啟用皮重處理：請將整個容器秤重，填入數量將自動計算。</string>
+  <string name="msg_help_tare_weight_purchase">啟用皮重處理：請將整個容器秤重，填入數量將自動計算</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_stock_check">此為將物品設定為食譜食材時的預設設定</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
@@ -335,14 +339,14 @@
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">此資料僅用於統計</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_not_check_shopping_list">在預設狀況下，被加到購物清單中的數量為「所需數量 - 庫存數量 - 購物清單數量」。啟用此選項後，僅根據庫存數量而不檢查購物清單中已存在的數量。</string>
+  <string name="msg_help_not_check_shopping_list">在預設狀況下，被加到購物清單中的數量為「所需數量 - 庫存數量 - 購物清單數量」。啟用此選項後，僅根據庫存數量而不檢查購物清單中已存在的數量</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_produces_product">當選擇一項物品後，在消耗此食譜時將一單位(一份庫存數量單位)加到庫存中。</string>
+  <string name="msg_help_produces_product">當選擇一項物品後，在消耗此食譜時將一單位(一份庫存數量單位)加到庫存中</string>
   <string name="msg_help_date_chooser">您可以在設定中切換成使用鍵盤輸入，這可以加快輸入的速度</string>
-  <string name="msg_help_date_chooser_keyboard">如果在您的地區慣用的日期格式是DDMMYY，您可以在設定中啟用反向日期格式。\n使用鍵盤上的輸入鍵完成輸入並關閉此頁面。</string>
+  <string name="msg_help_date_chooser_keyboard">如果在您的地區慣用的日期格式是DDMMYY，您可以在設定中啟用反向日期格式。\n使用鍵盤上的輸入鍵完成輸入並關閉此頁面</string>
   <string name="msg_help_quick_mode">長按標題欄以啟用快速模式，在快速模式中，已有輸入或掃描預設值的物品會自動以預設值填入所有欄位並立即處理</string>
-  <string name="msg_help_loading_circle_settings">在需要從伺服器載入資料的頁面中，此應用程式會先發出請求來檢查伺服器的資料庫是否有更新，並且只更新已經過期的資料。啟用此選項以在發出這種請求時顯示載入圖示。</string>
-  <string name="msg_help_start">新手模式已啟用：在所有頁面上顯示可用的提示。點擊以更改。</string>
+  <string name="msg_help_loading_circle_settings">在需要從伺服器載入資料的頁面中，此應用程式會先發出請求來檢查伺服器的資料庫是否有更新，並且只更新已經過期的資料。啟用此選項以在發出這種請求時顯示載入圖示</string>
+  <string name="msg_help_start">新手模式已啟用：在所有頁面上顯示可用的提示。點擊以更改</string>
   <string name="msg_help_purchased_date_settings">以下選項啟用後，將會在購買以及庫存頁面上顯示購買日期欄位。否則購買日期將預設為今天</string>
   <string name="msg_help_normal_login">如果您使用的是Home Assistant中的Grocy add-on插件，請點擊此卡片</string>
   <string name="msg_help_home_assistant_login">您正在使用Home Assistant中的Grocy add-on插件，因此需要填寫更多詳細資料。點擊此卡片以切換為一般登入</string>
@@ -468,7 +472,6 @@
   <string name="title_recipes">食譜</string>
   <string name="title_recipe_create">新增食譜</string>
   <string name="title_recipe_edit">編輯食譜</string>
-
   <string name="title_spoiled">已過期</string>
   <string name="title_use_specific">使用特定的庫存</string>
   <string name="title_specific">特定的庫存</string>
@@ -503,6 +506,7 @@
   <string name="title_product_cat_due_date">到期日</string>
   <string name="title_product_cat_amount">數量</string>
   <string name="title_product_cat_quantity_unit">數量單位</string>
+  <string name="title_notifications">通知</string>
   <string name="title_product_cat_barcodes">條碼</string>
   <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
   <string name="title_product_cat_qu_conversions">數量單位轉換</string>
@@ -650,10 +654,10 @@
   <string name="property_name">名稱</string>
   <string name="property_name_singular">名稱 (單)</string>
   <string name="property_name_plural">名稱 (多)</string>
-  <string name="property_product">商品</string>
-  <string name="property_products">商品</string>
-  <string name="property_product_name">商品名稱</string>
-  <string name="property_parent_product">主商品</string>
+  <string name="property_product">物品</string>
+  <string name="property_products">物品</string>
+  <string name="property_product_name">物品名稱</string>
+  <string name="property_parent_product">母物品</string>
   <string name="property_description">說明</string>
   <string name="property_note">註解</string>
   <string name="property_status">狀態</string>
@@ -751,8 +755,6 @@
   <string name="property_opened">已開封</string>
   <string name="property_not_opened">未開封</string>
   <string name="property_is_freezer">是否冷凍</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">熱量(大卡)</string>
   <string name="property_active">有效</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">永不顯示在庫存總覽</string>
@@ -813,6 +815,7 @@
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_servings_desired">需要份數</string>
   <string name="property_not_check_shopping_list">無須檢查購物清單中的數量</string>
+  <string name="property_not_check_shopping_list_description">加入不足的項目時</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_preparation">前置作業</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
@@ -827,6 +830,8 @@
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">可變數量</string>
   <string name="property_requirements_fulfilled">符合需求</string>
+  <string name="property_produces_product">成品</string>
+
   <string name="date_today">今天</string>
   <string name="date_unknown">不明</string>
   <!-- This means the 'time' context -->
@@ -883,7 +888,7 @@
   <string name="info_website">開啟 Grocy 網站</string>
 
   <string name="feature_1_title">Grocy for Android</string>
-  <string name="feature_1_description">您家中的自託管雜貨管理解決方案</string>
+  <string name="feature_1_description">您家中的自託管雜貨管理系統</string>
   <string name="feature_2_title">直覺的設計</string>
   <string name="feature_2_description">一鍵標記開封及消耗</string>
   <string name="feature_3_title">強大的批次處理</string>
@@ -918,17 +923,13 @@
   <string name="setting_theme_light">淺色</string>
   <string name="setting_language">語言</string>
   <string name="setting_language_description">選擇語言</string>
-  <string name="setting_language_info">感謝Transifex上的所有志願翻譯者!\n請至我們的GitHub瞭解如何讓Grocy Android支援您的語言。</string>
+  <string name="setting_language_info">感謝Transifex上所有的翻譯志願者!\n請至我們的GitHub瞭解如何讓Grocy Android支援您的語言</string>
   <string name="setting_language_system">系統預設:%1$s</string>
   <string name="setting_language_not_available">不可用</string>
   <string name="setting_open_food_facts">使用\"Open Food Facts\"和\"Open Beauty Facts\"</string>
   <string name="setting_open_food_facts_description">由條碼獲得資訊</string>
   <string name="setting_choose_barcode_scanner">選擇條碼掃描器</string>
   <string name="setting_choose_barcode_scanner_description">用於相機條碼掃描</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">裁切相機畫面至預覽格式</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">防止掃描器偵測預覽畫面外的條碼；可能無法在您的裝置上運作!</string>
   <string name="setting_use_front_cam">使用前鏡頭</string>
   <string name="setting_use_front_cam_description">條碼掃描用</string>
   <string name="setting_use_2d_scanner_format">使用二維條碼掃描器格式</string>
@@ -940,7 +941,7 @@
   <string name="setting_external_support">使用外接掃描器</string>
   <string name="setting_external_support_description">透過USB或藍牙</string>
   <string name="setting_reload_config">重新載入設定檔</string>
-  <string name="setting_reload_config_description">App 需要重新啟動</string>
+  <string name="setting_reload_config_description">需要重新啟動應用程式</string>
   <string name="setting_logout">登出</string>
   <string name="setting_logout_description">回到登入頁面</string>
   <string name="setting_manage_shortcuts">管理捷徑</string>
@@ -985,7 +986,7 @@
   <string name="setting_speed_up_start">降低應用程式啟動時間</string>
   <string name="setting_speed_up_start_description">只對較快的裝置有效</string>
   <string name="setting_date_keyboard_input">使用鍵盤輸入日期</string>
-  <string name="setting_date_keyboard_input_description">取代日期選轉盤</string>
+  <string name="setting_date_keyboard_input_description">取代日期選擇器</string>
   <string name="setting_date_keyboard_reverse">使用反向日期格式進行輸入‎</string>
   <string name="setting_date_keyboard_reverse_description">‎DDMMYY 而不是 YYMMDD‎</string>
   <string name="setting_loading_circle">顯示載入圖示</string>
@@ -1012,6 +1013,8 @@
   With the "Due soon" check enabled, the user will be notified every day at the selected time how
   many products in stock are due soon, so check means a check of the products in stock -->
   <string name="setting_notification_time_description">在檢查完成時</string>
+  <string name="setting_keep_screen_on_recipes_description">查看食譜時</string>
+
   <string name="notification_due_soon_content">協助減少食物浪費</string>
 
   <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
