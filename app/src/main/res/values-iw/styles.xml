@@ -19,8 +19,4 @@
 
 <resources>
 
-  <style name="Widget.Grocy.TextView.Medium" parent="Widget.Grocy.TextView">
-    <item name="android:textStyle">bold</item>
-  </style>
-
 </resources>

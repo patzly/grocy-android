@@ -88,8 +88,8 @@ public class BottomScrollBehavior {
         bottomBarHeight = bottomAppBar.getMeasuredHeight();
         ((LayoutParams) fabTopScroll.getLayoutParams()).bottomMargin
             = UiUtil.dpToPx(context, 16) + bottomBarHeight;
-        if (observerBottomBar.isAlive()) {
-          observerBottomBar.removeOnGlobalLayoutListener(this);
+        if (bottomAppBar.getViewTreeObserver().isAlive()) {
+          bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
       }
     });
@@ -260,8 +260,8 @@ public class BottomScrollBehavior {
         } else if (DEBUG) {
           Log.e(TAG, "measureScrollView: no child");
         }
-        if (observer.isAlive()) {
-          observer.removeOnGlobalLayoutListener(this);
+        if (scrollView.getViewTreeObserver().isAlive()) {
+          scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
       }
     });

@@ -30,10 +30,10 @@
 
   <TextView
     android:id="@+id/text_list_item_property"
+    style="@style/Widget.Grocy.TextView.LabelLarge"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="hello"
-    android:textAppearance="@style/TextAppearance.Grocy.LabelLarge"/>
+    android:textColor="?attr/colorSecondary" />
 
   <TextView
     android:id="@+id/text_list_item_value"

@@ -34,11 +34,14 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -50,7 +53,8 @@ import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -315,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
     binding.fabMainScroll.setBackgroundTintList(
         ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
     );
+    TooltipCompat.setTooltipText(binding.fabMainScroll, getString(R.string.action_top_scroll));
 
     scrollBehavior = new BottomScrollBehavior(
         this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
@@ -445,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
   public void updateBottomAppBar(
       boolean showFab,
       @MenuRes int newMenuId,
-      @Nullable Toolbar.OnMenuItemClickListener onMenuItemClickListener
+      @Nullable OnMenuItemClickListener onMenuItemClickListener
   ) {
     //scrollBehaviorOld.setTopScrollVisibility(true);
     if (showFab) {
@@ -458,6 +463,18 @@ public class MainActivity extends AppCompatActivity {
       }
     }
     binding.bottomAppBar.replaceMenu(newMenuId);
+    Menu menu = binding.bottomAppBar.getMenu();
+    int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
+    for (int i = 0; i < menu.size(); i++) {
+      MenuItem item = menu.getItem(i);
+      if (item.getIcon() != null) {
+        if (VERSION.SDK_INT >= VERSION_CODES.O) {
+          item.setIconTintList(ColorStateList.valueOf(tint));
+        } else {
+          item.getIcon().setTint(tint);
+        }
+      }
+    }
     binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
   }
 
@@ -527,9 +544,7 @@ public class MainActivity extends AppCompatActivity {
       onLongClick.run();
       return true;
     });
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      binding.fabMain.setTooltipText(getString(tooltipStringId));
-    }
+    TooltipCompat.setTooltipText(binding.fabMain, getString(tooltipStringId));
   }
 
   @Override

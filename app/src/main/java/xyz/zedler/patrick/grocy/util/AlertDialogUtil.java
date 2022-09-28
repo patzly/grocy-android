@@ -20,56 +20,13 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.res.ResourcesCompat;
-import com.google.android.material.button.MaterialButton;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 
 public class AlertDialogUtil {
-
-  public static void showWebViewDialog(Context context, String title, String html) {
-    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context, R.style.AlertDialogCustomWithNegativeOnly);
-    alertBuilder.setTitle(title);
-
-    WebView webView = new WebView(context);
-    webView.getSettings().setJavaScriptEnabled(false);
-    webView.getSettings().setDomStorageEnabled(false);
-    webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-    webView.getSettings().setAllowFileAccess(false);
-    webView.loadData(html, "text/html; charset=utf-8", "UTF-8");
-    webView.setBackgroundColor(
-        ResourcesCompat.getColor(context.getResources(), R.color.surface, null));
-    webView.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
-    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    FrameLayout linearLayout = (FrameLayout) inflater.inflate(R.layout.view_alert_dialog_scroll_content, null);
-    LinearLayout webViewContainer = linearLayout.findViewById(R.id.webview_container);
-    webViewContainer.addView(webView);
-    MaterialButton buttonClose = linearLayout.findViewById(R.id.button_close);
-
-    alertBuilder.setView(linearLayout);
-    AlertDialog alert = alertBuilder.create();
-    buttonClose.setOnClickListener(v -> alert.dismiss());
-    alert.show();
-
-    if (alert.getWindow() != null) {
-      WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-      lp2.copyFrom(alert.getWindow().getAttributes());
-      lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-      lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
-      alert.getWindow().setAttributes(lp2);
-    }
-  }
 
   public static void showConfirmationDialog(
       Context context,

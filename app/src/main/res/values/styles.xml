@@ -349,14 +349,6 @@
     <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
   </style-->
 
-  <!-- This style is overridden in the Hebrew res (iw) folder
-  Fallback to system font, extra styling needed for non-latin languages
-  "bold" is automatically applied to the fallback, only "medium" handling needed
-  Cyrillic alphabet is supported by Jost, no extra styling needed (Russian, Ukrainian) -->
-  <style name="Widget.Grocy.TextView.Medium" parent="Widget.Grocy.TextView">
-    <item name="android:fontFamily">@font/jost_medium</item>
-  </style>
-
   <!--style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView">
     <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
   </style-->

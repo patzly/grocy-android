@@ -32,6 +32,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
@@ -125,6 +126,21 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
 
     binding.buttonDrawerShoppingMode.setOnClickListener(
         v -> navigateDeepLink(R.string.deep_link_shoppingModeFragment)
+    );
+    TooltipCompat.setTooltipText(
+        binding.buttonDrawerShoppingMode, getString(R.string.title_shopping_mode)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerConsume, getString(R.string.title_consume)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerPurchase, getString(R.string.title_purchase)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerTransfer, getString(R.string.title_transfer)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerInventory, getString(R.string.title_inventory)
     );
 
     ClickUtil.setOnClickListeners(

@@ -21,7 +21,7 @@
 
   <integer name="default_anim_duration">300</integer>
 
-  <integer name="swipe_action_bg_radius">24</integer>
+  <integer name="swipe_action_bg_size">48</integer>
 
   <integer name="navigation_slide_duration">400</integer>
 

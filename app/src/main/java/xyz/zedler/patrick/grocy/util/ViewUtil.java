@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,6 +47,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -270,6 +272,16 @@ public class ViewUtil {
 
   public static void centerToolbarTitleOnLargeScreens(MaterialToolbar toolbar) {
     toolbar.setTitleCentered(!UiUtil.isFullWidth(toolbar.getContext()));
+  }
+
+  public static void centerTextOnLargeScreens(TextView textView) {
+    if (UiUtil.isFullWidth(textView.getContext())) {
+      textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+      textView.setGravity(Gravity.START);
+    } else {
+      textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+      textView.setGravity(Gravity.CENTER_HORIZONTAL);
+    }
   }
 
   // Ripple background for surface list items

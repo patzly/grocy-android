@@ -115,7 +115,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     super(0, ItemTouchHelper.RIGHT);
     this.context = context;
     buttons = new ArrayList<>();
-    buttonWidth = UiUtil.dpToPx(context, 72);
+    buttonWidth = UiUtil.dpToPx(context, UiUtil.isOrientationPortrait(context) ? 72 : 64);
 
     paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
     paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorPrimary));
@@ -364,22 +364,24 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
 
   public static class UnderlayButton {
 
-    private final Context context;
     private final Drawable drawable;
-    private final int iconSize;
+    private final int iconSize, bgSize, bgCornerRadius, buttonDistance;
     private int pos;
     private RectF clickRegion;
     private final UnderlayButtonClickListener clickListener;
     private Paint paintBg;
-    private int bgRadius;
 
     public UnderlayButton(
         Context context, @DrawableRes int resId, UnderlayButtonClickListener clickListener
     ) {
-      this.context = context;
       this.clickListener = clickListener;
 
       iconSize = UiUtil.dpToPx(context, 24);
+      bgSize = UiUtil.dpToPx(
+          context, context.getResources().getInteger(R.integer.swipe_action_bg_size)
+      );
+      bgCornerRadius = UiUtil.dpToPx(context, 16);
+      buttonDistance = UiUtil.dpToPx(context, 4);
 
       drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
       if (drawable == null) {
@@ -387,13 +389,9 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       }
       drawable.setColorFilter(ResUtil.getColorAttr(context, R.attr.colorOnPrimary), Mode.SRC_ATOP);
 
-      bgRadius = UiUtil.dpToPx(
-          context, context.getResources().getInteger(R.integer.swipe_action_bg_radius)
-      );
-
       paintBg = new Paint(Paint.ANTI_ALIAS_FLAG);
       paintBg.setColor(ResUtil.getColorAttr(context, R.attr.colorOnPrimary));
-      paintBg.setAlpha(15);
+      paintBg.setAlpha(20);
     }
 
     private boolean onClick(float x, float y) {
@@ -407,12 +405,23 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     private void draw(Canvas canvas, RectF rect, int nr, int count, int pos) {
       // push actions towards each other if there are two
       float offsetX = count == 2
-          ? nr == 0 ? UiUtil.dpToPx(context, 4) : -UiUtil.dpToPx(context, 4)
+          ? (nr == 0 ? buttonDistance : -buttonDistance)
           : 0;
 
       // DRAW ROUND BACKGROUND
 
-      canvas.drawCircle(rect.centerX() + offsetX, rect.centerY(), bgRadius, paintBg);
+      //canvas.drawCircle(rect.centerX() + offsetX, rect.centerY(), bgSize / 2f, paintBg);
+      float centerX = rect.centerX() + offsetX;
+      float centerY = rect.centerY();
+      int sizeHalf = bgSize / 2;
+      canvas.drawRoundRect(
+          centerX - sizeHalf,
+          centerY - sizeHalf,
+          centerX + sizeHalf,
+          centerY + sizeHalf,
+          bgCornerRadius, bgCornerRadius,
+          paintBg
+      );
 
       // DRAW ICON
 

@@ -29,7 +29,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import com.google.android.material.card.MaterialCardView;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 
 public class RecipePreparationCard extends LinearLayout {
 
@@ -66,13 +65,13 @@ public class RecipePreparationCard extends LinearLayout {
       webView.setBackgroundColor(
           ResourcesCompat.getColor(getResources(), R.color.on_background_tertiary, null));
       String finalPreparation = preparation;
-      card.setOnClickListener(
+      /*card.setOnClickListener( TODO: MaterialAlertDialog
           v -> AlertDialogUtil.showWebViewDialog(
               getContext(),
               getContext().getString(R.string.property_preparation),
               finalPreparation
           )
-      );
+      );*/
 
     } else {
       card.setVisibility(View.GONE);

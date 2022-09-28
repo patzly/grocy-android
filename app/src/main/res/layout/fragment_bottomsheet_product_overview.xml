@@ -20,7 +20,6 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical">
@@ -31,36 +30,44 @@
     android:orientation="horizontal"
     android:gravity="center_vertical">
 
-    <LinearLayout
-      android:layout_width="0dp"
+    <FrameLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:padding="16dp"
       android:layout_weight="1">
 
-      <TextView
-        android:id="@+id/text_name"
-        style="@style/Widget.Grocy.TextView.Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-      <TextView
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="@string/title_product_overview" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    </LinearLayout>
+        <TextView
+          android:id="@+id/text_name"
+          style="@style/Widget.Grocy.TextView.Toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
 
-    <com.google.android.material.appbar.MaterialToolbar
-      android:id="@+id/toolbar"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="8dp"
-      android:visibility="visible"
-      app:contentInsetStart="12dp"
-      app:menu="@menu/menu_actions_product_overview" />
+        <TextView
+          android:id="@+id/text_description"
+          style="@style/Widget.Grocy.TextView.ListItem.Description"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:text="@string/title_product_overview" />
+
+      </LinearLayout>
+
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_gravity="end|center_vertical"
+        android:visibility="visible"
+        app:contentInsetStart="12dp"
+        app:menu="@menu/menu_actions_product_overview" />
+
+    </FrameLayout>
 
   </LinearLayout>
 
@@ -74,6 +81,7 @@
     android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:id="@+id/linear_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -128,7 +136,10 @@
       <xyz.zedler.patrick.grocy.view.ProductDescriptionCard
         android:id="@+id/description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
 
       <LinearLayout
         android:id="@+id/linear_amount"
@@ -148,21 +159,18 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
+          android:layout_marginTop="4dp"
           android:orientation="horizontal">
 
-          <xyz.zedler.patrick.grocy.view.ActionButton
+          <com.google.android.material.button.MaterialButton
             android:id="@+id/button_consume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_round_consume_product"
-            app:tint="@color/icon" />
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_consume_product" />
 
-          <xyz.zedler.patrick.grocy.view.ActionButton
+          <com.google.android.material.button.MaterialButton
             android:id="@+id/button_open"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_round_open"
-            app:tint="@color/icon" />
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_open" />
 
         </LinearLayout>
 
@@ -228,20 +236,24 @@
         android:visibility="gone">
 
         <TextView
-          style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+          style="@style/Widget.Grocy.TextView.LabelLarge"
           android:text="@string/property_price_history"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
-          android:layout_margin="16dp" />
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="8dp"
+          android:textColor="?attr/colorSecondary" />
 
         <xyz.zedler.patrick.grocy.view.BezierCurveChart
           android:id="@+id/item_price_history"
           android:layout_width="match_parent"
           android:layout_height="240dp"
+          android:layout_marginStart="12dp"
+          android:layout_marginEnd="12dp"
           android:layout_marginBottom="0dp"
-          android:layout_marginStart="13dp"
-          android:layout_marginEnd="13dp"
           android:layout_marginTop="0dp" />
 
       </LinearLayout>
