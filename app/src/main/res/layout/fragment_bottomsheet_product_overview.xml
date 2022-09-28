@@ -24,52 +24,43 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <LinearLayout
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    android:layout_height="wrap_content">
 
-    <FrameLayout
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1">
+      android:orientation="vertical"
+      android:padding="16dp">
 
-      <LinearLayout
+      <TextView
+        android:id="@+id/text_name"
+        style="@style/Widget.Grocy.TextView.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <TextView
+        android:id="@+id/text_description"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:singleLine="true"
+        android:text="@string/title_product_overview" />
 
-        <TextView
-          android:id="@+id/text_name"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
+    </LinearLayout>
 
-        <TextView
-          android:id="@+id/text_description"
-          style="@style/Widget.Grocy.TextView.ListItem.Description"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:singleLine="true"
-          android:text="@string/title_product_overview" />
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="4dp"
+      android:layout_gravity="end|center_vertical"
+      android:visibility="visible"
+      app:contentInsetStart="12dp"
+      app:menu="@menu/menu_actions_product_overview" />
 
-      </LinearLayout>
-
-      <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_gravity="end|center_vertical"
-        android:visibility="visible"
-        app:contentInsetStart="12dp"
-        app:menu="@menu/menu_actions_product_overview" />
-
-    </FrameLayout>
-
-  </LinearLayout>
+  </FrameLayout>
 
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />

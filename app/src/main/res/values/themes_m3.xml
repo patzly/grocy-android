@@ -38,7 +38,6 @@
     <!-- Popup Menu styles -->
     <item name="popupMenuBackground">@drawable/shape_popup_menu</item>
     <item name="actionOverflowButtonStyle">@style/ThemeOverlay.Grocy.OverFlow</item>
-    <item name="tooltipFrameBackground">@drawable/shape_scrollbar_rounded</item>
 
     <!-- Dialog themes -->
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.Grocy.AlertDialog</item>

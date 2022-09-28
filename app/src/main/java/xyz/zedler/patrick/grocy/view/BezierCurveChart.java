@@ -42,6 +42,8 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BezierCurveChart extends View {
 
+  private static final String TAG = BezierCurveChart.class.getSimpleName();
+
   private static final float LABEL_ROTATION = 45;
 
   public static class Point implements Comparable<Point> {
@@ -166,7 +168,7 @@ public class BezierCurveChart extends View {
 
     // max price width
     int maxPriceWidth = 0;
-    for (float y = 1; y < maxY; y++) {
+    for (float y = 1; y < maxY * (maxY <= 1 ? 10 : 1); y++) {
       if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
         continue;
       }
@@ -176,7 +178,7 @@ public class BezierCurveChart extends View {
       if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
-      int labelWidth = getTextWidth(paintLabel, NumUtil.trim(y));
+      int labelWidth = getTextWidth(paintLabel, NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1)));
       if (labelWidth > maxPriceWidth) {
         maxPriceWidth = labelWidth;
       }
@@ -206,10 +208,15 @@ public class BezierCurveChart extends View {
 
     // Y-AXIS
 
-    scaleY = (rectChart.height() - badgeHeight - badgeMargin * 2) / maxY;
+    float drawingHeight = rectChart.height() - badgeHeight - badgeMargin * 2;
+    if (maxY > 1) {
+      scaleY = drawingHeight / maxY; // 800 / 4 = 200
+    } else {
+      scaleY = drawingHeight / (maxY * 10); // 800 / 0.4 * 10
+    }
 
     centerX = rectChart.right + labelMargin;
-    for (float y = 1; y < maxY; y++) {
+    for (float y = 1; y < maxY * (maxY <= 1 ? 10 : 1); y++) {
       if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
         continue;
       }
@@ -219,7 +226,7 @@ public class BezierCurveChart extends View {
       if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
-      String label = NumUtil.trim(y);
+      String label = NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1));
       centerY = rectChart.bottom - y * scaleY;
       centerY = centerY + getTextHeight(paintLabel, label) / 2;
       canvas.drawText(label, centerX, centerY, paintLabel);
@@ -255,7 +262,7 @@ public class BezierCurveChart extends View {
 
         Point newPoint = new Point(
             (p.x - startX) * rectChart.width() / axesSpan + rectChart.left,
-            rectChart.height() - (p.y * scaleY)
+            rectChart.height() - (p.y * scaleY * (maxY <= 1 ? 10 : 1))
         );
 
         ArrayList<Point> adjustedCurveList = adjustedCurveLists.get(key);
@@ -281,21 +288,17 @@ public class BezierCurveChart extends View {
       canvas.drawLine(x, rectChart.top, x, rectChart.bottom, paintGrid);
     }
 
-    for (float y = 1; y < maxY; y++) {
+    for (float y = 1; y < maxY * (maxY <= 1 ? 10 : 1); y++) {
       if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
         continue;
-      }
-      if (maxY >= 50 && maxY < 100 && y % 10 != 0) {
+      } else if (maxY >= 50 && maxY < 100 && y % 10 != 0) {
         continue;
-      }
-      if (maxY >= 100 && y % 20 != 0) {
+      } else if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
       canvas.drawLine(
-          rectChart.left,
-          rectChart.bottom - y * scaleY,
-          rectChart.right,
-          rectChart.bottom - y * scaleY,
+          rectChart.left, rectChart.bottom - y * scaleY,
+          rectChart.right, rectChart.bottom - y * scaleY,
           paintGrid
       );
     }

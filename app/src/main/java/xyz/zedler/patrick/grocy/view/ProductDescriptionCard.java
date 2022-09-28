@@ -24,7 +24,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -33,153 +36,206 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.annotation.Nullable;
-import com.google.android.material.card.MaterialCardView;
+import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.divider.MaterialDivider;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.ViewProductDescriptionCardBinding;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ProductDescriptionCard extends LinearLayout {
 
-  private WebView webView;
-  private MaterialDivider divider;
-  private TextView textViewHelp;
-  private MaterialCardView card;
-  private String finalDescription;
+  private static final String TAG = ProductDescriptionCard.class.getSimpleName();
+
+  private ViewProductDescriptionCardBinding binding;
+  private Context context;
+  private String description;
+  private AlertDialog dialog;
 
   public ProductDescriptionCard(Context context) {
     super(context);
-
-    init();
+    init(context);
   }
 
   public ProductDescriptionCard(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
-
-    init();
+    init(context);
   }
 
-  private void init() {
-    inflate(getContext(), R.layout.view_product_description_card, this);
+  private void init(Context context) {
+    this.context = context;
+    binding = ViewProductDescriptionCardBinding.inflate(
+        LayoutInflater.from(context), this, true
+    );
+    setSaveEnabled(true);
+  }
 
-    webView = findViewById(R.id.webview);
-    divider = findViewById(R.id.divider);
-    textViewHelp = findViewById(R.id.text_help);
-    card = findViewById(R.id.card);
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    if (dialog != null && dialog.isShowing()) {
+      dialog.dismiss();
+    }
+    binding = null;
   }
 
   @SuppressLint("ClickableViewAccessibility")
-  public void setDescriptionHtml(String description) {
-    if (description != null) {
-      description = description.replaceAll("<[/]?font[^>]*>", ""); // remove font
-      description = description.replaceAll(
+  public void setDescription(String html) {
+    if (html != null) {
+      html = html.replaceAll("<[/]?font[^>]*>", ""); // remove font
+      html = html.replaceAll(
           "<p[^>]*> *(<br ?/>)*</p[^>]*>[\\n\\r\\s]*$", "" // trim empty paragraphs at end
       );
-      description = description.replaceAll(
+      html = html.replaceAll(
           "^[\\n\\r\\s]*<p[^>]*> *(<br ?/>)*</p[^>]*>", "" // trim empty paragraphs at start
       );
-      finalDescription = description;
-      webView.getSettings().setJavaScriptEnabled(false);
-      webView.loadDataWithBaseURL(
+      description = html;
+      binding.webview.getSettings().setJavaScriptEnabled(false);
+      binding.webview.loadDataWithBaseURL(
           "file:///android_asset/",
-          getColoredHtml(description, true),
+          getFormattedHtml(html, true),
           "text/html; charset=utf-8", "utf8", null
       );
 
-      webView.setBackgroundColor(Color.TRANSPARENT);
-      webView.setOnTouchListener((v, event) -> card.onTouchEvent(event));
-      webView.setWebViewClient(new WebViewClient() {
+      binding.webview.setBackgroundColor(Color.TRANSPARENT);
+      binding.webview.setOnTouchListener((v, event) -> binding.card.onTouchEvent(event));
+      binding.webview.setWebViewClient(new WebViewClient() {
         @Override
         public void onPageFinished(WebView view, String url) {
           new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            ViewTreeObserver observer = webView.getViewTreeObserver();
+            ViewTreeObserver observer = binding.webview.getViewTreeObserver();
             observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
               @Override
               public void onGlobalLayout() {
-                webView.measure(
-                    MeasureSpec.makeMeasureSpec(card.getWidth(), MeasureSpec.EXACTLY),
+                binding.webview.measure(
+                    MeasureSpec.makeMeasureSpec(binding.card.getWidth(), MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
                 );
-                int height = webView.getMeasuredHeight();
-                int maxHeight = UiUtil.dpToPx(getContext(), 80);
-                int padding = UiUtil.dpToPx(getContext(), 8);
+                int height = binding.webview.getMeasuredHeight();
+                int maxHeight = UiUtil.dpToPx(context, 80);
+                int padding = UiUtil.dpToPx(context, 8);
+                boolean isStartEndParagraph = description.matches("^<p>.*</p>$");
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, Math.min(height, maxHeight)
                 );
-                params.setMargins(padding, padding, padding, padding);
-                webView.setLayoutParams(params);
+                params.setMargins(
+                    padding, isStartEndParagraph ? 0 : padding,
+                    padding, isStartEndParagraph ? 0 : padding
+                );
+                binding.webview.setLayoutParams(params);
                 if (height > maxHeight) {
-                  divider.setVisibility(VISIBLE);
-                  textViewHelp.setVisibility(VISIBLE);
+                  binding.divider.setVisibility(VISIBLE);
+                  binding.textHelp.setVisibility(VISIBLE);
                 }
-                if (webView.getViewTreeObserver().isAlive()) {
-                  webView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                if (binding.webview.getViewTreeObserver().isAlive()) {
+                  binding.webview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
               }
             });
           }, 0);
         }
       });
-      card.setOnClickListener(v -> showDescriptionDialog());
+      binding.card.setOnClickListener(v -> showDescriptionDialog());
     } else {
       setVisibility(View.GONE);
     }
   }
 
   public void showDescriptionDialog() {
-    FrameLayout frameLayout = new FrameLayout(getContext());
+    FrameLayout frameLayout = new FrameLayout(context);
     frameLayout.setLayoutParams(
         new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
     );
-    WebView webView = new WebView(getContext());
+    WebView webView = new WebView(context);
     webView.getSettings().setJavaScriptEnabled(false);
     webView.getSettings().setDomStorageEnabled(false);
     webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     webView.getSettings().setAllowFileAccess(false);
     webView.loadDataWithBaseURL(
-        "file:///android_asset/", getColoredHtml(finalDescription, false),
+        "file:///android_asset/", getFormattedHtml(description, false),
         "text/html; charset=utf-8", "utf8", null
     );
     webView.setBackgroundColor(Color.TRANSPARENT);
+    webView.setVerticalScrollBarEnabled(false);
     FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
         FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT
     );
     layoutParams.setMargins(
-        UiUtil.dpToPx(getContext(), 17),
-        UiUtil.dpToPx(getContext(), 10),
-        UiUtil.dpToPx(getContext(), 17),
+        UiUtil.dpToPx(context, 17),
+        UiUtil.dpToPx(context, 10),
+        UiUtil.dpToPx(context, 17),
         0
     );
     webView.setLayoutParams(layoutParams);
     frameLayout.addView(webView);
 
-    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-    builder.setTitle(R.string.property_description)
+    dialog = new MaterialAlertDialogBuilder(context)
+        .setTitle(R.string.property_description)
         .setView(frameLayout)
         .setPositiveButton(R.string.action_close, (dialog, which) -> {})
         .create();
-    builder.show();
+    dialog.show();
   }
 
-  private String getColoredHtml(String html, boolean useOnSurfaceVariant) {
+  private String getFormattedHtml(String html, boolean useOnSurfaceVariant) {
     int textColor = ResUtil.getColorAttr(
-        getContext(), useOnSurfaceVariant ? R.attr.colorOnSurfaceVariant : R.attr.colorOnSurface
+        context, useOnSurfaceVariant ? R.attr.colorOnSurfaceVariant : R.attr.colorOnSurface
     );
-    int linkColor = ResUtil.getColorAttr(getContext(), R.attr.colorPrimary);
-    return  "<!DOCTYPE html><html><head><title>Description</title><meta charset=\"UTF-8\">"
-        + "<style type='text/css'>"
-        + "@font-face {\n"
-        + "    font-family: Jost;\n"
-        + "    src: url(\"file:///android_asset/fonts/jost_400_book.otf\")\n"
-        + "}"
+    int linkColor = ResUtil.getColorAttr(context, R.attr.colorPrimary);
+    return  "<!DOCTYPE html><html><head><meta charset='UTF-8'><style type='text/css'>"
+        + "@font-face{font-family: Jost; src: url('fonts/jost_400_book.otf')}"
         + "body{font-family: Jost;color:#" + String.format("%06X", (0xFFFFFF & textColor)) + ";}"
         + "a{color:#" + String.format("%06X", (0xFFFFFF & linkColor)) + ";}"
-        + "</style></head>"
-        + "<body>" + html + "</body></html>";
+        + "</style></head><body>" + html + "</body></html>";
+  }
+
+  @Nullable
+  @Override
+  protected Parcelable onSaveInstanceState() {
+    SavedState state = new SavedState(super.onSaveInstanceState());
+    state.isDialogShown = dialog != null && dialog.isShowing();
+    return state;
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Parcelable state) {
+    SavedState savedState = (SavedState) state;
+    super.onRestoreInstanceState(savedState.getSuperState());
+    if (savedState.isDialogShown) {
+      new Handler(Looper.getMainLooper()).postDelayed(this::showDescriptionDialog, 1);
+    }
+  }
+
+  private static class SavedState extends BaseSavedState {
+    private boolean isDialogShown;
+
+    SavedState(Parcelable superState) {
+      super(superState);
+    }
+
+    private SavedState(Parcel in) {
+      super(in);
+      isDialogShown = in.readInt() == 1;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+      super.writeToParcel(out, flags);
+      out.writeInt(isDialogShown ? 1 : 0);
+    }
+
+    public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<>() {
+
+      public SavedState createFromParcel(Parcel in) {
+        return new SavedState(in);
+      }
+
+      public SavedState[] newArray(int size) {
+        return new SavedState[size];
+      }
+    };
   }
 }

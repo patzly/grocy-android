@@ -139,7 +139,7 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
     // DESCRIPTION
     CharSequence trimmedDescription = TextUtil.trimCharSequence(product.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
-    cardDescription.setDescriptionHtml(description);
+    cardDescription.setDescription(description);
 
     // LOCATION
     if (location != null && isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
