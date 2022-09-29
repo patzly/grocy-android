@@ -213,13 +213,13 @@ public class RecipesViewModel extends BaseViewModel {
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
     switch (filterChipLiveDataSort.getSortMode()) {
       case SORT_NAME:
-        SortUtil.sortRecipesByName(getApplication(), filteredRecipes, sortAscending);
+        SortUtil.sortRecipesByName(filteredRecipes, sortAscending);
         break;
       case SORT_CALORIES:
-        SortUtil.sortRecipesByCalories(getApplication(), filteredRecipes, recipeFulfillments, sortAscending);
+        SortUtil.sortRecipesByCalories(filteredRecipes, recipeFulfillments, sortAscending);
         break;
       case SORT_DUE_SCORE:
-        SortUtil.sortRecipesByDueScore(getApplication(), filteredRecipes, recipeFulfillments, sortAscending);
+        SortUtil.sortRecipesByDueScore(filteredRecipes, recipeFulfillments, sortAscending);
         break;
     }
 

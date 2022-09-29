@@ -62,7 +62,7 @@ public class FilterChipLiveDataProductGroup extends FilterChipLiveData {
   }
 
   public void setProductGroups(List<ProductGroup> productGroups) {
-    SortUtil.sortProductGroupsByName(application, productGroups, true);
+    SortUtil.sortProductGroupsByName(productGroups, true);
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
         NO_FILTER,

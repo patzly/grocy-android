@@ -78,7 +78,7 @@ public class StoresBottomSheet extends BaseBottomSheetDialogFragment
     assert storesArg != null;
     stores = new ArrayList<>(storesArg);
 
-    SortUtil.sortStoresByName(requireContext(), stores, true);
+    SortUtil.sortStoresByName(stores, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
     }

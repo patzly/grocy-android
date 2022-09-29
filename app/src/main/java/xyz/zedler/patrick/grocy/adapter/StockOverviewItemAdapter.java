@@ -190,7 +190,7 @@ public class StockOverviewItemAdapter extends
         || groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_MIN_STOCK_AMOUNT)) {
       SortUtil.sortStringsByValue(groupsSorted);
     } else {
-      SortUtil.sortStringsByName(context, groupsSorted, true);
+      SortUtil.sortStringsByName(groupsSorted, true);
     }
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
@@ -224,11 +224,7 @@ public class StockOverviewItemAdapter extends
     if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
       SortUtil.sortStockItemsByBBD(stockItems, sortAscending);
     } else {
-      SortUtil.sortStockItemsByName(
-          context,
-          stockItems,
-          sortAscending
-      );
+      SortUtil.sortStockItemsByName(stockItems, sortAscending);
     }
   }
 

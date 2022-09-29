@@ -336,7 +336,7 @@ public class MasterObjectListFragment extends BaseFragment
         List<ProductGroup> productGroups = viewModel.getProductGroups();
         if (productGroups != null && !productGroups.isEmpty()) {
           ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
-          SortUtil.sortProductGroupsByName(requireContext(), sorted, true);
+          SortUtil.sortProductGroupsByName(sorted, true);
           for (ProductGroup pg : sorted) {
             menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(itemTemp -> {
               if (binding.recycler.getAdapter() == null) {

@@ -19,7 +19,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/linear_list_item_container"
+  android:id="@+id/linear_container"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -29,22 +29,21 @@
   android:baselineAligned="false">
 
   <TextView
-    android:id="@+id/text_list_item_property"
+    android:id="@+id/text_property"
     style="@style/Widget.Grocy.TextView.LabelLarge"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="?attr/colorSecondary" />
 
   <TextView
-    android:id="@+id/text_list_item_value"
+    android:id="@+id/text_value"
     style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:singleLine="false"
-    android:maxLines="2" />
+    android:singleLine="false" />
 
   <TextView
-    android:id="@+id/text_list_item_extra"
+    android:id="@+id/text_extra"
     style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />

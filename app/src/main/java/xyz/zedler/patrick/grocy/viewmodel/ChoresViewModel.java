@@ -280,7 +280,7 @@ public class ChoresViewModel extends BaseViewModel {
     if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
       SortUtil.sortChoreEntriesByNextExecution(filteredChoreEntries, sortAscending);
     } else {
-      SortUtil.sortChoreEntriesByName(getApplication(), filteredChoreEntries, sortAscending);
+      SortUtil.sortChoreEntriesByName(filteredChoreEntries, sortAscending);
     }
 
     filteredChoreEntriesLive.setValue(filteredChoreEntries);

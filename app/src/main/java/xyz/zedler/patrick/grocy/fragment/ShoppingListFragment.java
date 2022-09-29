@@ -427,8 +427,7 @@ public class ShoppingListFragment extends BaseFragment implements
           showMessage(activity.getString(R.string.error_undefined));
           return true;
         }
-        SortUtil
-            .sortShoppingListItemsByName(requireContext(), listItems, productNamesHashMap, true);
+        SortUtil.sortShoppingListItemsByName(listItems, productNamesHashMap, true);
         int[] array = new int[listItems.size()];
         for (int i = 0; i < array.length; i++) {
           array[i] = listItems.get(i).getId();
@@ -463,8 +462,7 @@ public class ShoppingListFragment extends BaseFragment implements
           showMessage(activity.getString(R.string.error_no_done_items));
           return true;
         }
-        SortUtil
-            .sortShoppingListItemsByName(requireContext(), doneItems, productNamesHashMap, true);
+        SortUtil.sortShoppingListItemsByName(doneItems, productNamesHashMap, true);
         int[] array = new int[doneItems.size()];
         for (int i = 0; i < array.length; i++) {
           array[i] = doneItems.get(i).getId();

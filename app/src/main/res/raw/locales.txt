@@ -42,7 +42,7 @@ pl
 pl.demo.grocy.info
 hazelnutfox, Moarc, smigima, micwoj92, smiglo
 
-pt_PT
+pt-PT
 pt-pt.demo.grocy.info
 zedascouves, JST
 
@@ -62,10 +62,10 @@ uk
 en.demo.grocy.info
 NazimUa, rrader
 
-zh_CN
+zh-CN
 zh-cn.demo.grocy.info
 alei643, LuLuX
 
-zh_TW
+zh-TW
 zh-tw.demo.grocy.info
 Stillu, knfu, zobuwei, alexli1205, LuLuX

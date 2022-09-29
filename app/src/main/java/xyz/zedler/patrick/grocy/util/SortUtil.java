@@ -19,13 +19,13 @@
 
 package xyz.zedler.patrick.grocy.util;
 
-import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,13 +62,11 @@ public class SortUtil {
     ));
   }
 
-  public static void sortStockItemsByName(
-      Context context, List<StockItem> stockItems, boolean ascending
-  ) {
+  public static void sortStockItemsByName(List<StockItem> stockItems, boolean ascending) {
     if (stockItems == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(stockItems, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getProduct().getName().toLowerCase(),
         (ascending ? item2 : item1).getProduct().getName().toLowerCase())
@@ -118,13 +116,12 @@ public class SortUtil {
   }
 
   public static void sortStockEntriesByName(
-      Context context, List<StockEntry> stockEntries,
-      HashMap<Integer, Product> productHashMap, boolean ascending
+      List<StockEntry> stockEntries, HashMap<Integer, Product> productHashMap, boolean ascending
   ) {
     if (stockEntries == null || productHashMap == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(stockEntries, (entry1, entry2) -> {
       int productId1 = (ascending ? entry1 : entry2).getProductId();
       int productId2 = (ascending ? entry2 : entry1).getProductId();
@@ -161,18 +158,15 @@ public class SortUtil {
       return;
     }
     Collections.sort(
-        stockLocations,
-        (item1, item2) -> item1.getLocationName().toLowerCase().compareTo(
-            item2.getLocationName().toLowerCase()
-        )
+        stockLocations, Comparator.comparing(item -> item.getLocationName().toLowerCase())
     );
   }
 
-  public static void sortTasksByName(Context context, List<Task> tasks, boolean ascending) {
+  public static void sortTasksByName(List<Task> tasks, boolean ascending) {
     if (tasks == null || tasks.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(tasks, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
@@ -202,14 +196,12 @@ public class SortUtil {
   }
 
   public static void sortTaskCategoriesByName(
-      Context context,
-      ArrayList<TaskCategory> taskCategories,
-      boolean ascending
+      ArrayList<TaskCategory> taskCategories, boolean ascending
   ) {
     if (taskCategories == null || taskCategories.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(taskCategories, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
@@ -217,8 +209,7 @@ public class SortUtil {
   }
 
   public static void sortChoreEntriesByNextExecution(
-      List<ChoreEntry> choreEntries,
-      boolean ascending
+      List<ChoreEntry> choreEntries, boolean ascending
   ) {
     if (choreEntries == null || choreEntries.isEmpty()) {
       return;
@@ -246,41 +237,33 @@ public class SortUtil {
     );
   }
 
-  public static void sortChoreEntriesByName(
-      Context context,
-      ArrayList<ChoreEntry> choreEntries,
-      boolean ascending
-  ) {
+  public static void sortChoreEntriesByName(ArrayList<ChoreEntry> choreEntries, boolean ascending) {
     if (choreEntries == null || choreEntries.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(choreEntries, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getChoreName().toLowerCase(),
         (ascending ? item2 : item1).getChoreName().toLowerCase()
     ));
   }
 
-  public static void sortUsersByName(
-      Context context,
-      ArrayList<User> users,
-      boolean ascending
-  ) {
+  public static void sortUsersByName(ArrayList<User> users, boolean ascending) {
     if (users == null || users.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(users, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getDisplayName().toLowerCase(),
         (ascending ? item2 : item1).getDisplayName().toLowerCase()
     ));
   }
 
-  public static void sortStringsByName(Context context, List<String> strings, boolean ascending) {
+  public static void sortStringsByName(List<String> strings, boolean ascending) {
     if (strings == null || strings.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(strings, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).toLowerCase(),
         (ascending ? item2 : item1).toLowerCase()
@@ -306,38 +289,32 @@ public class SortUtil {
     });
   }
 
-  public static void sortLocationsByName(
-      Context context, List<Location> locations, boolean ascending
-  ) {
+  public static void sortLocationsByName(List<Location> locations, boolean ascending) {
     if (locations == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(locations, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
     ));
   }
 
-  public static void sortStoresByName(Context context, List<Store> stores, boolean ascending) {
+  public static void sortStoresByName(List<Store> stores, boolean ascending) {
     if (stores == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(stores, (item1, item2) -> Collator.getInstance(locale).compare(
             (ascending ? item1 : item2).getName().toLowerCase(),
             (ascending ? item2 : item1).getName().toLowerCase()));
   }
 
-  public static void sortProductGroupsByName(
-      Context context,
-      List<ProductGroup> productGroups,
-      boolean ascending
-  ) {
+  public static void sortProductGroupsByName(List<ProductGroup> productGroups, boolean ascending) {
     if (productGroups == null || productGroups.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(productGroups, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getName().toLowerCase(),
         (ascending ? item2 : item1).getName().toLowerCase()
@@ -345,14 +322,12 @@ public class SortUtil {
   }
 
   public static void sortQuantityUnitsByName(
-      Context context,
-      ArrayList<QuantityUnit> quantityUnits,
-      boolean ascending
+      ArrayList<QuantityUnit> quantityUnits, boolean ascending
   ) {
     if (quantityUnits == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(quantityUnits, (item1, item2) -> Collator.getInstance(locale).compare(
             (ascending ? item1 : item2).getName().toLowerCase(),
             (ascending ? item2 : item1).getName().toLowerCase()
@@ -360,7 +335,6 @@ public class SortUtil {
   }
 
   public static void sortShoppingListItemsByName(
-      Context context,
       List<ShoppingListItem> shoppingListItems,
       HashMap<Integer, String> productNamesHashMap,
       boolean ascending
@@ -368,7 +342,7 @@ public class SortUtil {
     if (shoppingListItems == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     ArrayList<ShoppingListItem> itemsWithoutProduct = new ArrayList<>();
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
       if (!shoppingListItem.hasProduct()) {
@@ -413,11 +387,11 @@ public class SortUtil {
     shoppingListItems.addAll(itemsWithoutProduct);
   }
 
-  public static void sortUsersByName(Context context, List<User> users, boolean ascending) {
+  public static void sortUsersByName(List<User> users, boolean ascending) {
     if (users == null || users.isEmpty()) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(users, (item1, item2) -> Collator.getInstance(locale).compare(
         (ascending ? item1 : item2).getUserName().toLowerCase(),
         (ascending ? item2 : item1).getUserName().toLowerCase()
@@ -428,8 +402,7 @@ public class SortUtil {
     if (languages == null) {
       return;
     }
-    Collections.sort(languages, (item1, item2) -> item1.getName().toLowerCase()
-        .compareTo(item2.getName().toLowerCase()));
+    Collections.sort(languages, Comparator.comparing(item -> item.getName().toLowerCase()));
   }
 
   @RequiresApi(api = Build.VERSION_CODES.N_MR1)
@@ -451,21 +424,20 @@ public class SortUtil {
     return sorted;
   }
 
-  public static void sortRecipesByName(Context context, List<Recipe> recipes, boolean ascending) {
+  public static void sortRecipesByName(List<Recipe> recipes, boolean ascending) {
     if (recipes == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
+    Locale locale = LocaleUtil.getLocale();
     Collections.sort(recipes, (item1, item2) -> Collator.getInstance(locale).compare(
             (ascending ? item1 : item2).getName().toLowerCase(),
             (ascending ? item2 : item1).getName().toLowerCase()));
   }
 
-  public static void sortRecipesByCalories(Context context, List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, boolean ascending) {
+  public static void sortRecipesByCalories(List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, boolean ascending) {
     if (recipes == null || recipeFulfillments == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
     Collections.sort(recipes, (recipe1, recipe2) -> {
       RecipeFulfillment recipeFulfillment1 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe1.getId());
       RecipeFulfillment recipeFulfillment2 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe2.getId());
@@ -477,11 +449,10 @@ public class SortUtil {
     });
   }
 
-  public static void sortRecipesByDueScore(Context context, List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, boolean ascending) {
+  public static void sortRecipesByDueScore(List<Recipe> recipes, List<RecipeFulfillment> recipeFulfillments, boolean ascending) {
     if (recipes == null || recipeFulfillments == null) {
       return;
     }
-    Locale locale = LocaleUtil.getUserLocale(context);
     Collections.sort(recipes, (recipe1, recipe2) -> {
       RecipeFulfillment recipeFulfillment1 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe1.getId());
       RecipeFulfillment recipeFulfillment2 = RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe2.getId());

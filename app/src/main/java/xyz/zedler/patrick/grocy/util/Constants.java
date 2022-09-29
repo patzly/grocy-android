@@ -122,7 +122,6 @@ public final class Constants {
 
       public final static String THEME = "app_theme"; // theme identifier is already used
       public final static String DARK_MODE = "theme";
-      public final static String LANGUAGE = "language";
       public static final String USE_SLIDING = "use_sliding_transition";
     }
 
@@ -220,7 +219,6 @@ public final class Constants {
 
       public final static String THEME = "";
       public final static int DARK_MODE = SettingsViewModel.DARK_MODE_SYSTEM;
-      public final static String LANGUAGE = null;
       public static final boolean USE_SLIDING = false;
     }
 

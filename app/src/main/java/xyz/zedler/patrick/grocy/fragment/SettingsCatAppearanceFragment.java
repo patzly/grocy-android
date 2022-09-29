@@ -34,12 +34,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatAppearanceBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LanguagesBottomSheet;
-import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
@@ -136,26 +134,10 @@ public class SettingsCatAppearanceFragment extends BaseFragment {
     }, 300);
   }
 
-  @Override
-  public void setLanguage(Language language) {
-    Locale locale = language != null
-        ? LocaleUtil.getLocaleFromCode(language.getCode())
-        : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
-    binding.textLanguage.setText(
-        language != null
-            ? locale.getDisplayName()
-            : getString(R.string.setting_language_system, locale.getDisplayName())
-    );
-  }
-
   public String getLanguage() {
-    String code = viewModel.getLanguage();
-    Locale locale = code != null
-        ? LocaleUtil.getLocaleFromCode(code)
-        : LocaleUtil.getNearestSupportedLocale(activity, LocaleUtil.getDeviceLocale());
-    return code != null
-        ? locale.getDisplayName()
-        : getString(R.string.setting_language_system, locale.getDisplayName());
+    return LocaleUtil.followsSystem()
+        ? getString(R.string.setting_language_system)
+        : LocaleUtil.getLocaleName();
   }
 
   public void showLanguageSelection() {

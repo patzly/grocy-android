@@ -71,7 +71,7 @@ public class ProductGroupsBottomSheet extends BaseBottomSheetDialogFragment
     assert productGroupsArg != null;
     productGroups = new ArrayList<>(productGroupsArg);
 
-    SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
+    SortUtil.sortProductGroupsByName(productGroups, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       productGroups.add(
           0,

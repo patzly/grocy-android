@@ -305,7 +305,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       return;
     }
 
-    Locale locale = LocaleUtil.getUserLocale(this.getApplication().getApplicationContext());
+    Locale locale = LocaleUtil.getLocale();
 
     Collections.sort(objects, (item1, item2) -> {
       String name1 = ObjectUtil.getObjectName(sortAscending ? item1 : item2, entity);

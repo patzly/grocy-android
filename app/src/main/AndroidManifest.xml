@@ -34,14 +34,18 @@
   </queries>
 
   <application
-    android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
-    android:supportsRtl="true"
+    android:icon="@mipmap/ic_launcher"
     android:theme="@style/Theme.GrocyM3"
+    android:supportsRtl="true"
+    android:enableOnBackInvokedCallback="true"
     android:hardwareAccelerated="true"
+    android:localeConfig="@xml/locales_config"
+    android:allowBackup="true"
+    android:fullBackupContent="@xml/backup_rules_full"
+    android:dataExtractionRules="@xml/backup_rules_extract"
     android:networkSecurityConfig="@xml/network_security_configuration"
-    tools:ignore="UnusedAttribute">
+    tools:targetApi="33">
 
     <activity
       android:name=".activity.SplashActivity"
@@ -71,6 +75,15 @@
       </intent-filter>
 
     </activity>
+
+    <service
+      android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+      android:enabled="false"
+      android:exported="false">
+      <meta-data
+        android:name="autoStoreLocales"
+        android:value="true" />
+    </service>
 
     <receiver
       android:name=".notification.DueSoonNotificationReceiver"

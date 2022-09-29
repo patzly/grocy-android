@@ -112,7 +112,7 @@ public class ShoppingListItemAdapter extends
       String groupingMode
   ) {
     if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
-      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
       addBottomNotes(
           context,
@@ -140,10 +140,10 @@ public class ShoppingListItemAdapter extends
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(shoppingListItemsGroupedHashMap.keySet());
-    SortUtil.sortStringsByName(context, groupsSorted, true);
+    SortUtil.sortStringsByName(groupsSorted, true);
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      SortUtil.sortShoppingListItemsByName(context, ungroupedItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(ungroupedItems, productNamesHashMap, true);
       groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
@@ -152,7 +152,7 @@ public class ShoppingListItemAdapter extends
       GroupHeader groupHeader = new GroupHeader(group);
       groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
-      SortUtil.sortShoppingListItemsByName(context, itemsFromGroup, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(itemsFromGroup, productNamesHashMap, true);
       groupedListItems.addAll(itemsFromGroup);
     }
     addBottomNotes(

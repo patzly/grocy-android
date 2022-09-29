@@ -282,7 +282,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
               new TypeToken<ArrayList<QuantityUnit>>() {
               }.getType()
           );
-          SortUtil.sortQuantityUnitsByName(requireContext(), quantityUnits, true);
+          SortUtil.sortQuantityUnitsByName(quantityUnits, true);
           quantityUnitNames = getQuantityUnitNames();
 
           binding.swipeMasterQuantityUnit.setRefreshing(false);

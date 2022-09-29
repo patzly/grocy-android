@@ -173,7 +173,7 @@ public class StockEntryAdapter extends
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(stockEntriesGroupedHashMap.keySet());
-    SortUtil.sortStringsByName(context, groupsSorted, true);
+    SortUtil.sortStringsByName(groupsSorted, true);
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
       sortStockEntries(context, ungroupedItems, productHashMap, sortMode, sortAscending);
@@ -207,12 +207,7 @@ public class StockEntryAdapter extends
     if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
       SortUtil.sortStockEntriesByDueDate(stockEntries, sortAscending);
     } else {
-      SortUtil.sortStockEntriesByName(
-          context,
-          stockEntries,
-          productHashMap,
-          sortAscending
-      );
+      SortUtil.sortStockEntriesByName(stockEntries, productHashMap, sortAscending);
     }
   }
 

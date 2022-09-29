@@ -19,21 +19,22 @@
 
 plugins {
     id 'com.android.application'
+    id 'androidx.navigation.safeargs'
 }
 
-apply plugin: "androidx.navigation.safeargs"
-
 android {
+    namespace 'xyz.zedler.patrick.grocy'
     compileSdkVersion 33
-
-    lint {
-        abortOnError false
-        disable 'MissingTranslation'
-    }
+    buildToolsVersion '33.0.0'
 
     buildFeatures {
         viewBinding true
         dataBinding true
+    }
+
+    lint {
+        abortOnError false
+        disable 'MissingTranslation'
     }
 
     defaultConfig {
@@ -42,6 +43,8 @@ android {
         targetSdkVersion 33
         versionCode 42
         versionName "2.3.0"
+        resConfigs 'cs', 'de', 'en', 'es', 'fr', 'hu', 'it', 'iw', 'nb', 'nl', 'pl', 'pt-rPT', 'ru',
+                'sk', 'sv', 'uk', 'zh-rCN', 'zh-rTW'
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -69,18 +72,22 @@ android {
             debuggable false
         }
     }
+
+    bundle {
+        storeArchive {
+            enable true
+        }
+    }
     
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility 11
         targetCompatibility 11
     }
-    buildToolsVersion '33.0.0'
-    namespace 'xyz.zedler.patrick.grocy'
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'

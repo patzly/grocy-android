@@ -267,7 +267,7 @@ public class MasterProductGroupFragment extends BaseFragment {
               new TypeToken<ArrayList<ProductGroup>>() {
               }.getType()
           );
-          SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
+          SortUtil.sortProductGroupsByName(productGroups, true);
           productGroupNames = getProductGroupNames();
 
           binding.swipeMasterProductGroup.setRefreshing(false);

@@ -71,7 +71,7 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     assert locationsArg != null;
     locations = new ArrayList<>(locationsArg);
 
-    SortUtil.sortLocationsByName(requireContext(), locations, true);
+    SortUtil.sortLocationsByName(locations, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       locations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
     }

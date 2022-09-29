@@ -19,9 +19,10 @@
 
 package xyz.zedler.patrick.grocy.model;
 
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 
-public class Language {
+public class Language implements Comparable<Language> {
 
   private final String code;
   private final String demoDomain;
@@ -33,7 +34,8 @@ public class Language {
     code = parts[0];
     demoDomain = parts[1];
     translators = parts[2];
-    name = LocaleUtil.getLocaleFromCode(code).getDisplayName(LocaleUtil.getDeviceLocale());
+    Locale locale = LocaleUtil.getLocaleFromCode(code);
+    name = locale.getDisplayName(locale);
   }
 
   public String getCode() {
@@ -50,5 +52,10 @@ public class Language {
 
   public String getName() {
     return name;
+  }
+
+  @Override
+  public int compareTo(Language other) {
+    return name.toLowerCase().compareTo(other.getName().toLowerCase());
   }
 }

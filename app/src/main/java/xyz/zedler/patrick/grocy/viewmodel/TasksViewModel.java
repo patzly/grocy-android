@@ -262,7 +262,7 @@ public class TasksViewModel extends BaseViewModel {
     if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
       SortUtil.sortTasksByDueDate(filteredTasks, sortAscending);
     } else {
-      SortUtil.sortTasksByName(getApplication(), filteredTasks, sortAscending);
+      SortUtil.sortTasksByName(filteredTasks, sortAscending);
     }
 
     filteredTasksLive.setValue(filteredTasks);

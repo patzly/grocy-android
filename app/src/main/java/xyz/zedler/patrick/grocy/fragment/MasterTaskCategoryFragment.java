@@ -261,7 +261,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
               new TypeToken<ArrayList<TaskCategory>>() {
               }.getType()
           );
-          SortUtil.sortTaskCategoriesByName(requireContext(), taskCategories, true);
+          SortUtil.sortTaskCategoriesByName(taskCategories, true);
           taskCategoryNames = getTaskCategoryNames();
 
           binding.swipe.setRefreshing(false);

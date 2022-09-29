@@ -203,13 +203,6 @@ public class SettingsViewModel extends BaseViewModel {
     sharedPrefs.edit().putInt(APPEARANCE.DARK_MODE, theme).apply();
   }
 
-  public String getLanguage() {
-    return sharedPrefs.getString(
-        Constants.SETTINGS.APPEARANCE.LANGUAGE,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
-    );
-  }
-
   public void showLoadingTimeoutBottomSheet() {
     Bundle bundle = new Bundle();
     bundle.putInt(Constants.ARGUMENT.NUMBER, getLoadingTimeout());
@@ -564,11 +557,7 @@ public class SettingsViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
     dlHelper.getProductGroups(
         productGroups -> {
-          SortUtil.sortProductGroupsByName(
-              getApplication().getApplicationContext(),
-              productGroups,
-              true
-          );
+          SortUtil.sortProductGroupsByName(productGroups, true);
           this.productGroups = productGroups;
           ProductGroup productGroup = ProductGroup.getFromId(productGroups, groupId);
           presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()

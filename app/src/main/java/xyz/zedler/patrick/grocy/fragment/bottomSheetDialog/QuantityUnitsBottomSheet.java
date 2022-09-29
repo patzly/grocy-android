@@ -71,7 +71,7 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
     assert qUsArg != null;
     quantityUnits = new ArrayList<>(qUsArg);
 
-    SortUtil.sortQuantityUnitsByName(requireContext(), quantityUnits, true);
+    SortUtil.sortQuantityUnitsByName(quantityUnits, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       quantityUnits.add(
           0,

@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowLanguageBinding;
 import xyz.zedler.patrick.grocy.model.Language;
-import xyz.zedler.patrick.grocy.util.LocaleUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHolder> {
 
@@ -42,9 +40,9 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
   private final LanguageAdapterListener listener;
   private final HashMap<String, Language> languageHashMap;
 
-  public LanguageAdapter(List<Language> languages,
-      String selectedCode,
-      LanguageAdapterListener listener) {
+  public LanguageAdapter(
+      List<Language> languages, String selectedCode, LanguageAdapterListener listener
+  ) {
     this.languages = languages;
     this.selectedCode = selectedCode;
     this.listener = listener;
@@ -74,34 +72,15 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
     );
   }
 
-  @SuppressLint("ClickableViewAccessibility")
   @Override
-  public void onBindViewHolder(
-      @NonNull final LanguageAdapter.ViewHolder holder,
-      int position
-  ) {
+  public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    holder.binding.linearLanguageContainer.setBackground(
+        ViewUtil.getRippleBgListItemSurface(holder.binding.getRoot().getContext())
+    );
+
     if (position == 0) {
-      Locale localeSystem = LocaleUtil.getNearestSupportedLocale(
-          languageHashMap, LocaleUtil.getDeviceLocale()
-      );
-      Language language = languageHashMap.get(localeSystem.toString());
-      if (language == null) {
-        language = languageHashMap.get(localeSystem.getLanguage());
-      }
-
-      String translators = language != null
-          ? language.getTranslators()
-          : holder.binding.getRoot().getContext().getString(
-              R.string.setting_language_not_available
-          );
-
-      holder.binding.textLanguageName.setText(
-          holder.binding.textLanguageName.getContext().getString(
-              R.string.setting_language_system,
-              localeSystem.getDisplayName(localeSystem)
-          )
-      );
-      holder.binding.textLanguageTranslators.setText(translators);
+      holder.binding.textLanguageName.setText(R.string.setting_language_system);
+      holder.binding.textLanguageTranslators.setText(R.string.setting_language_not_available);
 
       holder.binding.imageLanguageSelected.setVisibility(
           selectedCode != null ? View.INVISIBLE : View.VISIBLE

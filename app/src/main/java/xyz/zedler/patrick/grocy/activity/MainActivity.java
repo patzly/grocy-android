@@ -33,7 +33,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -110,6 +109,7 @@ import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
+import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
   private MainRepository repository;
   private ClickUtil clickUtil;
   private NetUtil netUtil;
+  private Locale locale;
   private NavController navController;
   private BroadcastReceiver networkReceiver;
   private BottomAppBarRefreshScrollBehavior scrollBehaviorOld;
@@ -167,39 +168,17 @@ public class MainActivity extends AppCompatActivity {
     }
     AppCompatDelegate.setDefaultNightMode(modeNight);
 
-    // LANGUAGE
+    // APPLY CONFIG TO RESOURCES
 
-    Locale userLocale = LocaleUtil.getUserLocale(this);
-    Locale.setDefault(userLocale);
     // base
     Resources resBase = getBaseContext().getResources();
     Configuration configBase = resBase.getConfiguration();
-    configBase.setLocale(userLocale);
     configBase.uiMode = uiMode;
     resBase.updateConfiguration(configBase, resBase.getDisplayMetrics());
     // app
     Resources resApp = getApplicationContext().getResources();
     Configuration configApp = resApp.getConfiguration();
-    configApp.setLocale(userLocale);
     resApp.updateConfiguration(configApp, getResources().getDisplayMetrics());
-    // set localized demo instance
-    String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
-    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
-            && !serverUrl.contains("test-")) {
-      List<Language> languages = LocaleUtil.getLanguages(this);
-      String demoDomain = null;
-      for (Language language : languages) {
-        if (language.getCode().equals(userLocale.getLanguage())) {
-          demoDomain = language.getDemoDomain();
-        }
-      }
-      if (demoDomain != null && !serverUrl.contains(demoDomain)) {
-        serverUrl = serverUrl.replaceAll(
-            "[a-z]+-?[a-z]*\\.demo\\.grocy\\.info", demoDomain
-        );
-        sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, serverUrl).apply();
-      }
-    }
 
     switch (sharedPrefs.getString(SETTINGS.APPEARANCE.THEME, SETTINGS_DEFAULT.APPEARANCE.THEME)) {
       case THEME.RED:
@@ -247,6 +226,32 @@ public class MainActivity extends AppCompatActivity {
     hapticUtil = new HapticUtil(this);
     clickUtil = new ClickUtil();
     netUtil = new NetUtil(this);
+
+    // LANGUAGE
+
+    locale = LocaleUtil.getLocale();
+
+    // refresh shortcut language
+    ShortcutUtil.refreshShortcuts(this);
+
+    // set localized demo instance
+    String serverUrl = sharedPrefs.getString(Constants.PREF.SERVER_URL, null);
+    if (serverUrl != null && serverUrl.contains("demo.grocy.info")
+        && !serverUrl.contains("test-")) {
+      List<Language> languages = LocaleUtil.getLanguages(this);
+      String demoDomain = null;
+      for (Language language : languages) {
+        if (language.getCode().equals(locale.getLanguage())) {
+          demoDomain = language.getDemoDomain();
+        }
+      }
+      if (demoDomain != null && !serverUrl.contains(demoDomain)) {
+        serverUrl = serverUrl.replaceAll(
+            "[a-z]+-?[a-z]*\\.demo\\.grocy\\.info", demoDomain
+        );
+        sharedPrefs.edit().putString(Constants.PREF.SERVER_URL, serverUrl).apply();
+      }
+    }
 
     // COLOR
 
@@ -389,9 +394,6 @@ public class MainActivity extends AppCompatActivity {
       super.attachBaseContext(base);
     } else {
       SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(base);
-      // Language
-      Locale userLocale = LocaleUtil.getUserLocale(base);
-      Locale.setDefault(userLocale);
       // Night mode
       int modeNight = sharedPrefs.getInt(
           SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
@@ -409,19 +411,10 @@ public class MainActivity extends AppCompatActivity {
       // Apply config to resources
       Resources resources = base.getResources();
       Configuration config = resources.getConfiguration();
-      config.setLocale(userLocale);
       config.uiMode = uiMode;
       resources.updateConfiguration(config, resources.getDisplayMetrics());
       super.attachBaseContext(base.createConfigurationContext(config));
     }
-  }
-
-  @Override
-  public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-    if (!runAsSuperClass && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
-      overrideConfiguration.setLocale(LocaleUtil.getUserLocale(this));
-    }
-    super.applyOverrideConfiguration(overrideConfiguration);
   }
 
   public void updateStartDestination() {
@@ -676,6 +669,10 @@ public class MainActivity extends AppCompatActivity {
         new String[]{"New:", "Improved:", "Fixed:"}
     );
     showBottomSheet(new TextBottomSheet(), bundle);
+  }
+
+  public Locale getLocale() {
+    return locale;
   }
 
   public SharedPreferences getSharedPrefs() {
