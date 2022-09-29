@@ -1057,7 +1057,7 @@
   <string name="setting_language_info">Remerciement à tous les traducteurs volontaires de Transifex !\nVisitez le projet sur GitHub pour rendre Grocy Android disponible dans votre langue.</string>
   <string name="setting_language_system">Suivre le système</string>
   <string name="setting_language_not_available">Anglais si la traduction n\'est pas disponible</string>
-  <string name="setting_transition">Utiliser une transition glissante entre les pages de paramètres</string>
+  <string name="setting_transition">Utiliser une transition de glissement entre les pages de paramètres</string>
   <string name="setting_transition_description">Au lieu d\'un fondu</string>
   <string name="setting_open_food_facts">Utilisez Open Food Facts</string>
   <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
