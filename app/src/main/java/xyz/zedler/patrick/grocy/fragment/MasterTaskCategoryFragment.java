@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterTaskCategoryBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;

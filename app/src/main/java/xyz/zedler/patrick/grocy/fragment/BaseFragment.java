@@ -60,7 +60,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 @SuppressWarnings("EmptyMethod")

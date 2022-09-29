@@ -37,23 +37,16 @@ import java.util.List;
 
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatOptional;
 import xyz.zedler.patrick.grocy.model.FormDataRecipeEditIngredientList;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.model.ProductBarcode;
-import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
-import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
-import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class RecipeEditIngredientListViewModel extends BaseViewModel {
 

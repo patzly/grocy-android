@@ -52,9 +52,9 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheetDialog
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.StockItem;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class DueSoonCheckWorker extends Worker {

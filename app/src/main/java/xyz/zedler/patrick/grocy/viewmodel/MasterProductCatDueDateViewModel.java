@@ -31,7 +31,7 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class MasterProductCatDueDateViewModel extends BaseViewModel {
 

@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class PrefsUtil {
 

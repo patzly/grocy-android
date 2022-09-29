@@ -36,8 +36,8 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class RequestQueueSingleton {
 

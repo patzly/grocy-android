@@ -30,6 +30,7 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;

@@ -29,8 +29,8 @@ import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.FAB;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.FAB;
 
 public class EditorHtmlFragment extends BaseFragment {
 

@@ -25,7 +25,7 @@ import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 
 public class FilterChipLiveDataRecipesExtraField extends FilterChipLiveData {
 

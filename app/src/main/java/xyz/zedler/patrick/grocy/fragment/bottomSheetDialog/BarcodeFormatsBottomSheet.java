@@ -38,9 +38,9 @@ import java.util.Set;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetBarcodeFormatsBinding;
-import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.BarcodeFormats;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class BarcodeFormatsBottomSheet extends BaseBottomSheetDialogFragment {
 

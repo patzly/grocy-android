@@ -34,9 +34,9 @@ import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 

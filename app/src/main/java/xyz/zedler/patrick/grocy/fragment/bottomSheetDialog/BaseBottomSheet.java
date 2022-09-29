@@ -42,7 +42,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.net.URLEncoder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 /**
  * This is an extended BottomSheetDialogFragment class. The one overridden method fixes the weird

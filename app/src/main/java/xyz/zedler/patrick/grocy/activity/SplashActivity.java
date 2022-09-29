@@ -39,11 +39,11 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.color.DynamicColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.Constants.THEME;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SplashActivity extends MainActivity {

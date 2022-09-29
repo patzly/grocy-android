@@ -26,8 +26,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
 

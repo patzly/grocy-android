@@ -17,7 +17,7 @@
  * Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
  */
 
-package xyz.zedler.patrick.grocy.util;
+package xyz.zedler.patrick.grocy;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import java.util.Arrays;

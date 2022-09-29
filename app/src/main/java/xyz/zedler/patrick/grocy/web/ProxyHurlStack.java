@@ -27,8 +27,8 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.net.URL;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class ProxyHurlStack extends HurlStack {
 

@@ -32,7 +32,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShoppingListClearBinding;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class ShoppingListClearBottomSheet extends BaseBottomSheetDialogFragment {
 

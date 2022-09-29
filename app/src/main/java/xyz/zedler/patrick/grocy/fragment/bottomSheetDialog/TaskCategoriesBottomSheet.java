@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.adapter.TaskCategoryAdapter.TaskCategoryAdapterL
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment

@@ -27,8 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.Constants.DATE;
+import xyz.zedler.patrick.grocy.Constants.DATE;
 
 public class DateUtil {
 
