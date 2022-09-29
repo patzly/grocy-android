@@ -228,12 +228,6 @@ public class FormDataRecipeEditIngredientEdit {
   }
 
   public boolean isAmountValid() {
-    if (amountLive.getValue() != null && amountLive.getValue().isEmpty()) {
-      if (amountLive.getValue() != null) {
-        clearForm();
-        return false;
-      }
-    }
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
       amountErrorLive.setValue(R.string.error_invalid_base_servings);
       return false;
@@ -298,13 +292,13 @@ public class FormDataRecipeEditIngredientEdit {
     productNameLive.setValue(null);
     productNameErrorLive.setValue(null);
     barcodeLive.setValue(null);
-    onlyCheckSingleUnitInStockLive.setValue(null);
+    onlyCheckSingleUnitInStockLive.setValue(false);
     amountLive.setValue(null);
     amountErrorLive.setValue(null);
     quantityUnitLive.setValue(null);
     quantityUnitLabelLive.setValue(getString(R.string.subtitle_none_selected));
     variableAmountLive.setValue(null);
-    notCheckStockFulfillmentLive.setValue(null);
+    notCheckStockFulfillmentLive.setValue(false);
     ingredientGroupLive.setValue(null);
     noteLive.setValue(null);
     priceFactorLive.setValue(null);
