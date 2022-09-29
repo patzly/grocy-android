@@ -56,9 +56,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
 
   @Override
   public View onCreateView(
-      @NonNull LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
   ) {
     binding = FragmentSettingsCatBehaviorBinding.inflate(inflater, container, false);
     return binding.getRoot();

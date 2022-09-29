@@ -19,10 +19,10 @@
 
 package xyz.zedler.patrick.grocy.util;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public final class Constants {
 
@@ -121,7 +121,7 @@ public final class Constants {
     public final static class APPEARANCE {
 
       public final static String THEME = "app_theme"; // theme identifier is already used
-      public final static String DARK_MODE = "theme";
+      public final static String DARK_MODE = "dark_mode";
       public static final String USE_SLIDING = "use_sliding_transition";
     }
 
@@ -218,7 +218,7 @@ public final class Constants {
     public final static class APPEARANCE {
 
       public final static String THEME = "";
-      public final static int DARK_MODE = SettingsViewModel.DARK_MODE_SYSTEM;
+      public final static int DARK_MODE = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
       public static final boolean USE_SLIDING = false;
     }
 
@@ -438,6 +438,7 @@ public final class Constants {
     public final static String RECIPE_POSITIONS = "recipe_positions";
     public final static String RUN_AS_SUPER_CLASS = "run_as_super_class";
     public final static String INSTANCE_STATE = "instance_state";
+    public final static String SCROLL_POSITION = "scroll_position";
   }
 
   public final static class FAB {

@@ -111,7 +111,6 @@ import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -192,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
         break;
       case THEME.GREEN:
         setTheme(R.style.Theme_Grocy_Green);
+        break;
+      case THEME.TURQUOISE:
+        setTheme(R.style.Theme_Grocy_Turquoise);
         break;
       case THEME.TEAL:
         setTheme(R.style.Theme_Grocy_Teal);
@@ -400,10 +402,10 @@ public class MainActivity extends AppCompatActivity {
       );
       int uiMode = base.getResources().getConfiguration().uiMode;
       switch (modeNight) {
-        case SettingsViewModel.DARK_MODE_NO:
+        case AppCompatDelegate.MODE_NIGHT_NO:
           uiMode = Configuration.UI_MODE_NIGHT_NO;
           break;
-        case SettingsViewModel.DARK_MODE_YES:
+        case AppCompatDelegate.MODE_NIGHT_YES:
           uiMode = Configuration.UI_MODE_NIGHT_YES;
           break;
       }

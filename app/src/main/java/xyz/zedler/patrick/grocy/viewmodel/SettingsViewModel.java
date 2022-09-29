@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
@@ -64,10 +63,6 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class SettingsViewModel extends BaseViewModel {
-
-  public static final int DARK_MODE_SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-  public static final int DARK_MODE_NO = AppCompatDelegate.MODE_NIGHT_NO;
-  public static final int DARK_MODE_YES = AppCompatDelegate.MODE_NIGHT_YES;
 
   private static final String TAG = SettingsViewModel.class.getSimpleName();
   private final SharedPreferences sharedPrefs;
