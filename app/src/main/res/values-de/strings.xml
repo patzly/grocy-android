@@ -1000,16 +1000,13 @@
 
   <string name="setting_theme">Thema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">System folgen</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Dunkel</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Hell</string>
   <string name="setting_language">Sprache</string>
   <string name="setting_language_description">Sprache auswählen</string>
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
-  <string name="setting_language_system">Systemvorgabe: %1$s</string>
-  <string name="setting_language_not_available">Nicht verfügbar</string>
+  <string name="setting_language_system">System folgen</string>
   <string name="setting_open_food_facts">Open Food Facts und Open Beauty Facts benutzen</string>
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
   <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
