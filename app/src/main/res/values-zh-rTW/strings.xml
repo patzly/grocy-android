@@ -916,16 +916,13 @@
 
   <string name="setting_theme">主題</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">與系統相同</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">深色</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">淺色</string>
   <string name="setting_language">語言</string>
   <string name="setting_language_description">選擇語言</string>
   <string name="setting_language_info">感謝Transifex上所有的翻譯志願者!\n請至我們的GitHub瞭解如何讓Grocy Android支援您的語言</string>
-  <string name="setting_language_system">系統預設:%1$s</string>
-  <string name="setting_language_not_available">不可用</string>
+  <string name="setting_language_system">與系統相同</string>
   <string name="setting_open_food_facts">使用\"Open Food Facts\"和\"Open Beauty Facts\"</string>
   <string name="setting_open_food_facts_description">由條碼獲得資訊</string>
   <string name="setting_choose_barcode_scanner">選擇條碼掃描器</string>
