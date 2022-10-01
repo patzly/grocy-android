@@ -178,7 +178,7 @@ public class SplashActivity extends MainActivity {
     int modeNight = sharedPrefs.getInt(
         SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
     );
-    int uiMode = getResources().getConfiguration().uiMode;
+    int uiMode = base.getResources().getConfiguration().uiMode;
     switch (modeNight) {
       case AppCompatDelegate.MODE_NIGHT_NO:
         uiMode = Configuration.UI_MODE_NIGHT_NO;
