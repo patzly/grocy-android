@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BottomScrollBehavior {
 
-  private static final String TAG = "BottomScrollBehavior";
+  private static final String TAG = BottomScrollBehavior.class.getSimpleName();
   private static final boolean DEBUG = false;
 
   private static final int STATE_SCROLLED_DOWN = 1;
@@ -338,7 +338,7 @@ public class BottomScrollBehavior {
                 }
               }, 1);
             }
-            if (dy < topScrollLimit && provideTopScroll) {
+            if (scrollAbsoluteY < topScrollLimit && provideTopScroll) {
               if (fabTopScroll.isOrWillBeShown()) {
                 fabTopScroll.hide();
               }
