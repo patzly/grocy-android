@@ -179,7 +179,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
   private void setUpThemeSelection() {
     boolean hasDynamic = DynamicColors.isDynamicColorAvailable();
     ViewGroup container = binding.linearOtherThemeContainer;
-    int colorsCount = 8;
+    int colorsCount = 7;
     for (int i = hasDynamic ? -1 : 0; i <= colorsCount; i++) {
       String name;
       int resId;
@@ -235,9 +235,6 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
                 ? android.R.color.system_accent1_700
                 : android.R.color.system_accent1_100
         );
-      } else if (i == colorsCount) {
-        // Amoled theme selection card
-        color = UiUtil.isDarkModeActive(activity) ? 0x484848 : 0xe3e3e3;
       } else {
         color = ResUtil.getColorAttr(
             new ContextThemeWrapper(activity, resId), R.attr.colorPrimaryContainer
