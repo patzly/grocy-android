@@ -26,7 +26,7 @@
   android:minHeight="48dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
+  android:background="@drawable/ripple_list_item_swipeable"
   android:padding="16dp"
   android:gravity="center_vertical">
 
@@ -39,7 +39,7 @@
 
     <TextView
       android:id="@+id/text_name"
-      style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+      style="@style/Widget.Grocy.TextView.ListItem.Title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
@@ -53,8 +53,7 @@
       android:layout_marginTop="1dp"
       android:layout_marginStart="6dp"
       android:visibility="gone"
-      android:background="@drawable/shape_circle"
-      android:backgroundTint="@color/retro_blue_fg" />
+      android:background="@drawable/shape_circle" />
 
   </LinearLayout>
 
@@ -68,7 +67,7 @@
   <LinearLayout
     android:id="@+id/linear_days"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     android:layout_marginStart="10dp">
 
@@ -77,7 +76,8 @@
       android:layout_height="3dp"
       android:layout_gravity="center_vertical"
       android:layout_marginEnd="10dp"
-      android:backgroundTint="@color/on_background_secondary"
+      android:backgroundTint="?attr/colorOnBackground"
+      android:alpha="0.61"
       android:background="@drawable/shape_circle" />
 
     <TextView
@@ -85,6 +85,7 @@
       style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
       android:singleLine="true" />
 
   </LinearLayout>
@@ -110,7 +111,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="end"
-      android:textSize="11sp"
+      android:textAppearance="@style/TextAppearance.Grocy.BodySmall"
       android:visibility="gone"/>
 
   </LinearLayout>
