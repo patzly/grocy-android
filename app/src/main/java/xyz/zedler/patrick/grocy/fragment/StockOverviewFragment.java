@@ -80,10 +80,7 @@ public class StockOverviewFragment extends BaseFragment implements
   ) {
     binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this,
-        binding.containerScanner,
-        this,
-        R.color.primary
+        this, binding.containerScanner, this, R.color.primary
     );
     return binding.getRoot();
   }
@@ -106,8 +103,7 @@ public class StockOverviewFragment extends BaseFragment implements
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    StockOverviewFragmentArgs args = StockOverviewFragmentArgs
-        .fromBundle(requireArguments());
+    StockOverviewFragmentArgs args = StockOverviewFragmentArgs.fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new StockOverviewViewModel
         .StockOverviewViewModelFactory(activity.getApplication(), args)
     ).get(StockOverviewViewModel.class);

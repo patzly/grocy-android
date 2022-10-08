@@ -341,6 +341,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
+    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {

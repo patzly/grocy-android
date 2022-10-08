@@ -207,7 +207,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
         binding.recyclerListSelection.getPaddingLeft(),
         binding.recyclerListSelection.getPaddingTop(),
         binding.recyclerListSelection.getPaddingRight(),
-        binding.recyclerListSelection.getPaddingBottom() + bottom
+        UiUtil.dpToPx(activity, 8) + bottom
     );
   }
 

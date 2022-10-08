@@ -21,11 +21,9 @@
 
   <dimen name="max_content_width">640dp</dimen>
 
+  <dimen name="global_scroll_bottom_padding">144dp</dimen>
+
   <dimen name="login_margin">32dp</dimen>
   <dimen name="main_side_margin">16dp</dimen>
-
-  <dimen name="tooltip_corner_radius">8dp</dimen>
-  <dimen name="tooltip_horizontal_padding">12dp</dimen>
-  <dimen name="tooltip_vertical_padding">8dp</dimen>
 
 </resources>

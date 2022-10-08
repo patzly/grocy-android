@@ -26,7 +26,7 @@
   android:minHeight="64dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
+  android:background="@drawable/ripple_list_item_swipeable"
   android:padding="16dp"
   android:gravity="center_vertical"
   android:weightSum="1">

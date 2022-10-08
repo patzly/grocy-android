@@ -1,4 +1,4 @@
-## 3.0.0:
+## 3.0.0
 
 - New: Material You redesign with dynamic colors for Android 12 and later
 - New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)

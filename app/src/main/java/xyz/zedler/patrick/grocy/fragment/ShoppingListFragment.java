@@ -25,7 +25,6 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -38,12 +37,16 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.ShoppingPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListClearBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListItemBottomSheet;
@@ -58,8 +61,6 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -80,6 +81,7 @@ public class ShoppingListFragment extends BaseFragment implements
   private FragmentShoppingListBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private PluralUtil pluralUtil;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -101,8 +103,6 @@ public class ShoppingListFragment extends BaseFragment implements
     }
     if (binding != null) {
       binding.recycler.animate().cancel();
-      binding.buttonShoppingListLists.animate().cancel();
-      binding.textShoppingListTitle.animate().cancel();
       binding.recycler.setAdapter(null);
       binding = null;
     }
@@ -117,6 +117,15 @@ public class ShoppingListFragment extends BaseFragment implements
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipeShoppingList);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+    binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
@@ -258,13 +267,12 @@ public class ShoppingListFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
-        && savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         !viewModel.isOffline(),
         viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
@@ -274,7 +282,8 @@ public class ShoppingListFragment extends BaseFragment implements
         R.drawable.ic_round_add_anim,
         R.string.action_add,
         Constants.FAB.TAG.ADD,
-        animated,
+        ShoppingListFragmentArgs.fromBundle(requireArguments()).getAnimateStart()
+            && savedInstanceState == null,
         this::addItem
     );
   }
@@ -296,30 +305,11 @@ public class ShoppingListFragment extends BaseFragment implements
     if (shoppingList == null) {
       return;
     }
-    changeAppBarTitle(
-        binding.textShoppingListTitle,
-        binding.buttonShoppingListLists,
-        shoppingList
-    );
-  }
-
-  // TODO: change View type of buttonLists to MaterialButton when ActionButtons are replaced
-  public static void changeAppBarTitle(
-      TextView textTitle,
-      View buttonLists,
-      ShoppingList shoppingList
-  ) {
     // change app bar title to shopping list name
-    if (textTitle.getText().toString().equals(shoppingList.getName())) {
+    if (Objects.equals(binding.toolbar.getTitle(), shoppingList.getName())) {
       return;
     }
-    textTitle.animate().alpha(0).withEndAction(() -> {
-      textTitle.setText(shoppingList.getName());
-      textTitle.animate().alpha(1).setDuration(150).start();
-    }).setDuration(150).start();
-    buttonLists.animate().alpha(0).withEndAction(
-        () -> buttonLists.animate().alpha(1).setDuration(150).start()
-    ).setDuration(150).start();
+    binding.toolbar.setTitle(shoppingList.getName());
   }
 
   @Override
@@ -549,12 +539,13 @@ public class ShoppingListFragment extends BaseFragment implements
           getBottomMenuClickListener()
       );
     }
+    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {
     if (isFeatureMultipleListsDisabled()) {
       binding.buttonShoppingListLists.setVisibility(View.GONE);
-      binding.textShoppingListTitle.setOnClickListener(null);
+      binding.toolbar.setOnClickListener(null);
     }
   }
 

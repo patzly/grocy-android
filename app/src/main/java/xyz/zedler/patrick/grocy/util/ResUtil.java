@@ -30,6 +30,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import androidx.annotation.AttrRes;
@@ -133,6 +134,18 @@ public class ResUtil {
     item.getIcon().setTintList(
         ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
     );
+  }
+
+  public static void tintMenuItemIcons(Context context, Menu menu) {
+    for (int i = 0; i < menu.size(); i++) {
+      MenuItem item = menu.getItem(i);
+      if (item == null || item.getIcon() == null) {
+        return;
+      }
+      item.getIcon().setTintList(
+          ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
+      );
+    }
   }
 
   public static Bitmap getBitmapFromDrawable(Context context, @DrawableRes int resId) {

@@ -131,7 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="16dp"
-            android:paddingBottom="80dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             app:transitionTypeChanging="@{true}">
