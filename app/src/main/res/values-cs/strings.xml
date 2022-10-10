@@ -1095,6 +1095,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="hint_key">Platný API klíč</string>
 
   <string name="setting_theme">Vzhled</string>
+  <string name="setting_theme_description">Zkuste jiný vzhled</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Podle OS</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Tmavý</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -1103,6 +1106,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_language_description">Vyberte jazyk</string>
   <string name="setting_language_info">Děkujeme všem dobrovolným překladatelům na Transifexu!\nPodívejte se, prosím, na náš GitHub, kde najdete, jak můžete pomoci s překladem grocy i do vašeho jazyka</string>
   <string name="setting_language_system">Podle operačního systému</string>
+  <string name="setting_language_not_available">Angličtina – pokud není k dispozici překlad</string>
+  <string name="setting_transition">Použít lineární přechod mezi stránkami nastavení</string>
+  <string name="setting_transition_description">Místo prolnutí</string>
   <string name="setting_open_food_facts">Použij Open Food Facts</string>
   <string name="setting_open_food_facts_description">Získat informace z čárových kódů</string>
   <string name="setting_choose_barcode_scanner">Vyberte skener čárových kódů</string>
