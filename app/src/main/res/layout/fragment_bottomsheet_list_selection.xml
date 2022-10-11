@@ -89,7 +89,6 @@
 
     <ProgressBar
       android:id="@+id/progress_confirmation"
-      android:layout_width="match_parent"
       style="@style/Widget.Grocy.ProgressBar.Horizontal.Red"
       android:layout_gravity="bottom"
       android:indeterminate="false"

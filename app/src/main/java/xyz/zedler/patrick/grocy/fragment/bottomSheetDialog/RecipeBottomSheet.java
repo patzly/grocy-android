@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,13 +31,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
@@ -51,6 +52,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.color.ColorRoles;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -73,6 +75,7 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -282,6 +285,11 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   public void updateDataWithServings() {
     TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
 
+    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
+    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
+    ColorRoles colorRed = ResUtil.getHarmonizedRoles(activity, R.color.red);
+
     // REQUIREMENTS FULFILLED
     if (recipeFulfillment.isNeedFulfilled()) {
       setMenuButtonState(binding.menuItemConsume, true);
@@ -293,7 +301,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           null
       ));
       binding.imageFulfillment.setColorFilter(
-          ContextCompat.getColor(requireContext(), R.color.retro_green_fg),
+          colorGreen.getAccent(),
           android.graphics.PorterDuff.Mode.SRC_IN
       );
       binding.missing.setVisibility(View.GONE);
@@ -307,7 +315,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           null
       ));
       binding.imageFulfillment.setColorFilter(
-          ContextCompat.getColor(requireContext(), R.color.retro_yellow_fg),
+          colorYellow.getAccent(),
           android.graphics.PorterDuff.Mode.SRC_IN
       );
       binding.missing.setText(
@@ -327,7 +335,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           null
       ));
       binding.imageFulfillment.setColorFilter(
-          ContextCompat.getColor(requireContext(), R.color.retro_red_fg),
+          colorRed.getAccent(),
           android.graphics.PorterDuff.Mode.SRC_IN
       );
       binding.missing.setText(
@@ -339,9 +347,34 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     }
 
     binding.name.setText(recipe.getName());
-    binding.textInputServings.setHelperText(getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings())));
-    binding.calories.setText(getString(R.string.property_energy), NumUtil.trim(recipeFulfillment.getCalories()), getString(R.string.subtitle_per_serving));
-    binding.costs.setText(getString(R.string.property_costs), NumUtil.trimPrice(recipeFulfillment.getCosts()) + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""));
+    binding.textInputServings.setHelperText(
+        getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings()))
+    );
+    binding.textInputServings.setHelperTextColor(ColorStateList.valueOf(colorBlue.getAccent()));
+    assert binding.textInputServings.getEditText() != null;
+    binding.textInputServings.getEditText().setOnEditorActionListener((v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_DONE) {
+        saveDesiredServings();
+      }
+      return false;
+    });
+    binding.calories.setText(
+        getString(R.string.property_energy),
+        NumUtil.trim(recipeFulfillment.getCalories()),
+        getString(R.string.subtitle_per_serving)
+    );
+    boolean isPriceTrackingEnabled = sharedPrefs.getBoolean(
+        Constants.PREF.FEATURE_STOCK_PRICE_TRACKING, true
+    );
+    if (isPriceTrackingEnabled) {
+      binding.costs.setText(
+          getString(R.string.property_costs),
+          NumUtil.trimPrice(recipeFulfillment.getCosts()) + " "
+              + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
+      );
+    } else {
+      binding.costs.setVisibility(View.GONE);
+    }
 
     if (recipePositions.isEmpty()) {
       binding.ingredientContainer.setVisibility(View.GONE);
@@ -548,6 +581,16 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private void setMenuButtonState(Button button, boolean enabled) {
     button.setEnabled(enabled);
     button.setAlpha(enabled ? 1f : 0.5f);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

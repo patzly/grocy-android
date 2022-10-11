@@ -106,7 +106,7 @@ public class RecipeFulfillment implements Parcelable {
     dest.writeString(productNamesCommaSeparated);
   }
 
-  public static final Creator<RecipeFulfillment> CREATOR = new Creator<RecipeFulfillment>() {
+  public static final Creator<RecipeFulfillment> CREATOR = new Creator<>() {
 
     @Override
     public RecipeFulfillment createFromParcel(Parcel in) {
