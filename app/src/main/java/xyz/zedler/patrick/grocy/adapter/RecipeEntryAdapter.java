@@ -26,6 +26,8 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -249,12 +251,12 @@ public class RecipeEntryAdapter extends
     if (recipe.getPictureFileName() != null) {
       holder.binding.picture.layout(0, 0, 0, 0);
 
-      Glide
-          .with(context)
-          .load(new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders))
-          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
+      Glide.with(context)
+          .load(
+              new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders)
+          ).transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
-          .listener(new RequestListener<Drawable>() {
+          .listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(
                 @Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model,
@@ -262,6 +264,7 @@ public class RecipeEntryAdapter extends
               holder.binding.picture.setVisibility(View.GONE);
               return false;
             }
+
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
@@ -272,6 +275,11 @@ public class RecipeEntryAdapter extends
           .into(holder.binding.picture);
     } else {
       holder.binding.picture.setVisibility(View.GONE);
+      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+          0, LayoutParams.WRAP_CONTENT
+      );
+      layoutParams.weight = 4;
+      holder.binding.linearTextContainer.setLayoutParams(layoutParams);
     }
 
 

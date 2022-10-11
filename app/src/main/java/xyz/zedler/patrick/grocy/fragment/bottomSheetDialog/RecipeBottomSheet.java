@@ -73,6 +73,7 @@ import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
@@ -372,10 +373,13 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       }
     }
 
-    if (recipe.getDescription() == null || recipe.getDescription().trim().isEmpty()) {
+    CharSequence trimmedDescription = TextUtil.trimCharSequence(recipe.getDescription());
+    String description = trimmedDescription != null ? trimmedDescription.toString() : null;
+    if (description == null || description.isEmpty()) {
       binding.preparation.setVisibility(View.GONE);
     } else {
-      binding.preparation.setPreparationHtml(recipe.getDescription());
+      binding.preparation.setDialogTitle(R.string.property_preparation);
+      binding.preparation.setHtml(description);
     }
   }
 

@@ -240,7 +240,12 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     CharSequence trimmedDescription = TextUtil.trimCharSequence(product.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
-    binding.description.setDescription(description);
+    if (description == null || description.isEmpty()) {
+      binding.description.setVisibility(View.GONE);
+    } else {
+      binding.description.setDialogTitle(R.string.property_description);
+      binding.description.setHtml(description);
+    }
 
     // ACTIONS
 

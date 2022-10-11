@@ -37,35 +37,37 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.databinding.ViewProductDescriptionCardBinding;
+import xyz.zedler.patrick.grocy.databinding.ViewHtmlCardBinding;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
-public class ProductDescriptionCard extends LinearLayout {
+public class HtmlCardView extends LinearLayout {
 
-  private static final String TAG = ProductDescriptionCard.class.getSimpleName();
+  private static final String TAG = HtmlCardView.class.getSimpleName();
 
-  private ViewProductDescriptionCardBinding binding;
+  private ViewHtmlCardBinding binding;
   private Context context;
-  private String description;
+  private String html;
   private AlertDialog dialog;
+  private String title;
 
-  public ProductDescriptionCard(Context context) {
+  public HtmlCardView(Context context) {
     super(context);
     init(context);
   }
 
-  public ProductDescriptionCard(Context context, @Nullable AttributeSet attrs) {
+  public HtmlCardView(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     init(context);
   }
 
   private void init(Context context) {
     this.context = context;
-    binding = ViewProductDescriptionCardBinding.inflate(
+    binding = ViewHtmlCardBinding.inflate(
         LayoutInflater.from(context), this, true
     );
     setSaveEnabled(true);
@@ -80,8 +82,12 @@ public class ProductDescriptionCard extends LinearLayout {
     binding = null;
   }
 
+  public void setDialogTitle(@StringRes int titleResId) {
+    title = context.getString(titleResId);
+  }
+
   @SuppressLint("ClickableViewAccessibility")
-  public void setDescription(String html) {
+  public void setHtml(String html) {
     if (html != null) {
       html = html.replaceAll("<[/]?font[^>]*>", ""); // remove font
       html = html.replaceAll(
@@ -90,7 +96,7 @@ public class ProductDescriptionCard extends LinearLayout {
       html = html.replaceAll(
           "^[\\n\\r\\s]*<p[^>]*> *(<br ?/>)*</p[^>]*>", "" // trim empty paragraphs at start
       );
-      description = html;
+      this.html = html;
       binding.webview.getSettings().setJavaScriptEnabled(false);
       binding.webview.loadDataWithBaseURL(
           "file:///android_asset/",
@@ -115,7 +121,7 @@ public class ProductDescriptionCard extends LinearLayout {
                 int height = binding.webview.getMeasuredHeight();
                 int maxHeight = UiUtil.dpToPx(context, 80);
                 int padding = UiUtil.dpToPx(context, 8);
-                boolean isStartEndParagraph = description.matches("^<p>.*</p>$");
+                boolean isStartEndParagraph = HtmlCardView.this.html.matches("^<p>.*</p>$");
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, Math.min(height, maxHeight)
                 );
@@ -136,13 +142,13 @@ public class ProductDescriptionCard extends LinearLayout {
           }, 0);
         }
       });
-      binding.card.setOnClickListener(v -> showDescriptionDialog());
+      binding.card.setOnClickListener(v -> showHtmlDialog());
     } else {
       setVisibility(View.GONE);
     }
   }
 
-  public void showDescriptionDialog() {
+  public void showHtmlDialog() {
     FrameLayout frameLayout = new FrameLayout(context);
     frameLayout.setLayoutParams(
         new FrameLayout.LayoutParams(
@@ -155,7 +161,7 @@ public class ProductDescriptionCard extends LinearLayout {
     webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     webView.getSettings().setAllowFileAccess(false);
     webView.loadDataWithBaseURL(
-        "file:///android_asset/", getFormattedHtml(description, false),
+        "file:///android_asset/", getFormattedHtml(html, false),
         "text/html; charset=utf-8", "utf8", null
     );
     webView.setBackgroundColor(Color.TRANSPARENT);
@@ -173,7 +179,7 @@ public class ProductDescriptionCard extends LinearLayout {
     frameLayout.addView(webView);
 
     dialog = new MaterialAlertDialogBuilder(context)
-        .setTitle(R.string.property_description)
+        .setTitle(title)
         .setView(frameLayout)
         .setPositiveButton(R.string.action_close, (dialog, which) -> {})
         .create();
@@ -205,7 +211,7 @@ public class ProductDescriptionCard extends LinearLayout {
     SavedState savedState = (SavedState) state;
     super.onRestoreInstanceState(savedState.getSuperState());
     if (savedState.isDialogShown) {
-      new Handler(Looper.getMainLooper()).postDelayed(this::showDescriptionDialog, 1);
+      new Handler(Looper.getMainLooper()).postDelayed(this::showHtmlDialog, 1);
     }
   }
 

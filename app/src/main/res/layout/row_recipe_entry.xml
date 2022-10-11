@@ -34,6 +34,7 @@
   android:weightSum="4">
 
   <LinearLayout
+    android:id="@+id/linear_text_container"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -58,17 +59,15 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:weightSum="1"
       tools:ignore="UseCompoundDrawables">
 
       <TextView
         android:id="@+id/fulfilled"
         style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="false"
-        android:maxLines="2"
-        android:layout_weight="1"/>
+        android:maxLines="2" />
 
       <ImageView
         android:id="@+id/image_fulfillment"

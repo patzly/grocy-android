@@ -124,13 +124,13 @@
 
       </HorizontalScrollView>
 
-      <xyz.zedler.patrick.grocy.view.ProductDescriptionCard
+      <xyz.zedler.patrick.grocy.view.HtmlCardView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
       <LinearLayout
         android:id="@+id/linear_amount"

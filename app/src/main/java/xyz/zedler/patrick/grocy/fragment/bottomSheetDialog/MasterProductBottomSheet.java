@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.view.ListItem;
-import xyz.zedler.patrick.grocy.view.ProductDescriptionCard;
+import xyz.zedler.patrick.grocy.view.HtmlCardView;
 
 public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -61,7 +61,7 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
       itemQuStock,
       itemQuFactor,
       itemProductGroup;
-  private ProductDescriptionCard cardDescription;
+  private HtmlCardView cardDescription;
 
   @NonNull
   @Override
@@ -139,7 +139,7 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
     // DESCRIPTION
     CharSequence trimmedDescription = TextUtil.trimCharSequence(product.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
-    cardDescription.setDescription(description);
+    cardDescription.setHtml(description);
 
     // LOCATION
     if (location != null && isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
