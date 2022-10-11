@@ -156,6 +156,14 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
             viewModel.getFormData().getScannerVisibilityLive()
     );
 
+    viewModel.getActionEditLive().observe(getViewLifecycleOwner(), isEdit -> activity.updateBottomAppBar(
+        true,
+        isEdit
+            ? R.menu.menu_recipe_edit_edit
+            : R.menu.menu_recipe_edit_create,
+        this::onMenuItemClick
+    ));
+
     String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
     if (action != null) {
       removeForThisDestination(Constants.ARGUMENT.ACTION);
