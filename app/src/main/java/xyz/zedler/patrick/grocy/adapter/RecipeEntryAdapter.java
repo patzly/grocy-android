@@ -26,10 +26,9 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.ColorRes;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,6 +44,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -53,6 +53,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
@@ -143,20 +144,25 @@ public class RecipeEntryAdapter extends
     holder.binding.title.setText(recipe.getName());
 
     if (recipeFulfillment != null) {
+      Context context = holder.binding.getRoot().getContext();
+      ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
+      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+      ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+
       // DUE SCORE
       int due_score = recipeFulfillment.getDueScore();
-      @ColorRes int color;
+      @ColorInt int color;
 
       if (due_score == 0) {
-        color = R.color.retro_green_fg;
+        color = colorGreen.getAccent();
       }
       else if (due_score <= 10) {
-        color = R.color.retro_yellow_fg;
+        color = colorYellow.getAccent();
       }
       else {
-        color = R.color.retro_red_fg;
+        color = colorRed.getAccent();
       }
-      holder.binding.dueScore.setTextColor(ContextCompat.getColor(context, color));
+      holder.binding.dueScore.setTextColor(color);
 
       holder.binding.dueScore.setText(
               context.getString(
@@ -174,7 +180,7 @@ public class RecipeEntryAdapter extends
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
-            ContextCompat.getColor(context, R.color.retro_green_fg),
+            colorGreen.getAccent(),
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setVisibility(View.GONE);
@@ -186,7 +192,7 @@ public class RecipeEntryAdapter extends
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
-            ContextCompat.getColor(context, R.color.retro_yellow_fg),
+            colorYellow.getAccent(),
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setText(
@@ -204,7 +210,7 @@ public class RecipeEntryAdapter extends
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
-            ContextCompat.getColor(context, R.color.retro_red_fg),
+            colorRed.getAccent(),
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setText(

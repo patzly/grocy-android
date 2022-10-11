@@ -96,7 +96,9 @@ public class LoginRequestFragment extends BaseFragment {
     builder.setPopEnterAnim(R.anim.slide_from_start);
     builder.setPopExitAnim(R.anim.slide_to_end);
     builder.setPopUpTo(R.id.navigation_main, true);
-    navigate(findNavController().getGraph().getStartDestination(), builder.build());
+    activity.navigateFragment(
+        findNavController().getGraph().getStartDestinationId(), builder.build()
+    );
   }
 
   @Override

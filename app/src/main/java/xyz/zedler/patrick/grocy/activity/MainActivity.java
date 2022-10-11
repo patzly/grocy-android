@@ -33,6 +33,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,6 +64,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavInflater;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -83,6 +87,13 @@ import java.util.Objects;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import org.conscrypt.Conscrypt;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
@@ -96,13 +107,6 @@ import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NetUtil;
@@ -582,6 +586,38 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  // NAVIGATION
+
+  private NavOptions getNavOptionsFragmentFadeOrSlide(boolean slideVertically) {
+    boolean useSliding = getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
+    if (useSliding) {
+      if (slideVertically) {
+        return new NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_in_up)
+            .setPopExitAnim(R.anim.slide_out_down)
+            .setExitAnim(R.anim.slide_no)
+            .build();
+      } else {
+        return new NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_from_end)
+            .setPopExitAnim(R.anim.slide_to_end)
+            .setPopEnterAnim(R.anim.slide_from_start)
+            .setExitAnim(R.anim.slide_to_start)
+            .build();
+      }
+    } else {
+      return new NavOptions.Builder()
+          .setEnterAnim(R.anim.enter_end_fade)
+          .setExitAnim(R.anim.exit_start_fade)
+          .setPopEnterAnim(R.anim.enter_start_fade)
+          .setPopExitAnim(R.anim.exit_end_fade)
+          .build();
+    }
+  }
+
   public void navigate(NavDirections directions) {
     if (navController == null || directions == null) {
       Log.e(TAG, "navigate: controller or direction is null");
@@ -594,14 +630,95 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  public void navigate(NavDirections directions, @NonNull NavOptions navOptions) {
+    if (navController == null || directions == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(directions, navOptions);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
+  public void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
+    if (navController == null || directions == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(directions, navigatorExtras);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
   public void navigateUp() {
-    NavHostFragment navHostFragment = (NavHostFragment) fragmentManager
-        .findFragmentById(R.id.fragment_main_nav_host);
-    assert navHostFragment != null;
-    NavController navController = navHostFragment.getNavController();
+    if (navController == null) {
+      NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(
+          R.id.fragment_main_nav_host
+      );
+      assert navHostFragment != null;
+      navController = navHostFragment.getNavController();
+    }
     navController.navigateUp();
     binding.bottomAppBar.performShow();
     hideKeyboard();
+  }
+
+  public void navigateFragment(@IdRes int destination) {
+    navigateFragment(destination, (Bundle) null);
+  }
+
+  public void navigateFragment(@IdRes int destination, @Nullable Bundle arguments) {
+    if (navController == null ) {
+      Log.e(TAG, "navigateFragment: controller is null");
+      return;
+    }
+    try {
+      navController.navigate(
+          destination, arguments, getNavOptionsFragmentFadeOrSlide(true)
+      );
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigateFragment: ", e);
+    }
+  }
+
+  public void navigateFragment(NavDirections directions) {
+    if (navController == null || directions == null) {
+      Log.e(TAG, "navigate: controller or direction is null");
+      return;
+    }
+    try {
+      navController.navigate(directions, getNavOptionsFragmentFadeOrSlide(true));
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: " + directions, e);
+    }
+  }
+
+  public void navigateFragment(@IdRes int destination, @NonNull NavOptions navOptions) {
+    if (navController == null ) {
+      Log.e(TAG, "navigate: controller is null");
+      return;
+    }
+    try {
+      navController.navigate(destination, null, navOptions);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigate: ", e);
+    }
+  }
+
+  public void navigateDeepLink(@NonNull Uri uri, boolean slideVertically) {
+    if (navController == null ) {
+      Log.e(TAG, "navigateFragment: controller is null");
+      return;
+    }
+    try {
+      navController.navigate(uri, getNavOptionsFragmentFadeOrSlide(slideVertically));
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigateFragment: ", e);
+    }
   }
 
   public boolean isOnline() {

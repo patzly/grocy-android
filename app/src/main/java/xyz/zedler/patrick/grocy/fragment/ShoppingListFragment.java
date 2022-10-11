@@ -298,6 +298,9 @@ public class ShoppingListFragment extends BaseFragment implements
   @Override
   public void selectShoppingList(ShoppingList shoppingList) {
     viewModel.selectShoppingList(shoppingList);
+    if (binding != null) {
+      binding.recycler.scrollToPosition(0);
+    }
   }
 
   private void changeAppBarTitle(int selectedShoppingListId) {
@@ -322,9 +325,11 @@ public class ShoppingListFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    navigate(ShoppingListFragmentDirections
-        .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
-        .setShoppingListItem(shoppingListItem));
+    activity.navigateFragment(
+        ShoppingListFragmentDirections
+            .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.EDIT)
+            .setShoppingListItem(shoppingListItem)
+    );
   }
 
   @Override
@@ -337,9 +342,12 @@ public class ShoppingListFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    navigate(R.id.purchaseFragment, new PurchaseFragmentArgs.Builder()
-        .setShoppingListItems(new int[]{shoppingListItem.getId()})
-        .setCloseWhenFinished(true).build().toBundle());
+    activity.navigateFragment(
+        R.id.purchaseFragment,
+        new PurchaseFragmentArgs.Builder()
+            .setShoppingListItems(new int[]{shoppingListItem.getId()})
+            .setCloseWhenFinished(true).build().toBundle()
+    );
   }
 
   @Override
@@ -359,9 +367,11 @@ public class ShoppingListFragment extends BaseFragment implements
   }
 
   public void addItem() {
-    navigate(ShoppingListFragmentDirections
-        .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
-        .setSelectedShoppingListId(viewModel.getSelectedShoppingListId()));
+    activity.navigateFragment(
+        ShoppingListFragmentDirections
+            .actionShoppingListFragmentToShoppingListItemEditFragment(Constants.ACTION.CREATE)
+            .setSelectedShoppingListId(viewModel.getSelectedShoppingListId())
+    );
   }
 
   private void showNotesEditor() {
@@ -393,8 +403,9 @@ public class ShoppingListFragment extends BaseFragment implements
         setUpSearch();
         return true;
       } else if (item.getItemId() == R.id.action_shopping_mode) {
-        navigate(ShoppingListFragmentDirections
-            .actionShoppingListFragmentToShoppingModeFragment());
+        activity.navigateFragment(
+            ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingModeFragment()
+        );
         return true;
       } else if (item.getItemId() == R.id.action_add_missing) {
         ViewUtil.startIcon(item);
@@ -422,10 +433,12 @@ public class ShoppingListFragment extends BaseFragment implements
         for (int i = 0; i < array.length; i++) {
           array[i] = listItems.get(i).getId();
         }
-        navigate(R.id.purchaseFragment,
+        activity.navigateFragment(
+            R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
                 .setShoppingListItems(array)
-                .setCloseWhenFinished(true).build().toBundle());
+                .setCloseWhenFinished(true).build().toBundle()
+        );
         return true;
       } else if (item.getItemId() == R.id.action_purchase_done_items) {
         ArrayList<ShoppingListItem> shoppingListItemsSelected
@@ -457,14 +470,17 @@ public class ShoppingListFragment extends BaseFragment implements
         for (int i = 0; i < array.length; i++) {
           array[i] = doneItems.get(i).getId();
         }
-        navigate(R.id.purchaseFragment,
+        activity.navigateFragment(
+            R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
                 .setShoppingListItems(array)
-                .setCloseWhenFinished(true).build().toBundle());
+                .setCloseWhenFinished(true).build().toBundle()
+        );
         return true;
       } else if (item.getItemId() == R.id.action_shopping_mode) {
-        navigate(ShoppingListFragmentDirections
-            .actionShoppingListFragmentToShoppingModeFragment());
+        activity.navigateFragment(
+            ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingModeFragment()
+        );
         return true;
       } else if (item.getItemId() == R.id.action_edit_notes) {
         showNotesEditor();

@@ -286,6 +286,33 @@
     <item name="android:paddingTop">8dp</item>
   </style>
 
+  <style
+    name="Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+    parent="@style/Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="boxCornerRadiusTopStart">16dp</item>
+    <item name="boxCornerRadiusTopEnd">16dp</item>
+    <item name="errorIconDrawable">@drawable/ic_round_error</item>
+    <!--item name="boxBackgroundColor">@color/on_background_tertiary</item>
+    <item name="boxStrokeColor">@color/secondary</item>
+    <item name="hintTextColor">@color/secondary</item>
+    <item name="android:textColorHint">@color/on_background_secondary</item>
+    <item name="errorTextColor">@color/error</item>
+    <item name="errorTextAppearance">@style/TextAppearance.Grocy.Error</item>
+    <item name="errorIconTint">@color/error</item>
+    <item name="boxStrokeErrorColor">@color/error</item-->
+  </style>
+
+  <!-- PROGRESS BAR -->
+
+  <style
+    name="Widget.Grocy.ProgressBar.Horizontal.Red"
+    parent="@android:style/Widget.ProgressBar.Horizontal">
+    <item name="android:layout_height">4dp</item>
+    <item name="android:progressDrawable">@drawable/shape_progress_bar_confirm</item>
+  </style>
+
   <!-- Divider -->
 
   <style name="Widget.Grocy.Divider" parent="Widget.Material3.MaterialDivider">

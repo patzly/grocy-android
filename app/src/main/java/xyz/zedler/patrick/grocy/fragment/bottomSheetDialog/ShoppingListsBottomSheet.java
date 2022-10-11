@@ -137,8 +137,9 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
-        navigate(ShoppingListFragmentDirections
-            .actionShoppingListFragmentToShoppingListEditFragment());
+        activity.navigateFragment(
+            ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListEditFragment()
+        );
       });
     }
 

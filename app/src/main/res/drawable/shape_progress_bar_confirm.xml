@@ -22,11 +22,7 @@
 
   <item android:id="@android:id/background">
 
-    <shape android:tint="@color/retro_red_translucent">
-
-      <corners android:radius="4dp" />
-
-    </shape>
+    <shape android:tint="?attr/colorSurfaceVariant" />
 
   </item>
 
@@ -34,11 +30,7 @@
 
     <clip>
 
-      <shape android:tint="@color/retro_red">
-
-        <corners android:radius="4dp" />
-
-      </shape>
+      <shape android:tint="?attr/colorError" />
 
     </clip>
 

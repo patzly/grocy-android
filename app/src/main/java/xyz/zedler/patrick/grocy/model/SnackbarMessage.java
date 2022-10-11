@@ -23,9 +23,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SnackbarMessage extends Event {
@@ -57,11 +55,15 @@ public class SnackbarMessage extends Event {
     this.duration = String.valueOf(duration * 1000);
   }
 
+  @Deprecated // Use getSnackbar(View)
   public Snackbar getSnackbar(Context context, View view) {
+    return getSnackbar(view);
+  }
+
+  public Snackbar getSnackbar(View view) {
     Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
     if (actionText != null) {
       snackbar.setAction(actionText, action);
-      snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.retro_green_fg_invert));
     }
     if (NumUtil.isStringInt(duration)) {
       snackbar.setDuration(Integer.parseInt(duration));

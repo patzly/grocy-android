@@ -195,14 +195,14 @@ public class StoredPurchasesFragment extends BaseFragment
         }
         barcodeIds = arrayString.toString();
       }
-      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+      navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
               .setProductName(((PendingProduct) item).getName())
               .setPendingProductId(String.valueOf(((PendingProduct) item).getId()))
               .setPendingProductBarcodes(barcodeIds)
               .build().toBundle());
     } else if (item instanceof Product) {
-      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+      navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(ACTION.EDIT)
               .setProductId(String.valueOf(((Product) item).getId()))
               .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))

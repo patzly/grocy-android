@@ -122,6 +122,8 @@ public class StockOverviewFragment extends BaseFragment implements
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
 
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
+
     // APP BAR BEHAVIOR
 
     appBarBehavior = new AppBarBehavior(

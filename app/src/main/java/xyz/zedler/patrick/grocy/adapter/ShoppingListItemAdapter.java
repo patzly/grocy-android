@@ -325,8 +325,6 @@ public class ShoppingListItemAdapter extends
 
     Context context = binding.getRoot().getContext();
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
-    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
-    ColorRoles colorOrange = ResUtil.getHarmonizedRoles(context, R.color.orange);
 
     // NAME
 

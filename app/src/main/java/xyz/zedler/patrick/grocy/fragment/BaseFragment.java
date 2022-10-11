@@ -38,8 +38,6 @@ import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavDirections;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
 import java.net.URLEncoder;
@@ -60,7 +58,6 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 @SuppressWarnings("EmptyMethod")
@@ -330,106 +327,36 @@ public class BaseFragment extends Fragment {
     return NavHostFragment.findNavController(this);
   }
 
-  public void navigate(NavDirections directions, @NonNull Navigator.Extras navigatorExtras) {
-    findNavController().navigate(directions, navigatorExtras);
-  }
-
-  private NavOptions getNavOptionsFragmentFade() {
-    return new NavOptions.Builder()
-        .setEnterAnim(R.anim.enter_end_fade)
-        .setExitAnim(R.anim.exit_start_fade)
-        .setPopEnterAnim(R.anim.enter_start_fade)
-        .setPopExitAnim(R.anim.exit_end_fade)
-        .build();
-  }
-
   public void navigateUp() {
     activity.navigateUp();
   }
 
-  public void navigate(@IdRes int destination) {
-    navigate(destination, (Bundle) null);
-  }
-
-  void navigate(@IdRes int destination, Bundle arguments) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      NavOptions.Builder builder = new NavOptions.Builder();
-      builder.setEnterAnim(R.anim.slide_in_up)
-          .setPopExitAnim(R.anim.slide_out_down)
-          .setExitAnim(R.anim.slide_no);
-      findNavController().navigate(destination, arguments, builder.build());
-    } else {
-      findNavController().navigate(destination, arguments, getNavOptionsFragmentFade());
-    }
-  }
-
+  @Deprecated // Use activity.navigate(NavDirections);
   public void navigate(NavDirections directions) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      NavOptions.Builder builder = new NavOptions.Builder();
-      builder.setEnterAnim(R.anim.slide_in_up)
-          .setPopExitAnim(R.anim.slide_out_down)
-          .setExitAnim(R.anim.slide_no);
-      findNavController().navigate(directions, builder.build());
-    } else {
-      findNavController().navigate(directions, getNavOptionsFragmentFade());
-    }
+    activity.navigate(directions);
   }
 
-  public void navigate(@IdRes int destination, @NonNull NavOptions navOptions) {
-    findNavController().navigate(destination, null, navOptions);
+  @Deprecated // Use activity.navigateFragment(int);
+  public void navigate(@IdRes int destination) {
+    activity.navigateFragment(destination);
   }
 
+  @Deprecated // Use activity.navigateFragment(int, Bundle);
+  void navigate(@IdRes int destination, Bundle arguments) {
+    activity.navigateFragment(destination, arguments);
+  }
+
+  @Deprecated // Use activity.navigateDeepLink(Uri.parse(String), boolean);
   public void navigateDeepLink(@NonNull String uri) {
-    navigateDeepLink(Uri.parse(uri));
+    activity.navigateDeepLink(Uri.parse(uri), true);
   }
 
   public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    navigateDeepLink(getUriWithArgs(getString(uri), args));
+    activity.navigateDeepLink(getUriWithArgs(getString(uri), args), true);
   }
 
-  public void navigateDeepLinkSlideStartEnd(@StringRes int uri, @NonNull Bundle args) {
-    navigateDeepLinkSlideStartEnd(getUriWithArgs(getString(uri), args));
-  }
-
-  private void navigateDeepLink(@NonNull Uri uri) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      NavOptions.Builder builder = new NavOptions.Builder();
-      builder.setEnterAnim(R.anim.slide_in_up)
-          .setPopExitAnim(R.anim.slide_out_down)
-          .setExitAnim(R.anim.slide_no);
-      findNavController().navigate(uri, builder.build());
-    } else {
-      findNavController().navigate(uri, getNavOptionsFragmentFade());
-    }
-  }
-
-  private void navigateDeepLinkSlideStartEnd(@NonNull Uri uri) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      NavOptions.Builder builder = new NavOptions.Builder();
-      builder.setEnterAnim(R.anim.slide_from_end)
-          .setPopExitAnim(R.anim.slide_to_end)
-          .setPopEnterAnim(R.anim.slide_from_start)
-          .setExitAnim(R.anim.slide_to_start);
-      findNavController().navigate(uri, builder.build());
-    } else {
-      findNavController().navigate(uri, getNavOptionsFragmentFade());
-    }
+  public void navigateDeepLinkHorizontally(@StringRes int uri, @NonNull Bundle args) {
+    activity.navigateDeepLink(getUriWithArgs(getString(uri), args), false);
   }
 
   private Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
