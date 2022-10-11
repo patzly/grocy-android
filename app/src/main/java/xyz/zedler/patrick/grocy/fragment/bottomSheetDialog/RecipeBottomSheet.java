@@ -214,6 +214,10 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     servingsDesiredLive = new MutableLiveData<>(NumUtil.trim(recipe.getDesiredServings()));
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
 
+    servingsDesiredSaveEnabledLive.observe(
+        getViewLifecycleOwner(), value -> binding.textInputServings.setEndIconVisible(value)
+    );
+
     loadRecipePicture();
     setupMenuButtons();
     updateDataWithServings();
@@ -347,6 +351,12 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     }
 
     binding.name.setText(recipe.getName());
+
+    binding.textInputServings.setEndIconOnClickListener(v -> saveDesiredServings());
+    binding.textInputServings.setEndIconOnLongClickListener(v -> {
+      activity.showToastTextLong(R.string.action_apply_desired_servings, true);
+      return true;
+    });
     binding.textInputServings.setHelperText(
         getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings()))
     );

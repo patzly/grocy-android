@@ -233,8 +233,8 @@
               android:hint="@string/property_servings_desired"
               app:helperTextEnabled="true"
               app:helperText="Base servings: 1"
-              app:endIconMode="clear_text"
-              app:endIconOnClickListener="@{v -> bottomSheet.clearServingsFieldAndFocusIt()}">
+              app:endIconMode="custom"
+              app:endIconDrawable="@drawable/ic_round_check_circle">
 
               <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_servings"
@@ -264,18 +264,9 @@
             android:id="@+id/amount_less"
             style="@style/Widget.Grocy.Button.IconButton"
             android:layout_marginBottom="4dp"
+            android:layout_marginEnd="12dp"
             android:onClick="@{() -> bottomSheet.changeAmount(false)}"
             app:icon="@drawable/ic_round_expand_more" />
-
-          <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Grocy.Button.IconButton.Filled"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="4dp"
-            android:enabled="@{bottomSheet.servingsDesiredSaveEnabledLive}"
-            android:onClick="@{v -> bottomSheet.saveDesiredServings()}"
-            android:animateLayoutChanges="true"
-            app:icon="@drawable/ic_round_done"
-            app:longClickToastText="@{@string/action_apply_desired_servings}" />
 
         </LinearLayout>
 

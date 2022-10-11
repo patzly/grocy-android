@@ -34,6 +34,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -45,6 +46,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.MenuRes;
@@ -57,6 +61,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -719,6 +724,22 @@ public class MainActivity extends AppCompatActivity {
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
     }
+  }
+
+  public void showToastTextLong(@StringRes int resId, boolean showLong) {
+    Toast toast = Toast.makeText(
+        this, resId, showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT
+    );
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+      LinearLayout linearLayout = (LinearLayout) toast.getView();
+      if (linearLayout != null) {
+        TextView textView = (TextView) linearLayout.getChildAt(0);
+        if (textView != null) {
+          textView.setTypeface(ResourcesCompat.getFont(this, R.font.jost_book));
+        }
+      }
+    }
+    toast.show();
   }
 
   public boolean isOnline() {

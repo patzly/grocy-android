@@ -50,7 +50,7 @@ public class SplashActivity extends MainActivity {
 
   @Override
   public void onCreate(Bundle bundle) {
-    if (Build.VERSION.SDK_INT >= 31) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
       super.onCreate(bundle);
 
       getSplashScreen().setOnExitAnimationListener(view -> {
