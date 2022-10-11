@@ -29,4 +29,11 @@
     app:showAsAction="always"
     tools:ignore="AlwaysShowAction" />
 
+  <item
+    android:id="@+id/action_save_not_close"
+    android:title="@string/action_save_not_close"
+    android:icon="@drawable/ic_round_save_as"
+    app:showAsAction="always"
+    tools:ignore="AlwaysShowAction" />
+
 </menu>
