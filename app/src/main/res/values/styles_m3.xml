@@ -205,6 +205,14 @@
   </style>
 
   <style
+    name="Widget.Grocy.Button.IconButton.Filled"
+    parent="Widget.Material3.Button.IconButton.Filled">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="iconSize">24dp</item>
+  </style>
+
+  <style
     name="Widget.Grocy.Button.IconButton.Outlined"
     parent="Widget.Material3.Button.IconButton.Outlined">
     <item name="android:layout_width">wrap_content</item>
@@ -309,6 +317,7 @@
   <style
     name="Widget.Grocy.ProgressBar.Horizontal.Red"
     parent="@android:style/Widget.ProgressBar.Horizontal">
+    <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">4dp</item>
     <item name="android:progressDrawable">@drawable/shape_progress_bar_confirm</item>
   </style>
@@ -658,7 +667,7 @@
     <item name="android:textColor">@color/on_surface</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView">
+  <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView.BodyMedium">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:maxLines">2</item>
