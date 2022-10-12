@@ -111,7 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="16dp"
-            android:paddingBottom="90dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             app:transitionTypeChanging="@{true}">
@@ -295,7 +295,6 @@
                   android:id="@+id/auto_complete_product"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:inputType="text|textCapSentences|textNoSuggestions"
                   android:imeOptions="actionDone"
                   android:completionThreshold="1"
@@ -379,8 +378,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/property_ingredients"
-                  android:textColor="@color/on_background" />
+                  android:text="@string/property_ingredients" />
 
               </LinearLayout>
 
@@ -414,8 +412,7 @@
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/property_preparation"
-                  android:textColor="@color/on_background" />
+                  android:text="@string/property_preparation" />
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Description"

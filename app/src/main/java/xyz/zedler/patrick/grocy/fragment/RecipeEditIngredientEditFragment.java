@@ -33,6 +33,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -59,6 +60,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
   private RecipeEditIngredientEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -91,6 +93,15 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     binding.setFormData(viewModel.getFormData());
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     binding.categoryQuantityUnit.setOnClickListener(v -> {
       ArrayList<QuantityUnit> quantityUnits = viewModel.getQuantityUnits();
@@ -149,12 +160,8 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
-
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
@@ -166,7 +173,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        savedInstanceState == null,
         () -> {
           if (!viewModel.getFormData().isFormValid()) {
             clearInputFocus();
@@ -278,6 +285,9 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     viewModel.setOfflineLive(!isOnline);
     if (isOnline) {
       viewModel.downloadData();
+    }
+    if (systemBarBehavior != null) {
+      systemBarBehavior.refresh();
     }
   }
 

@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -38,6 +40,7 @@ import xyz.zedler.patrick.grocy.adapter.RecipeEditIngredientListEntryAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEditIngredientListEntryAdapter.RecipeEditIngredientListEntryAdapterListener;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditIngredientListBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -46,8 +49,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientListViewModel;
 
 public class RecipeEditIngredientListFragment extends BaseFragment
@@ -61,6 +62,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
   private SwipeBehavior swipeBehavior;
   private ClickUtil clickUtil;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -97,6 +99,14 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     binding.setViewModel(viewModel);
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
     clickUtil = new ClickUtil();
@@ -198,31 +208,29 @@ public class RecipeEditIngredientListFragment extends BaseFragment
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(true, R.menu.menu_empty, menuItem -> false);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.recycler);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
         R.string.action_add,
         Constants.FAB.TAG.ADD,
-        animated,
-        () -> navigate(RecipeEditIngredientListFragmentDirections
-          .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
-                  ACTION.CREATE,
-                  viewModel.getAction()
-          )
-          .setRecipe(viewModel.getRecipe())
+        savedInstanceState == null,
+        () -> activity.navigateFragment(RecipeEditIngredientListFragmentDirections
+            .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
+                ACTION.CREATE,
+                viewModel.getAction()
+            )
+            .setRecipe(viewModel.getRecipe())
         )
     );
   }
 
   @Override
   public void onItemRowClicked(RecipePosition recipePosition, int position) {
-    navigate(
+    activity.navigateFragment(
         RecipeEditIngredientListFragmentDirections
             .actionRecipeEditIngredientListFragmentToRecipeEditIngredientEditFragment(
                     ACTION.EDIT,
@@ -246,6 +254,9 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     viewModel.setOfflineLive(!isOnline);
     if (isOnline) {
       viewModel.downloadData();
+    }
+    if (systemBarBehavior != null) {
+      systemBarBehavior.refresh();
     }
   }
 

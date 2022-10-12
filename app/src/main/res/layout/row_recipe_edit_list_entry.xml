@@ -18,50 +18,39 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linear_recipe_ingredient_container"
-    android:orientation="horizontal"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/linear_recipe_ingredient_container"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:minHeight="48dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:background="@drawable/ripple_list_item_swipeable"
+  android:padding="16dp"
+  android:baselineAligned="false">
+
+  <TextView
+    android:id="@+id/title"
+    style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/bg_list_item"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="20dp"
-    android:gravity="center_vertical">
+    android:layout_gravity="center_vertical" />
 
-  <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_weight="1">
+  <TextView
+    android:id="@+id/quantity"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:singleLine="true" />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/Widget.Grocy.TextView.ListItem.Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical" />
-
-    <TextView
-        android:id="@+id/quantity"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true" />
-
-    <TextView
-      android:id="@+id/variable_amount"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true"
-      android:textSize="12sp"
-      android:text="@string/property_variable_amount"/>
-
-  </LinearLayout>
+  <TextView
+    android:id="@+id/variable_amount"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:singleLine="true"
+    android:textSize="12sp"
+    android:text="@string/property_variable_amount" />
 
 </LinearLayout>
