@@ -42,12 +42,11 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/primary">
+      android:layout_height="?attr/actionBarSize">
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -101,7 +100,7 @@
           android:focusable="true"
           tools:targetApi="o"
           android:onClick="@{() -> formData.toggleDisplayHelpLive()}"
-          android:visibility="gone">
+          android:visibility="visible">
 
           <ImageView
             android:layout_width="24dp"
@@ -122,8 +121,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 

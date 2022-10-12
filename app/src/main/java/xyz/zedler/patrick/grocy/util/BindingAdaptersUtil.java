@@ -30,7 +30,6 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -175,7 +174,7 @@ public class BindingAdaptersUtil {
   }
 
   @BindingAdapter("longClickToastText")
-  public static void setLongClickToastText(MaterialButton view, String text) {
+  public static void setLongClickToastText(View view, String text) {
     view.setOnLongClickListener(v -> {
       Toast.makeText(view.getContext(), text, Toast.LENGTH_SHORT).show();
       return true;

@@ -290,8 +290,10 @@ public class RecipesFragment extends BaseFragment implements
     if (showOfflineError()) {
       return;
     }
-    navigate(RecipesFragmentDirections
-            .actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT).setRecipe(recipe));
+    activity.navigateFragment(
+        RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.EDIT)
+            .setRecipe(recipe)
+    );
   }
 
   @Override

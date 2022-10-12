@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipeEditBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -82,8 +83,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     RecipeEditFragmentArgs args = RecipeEditFragmentArgs
         .fromBundle(requireArguments());
     viewModel = new ViewModelProvider(
-        this,
-        new RecipeEditViewModelFactory(activity.getApplication(), args)
+        this, new RecipeEditViewModelFactory(activity.getApplication(), args)
     ).get(RecipeEditViewModel.class);
     binding.setActivity(activity);
     binding.setViewModel(viewModel);
@@ -91,21 +91,37 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
+
     binding.ingredients.setOnClickListener(v -> {
       if (viewModel.isActionEdit()) {
-        navigate(RecipeEditFragmentDirections
+        activity.navigateFragment(
+            RecipeEditFragmentDirections
                 .actionRecipeEditFragmentToRecipeEditIngredientListFragment(viewModel.getAction())
-                .setRecipe(viewModel.getRecipe()));
+                .setRecipe(viewModel.getRecipe())
+        );
       } else {
         activity.showSnackbar(R.string.subtitle_recipe_not_on_server);
       }
     });
     binding.preparation.setOnClickListener(v -> {
       if (viewModel.getFormData().getPreparationLive().getValue() != null) {
-        navigate(RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
-            .setText(viewModel.getFormData().getPreparationLive().getValue()));
+        activity.navigateFragment(
+            RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2().setText(
+                viewModel.getFormData().getPreparationLive().getValue()
+            )
+        );
       } else {
-        navigate(RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2());
+        activity.navigateFragment(
+            RecipeEditFragmentDirections.actionRecipeEditFragmentToEditorHtmlFragment2()
+        );
       }
     });
     Object preparationEdited = getFromThisDestinationNow(ARGUMENT.DESCRIPTION);
@@ -184,12 +200,12 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
@@ -201,7 +217,7 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        savedInstanceState == null,
         () -> {
           if (!viewModel.getFormData().isNameValid()) {
             clearInputFocus();

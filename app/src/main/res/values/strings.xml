@@ -108,6 +108,8 @@
   <string name="action_purchase_all_items">Purchase all items</string>
   <string name="action_skip_entry">Skip entry</string>
   <string name="action_toggle_flash">Toggle flash</string>
+  <string name="action_edit_recipe">Edit recipe</string>
+  <string name="action_delete_recipe">Delete recipe</string>
   <string name="action_delete_shopping_list">Delete shopping list</string>
   <string name="action_create_key">Create key</string>
   <string name="action_login">Login</string>
@@ -539,6 +541,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">To location</string>
   <string name="title_recipe">Recipe</string>
+  <string name="title_preparation_mode">Preparation mode</string>
   <string name="title_total_price">Total price</string>
   <string name="title_unit_price">Unit price</string>
   <!-- %1$s is a quantity unit -->

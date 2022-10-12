@@ -137,7 +137,7 @@ public class RecipePositionAdapter extends
     holder.binding.title.setText(product != null ? product.getName() : context.getString(R.string.error_undefined));
 
     // NOTE
-    if (recipePosition.getNote() == null) {
+    if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()) {
       holder.binding.note.setVisibility(View.GONE);
     } else {
       holder.binding.note.setText(recipePosition.getNote());

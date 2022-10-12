@@ -59,6 +59,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -84,7 +85,6 @@ import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
@@ -96,6 +96,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private static final String DIALOG_SHOPPING_LIST_SHOWING = "dialog_shopping_list_showing";
   private static final String DIALOG_SHOPPING_LIST_NAMES = "dialog_shopping_list_names";
   private static final String DIALOG_SHOPPING_LIST_CHECKED = "dialog_shopping_list_checked";
+  private static final String DIALOG_DELETE_SHOWING = "dialog_delete_showing";
 
   private SharedPreferences sharedPrefs;
   private MainActivity activity;
@@ -103,7 +104,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private ViewUtil.TouchProgressBarUtil touchProgressBarUtil;
   private RecipesRepository recipesRepository;
   private DownloadHelper dlHelper;
-  private AlertDialog dialogConsume, dialogShoppingList;
+  private AlertDialog dialogConsume, dialogShoppingList, dialogDelete;
   private final HashMap<String, Boolean> dialogShoppingListMultiChoiceItems = new HashMap<>();
 
   private Recipe recipe;
@@ -152,6 +153,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       dialogConsume.dismiss();
     } else if (dialogShoppingList != null) {
       dialogShoppingList.dismiss();
+    } else if (dialogDelete != null) {
+      dialogDelete.dismiss();
     }
     if (touchProgressBarUtil != null) {
       touchProgressBarUtil.onDestroy();
@@ -221,9 +224,19 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     }
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
-      if (item.getItemId() == R.id.action_copy_recipe) {
+      if (item.getItemId() == R.id.action_preparation_mode) {
+        openPreparationMode();
+        return true;
+      } else if (item.getItemId() == R.id.action_edit_recipe) {
+        activity.getCurrentFragment().editRecipe(recipe);
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_copy_recipe) {
         activity.getCurrentFragment().copyRecipe(recipe.getId());
         dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_delete_recipe) {
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;
@@ -239,6 +252,12 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     loadRecipePicture();
     setupMenuButtons();
     updateDataWithServings();
+
+    ColorStateList colorSurface3 = ColorStateList.valueOf(
+        SurfaceColors.SURFACE_3.getColor(activity)
+    );
+    binding.chipConsume.setChipBackgroundColor(colorSurface3);
+    binding.chipShoppingList.setChipBackgroundColor(colorSurface3);
 
     if (savedInstanceState != null) {
       if (savedInstanceState.getBoolean(DIALOG_CONSUME_SHOWING)) {
@@ -256,6 +275,10 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         }
         new Handler(Looper.getMainLooper()).postDelayed(
             this::showShoppingListConfirmationDialog, 1
+        );
+      } else if (savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::showDeleteConfirmationDialog, 1
         );
       }
     }
@@ -276,6 +299,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         DIALOG_SHOPPING_LIST_CHECKED,
         toPrimitiveBooleanArray(dialogShoppingListMultiChoiceItems.values().toArray(new Boolean[0]))
     );
+    outState.putBoolean(DIALOG_DELETE_SHOWING, dialogDelete != null && dialogDelete.isShowing());
   }
 
   private void loadDataFromDatabase() {
@@ -353,8 +377,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     // REQUIREMENTS FULFILLED
     if (recipeFulfillment.isNeedFulfilled()) {
-      setMenuButtonState(binding.menuItemConsume, true);
-      setMenuButtonState(binding.menuItemShoppingList, false);
+      setMenuButtonState(binding.chipConsume, true);
+      setMenuButtonState(binding.chipShoppingList, false);
       binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -367,8 +391,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       );
       binding.missing.setVisibility(View.GONE);
     } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-      setMenuButtonState(binding.menuItemConsume, false);
-      setMenuButtonState(binding.menuItemShoppingList, false);
+      setMenuButtonState(binding.chipConsume, false);
+      setMenuButtonState(binding.chipShoppingList, false);
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -387,8 +411,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       );
       binding.missing.setVisibility(View.VISIBLE);
     } else {
-      setMenuButtonState(binding.menuItemConsume, false);
-      setMenuButtonState(binding.menuItemShoppingList, true);
+      setMenuButtonState(binding.chipConsume, false);
+      setMenuButtonState(binding.chipShoppingList, true);
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -584,27 +608,14 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   }
 
   private void setupMenuButtons() {
-    binding.menuItemConsume.setOnClickListener(v -> showConsumeConfirmationDialog());
+    binding.chipConsume.setOnClickListener(v -> showConsumeConfirmationDialog());
     // Hashmap with all missing products for the dialog (at first all should be checked)
     // global variable for alert dialog management
     dialogShoppingListMultiChoiceItems.clear();
     for (Product product : products) {
       dialogShoppingListMultiChoiceItems.put(product.getName(), true);
     }
-    binding.menuItemShoppingList.setOnClickListener(v -> showShoppingListConfirmationDialog());
-    binding.menuItemEdit.setOnClickListener(v -> {
-      activity.getCurrentFragment().editRecipe(recipe);
-      dismiss();
-    });
-    touchProgressBarUtil = new TouchProgressBarUtil(
-        binding.progressConfirmation,
-        binding.menuItemDelete,
-        2000,
-        object -> {
-          activity.getCurrentFragment().deleteRecipe(recipe.getId());
-          dismiss();
-        }
-    );
+    binding.chipShoppingList.setOnClickListener(v -> showShoppingListConfirmationDialog());
   }
 
   private void showConsumeConfirmationDialog() {
@@ -669,6 +680,24 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     dialogShoppingList = builder.create();
     dialogShoppingList.show();
+  }
+
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            getString(
+                R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()
+            )
+        ).setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+          performHapticClick();
+          activity.getCurrentFragment().deleteRecipe(recipe.getId());
+          dismiss();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
   }
 
   public void openPreparationMode() {
