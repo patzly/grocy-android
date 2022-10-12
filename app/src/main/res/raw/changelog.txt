@@ -14,6 +14,7 @@
 - Fixed: Crash when editing an ingredient of a recipe (#579)
 - Fixed: Allow negative keyboard input value (-1) for due dates when editing products (#576)
 - Fixed: Crash on shopping list item edit page when product contains deleted quantity units (#582)
+- Fixed: On shopping list item edit page the change of product prevented saving (#583)
 - Fixed: (not F-Droid) ML Kit scanner doesn't ask for contacts permission anymore
 
 ## 2.3.0

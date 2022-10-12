@@ -331,10 +331,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       formData.getQuantityUnitsFactorsLive().setValue(null);
     }
 
-    if (!isActionEdit) {
-      QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
-      formData.getQuantityUnitLive().setValue(purchase);
-    }
+    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    formData.getQuantityUnitLive().setValue(purchase);
 
     formData.isFormValid();
   }
