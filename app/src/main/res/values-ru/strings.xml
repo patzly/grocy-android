@@ -815,8 +815,6 @@
   <string name="property_opened">вскрыто</string>
   <string name="property_not_opened">не вскрыто</string>
   <string name="property_is_freezer">Морозильник</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Калорийность (кКал)</string>
   <string name="property_active">Активный</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Никогда не показывать в обзоре запасов</string>
@@ -972,24 +970,17 @@
 
   <string name="setting_theme">Тема</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Системная</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Тёмная</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Светлая</string>
   <string name="setting_language">Язык</string>
   <string name="setting_language_description">Выбрать язык</string>
   <string name="setting_language_info">Большое спасибо всем переводчикам-добровольцам Transifex!\nПосетите нас на GitHub, чтобы узнать, как вы можете помочь сделать Grocy Android доступным для вашего языка.</string>
-  <string name="setting_language_system">Системное значение по умолчанию: %1$s</string>
-  <string name="setting_language_not_available">Не доступно</string>
+  <string name="setting_language_system">Системная</string>
   <string name="setting_open_food_facts">Использовать Open Food Facts</string>
   <string name="setting_open_food_facts_description">Получать данные со штрихкодов</string>
   <string name="setting_choose_barcode_scanner">Выберите сканер штрихкода</string>
   <string name="setting_choose_barcode_scanner_description">Для сканирования штрихкода камерой</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">Обрезать видеопоток камеры в формат предварительного просмотра</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Запрещает сканеру обнаруживать штрихкоды за пределами предварительного просмотра; Может не работать на вашем устройстве!</string>
   <string name="setting_use_front_cam">Использовать фронтальную камеру</string>
   <string name="setting_use_front_cam_description">Для сканирования штрихкодов</string>
   <string name="setting_use_2d_scanner_format">Использовать 2D формат сканера штрихкодов</string>

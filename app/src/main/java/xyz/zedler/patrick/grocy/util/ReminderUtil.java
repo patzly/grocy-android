@@ -41,9 +41,9 @@ import java.util.Calendar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.notification.BootReceiver;
 import xyz.zedler.patrick.grocy.notification.DueSoonNotificationReceiver;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT.NOTIFICATIONS;
 
 public class ReminderUtil {
 

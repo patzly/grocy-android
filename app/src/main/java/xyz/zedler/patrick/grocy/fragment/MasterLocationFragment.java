@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -281,7 +281,7 @@ public class MasterLocationFragment extends BaseFragment {
               new TypeToken<ArrayList<Location>>() {
               }.getType()
           );
-          SortUtil.sortLocationsByName(requireContext(), locations, true);
+          SortUtil.sortLocationsByName(locations, true);
           locationNames = getLocationNames();
 
           binding.swipeMasterLocation.setRefreshing(false);

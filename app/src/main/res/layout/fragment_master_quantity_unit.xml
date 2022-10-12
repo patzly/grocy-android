@@ -154,13 +154,13 @@
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Filled"
+          style="@style/Widget.Grocy.Card.Text"
           android:id="@+id/card_plural_forms_not_supported_info"
           android:visibility="gone"
           android:layout_margin="16dp">
 
           <TextView
-            style="@style/Widget.Grocy.TextView"
+            style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/msg_quantity_unit_plurals" />

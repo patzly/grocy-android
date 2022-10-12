@@ -21,7 +21,7 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 
 public class VersionUtil {
 

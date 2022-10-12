@@ -34,7 +34,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 

@@ -23,12 +23,13 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_LIST;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class ConfigUtil {

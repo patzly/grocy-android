@@ -19,30 +19,23 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import java.util.Locale;
-import java.util.Objects;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LanguageAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
-import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Language;
-import xyz.zedler.patrick.grocy.util.Constants;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
-import xyz.zedler.patrick.grocy.util.RestartUtil;
-import xyz.zedler.patrick.grocy.util.ShortcutUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
     implements LanguageAdapter.LanguageAdapterListener {
@@ -50,44 +43,33 @@ public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
   private final static String TAG = LanguagesBottomSheet.class.getSimpleName();
 
   private FragmentBottomsheetListSelectionBinding binding;
-  private MainActivity activity;
-  private SharedPreferences sharedPrefs;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater,
-      ViewGroup container,
-      Bundle savedInstanceState) {
+  public View onCreateView(
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState
+  ) {
     binding = FragmentBottomsheetListSelectionBinding.inflate(
         inflater, container, false
     );
 
-    activity = (MainActivity) requireActivity();
-
-    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    String selectedCode = sharedPrefs.getString(
-        Constants.SETTINGS.APPEARANCE.LANGUAGE,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
-    );
+    MainActivity activity = (MainActivity) requireActivity();
 
     binding.textListSelectionTitle.setText(getString(R.string.setting_language_description));
+    binding.textListSelectionTitle.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+    binding.textListSelectionTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+
     binding.textListSelectionDescription.setText(getString(R.string.setting_language_info));
     binding.textListSelectionDescription.setVisibility(View.VISIBLE);
 
     binding.recyclerListSelection.setLayoutManager(
-        new LinearLayoutManager(
-            activity,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
     binding.recyclerListSelection.setAdapter(
-        new LanguageAdapter(LocaleUtil.getLanguages(activity), selectedCode, this)
+        new LanguageAdapter(
+            LocaleUtil.getLanguages(activity),
+            LocaleUtil.getLanguageCode(AppCompatDelegate.getApplicationLocales()),
+            this
+        )
     );
 
     return binding.getRoot();
@@ -100,50 +82,23 @@ public class LanguagesBottomSheet extends BaseBottomSheetDialogFragment
   }
 
   @Override
-  public void onItemRowClicked(Language language) {
-    String previousCode = sharedPrefs.getString(
-        Constants.SETTINGS.APPEARANCE.LANGUAGE, null
-    );
-    String selectedCode = language != null ? language.getCode() : null;
-
-    if (Objects.equals(previousCode, selectedCode)) {
-      return;
-    } else if (previousCode == null || selectedCode == null) {
-      Locale localeDevice = LocaleUtil.getNearestSupportedLocale(
-          activity, LocaleUtil.getDeviceLocale()
-      );
-      String codeToCompare = previousCode == null ? selectedCode : previousCode;
-      if (Objects.equals(localeDevice.toString(), codeToCompare)) {
-        BaseFragment current = activity.getCurrentFragment();
-        current.setLanguage(language);
-        dismiss();
-      } else {
-        new Handler().postDelayed(() -> {
-          updateShortcuts(
-              selectedCode != null
-                  ? LocaleUtil.getLocaleFromCode(selectedCode)
-                  : localeDevice
-          );
-          RestartUtil.restartApp(activity);
-        }, 100);
-      }
-    } else {
-      new Handler().postDelayed(() -> {
-        updateShortcuts(LocaleUtil.getLocaleFromCode(selectedCode));
-        RestartUtil.restartApp(activity);
-      }, 100);
+  public void onItemRowClicked(@Nullable Language language) {
+    String code = language != null ? language.getCode() : null;
+    LocaleListCompat previous = AppCompatDelegate.getApplicationLocales();
+    LocaleListCompat selected = LocaleListCompat.forLanguageTags(code);
+    if (!previous.equals(selected)) {
+      performHapticClick();
+      dismiss();
+      AppCompatDelegate.setApplicationLocales(selected);
     }
-
-    sharedPrefs.edit().putString(Constants.SETTINGS.APPEARANCE.LANGUAGE, selectedCode).apply();
   }
 
-  private void updateShortcuts(@NonNull Locale locale) {
-    Configuration configuration = getResources().getConfiguration();
-    configuration.setLocale(locale);
-    getResources().updateConfiguration(
-        configuration, getResources().getDisplayMetrics()
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        0, UiUtil.dpToPx(requireContext(), 8),
+        0, UiUtil.dpToPx(requireContext(), 8) + bottom
     );
-    ShortcutUtil.refreshShortcuts(requireContext());
   }
 
   @NonNull

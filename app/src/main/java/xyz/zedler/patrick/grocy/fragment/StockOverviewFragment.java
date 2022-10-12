@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.elevation.SurfaceColors;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -52,11 +51,9 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.view.swiperefreshlayout.CircularProgressDrawable;
 import xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel;
 
 public class StockOverviewFragment extends BaseFragment implements
@@ -83,10 +80,7 @@ public class StockOverviewFragment extends BaseFragment implements
   ) {
     binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this,
-        binding.containerScanner,
-        this,
-        R.color.primary
+        this, binding.containerScanner, this, R.color.primary
     );
     return binding.getRoot();
   }
@@ -109,8 +103,7 @@ public class StockOverviewFragment extends BaseFragment implements
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-    StockOverviewFragmentArgs args = StockOverviewFragmentArgs
-        .fromBundle(requireArguments());
+    StockOverviewFragmentArgs args = StockOverviewFragmentArgs.fromBundle(requireArguments());
     viewModel = new ViewModelProvider(this, new StockOverviewViewModel
         .StockOverviewViewModelFactory(activity.getApplication(), args)
     ).get(StockOverviewViewModel.class);
@@ -128,6 +121,8 @@ public class StockOverviewFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 

@@ -89,7 +89,6 @@
 
     <ProgressBar
       android:id="@+id/progress_confirmation"
-      android:layout_width="match_parent"
       style="@style/Widget.Grocy.ProgressBar.Horizontal.Red"
       android:layout_gravity="bottom"
       android:indeterminate="false"
@@ -99,7 +98,7 @@
   </FrameLayout>
 
   <com.google.android.material.divider.MaterialDivider
-    style="@style/Widget.Grocy.Divider.NoMargins" />
+    style="@style/Widget.Grocy.Divider" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recycler_list_selection"

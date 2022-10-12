@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -120,8 +121,9 @@ public class RecipePositionAdapter extends
     QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
 
     // AMOUNT
+    double amount = recipePosition.getAmount() / recipe.getBaseServings() * recipe.getDesiredServings();
     if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
-      holder.binding.amount.setText(NumUtil.trim(recipePosition.getAmount() * recipe.getDesiredServings()));
+      holder.binding.amount.setText(NumUtil.trim(amount));
       holder.binding.variableAmount.setVisibility(View.GONE);
     } else {
       holder.binding.amount.setText(recipePosition.getVariableAmount());
@@ -129,13 +131,10 @@ public class RecipePositionAdapter extends
     }
 
     // QUANTITY UNIT
-    holder.binding.quantityUnit.setText(pluralUtil.getQuantityUnitPlural(
-        quantityUnit,
-        recipePosition.getAmount() * recipe.getDesiredServings()
-    ));
+    holder.binding.quantityUnit.setText(pluralUtil.getQuantityUnitPlural(quantityUnit, amount));
 
     // NAME
-    holder.binding.title.setText(product.getName());
+    holder.binding.title.setText(product != null ? product.getName() : context.getString(R.string.error_undefined));
 
     // NOTE
     if (recipePosition.getNote() == null) {

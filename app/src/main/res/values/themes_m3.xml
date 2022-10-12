@@ -27,6 +27,7 @@
     <item name="android:colorControlNormal">?attr/colorOnBackground</item>
     <item name="android:colorControlActivated">?attr/colorSecondary</item>
     <item name="android:colorEdgeEffect">?attr/colorSecondary</item>
+    <item name="android:textColorHighlight">@color/selector_highlighted_text</item>
 
     <item name="android:fontFamily">@font/jost_book</item>
 

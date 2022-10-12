@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.adapter.UserAdapter.UserAdapterListener;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class UsersBottomSheet extends BaseBottomSheetDialogFragment
@@ -78,7 +78,7 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     assert usersArg != null;
     ArrayList<User> users = new ArrayList<>(usersArg);
 
-    SortUtil.sortUsersByName(requireContext(), users, true);
+    SortUtil.sortUsersByName(users, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       users.add(0, new User(-1, getString(R.string.subtitle_none_selected)));
     }

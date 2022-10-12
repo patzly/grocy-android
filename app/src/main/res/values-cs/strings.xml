@@ -364,6 +364,8 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">Produkty budou spotřebovávány nejprve z tohoto umístění, (nebude-li při spotřebě zadáno jiné umístění)</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Označíte-li produkt jako otevřený, automaticky se přesune z Obvyklého umístění do Spotřebovávat z umístění. Abyste mohli funkci použít, musíte pro obě umístění vybrat různá místa.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Tento produkt nebude možné vybrat při nákupu. To je vhodné pro nadřazené produkty, které používáte jen jako sumář řady podřízených produktů.</string>
   <string name="msg_help_due_date_type">Podle zvoleného typu data bude styl zvýrazňování na stránce přehledu zásob rozdílný. „Datum minimální trvanlivosti” znamená, že produkt je bezpečné konzumovat i po tomto datu. „Datum použitelnosti” znamená, že konzumovat produkt po tomto datu není bezpečné.</string>
   <string name="msg_help_default_due_days_format">Dlouhým stiskem na položku zadat datum pomocí dialogu místo psaním</string>
@@ -871,6 +873,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_location_default">Výchozí umístění</string>
   <string name="property_location_default_insert">Výchozí umístění: %1$s</string>
   <string name="property_location_consume_default">Spotřebovávat z umístění</string>
+  <string name="property_move_on_open">Přesunout „otevřený” produkt</string>
   <string name="property_notes">Poznámky</string>
   <string name="property_locations">Umístění</string>
   <string name="property_store">Obchod</string>
@@ -902,7 +905,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="property_not_opened">neotevřeno</string>
   <string name="property_is_freezer">Místo je mrazící box</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energie (kcal)</string>
+  <string name="property_energy">Energie (kcal) jedné jednotky produktu</string>
   <string name="property_active">Aktivní</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nezobrazovat v Přehledu zásob</string>
@@ -1092,8 +1095,9 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="hint_key">Platný API klíč</string>
 
   <string name="setting_theme">Vzhled</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Podle operačního systému</string>
+  <string name="setting_theme_description">Zkuste jiný vzhled</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Podle OS</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Tmavý</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -1101,8 +1105,10 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="setting_language">Jazyk</string>
   <string name="setting_language_description">Vyberte jazyk</string>
   <string name="setting_language_info">Děkujeme všem dobrovolným překladatelům na Transifexu!\nPodívejte se, prosím, na náš GitHub, kde najdete, jak můžete pomoci s překladem grocy i do vašeho jazyka</string>
-  <string name="setting_language_system">Výchozí nastavení: %1$s</string>
-  <string name="setting_language_not_available">Není dostupný</string>
+  <string name="setting_language_system">Podle operačního systému</string>
+  <string name="setting_language_not_available">Angličtina – pokud není k dispozici překlad</string>
+  <string name="setting_transition">Použít lineární přechod mezi stránkami nastavení</string>
+  <string name="setting_transition_description">Místo prolnutí</string>
   <string name="setting_open_food_facts">Použij Open Food Facts</string>
   <string name="setting_open_food_facts_description">Získat informace z čárových kódů</string>
   <string name="setting_choose_barcode_scanner">Vyberte skener čárových kódů</string>

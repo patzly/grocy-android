@@ -36,8 +36,8 @@ import xyz.zedler.patrick.grocy.adapter.StoreAdapter;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class StoresBottomSheet extends BaseBottomSheetDialogFragment
@@ -78,7 +78,7 @@ public class StoresBottomSheet extends BaseBottomSheetDialogFragment
     assert storesArg != null;
     stores = new ArrayList<>(storesArg);
 
-    SortUtil.sortStoresByName(requireContext(), stores, true);
+    SortUtil.sortStoresByName(stores, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       stores.add(0, new Store(-1, getString(R.string.subtitle_none_selected)));
     }

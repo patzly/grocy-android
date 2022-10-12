@@ -42,9 +42,9 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditViewModel.RecipeEditViewModelFactory;
@@ -155,6 +155,14 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     embeddedFragmentScanner.setScannerVisibilityLive(
             viewModel.getFormData().getScannerVisibilityLive()
     );
+
+    viewModel.getActionEditLive().observe(getViewLifecycleOwner(), isEdit -> activity.updateBottomAppBar(
+        true,
+        isEdit
+            ? R.menu.menu_recipe_edit_edit
+            : R.menu.menu_recipe_edit_create,
+        this::onMenuItemClick
+    ));
 
     String action = (String) getFromThisDestinationNow(Constants.ARGUMENT.ACTION);
     if (action != null) {

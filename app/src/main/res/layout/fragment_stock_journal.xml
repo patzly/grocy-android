@@ -21,7 +21,7 @@
 
   <data>
     <import type="android.view.View" />
-    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.StockJournalViewModel" />

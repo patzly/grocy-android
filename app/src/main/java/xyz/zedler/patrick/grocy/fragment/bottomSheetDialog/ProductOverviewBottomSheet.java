@@ -20,9 +20,8 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.animation.ValueAnimator;
-import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +31,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.chip.Chip;
+import com.google.android.material.elevation.SurfaceColors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -59,12 +58,14 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.view.BezierCurveChart;
 
 public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
@@ -83,20 +84,15 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
   private Location location;
   private DownloadHelper dlHelper;
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
-
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetProductOverviewBinding
-        .inflate(inflater, container, false);
+    binding = FragmentBottomsheetProductOverviewBinding.inflate(
+        inflater, container, false
+    );
     return binding.getRoot();
   }
 
@@ -136,6 +132,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     refreshItems();
 
     binding.textName.setText(product.getName());
+    ViewUtil.centerTextOnLargeScreens(binding.textName);
+    ViewUtil.centerTextOnLargeScreens(binding.textDescription);
 
     // TOOLBAR
 
@@ -148,9 +146,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     );
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_add_to_shopping_list) {
-				navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
-						new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
-								.setProductId(String.valueOf(product.getId())).build().toBundle());
+        navigateDeepLink(R.string.deep_link_shoppingListItemEditFragment,
+            new ShoppingListItemEditFragmentArgs.Builder(Constants.ACTION.CREATE)
+                .setProductId(String.valueOf(product.getId())).build().toBundle());
         dismiss();
         return true;
       } else if (item.getItemId() == R.id.action_consume_all) {
@@ -184,9 +182,12 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       return false;
     });
 
-    Chip chipConsume = view.findViewById(R.id.chip_consume);
-    chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
-    chipConsume.setOnClickListener(v -> {
+    ColorStateList colorSurface3 = ColorStateList.valueOf(
+        SurfaceColors.SURFACE_3.getColor(activity)
+    );
+    binding.chipConsume.setChipBackgroundColor(colorSurface3);
+    binding.chipConsume.setVisibility(isInStock ? View.VISIBLE : View.GONE);
+    binding.chipConsume.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToConsumeFragment()
@@ -196,8 +197,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    Chip chipPurchase = view.findViewById(R.id.chip_purchase);
-    chipPurchase.setOnClickListener(v -> {
+    binding.chipPurchase.setChipBackgroundColor(colorSurface3);
+    binding.chipPurchase.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToPurchaseFragment()
@@ -207,10 +208,10 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    Chip chipTransfer = view.findViewById(R.id.chip_transfer);
-    chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
+    binding.chipTransfer.setChipBackgroundColor(colorSurface3);
+    binding.chipTransfer.setVisibility(isInStock && product.getEnableTareWeightHandlingInt() == 0
         ? View.VISIBLE : View.GONE);
-    chipTransfer.setOnClickListener(v -> {
+    binding.chipTransfer.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToTransferFragment()
@@ -220,8 +221,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    Chip chipInventory = view.findViewById(R.id.chip_inventory);
-    chipInventory.setOnClickListener(v -> {
+    binding.chipInventory.setChipBackgroundColor(colorSurface3);
+    binding.chipInventory.setOnClickListener(v -> {
       NavHostFragment.findNavController(this).navigate(
           ProductOverviewBottomSheetDirections
               .actionProductOverviewBottomSheetDialogFragmentToInventoryFragment()
@@ -232,14 +233,19 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     if (!showActions) {
-      view.findViewById(R.id.container_chips).setVisibility(View.GONE);
+      binding.containerChips.setVisibility(View.GONE);
     }
 
     // DESCRIPTION
 
     CharSequence trimmedDescription = TextUtil.trimCharSequence(product.getDescription());
     String description = trimmedDescription != null ? trimmedDescription.toString() : null;
-    binding.description.setDescriptionHtml(description);
+    if (description == null || description.isEmpty()) {
+      binding.description.setVisibility(View.GONE);
+    } else {
+      binding.description.setDialogTitle(R.string.property_description);
+      binding.description.setHtml(description);
+    }
 
     // ACTIONS
 
@@ -251,7 +257,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
     }
 
-    refreshButtonStates(false);
+    refreshButtonStates();
     binding.buttonConsume.setOnClickListener(v -> {
       disableActions();
       activity.getCurrentFragment().performAction(Constants.ACTION.CONSUME, stockItem);
@@ -263,31 +269,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
     // tooltips
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      binding.buttonConsume.setTooltipText(
-          activity.getString(
-              R.string.action_consume_one,
-              quantityUnitStock.getName(),
-              product.getName()
-          )
-      );
-      binding.buttonOpen.setTooltipText(
-          activity.getString(
-              R.string.action_open_one,
-              quantityUnitStock.getName(),
-              product.getName()
-          )
-      );
-      // TODO: tooltip colors
-    }
-    // no margin if description is != null
-    if (description != null) {
-      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-      );
-      layoutParams.setMargins(0, 0, 0, 0);
-      binding.linearAmount.setLayoutParams(layoutParams);
-    }
+    TooltipCompat.setTooltipText(
+        binding.buttonConsume,
+        activity.getString(
+            R.string.action_consume_one, quantityUnitStock.getName(), product.getName()
+        )
+    );
+    TooltipCompat.setTooltipText(
+        binding.buttonOpen,
+        activity.getString(
+            R.string.action_open_one, quantityUnitStock.getName(), product.getName()
+        )
+    );
 
     // LOAD DETAILS
 
@@ -295,7 +288,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dlHelper.getProductDetails(product.getId(), details -> {
         productDetails = details;
         stockItem = new StockItem(productDetails);
-        refreshButtonStates(true);
+        refreshButtonStates();
         refreshItems();
         loadStockLocations();
         loadPriceHistory((float) details.getProduct().getQuFactorPurchaseToStockDouble());
@@ -416,7 +409,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(Double.parseDouble(lastPrice)
                     * productDetails.getProduct().getQuFactorPurchaseToStockDouble())
-                + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
+                    + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
@@ -476,14 +469,17 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       return;
     }
     dlHelper.getStockLocations(product.getId(), stockLocations -> {
-      if (stockLocations.isEmpty()) return;
+      if (stockLocations.isEmpty()) {
+        return;
+      }
       if (hasDetails()) {
         location = productDetails.getLocation(); // refresh
       }
       StringBuilder locationsString = new StringBuilder();
       for (StockLocation stockLocation : stockLocations) {
         locationsString.append(stockLocation.getLocationName());
-        if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size()-1).getLocationId()) {
+        if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size() - 1)
+            .getLocationId()) {
           locationsString.append(", ");
         }
       }
@@ -582,23 +578,20 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     );
   }
 
-  private void refreshButtonStates(boolean animated) {
-    boolean consume = stockItem.getAmountDouble() > 0
-        && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0;
-    boolean open = stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
-        && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0;
-    if (animated) {
-      binding.buttonConsume.refreshState(consume);
-      binding.buttonOpen.refreshState(open);
-    } else {
-      binding.buttonConsume.setState(consume);
-      binding.buttonOpen.setState(open);
-    }
+  private void refreshButtonStates() {
+    binding.buttonConsume.setEnabled(
+        stockItem.getAmountDouble() > 0
+            && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
+    );
+    binding.buttonOpen.setEnabled(
+        stockItem.getAmountDouble() > stockItem.getAmountOpenedDouble()
+            && stockItem.getProduct().getEnableTareWeightHandlingInt() == 0
+    );
   }
 
   private void disableActions() {
-    binding.buttonConsume.refreshState(false);
-    binding.buttonOpen.refreshState(false);
+    binding.buttonConsume.setEnabled(false);
+    binding.buttonOpen.setEnabled(false);
   }
 
   private void hideDisabledFeatures() {
@@ -625,6 +618,16 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       return true;
     }
     return sharedPrefs.getBoolean(pref, true);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

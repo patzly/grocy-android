@@ -20,29 +20,31 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/linear_language_container"
-  android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:orientation="horizontal"
   android:minHeight="64dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/bg_list_item_surface"
-  android:padding="16dp"
   android:gravity="center_vertical">
 
   <ImageView
     android:id="@+id/image_language_selected"
     android:layout_width="24dp"
     android:layout_height="24dp"
+    android:layout_marginStart="16dp"
     android:layout_marginEnd="32dp"
     android:src="@drawable/ic_round_check_circle"
     android:visibility="invisible"
+    app:tint="?attr/colorOnSurface"
     tools:ignore="ContentDescription" />
 
   <LinearLayout
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical"
     android:layout_weight="1">
 
@@ -64,7 +66,8 @@
         android:id="@+id/text_language_translators"
         style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:maxLines="2" />
 
     </LinearLayout>
 

@@ -42,7 +42,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 
 public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {

@@ -46,7 +46,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -259,7 +259,7 @@ public class MasterStoreFragment extends BaseFragment {
               new TypeToken<List<Store>>() {
               }.getType()
           );
-          SortUtil.sortStoresByName(requireContext(), stores, true);
+          SortUtil.sortStoresByName(stores, true);
           storeNames = getStoreNames();
 
           binding.swipeMasterStore.setRefreshing(false);

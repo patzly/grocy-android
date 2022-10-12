@@ -22,11 +22,14 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -38,18 +41,21 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatServerFragment extends BaseFragment {
 
-  private final static String TAG = SettingsCatServerFragment.class.getSimpleName();
+  private static final String TAG = SettingsCatServerFragment.class.getSimpleName();
+
+  private static final String DIALOG_SHOWING = "dialog_showing";
 
   private FragmentSettingsCatServerBinding binding;
   private MainActivity activity;
   private SettingsViewModel viewModel;
+  private AlertDialog dialog;
 
   @Override
   public View onCreateView(
@@ -116,6 +122,22 @@ public class SettingsCatServerFragment extends BaseFragment {
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(DIALOG_SHOWING, dialog != null && dialog.isShowing());
+  }
+
+  @Override
+  public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+    super.onViewStateRestored(savedInstanceState);
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_SHOWING)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          () -> showLogoutDialog(viewModel.isDemo()), 1
+      );
+    }
+  }
+
   public void openServerWebsite() {
     String serverUrl = viewModel.getServerUrl();
     if (serverUrl == null) {
@@ -125,10 +147,9 @@ public class SettingsCatServerFragment extends BaseFragment {
   }
 
   public void showLogoutDialog(boolean isDemoInstance) {
-    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(
+    dialog = new MaterialAlertDialogBuilder(
         activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
-    );
-    builder.setTitle(isDemoInstance ? R.string.title_logout_demo : R.string.title_logout)
+    ).setTitle(isDemoInstance ? R.string.title_logout_demo : R.string.title_logout)
         .setMessage(isDemoInstance ? R.string.msg_logout_demo : R.string.msg_logout)
         .setPositiveButton(R.string.action_logout, (dialog, which) -> {
           performHapticHeavyClick();
@@ -136,6 +157,6 @@ public class SettingsCatServerFragment extends BaseFragment {
         }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
         .setOnCancelListener(dialog -> performHapticClick())
         .create();
-    builder.show();
+    dialog.show();
   }
 }

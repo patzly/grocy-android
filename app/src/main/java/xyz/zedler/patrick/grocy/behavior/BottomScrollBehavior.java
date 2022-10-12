@@ -43,7 +43,7 @@ import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BottomScrollBehavior {
 
-  private static final String TAG = "BottomScrollBehavior";
+  private static final String TAG = BottomScrollBehavior.class.getSimpleName();
   private static final boolean DEBUG = false;
 
   private static final int STATE_SCROLLED_DOWN = 1;
@@ -88,8 +88,8 @@ public class BottomScrollBehavior {
         bottomBarHeight = bottomAppBar.getMeasuredHeight();
         ((LayoutParams) fabTopScroll.getLayoutParams()).bottomMargin
             = UiUtil.dpToPx(context, 16) + bottomBarHeight;
-        if (observerBottomBar.isAlive()) {
-          observerBottomBar.removeOnGlobalLayoutListener(this);
+        if (bottomAppBar.getViewTreeObserver().isAlive()) {
+          bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
       }
     });
@@ -260,8 +260,8 @@ public class BottomScrollBehavior {
         } else if (DEBUG) {
           Log.e(TAG, "measureScrollView: no child");
         }
-        if (observer.isAlive()) {
-          observer.removeOnGlobalLayoutListener(this);
+        if (scrollView.getViewTreeObserver().isAlive()) {
+          scrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
       }
     });
@@ -338,7 +338,7 @@ public class BottomScrollBehavior {
                 }
               }, 1);
             }
-            if (dy < topScrollLimit && provideTopScroll) {
+            if (scrollAbsoluteY < topScrollLimit && provideTopScroll) {
               if (fabTopScroll.isOrWillBeShown()) {
                 fabTopScroll.hide();
               }

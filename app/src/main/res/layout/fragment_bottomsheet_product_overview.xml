@@ -20,31 +20,28 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <LinearLayout
+  <FrameLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-      android:layout_width="0dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:padding="16dp"
-      android:layout_weight="1">
+      android:padding="16dp">
 
       <TextView
         android:id="@+id/text_name"
-        style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+        style="@style/Widget.Grocy.TextView.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <TextView
+        android:id="@+id/text_description"
         style="@style/Widget.Grocy.TextView.ListItem.Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,17 +54,16 @@
       android:id="@+id/toolbar"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginEnd="8dp"
+      android:layout_marginEnd="4dp"
+      android:layout_gravity="end|center_vertical"
       android:visibility="visible"
       app:contentInsetStart="12dp"
       app:menu="@menu/menu_actions_product_overview" />
 
-  </LinearLayout>
+  </FrameLayout>
 
   <com.google.android.material.divider.MaterialDivider
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp" />
+    style="@style/Widget.Grocy.Divider" />
 
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
@@ -76,6 +72,7 @@
     android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:id="@+id/linear_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -86,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:overScrollMode="never">
+        android:overScrollMode="ifContentScrolls">
 
         <com.google.android.material.chip.ChipGroup
           android:layout_width="wrap_content"
@@ -101,25 +98,25 @@
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_consume"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_consume"
             app:chipIcon="@drawable/ic_round_consume_product"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_purchase"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_purchase"
             app:chipIcon="@drawable/ic_round_local_grocery_store"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_transfer"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_transfer"
             app:chipIcon="@drawable/ic_round_swap_horiz"/>
 
           <com.google.android.material.chip.Chip
             android:id="@+id/chip_inventory"
-            style="@style/Widget.Grocy.Chip"
+            style="@style/Widget.Grocy.Chip.Assist"
             android:text="@string/title_inventory"
             app:chipIcon="@drawable/ic_round_inventory"/>
 
@@ -127,10 +124,13 @@
 
       </HorizontalScrollView>
 
-      <xyz.zedler.patrick.grocy.view.ProductDescriptionCard
+      <xyz.zedler.patrick.grocy.view.HtmlCardView
         android:id="@+id/description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp" />
 
       <LinearLayout
         android:id="@+id/linear_amount"
@@ -150,21 +150,18 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginEnd="16dp"
+          android:layout_marginTop="4dp"
           android:orientation="horizontal">
 
-          <xyz.zedler.patrick.grocy.view.ActionButton
+          <com.google.android.material.button.MaterialButton
             android:id="@+id/button_consume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_round_consume_product"
-            app:tint="@color/icon" />
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_consume_product" />
 
-          <xyz.zedler.patrick.grocy.view.ActionButton
+          <com.google.android.material.button.MaterialButton
             android:id="@+id/button_open"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_round_open"
-            app:tint="@color/icon" />
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_open" />
 
         </LinearLayout>
 
@@ -230,20 +227,24 @@
         android:visibility="gone">
 
         <TextView
-          style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+          style="@style/Widget.Grocy.TextView.LabelLarge"
           android:text="@string/property_price_history"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
-          android:layout_margin="16dp" />
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="8dp"
+          android:textColor="?attr/colorSecondary" />
 
         <xyz.zedler.patrick.grocy.view.BezierCurveChart
           android:id="@+id/item_price_history"
           android:layout_width="match_parent"
           android:layout_height="240dp"
+          android:layout_marginStart="12dp"
+          android:layout_marginEnd="12dp"
           android:layout_marginBottom="0dp"
-          android:layout_marginStart="13dp"
-          android:layout_marginEnd="13dp"
           android:layout_marginTop="0dp" />
 
       </LinearLayout>

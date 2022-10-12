@@ -18,7 +18,6 @@
   -->
 
 <menu
-  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -26,19 +25,18 @@
     android:id="@+id/action_search"
     android:title="@string/action_search"
     android:icon="@drawable/ic_round_search_anim"
-    app:showAsAction="always"
-    tools:ignore="AlwaysShowAction" />
+    app:showAsAction="always" />
 
   <item
     android:id="@+id/action_stock_journal"
     android:title="@string/title_stock_journal"
-    app:showAsAction="never"
-    tools:ignore="AlwaysShowAction" />
+    android:icon="@drawable/ic_round_history_anim"
+    app:showAsAction="always" />
 
   <item
     android:id="@+id/action_stock_entries"
     android:title="@string/title_stock_entries"
-    app:showAsAction="never"
-    tools:ignore="AlwaysShowAction" />
+    android:icon="@drawable/ic_round_format_list_numbered"
+    app:showAsAction="ifRoom" />
 
 </menu>

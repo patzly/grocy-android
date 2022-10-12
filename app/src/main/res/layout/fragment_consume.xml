@@ -25,7 +25,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
-    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="formData"
       type="xyz.zedler.patrick.grocy.model.FormDataConsume" />

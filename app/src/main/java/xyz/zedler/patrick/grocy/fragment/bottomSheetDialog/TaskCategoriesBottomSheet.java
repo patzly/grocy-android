@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.adapter.TaskCategoryAdapter.TaskCategoryAdapterL
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
@@ -78,7 +78,7 @@ public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
     assert taskCategoriesArg != null;
     ArrayList<TaskCategory> taskCategories = new ArrayList<>(taskCategoriesArg);
 
-    SortUtil.sortTaskCategoriesByName(requireContext(), taskCategories, true);
+    SortUtil.sortTaskCategoriesByName(taskCategories, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       taskCategories.add(0, new TaskCategory(-1, getString(R.string.subtitle_none_selected)));
     }

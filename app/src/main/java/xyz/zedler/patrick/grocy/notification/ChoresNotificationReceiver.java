@@ -31,9 +31,9 @@ import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.CHORES;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.CHORES;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 
 public class ChoresNotificationReceiver extends BroadcastReceiver {

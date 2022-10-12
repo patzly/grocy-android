@@ -62,7 +62,7 @@ public class FilterChipLiveDataAssignment extends FilterChipLiveData {
   }
 
   public void setUsers(List<User> users) {
-    SortUtil.sortUsersByName(application, users, true);
+    SortUtil.sortUsersByName(users, true);
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
         NO_FILTER,

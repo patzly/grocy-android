@@ -35,7 +35,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -59,7 +60,6 @@
           android:id="@+id/button_shopping_list_lists"
           style="@style/Widget.Grocy.Button.IconButton"
           android:layout_marginStart="20dp"
-          android:layout_marginEnd="4dp"
           android:layout_gravity="end|center_vertical"
           android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}"
           app:icon="@drawable/ic_round_expand_more" />
@@ -107,7 +107,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
-          android:paddingBottom="8dp"
+          android:paddingBottom="@dimen/global_scroll_bottom_padding"
           android:overScrollMode="ifContentScrolls"
           android:clipToPadding="false"
           android:layoutAnimation="@anim/recycler_layout" />

@@ -45,7 +45,7 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.repository.ChoresRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -280,7 +280,7 @@ public class ChoresViewModel extends BaseViewModel {
     if (filterChipLiveDataSort.getSortMode().equals(FilterChipLiveDataTasksSort.SORT_DUE_DATE)) {
       SortUtil.sortChoreEntriesByNextExecution(filteredChoreEntries, sortAscending);
     } else {
-      SortUtil.sortChoreEntriesByName(getApplication(), filteredChoreEntries, sortAscending);
+      SortUtil.sortChoreEntriesByName(filteredChoreEntries, sortAscending);
     }
 
     filteredChoreEntriesLive.setValue(filteredChoreEntries);

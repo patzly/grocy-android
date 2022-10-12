@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -52,6 +53,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
@@ -112,7 +114,7 @@ public class ShoppingListItemAdapter extends
       String groupingMode
   ) {
     if (groupingMode.equals(FilterChipLiveDataShoppingListGrouping.GROUPING_NONE)) {
-      SortUtil.sortShoppingListItemsByName(context, shoppingListItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(shoppingListItems, productNamesHashMap, true);
       ArrayList<GroupedListItem> groupedListItems = new ArrayList<>(shoppingListItems);
       addBottomNotes(
           context,
@@ -140,10 +142,10 @@ public class ShoppingListItemAdapter extends
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(shoppingListItemsGroupedHashMap.keySet());
-    SortUtil.sortStringsByName(context, groupsSorted, true);
+    SortUtil.sortStringsByName(groupsSorted, true);
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
-      SortUtil.sortShoppingListItemsByName(context, ungroupedItems, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(ungroupedItems, productNamesHashMap, true);
       groupedListItems.addAll(ungroupedItems);
     }
     for (String group : groupsSorted) {
@@ -152,7 +154,7 @@ public class ShoppingListItemAdapter extends
       GroupHeader groupHeader = new GroupHeader(group);
       groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
       groupedListItems.add(groupHeader);
-      SortUtil.sortShoppingListItemsByName(context, itemsFromGroup, productNamesHashMap, true);
+      SortUtil.sortShoppingListItemsByName(itemsFromGroup, productNamesHashMap, true);
       groupedListItems.addAll(itemsFromGroup);
     }
     addBottomNotes(
@@ -321,6 +323,9 @@ public class ShoppingListItemAdapter extends
     ShoppingListItem item = (ShoppingListItem) groupedListItem;
     RowShoppingListItemBinding binding = ((ShoppingListItemViewHolder) viewHolder).binding;
 
+    Context context = binding.getRoot().getContext();
+    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(context, R.color.blue);
+
     // NAME
 
     Product product = null;
@@ -387,27 +392,25 @@ public class ShoppingListItemAdapter extends
       binding.amount.setTypeface(
           ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_medium)
       );
-      binding.amount.setTextColor(
-          ContextCompat.getColor(binding.amount.getContext(), R.color.retro_blue_fg)
-      );
+      binding.amount.setTextColor(colorBlue.getAccent());
+      binding.amount.setAlpha(1);
     } else {
       binding.amount.setTypeface(
           ResourcesCompat.getFont(binding.amount.getContext(), R.font.jost_book)
       );
-      binding.amount.setTextColor(
-          ContextCompat.getColor(binding.amount.getContext(), R.color.on_background_secondary)
-      );
+      binding.amount.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
+      binding.amount.setAlpha(0.61f);
     }
     if (item.isUndone()) {
       binding.amount.setPaintFlags(
           binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
       );
-      binding.amount.setAlpha(1.0f);
+      binding.amount.setAlpha(1);
     } else {
       binding.amount.setPaintFlags(
           binding.amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
       );
-      binding.amount.setAlpha(0.6f);
+      binding.amount.setAlpha(0.61f);
     }
 
     // NOTE

@@ -62,7 +62,7 @@ public class FilterChipLiveDataLocation extends FilterChipLiveData {
   }
 
   public void setLocations(List<Location> locations) {
-    SortUtil.sortLocationsByName(application, locations, true);
+    SortUtil.sortLocationsByName(locations, true);
     ArrayList<MenuItemData> menuItemDataList = new ArrayList<>();
     menuItemDataList.add(new MenuItemData(
         NO_FILTER,

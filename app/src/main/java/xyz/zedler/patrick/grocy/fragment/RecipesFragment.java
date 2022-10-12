@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.RecipeEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentRecipesBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.RecipeBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -52,9 +53,9 @@ import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipesViewModel;
 
@@ -70,6 +71,7 @@ public class RecipesFragment extends BaseFragment implements
   private SwipeBehavior swipeBehavior;
   private FragmentRecipesBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -108,6 +110,14 @@ public class RecipesFragment extends BaseFragment implements
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -241,7 +251,22 @@ public class RecipesFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
+    // UPDATE UI
+
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
+    activity.updateFab(
+        R.drawable.ic_round_add_anim,
+        R.string.action_add,
+        Constants.FAB.TAG.ADD,
+        savedInstanceState == null,
+        () -> activity.navigateFragment(
+            RecipesFragmentDirections.actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE)
+        )
+    );
   }
 
   @Override
@@ -288,20 +313,6 @@ public class RecipesFragment extends BaseFragment implements
   @Override
   public void updateData() {
     viewModel.downloadData();
-  }
-
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(true, R.menu.menu_recipes, this::onMenuItemClick);
-    activity.updateFab(
-        R.drawable.ic_round_add_anim,
-        R.string.action_add,
-        Constants.FAB.TAG.ADD,
-        animated,
-        () -> navigate(RecipesFragmentDirections
-            .actionRecipesFragmentToRecipeEditFragment(ACTION.CREATE))
-    );
   }
 
   @Override
@@ -363,6 +374,7 @@ public class RecipesFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
+    systemBarBehavior.refresh();
   }
 
   private void setUpSearch() {

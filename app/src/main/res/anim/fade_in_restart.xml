@@ -17,31 +17,9 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<layer-list
-  xmlns:android="http://schemas.android.com/apk/res/android">
-
-  <item android:id="@android:id/background">
-
-    <shape android:tint="@color/retro_red_translucent">
-
-      <corners android:radius="4dp" />
-
-    </shape>
-
-  </item>
-
-  <item android:id="@android:id/progress">
-
-    <clip>
-
-      <shape android:tint="@color/retro_red">
-
-        <corners android:radius="4dp" />
-
-      </shape>
-
-    </clip>
-
-  </item>
-
-</layer-list>
+<alpha
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:interpolator="@android:interpolator/fast_out_slow_in"
+  android:fromAlpha="0.0"
+  android:toAlpha="1.0"
+  android:duration="400" />

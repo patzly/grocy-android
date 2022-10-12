@@ -19,36 +19,30 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShoppingListItemBinding;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
-import xyz.zedler.patrick.grocy.view.ListItem;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ShoppingListItemBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = ShoppingListItemBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetShoppingListItemBinding binding;
   private MainActivity activity;
   private String productName, amount;
   private ShoppingListItem shoppingListItem;
-  private ListItem itemName, itemAmount, itemNote, itemStatus;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -56,39 +50,31 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_shopping_list_item,
-        container,
-        false
+    binding = FragmentBottomsheetShoppingListItemBinding.inflate(
+        inflater, container, false
     );
 
-    activity = (MainActivity) getActivity();
-    assert activity != null;
+    activity = (MainActivity) requireActivity();
 
     Bundle bundle = getArguments();
     if (bundle == null) {
       dismiss();
-      return view;
+      return binding.getRoot();
     }
 
     productName = bundle.getString(Constants.ARGUMENT.PRODUCT_NAME);
     amount = bundle.getString(Constants.ARGUMENT.AMOUNT);
     shoppingListItem = bundle.getParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM);
 
-    // VIEWS
-
-    itemName = view.findViewById(R.id.item_shopping_list_item_name);
-    itemAmount = view.findViewById(R.id.item_shopping_list_item_amount);
-    itemNote = view.findViewById(R.id.item_shopping_list_item_note);
-    itemStatus = view.findViewById(R.id.item_shopping_list_item_status);
-
     // TOOLBAR
 
-    MaterialToolbar toolbar = view.findViewById(R.id.toolbar_shopping_list_item);
-    if (productName == null) {
-      view.findViewById(R.id.action_purchase).setVisibility(View.GONE);
+    ResUtil.tintMenuItemIcons(requireContext(), binding.toolbarShoppingListItem.getMenu());
+    MenuItem itemPurchase = binding.toolbarShoppingListItem.getMenu()
+        .findItem(R.id.action_purchase);
+    if (itemPurchase != null) {
+      itemPurchase.setVisible(productName != null);
     }
-    toolbar.setOnMenuItemClickListener(item -> {
+    binding.toolbarShoppingListItem.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_toggle_done) {
         activity.getCurrentFragment().toggleDoneStatus(shoppingListItem);
         dismiss();
@@ -110,7 +96,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     if (bundle.getBoolean(Constants.ARGUMENT.SHOW_OFFLINE)) {
-      Menu menu = toolbar.getMenu();
+      Menu menu = binding.toolbarShoppingListItem.getMenu();
       menu.findItem(R.id.action_purchase).setVisible(false);
       menu.findItem(R.id.action_edit).setVisible(false);
       menu.findItem(R.id.action_delete).setVisible(false);
@@ -118,31 +104,37 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheetDialogFragment {
 
     setData();
 
-    return view;
+    return binding.getRoot();
   }
 
   private void setData() {
     // NAME
     if (productName != null) {
-      itemName.setText(activity.getString(R.string.property_name), productName);
+      binding.itemShoppingListItemName.setText(
+          activity.getString(R.string.property_name), productName
+      );
     } else {
-      itemName.setText(
+      binding.itemShoppingListItemName.setText(
           activity.getString(R.string.property_name),
           activity.getString(R.string.subtitle_empty)
       );
     }
 
     // AMOUNT
-    itemAmount.setText(activity.getString(R.string.property_amount), amount);
+    binding.itemShoppingListItemAmount.setText(
+        activity.getString(R.string.property_amount), amount
+    );
 
     // NOTE
     String trimmedNote = (String) TextUtil.trimCharSequence(shoppingListItem.getNote());
     if (trimmedNote != null && !trimmedNote.isEmpty()) {
-      itemNote.setSingleLine(false);
-      itemNote.setText(activity.getString(R.string.property_note), trimmedNote);
+      binding.itemShoppingListItemNote.setSingleLine(false);
+      binding.itemShoppingListItemNote.setText(
+          activity.getString(R.string.property_note), trimmedNote
+      );
     } else {
-      itemNote.setSingleLine(true);
-      itemNote.setText(
+      binding.itemShoppingListItemNote.setSingleLine(true);
+      binding.itemShoppingListItemNote.setText(
           activity.getString(R.string.property_note),
           activity.getString(R.string.subtitle_empty)
       );
@@ -150,16 +142,26 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheetDialogFragment {
 
     // STATUS
     if (shoppingListItem.getDoneInt() == 1) {
-      itemStatus.setText(
+      binding.itemShoppingListItemStatus.setText(
           activity.getString(R.string.property_status),
           activity.getString(R.string.subtitle_done)
       );
     } else {
-      itemStatus.setText(
+      binding.itemShoppingListItemStatus.setText(
           activity.getString(R.string.property_status),
           activity.getString(R.string.subtitle_undone)
       );
     }
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

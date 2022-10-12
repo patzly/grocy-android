@@ -18,15 +18,13 @@
   -->
 
 <vector
-  android:height="24dp"
-  android:viewportHeight="24"
-  android:viewportWidth="24"
-  android:width="24dp"
+  android:autoMirrored="true"
+  android:width="42dp"
+  android:height="42dp"
+  android:viewportHeight="42"
+  android:viewportWidth="42"
   xmlns:android="http://schemas.android.com/apk/res/android">
   <path
     android:fillColor="#000000"
-    android:pathData="M12,19m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0" />
-  <path
-    android:fillColor="#000000"
-    android:pathData="M12,3c-1.1,0 -2,0.9 -2,2v8c0,1.1 0.9,2 2,2s2,-0.9 2,-2V5c0,-1.1 -0.9,-2 -2,-2z" />
+    android:pathData="M18,25.17 L14.53,21.7c-0.39,-0.39 -1.02,-0.39 -1.41,0 -0.39,0.39 -0.39,1.02 0,1.41l4.18,4.18c0.39,0.39 1.02,0.39 1.41,0L29.29,16.71c0.39,-0.39 0.39,-1.02 0,-1.41 -0.39,-0.39 -1.02,-0.39 -1.41,0z" />
 </vector>

@@ -20,24 +20,29 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
@@ -52,12 +57,15 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.color.ColorRoles;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -71,10 +79,9 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
@@ -85,12 +92,19 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
   private final static String TAG = RecipeBottomSheet.class.getSimpleName();
 
+  private static final String DIALOG_CONSUME_SHOWING = "dialog_consume_showing";
+  private static final String DIALOG_SHOPPING_LIST_SHOWING = "dialog_shopping_list_showing";
+  private static final String DIALOG_SHOPPING_LIST_NAMES = "dialog_shopping_list_names";
+  private static final String DIALOG_SHOPPING_LIST_CHECKED = "dialog_shopping_list_checked";
+
   private SharedPreferences sharedPrefs;
   private MainActivity activity;
   private FragmentBottomsheetRecipeBinding binding;
   private ViewUtil.TouchProgressBarUtil touchProgressBarUtil;
   private RecipesRepository recipesRepository;
   private DownloadHelper dlHelper;
+  private AlertDialog dialogConsume, dialogShoppingList;
+  private final HashMap<String, Boolean> dialogShoppingListMultiChoiceItems = new HashMap<>();
 
   private Recipe recipe;
   private RecipeFulfillment recipeFulfillment;
@@ -105,12 +119,6 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
 
   private boolean servingsDesiredChanged;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -139,6 +147,12 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
   @Override
   public void onDestroyView() {
+    if (dialogConsume != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogConsume.dismiss();
+    } else if (dialogShoppingList != null) {
+      dialogShoppingList.dismiss();
+    }
     if (touchProgressBarUtil != null) {
       touchProgressBarUtil.onDestroy();
       touchProgressBarUtil = null;
@@ -218,16 +232,59 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     servingsDesiredLive = new MutableLiveData<>(NumUtil.trim(recipe.getDesiredServings()));
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
 
+    servingsDesiredSaveEnabledLive.observe(
+        getViewLifecycleOwner(), value -> binding.textInputServings.setEndIconVisible(value)
+    );
+
     loadRecipePicture();
     setupMenuButtons();
     updateDataWithServings();
+
+    if (savedInstanceState != null) {
+      if (savedInstanceState.getBoolean(DIALOG_CONSUME_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::showConsumeConfirmationDialog, 1
+        );
+      } else if (savedInstanceState.getBoolean(DIALOG_SHOPPING_LIST_SHOWING)) {
+        dialogShoppingListMultiChoiceItems.clear();
+        String[] names = savedInstanceState.getStringArray(DIALOG_SHOPPING_LIST_NAMES);
+        boolean[] checked = savedInstanceState.getBooleanArray(DIALOG_SHOPPING_LIST_CHECKED);
+        if (names != null && checked != null) {
+          for (int i = 0; i < names.length; i++) {
+            dialogShoppingListMultiChoiceItems.put(names[i], checked[i]);
+          }
+        }
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::showShoppingListConfirmationDialog, 1
+        );
+      }
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean(DIALOG_CONSUME_SHOWING, dialogConsume != null && dialogConsume.isShowing());
+    outState.putBoolean(
+        DIALOG_SHOPPING_LIST_SHOWING, dialogShoppingList != null && dialogShoppingList.isShowing()
+    );
+    outState.putStringArray(
+        DIALOG_SHOPPING_LIST_NAMES,
+        dialogShoppingListMultiChoiceItems.keySet().toArray(new String[0])
+    );
+    outState.putBooleanArray(
+        DIALOG_SHOPPING_LIST_CHECKED,
+        toPrimitiveBooleanArray(dialogShoppingListMultiChoiceItems.values().toArray(new Boolean[0]))
+    );
   }
 
   private void loadDataFromDatabase() {
     recipesRepository.loadFromDatabase(data -> {
       recipes = data.getRecipes();
       recipeFulfillments = data.getRecipeFulfillments();
-      recipePositions = RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
+      recipePositions = RecipePosition.getRecipePositionsFromRecipeId(
+          data.getRecipePositions(), recipe.getId()
+      );
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
 
@@ -289,6 +346,11 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   public void updateDataWithServings() {
     TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
 
+    ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
+    ColorRoles colorYellow = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
+    ColorRoles colorRed = ResUtil.getHarmonizedRoles(activity, R.color.red);
+
     // REQUIREMENTS FULFILLED
     if (recipeFulfillment.isNeedFulfilled()) {
       setMenuButtonState(binding.menuItemConsume, true);
@@ -296,11 +358,11 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
-          R.drawable.ic_round_done,
+          R.drawable.ic_round_check_circle_outline,
           null
       ));
       binding.imageFulfillment.setColorFilter(
-          ContextCompat.getColor(requireContext(), R.color.retro_green_fg),
+          colorGreen.getAccent(),
           android.graphics.PorterDuff.Mode.SRC_IN
       );
       binding.missing.setVisibility(View.GONE);
@@ -310,11 +372,11 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
-          R.drawable.ic_round_priority_high,
+          R.drawable.ic_round_error_outline,
           null
       ));
       binding.imageFulfillment.setColorFilter(
-          ContextCompat.getColor(requireContext(), R.color.retro_yellow_fg),
+          colorYellow.getAccent(),
           android.graphics.PorterDuff.Mode.SRC_IN
       );
       binding.missing.setText(
@@ -330,11 +392,11 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
-          R.drawable.ic_round_close,
+          R.drawable.ic_round_highlight_off,
           null
       ));
       binding.imageFulfillment.setColorFilter(
-          ContextCompat.getColor(requireContext(), R.color.retro_red_fg),
+          colorRed.getAccent(),
           android.graphics.PorterDuff.Mode.SRC_IN
       );
       binding.missing.setText(
@@ -346,9 +408,40 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     }
 
     binding.name.setText(recipe.getName());
-    binding.textInputServings.setHelperText(getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings())));
-    binding.calories.setText(getString(R.string.property_energy), NumUtil.trim(recipeFulfillment.getCalories()), getString(R.string.subtitle_per_serving));
-    binding.costs.setText(getString(R.string.property_costs), NumUtil.trimPrice(recipeFulfillment.getCosts()) + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""));
+
+    binding.textInputServings.setEndIconOnClickListener(v -> saveDesiredServings());
+    binding.textInputServings.setEndIconOnLongClickListener(v -> {
+      activity.showToastTextLong(R.string.action_apply_desired_servings, true);
+      return true;
+    });
+    binding.textInputServings.setHelperText(
+        getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings()))
+    );
+    binding.textInputServings.setHelperTextColor(ColorStateList.valueOf(colorBlue.getAccent()));
+    assert binding.textInputServings.getEditText() != null;
+    binding.textInputServings.getEditText().setOnEditorActionListener((v, actionId, event) -> {
+      if (actionId == EditorInfo.IME_ACTION_DONE) {
+        saveDesiredServings();
+      }
+      return false;
+    });
+    binding.calories.setText(
+        getString(R.string.property_energy),
+        NumUtil.trim(recipeFulfillment.getCalories()),
+        getString(R.string.subtitle_per_serving)
+    );
+    boolean isPriceTrackingEnabled = sharedPrefs.getBoolean(
+        Constants.PREF.FEATURE_STOCK_PRICE_TRACKING, true
+    );
+    if (isPriceTrackingEnabled) {
+      binding.costs.setText(
+          getString(R.string.property_costs),
+          NumUtil.trimPrice(recipeFulfillment.getCosts()) + " "
+              + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
+      );
+    } else {
+      binding.costs.setVisibility(View.GONE);
+    }
 
     if (recipePositions.isEmpty()) {
       binding.ingredientContainer.setVisibility(View.GONE);
@@ -380,16 +473,14 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       }
     }
 
-    if (recipe.getDescription() == null || recipe.getDescription().trim().isEmpty()) {
+    CharSequence trimmedDescription = TextUtil.trimCharSequence(recipe.getDescription());
+    String description = trimmedDescription != null ? trimmedDescription.toString() : null;
+    if (description == null || description.isEmpty()) {
       binding.preparation.setVisibility(View.GONE);
     } else {
-      binding.preparation.setPreparationHtml(recipe.getDescription());
+      binding.preparation.setDialogTitle(R.string.property_preparation);
+      binding.preparation.setHtml(description);
     }
-  }
-
-  public void clearServingsFieldAndFocusIt() {
-    servingsDesiredLive.setValue(null);
-    binding.textInputServings.requestFocus();
   }
 
   public void clearInputFocus() {
@@ -463,17 +554,18 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           )
           .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(requireContext(), 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
-          .listener(new RequestListener<Drawable>() {
+          .listener(new RequestListener<>() {
             @Override
-            public boolean onLoadFailed(
-                @Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model,
+            public boolean onLoadFailed(@Nullable GlideException e, Object model,
                 Target<Drawable> target, boolean isFirstResource) {
               binding.picture.setVisibility(View.GONE);
-              LinearLayout.LayoutParams params = (LayoutParams) binding.headerTextContainer.getLayoutParams();
-              params.weight = 4f;
+              LinearLayout.LayoutParams params
+                  = (LayoutParams) binding.headerTextContainer.getLayoutParams();
+              params.weight = 4;
               binding.headerTextContainer.setLayoutParams(params);
               return false;
             }
+
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
@@ -484,35 +576,22 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           .into(binding.picture);
     } else {
       binding.picture.setVisibility(View.GONE);
-      LinearLayout.LayoutParams params = (LayoutParams) binding.headerTextContainer.getLayoutParams();
-      params.weight = 4f;
+      LinearLayout.LayoutParams params
+          = (LayoutParams) binding.headerTextContainer.getLayoutParams();
+      params.weight = 4;
       binding.headerTextContainer.setLayoutParams(params);
     }
   }
 
   private void setupMenuButtons() {
-    binding.menuItemConsume.setOnClickListener(v -> AlertDialogUtil.showConfirmationDialog(
-        requireContext(),
-        getString(R.string.msg_recipe_consume_ask, recipe.getName()),
-        () -> {
-          activity.getCurrentFragment().consumeRecipe(recipe.getId());
-          dismiss();
-        })
-    );
-    HashMap<String, Boolean> missingIngredients = new HashMap<>();
+    binding.menuItemConsume.setOnClickListener(v -> showConsumeConfirmationDialog());
+    // Hashmap with all missing products for the dialog (at first all should be checked)
+    // global variable for alert dialog management
+    dialogShoppingListMultiChoiceItems.clear();
     for (Product product : products) {
-      missingIngredients.put(product.getName(), true);
+      dialogShoppingListMultiChoiceItems.put(product.getName(), true);
     }
-    binding.menuItemShoppingList.setOnClickListener(v -> AlertDialogUtil.showConfirmationDialog(
-        requireContext(),
-        getString(R.string.msg_recipe_shopping_list_ask, recipe.getName()),
-        missingIngredients,
-        ingredientsToAdd -> {
-          Log.i(TAG, "setupMenuButtons: " + ingredientsToAdd);
-          activity.getCurrentFragment().addNotFulfilledProductsToCartForRecipe(recipe.getId());
-          dismiss();
-        })
-    );
+    binding.menuItemShoppingList.setOnClickListener(v -> showShoppingListConfirmationDialog());
     binding.menuItemEdit.setOnClickListener(v -> {
       activity.getCurrentFragment().editRecipe(recipe);
       dismiss();
@@ -526,6 +605,70 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           dismiss();
         }
     );
+  }
+
+  private void showConsumeConfirmationDialog() {
+    dialogConsume = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(getString(R.string.msg_recipe_consume_ask, recipe.getName()))
+        .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+          performHapticClick();
+          activity.getCurrentFragment().consumeRecipe(recipe.getId());
+          dismiss();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogConsume.show();
+  }
+
+  private void showShoppingListConfirmationDialog() {
+    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog
+    );
+    Typeface jost = ResourcesCompat.getFont(activity, R.font.jost_book);
+
+    TextView title = new TextView(activity);
+    title.setTextAppearance(activity, R.style.Widget_Grocy_TextView_HeadlineSmall);
+    int padding = UiUtil.dpToPx(activity, 8);
+    title.setPadding(padding * 3, padding * 3, padding * 3, padding * 2);
+    title.setText(R.string.title_confirmation);
+    title.setTextSize(24);
+    title.setTypeface(jost);
+
+    TextView text = new TextView(activity);
+    text.setTextAppearance(activity, R.style.Widget_Grocy_TextView_BodyMedium);
+    text.setPadding(padding * 3, 0, padding * 3, 0);
+    text.setText(getString(R.string.msg_recipe_shopping_list_ask, recipe.getName()));
+    text.setTextSize(14);
+    text.setTypeface(jost);
+
+    LinearLayout container = new LinearLayout(activity);
+    container.setOrientation(LinearLayout.VERTICAL);
+    container.addView(title);
+    container.addView(text);
+
+    builder.setCustomTitle(container);
+    builder.setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+      Log.i(TAG, "setupMenuButtons: " + dialogShoppingListMultiChoiceItems);
+      activity.getCurrentFragment().addNotFulfilledProductsToCartForRecipe(recipe.getId());
+      dialog.dismiss();
+    });
+    builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick());
+    builder.setOnCancelListener(dialog -> performHapticClick());
+
+    String[] names = dialogShoppingListMultiChoiceItems.keySet().toArray(new String[0]);
+    Boolean[] namesChecked = dialogShoppingListMultiChoiceItems.values().toArray(new Boolean[0]);
+    builder.setMultiChoiceItems(
+        names,
+        toPrimitiveBooleanArray(namesChecked),
+        (dialog, which, isChecked) -> dialogShoppingListMultiChoiceItems.put(
+            (String) names[which], isChecked
+        )
+    );
+
+    dialogShoppingList = builder.create();
+    dialogShoppingList.show();
   }
 
   public void openPreparationMode() {
@@ -552,6 +695,25 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private void setMenuButtonState(Button button, boolean enabled) {
     button.setEnabled(enabled);
     button.setAlpha(enabled ? 1f : 0.5f);
+  }
+
+  private static boolean[] toPrimitiveBooleanArray(Boolean... booleanList) {
+    final boolean[] primitives = new boolean[booleanList.length];
+    int index = 0;
+    for (Boolean object : booleanList) {
+      primitives[index++] = object;
+    }
+    return primitives;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

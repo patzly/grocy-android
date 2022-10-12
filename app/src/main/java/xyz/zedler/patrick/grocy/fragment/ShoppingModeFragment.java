@@ -52,9 +52,9 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
@@ -341,6 +341,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
+    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {

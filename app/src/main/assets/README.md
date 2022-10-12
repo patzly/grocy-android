@@ -1,5 +1,10 @@
 # TODO
 
+## If locales change:
+- Change in app module build.gradle in resConfigs
+- Change in raw/locales.txt
+- Change in res/xml/locales_config.xml
+
 ## upcoming changelog lines:
 - New: Purchase page quick mode has now the ability to create products later (#411)
 

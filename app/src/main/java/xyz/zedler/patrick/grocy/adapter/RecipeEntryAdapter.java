@@ -26,10 +26,11 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.ColorRes;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,6 +46,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -53,6 +55,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesExtraField;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
@@ -143,20 +146,25 @@ public class RecipeEntryAdapter extends
     holder.binding.title.setText(recipe.getName());
 
     if (recipeFulfillment != null) {
+      Context context = holder.binding.getRoot().getContext();
+      ColorRoles colorGreen = ResUtil.getHarmonizedRoles(context, R.color.green);
+      ColorRoles colorYellow = ResUtil.getHarmonizedRoles(context, R.color.yellow);
+      ColorRoles colorRed = ResUtil.getHarmonizedRoles(context, R.color.red);
+
       // DUE SCORE
       int due_score = recipeFulfillment.getDueScore();
-      @ColorRes int color;
+      @ColorInt int color;
 
       if (due_score == 0) {
-        color = R.color.retro_green_fg;
+        color = colorGreen.getAccent();
       }
       else if (due_score <= 10) {
-        color = R.color.retro_yellow_fg;
+        color = colorYellow.getAccent();
       }
       else {
-        color = R.color.retro_red_fg;
+        color = colorRed.getAccent();
       }
-      holder.binding.dueScore.setTextColor(ContextCompat.getColor(context, color));
+      holder.binding.dueScore.setTextColor(color);
 
       holder.binding.dueScore.setText(
               context.getString(
@@ -170,11 +178,11 @@ public class RecipeEntryAdapter extends
         holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_done,
+            R.drawable.ic_round_check_circle_outline,
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
-            ContextCompat.getColor(context, R.color.retro_green_fg),
+            colorGreen.getAccent(),
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setVisibility(View.GONE);
@@ -182,11 +190,11 @@ public class RecipeEntryAdapter extends
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_priority_high,
+            R.drawable.ic_round_error_outline,
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
-            ContextCompat.getColor(context, R.color.retro_yellow_fg),
+            colorYellow.getAccent(),
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setText(
@@ -200,11 +208,11 @@ public class RecipeEntryAdapter extends
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_close,
+            R.drawable.ic_round_highlight_off,
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
-            ContextCompat.getColor(context, R.color.retro_red_fg),
+            colorRed.getAccent(),
             android.graphics.PorterDuff.Mode.SRC_IN
         );
         holder.binding.missing.setText(
@@ -243,12 +251,12 @@ public class RecipeEntryAdapter extends
     if (recipe.getPictureFileName() != null) {
       holder.binding.picture.layout(0, 0, 0, 0);
 
-      Glide
-          .with(context)
-          .load(new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders))
-          .transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
+      Glide.with(context)
+          .load(
+              new GlideUrl(grocyApi.getRecipePicture(recipe.getPictureFileName()), grocyAuthHeaders)
+          ).transform(new CenterCrop(), new RoundedCorners(UiUtil.dpToPx(context, 12)))
           .transition(DrawableTransitionOptions.withCrossFade())
-          .listener(new RequestListener<Drawable>() {
+          .listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(
                 @Nullable @org.jetbrains.annotations.Nullable GlideException e, Object model,
@@ -256,6 +264,7 @@ public class RecipeEntryAdapter extends
               holder.binding.picture.setVisibility(View.GONE);
               return false;
             }
+
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
@@ -266,6 +275,11 @@ public class RecipeEntryAdapter extends
           .into(holder.binding.picture);
     } else {
       holder.binding.picture.setVisibility(View.GONE);
+      LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+          0, LayoutParams.WRAP_CONTENT
+      );
+      layoutParams.weight = 4;
+      holder.binding.linearTextContainer.setLayoutParams(layoutParams);
     }
 
 

@@ -1013,8 +1013,9 @@
   <string name="hint_key">Valid API key</string>
 
   <string name="setting_theme">Theme</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Follow system</string>
+  <string name="setting_theme_description">Try another look</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Auto</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Dark</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -1022,8 +1023,10 @@
   <string name="setting_language">Language</string>
   <string name="setting_language_description">Select language</string>
   <string name="setting_language_info">Many thanks to all the volunteer translators at Transifex!\nPlease visit us on GitHub to learn how you can help make Grocy Android available for your language.</string>
-  <string name="setting_language_system">System default: %1$s</string>
-  <string name="setting_language_not_available">Not available</string>
+  <string name="setting_language_system">Follow system</string>
+  <string name="setting_language_not_available">English if translation is not available</string>
+  <string name="setting_transition">Use sliding transition between settings pages</string>
+  <string name="setting_transition_description">Instead of fading</string>
   <string name="setting_open_food_facts">Use Open Food Facts and Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Get info from barcodes</string>
   <string name="setting_choose_barcode_scanner">Choose barcode scanner</string>

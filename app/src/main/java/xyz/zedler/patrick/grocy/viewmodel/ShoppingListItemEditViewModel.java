@@ -50,7 +50,7 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.repository.ShoppingListItemEditRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -318,17 +318,21 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.getProductNameLive().setValue(product.getName());
 
 
-    HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-        getApplication(),
-        quantityUnitHashMap,
-        unitConversions,
-        product
-    );
-    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-    if (!isActionEdit) {
-      QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
-      formData.getQuantityUnitLive().setValue(purchase);
+    try {
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          getApplication(),
+          quantityUnitHashMap,
+          unitConversions,
+          product
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+    } catch (IllegalArgumentException e) {
+      showMessage(e.getMessage());
+      formData.getQuantityUnitsFactorsLive().setValue(null);
     }
+
+    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    formData.getQuantityUnitLive().setValue(purchase);
 
     formData.isFormValid();
   }

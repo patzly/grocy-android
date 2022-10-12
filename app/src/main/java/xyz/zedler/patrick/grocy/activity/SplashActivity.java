@@ -39,19 +39,18 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.color.DynamicColors;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.util.Constants.THEME;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SplashActivity extends MainActivity {
 
   @Override
   public void onCreate(Bundle bundle) {
-    if (Build.VERSION.SDK_INT >= 31) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
       super.onCreate(bundle);
 
       getSplashScreen().setOnExitAnimationListener(view -> {
@@ -181,10 +180,10 @@ public class SplashActivity extends MainActivity {
     );
     int uiMode = base.getResources().getConfiguration().uiMode;
     switch (modeNight) {
-      case SettingsViewModel.DARK_MODE_NO:
+      case AppCompatDelegate.MODE_NIGHT_NO:
         uiMode = Configuration.UI_MODE_NIGHT_NO;
         break;
-      case SettingsViewModel.DARK_MODE_YES:
+      case AppCompatDelegate.MODE_NIGHT_YES:
         uiMode = Configuration.UI_MODE_NIGHT_YES;
         break;
     }

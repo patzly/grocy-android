@@ -33,7 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputBinding;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class InputBottomSheet extends BaseBottomSheetDialogFragment {
@@ -77,11 +77,11 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     Object text = requireArguments().get(ARGUMENT.TEXT);
     if (number instanceof Double) {
       inputLive.setValue(NumUtil.trim((Double) number));
-      inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
+      inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED;
       showMoreLess = true;
     } else if (number instanceof Integer) {
       inputLive.setValue(NumUtil.trim((Integer) number));
-      inputType = InputType.TYPE_CLASS_NUMBER;
+      inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED;
       showMoreLess = true;
     } else {
       inputLive.setValue(text != null ? (String) text : "");

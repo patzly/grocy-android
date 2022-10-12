@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -282,7 +282,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
               new TypeToken<ArrayList<QuantityUnit>>() {
               }.getType()
           );
-          SortUtil.sortQuantityUnitsByName(requireContext(), quantityUnits, true);
+          SortUtil.sortQuantityUnitsByName(quantityUnits, true);
           quantityUnitNames = getQuantityUnitNames();
 
           binding.swipeMasterQuantityUnit.setRefreshing(false);

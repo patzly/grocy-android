@@ -35,8 +35,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ProductGroupAdapter;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class ProductGroupsBottomSheet extends BaseBottomSheetDialogFragment
@@ -71,7 +71,7 @@ public class ProductGroupsBottomSheet extends BaseBottomSheetDialogFragment
     assert productGroupsArg != null;
     productGroups = new ArrayList<>(productGroupsArg);
 
-    SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
+    SortUtil.sortProductGroupsByName(productGroups, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       productGroups.add(
           0,

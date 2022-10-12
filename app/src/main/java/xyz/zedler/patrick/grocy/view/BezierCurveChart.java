@@ -21,38 +21,32 @@ package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
-import android.graphics.Paint.FontMetrics;
 import android.graphics.Path;
+import android.graphics.Path.Op;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BezierCurveChart extends View {
 
-  private static final float CURVE_LINE_WIDTH = 2f;
-  private static final float BADGE_HEIGHT = 10; // percentage of chartRect height
-  private static final float BADGE_MARGIN = 5;
-  private static final float BADGE_FONT_SIZE = 70; // 100 means font fills badge with height
-  private static final float X_LABEL_OFFSET_Y = 16;
-  private static final float Y_LABEL_OFFSET_X = 12;
+  private static final String TAG = BezierCurveChart.class.getSimpleName();
 
-  public static class Point {
+  private static final float LABEL_ROTATION = 45;
 
+  public static class Point implements Comparable<Point> {
     final float x;
     final float y;
 
@@ -61,7 +55,10 @@ public class BezierCurveChart extends View {
       this.y = y;
     }
 
-    static final Comparator<Point> X_COMPARATOR = (lhs, rhs) -> (int) (lhs.x - rhs.x);
+    @Override
+    public int compareTo(Point o) {
+      return Float.compare(this.x, o.x);
+    }
 
     @NonNull
     @Override
@@ -70,9 +67,8 @@ public class BezierCurveChart extends View {
     }
   }
 
-  private final Context context;
   private final Paint paintChartBg = new Paint();
-  private final Paint paintCurve = new Paint();
+  private final Paint paintCurve;
   private final Paint paintDot = new Paint();
   private final Paint paintFill = new Paint();
   private final Paint paintGrid = new Paint();
@@ -81,86 +77,98 @@ public class BezierCurveChart extends View {
   private final Paint paintBadgeText = new Paint();
   private final Path pathCurve = new Path();
   private final Path pathFill = new Path();
+  private final Path pathFillMask = new Path();
   private final RectF rectChart = new RectF(); // rectangle without labels
   private final RectF rectBadge = new RectF();
+  private final Rect rectMeasure = new Rect();
   private final Rect rectDrawing = new Rect();
-  private final ArrayList<Integer> curveColors = new ArrayList<>();
+  private final List<ColorRoles> curveColors = new ArrayList<>();
   private ArrayList<String> labels;
   private HashMap<String, ArrayList<Point>> curveLists;
   private final HashMap<String, ArrayList<Point>> adjustedCurveLists = new HashMap<>();
   private float lastXLeftBadge = 0;
   private float maxY = 0;
   private float scaleY;
-  private final int cornerRadius;
+  private final int cornerRadiusBadge, cornerRadiusBg;
+  private final int badgeHeight, badgePadding, badgeMargin;
   private final int dotRadius;
+  private final int labelMargin, paddingEnd;
+  private final boolean isRtl;
 
   public BezierCurveChart(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    this.context = context;
+    isRtl = UiUtil.isLayoutRtl(context);
 
-    cornerRadius = UiUtil.dpToPx(context, 6);
-    dotRadius = UiUtil.dpToPx(context, 3);
+    cornerRadiusBadge = UiUtil.dpToPx(context, 8);
+    cornerRadiusBg = UiUtil.dpToPx(context, 12);
+    dotRadius = UiUtil.dpToPx(context, 4);
+    badgeHeight = UiUtil.dpToPx(context, 24);
+    badgePadding = UiUtil.dpToPx(context, 7);
+    badgeMargin = UiUtil.dpToPx(context, 8);
+    labelMargin = UiUtil.dpToPx(context, 8);
+    paddingEnd = UiUtil.dpToPx(context, 4);
 
+    paintCurve = new Paint(Paint.ANTI_ALIAS_FLAG);
     paintCurve.setStyle(Paint.Style.STROKE);
-    paintCurve.setStrokeCap(Paint.Cap.ROUND);
-    paintCurve.setStrokeWidth(UiUtil.dpToPx(context, CURVE_LINE_WIDTH));
-    paintCurve.setAntiAlias(true);
+    paintCurve.setStrokeWidth(UiUtil.dpToPx(context, 2));
 
-    curveColors.add(getColor(R.color.retro_blue_bg));
-    curveColors.add(getColor(R.color.retro_yellow_bg));
-    curveColors.add(getColor(R.color.retro_red_bg_black));
-    curveColors.add(getColor(R.color.retro_dirt)); // TODO: light variants
-    curveColors.add(getColor(R.color.retro_green_bg_black));
+    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.green));
+    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.yellow));
+    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.orange));
+    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.red));
+    curveColors.add(ResUtil.getHarmonizedRoles(context, R.color.blue));
 
     paintDot.setStyle(Paint.Style.FILL);
     paintDot.setAntiAlias(true);
 
     paintFill.setStyle(Paint.Style.FILL);
     paintFill.setAntiAlias(true);
-    paintFill.setPathEffect(new CornerPathEffect(cornerRadius));
 
     paintChartBg.setStyle(Paint.Style.FILL);
-    paintChartBg.setColor(getColor(R.color.on_background_tertiary));
+    paintChartBg.setColor(ResUtil.getColorAttr(context, R.attr.colorSurfaceVariant));
     paintChartBg.setAntiAlias(true);
 
     paintGrid.setStyle(Paint.Style.STROKE);
-    paintGrid.setStrokeCap(Paint.Cap.SQUARE);
-    paintGrid.setColor(Color.argb(0x30, 0xD0, 0xD0, 0xD0));
+    // TODO: use colorOutlineVariant when it's available
+    paintGrid.setColor(ResUtil.getColorAttr(context, R.attr.colorOutline));
+    paintGrid.setAlpha(100);
     paintGrid.setAntiAlias(true);
-    paintGrid.setStrokeWidth(3.0f);
+    paintGrid.setStrokeWidth(UiUtil.dpToPx(context, 1));
 
     paintBadge.setStyle(Paint.Style.FILL);
     paintBadge.setAntiAlias(true);
 
-    paintBadgeText.setColor(Color.BLACK);
     paintBadgeText.setAntiAlias(true);
-    paintBadgeText.setTextSize(UiUtil.spToPx(context, 14));
+    paintBadgeText.setTextSize(UiUtil.spToPx(context, 12));
     paintBadgeText.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
 
-    paintLabel.setColor(getColor(R.color.on_background_secondary));
-    paintLabel.setTextSize(UiUtil.spToPx(context, 13));
-    paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.jost_book));
+    paintLabel.setColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+    paintLabel.setTextSize(UiUtil.spToPx(context, 11));
+    paintLabel.setTypeface(ResourcesCompat.getFont(context, R.font.jost_medium));
     paintLabel.setAntiAlias(true);
   }
 
   private void drawLabels(Canvas canvas) {
-    // Y-AXIS
-
-    // Y coordinate scale
-    float maxWidth = 0;
-    for (String label : labels) {
-      float labelWidth = getTextWidth(paintLabel, label);
-      if (labelWidth > maxWidth) {
-        maxWidth = labelWidth;
+    // max date width
+    int maxDateHeight = 0;
+    int lastDateWidth = 0;
+    for (int i = 0; i < labels.size(); i++) {
+      int labelWidth = getTextWidth(paintLabel, labels.get(i)) + labelMargin;
+      double alpha = Math.toRadians(90 - LABEL_ROTATION);
+      int rotatedHeight = (int) (labelWidth * Math.cos(alpha));
+      if (rotatedHeight > maxDateHeight) {
+        maxDateHeight = rotatedHeight;
+      }
+      if (i == labels.size() - 1) { // calculate last width
+        lastDateWidth = (int) (labelWidth * Math.sin(Math.toRadians(LABEL_ROTATION)));
       }
     }
-    int newBottom = (int) (rectChart.bottom - maxWidth - X_LABEL_OFFSET_Y);
-    int newChartHeight = (int) (newBottom - rectChart.top);
-    scaleY = newChartHeight / maxY * (1 - BADGE_HEIGHT / 100 - BADGE_MARGIN * 2 / 100);
+    rectChart.bottom -= maxDateHeight + paintLabel.getTextSize() / 2;
 
-    maxWidth = 0;
-    for (float y = 1; y < maxY; y++) {
+    // max price width
+    int maxPriceWidth = 0;
+    for (float y = 1; y < maxY * (maxY <= 1 ? 10 : 1); y++) {
       if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
         continue;
       }
@@ -170,74 +178,59 @@ public class BezierCurveChart extends View {
       if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
-      String s = NumUtil.trim(y);
-      float labelWidth = getTextWidth(paintLabel, s);
-      if (maxWidth < labelWidth) {
-        maxWidth = labelWidth;
+      int labelWidth = getTextWidth(paintLabel, NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1)));
+      if (labelWidth > maxPriceWidth) {
+        maxPriceWidth = labelWidth;
       }
     }
-
-    // Move left border
-    rectChart.left = (int) (rectChart.left + dotRadius);
-    if (getTextWidth(paintLabel, labels.get(labels.size() - 1)) > maxWidth) {
-      rectChart.right -= getTextWidth(paintLabel, labels.get(labels.size() - 1)) - 40;
-    } else {
-      rectChart.right -= maxWidth + 20;
-    }
-
-    float labelX = rectChart.right;
-    float labelY;
-    for (float y = 1; y < maxY; y++) {
-      if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
-        continue;
-      }
-      if (maxY >= 50 && maxY < 100 && y % 10 != 0) {
-        continue;
-      }
-      if (maxY >= 100 && y % 20 != 0) {
-        continue;
-      }
-      String s = NumUtil.trim(y);
-      float centerY = newBottom - y * scaleY;
-      labelY = centerY + (getTextHeight(paintLabel) - 16) / 2;
-      canvas.drawText(s, labelX + Y_LABEL_OFFSET_X, labelY, paintLabel);
-    }
+    rectChart.right -= Math.max(maxPriceWidth + labelMargin, lastDateWidth);
 
     // X-AXIS
 
-    float part;
+    float sectionWidth;
     if (labels.size() > 1) {
-      part = rectChart.width() / (labels.size() - 1);
+      sectionWidth = rectChart.width() / (labels.size() - 1);
     } else {
-      part = 1;
+      sectionWidth = 1;
     }
 
-    maxWidth = 0;
+    float centerX, centerY;
     for (int i = 0; i < labels.size(); i++) {
-      String s = labels.get(i);
-      float centerX = rectChart.left + part * i;
-      float labelWidth = getTextWidth(paintLabel, s);
-      if (labelWidth > maxWidth) {
-        maxWidth = labelWidth;
-      }
-
-      if (i == 0) {
-        centerX += 15;
-        labelX = centerX;
-      } else if (i == labels.size() - 1) {
-        centerX -= 5;
-        labelX = centerX;
-      } else {
-        labelX = centerX;
-      }
-      labelY = rectChart.bottom + X_LABEL_OFFSET_Y / 2;
-      labelX += X_LABEL_OFFSET_Y / 2;
+      String label = labels.get(i);
+      paintLabel.getTextBounds(label, 0, label.length(), rectMeasure);
+      centerX = rectChart.left + sectionWidth * i;
+      centerY = rectChart.bottom + labelMargin;
       canvas.save();
-      canvas.rotate(45f, centerX, newBottom);
-      canvas.drawText(s, labelX, labelY - labelWidth, paintLabel);
+      canvas.rotate(LABEL_ROTATION, centerX, centerY);
+      canvas.drawText(label, centerX, centerY - rectMeasure.centerY(), paintLabel);
       canvas.restore();
     }
-    rectChart.bottom = (int) (rectChart.bottom - maxWidth - X_LABEL_OFFSET_Y);
+
+    // Y-AXIS
+
+    float drawingHeight = rectChart.height() - badgeHeight - badgeMargin * 2;
+    if (maxY > 1) {
+      scaleY = drawingHeight / maxY; // 800 / 4 = 200
+    } else {
+      scaleY = drawingHeight / (maxY * 10); // 800 / 0.4 * 10
+    }
+
+    centerX = rectChart.right + labelMargin;
+    for (float y = 1; y < maxY * (maxY <= 1 ? 10 : 1); y++) {
+      if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
+        continue;
+      }
+      if (maxY >= 50 && maxY < 100 && y % 10 != 0) {
+        continue;
+      }
+      if (maxY >= 100 && y % 20 != 0) {
+        continue;
+      }
+      String label = NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1));
+      centerY = rectChart.bottom - y * scaleY;
+      centerY = centerY + getTextHeight(paintLabel, label) / 2;
+      canvas.drawText(label, centerX, centerY, paintLabel);
+    }
   }
 
   private void adjustPoints() {
@@ -269,7 +262,7 @@ public class BezierCurveChart extends View {
 
         Point newPoint = new Point(
             (p.x - startX) * rectChart.width() / axesSpan + rectChart.left,
-            rectChart.height() - (p.y * scaleY)
+            rectChart.height() - (p.y * scaleY * (maxY <= 1 ? 10 : 1))
         );
 
         ArrayList<Point> adjustedCurveList = adjustedCurveLists.get(key);
@@ -284,7 +277,8 @@ public class BezierCurveChart extends View {
   }
 
   private void drawGrid(Canvas canvas) {
-    canvas.drawRoundRect(rectChart, cornerRadius, cornerRadius, paintChartBg);
+    canvas.drawRoundRect(rectChart, cornerRadiusBg, cornerRadiusBg, paintChartBg);
+    getRoundedRectAsPath(pathFillMask, rectChart, cornerRadiusBg, cornerRadiusBg);
 
     int gridCount = labels.size() - 1;
     float part = rectChart.width() / gridCount;
@@ -294,22 +288,65 @@ public class BezierCurveChart extends View {
       canvas.drawLine(x, rectChart.top, x, rectChart.bottom, paintGrid);
     }
 
-    for (float y = 1; y < maxY; y++) {
+    for (float y = 1; y < maxY * (maxY <= 1 ? 10 : 1); y++) {
       if (maxY >= 10 && maxY < 50 && y % 5 != 0) {
         continue;
-      }
-      if (maxY >= 50 && maxY < 100 && y % 10 != 0) {
+      } else if (maxY >= 50 && maxY < 100 && y % 10 != 0) {
+        continue;
+      } else if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
-      if (maxY >= 100 && y % 20 != 0) {
-        continue;
-      }
-      canvas.drawLine(rectChart.left,
-          rectChart.bottom - y * scaleY,
-          rectChart.right,
-          rectChart.bottom - y * scaleY, paintGrid
+      canvas.drawLine(
+          rectChart.left, rectChart.bottom - y * scaleY,
+          rectChart.right, rectChart.bottom - y * scaleY,
+          paintGrid
       );
     }
+  }
+
+  private static void getRoundedRectAsPath(Path target, RectF rect, float rx, float ry) {
+    target.reset();
+    if (rx < 0) {
+      rx = 0;
+    }
+    if (ry < 0) {
+      ry = 0;
+    }
+    if (rx > rect.width() / 2) {
+      rx = rect.width() / 2;
+    }
+    if (ry > rect.height() / 2) {
+      ry = rect.height() / 2;
+    }
+    float widthMinusCorners = (rect.width() - (2 * rx));
+    float heightMinusCorners = (rect.height() - (2 * ry));
+
+    target.moveTo(rect.right, rect.top + ry);
+    target.arcTo( //top-right-corner
+        rect.right - 2 * rx, rect.top, rect.right, rect.top + 2 * ry,
+        0, -90,
+        false
+    );
+    target.rLineTo(-widthMinusCorners, 0);
+    target.arcTo( //top-left corner
+        rect.left, rect.top, rect.left + 2*rx, rect.top + 2 * ry,
+        270, -90,
+        false
+    );
+    target.rLineTo(0, heightMinusCorners);
+    target.arcTo( // bottom-left corner
+        rect.left, rect.bottom - 2 * ry, rect.left + 2 * rx, rect.bottom,
+        180, -90,
+        false
+    );
+    target.rLineTo(widthMinusCorners, 0);
+    target.arcTo( // bottom-right corner
+        rect.right - 2 * rx, rect.bottom - 2 * ry, rect.right, rect.bottom,
+        90, -90,
+        false
+    );
+    target.rLineTo(0, -heightMinusCorners);
+    target.close();
   }
 
   private void drawCurvesFill(Canvas canvas) {
@@ -322,13 +359,14 @@ public class BezierCurveChart extends View {
       pathFill.lineTo(curveList.get(0).x, rectChart.bottom);
       pathFill.lineTo(curveList.get(0).x, curveList.get(0).y);
       pathFill.close();
-      int curveColor = curveColors.get(colorIndex);
+      pathFill.op(pathFillMask, Op.INTERSECT);
+      int curveColor = curveColors.get(colorIndex).getAccentContainer();
       colorIndex++;
       if (colorIndex > curveColors.size() - 1) {
         colorIndex = 0;
       }
       paintFill.setColor(curveColor);
-      paintFill.setAlpha(40);
+      paintFill.setAlpha(100);
       canvas.drawPath(pathFill, paintFill);
     }
   }
@@ -357,17 +395,19 @@ public class BezierCurveChart extends View {
     for (String curveLabel : adjustedCurveLists.keySet()) {
       ArrayList<Point> curveList = adjustedCurveLists.get(curveLabel);
       assert curveList != null;
-      int curveColor = curveColors.get(colorIndex);
-      colorIndex++;
+      int curveColor = curveColors.get(colorIndex).getAccent();
       if (colorIndex > curveColors.size() - 1) {
         colorIndex = 0;
       }
-      drawDots(canvas, curveList, curveColor);
-      drawBadge(canvas, curveLabel, curveColor);
 
       buildPath(pathCurve, curveList);
       paintCurve.setColor(curveColor);
       canvas.drawPath(pathCurve, paintCurve);
+
+      drawDots(canvas, curveList, curveColor);
+      drawBadge(canvas, curveLabel, curveColors.get(colorIndex));
+
+      colorIndex++;
     }
   }
 
@@ -378,39 +418,38 @@ public class BezierCurveChart extends View {
     }
   }
 
-  private void drawBadge(Canvas canvas, String text, int color) {
-    rectBadge.top = rectChart.top + rectChart.height() * BADGE_MARGIN / 100;
-    rectBadge.bottom = rectBadge.top + rectChart.height() * BADGE_HEIGHT / 100;
-    float badgeMargin = rectChart.height() * BADGE_MARGIN / 100;
-
+  private void drawBadge(Canvas canvas, String text, ColorRoles colorRoles) {
     Rect textBounds = new Rect();
-    paintBadgeText.getTextBounds(text, 0, 1, textBounds);
-    float textWidth = getTextWidth(paintBadgeText, text);
-    float textHeight = textBounds.bottom - textBounds.top;
-    float textY = rectBadge.top + rectBadge.height() / 2 + textHeight / 2;
+    paintBadgeText.getTextBounds(text, 0, text.length(), textBounds);
+    textBounds.inset(-badgePadding, 0);
+
+    rectBadge.top = rectChart.top + badgeMargin;
+    rectBadge.bottom = rectBadge.top + badgeHeight;
 
     if (lastXLeftBadge == 0) {
       lastXLeftBadge = rectChart.right;
     }
     rectBadge.right = lastXLeftBadge - badgeMargin;
-    rectBadge.left = rectBadge.right - textWidth - rectBadge.height() * BADGE_FONT_SIZE / 200;
+    rectBadge.left = rectBadge.right - textBounds.width();
     lastXLeftBadge = rectBadge.left;
-    float badgeCenterX = rectBadge.left + rectBadge.width() / 2;
 
-    float textX = badgeCenterX - textWidth / 2;
+    float textX = rectBadge.left + badgePadding;
+    float textY = rectBadge.centerY() + textBounds.height() / 2f;
 
-    paintBadge.setColor(color);
-    canvas.drawRoundRect(rectBadge, cornerRadius, cornerRadius, paintBadge);
+    paintBadge.setColor(colorRoles.getAccent());
+    canvas.drawRoundRect(rectBadge, cornerRadiusBadge, cornerRadiusBadge, paintBadge);
+    paintBadgeText.setColor(colorRoles.getOnAccent());
     canvas.drawText(text, textX, textY, paintBadgeText);
   }
 
-  public float getTextHeight(Paint textPaint) {
-    FontMetrics fm = textPaint.getFontMetrics();
-    return (float) Math.ceil(fm.descent - fm.ascent) - 2;
+  public float getTextHeight(Paint textPaint, String text) {
+    textPaint.getTextBounds(text, 0, text.length(), rectMeasure);
+    return rectMeasure.height();
   }
 
-  public float getTextWidth(Paint textPaint, String text) {
-    return textPaint.measureText(text);
+  public int getTextWidth(Paint textPaint, String text) {
+    textPaint.getTextBounds(text, 0, text.length(), rectMeasure);
+    return rectMeasure.width();
   }
 
   public void init(
@@ -424,7 +463,7 @@ public class BezierCurveChart extends View {
     }
     // order by x coordinate ascending
     for (ArrayList<Point> curveList : curveLists.values()) {
-      Collections.sort(curveList, Point.X_COMPARATOR);
+      Collections.sort(curveList);
     }
     // set maxY to highest y coordinate
     maxY = 0;
@@ -446,6 +485,13 @@ public class BezierCurveChart extends View {
     rectChart.top = rectDrawing.top;
     rectChart.left = rectDrawing.left;
     rectChart.right = rectDrawing.right;
+    if (isRtl) {
+      rectChart.right -= dotRadius;
+      rectChart.left += paddingEnd;
+    } else {
+      rectChart.left += dotRadius;
+      rectChart.right -= paddingEnd;
+    }
 
     if (curveLists == null) {
       return;
@@ -462,10 +508,6 @@ public class BezierCurveChart extends View {
     drawCurvesFill(canvas);
 
     drawCurvesLine(canvas);
-  }
-
-  private int getColor(@ColorRes int color) {
-    return ContextCompat.getColor(context, color);
   }
 }
 

@@ -45,8 +45,8 @@ import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.ChooseProductViewModel;
 
 public class ChooseProductFragment extends BaseFragment
@@ -141,7 +141,7 @@ public class ChooseProductFragment extends BaseFragment
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
+        Snackbar snackbar = msg.getSnackbar(activity.binding.coordinatorMain);
         activity.showSnackbar(snackbar);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -218,7 +218,7 @@ public class ChooseProductFragment extends BaseFragment
   }
 
   public void createNewProduct() {
-    navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+    navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
         new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
             .setProductName(viewModel.getProductNameLive().getValue())
             .build().toBundle());

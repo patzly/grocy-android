@@ -38,8 +38,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
 public class NotificationService extends Service {
 

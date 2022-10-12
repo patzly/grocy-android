@@ -26,7 +26,7 @@
   android:minHeight="64dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
+  android:background="@drawable/ripple_list_item_swipeable"
   android:padding="16dp"
   android:gravity="center_vertical"
   android:weightSum="1">
@@ -39,14 +39,14 @@
 
     <TextView
         android:id="@+id/name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true" />
 
     <TextView
         android:id="@+id/note_as_name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="italic"

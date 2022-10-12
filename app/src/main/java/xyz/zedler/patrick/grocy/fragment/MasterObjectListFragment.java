@@ -61,8 +61,8 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
@@ -336,7 +336,7 @@ public class MasterObjectListFragment extends BaseFragment
         List<ProductGroup> productGroups = viewModel.getProductGroups();
         if (productGroups != null && !productGroups.isEmpty()) {
           ArrayList<ProductGroup> sorted = new ArrayList<>(productGroups);
-          SortUtil.sortProductGroupsByName(requireContext(), sorted, true);
+          SortUtil.sortProductGroupsByName(sorted, true);
           for (ProductGroup pg : sorted) {
             menuProductGroups.add(pg.getName()).setOnMenuItemClickListener(itemTemp -> {
               if (binding.recycler.getAdapter() == null) {

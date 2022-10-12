@@ -47,7 +47,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -267,7 +267,7 @@ public class MasterProductGroupFragment extends BaseFragment {
               new TypeToken<ArrayList<ProductGroup>>() {
               }.getType()
           );
-          SortUtil.sortProductGroupsByName(requireContext(), productGroups, true);
+          SortUtil.sortProductGroupsByName(productGroups, true);
           productGroupNames = getProductGroupNames();
 
           binding.swipeMasterProductGroup.setRefreshing(false);

@@ -24,7 +24,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
-    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel" />
@@ -108,7 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:orientation="vertical">
 
         <LinearLayout

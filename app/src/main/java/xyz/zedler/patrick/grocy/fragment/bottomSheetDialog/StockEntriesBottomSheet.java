@@ -34,7 +34,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntrySelectionAdapter;
 import xyz.zedler.patrick.grocy.model.StockEntry;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
     implements StockEntrySelectionAdapter.StockEntrySelectionAdapterListener {

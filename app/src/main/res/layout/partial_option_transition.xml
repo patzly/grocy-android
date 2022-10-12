@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/linear_other_transition"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+
+  <ImageView
+    android:id="@+id/image_other_transition"
+    style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+    android:src="@drawable/ic_round_swap_horiz_anim"
+    tools:ignore="ContentDescription" />
+
+  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+    <TextView
+      style="@style/Widget.Grocy.TextView.ListItem.Title"
+      android:text="@string/setting_transition" />
+
+    <TextView
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:text="@string/setting_transition_description" />
+
+  </LinearLayout>
+
+  <com.google.android.material.materialswitch.MaterialSwitch
+    android:id="@+id/switch_other_transition"
+    style="@style/Widget.Grocy.Switch" />
+
+</LinearLayout>

@@ -20,17 +20,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- For languages not supported by Jost*, the system font will be used as fallback.
-       If the system font is used, the medium variant of Jost* won't be replaced by a medium/bold
-       variant of the system font, so we have to configure these texts to be styled bold for these
-       locales with textStyle="bold".
-       Untranslated text (names or untranslated strings) with textStyle set to bold will look like
-       the medium variant of Jost*, so there is no extra attention needed for e.g. the app bar.
+       If the Jost* Medium is used, the system will automatically switch to the font-xx folder for
+       the unsupported language where Roboto Medium is used instead.
        Affected languages: Hebrew,... TODO: any other? -->
 
   <style name="ThemeOverlay.Grocy.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
     <item name="android:backgroundDimAmount">0.7</item>
     <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
     <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
+    <item name="buttonBarNeutralButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
     <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Grocy.Title.Text</item>
   </style>
 
@@ -87,11 +85,11 @@
     <item name="android:textColor">?attr/colorSurfaceVariant</item>
   </style>
 
-  <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Snackbar"
     parent="Widget.Material3.Button.TextButton.Snackbar">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
   <!-- ImageView (icons) -->
@@ -110,22 +108,15 @@
 
   <!-- Button -->
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.UnelevatedButton"
+    name="Widget.Grocy.Button.UnelevatedButton"
     parent="Widget.Material3.Button.UnelevatedButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.UnelevatedButton"
-    parent="Base.Grocy.Button.UnelevatedButton">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.UnelevatedButton.Dialog.Caution"
     parent="Widget.Grocy.Button.TextButton.Dialog">
@@ -134,106 +125,69 @@
     <item name="rippleColor">@color/selector_highlight_error_container</item>
   </style>
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.TonalButton"
+    name="Widget.Grocy.Button.TonalButton"
     parent="Widget.Material3.Button.TonalButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.TonalButton"
-    parent="Base.Grocy.Button.TonalButton">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.TonalButton.Icon"
+    name="Widget.Grocy.Button.TonalButton.Icon"
     parent="Widget.Material3.Button.TonalButton.Icon">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.TonalButton.Icon"
-    parent="Base.Grocy.Button.TonalButton.Icon">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.OutlinedButton"
+    name="Widget.Grocy.Button.OutlinedButton"
     parent="Widget.Material3.Button.OutlinedButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.OutlinedButton"
-    parent="Base.Grocy.Button.OutlinedButton">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.OutlinedButton.Icon"
+    name="Widget.Grocy.Button.OutlinedButton.Icon"
     parent="Widget.Material3.Button.OutlinedButton.Icon">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconPadding">8dp</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.OutlinedButton.Icon"
-    parent="Base.Grocy.Button.OutlinedButton.Icon">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.TextButton"
+    name="Widget.Grocy.Button.TextButton"
     parent="Widget.Material3.Button.TextButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.TextButton"
-    parent="Base.Grocy.Button.TextButton">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Base style -->
   <style
-    name="Base.Grocy.Button.TextButton.Icon"
+    name="Widget.Grocy.Button.TextButton.Icon"
     parent="Widget.Material3.Button.TextButton.Icon">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconPadding">8dp</item>
-  </style>
-
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.Button.TextButton.Icon"
-    parent="Base.Grocy.Button.TextButton.Icon">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog"
     parent="Widget.Material3.Button.TextButton.Dialog">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog.Caution"
     parent="Widget.Grocy.Button.TextButton.Dialog">
@@ -247,6 +201,14 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    <item name="iconSize">24dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.Button.IconButton.Filled"
+    parent="Widget.Material3.Button.IconButton.Filled">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="iconSize">24dp</item>
   </style>
 
@@ -332,23 +294,49 @@
     <item name="android:paddingTop">8dp</item>
   </style>
 
+  <style
+    name="Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+    parent="@style/Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="boxCornerRadiusTopStart">16dp</item>
+    <item name="boxCornerRadiusTopEnd">16dp</item>
+    <item name="errorIconDrawable">@drawable/ic_round_error</item>
+    <!--item name="boxBackgroundColor">@color/on_background_tertiary</item>
+    <item name="boxStrokeColor">@color/secondary</item>
+    <item name="hintTextColor">@color/secondary</item>
+    <item name="android:textColorHint">@color/on_background_secondary</item>
+    <item name="errorTextColor">@color/error</item>
+    <item name="errorTextAppearance">@style/TextAppearance.Grocy.Error</item>
+    <item name="errorIconTint">@color/error</item>
+    <item name="boxStrokeErrorColor">@color/error</item-->
+  </style>
+
+  <!-- PROGRESS BAR -->
+
+  <style
+    name="Widget.Grocy.ProgressBar.Horizontal.Red"
+    parent="@android:style/Widget.ProgressBar.Horizontal">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">4dp</item>
+    <item name="android:progressDrawable">@drawable/shape_progress_bar_confirm</item>
+  </style>
+
   <!-- Divider -->
 
   <style name="Widget.Grocy.Divider" parent="Widget.Material3.MaterialDivider">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">center</item>
+  </style>
+
+  <style name="Widget.Grocy.Divider.Margin" parent="Widget.Grocy.Divider">
     <item name="android:layout_marginTop">8dp</item>
     <item name="android:layout_marginBottom">8dp</item>
   </style>
 
-  <style name="Widget.Grocy.Divider.Small" parent="Widget.Grocy.Divider">
+  <style name="Widget.Grocy.Divider.Small" parent="Widget.Grocy.Divider.Margin">
     <item name="android:layout_width">56dp</item>
-  </style>
-
-  <style name="Widget.Grocy.Divider.NoMargins" parent="Widget.Grocy.Divider">
-    <item name="android:layout_marginTop">0dp</item>
-    <item name="android:layout_marginBottom">0dp</item>
   </style>
 
   <!-- CheckBox -->
@@ -384,9 +372,25 @@
     <item name="tickColorActive">?attr/colorSurfaceVariant</item>
   </style>
 
+  <!-- CHIP -->
+
+  <style name="Widget.Grocy.Chip.Assist" parent="Widget.Material3.Chip.Assist">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textAppearance">@style/TextAppearance.Grocy.LabelLarge</item>
+    <item name="chipIconTint">?attr/colorPrimary</item>
+  </style>
+
   <!-- Tooltip -->
 
   <style name="Widget.Grocy.Tooltip" parent="Widget.Material3.Tooltip">
+    <item name="android:textColor">?attr/colorOnTertiaryContainer</item>
+    <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
+    <item name="shapeAppearance">@style/ShapeAppearance.Grocy.Tooltip</item>
+    <item name="backgroundTint">?attr/colorTertiaryContainer</item>
+  </style>
+
+  <style name="Widget.Grocy.Tooltip.System" parent="Widget.Material3.Tooltip">
     <item name="android:textColor">?attr/colorOnTertiaryContainer</item>
     <item name="android:textAppearance">@style/TextAppearance.Grocy.Tooltip</item>
     <item name="shapeAppearance">@style/ShapeAppearance.Grocy.Tooltip</item>
@@ -400,11 +404,11 @@
 
   <!-- ExtendedFloatingActionButton -->
 
-  <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.ExtendedFloatingActionButton"
     parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
   <!-- TimePicker -->
@@ -425,6 +429,7 @@
   <style
     name="TextAppearance.Grocy.TimePicker.Title"
     parent="TextAppearance.Material3.MaterialTimePicker.Title">
+    <item name="android:fontFamily">@font/jost_medium</item>
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 
@@ -438,6 +443,7 @@
   <style
     name="TextAppearance.Grocy.TimePicker.DisplayLarge"
     parent="TextAppearance.Material3.DisplayLarge">
+    <item name="android:fontFamily">@font/jost_book</item>
     <item name="fontFamily">@font/jost_book</item>
   </style>
 
@@ -450,6 +456,7 @@
   <style
     name="TextAppearance.Grocy.TimePicker.HeadlineMedium"
     parent="TextAppearance.Material3.HeadlineMedium">
+    <item name="android:fontFamily">@font/jost_book</item>
     <item name="fontFamily">@font/jost_book</item>
   </style>
 
@@ -466,6 +473,7 @@
     name="Widget.Grocy.Button.TextButton.Dialog.Flush"
     parent="Widget.Material3.Button.TextButton.Dialog.Flush">
     <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
   <!-- LinearLayout (lists) -->
@@ -588,13 +596,16 @@
     <item name="android:breakStrategy" tools:targetApi="m">high_quality</item>
     <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
     <item name="android:lineBreakWordStyle" tools:targetApi="33">phrase</item>
-    <item name="lineHeight">24sp</item>
-    <item name="android:lineHeight" tools:targetApi="p">24sp</item>
   </style>
 
   <style name="Widget.Grocy.TextView" parent="Base.Grocy.TextView">
     <!-- Overridden in v33 with fullFast -->
     <item name="android:hyphenationFrequency" tools:targetApi="m">full</item>
+  </style>
+
+  <style name="Widget.Grocy.TextView.Medium" parent="Widget.Grocy.TextView">
+    <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
   <style name="Widget.Grocy.TextView.Paragraph" parent="Widget.Grocy.TextView">
@@ -607,43 +618,42 @@
     <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
   </style>
 
-  <!-- Base style -->
-  <style
-    name="Base.Grocy.TextView.TitleMedium"
-    parent="Widget.Grocy.TextView">
+  <!-- M3 TYPOGRAPHY -->
+
+  <style name="Widget.Grocy.TextView.HeadlineSmall" parent="Widget.Grocy.TextView">
+    <item name="android:textAppearance">?attr/textAppearanceHeadlineSmall</item>
+  </style>
+
+  <style name="Widget.Grocy.TextView.TitleMedium" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
   </style>
 
-  <!-- Localized style -->
-  <style
-    name="Widget.Grocy.TextView.TitleMedium"
-    parent="Base.Grocy.TextView.TitleMedium">
-    <item name="android:fontFamily">@font/jost_medium</item>
+  <style name="Widget.Grocy.TextView.BodyMedium" parent="Widget.Grocy.TextView">
+    <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
   </style>
 
-  <!-- Base style -->
-  <style name="Base.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
+  <style name="Widget.Grocy.TextView.LabelLarge" parent="Widget.Grocy.TextView.Medium">
+    <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+  </style>
+
+  <style name="Widget.Grocy.TextView.LabelMedium" parent="Widget.Grocy.TextView.Medium">
+    <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
+  </style>
+
+  <!-- Other text widget styles -->
+
+  <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
     <item name="android:singleLine">true</item>
     <item name="android:textColor">?attr/colorOnSurface</item>
   </style>
 
-  <!-- Localized style -->
-  <style name="Widget.Grocy.TextView.Toolbar" parent="Base.Grocy.TextView.Toolbar">
-    <!-- Untranslated text like the app name doesn't need medium font if the system font is used
-    as fallback because they will already appear medium with the textStyle attribute set to bold
-    for these locales. -->
-    <item name="android:fontFamily">@font/jost_medium</item>
-  </style>
-
-  <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView">
+  <style name="Widget.Grocy.TextView.OfflineIndicator" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textAppearance">@style/TextAppearance.Grocy.LabelLarge</item>
     <item name="android:textColor">?attr/colorOnError</item>
-    <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Base style -->
-  <style name="Base.Grocy.TextView.Category" parent="Widget.Grocy.TextView">
+  <style name="Widget.Grocy.TextView.Category" parent="Widget.Grocy.TextView.Medium">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginStart">72dp</item>
@@ -653,13 +663,7 @@
     <item name="android:textColor">?attr/colorSecondary</item>
   </style>
 
-  <!-- Localized style -->
-  <style name="Widget.Grocy.TextView.Category" parent="Base.Grocy.TextView.Category">
-    <item name="android:fontFamily">@font/jost_medium</item>
-  </style>
-
-  <!-- Base style -->
-  <style name="Base.Grocy.TextView.DrawerItem" parent="Widget.Grocy.TextView">
+  <style name="Widget.Grocy.TextView.DrawerItem" parent="Widget.Grocy.TextView.Medium">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
@@ -667,12 +671,7 @@
     <item name="android:textColor">@color/on_surface</item>
   </style>
 
-  <!-- Localized style -->
-  <style name="Widget.Grocy.TextView.DrawerItem" parent="Base.Grocy.TextView.DrawerItem">
-    <item name="android:fontFamily">@font/jost_medium</item>
-  </style>
-
-  <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView">
+  <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView.BodyMedium">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:maxLines">2</item>
@@ -699,21 +698,28 @@
 
   <!-- TextAppearance -->
 
-  <!-- Localized style, no empty base style needed -->
   <style name="TextAppearance.Grocy.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+    <item name="android:fontFamily">@font/jost_medium</item>
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 
-  <!-- Localized style, no empty base style needed -->
+  <style name="TextAppearance.Grocy.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+    <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
+  </style>
+
   <style name="TextAppearance.Grocy.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">
+    <item name="android:fontFamily">@font/jost_medium</item>
     <item name="fontFamily">@font/jost_medium</item>
   </style>
 
   <style name="TextAppearance.Grocy.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+    <item name="android:fontFamily">@font/jost_book</item>
     <item name="fontFamily">@font/jost_book</item>
   </style>
 
   <style name="TextAppearance.Grocy.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+    <item name="android:fontFamily">@font/jost_book</item>
     <item name="fontFamily">@font/jost_book</item>
   </style>
 
@@ -721,6 +727,7 @@
 
   <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
     <item name="android:textColor">?android:attr/colorBackground</item>
+    <item name="android:fontFamily">@font/jost_book</item>
     <item name="fontFamily">@font/jost_book</item>
   </style>
 

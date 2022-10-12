@@ -21,7 +21,7 @@
 
   <data>
     <import type="android.view.View" />
-    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="viewModel"
       type="xyz.zedler.patrick.grocy.viewmodel.StockOverviewViewModel" />
@@ -38,7 +38,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
@@ -58,35 +59,11 @@
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize">
 
-          <FrameLayout
-            android:id="@+id/frame_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="4dp"
-            android:layout_gravity="start|center_vertical"
-            android:background="?attr/actionBarItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:contentDescription="@string/action_back"
-            android:tooltipText="@string/action_back"
-            android:focusable="true"
-            tools:targetApi="o"
-            android:onClick="@{() -> activity.navigateUp()}">
-
-            <ImageView
-              style="@style/Widget.Grocy.ImageView.Icon.Navigation"
-              android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_arrow_back" />
-
-          </FrameLayout>
-
-          <TextView
-            android:id="@+id/text_title"
-            style="@style/Widget.Grocy.TextView.Toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/title_stock_overview" />
+          <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_default"
+            style="@style/Widget.Grocy.Toolbar.Back"
+            app:title="@string/title_stock_overview"
+            app:titleCentered="true" />
 
         </FrameLayout>
 
@@ -282,7 +259,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
-          android:paddingBottom="88dp"
+          android:paddingBottom="@dimen/global_scroll_bottom_padding"
           android:overScrollMode="ifContentScrolls"
           android:clipToPadding="false"
           android:layoutAnimation="@anim/recycler_layout"

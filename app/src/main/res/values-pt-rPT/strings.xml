@@ -529,7 +529,6 @@
   <string name="title_recipes">Receitas</string>
   <string name="title_recipe_create">Criar receita</string>
   <string name="title_recipe_edit">Editar receita</string>
-
   <string name="title_spoiled">Expirado</string>
   <string name="title_use_specific">Usar item de stock específico</string>
   <string name="title_specific">Item de stock específico</string>
@@ -859,8 +858,6 @@
   <string name="property_opened">aberto</string>
   <string name="property_not_opened">não aberto</string>
   <string name="property_is_freezer">É congelador</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energia (kcal)</string>
   <string name="property_active">Activo</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Não mostrar na visão geral de stock</string>
@@ -1042,24 +1039,17 @@
 
   <string name="setting_theme">Tema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Igual ao sistema</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Escuro</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">Claro</string>
   <string name="setting_language">Idioma</string>
   <string name="setting_language_description">Seleccione idioma</string>
   <string name="setting_language_info">Muito obrigado a todos os tradutores voluntários no Transifex!\nPor favor visite-nos no GitHub para descubrir como pode ajudar a tornar o Grocy Android no seu idioma.</string>
-  <string name="setting_language_system">Pré-defenição do sistema: %1$s</string>
-  <string name="setting_language_not_available">Não disponível</string>
+  <string name="setting_language_system">Igual ao sistema</string>
   <string name="setting_open_food_facts">Usar Open Food Facts e Open Beauty Facts</string>
   <string name="setting_open_food_facts_description">Obter detalhes dos códigos de barra</string>
   <string name="setting_choose_barcode_scanner">Escolher leitor de código de barras</string>
   <string name="setting_choose_barcode_scanner_description">Para leitor de código de barras com câmara</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">Cortar imagem da câmara para pré-visualizar formato</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Previne que o scanner detecte códigos de barras fora da pré-visualização; Pode não funcionar no seu dispositivo!</string>
   <string name="setting_use_front_cam">Utilizar a câmara frontal</string>
   <string name="setting_use_front_cam_description">Para digitalização de códigos de barra</string>
   <string name="setting_use_2d_scanner_format">Usar formato de código de barras 2D</string>

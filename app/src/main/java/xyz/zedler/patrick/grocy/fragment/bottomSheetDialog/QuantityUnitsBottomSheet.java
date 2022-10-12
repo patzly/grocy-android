@@ -36,8 +36,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.QuantityUnitAdapter;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
@@ -71,7 +71,7 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
     assert qUsArg != null;
     quantityUnits = new ArrayList<>(qUsArg);
 
-    SortUtil.sortQuantityUnitsByName(requireContext(), quantityUnits, true);
+    SortUtil.sortQuantityUnitsByName(quantityUnits, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       quantityUnits.add(
           0,

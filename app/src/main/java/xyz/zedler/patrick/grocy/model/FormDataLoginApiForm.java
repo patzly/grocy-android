@@ -33,7 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.LoginApiFormFragmentArgs;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class FormDataLoginApiForm {
 

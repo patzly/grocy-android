@@ -47,9 +47,9 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StoredPurchase;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ACTION;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.viewmodel.StoredPurchasesViewModel;
 
 public class StoredPurchasesFragment extends BaseFragment
@@ -195,14 +195,14 @@ public class StoredPurchasesFragment extends BaseFragment
         }
         barcodeIds = arrayString.toString();
       }
-      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+      navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
               .setProductName(((PendingProduct) item).getName())
               .setPendingProductId(String.valueOf(((PendingProduct) item).getId()))
               .setPendingProductBarcodes(barcodeIds)
               .build().toBundle());
     } else if (item instanceof Product) {
-      navigateDeepLinkSlideStartEnd(R.string.deep_link_masterProductFragment,
+      navigateDeepLinkHorizontally(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(ACTION.EDIT)
               .setProductId(String.valueOf(((Product) item).getId()))
               .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))

@@ -1045,8 +1045,9 @@
   <string name="hint_key">Clé API valide</string>
 
   <string name="setting_theme">Thème</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Suivre le système</string>
+  <string name="setting_theme_description">Essayez une autre apparence</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Auto</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Sombre</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -1054,8 +1055,10 @@
   <string name="setting_language">Langue</string>
   <string name="setting_language_description">Choisir une langue</string>
   <string name="setting_language_info">Remerciement à tous les traducteurs volontaires de Transifex !\nVisitez le projet sur GitHub pour rendre Grocy Android disponible dans votre langue.</string>
-  <string name="setting_language_system">Valeur par défaut : %1$s</string>
-  <string name="setting_language_not_available">Non disponible</string>
+  <string name="setting_language_system">Suivre le système</string>
+  <string name="setting_language_not_available">Anglais si la traduction n\'est pas disponible</string>
+  <string name="setting_transition">Utiliser une transition de glissement entre les pages de paramètres</string>
+  <string name="setting_transition_description">Au lieu d\'un fondu</string>
   <string name="setting_open_food_facts">Utilisez Open Food Facts</string>
   <string name="setting_open_food_facts_description">Obtenir des informations à partir des codes-barres</string>
   <string name="setting_choose_barcode_scanner">Choisissez un lecteur de codes-barres</string>

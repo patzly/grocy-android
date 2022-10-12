@@ -37,7 +37,7 @@ import xyz.zedler.patrick.grocy.adapter.StockLocationAdapter;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockLocation;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 
 public class StockLocationsBottomSheet extends BaseBottomSheetDialogFragment
     implements StockLocationAdapter.StockLocationAdapterListener {

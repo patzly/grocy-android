@@ -23,7 +23,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
@@ -45,19 +44,19 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.util.ConfigUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.APPEARANCE;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.BEHAVIOR;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NETWORK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.NOTIFICATIONS;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.RECIPES;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_LIST;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SHOPPING_MODE;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.APPEARANCE;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.NOTIFICATIONS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.RECIPES;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_LIST;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ReminderUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
@@ -65,10 +64,6 @@ import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class SettingsViewModel extends BaseViewModel {
-
-  public static final int DARK_MODE_SYSTEM = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-  public static final int DARK_MODE_NO = AppCompatDelegate.MODE_NIGHT_NO;
-  public static final int DARK_MODE_YES = AppCompatDelegate.MODE_NIGHT_YES;
 
   private static final String TAG = SettingsViewModel.class.getSimpleName();
   private final SharedPreferences sharedPrefs;
@@ -204,13 +199,6 @@ public class SettingsViewModel extends BaseViewModel {
 
   public void setTheme(int theme) {
     sharedPrefs.edit().putInt(APPEARANCE.DARK_MODE, theme).apply();
-  }
-
-  public String getLanguage() {
-    return sharedPrefs.getString(
-        Constants.SETTINGS.APPEARANCE.LANGUAGE,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.LANGUAGE
-    );
   }
 
   public void showLoadingTimeoutBottomSheet() {
@@ -596,11 +584,7 @@ public class SettingsViewModel extends BaseViewModel {
     ).perform(dlHelper.getUuid());
     dlHelper.getProductGroups(
         productGroups -> {
-          SortUtil.sortProductGroupsByName(
-              getApplication().getApplicationContext(),
-              productGroups,
-              true
-          );
+          SortUtil.sortProductGroupsByName(productGroups, true);
           this.productGroups = productGroups;
           ProductGroup productGroup = ProductGroup.getFromId(productGroups, groupId);
           presetProductGroupTextLive.setValue(productGroup != null ? productGroup.getName()

@@ -40,8 +40,8 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
@@ -137,8 +137,9 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       binding.buttonListSelectionNew.setVisibility(View.VISIBLE);
       binding.buttonListSelectionNew.setOnClickListener(v -> {
         dismiss();
-        navigate(ShoppingListFragmentDirections
-            .actionShoppingListFragmentToShoppingListEditFragment());
+        activity.navigateFragment(
+            ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListEditFragment()
+        );
       });
     }
 
@@ -207,7 +208,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
         binding.recyclerListSelection.getPaddingLeft(),
         binding.recyclerListSelection.getPaddingTop(),
         binding.recyclerListSelection.getPaddingRight(),
-        binding.recyclerListSelection.getPaddingBottom() + bottom
+        UiUtil.dpToPx(activity, 8) + bottom
     );
   }
 

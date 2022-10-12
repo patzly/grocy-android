@@ -25,11 +25,10 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
 
-  <View
+  <com.google.android.material.divider.MaterialDivider
     android:id="@+id/divider"
-    style="@style/Widget.Grocy.Divider"
+    style="@style/Widget.Grocy.Divider.Margin"
     android:layout_marginTop="16dp"
-    android:layout_marginBottom="8dp"
     android:layout_marginStart="16dp"
     android:visibility="gone" />
 

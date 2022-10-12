@@ -25,7 +25,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
-    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
     <variable
       name="formData"
       type="xyz.zedler.patrick.grocy.model.FormDataInventory" />
@@ -222,7 +222,7 @@
                 android:layout_height="wrap_content"
                 layout="@layout/row_shopping_list_item" />
 
-              <View
+              <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider_drawer_shopping_list"
                 style="@style/Widget.Grocy.Divider" />
 
@@ -730,7 +730,6 @@
                     android:inputType="text|textCapSentences"
                     android:textColor="@color/on_background"
                     android:imeOptions="actionDone"
-                    android:maxLength="10"
                     android:text="@={formData.noteLive}"
                     app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
 

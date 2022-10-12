@@ -49,10 +49,10 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -173,7 +173,7 @@ public class StockEntryAdapter extends
     }
     ArrayList<GroupedListItem> groupedListItems = new ArrayList<>();
     ArrayList<String> groupsSorted = new ArrayList<>(stockEntriesGroupedHashMap.keySet());
-    SortUtil.sortStringsByName(context, groupsSorted, true);
+    SortUtil.sortStringsByName(groupsSorted, true);
     if (!ungroupedItems.isEmpty()) {
       groupedListItems.add(new GroupHeader(context.getString(R.string.property_ungrouped)));
       sortStockEntries(context, ungroupedItems, productHashMap, sortMode, sortAscending);
@@ -207,12 +207,7 @@ public class StockEntryAdapter extends
     if (sortMode.equals(FilterChipLiveDataStockSort.SORT_DUE_DATE)) {
       SortUtil.sortStockEntriesByDueDate(stockEntries, sortAscending);
     } else {
-      SortUtil.sortStockEntriesByName(
-          context,
-          stockEntries,
-          productHashMap,
-          sortAscending
-      );
+      SortUtil.sortStockEntriesByName(stockEntries, productHashMap, sortAscending);
     }
   }
 

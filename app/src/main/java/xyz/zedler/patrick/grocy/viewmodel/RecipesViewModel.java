@@ -44,7 +44,7 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -213,13 +213,13 @@ public class RecipesViewModel extends BaseViewModel {
     boolean sortAscending = filterChipLiveDataSort.isSortAscending();
     switch (filterChipLiveDataSort.getSortMode()) {
       case SORT_NAME:
-        SortUtil.sortRecipesByName(getApplication(), filteredRecipes, sortAscending);
+        SortUtil.sortRecipesByName(filteredRecipes, sortAscending);
         break;
       case SORT_CALORIES:
-        SortUtil.sortRecipesByCalories(getApplication(), filteredRecipes, recipeFulfillments, sortAscending);
+        SortUtil.sortRecipesByCalories(filteredRecipes, recipeFulfillments, sortAscending);
         break;
       case SORT_DUE_SCORE:
-        SortUtil.sortRecipesByDueScore(getApplication(), filteredRecipes, recipeFulfillments, sortAscending);
+        SortUtil.sortRecipesByDueScore(filteredRecipes, recipeFulfillments, sortAscending);
         break;
     }
 

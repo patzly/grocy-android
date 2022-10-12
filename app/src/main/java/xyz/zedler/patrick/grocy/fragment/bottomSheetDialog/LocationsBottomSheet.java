@@ -36,8 +36,8 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.LocationAdapter;
 import xyz.zedler.patrick.grocy.model.Location;
-import xyz.zedler.patrick.grocy.util.Constants;
-import xyz.zedler.patrick.grocy.util.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
 public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
@@ -71,7 +71,7 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     assert locationsArg != null;
     locations = new ArrayList<>(locationsArg);
 
-    SortUtil.sortLocationsByName(requireContext(), locations, true);
+    SortUtil.sortLocationsByName(locations, true);
     if (bundle.getBoolean(ARGUMENT.DISPLAY_EMPTY_OPTION, false)) {
       locations.add(0, new Location(-1, getString(R.string.subtitle_none_selected)));
     }

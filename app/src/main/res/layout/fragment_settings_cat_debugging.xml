@@ -26,7 +26,7 @@
   <data>
     <import type="android.view.View" />
     <import type="xyz.zedler.patrick.grocy.R" />
-    <import type="xyz.zedler.patrick.grocy.util.Constants" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
     <import type="xyz.zedler.patrick.grocy.fragment.SettingsCatDebuggingFragmentDirections" />
     <variable
       name="viewModel"

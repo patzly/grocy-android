@@ -19,7 +19,7 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/linear_list_item_container"
+  android:id="@+id/linear_container"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -29,44 +29,23 @@
   android:baselineAligned="false">
 
   <TextView
-    android:id="@+id/text_list_item_property"
-    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+    android:id="@+id/text_property"
+    style="@style/Widget.Grocy.TextView.LabelLarge"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical" />
+    android:textColor="?attr/colorSecondary" />
 
-  <LinearLayout
+  <TextView
+    android:id="@+id/text_value"
+    style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:minHeight="20dp"
-    android:gravity="bottom">
+    android:singleLine="false" />
 
-    <TextView
-      android:id="@+id/text_list_item_value"
-      style="@style/Widget.Grocy.TextView.ListItem.Title"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="false"
-      android:maxLines="2" />
-
-  </LinearLayout>
-
-  <LinearLayout
-    android:id="@+id/linear_list_item_extra"
+  <TextView
+    android:id="@+id/text_extra"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:minHeight="20dp"
-    android:gravity="bottom">
-
-    <TextView
-      android:id="@+id/text_list_item_extra"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true" />
-
-  </LinearLayout>
+    android:layout_height="wrap_content" />
 
 </LinearLayout>

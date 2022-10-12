@@ -45,10 +45,10 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ZXingPromptBottomSheet;
 import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
-import xyz.zedler.patrick.grocy.util.Constants.BarcodeFormats;
+import xyz.zedler.patrick.grocy.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.util.Constants.PREF;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS.SCANNER;
-import xyz.zedler.patrick.grocy.util.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implements

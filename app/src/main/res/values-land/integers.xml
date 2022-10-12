@@ -19,6 +19,6 @@
 
 <resources>
 
-  <integer name="swipe_action_bg_radius">20</integer>
+  <integer name="swipe_action_bg_size">40</integer>
 
 </resources>

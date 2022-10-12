@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.repository.MasterObjectListRepository;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ObjectUtil;
@@ -305,7 +305,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       return;
     }
 
-    Locale locale = LocaleUtil.getUserLocale(this.getApplication().getApplicationContext());
+    Locale locale = LocaleUtil.getLocale();
 
     Collections.sort(objects, (item1, item2) -> {
       String name1 = ObjectUtil.getObjectName(sortAscending ? item1 : item2, entity);

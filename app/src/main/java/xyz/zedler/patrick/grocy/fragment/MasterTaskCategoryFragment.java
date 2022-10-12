@@ -48,7 +48,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterTaskCategoryBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.util.Constants;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -261,7 +261,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
               new TypeToken<ArrayList<TaskCategory>>() {
               }.getType()
           );
-          SortUtil.sortTaskCategoriesByName(requireContext(), taskCategories, true);
+          SortUtil.sortTaskCategoriesByName(taskCategories, true);
           taskCategoryNames = getTaskCategoryNames();
 
           binding.swipe.setRefreshing(false);

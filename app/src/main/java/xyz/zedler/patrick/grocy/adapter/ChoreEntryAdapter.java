@@ -39,7 +39,7 @@ import xyz.zedler.patrick.grocy.databinding.RowChoreEntryBinding;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.util.Constants.DATE;
+import xyz.zedler.patrick.grocy.Constants.DATE;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 

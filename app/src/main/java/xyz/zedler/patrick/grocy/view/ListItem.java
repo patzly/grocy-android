@@ -22,25 +22,21 @@ package xyz.zedler.patrick.grocy.view;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.annotation.Nullable;
-import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.databinding.ViewListItemBinding;
 
 public class ListItem extends LinearLayout {
 
-  private final Context context;
-  private TextView textViewProperty, textViewValue, textViewExtra;
-  private LinearLayout linearLayoutContainer, linearLayoutExtra;
-  private int height = 0;
+  private ViewListItemBinding binding;
+  private int height;
 
   public ListItem(Context context) {
     super(context);
 
-    this.context = context;
-    init();
   }
 
   /**
@@ -48,19 +44,15 @@ public class ListItem extends LinearLayout {
    */
   public ListItem(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
-
-    this.context = context;
-    init();
+    binding = ViewListItemBinding.inflate(
+        LayoutInflater.from(context), this, true
+    );
   }
 
-  private void init() {
-    inflate(context, R.layout.view_list_item, this);
-
-    linearLayoutContainer = findViewById(R.id.linear_list_item_container);
-    textViewProperty = findViewById(R.id.text_list_item_property);
-    textViewValue = findViewById(R.id.text_list_item_value);
-    textViewExtra = findViewById(R.id.text_list_item_extra);
-    linearLayoutExtra = findViewById(R.id.linear_list_item_extra);
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    binding = null;
   }
 
   public void setText(String property, String value) {
@@ -70,18 +62,18 @@ public class ListItem extends LinearLayout {
   public void setText(String property, String value, String extra) {
     // property
     if (property != null) {
-      textViewProperty.setText(property);
+      binding.textProperty.setText(property);
     } else {
-      textViewProperty.setVisibility(GONE);
+      binding.textProperty.setVisibility(GONE);
     }
     // value
-    textViewValue.setText(value);
+    binding.textValue.setText(value);
     // extra
     if (extra != null) {
-      textViewExtra.setText(extra);
-      linearLayoutExtra.setVisibility(VISIBLE);
+      binding.textExtra.setText(extra);
+      binding.textExtra.setVisibility(VISIBLE);
     } else {
-      linearLayoutExtra.setVisibility(GONE);
+      binding.textExtra.setVisibility(GONE);
     }
     if (getVisibility() == GONE) {
       // expand
@@ -115,11 +107,11 @@ public class ListItem extends LinearLayout {
   }
 
   public void setSingleLine(boolean singleLine) {
-    textViewValue.setSingleLine(singleLine);
+    binding.textValue.setSingleLine(singleLine);
   }
 
   @Override
   public void setOnClickListener(@Nullable OnClickListener l) {
-    linearLayoutContainer.setOnClickListener(l);
+    binding.linearContainer.setOnClickListener(l);
   }
 }

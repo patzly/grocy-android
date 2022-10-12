@@ -143,6 +143,8 @@
   <string name="msg_task_undo">ביטול משימה</string>
   <string name="msg_recipes_enough_in_stock">מספיק במלאי</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) מספיק במלאי</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) אין מספיק במלאי</string>
+  <string name="msg_recipes_not_enough">אין מספיק במלאי</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">נרכשו %1$s %2$s מתוך %3$s</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
@@ -157,6 +159,8 @@
   <!-- %1$s is a product name -->
   <string name="msg_no_stock_entries">אין רשומות מלאי עבור %1$s</string>
   <string name="msg_not_found">המוצר לא נמצא</string>
+  <string name="msg_editor_hint">כאן ניתן לכתוב טקסט</string>
+  <string name="msg_coming_soon">יכולת זאת תהיה זמינה בקרוב</string>
   <string name="msg_undone_transaction">העברה לטיפול</string>
   <string name="msg_failed_to_sync">סנכרון הרשומות נכשל</string>
   <string name="msg_synced">הרשומות סונכרנו בהצלחה</string>
@@ -212,12 +216,14 @@
   <string name="msg_logout_demo">בחרת לפעול מול עותק ההדגמה של grocy של <u>https://grocy.info</u>.\n\n<b>אף אחד מהשינויים שלך לא יישמר!\nהם יישארו ציבוריים עד שהשרת ידרוס אותם אוטומטית.</b>\n\nבמסך הכניסה ניתן למלא כתובת שרת משלך.</string>
   <string name="msg_logout_demo_short">שרת להדגמה ציבורית. יש לגעת לקבלת פרטים.</string>
   <string name="msg_restart">נדרשת הפעלת היישומון מחדש כדי להחיל את ההגדרות הנוכחיות של Grocy כראוי.</string>
+  <string name="msg_full_description">נגיעה כאן תציג את התיאור המלא.</string>
   <string name="msg_shortcuts">ניתן להפעיל עד 4 קיצורי דרך:</string>
   <string name="msg_shortcuts_not_supported">אין תמיכה בקיצורי דרך בגרסת ה־Android הזאת.</string>
   <string name="msg_barcode_formats">אפשר לשפר את מהירות מזהה הברקודים על ידי הגדרתו לזהות את סוגי הברקודים שאמורים להיקרא.</string>
   <string name="msg_features">להתחיל את ההיכרות שוב תחת „על אודות”</string>
   <string name="msg_feedback">יש לך משאלות, שאלות או תקלות? ניתן ליצור אתנו קשר כדי לאפשר לנו לעזור לך!\nאחרת נשמח מאוד לקבל ביקורת חיובית בחנות Play.</string>
   <string name="msg_point_at_barcode">נא להפנות את המצלמה שלך לעבר ברקוד</string>
+  <string name="msg_press_hold_confirm">נגיעה והחזקה תאשרנה מחיקה</string>
   <string name="msg_welcome_to_grocy">ברוך בואך ל־Grocy עבור Android!\n\nכדי להשתמש ב־grocy ביעילות רצוי שיהיה לך שרת משלך או את התוסף של grocy ל־Home Assistant.\nאם מעניין אותך רק להתנסות ביישומון הזה אפשר להשתמש בשרת ההדגמה שיצר ברנד בסטל, היוצר של grocy.</string>
   <string name="msg_choose_option_below">נא לבחור אפשרות אחת מלמטה.</string>
   <string name="msg_qr_code_scan">במכשיר אחר, עליך לבקר באתר של grocy ולגשת לעמוד ‚מפתחות API’. יש ללחוץ על ‚הוספה’ ואז על סמל ה־QR הקטן ולסרוק את קוד ה־QR.</string>
@@ -647,8 +653,6 @@
   <string name="property_opened">נפתח</string>
   <string name="property_not_opened">לא נפתח</string>
   <string name="property_is_freezer">במקפיא</string>
-  <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">אנרגיה (קק״ל)</string>
   <string name="property_active">פעיל</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">לעולם לא להציג בסקירת המלאי</string>
@@ -802,24 +806,17 @@
 
   <string name="setting_theme">ערכת עיצוב</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">כמו המערכת</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">כהה</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_light">בהירה</string>
   <string name="setting_language">שפה</string>
   <string name="setting_language_description">בחירת שפה</string>
   <string name="setting_language_info">תודתנו נתונה לכל המתרגמים בהתנדבות ב־Transifex!\nנא לבקר ב־GitHub שלנו כדי ללמוד כיצד ניתן לקדם את Grocy ל־Android לדבר בשפה שלך.</string>
-  <string name="setting_language_system">בררת המחדל של המערכת: %1$s</string>
-  <string name="setting_language_not_available">לא זמין</string>
+  <string name="setting_language_system">כמו המערכת</string>
   <string name="setting_open_food_facts">להשתמש ב־Open Food Facts</string>
   <string name="setting_open_food_facts_description">קבלת מידע מברקודים</string>
   <string name="setting_choose_barcode_scanner">נא לבחור סורק ברקודים</string>
   <string name="setting_choose_barcode_scanner_description">לסריקת ברקודים עם המצלמה</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">חיתוך תזרים המצלמה לתצורת הצגה מקדימה</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">מונע מהסורק לזהות ברקודים מחוץ להצגה המקדימה, עשוי לא לעבוד במכשיר שלך!</string>
   <string name="setting_use_front_cam">להשתמש במצלמה הקדמית</string>
   <string name="setting_use_front_cam_description">לסריקת ברקודים</string>
   <string name="setting_use_2d_scanner_format">להשתמש בתצורת סריקה דו־ממדית של סורק הברקודים</string>

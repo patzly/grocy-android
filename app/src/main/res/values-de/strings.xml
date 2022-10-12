@@ -328,6 +328,8 @@
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_consume_location">Bestandseinträge an diesem Standort werden zuerst verbraucht.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Wenn aktiviert, wird die entsprechende Menge an den Standardverbrauchsstandort umgelagert, wenn das Produkt als geöffnet markiert wurde.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Wenn aktiviert, kann dieses Produkt keinen eigenen Bestand haben, bedeutet es ist unter \"Einkauf\" nicht auswählbar (nützlich für übergeordnete Produkte, die nur als Zusammenfassung/Gesamtansicht der untergeordneten Produkte verwendet werden).</string>
   <string name="msg_help_due_date_type">Je nach ausgewähltem Typ wird die Hervorhebung auf der Bestandsübersicht unterschiedlich sein. \"MHD\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum möglicherweise immer noch verzehrt werden kann. \"Verbrauchsdatum\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum nicht mehr verzehrt werden kann.</string>
   <string name="msg_help_default_due_days_format">Sie können lange auf einen Eintrag unten tippen, um ein Datum anstatt einer Zahl einzugeben.</string>
@@ -510,6 +512,8 @@
   <string name="title_recipes">Rezepte</string>
   <string name="title_recipe_create">Rezept erstellen</string>
   <string name="title_recipe_edit">Rezept bearbeiten</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Editor</string>
 
   <string name="title_spoiled">Verdorben</string>
   <string name="title_use_specific">Bestimmten Bestandseintrag verwenden</string>
@@ -791,6 +795,7 @@
   <string name="property_location_default">Standard Standort</string>
   <string name="property_location_default_insert">Standard-Standort: %1$s</string>
   <string name="property_location_consume_default">Standardverbrauchsstandort</string>
+  <string name="property_move_on_open">Beim Öffnen umlagern</string>
   <string name="property_notes">Notizen</string>
   <string name="property_locations">Standorte</string>
   <string name="property_store">Geschäft</string>
@@ -822,7 +827,7 @@
   <string name="property_not_opened">nicht geöffnet</string>
   <string name="property_is_freezer">Ist ein Gefrier-Standort</string>
   <!-- kcal (kilo calories) is a unit for energy -->
-  <string name="property_energy">Energie (kcal)</string>
+  <string name="property_energy">Energie (kcal) pro Bestandsmengeneinheit</string>
   <string name="property_active">Aktiv</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_never_show">Nie auf der Bestand-Seite anzeigen</string>
@@ -899,7 +904,7 @@
   <string name="property_ingredient_group">Gruppe</string>
   <!-- See context for this string on the web interface on the recipe ingredients edit page -->
   <string name="property_variable_amount">Variable Menge</string>
-  <string name="property_requirements_fulfilled">Bestand reicht aus</string>
+  <string name="property_requirements_fulfilled">Bedarf im Bestand</string>
   <string name="property_produces_product">Produziertes Produkt</string>
 
   <string name="date_today">Heute</string>
@@ -994,8 +999,9 @@
   <string name="hint_key">Gültiger API-Schlüssel</string>
 
   <string name="setting_theme">Thema</string>
-  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">System folgen</string>
+  <string name="setting_theme_description">Probieren Sie ein anderes Design aus</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Auto</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Dunkel</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -1003,16 +1009,14 @@
   <string name="setting_language">Sprache</string>
   <string name="setting_language_description">Sprache auswählen</string>
   <string name="setting_language_info">Vielen Dank an alle freiwilligen Übersetzer bei Transifex!\nBesuchen Sie uns auf GitHub, um zu erfahren, wie Sie helfen können, Grocy Android für Ihre Sprache verfügbar zu machen.</string>
-  <string name="setting_language_system">Systemvorgabe: %1$s</string>
-  <string name="setting_language_not_available">Nicht verfügbar</string>
+  <string name="setting_language_system">System folgen</string>
+  <string name="setting_language_not_available">Englisch, wenn Übersetzung nicht verfügbar</string>
+  <string name="setting_transition">Schieben als Seitenübergang verwenden</string>
+  <string name="setting_transition_description">Anstatt auszublenden</string>
   <string name="setting_open_food_facts">Open Food Facts und Open Beauty Facts benutzen</string>
   <string name="setting_open_food_facts_description">Info von Barcodes bekommen</string>
   <string name="setting_choose_barcode_scanner">Barcode-Scanner wählen</string>
   <string name="setting_choose_barcode_scanner_description">Für Barcode-Scannen mit der Kamera</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">Kamera-Stream auf Vorschau-Format zuschneiden</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Verhindert, dass der Scanner Barcodes außerhalb der Vorschau erkennt; Funktioniert möglicherweise nicht auf Ihrem Gerät!</string>
   <string name="setting_use_front_cam">Selfie-Kamera nutzen</string>
   <string name="setting_use_front_cam_description">Für Barcode-Scanning</string>
   <string name="setting_use_2d_scanner_format">2D-Barcode Scanner-Format benutzen</string>
