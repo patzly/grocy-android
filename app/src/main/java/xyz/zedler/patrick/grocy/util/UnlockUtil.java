@@ -20,13 +20,6 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import xyz.zedler.patrick.grocy.util.Constants.PREF;
 
 public class UnlockUtil {
 
