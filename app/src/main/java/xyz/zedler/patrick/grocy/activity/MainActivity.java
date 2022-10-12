@@ -456,30 +456,29 @@ public class MainActivity extends AppCompatActivity {
       @MenuRes int newMenuId,
       @Nullable OnMenuItemClickListener onMenuItemClickListener
   ) {
-    //scrollBehaviorOld.setTopScrollVisibility(true);
-    if (showFab) {
-      if (!binding.fabMain.isShown() && !isServerUrlEmpty()) {
+    // Handler with postDelayed is necessary for workaround of issue #552
+    new Handler().postDelayed(() -> {
+      //scrollBehaviorOld.setTopScrollVisibility(true);
+      if (showFab && !binding.fabMain.isShown() && !isServerUrlEmpty()) {
         binding.fabMain.show();
-      }
-    } else {
-      if (binding.fabMain.isShown()) {
+      } else if (!showFab && binding.fabMain.isShown()) {
         binding.fabMain.hide();
       }
-    }
-    binding.bottomAppBar.replaceMenu(newMenuId);
-    Menu menu = binding.bottomAppBar.getMenu();
-    int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
-    for (int i = 0; i < menu.size(); i++) {
-      MenuItem item = menu.getItem(i);
-      if (item.getIcon() != null) {
-        if (VERSION.SDK_INT >= VERSION_CODES.O) {
-          item.setIconTintList(ColorStateList.valueOf(tint));
-        } else {
-          item.getIcon().setTint(tint);
+      binding.bottomAppBar.replaceMenu(newMenuId);
+      Menu menu = binding.bottomAppBar.getMenu();
+      int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
+      for (int i = 0; i < menu.size(); i++) {
+        MenuItem item = menu.getItem(i);
+        if (item.getIcon() != null) {
+          if (VERSION.SDK_INT >= VERSION_CODES.O) {
+            item.setIconTintList(ColorStateList.valueOf(tint));
+          } else {
+            item.getIcon().setTint(tint);
+          }
         }
       }
-    }
-    binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+      binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+    }, 10);
   }
 
   public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {
