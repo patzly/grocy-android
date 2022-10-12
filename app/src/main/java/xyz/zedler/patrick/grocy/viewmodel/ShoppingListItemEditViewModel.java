@@ -318,17 +318,21 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.getProductNameLive().setValue(product.getName());
 
 
-    HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
-        getApplication(),
-        quantityUnitHashMap,
-        unitConversions,
-        product
-    );
-    formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
-    if (!isActionEdit) {
-      QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
-      formData.getQuantityUnitLive().setValue(purchase);
+    try {
+      HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil.getUnitFactors(
+          getApplication(),
+          quantityUnitHashMap,
+          unitConversions,
+          product
+      );
+      formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
+    } catch (IllegalArgumentException e) {
+      showMessage(e.getMessage());
+      formData.getQuantityUnitsFactorsLive().setValue(null);
     }
+
+    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    formData.getQuantityUnitLive().setValue(purchase);
 
     formData.isFormValid();
   }

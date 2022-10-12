@@ -127,6 +127,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
         (LinearLayoutManager) binding.recycler.getLayoutManager()) {
       @Override
       protected void loadMoreItems() {
+        if (binding.recycler.getAdapter() instanceof StockPlaceholderAdapter) return;
         viewModel.setCurrentPage(viewModel.getCurrentPage() + 1);
         viewModel.loadNextPage(stockLogEntries -> {
           if (stockLogEntries.size() == 0) {
