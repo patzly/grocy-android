@@ -32,4 +32,6 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         rm: true
         tag: nightly
-        files: app/build/outputs/apk/debug/app-debug.apk
+        files: |
+          app/build/outputs/apk/debug/app-debug.apk
+          app/src/main/res/raw/changelog.txt
