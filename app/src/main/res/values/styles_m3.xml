@@ -620,6 +620,10 @@
 
   <!-- M3 TYPOGRAPHY -->
 
+  <style name="Widget.Grocy.TextView.HeadlineSmall" parent="Widget.Grocy.TextView">
+    <item name="android:textAppearance">?attr/textAppearanceHeadlineSmall</item>
+  </style>
+
   <style name="Widget.Grocy.TextView.TitleMedium" parent="Widget.Grocy.TextView.Medium">
     <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
   </style>

@@ -178,7 +178,7 @@ public class RecipeEntryAdapter extends
         holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_done,
+            R.drawable.ic_round_check_circle_outline,
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
@@ -190,7 +190,7 @@ public class RecipeEntryAdapter extends
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_priority_high,
+            R.drawable.ic_round_error_outline,
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(
@@ -208,7 +208,7 @@ public class RecipeEntryAdapter extends
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            R.drawable.ic_round_close,
+            R.drawable.ic_round_highlight_off,
             context.getTheme()
         ));
         holder.binding.imageFulfillment.setColorFilter(

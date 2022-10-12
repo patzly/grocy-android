@@ -20,6 +20,8 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,9 +29,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -46,7 +50,6 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.StockLogEntry;
-import xyz.zedler.patrick.grocy.util.AlertDialogUtil;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.StockJournalViewModel;
@@ -55,6 +58,9 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
   private final static String TAG = StockJournalFragment.class.getSimpleName();
 
+  private static final String DIALOG_SHOWING = "dialog_showing";
+  private static final String DIALOG_ENTRY = "dialog_entry";
+
   private MainActivity activity;
   private StockJournalViewModel viewModel;
   private AppBarBehavior appBarBehavior;
@@ -62,6 +68,8 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
   private SwipeBehavior swipeBehavior;
   private FragmentStockJournalBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private AlertDialog dialog;
+  private StockLogEntry dialogEntry;
 
   @Override
   public View onCreateView(
@@ -222,10 +230,8 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI();
-  }
+    // UPDATE UI
 
-  private void updateUI() {
     activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
     activity.getScrollBehaviorOld().setHideOnScroll(true);
     activity.updateBottomAppBar(
@@ -237,8 +243,26 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
   @Override
   public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    boolean isShowing = dialog != null && dialog.isShowing();
+    outState.putBoolean(DIALOG_SHOWING, isShowing);
+    if (isShowing) {
+      outState.putParcelable(DIALOG_ENTRY, dialogEntry);
+    }
     if (appBarBehavior != null) {
       appBarBehavior.saveInstanceState(outState);
+    }
+  }
+
+  @Override
+  public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+    super.onViewStateRestored(savedInstanceState);
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_SHOWING)) {
+      StockLogEntry entry = savedInstanceState.getParcelable(DIALOG_ENTRY);
+      new Handler(Looper.getMainLooper()).postDelayed(
+          () -> showConfirmationDialog(entry), 1
+      );
     }
   }
 
@@ -262,11 +286,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     if (swipeBehavior != null) {
       swipeBehavior.recoverLatestSwipedItem();
     }
-    AlertDialogUtil.showConfirmationDialog(
-        requireContext(),
-        getString(R.string.msg_undo_transaction),
-        () -> viewModel.undoTransaction(entry)
-    );
+    showConfirmationDialog(entry);
   }
 
   @Override
@@ -278,6 +298,20 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     if (isOnline) {
       viewModel.downloadData();
     }
+  }
+
+  private void showConfirmationDialog(StockLogEntry entry) {
+    dialogEntry = entry;
+    dialog = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.msg_undo_transaction)
+        .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+          performHapticClick();
+          viewModel.undoTransaction(entry);
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialog.show();
   }
 
   private void setUpSearch() {
