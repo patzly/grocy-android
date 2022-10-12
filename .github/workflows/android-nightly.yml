@@ -1,6 +1,7 @@
 name: Android nightly build
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 2 * * *' # run at 2 AM UTC
 
@@ -22,3 +23,12 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+
+    # Update tag and pre-release
+    # - Update (force-push) tag to the commit that is used in the workflow.
+    # - Upload artifacts defined by the user.
+    - uses: pyTooling/Actions/releaser@r0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: nightly
+        files: app/build/outputs/apk/debug/app-debug.apk
