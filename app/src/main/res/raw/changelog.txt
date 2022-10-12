@@ -16,6 +16,7 @@
 - Fixed: Crash on shopping list item edit page when product contains deleted quantity units (#582)
 - Fixed: On shopping list item edit page the change of product prevented saving (#583)
 - Fixed: FAB displayed after rotation on pages where no FAB is used (#552)
+- Fixed: Crash on stock journal page
 - Fixed: (not F-Droid) ML Kit scanner doesn't ask for contacts permission anymore
 
 ## 2.3.0
