@@ -105,6 +105,8 @@
   <string name="action_purchase_all_items">Nakoupit všechno</string>
   <string name="action_skip_entry">Přeskočit položku</string>
   <string name="action_toggle_flash">Vybrat/nevybrat</string>
+  <string name="action_edit_recipe">Upravit recept</string>
+  <string name="action_delete_recipe">Smazat recept</string>
   <string name="action_delete_shopping_list">Smazat nákupní seznam</string>
   <string name="action_create_key">Vytvořit klíč</string>
   <string name="action_login">Přihlásit se</string>
@@ -565,6 +567,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Do umístění</string>
   <string name="title_recipe">Recept</string>
+  <string name="title_preparation_mode">Režim přípravy pokrmu</string>
   <string name="title_total_price">Celková cena</string>
   <string name="title_unit_price">Cena za jednotku</string>
   <!-- %1$s is a quantity unit -->
