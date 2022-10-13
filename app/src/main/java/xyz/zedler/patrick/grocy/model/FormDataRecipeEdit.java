@@ -75,7 +75,7 @@ public class FormDataRecipeEdit {
     ));
     nameLive = new MutableLiveData<>();
     nameErrorLive = new MutableLiveData<>();
-    baseServingsLive = new MutableLiveData<>();
+    baseServingsLive = new MutableLiveData<>("1");
     baseServingsErrorLive = new MutableLiveData<>();
     notCheckShoppingListLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
@@ -174,6 +174,13 @@ public class FormDataRecipeEdit {
     this.filledWithRecipe = filled;
   }
 
+  public boolean isFormValid() {
+    boolean valid = isNameValid();
+    valid = isBaseServingsValid() && valid;
+    valid = isProductNameValid() && valid;
+    return valid;
+  }
+
   public boolean isNameValid() {
     if (nameLive.getValue() == null || nameLive.getValue().isEmpty()) {
       nameErrorLive.setValue(R.string.error_empty);
@@ -181,10 +188,6 @@ public class FormDataRecipeEdit {
     }
     nameErrorLive.setValue(null);
     return true;
-  }
-
-  public boolean isFormValid() {
-    return isNameValid();
   }
 
   public boolean isProductNameValid() {
@@ -209,13 +212,7 @@ public class FormDataRecipeEdit {
   }
 
   public boolean isBaseServingsValid() {
-    if (baseServingsLive.getValue() != null && baseServingsLive.getValue().isEmpty()) {
-      if (baseServingsLive.getValue() != null) {
-        clearForm();
-        return false;
-      }
-    }
-    if (baseServingsLive.getValue() == null && !baseServingsLive.getValue().isEmpty()) {
+    if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
       baseServingsErrorLive.setValue(R.string.error_invalid_base_servings);
       return false;
     }
