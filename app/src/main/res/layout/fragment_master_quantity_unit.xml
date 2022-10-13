@@ -226,6 +226,43 @@
 
         </LinearLayout>
 
+        <LinearLayout
+          android:id="@+id/category_qu_conversions"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_scale_anim"
+            tools:ignore="ContentDescription" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/title_product_cat_qu_conversions" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/subtitle_product_not_on_server"
+              android:visibility="gone" />
+
+          </LinearLayout>
+
+          <ImageView
+            android:layout_marginStart="16dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:src="@drawable/ic_round_expand_more"
+            android:rotation="-90"
+            tools:ignore="ContentDescription"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        </LinearLayout>
+
       </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -191,7 +191,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     activity.getScrollBehaviorOld().setHideOnScroll(false);
     activity.updateBottomAppBar(
         true,
-        editQuantityUnit != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
+        editQuantityUnit != null ? R.menu.menu_master_item_edit : R.menu.menu_save_without_close,
         getBottomMenuClickListener()
     );
     activity.updateFab(
