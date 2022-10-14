@@ -22,15 +22,20 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListAdapter;
@@ -40,20 +45,21 @@ import xyz.zedler.patrick.grocy.fragment.ShoppingListFragment;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListFragmentDirections;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.repository.ShoppingListRepository;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 
 public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     implements ShoppingListAdapter.ShoppingListAdapterListener {
 
   private final static String TAG = ShoppingListsBottomSheet.class.getSimpleName();
 
+  private static final String DIALOG_DELETE_SHOWING = "dialog_delete_showing";
+  private static final String DIALOG_DELETE_SHOPPING_LIST = "dialog_delete_shopping_list";
+
   private FragmentBottomsheetListSelectionBinding binding;
   private MainActivity activity;
-  private TouchProgressBarUtil touchProgressBarUtil;
+  private AlertDialog dialogDelete;
+  private ShoppingList shoppingListDelete;
 
   @Override
   public View onCreateView(
@@ -143,20 +149,21 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       });
     }
 
-    touchProgressBarUtil = new TouchProgressBarUtil(
-        binding.progressConfirmation,
-        null,
-        object -> activity.getCurrentFragment().deleteShoppingList((ShoppingList) object)
-    );
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {
+      shoppingListDelete = savedInstanceState.getParcelable(DIALOG_DELETE_SHOPPING_LIST);
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
 
     return binding.getRoot();
   }
 
   @Override
   public void onDestroyView() {
-    if (touchProgressBarUtil != null) {
-      touchProgressBarUtil.onDestroy();
-      touchProgressBarUtil = null;
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
     }
     super.onDestroyView();
   }
@@ -165,6 +172,16 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
   public void onDestroy() {
     super.onDestroy();
     binding = null;
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE_SHOWING, isShowing);
+    if (isShowing) {
+      outState.putParcelable(DIALOG_DELETE_SHOPPING_LIST, shoppingListDelete);
+    }
   }
 
   @Override
@@ -186,20 +203,31 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
   }
 
   @Override
-  public void onTouchDelete(View view, MotionEvent event, ShoppingList shoppingList) {
-    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-      if (!activity.isOnline()) {
-        showMessage(R.string.error_offline);
-        return;
-      }
-      touchProgressBarUtil.showAndStartProgress(view, shoppingList);
-    } else if (event.getAction() == MotionEvent.ACTION_UP
-        || event.getAction() == MotionEvent.ACTION_CANCEL) {
-      if (!activity.isOnline()) {
-        return;
-      }
-      touchProgressBarUtil.hideAndStopProgress();
+  public void onClickDelete(ShoppingList shoppingList) {
+    shoppingListDelete = shoppingList;
+    showDeleteConfirmationDialog();
+  }
+
+  private void showDeleteConfirmationDialog() {
+    if (shoppingListDelete == null) {
+      return;
     }
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            getString(
+                R.string.msg_master_delete, getString(R.string.title_shopping_list),
+                shoppingListDelete.getName()
+            )
+        ).setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+          performHapticClick();
+          activity.getCurrentFragment().deleteShoppingList(shoppingListDelete);
+          dismiss();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
   }
 
   @Override
