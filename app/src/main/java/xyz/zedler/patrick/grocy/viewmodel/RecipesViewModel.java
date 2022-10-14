@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.FilterChipLiveDataRecipesStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -73,6 +74,7 @@ public class RecipesViewModel extends BaseViewModel {
   private List<RecipePosition> recipePositions;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> quantityUnitConversions;
 
   private String searchInput;
   private final boolean debug;
@@ -113,6 +115,7 @@ public class RecipesViewModel extends BaseViewModel {
       recipePositions = data.getRecipePositions();
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
+      quantityUnitConversions = data.getQuantityUnitConversions();
 
       updateFilteredRecipes();
       if (downloadAfterLoading) {
@@ -135,7 +138,8 @@ public class RecipesViewModel extends BaseViewModel {
         RecipeFulfillment.class,
         RecipePosition.class,
         Product.class,
-        QuantityUnit.class
+        QuantityUnit.class,
+        QuantityUnitConversion.class
     );
   }
 
@@ -150,6 +154,7 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -278,6 +283,10 @@ public class RecipesViewModel extends BaseViewModel {
 
   public ArrayList<QuantityUnit> getQuantityUnits() {
     return new ArrayList<>(quantityUnits);
+  }
+
+  public List<QuantityUnitConversion> getQuantityUnitConversions() {
+    return new ArrayList<>(quantityUnitConversions);
   }
 
   public boolean isSearchActive() {

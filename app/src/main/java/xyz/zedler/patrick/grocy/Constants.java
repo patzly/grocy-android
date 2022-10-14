@@ -376,6 +376,7 @@ public final class Constants {
     public final static String QUANTITY_UNITS = "quantity_units";
     public final static String QUANTITY_UNIT_PURCHASE = "quantity_unit_purchase";
     public final static String QUANTITY_UNIT_STOCK = "quantity_unit_stock";
+    public final static String QUANTITY_UNIT_CONVERSIONS = "quantity_unit_conversions";
     public final static String AMOUNT = "amount";
     public final static String LOCATION = "location";
     public final static String LOCATIONS = "locations";

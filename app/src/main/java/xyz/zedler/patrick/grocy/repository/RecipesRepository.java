@@ -27,6 +27,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -51,17 +52,20 @@ public class RecipesRepository {
     private final List<RecipePosition> recipePositions;
     private final List<Product> products;
     private final List<QuantityUnit> quantityUnits;
+    private final List<QuantityUnitConversion> quantityUnitConversions;
 
     public RecipesData(List<Recipe> recipes,
                        List<RecipeFulfillment> recipeFulfillments,
                        List<RecipePosition> recipePositions,
                        List<Product> products,
-                       List<QuantityUnit> quantityUnits) {
+                       List<QuantityUnit> quantityUnits,
+                       List<QuantityUnitConversion> quantityUnitConversions) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
       this.recipePositions = recipePositions;
       this.products = products;
       this.quantityUnits = quantityUnits;
+      this.quantityUnitConversions = quantityUnitConversions;
     }
 
     public List<Recipe> getRecipes() {
@@ -83,6 +87,10 @@ public class RecipesRepository {
     public List<QuantityUnit> getQuantityUnits() {
       return quantityUnits;
     }
+
+    public List<QuantityUnitConversion> getQuantityUnitConversions() {
+      return quantityUnitConversions;
+    }
   }
 
   public void loadFromDatabase(RecipesDataListener listener) {
@@ -93,6 +101,7 @@ public class RecipesRepository {
             appDatabase.recipePositionDao().getRecipePositions(),
             appDatabase.productDao().getProducts(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
+            appDatabase.quantityUnitConversionDao().getConversions(),
             RecipesData::new
         )
         .subscribeOn(Schedulers.io())
