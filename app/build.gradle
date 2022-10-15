@@ -92,6 +92,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.paging:paging-runtime:3.1.1'
 
     // Navigation framework for easy navigation control using XML
     implementation 'androidx.navigation:navigation-fragment:2.5.2'

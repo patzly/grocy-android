@@ -199,6 +199,23 @@
 
         </LinearLayout>
 
+        <LinearLayout
+          android:id="@+id/linear_drawer_meal_plan"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+
+          <ImageView
+            android:id="@+id/image_drawer_meal_plan"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_date_range" />
+
+          <TextView
+            android:id="@+id/text_drawer_meal_plan"
+            style="@style/Widget.Grocy.TextView.DrawerItem"
+            android:text="@string/title_meal_plan" />
+
+        </LinearLayout>
+
       </LinearLayout>
 
       <LinearLayout

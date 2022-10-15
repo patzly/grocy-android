@@ -297,6 +297,9 @@
     <action
       android:id="@+id/action_drawerBottomSheetDialogFragment_to_recipesFragment"
       app:destination="@id/recipesFragment" />
+    <action
+      android:id="@+id/action_drawerBottomSheetDialogFragment_to_mealPlanFragment"
+      app:destination="@id/mealPlanFragment" />
   </dialog>
   <action
     android:id="@+id/action_global_drawerBottomSheetDialogFragment"
@@ -1358,4 +1361,9 @@
       app:nullable="true"
       android:defaultValue="@null" />
   </fragment>
+  <fragment
+    android:id="@+id/mealPlanFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.MealPlanFragment"
+    android:label="MealPlanFragment"
+    tools:layout="@layout/fragment_meal_plan"/>
 </navigation>

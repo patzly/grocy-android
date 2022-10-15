@@ -154,6 +154,7 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         binding.linearDrawerChores,
         binding.linearDrawerTasks,
         binding.linearDrawerRecipes,
+        binding.linearDrawerMealPlan,
         binding.linearDrawerMasterData,
         binding.linearDrawerSettings,
         binding.linearDrawerFeedback,
@@ -270,6 +271,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     } else if (v.getId() == R.id.linear_drawer_recipes) {
       navigateCustom(DrawerBottomSheetDirections
               .actionDrawerBottomSheetDialogFragmentToRecipesFragment());
+    } else if (v.getId() == R.id.linear_drawer_meal_plan) {
+      navigateCustom(DrawerBottomSheetDirections
+          .actionDrawerBottomSheetDialogFragmentToMealPlanFragment());
     }
   }
 
