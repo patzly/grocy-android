@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +29,12 @@ import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -172,17 +175,27 @@ public class MealPlanFragment extends BaseFragment implements
       calendarDayAdapter.submitList(localDates);
     });
 
-    SnapToBlockHelper snapToBlockHelper = new SnapToBlockHelper(7);
+
+
+    SnapToBlockHelper snapToBlockHelper = new SnapToBlockHelper(1);
     snapToBlockHelper.attachToRecyclerView(binding.recyclerCalendar);
     snapToBlockHelper.setSnapBlockCallback(new SnapBlockCallback() {
       @Override
-      public void onBlockSnap(int snapPosition) {
-        Log.i(TAG, "onBlockSnap: " + "snap");
-      }
+      public void onBlockSnap(int snapPosition) {}
 
       @Override
       public void onBlockSnapped(int snapPosition) {
-        Log.i(TAG, "onBlockSnap: " + "snapped");
+        PagedList<LocalDate> list = calendarDayAdapter.getCurrentList();
+        LocalDate date = list != null ? list.get(snapPosition) : null;
+        if (date != null) {
+          binding.weekDates.setText(
+              getString(
+                  R.string.date_timespan,
+                  date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+                  date.plusDays(6).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+              )
+          );
+        }
       }
     });
 

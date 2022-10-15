@@ -30,20 +30,15 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
-import androidx.paging.PagedList.BoundaryCallback;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import org.json.JSONException;
@@ -84,7 +79,6 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.view.singlerowcalendar.DayInfo;
 import xyz.zedler.patrick.grocy.view.singlerowcalendar.HorizontalCalendarFactory;
 
 public class MealPlanViewModel extends BaseViewModel {
@@ -110,7 +104,6 @@ public class MealPlanViewModel extends BaseViewModel {
   private final FilterChipLiveDataStockExtraField filterChipLiveDataExtraField;
 
   private Calendar calendar;
-  private final MutableLiveData<DayInfo> currentDate;
   private final LiveData<PagedList<LocalDate>> horizontalCalendarSource;
 
   private List<StockItem> stockItems;
@@ -149,25 +142,9 @@ public class MealPlanViewModel extends BaseViewModel {
     scannerVisibilityLive = new MutableLiveData<>(false);
 
     calendar = Calendar.getInstance();
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("LLL d, yyyy");
     Instant now = Instant.now();
-    LocalDate nowDate = now.atZone(ZoneId.systemDefault()).toLocalDate();
-    currentDate = new MutableLiveData<>(new DayInfo(nowDate.getDayOfWeek().getDisplayName(TextStyle.FULL,
-        Locale.getDefault()), dateFormatter.format(nowDate)));
     horizontalCalendarSource =
-        new LivePagedListBuilder<>(new HorizontalCalendarFactory(now), 30)
-            .setBoundaryCallback(new BoundaryCallback<>() {
-              @Override
-              public void onItemAtEndLoaded(@NonNull LocalDate itemAtEnd) {
-                super.onItemAtEndLoaded(itemAtEnd);
-              }
-
-              @Override
-              public void onItemAtFrontLoaded(@NonNull LocalDate itemAtFront) {
-                super.onItemAtFrontLoaded(itemAtFront);
-              }
-            })
-            .build();
+        new LivePagedListBuilder<>(new HorizontalCalendarFactory(now), 10).build();
 
     filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
         getApplication(),

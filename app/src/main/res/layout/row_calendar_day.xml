@@ -17,42 +17,43 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<LinearLayout
+<com.google.android.material.card.MaterialCardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/container"
+  android:id="@+id/card"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:orientation="vertical">
+  android:minWidth="32dp"
+  app:cardCornerRadius="8dp"
+  app:strokeWidth="1dp"
+  app:strokeColor="?attr/colorOutline"
+  app:cardElevation="0dp"
+  app:cardBackgroundColor="@color/transparent">
 
-  <com.google.android.material.card.MaterialCardView
-    android:id="@+id/card"
+  <LinearLayout
     android:layout_width="wrap_content"
-    android:layout_height="32dp"
-    android:minWidth="32dp"
-    app:cardCornerRadius="8dp"
-    app:strokeWidth="1dp"
-    app:strokeColor="?attr/colorOutline"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/transparent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center">
 
-    <LinearLayout
+    <TextView
+      android:id="@+id/weekday"
+      style="@style/TextAppearance.Grocy.LabelLarge"
       android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:orientation="horizontal"
-      android:gravity="center"
-      android:layout_gravity="center">
+      android:layout_height="wrap_content"
+      android:layout_marginTop="2dp"
+      android:textSize="12sp"
+      android:textColor="@color/filter_chip_text_inactive" />
 
-      <TextView
-        android:id="@+id/text"
-        style="@style/TextAppearance.Grocy.LabelLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/filter_chip_text_inactive" />
+    <TextView
+      android:id="@+id/day"
+      style="@style/TextAppearance.Grocy.Chip"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="1dp"
+      android:textColor="@color/filter_chip_text_inactive" />
 
-    </LinearLayout>
+  </LinearLayout>
 
-  </com.google.android.material.card.MaterialCardView>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

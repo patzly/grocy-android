@@ -23,7 +23,7 @@ public class HorizontalCalendarSource extends PageKeyedDataSource<Long, LocalDat
     LocalDate previousDay = today.plusDays(loadParams.key);
     ArrayList<LocalDate> list = new ArrayList<>();
     list.add(previousDay);
-    loadCallback.onResult(list, loadParams.key+1);
+    loadCallback.onResult(list, loadParams.key+7);
   }
 
   @Override
@@ -32,7 +32,7 @@ public class HorizontalCalendarSource extends PageKeyedDataSource<Long, LocalDat
     LocalDate previousDay = today.plusDays(loadParams.key);
     ArrayList<LocalDate> list = new ArrayList<>();
     list.add(previousDay);
-    loadCallback.onResult(list, loadParams.key-1);
+    loadCallback.onResult(list, loadParams.key-7);
   }
 
   @Override
@@ -40,6 +40,6 @@ public class HorizontalCalendarSource extends PageKeyedDataSource<Long, LocalDat
       @NonNull LoadInitialCallback<Long, LocalDate> loadInitialCallback) {
     ArrayList<LocalDate> list = new ArrayList<>();
     list.add(today);
-    loadInitialCallback.onResult(list, -1L, 1L);
+    loadInitialCallback.onResult(list, -7L, 7L);
   }
 }

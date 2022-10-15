@@ -23,16 +23,16 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import xyz.zedler.patrick.grocy.adapter.CalendarDayAdapter.CalendarDayViewHolder;
-import xyz.zedler.patrick.grocy.databinding.RowCalendarDayBinding;
-import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.databinding.RowCalendarWeekBinding;
 
 public class CalendarDayAdapter extends PagedListAdapter<LocalDate, CalendarDayViewHolder> {
 
@@ -75,23 +75,37 @@ public class CalendarDayAdapter extends PagedListAdapter<LocalDate, CalendarDayV
 
   public static class CalendarDayViewHolder extends ViewHolder {
 
-    private final RowCalendarDayBinding binding;
+    private final RowCalendarWeekBinding binding;
 
-    public CalendarDayViewHolder(RowCalendarDayBinding binding) {
+    public CalendarDayViewHolder(RowCalendarWeekBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
 
     public void onBind(LocalDate date) {
       if (date == null) return;
-      binding.text.setText(String.valueOf(date.getDayOfMonth()));
+      binding.card1.weekday.setText(date.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+      binding.card2.weekday.setText(date.plusDays(1).getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+      binding.card3.weekday.setText(date.plusDays(2).getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+      binding.card4.weekday.setText(date.plusDays(3).getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+      binding.card5.weekday.setText(date.plusDays(4).getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+      binding.card6.weekday.setText(date.plusDays(5).getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+      binding.card7.weekday.setText(date.plusDays(6).getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.getDefault()));
+
+      binding.card1.day.setText(String.valueOf(date.getDayOfMonth()));
+      binding.card2.day.setText(String.valueOf(date.plusDays(1).getDayOfMonth()));
+      binding.card3.day.setText(String.valueOf(date.plusDays(2).getDayOfMonth()));
+      binding.card4.day.setText(String.valueOf(date.plusDays(3).getDayOfMonth()));
+      binding.card5.day.setText(String.valueOf(date.plusDays(4).getDayOfMonth()));
+      binding.card6.day.setText(String.valueOf(date.plusDays(5).getDayOfMonth()));
+      binding.card7.day.setText(String.valueOf(date.plusDays(6).getDayOfMonth()));
     }
   }
 
   @NonNull
   @Override
   public CalendarDayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new CalendarDayViewHolder(RowCalendarDayBinding.inflate(
+    return new CalendarDayViewHolder(RowCalendarWeekBinding.inflate(
         LayoutInflater.from(parent.getContext()),
         parent,
         false
@@ -101,20 +115,9 @@ public class CalendarDayAdapter extends PagedListAdapter<LocalDate, CalendarDayV
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onBindViewHolder(@NonNull CalendarDayViewHolder holder, int position) {
-
-
-    int width = UiUtil.dpToPx(holder.binding.container.getContext(), 32);
-
-    int margin = (screenWidth - 7 * width) / (7 * 2);
-
-
     if (getItem(position) != null) {
       holder.onBind(getItem(position));
     }
-
-    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.binding.card.getLayoutParams();
-    layoutParams.setMarginStart(margin);
-    layoutParams.setMarginEnd(margin);
 
     // CONTAINER
 

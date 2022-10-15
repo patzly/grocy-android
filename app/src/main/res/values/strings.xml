@@ -931,6 +931,8 @@
   <string name="date_unlimited">Unlimited</string>
   <!-- This means the 'time' context, like 'Last used date: Never' -->
   <string name="date_never">Never</string>
+  <!-- %1$s is 'from' date, %2$s is 'to' date -->
+  <string name="date_timespan">%1$s - %2$s</string>
 
   <plurals name="date_days">
     <item quantity="one">%d day</item>

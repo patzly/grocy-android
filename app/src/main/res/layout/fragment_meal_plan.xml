@@ -198,12 +198,12 @@
         android:orientation="vertical">
 
         <TextView
+          android:id="@+id/week_dates"
           style="@style/Widget.Grocy.TextView.Medium"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
-          android:layout_gravity="center"
-          android:text="10. – 16. Okt. 2022"/>
+          android:layout_gravity="center"/>
 
         <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recycler_calendar"
