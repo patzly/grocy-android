@@ -105,6 +105,8 @@
   <string name="action_purchase_all_items">Alle Einträge einkaufen</string>
   <string name="action_skip_entry">Eintrag überspringen</string>
   <string name="action_toggle_flash">Blitz umschalten</string>
+  <string name="action_edit_recipe">Rezept bearbeiten</string>
+  <string name="action_delete_recipe">Rezept löschen</string>
   <string name="action_delete_shopping_list">Einkaufszettel löschen</string>
   <string name="action_create_key">Schlüssel erstellen</string>
   <string name="action_login">Anmelden</string>
@@ -525,6 +527,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Nach Standort</string>
   <string name="title_recipe">Rezept</string>
+  <string name="title_preparation_mode">Zubereitungsmodus</string>
   <string name="title_total_price">Gesamtpreis</string>
   <string name="title_unit_price">Einzelpreis</string>
   <!-- %1$s is a quantity unit -->
