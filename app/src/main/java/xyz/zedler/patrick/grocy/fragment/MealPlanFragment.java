@@ -20,7 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +31,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.adapter.CalendarDayAdapter;
+import xyz.zedler.patrick.grocy.adapter.CalendarWeekAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockOverviewItemAdapter;
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
@@ -62,6 +62,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 import xyz.zedler.patrick.grocy.viewmodel.MealPlanViewModel;
 
 public class MealPlanFragment extends BaseFragment implements
@@ -156,25 +157,30 @@ public class MealPlanFragment extends BaseFragment implements
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
 
-    DisplayMetrics displayMetrics = new DisplayMetrics();
-    activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    int width = displayMetrics.widthPixels;
-
-    CalendarDayAdapter calendarDayAdapter = new CalendarDayAdapter(
-        requireContext(),
-        width,
-        () -> {},
-        CalendarDayAdapter.DIFF_CALLBACK
-    );
-    binding.recyclerCalendar.setAdapter(calendarDayAdapter);
     LinearLayoutManager layoutManager
         = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
     binding.recyclerCalendar.setLayoutManager(layoutManager);
+    CalendarWeekAdapter calendarWeekAdapter = new CalendarWeekAdapter(
+        requireContext(),
+        week -> {
+          if (week == null) return;
+          viewModel.showMessage(
+              week.getStartDate().toString() + " " + week.getSelectedDayOfWeek()
+          );
+        },
+        CalendarWeekAdapter.DIFF_CALLBACK,
+        viewModel.getSelectedDate(),
+        currentList -> {
+          new Handler().postDelayed(() -> {
+            viewModel.resetCalendarPosition();
+          }, 200);
+        }
+    );
+    binding.recyclerCalendar.setAdapter(calendarWeekAdapter);
 
-    viewModel.getHorizontalCalendarSource().observe(getViewLifecycleOwner(), localDates -> {
-      calendarDayAdapter.submitList(localDates);
+    viewModel.getHorizontalCalendarSource().observe(getViewLifecycleOwner(), day -> {
+      calendarWeekAdapter.submitList(day);
     });
-
 
 
     SnapToBlockHelper snapToBlockHelper = new SnapToBlockHelper(1);
@@ -185,18 +191,34 @@ public class MealPlanFragment extends BaseFragment implements
 
       @Override
       public void onBlockSnapped(int snapPosition) {
-        PagedList<LocalDate> list = calendarDayAdapter.getCurrentList();
-        LocalDate date = list != null ? list.get(snapPosition) : null;
-        if (date != null) {
+        PagedList<Week> list = calendarWeekAdapter.getCurrentList();
+        Week week = list != null ? list.get(snapPosition) : null;
+        if (week != null) {
           binding.weekDates.setText(
               getString(
                   R.string.date_timespan,
-                  date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
-                  date.plusDays(6).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                  week.getStartDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+                  week.getStartDate().plusDays(6).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
               )
           );
+          //int dayOfWeek = viewModel.getSelectedDate().getDayOfWeek().ordinal()-1;
+          //viewModel.setSelectedDate(week.getStartDate().plusDays(dayOfWeek));
+          Week previousSelected = viewModel.getSelectedWeek();
+          calendarWeekAdapter.onSelect(week, previousSelected.getSelectedDayOfWeek());
         }
       }
+    });
+
+    LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(requireContext());
+
+    viewModel.getGoToPosition().observe(getViewLifecycleOwner(), position -> {
+      if (position == -1) {
+        return;
+      }
+      linearSmoothScroller.setTargetPosition(position);
+      calendarWeekAdapter.onSelect(position, 0);
+      layoutManager.startSmoothScroll(linearSmoothScroller);
+      viewModel.getGoToPosition().setValue(-1);
     });
 
     viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {

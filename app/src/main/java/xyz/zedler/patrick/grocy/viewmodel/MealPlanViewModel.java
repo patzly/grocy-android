@@ -35,6 +35,7 @@ import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -79,6 +80,7 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
+import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 import xyz.zedler.patrick.grocy.view.singlerowcalendar.HorizontalCalendarFactory;
 
 public class MealPlanViewModel extends BaseViewModel {
@@ -103,8 +105,12 @@ public class MealPlanViewModel extends BaseViewModel {
   private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
   private final FilterChipLiveDataStockExtraField filterChipLiveDataExtraField;
 
+  private Instant now;
   private Calendar calendar;
-  private final LiveData<PagedList<LocalDate>> horizontalCalendarSource;
+  private int firstDayOfWeek;
+  private final LiveData<PagedList<Week>> horizontalCalendarSource;
+  private final MutableLiveData<Integer> goToPosition;
+  private LocalDate selectedDate;
 
   private List<StockItem> stockItems;
   private List<Product> products;
@@ -142,9 +148,12 @@ public class MealPlanViewModel extends BaseViewModel {
     scannerVisibilityLive = new MutableLiveData<>(false);
 
     calendar = Calendar.getInstance();
-    Instant now = Instant.now();
+    now = Instant.now();
+    firstDayOfWeek = 0;
     horizontalCalendarSource =
-        new LivePagedListBuilder<>(new HorizontalCalendarFactory(now), 10).build();
+        new LivePagedListBuilder<>(new HorizontalCalendarFactory(now, firstDayOfWeek), 10).build();
+    goToPosition = new MutableLiveData<>(-1);
+    selectedDate = LocalDate.now(ZoneId.systemDefault());
 
     filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
         getApplication(),
@@ -634,8 +643,45 @@ public class MealPlanViewModel extends BaseViewModel {
     return calendar;
   }
 
-  public LiveData<PagedList<LocalDate>> getHorizontalCalendarSource() {
+  public LiveData<PagedList<Week>> getHorizontalCalendarSource() {
     return horizontalCalendarSource;
+  }
+
+  public Week getSelectedWeek() {
+    if (horizontalCalendarSource.getValue() == null) return null;
+    for (Week weekTemp : horizontalCalendarSource.getValue()) {
+      if (weekTemp.getSelectedDayOfWeek() > -1) {
+        return weekTemp;
+      }
+    }
+    return null;
+  }
+
+  public void resetCalendarPosition() {
+    LocalDate today = now.atZone(ZoneId.systemDefault()).toLocalDate();
+    int offsetToStart = today.getDayOfWeek().ordinal()-(firstDayOfWeek-1);
+    LocalDate weekStart = today.minusDays(offsetToStart);
+    if (horizontalCalendarSource.getValue() == null) return;
+    int index = 0;
+    for (Week weekTemp : horizontalCalendarSource.getValue()) {
+      if (weekTemp.getStartDate().isEqual(weekStart)) {
+        goToPosition.setValue(index);
+        return;
+      }
+      index++;
+    }
+  }
+
+  public MutableLiveData<Integer> getGoToPosition() {
+    return goToPosition;
+  }
+
+  public LocalDate getSelectedDate() {
+    return selectedDate;
+  }
+
+  public void setSelectedDate(LocalDate selectedDate) {
+    this.selectedDate = selectedDate;
   }
 
   public ArrayList<Integer> getProductIdsMissingItems() {

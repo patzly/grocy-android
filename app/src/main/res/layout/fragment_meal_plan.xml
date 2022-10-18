@@ -235,7 +235,9 @@
             android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:clipToPadding="false"
             android:layoutAnimation="@anim/recycler_layout"
-            android:overScrollMode="ifContentScrolls" />
+            android:overScrollMode="ifContentScrolls"
+            android:clickable="false"
+            android:focusable="false"/>
 
         </FrameLayout>
 

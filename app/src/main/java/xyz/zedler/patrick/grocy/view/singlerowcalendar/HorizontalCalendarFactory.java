@@ -3,19 +3,20 @@ package xyz.zedler.patrick.grocy.view.singlerowcalendar;
 import androidx.annotation.NonNull;
 import androidx.paging.DataSource;
 import java.time.Instant;
-import java.time.LocalDate;
 
-public class HorizontalCalendarFactory extends DataSource.Factory<Long, LocalDate> {
+public class HorizontalCalendarFactory extends DataSource.Factory<Long, Week> {
 
   private final Instant now;
+  private final int firstDayOfWeek;
 
-  public HorizontalCalendarFactory(Instant now) {
+  public HorizontalCalendarFactory(Instant now, int firstDayOfWeek) {
     this.now = now;
+    this.firstDayOfWeek = firstDayOfWeek;
   }
 
   @NonNull
   @Override
-  public DataSource<Long, LocalDate> create() {
-    return new HorizontalCalendarSource(now);
+  public DataSource<Long, Week> create() {
+    return new HorizontalCalendarSource(now, firstDayOfWeek);
   }
 }
