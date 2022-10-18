@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     implements UserAdapterListener {
@@ -84,6 +85,7 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     }
     int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
+    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_users));
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

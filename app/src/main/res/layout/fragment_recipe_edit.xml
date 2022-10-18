@@ -383,13 +383,9 @@
               </LinearLayout>
 
               <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_marginStart="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:rotation="-90"
-                android:src="@drawable/ic_round_expand_more"
+                android:src="@drawable/ic_round_chevron_right"
                 tools:ignore="ContentDescription" />
 
             </LinearLayout>
@@ -422,13 +418,9 @@
               </LinearLayout>
 
               <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_marginStart="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:rotation="-90"
-                android:src="@drawable/ic_round_expand_more"
+                android:src="@drawable/ic_round_chevron_right"
                 tools:ignore="ContentDescription" />
 
             </LinearLayout>

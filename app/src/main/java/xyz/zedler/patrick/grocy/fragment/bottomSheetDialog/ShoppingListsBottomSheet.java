@@ -88,9 +88,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
     }
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_shopping_lists));
-    if (!UiUtil.isFullWidth(activity)) {
-      binding.textListSelectionTitle.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-    }
+    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
