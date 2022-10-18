@@ -39,7 +39,13 @@
   <color name="custom_green_50">#5b822c</color>
 
   <color name="custom_red_60">#db716f</color>
+  <color name="custom_red_50">#bc5957</color>
   <color name="custom_red_35">#8d3535</color>
+
+  <color name="toast_brown_90">#ffdeac</color>
+  <color name="toast_brown_70">#dca030</color>
+  <color name="toast_brown_50">#9e6e00</color>
+  <color name="toast_brown_30">#604100</color>
 
   <!-- RED -->
 

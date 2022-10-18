@@ -86,7 +86,22 @@ public class ResUtil {
     int[] resIds = new int[] {
         R.color.logo_yellow,
         R.color.logo_green,
-        R.color.logo_red
+        R.color.logo_red,
+
+        R.color.custom_yellow_80,
+        R.color.custom_yellow_50,
+
+        R.color.custom_green_80,
+        R.color.custom_green_50,
+
+        R.color.custom_red_60,
+        R.color.custom_red_50,
+        R.color.custom_red_35,
+
+        R.color.toast_brown_90,
+        R.color.toast_brown_70,
+        R.color.toast_brown_50,
+        R.color.toast_brown_30,
     };
     HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
         .setColorResourceIds(resIds)
