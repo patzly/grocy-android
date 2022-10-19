@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.fragment.ChoresFragment;
 import xyz.zedler.patrick.grocy.fragment.ConsumeFragment;
 import xyz.zedler.patrick.grocy.fragment.InventoryFragment;
 import xyz.zedler.patrick.grocy.fragment.MasterObjectListFragment;
+import xyz.zedler.patrick.grocy.fragment.MealPlanFragment;
 import xyz.zedler.patrick.grocy.fragment.OverviewStartFragment;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragment;
 import xyz.zedler.patrick.grocy.fragment.RecipesFragment;
@@ -103,6 +104,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 8)
     );
     binding.linearDrawerRecipes.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerMealPlan.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
     binding.linearDrawerChores.setBackground(
@@ -204,6 +208,8 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
       select(binding.linearDrawerTasks, binding.textDrawerTasks, binding.imageDrawerTasks);
     } else if (currentFragment instanceof RecipesFragment) {
       select(binding.linearDrawerRecipes, binding.textDrawerRecipes, binding.imageDrawerRecipes);
+    } else if (currentFragment instanceof MealPlanFragment) {
+      select(binding.linearDrawerMealPlan, binding.textDrawerMealPlan, binding.imageDrawerMealPlan);
     } else if (currentFragment instanceof MasterObjectListFragment) {
       select(
           binding.linearDrawerMasterData,

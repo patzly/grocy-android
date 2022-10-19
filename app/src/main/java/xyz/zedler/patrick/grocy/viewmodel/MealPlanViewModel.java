@@ -37,7 +37,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
@@ -52,13 +51,6 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveData;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataLocation;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataProductGroup;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockExtraField;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockGrouping;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockSort;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.model.MissingItem;
@@ -80,8 +72,8 @@ import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 import xyz.zedler.patrick.grocy.view.singlerowcalendar.HorizontalCalendarFactory;
+import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 
 public class MealPlanViewModel extends BaseViewModel {
 
@@ -97,19 +89,10 @@ public class MealPlanViewModel extends BaseViewModel {
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<StockItem>> filteredStockItemsLive;
-  private final MutableLiveData<Boolean> scannerVisibilityLive;
-  private final FilterChipLiveDataStockStatus filterChipLiveDataStatus;
-  private final FilterChipLiveDataProductGroup filterChipLiveDataProductGroup;
-  private final FilterChipLiveDataLocation filterChipLiveDataLocation;
-  private final FilterChipLiveDataStockSort filterChipLiveDataSort;
-  private final FilterChipLiveDataStockGrouping filterChipLiveDataGrouping;
-  private final FilterChipLiveDataStockExtraField filterChipLiveDataExtraField;
 
-  private Instant now;
-  private Calendar calendar;
+  private final Instant now;
   private int firstDayOfWeek;
   private final LiveData<PagedList<Week>> horizontalCalendarSource;
-  private final MutableLiveData<Integer> goToPosition;
 
   private List<StockItem> stockItems;
   private List<Product> products;
@@ -144,52 +127,20 @@ public class MealPlanViewModel extends BaseViewModel {
     infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     filteredStockItemsLive = new MutableLiveData<>();
-    scannerVisibilityLive = new MutableLiveData<>(false);
 
-    calendar = Calendar.getInstance();
     now = Instant.now();
-    firstDayOfWeek = 0;
+    String firstDayOfWeekStr = sharedPrefs.getString(PREF.MEAL_PLAN_FIRST_DAY_OF_WEEK, "");
+    firstDayOfWeek = NumUtil.isStringInt(firstDayOfWeekStr) ? Integer.parseInt(firstDayOfWeekStr) : 0;
+    if (firstDayOfWeek < 0 || firstDayOfWeek > 6) firstDayOfWeek = 0;
     horizontalCalendarSource =
         new LivePagedListBuilder<>(new HorizontalCalendarFactory(now, firstDayOfWeek), 10).build();
-    goToPosition = new MutableLiveData<>(-1);
 
-    filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
-        getApplication(),
-        this::updateFilteredStockItems
-    );
-    if (NumUtil.isStringInt(args.getStatusFilterId())) {
-      if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataStockStatus.STATUS_DUE_SOON) {
-        filterChipLiveDataStatus.setStatusDueSoon();
-      }
-    }
-    filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
-        getApplication(),
-        this::updateFilteredStockItems
-    );
-    filterChipLiveDataLocation = new FilterChipLiveDataLocation(
-        getApplication(),
-        this::updateFilteredStockItems
-    );
-    filterChipLiveDataSort = new FilterChipLiveDataStockSort(
-        getApplication(),
-        this::updateFilteredStockItems
-    );
-    filterChipLiveDataGrouping = new FilterChipLiveDataStockGrouping(
-        getApplication(),
-        this::updateFilteredStockItems
-    );
-    filterChipLiveDataExtraField = new FilterChipLiveDataStockExtraField(
-        getApplication(),
-        this::updateFilteredStockItems
-    );
   }
 
   public void loadFromDatabase(boolean downloadAfterLoading) {
     repository.loadFromDatabase(data -> {
       quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
       productGroupHashMap = ArrayUtil.getProductGroupsHashMap(data.getProductGroups());
-      filterChipLiveDataProductGroup.setProductGroups(data.getProductGroups());
       this.products = data.getProducts();
       productHashMap = ArrayUtil.getProductsHashMap(data.getProducts());
       productAveragePriceHashMap = ArrayUtil
@@ -250,7 +201,6 @@ public class MealPlanViewModel extends BaseViewModel {
           shoppingListItemsProductIds.add(item.getProductId());
         }
       }
-      filterChipLiveDataLocation.setLocations(data.getLocations());
       locationHashMap = ArrayUtil.getLocationsHashMap(data.getLocations());
 
       stockLocationsHashMap = new HashMap<>();
@@ -264,14 +214,6 @@ public class MealPlanViewModel extends BaseViewModel {
         locationsForProductId.put(stockLocation.getLocationId(), stockLocation);
       }
 
-      filterChipLiveDataStatus
-          .setDueSoonCount(itemsDueCount)
-          .setOverdueCount(itemsOverdueCount)
-          .setExpiredCount(itemsExpiredCount)
-          .setBelowStockCount(itemsMissingCount)
-          .setInStockCount(itemsInStockCount)
-          .setOpenedCount(itemsOpenedCount)
-          .emitCounts();
       updateFilteredStockItems();
       if (downloadAfterLoading) {
         downloadData();
@@ -375,58 +317,12 @@ public class MealPlanViewModel extends BaseViewModel {
       if (productSearch != null && productSearch.getId() != item.getProductId()) {
         continue;
       }
-
-      int productGroupFilterId = filterChipLiveDataProductGroup.getSelectedId();
-      if (productGroupFilterId != FilterChipLiveDataProductGroup.NO_FILTER
-          && NumUtil.isStringInt(item.getProduct().getProductGroupId())
-          && productGroupFilterId != Integer.parseInt(item.getProduct().getProductGroupId())
-          || productGroupFilterId != FilterChipLiveDataProductGroup.NO_FILTER
-          && !NumUtil.isStringInt(item.getProduct().getProductGroupId())
-      ) {
-        continue;
-      }
-      int locationFilterId = filterChipLiveDataLocation.getSelectedId();
-      if (locationFilterId != FilterChipLiveDataLocation.NO_FILTER) {
-        HashMap<Integer, StockLocation> stockLocationsForProductId
-            = stockLocationsHashMap.get(item.getProductId());
-        if (stockLocationsForProductId == null
-            || !stockLocationsForProductId.containsKey(locationFilterId)
-        ) {
-          continue;
-        }
-      }
-
-      MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
-      if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
-          && item.isItemDue()
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
-          && item.isItemOverdue()
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
-          && item.isItemExpired()
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
-          && missingItem != null
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK
-          && (missingItem == null || missingItem.getIsPartlyInStockBoolean())
-          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OPENED
-          && item.getAmountOpenedDouble() > 0
-      ) {
-        filteredStockItems.add(item);
-      }
     }
 
     if (filteredStockItems.isEmpty()) {
       InfoFullscreen info;
       if (searchInput != null && !searchInput.isEmpty()) {
         info = new InfoFullscreen(InfoFullscreen.INFO_NO_SEARCH_RESULTS);
-      } else if (filterChipLiveDataStatus.getStatus()
-          != FilterChipLiveDataStockStatus.STATUS_ALL
-          || filterChipLiveDataProductGroup.getSelectedId()
-          != FilterChipLiveDataProductGroup.NO_FILTER
-          || filterChipLiveDataLocation.getSelectedId()
-          != FilterChipLiveDataProductGroup.NO_FILTER
-      ) {
-        info = new InfoFullscreen(InfoFullscreen.INFO_NO_FILTER_RESULTS);
       } else {
         info = new InfoFullscreen(InfoFullscreen.INFO_EMPTY_STOCK);
       }
@@ -637,10 +533,6 @@ public class MealPlanViewModel extends BaseViewModel {
     updateFilteredStockItems();
   }
 
-  public Calendar getCalendar() {
-    return calendar;
-  }
-
   public LiveData<PagedList<Week>> getHorizontalCalendarSource() {
     return horizontalCalendarSource;
   }
@@ -676,21 +568,6 @@ public class MealPlanViewModel extends BaseViewModel {
       index++;
     }
     return -1;
-  }
-
-  public void resetCalendarPosition() {
-    LocalDate today = now.atZone(ZoneId.systemDefault()).toLocalDate();
-    int offsetToStart = today.getDayOfWeek().ordinal()-(firstDayOfWeek-1);
-    LocalDate weekStart = today.minusDays(offsetToStart);
-    if (horizontalCalendarSource.getValue() == null) return;
-    int index = 0;
-    for (Week weekTemp : horizontalCalendarSource.getValue()) {
-      if (weekTemp.getStartDate().isEqual(weekStart)) {
-        goToPosition.setValue(index);
-        return;
-      }
-      index++;
-    }
   }
 
   public ArrayList<Integer> getProductIdsMissingItems() {
@@ -731,59 +608,6 @@ public class MealPlanViewModel extends BaseViewModel {
 
   public QuantityUnit getQuantityUnitFromId(int id) {
     return quantityUnitHashMap.get(id);
-  }
-
-  public FilterChipLiveData.Listener getFilterChipLiveDataStatus() {
-    return () -> filterChipLiveDataStatus;
-  }
-
-  public FilterChipLiveData.Listener getFilterChipLiveDataProductGroup() {
-    return () -> filterChipLiveDataProductGroup;
-  }
-
-  public FilterChipLiveData.Listener getFilterChipLiveDataLocation() {
-    return () -> filterChipLiveDataLocation;
-  }
-
-  public FilterChipLiveData.Listener getFilterChipLiveDataSort() {
-    return () -> filterChipLiveDataSort;
-  }
-
-  public String getSortMode() {
-    return filterChipLiveDataSort.getSortMode();
-  }
-
-  public boolean isSortAscending() {
-    return filterChipLiveDataSort.isSortAscending();
-  }
-
-  public FilterChipLiveData.Listener getFilterChipLiveDataGrouping() {
-    return () -> filterChipLiveDataGrouping;
-  }
-
-  public String getGroupingMode() {
-    return filterChipLiveDataGrouping.getGroupingMode();
-  }
-
-  public FilterChipLiveData.Listener getFilterChipLiveDataExtraField() {
-    return () -> filterChipLiveDataExtraField;
-  }
-
-  public String getExtraField() {
-    return filterChipLiveDataExtraField.getExtraField();
-  }
-
-  public MutableLiveData<Boolean> getScannerVisibilityLive() {
-    return scannerVisibilityLive;
-  }
-
-  public boolean isScannerVisible() {
-    assert scannerVisibilityLive.getValue() != null;
-    return scannerVisibilityLive.getValue();
-  }
-
-  public void toggleScannerVisibility() {
-    scannerVisibilityLive.setValue(!isScannerVisible());
   }
 
   @NonNull

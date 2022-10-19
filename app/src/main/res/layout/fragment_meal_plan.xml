@@ -54,111 +54,11 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize">
 
-        <FrameLayout
-          android:id="@+id/app_bar_default"
-          android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize">
-
-          <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_default"
-            style="@style/Widget.Grocy.Toolbar.Back"
-            app:title="@string/title_meal_plan"
-            app:titleCentered="true" />
-
-        </FrameLayout>
-
-        <LinearLayout
-          android:id="@+id/app_bar_search"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:visibility="gone">
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
-
-            <FrameLayout
-              android:layout_width="48dp"
-              android:layout_height="48dp"
-              android:layout_marginStart="4dp"
-              android:layout_marginEnd="20dp"
-              android:background="?attr/actionBarItemBackground"
-              android:clickable="true"
-              android:gravity="center"
-              android:contentDescription="@string/action_close"
-              android:tooltipText="@string/action_close"
-              android:focusable="true"
-              tools:targetApi="o"
-              android:onClick="@{() -> fragment.dismissSearch()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon.Navigation"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_round_close" />
-
-            </FrameLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-              android:id="@+id/text_input_search"
-              style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:layout_marginStart="0dp"
-              android:layout_marginEnd="0dp"
-              app:endIconMode="clear_text">
-
-              <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_search"
-                style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionSearch"
-                android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-                android:singleLine="true"
-                android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
-                app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <FrameLayout
-              android:id="@+id/frame_scan"
-              android:layout_width="48dp"
-              android:layout_height="48dp"
-              android:layout_marginStart="20dp"
-              android:layout_marginEnd="4dp"
-              android:background="?attr/actionBarItemBackground"
-              android:clickable="true"
-              android:gravity="center"
-              android:contentDescription="@string/action_scan"
-              android:tooltipText="@string/action_scan"
-              android:focusable="true"
-              android:onClick="@{() -> fragment.toggleScannerVisibility()}"
-              tools:targetApi="o">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
-                android:layout_gravity="center"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_round_barcode_scan" />
-
-            </FrameLayout>
-
-          </LinearLayout>
-
-          <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/container_scanner"
-            android:layout_width="350dp"
-            android:layout_height="160dp"
-            android:layout_gravity="center"
-            android:visibility="@{viewModel.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-            android:onClick="@{() -> fragment.toggleTorch()}"/>
-
-        </LinearLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar_default"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:title="@string/title_meal_plan"
+          app:titleCentered="true" />
 
       </FrameLayout>
 
@@ -228,16 +128,23 @@
           android:overScrollMode="ifContentScrolls"
           android:clipToPadding="false"
           android:layoutAnimation="@anim/recycler_layout"
-          android:scrollbarStyle="outsideOverlay"/>
+          android:scrollbarStyle="outsideOverlay"
+          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <com.google.android.material.divider.MaterialDivider
           style="@style/Widget.Grocy.Divider.Margin"
           android:layout_marginBottom="0dp" />
 
+        <androidx.viewpager2.widget.ViewPager2
+          android:id="@+id/infiniteViewPager"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
+
         <FrameLayout
           android:id="@+id/frame"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content">
+          android:layout_height="wrap_content"
+          android:visibility="gone">
 
           <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"

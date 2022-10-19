@@ -35,6 +35,8 @@ public final class Constants {
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY = "home_assistant_ingress_session_key";
     public final static String HOME_ASSISTANT_INGRESS_SESSION_KEY_TIME = "home_assistant_ingress_session_key_time";
     public final static String CURRENCY = "currency";
+    public final static String CALENDAR_FIRST_DAY_OF_WEEK = "calendar_first_day_of_week";
+    public final static String MEAL_PLAN_FIRST_DAY_OF_WEEK = "mealplan_first_day_of_week";
     public final static String GROCY_VERSION = "grocy_version";
     public final static String CREDENTIALS = "credentials";
     public final static String CURRENT_USER_ID = "current_user_id";

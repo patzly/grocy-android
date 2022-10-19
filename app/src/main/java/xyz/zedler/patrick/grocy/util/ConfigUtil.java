@@ -83,6 +83,14 @@ public class ConfigUtil {
               Constants.PREF.CURRENCY,
               jsonObject.getString("CURRENCY")
           )
+          .putString(
+              Constants.PREF.CALENDAR_FIRST_DAY_OF_WEEK,
+              jsonObject.getString("CALENDAR_FIRST_DAY_OF_WEEK")
+          )
+          .putString(
+              Constants.PREF.MEAL_PLAN_FIRST_DAY_OF_WEEK,
+              jsonObject.getString("MEAL_PLAN_FIRST_DAY_OF_WEEK")
+          )
           .putBoolean(
               Constants.PREF.FEATURE_STOCK,
               jsonObject.getBoolean("FEATURE_FLAG_STOCK")
