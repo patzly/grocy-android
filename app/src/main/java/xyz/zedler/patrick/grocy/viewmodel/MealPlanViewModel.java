@@ -110,7 +110,6 @@ public class MealPlanViewModel extends BaseViewModel {
   private int firstDayOfWeek;
   private final LiveData<PagedList<Week>> horizontalCalendarSource;
   private final MutableLiveData<Integer> goToPosition;
-  private LocalDate selectedDate;
 
   private List<StockItem> stockItems;
   private List<Product> products;
@@ -153,7 +152,6 @@ public class MealPlanViewModel extends BaseViewModel {
     horizontalCalendarSource =
         new LivePagedListBuilder<>(new HorizontalCalendarFactory(now, firstDayOfWeek), 10).build();
     goToPosition = new MutableLiveData<>(-1);
-    selectedDate = LocalDate.now(ZoneId.systemDefault());
 
     filterChipLiveDataStatus = new FilterChipLiveDataStockStatus(
         getApplication(),
@@ -657,6 +655,29 @@ public class MealPlanViewModel extends BaseViewModel {
     return null;
   }
 
+  public LocalDate getToday() {
+    return now.atZone(ZoneId.systemDefault()).toLocalDate();
+  }
+
+  public int getDayOffsetToWeekStart(LocalDate date) {
+    return date.getDayOfWeek().ordinal()-(firstDayOfWeek-1);
+  }
+
+  public int getCalendarPosition(LocalDate date) {
+    if (date == null) return -1;
+    int offsetToStart = getDayOffsetToWeekStart(date);
+    LocalDate weekStart = date.minusDays(offsetToStart);
+    int index = 0;
+    if (horizontalCalendarSource.getValue() == null) return -1;
+    for (Week weekTemp : horizontalCalendarSource.getValue()) {
+      if (weekTemp.getStartDate().isEqual(weekStart)) {
+        return index;
+      }
+      index++;
+    }
+    return -1;
+  }
+
   public void resetCalendarPosition() {
     LocalDate today = now.atZone(ZoneId.systemDefault()).toLocalDate();
     int offsetToStart = today.getDayOfWeek().ordinal()-(firstDayOfWeek-1);
@@ -670,18 +691,6 @@ public class MealPlanViewModel extends BaseViewModel {
       }
       index++;
     }
-  }
-
-  public MutableLiveData<Integer> getGoToPosition() {
-    return goToPosition;
-  }
-
-  public LocalDate getSelectedDate() {
-    return selectedDate;
-  }
-
-  public void setSelectedDate(LocalDate selectedDate) {
-    this.selectedDate = selectedDate;
   }
 
   public ArrayList<Integer> getProductIdsMissingItems() {

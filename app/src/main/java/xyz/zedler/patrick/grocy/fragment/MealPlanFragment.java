@@ -33,6 +33,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
@@ -80,6 +81,9 @@ public class MealPlanFragment extends BaseFragment implements
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
   private SystemBarBehavior systemBarBehavior;
+  private CalendarWeekAdapter calendarWeekAdapter;
+
+  private boolean suppressNextSelectEvent;
 
   @Override
   public View onCreateView(
@@ -160,27 +164,16 @@ public class MealPlanFragment extends BaseFragment implements
     LinearLayoutManager layoutManager
         = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
     binding.recyclerCalendar.setLayoutManager(layoutManager);
-    CalendarWeekAdapter calendarWeekAdapter = new CalendarWeekAdapter(
+    calendarWeekAdapter = new CalendarWeekAdapter(
         requireContext(),
         week -> {
           if (week == null) return;
-          viewModel.showMessage(
-              week.getStartDate().toString() + " " + week.getSelectedDayOfWeek()
-          );
+          viewModel.showMessage(week.getSelectedDate().toString());
         },
-        CalendarWeekAdapter.DIFF_CALLBACK,
-        viewModel.getSelectedDate(),
-        currentList -> {
-          new Handler().postDelayed(() -> {
-            viewModel.resetCalendarPosition();
-          }, 200);
-        }
+        CalendarWeekAdapter.DIFF_CALLBACK
     );
     binding.recyclerCalendar.setAdapter(calendarWeekAdapter);
 
-    viewModel.getHorizontalCalendarSource().observe(getViewLifecycleOwner(), day -> {
-      calendarWeekAdapter.submitList(day);
-    });
 
 
     SnapToBlockHelper snapToBlockHelper = new SnapToBlockHelper(1);
@@ -191,34 +184,52 @@ public class MealPlanFragment extends BaseFragment implements
 
       @Override
       public void onBlockSnapped(int snapPosition) {
-        PagedList<Week> list = calendarWeekAdapter.getCurrentList();
-        Week week = list != null ? list.get(snapPosition) : null;
-        if (week != null) {
-          binding.weekDates.setText(
-              getString(
-                  R.string.date_timespan,
-                  week.getStartDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
-                  week.getStartDate().plusDays(6).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-              )
-          );
-          //int dayOfWeek = viewModel.getSelectedDate().getDayOfWeek().ordinal()-1;
-          //viewModel.setSelectedDate(week.getStartDate().plusDays(dayOfWeek));
-          Week previousSelected = viewModel.getSelectedWeek();
-          calendarWeekAdapter.onSelect(week, previousSelected.getSelectedDayOfWeek());
+        Week previousSelected = viewModel.getSelectedWeek();
+        if (!suppressNextSelectEvent) {
+          calendarWeekAdapter.onSelect(snapPosition, previousSelected.getSelectedDayOfWeek());
+        } else {
+          suppressNextSelectEvent = false;
         }
+        updateWeekDatesText(snapPosition);
       }
     });
 
     LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(requireContext());
 
-    viewModel.getGoToPosition().observe(getViewLifecycleOwner(), position -> {
+
+    viewModel.getHorizontalCalendarSource().observe(getViewLifecycleOwner(), weeks -> {
+      boolean initial =
+          calendarWeekAdapter.getCurrentList() == null || calendarWeekAdapter.getItemCount() == 0;
+      calendarWeekAdapter.submitList(weeks);
+
+      if (initial && weeks.size() > 0) {
+        new Handler().postDelayed(() -> {
+          int position = calendarWeekAdapter.getPositionOfWeek(
+              viewModel.getSelectedWeek().getStartDate()
+          );
+          if (position == -1) {
+            return;
+          }
+          binding.recyclerCalendar.scrollToPosition(position);
+          updateWeekDatesText(position);
+        }, 100);
+      }
+    });
+
+    binding.today.setOnClickListener(v -> {
+      LocalDate today = viewModel.getToday();
+      int position = viewModel.getCalendarPosition(today);
+
       if (position == -1) {
         return;
       }
+
       linearSmoothScroller.setTargetPosition(position);
-      calendarWeekAdapter.onSelect(position, 0);
+      if (layoutManager.findFirstVisibleItemPosition() != position) {
+        suppressNextSelectEvent = true;
+      }
+      calendarWeekAdapter.onSelect(position, viewModel.getDayOffsetToWeekStart(today));
       layoutManager.startSmoothScroll(linearSmoothScroller);
-      viewModel.getGoToPosition().setValue(-1);
     });
 
     viewModel.getFilteredStockItemsLive().observe(getViewLifecycleOwner(), items -> {
@@ -366,6 +377,20 @@ public class MealPlanFragment extends BaseFragment implements
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_stock, this::onMenuItemClick);
+  }
+
+  private void updateWeekDatesText(int position) {
+    PagedList<Week> currentList = this.calendarWeekAdapter.getCurrentList();
+    if (currentList == null || position+1 > currentList.size()) return;
+    Week week = currentList.get(position);
+    if (week == null) return;
+    binding.weekDates.setText(
+        getString(
+            R.string.date_timespan,
+            week.getStartDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
+            week.getStartDate().plusDays(6).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        )
+    );
   }
 
   @Override

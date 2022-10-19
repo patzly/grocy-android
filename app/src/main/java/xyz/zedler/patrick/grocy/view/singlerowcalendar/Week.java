@@ -3,7 +3,7 @@ package xyz.zedler.patrick.grocy.view.singlerowcalendar;
 import java.time.LocalDate;
 
 public class Week {
-  private int selectedDayOfWeek; // int which is 0-6 if weekday in this week is selected, or -1 if not
+  private int selectedDayOfWeek = -1; // int which is 0-6 if weekday in this week is selected, or -1 if not
   private LocalDate startDate;
 
   public Week(int selectedDayOfWeek, LocalDate startDate) {
@@ -17,6 +17,13 @@ public class Week {
 
   public void setSelectedDayOfWeek(int selectedDayOfWeek) {
     this.selectedDayOfWeek = selectedDayOfWeek;
+  }
+
+  public LocalDate getSelectedDate() {
+    if (this.selectedDayOfWeek == -1) {
+      return null;
+    }
+    return this.startDate.plusDays(this.selectedDayOfWeek);
   }
 
   public LocalDate getStartDate() {

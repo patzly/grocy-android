@@ -73,6 +73,11 @@ public class SnapToBlockHelper extends SnapHelper {
   public void attachToRecyclerView(@Nullable final RecyclerView recyclerView)
       throws IllegalStateException {
 
+    if (mRecyclerView == recyclerView) {
+      return; // nothing to do
+    }
+    mRecyclerView = null;
+
     if (recyclerView != null) {
       mRecyclerView = recyclerView;
       final LinearLayoutManager layoutManager =

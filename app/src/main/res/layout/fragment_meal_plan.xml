@@ -197,13 +197,26 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-          android:id="@+id/week_dates"
-          style="@style/Widget.Grocy.TextView.Medium"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:layout_gravity="center"/>
+        <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/week_dates"
+            style="@style/Widget.Grocy.TextView.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_gravity="center"/>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/today"
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:layout_marginEnd="4dp"
+            android:layout_gravity="end"
+            app:icon="@drawable/ic_round_event" />
+
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recycler_calendar"

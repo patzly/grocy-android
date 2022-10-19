@@ -21,11 +21,13 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources.Theme;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.paging.PagedList;
+import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,10 +35,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.adapter.CalendarWeekAdapter.CalendarDayViewHolder;
 import xyz.zedler.patrick.grocy.databinding.RowCalendarDayBinding;
 import xyz.zedler.patrick.grocy.databinding.RowCalendarWeekBinding;
-import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.view.singlerowcalendar.Week;
 
 public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewHolder> {
@@ -45,9 +47,7 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
   private final static boolean DEBUG = false;
 
   private Context context;
-  private LocalDate selectedDate;
   private final CalendarWeekAdapterListener listener;
-  private final CurrentListChangedListener onListChanged;
 
   public static final DiffUtil.ItemCallback<Week> DIFF_CALLBACK = new DiffUtil.ItemCallback<>() {
     @Override
@@ -64,15 +64,11 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
   public CalendarWeekAdapter(
       Context context,
       CalendarWeekAdapterListener listener,
-      DiffUtil.ItemCallback<Week> dateItemCallback,
-      LocalDate selectedDate,
-      CurrentListChangedListener onListChanged
+      DiffUtil.ItemCallback<Week> dateItemCallback
   ) {
     super(dateItemCallback);
     this.context = context;
     this.listener = listener;
-    this.selectedDate = selectedDate;
-    this.onListChanged = onListChanged;
   }
 
   @Override
@@ -90,10 +86,7 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
       this.binding = binding;
     }
 
-    public void onBind(
-        Week week,
-        CalendarWeekAdapterListener listener
-    ) {
+    public void onBind(Week week) {
       if (week == null) return;
 
       for (int i = 0; i < binding.container.getChildCount(); i++) {
@@ -103,9 +96,20 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
         bindingDay.day.setText(String.valueOf(week.getStartDate().plusDays(i).getDayOfMonth()));
 
         if (week.getSelectedDayOfWeek() == i) {
-          bindingDay.card.setStrokeWidth(UiUtil.dpToPx(bindingDay.day.getContext(), 2));
+          bindingDay.card.setStrokeColor(ContextCompat.getColor(context, R.color.material_dynamic_secondary50));
+          bindingDay.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.material_dynamic_secondary50));
+          bindingDay.weekday.setTextColor(ContextCompat.getColor(context, R.color.white));
+          bindingDay.day.setTextColor(ContextCompat.getColor(context, R.color.white));
         } else {
-          bindingDay.card.setStrokeWidth(UiUtil.dpToPx(bindingDay.day.getContext(), 1));
+          TypedValue typedValue = new TypedValue();
+          Theme theme = context.getTheme();
+          theme.resolveAttribute(R.attr.colorOutline, typedValue, true);
+          @ColorInt int colorOutline = typedValue.data;
+
+          bindingDay.card.setStrokeColor(colorOutline);
+          bindingDay.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.transparent));
+          bindingDay.weekday.setTextColor(ContextCompat.getColor(context, R.color.black));
+          bindingDay.day.setTextColor(ContextCompat.getColor(context, R.color.black));
         }
 
         int finalI = i;
@@ -114,7 +118,6 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
             (view, focus) -> {
               if (focus) {
                 onSelect(week, finalI);
-                listener.onItemRowClicked(week);
               }
             }
         );
@@ -136,11 +139,12 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
   @Override
   public void onBindViewHolder(@NonNull CalendarDayViewHolder holder, int position) {
     if (getItem(position) != null) {
-      holder.onBind(getItem(position), listener);
+      holder.onBind(getItem(position));
     }
   }
 
   public void onSelect(Week week, int dayOfWeek) {
+    if (getCurrentList() == null) return;
     int index = 0;
     for (Week weekTemp : getCurrentList()) {
       if (weekTemp.getStartDate().isEqual(week.getStartDate())) {
@@ -160,19 +164,20 @@ public class CalendarWeekAdapter extends PagedListAdapter<Week, CalendarDayViewH
     Week week = getItem(position);
     if (week == null) return;
     week.setSelectedDayOfWeek(dayOfWeek);
+    listener.onItemRowClicked(week);
     notifyDataSetChanged();
   }
 
-  @Override
-  public void onCurrentListChanged(@Nullable PagedList<Week> previousList,
-      @Nullable PagedList<Week> currentList) {
-    super.onCurrentListChanged(previousList, currentList);
-    onListChanged.onListChanged(currentList);
-  }
-
-  public interface CurrentListChangedListener {
-
-    void onListChanged(@Nullable PagedList<Week> currentList);
+  public int getPositionOfWeek(LocalDate startDate) {
+    if (getCurrentList() == null) return -1;
+    int index = 0;
+    for (Week weekTemp : getCurrentList()) {
+      if (weekTemp.getStartDate().isEqual(startDate)) {
+        return index;
+      }
+      index++;
+    }
+    return -1;
   }
 
   public interface CalendarWeekAdapterListener {
