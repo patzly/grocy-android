@@ -1001,7 +1001,7 @@
   <string name="hint_server">Server-URL</string>
   <string name="hint_key">Gültiger API-Schlüssel</string>
 
-  <string name="setting_theme">Thema</string>
+  <string name="setting_theme">Farbschema</string>
   <string name="setting_theme_description">Probieren Sie ein anderes Design aus</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
   <string name="setting_theme_auto">Auto</string>
