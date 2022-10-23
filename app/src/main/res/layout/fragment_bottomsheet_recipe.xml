@@ -141,7 +141,7 @@
             <com.google.android.material.chip.Chip
               android:id="@+id/chip_consume"
               style="@style/Widget.Grocy.Chip.Assist"
-              android:text="@string/title_consume"
+              android:text="@string/action_consume"
               app:chipIcon="@drawable/ic_round_consume_product"
               app:longClickToastText="@{@string/action_consume_recipe}" />
 
