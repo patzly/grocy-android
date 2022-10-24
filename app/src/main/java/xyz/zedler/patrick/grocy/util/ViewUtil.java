@@ -496,7 +496,7 @@ public class ViewUtil {
         Toast.makeText(
             progressConfirm.getContext(),
             R.string.msg_press_hold_confirm,
-            Toast.LENGTH_LONG
+            Toast.LENGTH_SHORT
         ).show();
       }
     }

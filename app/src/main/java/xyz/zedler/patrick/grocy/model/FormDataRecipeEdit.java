@@ -33,6 +33,8 @@ import androidx.lifecycle.Transformations;
 
 import java.util.ArrayList;
 
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -62,12 +64,17 @@ public class FormDataRecipeEdit {
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithRecipe;
+  private final int maxDecimalPlacesAmount;
 
   public FormDataRecipeEdit(Application application,
                             SharedPreferences sharedPrefs,
                             RecipeEditFragmentArgs args) {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     pluralUtil = new PluralUtil(application);
     displayHelpLive = new MutableLiveData<>(sharedPrefs.getBoolean(
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
@@ -75,7 +82,7 @@ public class FormDataRecipeEdit {
     ));
     nameLive = new MutableLiveData<>();
     nameErrorLive = new MutableLiveData<>();
-    baseServingsLive = new MutableLiveData<>();
+    baseServingsLive = new MutableLiveData<>("1");
     baseServingsErrorLive = new MutableLiveData<>();
     notCheckShoppingListLive = new MutableLiveData<>();
     productsLive = new MutableLiveData<>();
@@ -85,7 +92,7 @@ public class FormDataRecipeEdit {
     productNameInfoStockLive = Transformations.map(
             productDetailsLive,
             productDetails -> {
-              String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails);
+              String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails, maxDecimalPlacesAmount);
               return info != null ? application.getString(R.string.property_in_stock, info) : " ";
             }
     );
@@ -174,6 +181,13 @@ public class FormDataRecipeEdit {
     this.filledWithRecipe = filled;
   }
 
+  public boolean isFormValid() {
+    boolean valid = isNameValid();
+    valid = isBaseServingsValid() && valid;
+    valid = isProductNameValid() && valid;
+    return valid;
+  }
+
   public boolean isNameValid() {
     if (nameLive.getValue() == null || nameLive.getValue().isEmpty()) {
       nameErrorLive.setValue(R.string.error_empty);
@@ -181,10 +195,6 @@ public class FormDataRecipeEdit {
     }
     nameErrorLive.setValue(null);
     return true;
-  }
-
-  public boolean isFormValid() {
-    return isNameValid();
   }
 
   public boolean isProductNameValid() {
@@ -209,13 +219,7 @@ public class FormDataRecipeEdit {
   }
 
   public boolean isBaseServingsValid() {
-    if (baseServingsLive.getValue() != null && baseServingsLive.getValue().isEmpty()) {
-      if (baseServingsLive.getValue() != null) {
-        clearForm();
-        return false;
-      }
-    }
-    if (baseServingsLive.getValue() == null && !baseServingsLive.getValue().isEmpty()) {
+    if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
       baseServingsErrorLive.setValue(R.string.error_invalid_base_servings);
       return false;
     }
@@ -232,24 +236,24 @@ public class FormDataRecipeEdit {
   public void moreBaseServings(ImageView view) {
     ViewUtil.startIcon(view);
     if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
-      baseServingsLive.setValue(NumUtil.trim(1.0));
+      baseServingsLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
       double currentValue = Double.parseDouble(baseServingsLive.getValue());
-      baseServingsLive.setValue(NumUtil.trim(currentValue + 1));
+      baseServingsLive.setValue(NumUtil.trimAmount(currentValue + 1, maxDecimalPlacesAmount));
     }
   }
 
   public void lessBaseServings(ImageView view) {
     ViewUtil.startIcon(view);
     if (baseServingsLive.getValue() == null || baseServingsLive.getValue().isEmpty()) {
-      baseServingsLive.setValue(NumUtil.trim(1.0));
+      baseServingsLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
       double currentValue = Double.parseDouble(baseServingsLive.getValue());
 
       if (currentValue == 1)
         return;
 
-      baseServingsLive.setValue(NumUtil.trim(currentValue - 1));
+      baseServingsLive.setValue(NumUtil.trimAmount(currentValue - 1, maxDecimalPlacesAmount));
     }
   }
 

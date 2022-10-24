@@ -32,6 +32,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -48,6 +49,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEntryBinding;
@@ -75,6 +78,7 @@ public class RecipeEntryAdapter extends
   private String sortMode;
   private boolean sortAscending;
   private String extraField;
+  private final int maxDecimalPlacesAmount;
 
   public RecipeEntryAdapter(
       Context context,
@@ -96,6 +100,10 @@ public class RecipeEntryAdapter extends
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
     this.extraField = extraField;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   @Override
@@ -230,7 +238,7 @@ public class RecipeEntryAdapter extends
     switch (extraField) {
       case FilterChipLiveDataRecipesExtraField.EXTRA_FIELD_CALORIES:
         if (recipeFulfillment != null) {
-          extraFieldText = NumUtil.trim(recipeFulfillment.getCalories());
+          extraFieldText = NumUtil.trimAmount(recipeFulfillment.getCalories(), maxDecimalPlacesAmount);
           extraFieldSubtitleText = "kcal";
         }
         break;

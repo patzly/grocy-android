@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
@@ -92,12 +94,17 @@ public class TransferViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> quickModeEnabled;
 
   private Runnable queueEmptyAction;
+  private final int maxDecimalPlacesAmount;
 
   public TransferViewModel(@NonNull Application application, TransferFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -264,14 +271,14 @@ public class TransferViewModel extends BaseViewModel {
       if (barcode != null && barcode.hasAmount()) {
         // if barcode contains amount, take this
         // quick mode status doesn't matter
-        formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
+        formData.getAmountLive().setValue(NumUtil.trimAmount(barcode.getAmountDouble(), maxDecimalPlacesAmount));
       } else if (!isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
             Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
         );
         if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
+          defaultAmount = NumUtil.trimAmount(Double.parseDouble(defaultAmount), maxDecimalPlacesAmount);
         }
         if (NumUtil.isStringDouble(defaultAmount)
             && Double.parseDouble(defaultAmount) > 0) {
@@ -279,7 +286,7 @@ public class TransferViewModel extends BaseViewModel {
         }
       } else {
         // if quick mode enabled, always fill with amount 1
-        formData.getAmountLive().setValue(NumUtil.trim(1));
+        formData.getAmountLive().setValue(NumUtil.trimAmount(1, maxDecimalPlacesAmount));
       }
 
       // stock entry

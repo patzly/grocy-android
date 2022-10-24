@@ -17,12 +17,28 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+    android:id="@+id/action_preparation_mode"
+    android:title="@string/title_preparation_mode"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/action_edit_recipe"
+    android:title="@string/action_edit_recipe"
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/action_copy_recipe"
     android:title="@string/action_copy_recipe"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/action_delete_recipe"
+    android:title="@string/action_delete_recipe"
     app:showAsAction="never" />
 
 </menu>

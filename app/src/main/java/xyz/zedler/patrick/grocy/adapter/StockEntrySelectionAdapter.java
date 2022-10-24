@@ -25,8 +25,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowStockEntrySelectionBinding;
 import xyz.zedler.patrick.grocy.model.StockEntry;
@@ -44,6 +47,7 @@ public class StockEntrySelectionAdapter
   private final String selectedId;
   private final StockEntrySelectionAdapterListener listener;
   private final DateUtil dateUtil;
+  private final int maxDecimalPlacesAmount;
 
   public StockEntrySelectionAdapter(
       Context context,
@@ -56,6 +60,10 @@ public class StockEntrySelectionAdapter
     this.selectedId = selectedId;
     this.listener = listener;
     this.dateUtil = new DateUtil(context);
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -123,7 +131,7 @@ public class StockEntrySelectionAdapter
           context.getString(
               R.string.subtitle_stock_entry,
               bbd,
-              NumUtil.trim(stockEntry.getAmount()),
+              NumUtil.trimAmount(stockEntry.getAmount(), maxDecimalPlacesAmount),
               context.getString(
                   stockEntry.getOpen() == 0
                       ? R.string.property_not_opened

@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.StockEntriesFragmentArgs;
@@ -92,12 +94,17 @@ public class StockEntriesViewModel extends BaseViewModel {
   private String searchInput;
   @Nullable private final Integer productId;
   private final boolean debug;
+  private final int maxDecimalPlacesAmount;
 
   public StockEntriesViewModel(@NonNull Application application, StockEntriesFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     productId = NumUtil.isStringInt(args.getProductId())
         ? Integer.parseInt(args.getProductId()) : null;
 
@@ -313,7 +320,7 @@ public class StockEntriesViewModel extends BaseViewModel {
 
           String msg = getApplication().getString(
               spoiled ? R.string.msg_consumed_spoiled : R.string.msg_consumed,
-              NumUtil.trim(amountConsumed),
+              NumUtil.trimAmount(amountConsumed, maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   product.getQuIdStockInt(),
@@ -387,7 +394,7 @@ public class StockEntriesViewModel extends BaseViewModel {
 
           String msg = getApplication().getString(
               R.string.msg_opened,
-              NumUtil.trim(amountOpened),
+              NumUtil.trimAmount(amountOpened, maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   product.getQuIdStockInt(),

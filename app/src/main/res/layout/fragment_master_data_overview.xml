@@ -85,7 +85,7 @@
 
           <LinearLayout
             android:id="@+id/linear_products"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -113,7 +113,7 @@
 
           <LinearLayout
             android:id="@+id/linear_locations"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -140,7 +140,7 @@
 
           <LinearLayout
             android:id="@+id/linear_stores"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -167,7 +167,7 @@
 
           <LinearLayout
             android:id="@+id/linear_quantity_units"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -194,7 +194,7 @@
 
           <LinearLayout
             android:id="@+id/linear_product_groups"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -221,7 +221,7 @@
 
           <LinearLayout
             android:id="@+id/linear_task_categories"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -248,7 +248,7 @@
 
           <LinearLayout
             android:id="@+id/linear_chores"
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

@@ -28,6 +28,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.databinding.ViewListItemBinding;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ListItem extends LinearLayout {
 
@@ -60,6 +61,14 @@ public class ListItem extends LinearLayout {
   }
 
   public void setText(String property, String value, String extra) {
+    if (property != null && extra != null) {
+      int dp4 = UiUtil.dpToPx(getContext(), 4);
+      boolean isRtl = UiUtil.isLayoutRtl(getContext());
+      binding.linearContainer.setMinimumHeight(UiUtil.dpToPx(getContext(), 88));
+      binding.linearContainer.setPadding(
+          isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
+      );
+    }
     // property
     if (property != null) {
       binding.textProperty.setText(property);

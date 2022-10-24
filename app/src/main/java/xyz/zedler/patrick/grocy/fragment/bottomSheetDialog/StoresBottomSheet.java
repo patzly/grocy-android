@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class StoresBottomSheet extends BaseBottomSheetDialogFragment
     implements StoreAdapter.StoreAdapterListener {
@@ -84,6 +85,7 @@ public class StoresBottomSheet extends BaseBottomSheetDialogFragment
     }
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
+    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_stores));
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

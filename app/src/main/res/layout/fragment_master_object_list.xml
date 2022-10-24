@@ -17,19 +17,18 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<RelativeLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/background">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="?android:attr/colorBackground">
 
   <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/app_bar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
-    android:background="@color/primary"
     android:layout_alignParentTop="true"
     android:orientation="vertical"
     android:animateLayoutChanges="true">
@@ -37,40 +36,12 @@
     <LinearLayout
       android:id="@+id/app_bar_default"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:gravity="center_vertical"
-      android:orientation="horizontal">
+      android:layout_height="?attr/actionBarSize">
 
-      <FrameLayout
-        android:id="@+id/back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="20dp"
-        android:background="?attr/actionBarItemBackground"
-        android:clickable="true"
-        android:gravity="center"
-        android:contentDescription="@string/action_back"
-        android:tooltipText="@string/action_back"
-        android:focusable="true"
-        tools:targetApi="o">
-
-        <ImageView
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_gravity="center"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_arrow_back" />
-
-      </FrameLayout>
-
-      <TextView
-        android:id="@+id/title"
-        style="@style/Widget.Grocy.TextView.Toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginEnd="16dp" />
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_default"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:titleCentered="true" />
 
     </LinearLayout>
 
@@ -88,7 +59,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="4dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="8dp"
         android:background="?attr/actionBarItemBackground"
         android:clickable="true"
         android:gravity="center"
@@ -113,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="0dp"
-        android:layout_marginEnd="72dp">
+        android:layout_marginEnd="56dp">
 
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/edit_text_search"
@@ -122,8 +93,7 @@
           android:layout_height="wrap_content"
           android:imeOptions="actionSearch"
           android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-          android:singleLine="true"
-          android:textColor="@color/on_background" />
+          android:singleLine="true" />
 
       </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,18 +103,16 @@
       android:id="@+id/linear_offline_error"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:background="@color/retro_red_bg_black"
+      android:background="?attr/colorError"
       android:gravity="center"
-      android:alpha="0.9"
       android:visibility="gone">
 
       <TextView
         style="@style/Widget.Grocy.TextView.OfflineIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/error_offline" />
 
     </LinearLayout>
@@ -155,7 +123,7 @@
     android:id="@+id/swipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@id/app_bar"
+    android:layout_marginTop="?attr/actionBarSize"
     android:animateLayoutChanges="true"
     android:overScrollMode="never">
 
@@ -170,7 +138,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="8dp"
-        android:paddingBottom="100dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:overScrollMode="never"
         android:scrollbarStyle="outsideOverlay"
         android:layoutAnimation="@anim/recycler_layout" />
@@ -179,4 +147,4 @@
 
   </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

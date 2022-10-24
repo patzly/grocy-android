@@ -53,7 +53,7 @@
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">?attr/actionBarSize</item>
     <item name="titleTextAppearance">@style/TextAppearance.Grocy.Toolbar.Title</item>
-    <item name="titleMarginStart">16dp</item>
+    <item name="titleMarginStart">0dp</item>
     <item name="android:actionOverflowMenuStyle">@style/ThemeOverlay.Grocy.OverFlow</item>
   </style>
 
@@ -490,22 +490,18 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem">
-    <item name="android:clickable">true</item>
-    <item name="android:background">@drawable/ripple_list_item_bg</item>
-  </style>
-
-  <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine"
     parent="Widget.Grocy.LinearLayout.ListItem">
-    <item name="android:minHeight">48dp</item>
+    <item name="android:minHeight">56dp</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">24dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
   </style>
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
-    <item name="android:minHeight">56dp</item>
   </style>
 
   <style
@@ -517,21 +513,29 @@
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
-    <item name="android:clickable">true</item>
-    <item name="android:background">@drawable/ripple_list_item_bg</item>
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
   </style>
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine"
     parent="Widget.Grocy.LinearLayout.ListItem">
-    <item name="android:minHeight">64dp</item>
+    <item name="android:minHeight">72dp</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">24dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.More"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
   </style>
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
     parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
-    <item name="android:minHeight">72dp</item>
   </style>
 
   <style
@@ -542,8 +546,31 @@
   </style>
 
   <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
+  </style>
+
+  <style
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.ThreeLine"
+    parent="Widget.Grocy.LinearLayout.ListItem">
+    <item name="android:minHeight">88dp</item>
+    <item name="android:gravity">top</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">24dp</item>
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.ThreeLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/ripple_list_item_bg</item>
   </style>
@@ -566,8 +593,7 @@
   <style name="Widget.Grocy.ImageView.ListItem.Icon" parent="">
     <item name="android:layout_width">24dp</item>
     <item name="android:layout_height">24dp</item>
-    <item name="android:layout_gravity">start|center_vertical</item>
-    <item name="android:layout_marginEnd">32dp</item>
+    <item name="android:layout_marginEnd">16dp</item>
     <item name="tint">?attr/colorOnSurfaceVariant</item>
     <item name="android:importantForAccessibility">no</item>
   </style>
@@ -640,9 +666,13 @@
     <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
   </style>
 
+  <style name="Widget.Grocy.TextView.LabelSmall" parent="Widget.Grocy.TextView.Medium">
+    <item name="android:textAppearance">?attr/textAppearanceLabelSmall</item>
+  </style>
+
   <!-- Other text widget styles -->
 
-  <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView.Medium">
+  <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
     <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
     <item name="android:singleLine">true</item>
     <item name="android:textColor">?attr/colorOnSurface</item>
@@ -656,7 +686,7 @@
   <style name="Widget.Grocy.TextView.Category" parent="Widget.Grocy.TextView.Medium">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginStart">72dp</item>
+    <item name="android:layout_marginStart">56dp</item>
     <item name="android:paddingTop">10dp</item>
     <item name="android:paddingBottom">3dp</item>
     <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
@@ -671,29 +701,27 @@
     <item name="android:textColor">@color/on_surface</item>
   </style>
 
-  <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView.BodyMedium">
+  <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView.Medium">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:maxLines">2</item>
-    <item name="android:letterSpacing">0.1</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:alpha">0.61</item>
-    <item name="android:textAppearance">?attr/textAppearanceBodySmall</item>
+    <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
+    <!--item name="android:textAppearance">?attr/textAppearanceLabelSmall</item Guideline says small but that's too small -->
+    <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
   </style>
 
   <style name="Widget.Grocy.TextView.ListItem.Title" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <!--item name="android:textAppearance">?attr/textAppearanceTitleLarge</item-->
-    <!-- Too large, instead use slightly smaller custom size -->
-    <item name="android:textSize">18sp</item>
+    <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
+    <item name="android:textColor">?attr/colorOnSurface</item>
   </style>
 
   <style name="Widget.Grocy.TextView.ListItem.Description" parent="Widget.Grocy.TextView">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:alpha">0.61</item>
+    <item name="android:textAppearance">?attr/textAppearanceBodyMedium</item>
+    <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
   </style>
 
   <!-- TextAppearance -->
@@ -710,7 +738,7 @@
 
   <style name="TextAppearance.Grocy.Toolbar.Title" parent="TextAppearance.Material3.TitleLarge">
     <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_book</item>
   </style>
 
   <style name="TextAppearance.Grocy.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">

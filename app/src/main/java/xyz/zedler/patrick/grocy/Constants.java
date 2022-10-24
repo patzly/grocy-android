@@ -171,6 +171,10 @@ public final class Constants {
       public final static String DEFAULT_PURCHASE_AMOUNT = "stock_default_purchase_amount"; // used for pref sync, DO NOT EDIT VALUE
       public final static String DEFAULT_CONSUME_AMOUNT = "stock_default_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
       public final static String USE_QUICK_CONSUME_AMOUNT = "stock_default_consume_amount_use_quick_consume_amount"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String DECIMAL_PLACES_AMOUNT = "stock_decimal_places_amounts"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String DECIMAL_PLACES_PRICES_INPUT = "stock_decimal_places_prices_input"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String DECIMAL_PLACES_PRICES_DISPLAY = "stock_decimal_places_prices_display"; // used for pref sync, DO NOT EDIT VALUE
+      public final static String AUTO_DECIMAL_SEPARATOR_PRICES = "stock_auto_decimal_separator_prices"; // used for pref sync, DO NOT EDIT VALUE
     }
 
     public final static class SHOPPING_LIST {
@@ -285,6 +289,10 @@ public final class Constants {
       public final static String DEFAULT_CONSUME_AMOUNT = "1";
       public final static boolean USE_QUICK_CONSUME_AMOUNT = false;
       public final static boolean TREAT_OPENED_OUT_OF_STOCK = true;
+      public final static int DECIMAL_PLACES_AMOUNT = 2;
+      public final static int DECIMAL_PLACES_PRICES_INPUT = 2;
+      public final static int DECIMAL_PLACES_PRICES_DISPLAY = 2;
+      public final static boolean AUTO_DECIMAL_SEPARATOR_PRICES = false;
     }
 
     public final static class SHOPPING_LIST {
@@ -381,6 +389,7 @@ public final class Constants {
     public final static String QUANTITY_UNITS = "quantity_units";
     public final static String QUANTITY_UNIT_PURCHASE = "quantity_unit_purchase";
     public final static String QUANTITY_UNIT_STOCK = "quantity_unit_stock";
+    public final static String QUANTITY_UNIT_CONVERSIONS = "quantity_unit_conversions";
     public final static String AMOUNT = "amount";
     public final static String LOCATION = "location";
     public final static String LOCATIONS = "locations";

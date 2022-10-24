@@ -24,27 +24,13 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <LinearLayout
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar"
+    style="@style/Widget.Grocy.Toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
-
-    <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:layout_width="0dp"
-      android:layout_weight="1"
-      android:text="@string/title_product" />
-
-    <com.google.android.material.appbar.MaterialToolbar
-      android:id="@+id/toolbar_master_product"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:visibility="visible"
-      app:contentInsetStart="12dp"
-      app:menu="@menu/menu_actions_master_product" />
-
-  </LinearLayout>
+    app:title="@string/title_product"
+    app:menu="@menu/menu_actions_master_product" />
 
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />
@@ -56,6 +42,7 @@
     android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:id="@+id/linear_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
@@ -63,42 +50,42 @@
       android:paddingBottom="8dp">
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_name"
+        android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.HtmlCardView
-        android:id="@+id/card_master_product_description"
+        android:id="@+id/card_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_location"
+        android:id="@+id/item_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_min_stock_amount"
+        android:id="@+id/item_min_stock_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_qu_purchase"
+        android:id="@+id/item_qu_purchase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_qu_stock"
+        android:id="@+id/item_qu_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_qu_factor"
+        android:id="@+id/item_qu_factor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
       <xyz.zedler.patrick.grocy.view.ListItem
-        android:id="@+id/item_master_product_product_group"
+        android:id="@+id/item_product_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

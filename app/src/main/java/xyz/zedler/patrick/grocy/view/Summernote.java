@@ -32,8 +32,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import androidx.webkit.WebSettingsCompat;
-import xyz.zedler.patrick.grocy.util.UnitUtil;
 
 /**
  * Created by Avinash on 01-04-2016.
@@ -65,6 +63,7 @@ public class Summernote extends WebView  {
 
     @SuppressLint("SetJavaScriptEnabled")
     public void enable_summernote(){
+        setOverScrollMode(OVER_SCROLL_NEVER);
         this.getSettings().setJavaScriptEnabled(true);
         this.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         this.addJavascriptInterface(new MyJavaScriptInterface(), "android");
@@ -81,7 +80,9 @@ public class Summernote extends WebView  {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
-                ((Activity) context).startActivityForResult(Intent.createChooser(intent, "File Chooser"), REQUEST_FILE_PICKER);
+                ((Activity) context).startActivityForResult(
+                    Intent.createChooser(intent, "File Chooser"), REQUEST_FILE_PICKER
+                );
                 return true;
             }
         });

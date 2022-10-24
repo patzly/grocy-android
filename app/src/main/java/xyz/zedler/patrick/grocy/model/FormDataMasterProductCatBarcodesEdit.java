@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
@@ -28,9 +29,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -58,10 +62,16 @@ public class FormDataMasterProductCatBarcodesEdit {
   private final PluralUtil pluralUtil;
   private boolean filledWithProductBarcode;
   private QuantityUnit quantityUnitPurchase;
+  private final int maxDecimalPlacesAmount;
 
   public FormDataMasterProductCatBarcodesEdit(Application application, Product product) {
     this.application = application;
     this.product = product;
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     scannerVisibilityLive = new MutableLiveData<>(false);
     barcodeLive = new MutableLiveData<>();
     barcodeErrorLive = new MutableLiveData<>();
@@ -148,7 +158,7 @@ public class FormDataMasterProductCatBarcodesEdit {
       amountLive.setValue(String.valueOf(1));
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
-      amountLive.setValue(NumUtil.trim(amountNew));
+      amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -157,7 +167,7 @@ public class FormDataMasterProductCatBarcodesEdit {
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
       double amountNew = Double.parseDouble(amountLive.getValue()) - 1;
       if (amountNew >= 1) {
-        amountLive.setValue(NumUtil.trim(amountNew));
+        amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
     }
   }
@@ -217,7 +227,7 @@ public class FormDataMasterProductCatBarcodesEdit {
       if (product != null) {
         amountMultiplied = amount / (double) currentFactor;
       }
-      return NumUtil.trim(amountMultiplied);
+      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
     } else {
       return null;
     }
@@ -271,6 +281,12 @@ public class FormDataMasterProductCatBarcodesEdit {
     }
     if (!NumUtil.isStringDouble(amountLive.getValue())) {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
+      return false;
+    }
+    if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      ));
       return false;
     }
     if (Double.parseDouble(amountLive.getValue()) <= 0) {

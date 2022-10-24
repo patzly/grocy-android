@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -89,19 +90,32 @@ public class MasterProductFragment extends BaseFragment {
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    binding.categoryOptional.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipeMasterProductSimple);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
+    binding.categoryOptional.setOnClickListener(
+        v -> activity.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatOptionalFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
-    binding.categoryLocation.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+    binding.categoryLocation.setOnClickListener(
+        v -> activity.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatLocationFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
-    binding.categoryDueDate.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+    binding.categoryDueDate.setOnClickListener(
+        v -> activity.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatDueDateFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
-    binding.categoryAmount.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+    binding.categoryAmount.setOnClickListener(
+        v -> activity.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatAmountFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
-    binding.categoryQuantityUnit.setOnClickListener(v -> navigate(MasterProductFragmentDirections
+    binding.categoryQuantityUnit.setOnClickListener(
+        v -> activity.navigateFragment(MasterProductFragmentDirections
         .actionMasterProductFragmentToMasterProductCatQuantityUnitFragment(viewModel.getAction())
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
@@ -109,7 +123,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.subtitle_product_not_on_server);
         return;
       }
-      navigate(MasterProductFragmentDirections
+      activity.navigateFragment(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatBarcodesFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -118,7 +132,7 @@ public class MasterProductFragment extends BaseFragment {
         activity.showSnackbar(R.string.subtitle_product_not_on_server);
         return;
       }
-      navigate(MasterProductFragmentDirections
+      activity.navigateFragment(MasterProductFragmentDirections
           .actionMasterProductFragmentToMasterProductCatConversionsFragment(viewModel.getAction())
           .setProduct(viewModel.getFilledProduct()));
     });
@@ -192,12 +206,12 @@ public class MasterProductFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
@@ -219,7 +233,7 @@ public class MasterProductFragment extends BaseFragment {
         R.drawable.ic_round_save,
         R.string.action_save_close,
         Constants.FAB.TAG.SAVE,
-        animated,
+        savedInstanceState == null,
         () -> viewModel.saveProduct(true)
     );
   }

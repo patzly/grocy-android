@@ -28,6 +28,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,7 +86,7 @@ public class QuantityUnitConversion implements Parcelable {
     dest.writeString(rowCreatedTimestamp);
   }
 
-  public static final Creator<QuantityUnitConversion> CREATOR = new Creator<QuantityUnitConversion>() {
+  public static final Creator<QuantityUnitConversion> CREATOR = new Creator<>() {
 
     @Override
     public QuantityUnitConversion createFromParcel(Parcel in) {
@@ -167,13 +169,55 @@ public class QuantityUnitConversion implements Parcelable {
         fromQuId == that.fromQuId &&
         toQuId == that.toQuId &&
         Double.compare(that.factor, factor) == 0 &&
-        productId == that.productId &&
+        Objects.equals(productId, that.productId) &&
         Objects.equals(rowCreatedTimestamp, that.rowCreatedTimestamp);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, fromQuId, toQuId, factor, productId, rowCreatedTimestamp);
+  }
+
+  public static List<QuantityUnitConversion> getFromTargetUnit(List<QuantityUnitConversion> quantityUnitConversions, int toQuId) {
+    if (quantityUnitConversions == null) return null;
+    ArrayList<QuantityUnitConversion> result = new ArrayList<>();
+    for (QuantityUnitConversion quantityUnitConversion : quantityUnitConversions) {
+      if (quantityUnitConversion.getToQuId() == toQuId) {
+        result.add(quantityUnitConversion);
+      }
+    }
+    return result;
+  }
+
+  public static QuantityUnitConversion getFromTwoUnits(
+      List<QuantityUnitConversion> quantityUnitConversions,
+      int fromQuId,
+      int toQuId,
+      int productId
+  ) {
+    if (quantityUnitConversions == null) return null;
+    QuantityUnitConversion tempConversion = null;
+    for (QuantityUnitConversion quantityUnitConversion : quantityUnitConversions) {
+      if (quantityUnitConversion.getFromQuId() == fromQuId && quantityUnitConversion.getToQuId() == toQuId) {
+        if (NumUtil.isStringInt(quantityUnitConversion.getProductId()) && quantityUnitConversion.getProductIdInt() == productId) {
+          return quantityUnitConversion;
+        }
+        tempConversion = quantityUnitConversion;
+      }
+    }
+    return tempConversion;
+  }
+
+  public static ArrayList<QuantityUnitConversion> getQuantityUnitConversionsForRecipePositions(
+      List<QuantityUnitConversion> quantityUnitConversions,
+      List<RecipePosition> recipePositions
+  ) {
+    ArrayList<QuantityUnitConversion> result = new ArrayList<>();
+    for (RecipePosition recipePosition : recipePositions) {
+      List<QuantityUnitConversion> conversionsPosition = getFromTargetUnit(quantityUnitConversions, recipePosition.getQuantityUnitId());
+      result.addAll(conversionsPosition);
+    }
+    return result;
   }
 
   public static JSONObject getJsonFromConversion(QuantityUnitConversion conversion, boolean debug,

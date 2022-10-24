@@ -32,9 +32,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:gravity="center_vertical"
-      android:paddingEnd="8dp"
-      android:paddingStart="0dp">
+      android:gravity="center_vertical">
 
       <TextView
         style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"

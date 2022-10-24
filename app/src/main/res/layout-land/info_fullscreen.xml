@@ -22,9 +22,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/background"
-  android:clickable="true"
-  android:focusable="true"
+  android:background="?android:attr/colorBackground"
   android:fillViewport="true">
 
   <LinearLayout
@@ -32,7 +30,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:weightSum="1"
-    android:layout_marginBottom="?actionBarSize"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:baselineAligned="false"
     android:paddingTop="32dp"
     android:paddingBottom="32dp">
@@ -48,26 +46,10 @@
 
       <ImageView
         android:id="@+id/image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
-
-      <TextView
-        android:id="@+id/title"
-        style="@style/Widget.Grocy.TextView.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="18sp" />
-
-      <TextView
-        android:id="@+id/subtitle"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAlignment="center" />
 
     </LinearLayout>
 
@@ -79,6 +61,21 @@
       android:gravity="center"
       android:paddingStart="16dp"
       android:paddingEnd="16dp">
+
+      <TextView
+        android:id="@+id/title"
+        style="@style/Widget.Grocy.TextView.HeadlineSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center" />
+
+      <TextView
+        android:id="@+id/subtitle"
+        style="@style/Widget.Grocy.TextView.ListItem.Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center" />
 
       <com.google.android.material.button.MaterialButton
         android:id="@+id/retry"

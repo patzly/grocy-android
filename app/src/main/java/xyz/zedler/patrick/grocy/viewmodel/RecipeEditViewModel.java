@@ -40,6 +40,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -82,6 +84,7 @@ public class RecipeEditViewModel extends BaseViewModel {
 
   private final boolean debug;
   private final MutableLiveData<Boolean> actionEditLive;
+  private final int maxDecimalPlacesAmount;
 
   public RecipeEditViewModel(
       @NonNull Application application,
@@ -91,6 +94,10 @@ public class RecipeEditViewModel extends BaseViewModel {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(application, TAG, isLoadingLive::setValue);
@@ -344,7 +351,7 @@ public class RecipeEditViewModel extends BaseViewModel {
     assert entry != null;
 
     formData.getNameLive().setValue(entry.getName());
-    formData.getBaseServingsLive().setValue(NumUtil.trim(entry.getBaseServings()));
+    formData.getBaseServingsLive().setValue(NumUtil.trimAmount(entry.getBaseServings(), maxDecimalPlacesAmount));
     formData.getNotCheckShoppingListLive().setValue(entry.isNotCheckShoppingList());
     formData.getProductsLive().setValue(Product.getActiveProductsOnly(products));
     formData.getPreparationLive().setValue(entry.getDescription());

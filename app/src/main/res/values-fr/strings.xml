@@ -105,6 +105,8 @@
   <string name="action_purchase_all_items">Acheter tous les articles</string>
   <string name="action_skip_entry">Passer l\'article</string>
   <string name="action_toggle_flash">Activer/désactiver le flash</string>
+  <string name="action_edit_recipe">Modifier la recette</string>
+  <string name="action_delete_recipe">Supprimer la recette</string>
   <string name="action_delete_shopping_list">Supprimer la liste d\'achats</string>
   <string name="action_create_key">Créer une clé</string>
   <string name="action_login">S\'identifier</string>
@@ -458,6 +460,8 @@
   <string name="error_bounds_max">Doit être inférieur ou égal à %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Doit être supérieur à %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_max_decimal_places">Max. %1$s décimales</string>
   <string name="error_offline">Hors ligne</string>
   <string name="error_offline_subtitle">Cette page ne fonctionne qu\'avec un accès internet. Vérifiez votre connexion.</string>
   <string name="error_no_done_items">Il n\'y a aucun article coché</string>
@@ -543,6 +547,7 @@
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="title_location_to">Vers</string>
   <string name="title_recipe">Recette</string>
+  <string name="title_preparation_mode">Mode de préparation</string>
   <string name="title_total_price">Prix total</string>
   <string name="title_unit_price">Prix unitaire</string>
   <!-- %1$s is a quantity unit -->

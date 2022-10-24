@@ -24,10 +24,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowQuantityUnitConversionBinding;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -43,7 +46,7 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
   private final ArrayList<QuantityUnitConversion> quantityUnitConversions;
   private final QuantityUnitConversionAdapterListener listener;
   private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
-
+  private final int maxDecimalPlacesAmount;
 
   public QuantityUnitConversionAdapter(
       Context context,
@@ -55,6 +58,10 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
     this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
     this.listener = listener;
     this.quantityUnitHashMap = quantityUnitHashMap;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -94,7 +101,7 @@ public class QuantityUnitConversionAdapter extends RecyclerView.Adapter<Quantity
     ));
     holder.binding.toAmountUnit.setText(context.getString(
         R.string.subtitle_amount,
-        NumUtil.trim(conversion.getFactor()),
+        NumUtil.trimAmount(conversion.getFactor(), maxDecimalPlacesAmount),
         pluralUtil.getQuantityUnitPlural(quantityUnitHashMap, conversion.getToQuId(), conversion.getFactor())
     ));
 

@@ -95,6 +95,8 @@ public class SettingsViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> choresNotificationsEnabledLive;
   private final MutableLiveData<String> choresNotificationsTimeTextLive;
 
+  private final int allowedDecimalPlacesAmount;
+
   public SettingsViewModel(@NonNull Application application) {
     super(application);
 
@@ -129,6 +131,10 @@ public class SettingsViewModel extends BaseViewModel {
     dueSoonNotificationsTimeTextLive = new MutableLiveData<>(getDueSoonNotificationsTime());
     choresNotificationsEnabledLive = new MutableLiveData<>(getChoresNotificationsEnabled());
     choresNotificationsTimeTextLive = new MutableLiveData<>(getChoresNotificationsTime());
+
+    allowedDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT, SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   public boolean isDemo() {
@@ -143,6 +149,10 @@ public class SettingsViewModel extends BaseViewModel {
             getString(R.string.date_unknown)
         )
     );
+  }
+
+  public boolean getIsVersionCompatible() {
+    return isVersionCompatible();
   }
 
   public void showCompatibilityBottomSheet() {
@@ -771,7 +781,7 @@ public class SettingsViewModel extends BaseViewModel {
     } else {
       amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT);
     }
-    return NumUtil.trim(amountDouble);
+    return NumUtil.trimAmount(amountDouble, allowedDecimalPlacesAmount);
   }
 
   public MutableLiveData<String> getDefaultPurchaseAmountTextLive() {
@@ -786,9 +796,9 @@ public class SettingsViewModel extends BaseViewModel {
         amount = 0;
       }
     }
-    sharedPrefs.edit().putString(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trim(amount)).apply();
-    defaultPurchaseAmountTextLive.setValue(NumUtil.trim(amount));
-    dlHelper.uploadSetting(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trim(amount), this::showMessage);
+    sharedPrefs.edit().putString(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount)).apply();
+    defaultPurchaseAmountTextLive.setValue(NumUtil.trimAmount(amount, allowedDecimalPlacesAmount));
+    dlHelper.uploadSetting(STOCK.DEFAULT_PURCHASE_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount), this::showMessage);
   }
 
   public boolean getPurchasedDateEnabled() {
@@ -834,7 +844,7 @@ public class SettingsViewModel extends BaseViewModel {
     } else {
       amountDouble = Double.parseDouble(SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT);
     }
-    return NumUtil.trim(amountDouble);
+    return NumUtil.trimAmount(amountDouble, allowedDecimalPlacesAmount);
   }
 
   public MutableLiveData<String> getDefaultConsumeAmountTextLive() {
@@ -849,9 +859,9 @@ public class SettingsViewModel extends BaseViewModel {
         amount = 0;
       }
     }
-    sharedPrefs.edit().putString(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trim(amount)).apply();
-    defaultConsumeAmountTextLive.setValue(NumUtil.trim(amount));
-    dlHelper.uploadSetting(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trim(amount), this::showMessage);
+    sharedPrefs.edit().putString(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount)).apply();
+    defaultConsumeAmountTextLive.setValue(NumUtil.trimAmount(amount, allowedDecimalPlacesAmount));
+    dlHelper.uploadSetting(STOCK.DEFAULT_CONSUME_AMOUNT, NumUtil.trimAmount(amount, allowedDecimalPlacesAmount), this::showMessage);
   }
 
   public boolean getUseQuickConsumeAmountEnabled() {

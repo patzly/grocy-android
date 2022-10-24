@@ -154,11 +154,11 @@ public class OverviewStartFragment extends BaseFragment {
         R.string.action_scan,
         Constants.FAB.TAG.SCAN,
         animated,
-        () -> navigate(
+        () -> activity.navigateFragment(
             R.id.consumeFragment,
             new ConsumeFragmentArgs.Builder()
                 .setStartWithScanner(true).build().toBundle()
-        ), () -> navigate(
+        ), () -> activity.navigateFragment(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
                 .setStartWithScanner(true).build().toBundle()

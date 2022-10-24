@@ -47,17 +47,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="0dp"
-        android:weightSum="4"
-        android:onClick="@{v -> bottomSheet.openPreparationMode()}">
+        android:weightSum="4">
 
         <LinearLayout
           android:id="@+id/header_text_container"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
+          android:padding="16dp"
           android:orientation="vertical"
           android:layout_weight="3">
 
@@ -74,13 +70,6 @@
             android:singleLine="true"
             android:text="@string/title_recipe" />
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.BodyMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:alpha="0.61"
-            android:text="@string/subtitle_tap_preparation_mode" />
-
         </LinearLayout>
 
         <ImageView
@@ -88,7 +77,8 @@
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="1"
-          android:layout_marginStart="16dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginBottom="16dp"
           tools:ignore="ContentDescription" />
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -102,14 +92,6 @@
           app:menu="@menu/menu_recipe" />
 
       </LinearLayout>
-
-      <ProgressBar
-        android:id="@+id/progress_confirmation"
-        style="@style/Widget.Grocy.ProgressBar.Horizontal.Red"
-        android:layout_gravity="bottom"
-        android:indeterminate="false"
-        android:max="100"
-        android:visibility="gone" />
 
       <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_loading"
@@ -136,74 +118,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="8dp"
         android:paddingBottom="8dp">
 
-        <LinearLayout
-          android:id="@+id/menu_container"
+        <HorizontalScrollView
+          android:id="@+id/container_chips"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:paddingHorizontal="16dp"
-          android:paddingVertical="8dp"
-          android:weightSum="4">
+          android:scrollbars="none"
+          android:overScrollMode="ifContentScrolls">
 
-          <FrameLayout
-            android:layout_width="0dp"
+          <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            app:singleLine="true"
+            app:chipSpacing="8dp">
 
-            <com.google.android.material.button.MaterialButton
-              android:id="@+id/menu_item_consume"
-              style="@style/Widget.Grocy.Button.IconButton"
-              android:layout_gravity="center_horizontal"
-              app:icon="@drawable/ic_round_consume_product"
+            <com.google.android.material.chip.Chip
+              android:id="@+id/chip_consume"
+              style="@style/Widget.Grocy.Chip.Assist"
+              android:text="@string/action_consume"
+              app:chipIcon="@drawable/ic_round_consume_product"
               app:longClickToastText="@{@string/action_consume_recipe}" />
 
-          </FrameLayout>
-
-          <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <com.google.android.material.button.MaterialButton
-              android:id="@+id/menu_item_shopping_list"
-              style="@style/Widget.Grocy.Button.IconButton"
-              android:layout_gravity="center_horizontal"
-              app:icon="@drawable/ic_round_add_shopping_cart"
+            <com.google.android.material.chip.Chip
+              android:id="@+id/chip_shopping_list"
+              style="@style/Widget.Grocy.Chip.Assist"
+              android:text="@string/action_shopping_list_add"
+              app:chipIcon="@drawable/ic_round_add_shopping_cart"
               app:longClickToastText="@{@string/action_put_missing_products_on_shopping_list}" />
 
-          </FrameLayout>
+          </com.google.android.material.chip.ChipGroup>
 
-          <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <com.google.android.material.button.MaterialButton
-              android:id="@+id/menu_item_edit"
-              style="@style/Widget.Grocy.Button.IconButton"
-              android:layout_gravity="center_horizontal"
-              app:icon="@drawable/ic_round_edit"
-              app:longClickToastText="@{@string/action_edit}" />
-
-          </FrameLayout>
-
-          <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <com.google.android.material.button.MaterialButton
-              android:id="@+id/menu_item_delete"
-              style="@style/Widget.Grocy.Button.IconButton"
-              android:layout_gravity="center_horizontal"
-              app:icon="@drawable/ic_round_delete_anim" />
-
-          </FrameLayout>
-
-        </LinearLayout>
+        </HorizontalScrollView>
 
         <View
           android:id="@+id/dummy_focus_view"
@@ -222,7 +173,7 @@
             style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:paddingTop="8dp"
+            android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:paddingStart="16dp"
             android:paddingEnd="0dp">
@@ -256,15 +207,15 @@
             android:id="@+id/amount_more"
             style="@style/Widget.Grocy.Button.IconButton"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:onClick="@{() -> bottomSheet.changeAmount(true)}"
             app:icon="@drawable/ic_round_expand_less" />
 
           <com.google.android.material.button.MaterialButton
             android:id="@+id/amount_less"
             style="@style/Widget.Grocy.Button.IconButton"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="4dp"
             android:onClick="@{() -> bottomSheet.changeAmount(false)}"
             app:icon="@drawable/ic_round_expand_more" />
 

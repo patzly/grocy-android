@@ -110,6 +110,10 @@ public class OverviewStartViewModel extends BaseViewModel {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    int decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -147,7 +151,7 @@ public class OverviewStartViewModel extends BaseViewModel {
             stockDescriptionTextLive.setValue(getResources().getQuantityString(
                 R.plurals.description_overview_stock_value,
                 count, count,
-                NumUtil.trim(value),
+                NumUtil.trimPrice(value, decimalPlacesPriceDisplay),
                 sharedPrefs.getString(Constants.PREF.CURRENCY, "")
             ));
           } else {
@@ -167,7 +171,7 @@ public class OverviewStartViewModel extends BaseViewModel {
             stockDescriptionTextLive.setValue(getResources().getQuantityString(
                 R.plurals.description_overview_stock_value,
                 count, count,
-                NumUtil.trim(value),
+                NumUtil.trimPrice(value, decimalPlacesPriceDisplay),
                 sharedPrefs.getString(Constants.PREF.CURRENCY, "")
             ));
           } else {

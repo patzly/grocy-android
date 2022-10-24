@@ -26,11 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.FAB;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
+import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
 
 public class EditorHtmlFragment extends BaseFragment {
 
@@ -60,6 +61,17 @@ public class EditorHtmlFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.summernote);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.summernote, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_done,
@@ -72,6 +84,7 @@ public class EditorHtmlFragment extends BaseFragment {
         }
     );
 
+    binding.summernote.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
     EditorHtmlFragmentArgs args = EditorHtmlFragmentArgs.fromBundle(getArguments());
     if (args.getText() != null && savedInstanceState == null) {

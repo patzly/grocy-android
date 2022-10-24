@@ -21,17 +21,22 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
@@ -47,12 +52,12 @@ import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class StockOverviewItemAdapter extends
     RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
@@ -76,6 +81,8 @@ public class StockOverviewItemAdapter extends
   private String extraField;
   private final DateUtil dateUtil;
   private final String currency;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
 
   public StockOverviewItemAdapter(
       Context context,
@@ -109,6 +116,15 @@ public class StockOverviewItemAdapter extends
     this.shoppingListFeatureEnabled = shoppingListFeatureEnabled;
     this.daysExpiringSoon = daysExpiringSoon;
     this.currency = currency;
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    this.maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    this.decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
     this.dateUtil = new DateUtil(context);
     this.sortMode = sortMode;
     this.sortAscending = sortAscending;
@@ -116,7 +132,7 @@ public class StockOverviewItemAdapter extends
     this.extraField = extraField;
     this.groupedListItems = getGroupedListItems(context, stockItems,
         productGroupHashMap, productHashMap, locationHashMap, currency, dateUtil, sortMode,
-        sortAscending, groupingMode);
+        sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
   }
 
   static ArrayList<GroupedListItem> getGroupedListItems(
@@ -129,7 +145,9 @@ public class StockOverviewItemAdapter extends
       DateUtil dateUtil,
       String sortMode,
       boolean sortAscending,
-      String groupingMode
+      String groupingMode,
+      int maxDecimalPlacesAmount,
+      int decimalPlacesPriceDisplay
   ) {
     if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_NONE)) {
       sortStockItems(context, stockItems, sortMode, sortAscending);
@@ -146,14 +164,14 @@ public class StockOverviewItemAdapter extends
         ProductGroup productGroup = productGroupHashMap.get(productGroupId);
         groupName = productGroup != null ? productGroup.getName() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_VALUE)) {
-        groupName = NumUtil.trimPrice(stockItem.getValueDouble());
+        groupName = NumUtil.trimPrice(stockItem.getValueDouble(), decimalPlacesPriceDisplay);
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES_PER_STOCK)) {
         groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
             ? stockItem.getProduct().getCalories() : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_CALORIES)) {
         groupName = NumUtil.isStringDouble(stockItem.getProduct().getCalories())
-            ? NumUtil.trim(Double.parseDouble(stockItem.getProduct().getCalories())
-            * stockItem.getAmountDouble()) : null;
+            ? NumUtil.trimAmount(Double.parseDouble(stockItem.getProduct().getCalories())
+            * stockItem.getAmountDouble(), maxDecimalPlacesAmount) : null;
       } else if (groupingMode.equals(FilterChipLiveDataStockGrouping.GROUPING_DUE_DATE)) {
         groupName = stockItem.getBestBeforeDate();
         if (groupName != null && !groupName.isEmpty()) {
@@ -328,7 +346,7 @@ public class StockOverviewItemAdapter extends
 
     QuantityUnit quantityUnitStock = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
     holder.binding.textAmount.setText(
-        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnitStock)
+        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount)
     );
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
       holder.binding.textAmount.setTypeface(
@@ -366,6 +384,13 @@ public class StockOverviewItemAdapter extends
       if (Integer.parseInt(days) <= daysExpiringSoon) {
         colorDays = true;
       }
+      if (holder.binding.linearDays.getChildCount() == 1) { // not in landscape/tablet mode
+        int dp4 = UiUtil.dpToPx(context, 4);
+        boolean isRtl = UiUtil.isLayoutRtl(context);
+        holder.binding.linearContainer.setPadding(
+            isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
+        );
+      }
     } else {
       holder.binding.linearDays.setVisibility(View.GONE);
       holder.binding.textDays.setText(null);
@@ -401,7 +426,7 @@ public class StockOverviewItemAdapter extends
     switch (extraField) {
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_VALUE:
         if (NumUtil.isStringDouble(stockItem.getValue())) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue()));
+          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay);
         }
         if (currency != null && !currency.isEmpty()) {
           extraFieldSubtitleText = currency;
@@ -415,15 +440,15 @@ public class StockOverviewItemAdapter extends
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_CALORIES_TOTAL:
         if (NumUtil.isStringDouble(stockItem.getProduct().getCalories())) {
-          extraFieldText = NumUtil.trim(Double.parseDouble(stockItem.getProduct()
-              .getCalories()) * stockItem.getAmountDouble());
+          extraFieldText = NumUtil.trimAmount(Double.parseDouble(stockItem.getProduct()
+              .getCalories()) * stockItem.getAmountDouble(), maxDecimalPlacesAmount);
           extraFieldSubtitleText = "kcal";
         }
         break;
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:
         String avg = productAveragePriceHashMap.get(stockItem.getProductId());
         if (NumUtil.isStringDouble(avg)) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(avg) * factorPurchaseToStock);
+          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay);
           QuantityUnit quantityUnitPurchase = quantityUnitHashMap
               .get(stockItem.getProduct().getQuIdPurchaseInt());
           if (quantityUnitPurchase != null && quantityUnitStock != null
@@ -440,7 +465,7 @@ public class StockOverviewItemAdapter extends
         ProductLastPurchased p = productLastPurchasedHashMap.get(stockItem.getProductId());
         if (p != null && NumUtil.isStringDouble(p.getPrice())) {
           extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())
-              * factorPurchaseToStock);
+              * factorPurchaseToStock, decimalPlacesPriceDisplay);
           QuantityUnit quantityUnitPurchase = quantityUnitHashMap
               .get(stockItem.getProduct().getQuIdPurchaseInt());
           if (quantityUnitPurchase != null && quantityUnitStock != null
@@ -506,7 +531,7 @@ public class StockOverviewItemAdapter extends
   ) {
     ArrayList<GroupedListItem> newGroupedListItems = getGroupedListItems(context, newList,
         productGroupHashMap, productHashMap, locationHashMap, this.currency, this.dateUtil,
-        sortMode, sortAscending, groupingMode);
+        sortMode, sortAscending, groupingMode, maxDecimalPlacesAmount, decimalPlacesPriceDisplay);
     StockOverviewItemAdapter.DiffCallback diffCallback = new StockOverviewItemAdapter.DiffCallback(
         this.groupedListItems,
         newGroupedListItems,

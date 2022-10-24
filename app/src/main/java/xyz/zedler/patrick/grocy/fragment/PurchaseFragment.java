@@ -217,6 +217,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
           viewModel.getProductHashMap(),
           viewModel.getQuantityUnitHashMap(),
           viewModel.getShoppingListItemAmountsHashMap(),
+          viewModel.getMaxDecimalPlacesAmount(),
           pluralUtil
       );
     });

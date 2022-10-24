@@ -77,6 +77,8 @@ public class StockEntryAdapter extends
   private final DateUtil dateUtil;
   private final String currency;
   private final int dueSoonDays;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
 
   public StockEntryAdapter(
       Context context,
@@ -93,6 +95,14 @@ public class StockEntryAdapter extends
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.showDateTracking = sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true);
     this.currency = sharedPrefs.getString(PREF.CURRENCY, "");
+    this.maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    this.decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
     String days = sharedPrefs.getString(STOCK.DUE_SOON_DAYS, SETTINGS_DEFAULT.STOCK.DUE_SOON_DAYS);
     if (NumUtil.isStringInt(days)) {
       this.dueSoonDays = Integer.parseInt(days);
@@ -300,7 +310,7 @@ public class StockEntryAdapter extends
         ? quantityUnitHashMap.get(product.getQuIdStockInt()) : null;
     holder.binding.amount.setText(context.getString(
         R.string.property_amount_insert,
-        AmountUtil.getStockEntryAmountInfo(context, pluralUtil, stockEntry, quantityUnitStock)
+        AmountUtil.getStockEntryAmountInfo(context, pluralUtil, stockEntry, quantityUnitStock, maxDecimalPlacesAmount)
     ));
 
     // BEST BEFORE
@@ -382,13 +392,13 @@ public class StockEntryAdapter extends
       if (product == null) {
         holder.binding.price.setText(context.getString(
             R.string.property_price_insert,
-            NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice())) + " " + currency
+            NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice()), decimalPlacesPriceDisplay) + " " + currency
         ));
       } else if (product.getQuIdStockInt() == product.getQuIdPurchaseInt() || quPurchase == null) {
         holder.binding.price.setText(context.getString(
             R.string.property_price_insert,
             NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice())
-                * product.getQuFactorPurchaseToStockDouble()) + " " + currency
+                * product.getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay) + " " + currency
         ));
       } else {
         holder.binding.price.setText(context.getString(
@@ -396,7 +406,7 @@ public class StockEntryAdapter extends
             context.getString(
                 R.string.property_price_insert,
                 NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice())
-                    * product.getQuFactorPurchaseToStockDouble()) + " " + currency
+                    * product.getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay) + " " + currency
             ),
             quPurchase.getName()
         ));

@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -32,10 +33,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -53,9 +57,11 @@ public class RecipePositionAdapter extends
   private final List<RecipePosition> recipePositions;
   private final List<Product> products;
   private final List<QuantityUnit> quantityUnits;
+  private final List<QuantityUnitConversion> quantityUnitConversions;
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
+  private final int maxDecimalPlacesAmount;
 
   public RecipePositionAdapter(
       Context context,
@@ -64,14 +70,20 @@ public class RecipePositionAdapter extends
       List<RecipePosition> recipePositions,
       List<Product> products,
       List<QuantityUnit> quantityUnits,
+      List<QuantityUnitConversion> quantityUnitConversions,
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     this.linearLayoutManager = linearLayoutManager;
     this.recipe = recipe;
     this.recipePositions = new ArrayList<>(recipePositions);
     this.products = new ArrayList<>(products);
     this.quantityUnits = new ArrayList<>(quantityUnits);
+    this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
   }
@@ -119,11 +131,15 @@ public class RecipePositionAdapter extends
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
     QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
+    QuantityUnitConversion quantityUnitConversion = product != null ? QuantityUnitConversion.getFromTwoUnits(quantityUnitConversions, product.getQuIdStockInt(), recipePosition.getQuantityUnitId(), product.getId()) : null;
 
     // AMOUNT
     double amount = recipePosition.getAmount() / recipe.getBaseServings() * recipe.getDesiredServings();
+    if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
+      amount *= quantityUnitConversion.getFactor();
+    }
     if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
-      holder.binding.amount.setText(NumUtil.trim(amount));
+      holder.binding.amount.setText(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
       holder.binding.variableAmount.setVisibility(View.GONE);
     } else {
       holder.binding.amount.setText(recipePosition.getVariableAmount());
@@ -137,7 +153,7 @@ public class RecipePositionAdapter extends
     holder.binding.title.setText(product != null ? product.getName() : context.getString(R.string.error_undefined));
 
     // NOTE
-    if (recipePosition.getNote() == null) {
+    if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()) {
       holder.binding.note.setVisibility(View.GONE);
     } else {
       holder.binding.note.setText(recipePosition.getNote());
@@ -174,7 +190,8 @@ public class RecipePositionAdapter extends
       Recipe recipe,
       List<RecipePosition> newList,
       List<Product> newProducts,
-      List<QuantityUnit> newQuantityUnits
+      List<QuantityUnit> newQuantityUnits,
+      List<QuantityUnitConversion> newQuantityUnitConversions
   ) {
 
     RecipePositionAdapter.DiffCallback diffCallback = new RecipePositionAdapter.DiffCallback(
@@ -185,7 +202,9 @@ public class RecipePositionAdapter extends
         this.products,
         newProducts,
         this.quantityUnits,
-        newQuantityUnits
+        newQuantityUnits,
+        this.quantityUnitConversions,
+        newQuantityUnitConversions
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipe = recipe;
@@ -195,6 +214,8 @@ public class RecipePositionAdapter extends
     this.products.addAll(newProducts);
     this.quantityUnits.clear();
     this.quantityUnits.addAll(newQuantityUnits);
+    this.quantityUnitConversions.clear();
+    this.quantityUnitConversions.addAll(newQuantityUnitConversions);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -208,6 +229,8 @@ public class RecipePositionAdapter extends
     List<Product> newProducts;
     List<QuantityUnit> oldQuantityUnits;
     List<QuantityUnit> newQuantityUnits;
+    List<QuantityUnitConversion> oldQuantityUnitConversions;
+    List<QuantityUnitConversion> newQuantityUnitConversions;
 
     public DiffCallback(
         Recipe oldRecipe,
@@ -217,7 +240,9 @@ public class RecipePositionAdapter extends
         List<Product> oldProducts,
         List<Product> newProducts,
         List<QuantityUnit> oldQuantityUnits,
-        List<QuantityUnit> newQuantityUnits
+        List<QuantityUnit> newQuantityUnits,
+        List<QuantityUnitConversion> oldQuantityUnitConversions,
+        List<QuantityUnitConversion> newQuantityUnitConversions
     ) {
       this.oldRecipe = oldRecipe;
       this.newRecipe = newRecipe;
@@ -227,6 +252,8 @@ public class RecipePositionAdapter extends
       this.newProducts = newProducts;
       this.oldQuantityUnits = oldQuantityUnits;
       this.newQuantityUnits = newQuantityUnits;
+      this.oldQuantityUnitConversions = oldQuantityUnitConversions;
+      this.newQuantityUnitConversions = newQuantityUnitConversions;
     }
 
     @Override
@@ -259,6 +286,8 @@ public class RecipePositionAdapter extends
       Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
       QuantityUnit newQuantityUnit = QuantityUnit.getFromId(newQuantityUnits, newItem.getQuantityUnitId());
       QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(oldQuantityUnits, oldItem.getQuantityUnitId());
+      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(newQuantityUnitConversions, newItemProduct.getQuIdStockInt(), newItem.getQuantityUnitId(), newItemProduct.getId()) : null;
+      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(oldQuantityUnitConversions, oldItemProduct.getQuIdStockInt(), oldItem.getQuantityUnitId(), oldItemProduct.getId()) : null;
 
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
@@ -269,6 +298,11 @@ public class RecipePositionAdapter extends
       }
 
       if (newQuantityUnit == null || !newQuantityUnit.equals(oldQuantityUnit)) {
+        return false;
+      }
+
+      if (newQuantityUnitConversion == null
+          || !newQuantityUnitConversion.equals(oldQuantityUnitConversion)) {
         return false;
       }
 

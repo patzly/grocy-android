@@ -59,6 +59,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.elevation.SurfaceColors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -66,6 +67,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -75,6 +78,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetRecipeBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
@@ -84,7 +88,6 @@ import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
-import xyz.zedler.patrick.grocy.util.ViewUtil.TouchProgressBarUtil;
 import xyz.zedler.patrick.grocy.web.RequestHeaders;
 
 public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
@@ -96,6 +99,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private static final String DIALOG_SHOPPING_LIST_SHOWING = "dialog_shopping_list_showing";
   private static final String DIALOG_SHOPPING_LIST_NAMES = "dialog_shopping_list_names";
   private static final String DIALOG_SHOPPING_LIST_CHECKED = "dialog_shopping_list_checked";
+  private static final String DIALOG_DELETE_SHOWING = "dialog_delete_showing";
 
   private SharedPreferences sharedPrefs;
   private MainActivity activity;
@@ -103,7 +107,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private ViewUtil.TouchProgressBarUtil touchProgressBarUtil;
   private RecipesRepository recipesRepository;
   private DownloadHelper dlHelper;
-  private AlertDialog dialogConsume, dialogShoppingList;
+  private AlertDialog dialogConsume, dialogShoppingList, dialogDelete;
   private final HashMap<String, Boolean> dialogShoppingListMultiChoiceItems = new HashMap<>();
 
   private Recipe recipe;
@@ -113,12 +117,15 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private List<RecipePosition> recipePositions;
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
+  private List<QuantityUnitConversion> quantityUnitConversions;
 
   private MutableLiveData<Boolean> networkLoadingLive;
   private MutableLiveData<String> servingsDesiredLive;
   private MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
 
   private boolean servingsDesiredChanged;
+  private int maxDecimalPlacesAmount;
+  private int decimalPlacesPriceDisplay;
 
   @Override
   public View onCreateView(
@@ -152,6 +159,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       dialogConsume.dismiss();
     } else if (dialogShoppingList != null) {
       dialogShoppingList.dismiss();
+    } else if (dialogDelete != null) {
+      dialogDelete.dismiss();
     }
     if (touchProgressBarUtil != null) {
       touchProgressBarUtil.onDestroy();
@@ -187,6 +196,15 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         isLoading -> networkLoadingLive.setValue(isLoading));
     recipesRepository = new RecipesRepository(activity.getApplication());
 
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+
     binding.recycler.setLayoutManager(
             new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
@@ -208,28 +226,40 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     recipePositions = bundle.getParcelableArrayList(ARGUMENT.RECIPE_POSITIONS);
     products = bundle.getParcelableArrayList(ARGUMENT.PRODUCTS);
     quantityUnits = bundle.getParcelableArrayList(ARGUMENT.QUANTITY_UNITS);
+    quantityUnitConversions = bundle.getParcelableArrayList(ARGUMENT.QUANTITY_UNIT_CONVERSIONS);
 
     if (
         recipe == null ||
             recipeFulfillment == null ||
             recipePositions == null ||
             products == null ||
-            quantityUnits == null
+            quantityUnits == null ||
+            quantityUnitConversions == null
     ) {
       dismiss();
       return;
     }
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
-      if (item.getItemId() == R.id.action_copy_recipe) {
+      if (item.getItemId() == R.id.action_preparation_mode) {
+        openPreparationMode();
+        return true;
+      } else if (item.getItemId() == R.id.action_edit_recipe) {
+        activity.getCurrentFragment().editRecipe(recipe);
+        dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_copy_recipe) {
         activity.getCurrentFragment().copyRecipe(recipe.getId());
         dismiss();
+        return true;
+      } else if (item.getItemId() == R.id.action_delete_recipe) {
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;
     });
 
-    servingsDesiredLive = new MutableLiveData<>(NumUtil.trim(recipe.getDesiredServings()));
+    servingsDesiredLive = new MutableLiveData<>(NumUtil.trimAmount(recipe.getDesiredServings(), maxDecimalPlacesAmount));
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
 
     servingsDesiredSaveEnabledLive.observe(
@@ -239,6 +269,12 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     loadRecipePicture();
     setupMenuButtons();
     updateDataWithServings();
+
+    ColorStateList colorSurface3 = ColorStateList.valueOf(
+        SurfaceColors.SURFACE_3.getColor(activity)
+    );
+    binding.chipConsume.setChipBackgroundColor(colorSurface3);
+    binding.chipShoppingList.setChipBackgroundColor(colorSurface3);
 
     if (savedInstanceState != null) {
       if (savedInstanceState.getBoolean(DIALOG_CONSUME_SHOWING)) {
@@ -256,6 +292,10 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         }
         new Handler(Looper.getMainLooper()).postDelayed(
             this::showShoppingListConfirmationDialog, 1
+        );
+      } else if (savedInstanceState.getBoolean(DIALOG_DELETE_SHOWING)) {
+        new Handler(Looper.getMainLooper()).postDelayed(
+            this::showDeleteConfirmationDialog, 1
         );
       }
     }
@@ -276,6 +316,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         DIALOG_SHOPPING_LIST_CHECKED,
         toPrimitiveBooleanArray(dialogShoppingListMultiChoiceItems.values().toArray(new Boolean[0]))
     );
+    outState.putBoolean(DIALOG_DELETE_SHOWING, dialogDelete != null && dialogDelete.isShowing());
   }
 
   private void loadDataFromDatabase() {
@@ -287,6 +328,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       );
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
+      quantityUnitConversions = data.getQuantityUnitConversions();
 
       recipe = Recipe.getRecipeFromId(recipes, recipe.getId());
       recipeFulfillment = recipe != null
@@ -339,7 +381,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       double servings = Double.parseDouble(servingsDesiredLive.getValue());
       double servingsNew = more ? servings + 1 : servings - 1;
       if (servingsNew <= 0) servingsNew = 1;
-      servingsDesiredLive.setValue(NumUtil.trim(servingsNew));
+      servingsDesiredLive.setValue(NumUtil.trimAmount(servingsNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -353,8 +395,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     // REQUIREMENTS FULFILLED
     if (recipeFulfillment.isNeedFulfilled()) {
-      setMenuButtonState(binding.menuItemConsume, true);
-      setMenuButtonState(binding.menuItemShoppingList, false);
+      setMenuButtonState(binding.chipConsume, true);
+      setMenuButtonState(binding.chipShoppingList, false);
       binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -367,8 +409,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       );
       binding.missing.setVisibility(View.GONE);
     } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
-      setMenuButtonState(binding.menuItemConsume, false);
-      setMenuButtonState(binding.menuItemShoppingList, false);
+      setMenuButtonState(binding.chipConsume, false);
+      setMenuButtonState(binding.chipShoppingList, false);
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -387,8 +429,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       );
       binding.missing.setVisibility(View.VISIBLE);
     } else {
-      setMenuButtonState(binding.menuItemConsume, false);
-      setMenuButtonState(binding.menuItemShoppingList, true);
+      setMenuButtonState(binding.chipConsume, false);
+      setMenuButtonState(binding.chipShoppingList, true);
       binding.fulfilled.setText(R.string.msg_recipes_not_enough);
       binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
           getResources(),
@@ -415,7 +457,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       return true;
     });
     binding.textInputServings.setHelperText(
-        getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings()))
+        getString(R.string.property_servings_base_insert, NumUtil.trimAmount(recipe.getBaseServings(), maxDecimalPlacesAmount))
     );
     binding.textInputServings.setHelperTextColor(ColorStateList.valueOf(colorBlue.getAccent()));
     assert binding.textInputServings.getEditText() != null;
@@ -427,7 +469,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     });
     binding.calories.setText(
         getString(R.string.property_energy),
-        NumUtil.trim(recipeFulfillment.getCalories()),
+        NumUtil.trimAmount(recipeFulfillment.getCalories(), maxDecimalPlacesAmount),
         getString(R.string.subtitle_per_serving)
     );
     boolean isPriceTrackingEnabled = sharedPrefs.getBoolean(
@@ -436,7 +478,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     if (isPriceTrackingEnabled) {
       binding.costs.setText(
           getString(R.string.property_costs),
-          NumUtil.trimPrice(recipeFulfillment.getCosts()) + " "
+          NumUtil.trimPrice(recipeFulfillment.getCosts(), decimalPlacesPriceDisplay) + " "
               + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
       );
     } else {
@@ -451,7 +493,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
             recipe,
             recipePositions,
             products,
-            quantityUnits
+            quantityUnits,
+            quantityUnitConversions
         );
       } else {
         binding.recycler.setAdapter(
@@ -462,6 +505,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
                 recipePositions,
                 products,
                 quantityUnits,
+                quantityUnitConversions,
                 this
             )
         );
@@ -506,13 +550,13 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       servingsDesired = NumUtil.toDouble(servingsDesiredLive.getValue());
     } else {
       servingsDesired = 1;
-      servingsDesiredLive.setValue(NumUtil.trim(servingsDesired));
+      servingsDesiredLive.setValue(NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount));
     }
     servingsDesiredSaveEnabledLive.setValue(false);
 
     JSONObject body = new JSONObject();
     try {
-      body.put("desired_servings", NumUtil.trim(servingsDesired));
+      body.put("desired_servings", NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount));
     } catch (JSONException e) {
       showToast(R.string.error_undefined);
       servingsDesiredSaveEnabledLive.setValue(true);
@@ -584,27 +628,14 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   }
 
   private void setupMenuButtons() {
-    binding.menuItemConsume.setOnClickListener(v -> showConsumeConfirmationDialog());
+    binding.chipConsume.setOnClickListener(v -> showConsumeConfirmationDialog());
     // Hashmap with all missing products for the dialog (at first all should be checked)
     // global variable for alert dialog management
     dialogShoppingListMultiChoiceItems.clear();
     for (Product product : products) {
       dialogShoppingListMultiChoiceItems.put(product.getName(), true);
     }
-    binding.menuItemShoppingList.setOnClickListener(v -> showShoppingListConfirmationDialog());
-    binding.menuItemEdit.setOnClickListener(v -> {
-      activity.getCurrentFragment().editRecipe(recipe);
-      dismiss();
-    });
-    touchProgressBarUtil = new TouchProgressBarUtil(
-        binding.progressConfirmation,
-        binding.menuItemDelete,
-        2000,
-        object -> {
-          activity.getCurrentFragment().deleteRecipe(recipe.getId());
-          dismiss();
-        }
-    );
+    binding.chipShoppingList.setOnClickListener(v -> showShoppingListConfirmationDialog());
   }
 
   private void showConsumeConfirmationDialog() {
@@ -612,7 +643,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         activity, R.style.ThemeOverlay_Grocy_AlertDialog
     ).setTitle(R.string.title_confirmation)
         .setMessage(getString(R.string.msg_recipe_consume_ask, recipe.getName()))
-        .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        .setPositiveButton(R.string.action_consume_all, (dialog, which) -> {
           performHapticClick();
           activity.getCurrentFragment().consumeRecipe(recipe.getId());
           dismiss();
@@ -669,6 +700,24 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     dialogShoppingList = builder.create();
     dialogShoppingList.show();
+  }
+
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            getString(
+                R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          activity.getCurrentFragment().deleteRecipe(recipe.getId());
+          dismiss();
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
   }
 
   public void openPreparationMode() {

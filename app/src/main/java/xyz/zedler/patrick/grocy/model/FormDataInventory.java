@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.InventoryFragmentArgs;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -94,6 +96,9 @@ public class FormDataInventory {
   private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
+  private final int decimalPlacesPriceInput;
 
   public FormDataInventory(
       Application application,
@@ -108,6 +113,18 @@ public class FormDataInventory {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+    decimalPlacesPriceInput = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_INPUT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_INPUT
+    );
     scannerVisibilityLive = new MutableLiveData<>(false);
     if (args.getStartWithScanner() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
@@ -129,7 +146,7 @@ public class FormDataInventory {
     productNameInfoStockLive = Transformations.map(
         productDetailsLive,
         productDetails -> {
-          String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails);
+          String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails, maxDecimalPlacesAmount);
           return info != null ? application.getString(R.string.property_in_stock, info) : " ";
         }
     );
@@ -388,7 +405,7 @@ public class FormDataInventory {
     } else {
       amountMultiplied = amount / (double) currentFactor;
     }
-    return NumUtil.trim(amountMultiplied);
+    return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
   }
 
   private String getAmountHelpText() {
@@ -411,12 +428,12 @@ public class FormDataInventory {
       if (!isTareWeightEnabled() || productDetailsLive.getValue() == null) {
         amountLive.setValue(String.valueOf(1));
       } else {
-        amountLive.setValue(NumUtil.trim(productDetailsLive.getValue()
-            .getProduct().getTareWeightDouble()));
+        amountLive.setValue(NumUtil.trimAmount(productDetailsLive.getValue()
+            .getProduct().getTareWeightDouble(), maxDecimalPlacesAmount));
       }
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
-      amountLive.setValue(NumUtil.trim(amountNew));
+      amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -429,7 +446,7 @@ public class FormDataInventory {
         amountNew = amountCurrent - 1;
       }
       if (amountNew != null) {
-        amountLive.setValue(NumUtil.trim(amountNew));
+        amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
     }
   }
@@ -453,7 +470,7 @@ public class FormDataInventory {
     return application.getResources().getQuantityString(
         msg,
         (int) Math.ceil(amountDiffAbs),
-        NumUtil.trim(amountDiffAbs),
+        NumUtil.trimAmount(amountDiffAbs, maxDecimalPlacesAmount),
         pluralUtil.getQuantityUnitPlural(stockUnit, amountDiffAbs)
     );
   }
@@ -486,15 +503,15 @@ public class FormDataInventory {
     assert productDetailsLive.getValue() != null && stockUnit != null && amountStock != null;
     double amountStockDouble = Double.parseDouble(amountStock);
     if (isTareWeightEnabled()) {
-      amountStock = NumUtil.trim(amountStockDouble
-          - productDetailsLive.getValue().getProduct().getTareWeightDouble());
+      amountStock = NumUtil.trimAmount(amountStockDouble
+          - productDetailsLive.getValue().getProduct().getTareWeightDouble(), maxDecimalPlacesAmount);
     }
     return application.getString(
         R.string.msg_inventoried,
         productDetailsLive.getValue().getProduct().getName(),
         amountStock,
         pluralUtil.getQuantityUnitPlural(stockUnit, amountStockDouble),
-        amountDiff >= 0 ? "+" + NumUtil.trim(amountDiff) : NumUtil.trim(amountDiff)
+        amountDiff >= 0 ? "+" + NumUtil.trimAmount(amountDiff, maxDecimalPlacesAmount) : NumUtil.trimAmount(amountDiff, maxDecimalPlacesAmount)
     );
   }
 
@@ -559,7 +576,7 @@ public class FormDataInventory {
     } else {
       priceMultiplied = price * (double) currentFactor;
     }
-    return NumUtil.trimPrice(priceMultiplied);
+    return NumUtil.trimPrice(priceMultiplied, decimalPlacesPriceInput);
   }
 
   public MutableLiveData<String> getPriceErrorLive() {
@@ -596,10 +613,10 @@ public class FormDataInventory {
 
   public void morePrice() {
     if (priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
-      priceLive.setValue(NumUtil.trimPrice(1));
+      priceLive.setValue(NumUtil.trimPrice(1, decimalPlacesPriceInput));
     } else {
       double priceNew = NumUtil.toDouble(priceLive.getValue()) + 1;
-      priceLive.setValue(NumUtil.trimPrice(priceNew));
+      priceLive.setValue(NumUtil.trimPrice(priceNew, decimalPlacesPriceInput));
     }
   }
 
@@ -609,7 +626,7 @@ public class FormDataInventory {
     }
     double priceNew = NumUtil.toDouble(priceLive.getValue()) - 1;
     if (priceNew >= 0) {
-      priceLive.setValue(NumUtil.trimPrice(priceNew));
+      priceLive.setValue(NumUtil.trimPrice(priceNew, decimalPlacesPriceInput));
     } else {
       priceLive.setValue(null);
     }
@@ -697,18 +714,24 @@ public class FormDataInventory {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
       return false;
     }
+    if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      ));
+      return false;
+    }
     if (!isTareWeightEnabled()&& NumUtil.isStringDouble(amountLive.getValue())
         && Double.parseDouble(amountLive.getValue()) == productDetails.getStockAmount()) {
       amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
-          NumUtil.trim(productDetails.getStockAmount())));
+          NumUtil.trimAmount(productDetails.getStockAmount(), maxDecimalPlacesAmount)));
       return false;
     }
     if (isTareWeightEnabled() && NumUtil.isStringDouble(amountLive.getValue())
         && Double.parseDouble(amountLive.getValue()) == productDetails.getStockAmount()
         + productDetails.getProduct().getTareWeightDouble()) {
       amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
-          NumUtil.trim(productDetails.getStockAmount()
-              + productDetails.getProduct().getTareWeightDouble())));
+          NumUtil.trimAmount(productDetails.getStockAmount()
+              + productDetails.getProduct().getTareWeightDouble(), maxDecimalPlacesAmount)));
       return false;
     }
     if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) < 0) {
@@ -721,7 +744,7 @@ public class FormDataInventory {
     ) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_min,
-          NumUtil.trim(productDetails.getProduct().getTareWeightDouble())
+          NumUtil.trimAmount(productDetails.getProduct().getTareWeightDouble(), maxDecimalPlacesAmount)
       ));
       return false;
     }
@@ -757,6 +780,12 @@ public class FormDataInventory {
       priceErrorLive.setValue(getString(R.string.error_invalid_price));
       return false;
     }
+    if (NumUtil.getDecimalPlacesCount(priceLive.getValue()) > decimalPlacesPriceInput) {
+      priceErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(decimalPlacesPriceInput)
+      ));
+      return false;
+    }
     priceErrorLive.setValue(null);
     return true;
   }
@@ -786,7 +815,7 @@ public class FormDataInventory {
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       price = priceLive.getValue();
       if (NumUtil.isStringDouble(price)) {
-        price = NumUtil.trimPrice(Double.parseDouble(price));
+        price = NumUtil.trimPrice(Double.parseDouble(price), decimalPlacesPriceDisplay);
         if (currency != null && !currency.isEmpty()) {
           price += " " + currency;
         }
@@ -805,7 +834,7 @@ public class FormDataInventory {
     return application.getString(
         R.string.msg_quick_mode_confirm_inventory,
         details.getProduct().getName(),
-        NumUtil.trim(amountNew),
+        NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount),
         pluralUtil.getQuantityUnitPlural(qU, amountNew),
         dueDateTextLive.getValue(),
         price,

@@ -30,6 +30,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetStockEntryBinding;
@@ -52,6 +54,7 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   private MainActivity activity;
   private FragmentBottomsheetStockEntryBinding binding;
+  private int decimalPlacesPriceDisplay;
 
   @NonNull
   @Override
@@ -77,6 +80,10 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
     assert activity != null;
 
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+    decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
 
     Bundle bundle = requireArguments();
     StockEntry stockEntry = bundle.getParcelable(ARGUMENT.STOCK_ENTRY);
@@ -101,10 +108,14 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
       binding.note.setText(stockEntry.getNote());
     }
 
+    int maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     binding.amount.setText(
         getString(R.string.property_amount),
         AmountUtil.getStockEntryAmountInfo(requireContext(),
-            new PluralUtil(requireContext()), stockEntry, quStock)
+            new PluralUtil(requireContext()), stockEntry, quStock, maxDecimalPlacesAmount)
     );
 
     String date = stockEntry.getBestBeforeDate();
@@ -149,7 +160,7 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
         binding.price.setText(
             getString(R.string.property_price),
             NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice())
-                * product.getQuFactorPurchaseToStockDouble()) + " " + currency
+                * product.getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay) + " " + currency
         );
       } else {
         binding.price.setText(
@@ -157,12 +168,12 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
             getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice())
-                    * product.getQuFactorPurchaseToStockDouble()) + " " + currency,
+                    * product.getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay) + " " + currency,
                 quPurchase.getName()
             ),
             getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice())) + " " + currency,
+                NumUtil.trimPrice(NumUtil.toDouble(stockEntry.getPrice()), decimalPlacesPriceDisplay) + " " + currency,
                 quStock.getName()
             )
         );

@@ -63,6 +63,7 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
   private int swipedPos = -1;
   private float swipeThreshold = 0.5f;
   private final Paint paintBg, paintDivider;
+  private final RectF rectIcon = new RectF();
 
   private final View.OnTouchListener onTouchListener = new View.OnTouchListener() {
     @Override
@@ -338,9 +339,10 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
     float buttonLeft = itemView.getLeft();
     for (int i = 0; i < buttons.size(); i++) {
       float right = buttonLeft + buttonWidth;
+      rectIcon.set(buttonLeft, itemView.getTop(), right, itemView.getBottom());
       buttons.get(i).draw(
           canvas,
-          new RectF(buttonLeft, itemView.getTop(), right, itemView.getBottom()),
+          rectIcon,
           i,
           buttons.size(),
           pos
