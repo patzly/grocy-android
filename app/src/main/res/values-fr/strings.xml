@@ -460,6 +460,8 @@
   <string name="error_bounds_max">Doit être inférieur ou égal à %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Doit être supérieur à %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_max_decimal_places">Max. %1$s décimales</string>
   <string name="error_offline">Hors ligne</string>
   <string name="error_offline_subtitle">Cette page ne fonctionne qu\'avec un accès internet. Vérifiez votre connexion.</string>
   <string name="error_no_done_items">Il n\'y a aucun article coché</string>
