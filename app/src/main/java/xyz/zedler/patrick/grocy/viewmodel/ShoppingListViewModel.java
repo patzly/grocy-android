@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -94,12 +96,18 @@ public class ShoppingListViewModel extends BaseViewModel {
   private NetworkQueue currentQueueLoading;
   private String searchInput;
   private final boolean debug;
+  private final int maxDecimalPlacesAmount;
+
 
   public ShoppingListViewModel(@NonNull Application application) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -805,6 +813,10 @@ public class ShoppingListViewModel extends BaseViewModel {
 
   public HashMap<Integer, Double> getShoppingListItemAmountsHashMap() {
     return shoppingListItemAmountsHashMap;
+  }
+
+  public int getMaxDecimalPlacesAmount() {
+    return maxDecimalPlacesAmount;
   }
 
   @NonNull

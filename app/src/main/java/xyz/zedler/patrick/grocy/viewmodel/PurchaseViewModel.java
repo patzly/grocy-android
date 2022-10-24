@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
@@ -110,12 +112,22 @@ public class PurchaseViewModel extends BaseViewModel {
   private Integer storedPurchaseId;
   private StoredPurchase storedPurchase;
   private Runnable queueEmptyAction;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceInput;
 
   public PurchaseViewModel(@NonNull Application application, PurchaseFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceInput = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_INPUT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_INPUT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -328,15 +340,15 @@ public class PurchaseViewModel extends BaseViewModel {
       if (!isTareWeightEnabled && barcode != null && barcode.hasAmount()) {
         // if barcode contains amount, take this (with tare weight handling off)
         // quick mode status doesn't matter
-        formData.getAmountLive().setValue(NumUtil.trim(barcode.getAmountDouble()));
+        formData.getAmountLive().setValue(NumUtil.trimAmount(barcode.getAmountDouble(), maxDecimalPlacesAmount));
       } else if (!isTareWeightEnabled && shoppingListItem != null) {
         Double amountInUnit = AmountUtil.getShoppingListItemAmount(
             shoppingListItem, productHashMap, quantityUnitHashMap, unitConversionHashMap
         );
         if (amountInUnit != null) {
-          formData.getAmountLive().setValue(NumUtil.trim(amountInUnit));
+          formData.getAmountLive().setValue(NumUtil.trimAmount(amountInUnit, maxDecimalPlacesAmount));
         } else {
-          formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
+          formData.getAmountLive().setValue(NumUtil.trimAmount(shoppingListItem.getAmountDouble(), maxDecimalPlacesAmount));
         }
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
@@ -344,7 +356,7 @@ public class PurchaseViewModel extends BaseViewModel {
             Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_PURCHASE_AMOUNT
         );
         if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trim(Double.parseDouble(defaultAmount));
+          defaultAmount = NumUtil.trimAmount(Double.parseDouble(defaultAmount), maxDecimalPlacesAmount);
         }
         if (NumUtil.isStringDouble(defaultAmount)
             && Double.parseDouble(defaultAmount) > 0) {
@@ -352,7 +364,7 @@ public class PurchaseViewModel extends BaseViewModel {
         }
       } else if (!isTareWeightEnabled) {
         // if quick mode enabled, always fill with amount 1
-        formData.getAmountLive().setValue(NumUtil.trim(1));
+        formData.getAmountLive().setValue(NumUtil.trimAmount(1, maxDecimalPlacesAmount));
       }
 
       // purchased date
@@ -383,7 +395,7 @@ public class PurchaseViewModel extends BaseViewModel {
           lastPrice = productDetails.getLastPrice();
         }
         if (lastPrice != null && !lastPrice.isEmpty()) {
-          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor);
+          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor, decimalPlacesPriceInput);
         }
         formData.getPriceLive().setValue(lastPrice);
       }
@@ -418,7 +430,7 @@ public class PurchaseViewModel extends BaseViewModel {
     if (productId == null && shoppingListItem.hasProduct()) {
       productId = shoppingListItem.getProductIdInt();
     } else if (productId == null) {
-      formData.getAmountLive().setValue(NumUtil.trim(shoppingListItem.getAmountDouble()));
+      formData.getAmountLive().setValue(NumUtil.trimAmount(shoppingListItem.getAmountDouble(), maxDecimalPlacesAmount));
       return;
     }
     dlHelper.getProductDetails(
@@ -437,7 +449,7 @@ public class PurchaseViewModel extends BaseViewModel {
     // amount
     formData.getAmountLive().setValue(
         barcode == null || barcode.getAmount() == null
-            ? NumUtil.trim(1) : barcode.getAmount()
+            ? NumUtil.trimAmount(1, maxDecimalPlacesAmount) : barcode.getAmount()
     );
 
     // purchased date
@@ -453,7 +465,7 @@ public class PurchaseViewModel extends BaseViewModel {
         lastPrice = barcode.getLastPrice();
       }
       if (lastPrice != null && !lastPrice.isEmpty()) {
-        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+        lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice), decimalPlacesPriceInput);
       }
       formData.getPriceLive().setValue(lastPrice);
     }
@@ -1007,6 +1019,10 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public boolean hasStoredPurchase() {
     return storedPurchaseId != null;
+  }
+
+  public int getMaxDecimalPlacesAmount() {
+    return maxDecimalPlacesAmount;
   }
 
   public boolean isQuickModeEnabled() {

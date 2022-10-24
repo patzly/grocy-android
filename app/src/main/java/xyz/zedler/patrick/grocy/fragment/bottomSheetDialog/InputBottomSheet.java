@@ -29,7 +29,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputBinding;
@@ -44,6 +47,7 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
   private FragmentBottomsheetInputBinding binding;
 
   private MutableLiveData<String> inputLive;
+  private int maxDecimalPlacesAmount;
 
   @NonNull
   @Override
@@ -70,17 +74,22 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     binding.setBottomsheet(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(requireContext()).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+
     inputLive = new MutableLiveData<>();
     int inputType;
     boolean showMoreLess;
     Object number = requireArguments().get(ARGUMENT.NUMBER);
     Object text = requireArguments().get(ARGUMENT.TEXT);
     if (number instanceof Double) {
-      inputLive.setValue(NumUtil.trim((Double) number));
+      inputLive.setValue(NumUtil.trimAmount((Double) number, maxDecimalPlacesAmount));
       inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED;
       showMoreLess = true;
     } else if (number instanceof Integer) {
-      inputLive.setValue(NumUtil.trim((Integer) number));
+      inputLive.setValue(NumUtil.trimAmount((Integer) number, maxDecimalPlacesAmount));
       inputType = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED;
       showMoreLess = true;
     } else {
@@ -122,7 +131,7 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     if (!NumUtil.isStringNum(currentInput)) {
       nextInput = String.valueOf(1);
     } else {
-      nextInput = NumUtil.trim(Double.parseDouble(currentInput) + 1);
+      nextInput = NumUtil.trimAmount(Double.parseDouble(currentInput) + 1, maxDecimalPlacesAmount);
     }
     inputLive.setValue(nextInput);
   }
@@ -132,7 +141,7 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     if (!NumUtil.isStringNum(currentInput)) {
       return;
     }
-    String nextInput = NumUtil.trim(Double.parseDouble(currentInput) - 1);
+    String nextInput = NumUtil.trimAmount(Double.parseDouble(currentInput) - 1, maxDecimalPlacesAmount);
     inputLive.setValue(nextInput);
   }
 

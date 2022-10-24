@@ -92,7 +92,8 @@ public class AmountUtil {
       @NonNull PluralUtil pluralUtil,
       @NonNull StringBuilder stringBuilder,
       @Nullable StockItem stockItem,
-      @Nullable QuantityUnit quantityUnit
+      @Nullable QuantityUnit quantityUnit,
+      int maxDecimalPlacesAmount
   ) {
     if (stockItem == null) return;
     String unitStr = "";
@@ -102,7 +103,7 @@ public class AmountUtil {
     stringBuilder.append(
         context.getString(
             R.string.subtitle_amount,
-            NumUtil.trim(stockItem.getAmountDouble()),
+            NumUtil.trimAmount(stockItem.getAmountDouble(), maxDecimalPlacesAmount),
             unitStr
         )
     );
@@ -111,7 +112,7 @@ public class AmountUtil {
       stringBuilder.append(
           context.getString(
               R.string.subtitle_amount_opened,
-              NumUtil.trim(stockItem.getAmountOpenedDouble())
+              NumUtil.trimAmount(stockItem.getAmountOpenedDouble(), maxDecimalPlacesAmount)
           )
       );
     }
@@ -122,7 +123,8 @@ public class AmountUtil {
       @NonNull PluralUtil pluralUtil,
       @NonNull StringBuilder stringBuilder,
       @Nullable StockEntry stockEntry,
-      @Nullable QuantityUnit quantityUnit
+      @Nullable QuantityUnit quantityUnit,
+      int maxDecimalPlacesAmount
   ) {
     if (stockEntry == null) return;
     String unitStr = "";
@@ -132,7 +134,7 @@ public class AmountUtil {
     stringBuilder.append(
         context.getString(
             R.string.subtitle_amount,
-            NumUtil.trim(stockEntry.getAmount()),
+            NumUtil.trimAmount(stockEntry.getAmount(), maxDecimalPlacesAmount),
             unitStr
         )
     );
@@ -147,7 +149,8 @@ public class AmountUtil {
       @NonNull PluralUtil pluralUtil,
       @NonNull StringBuilder stringBuilder,
       @Nullable StockItem stockItem,
-      @Nullable QuantityUnit quantityUnit
+      @Nullable QuantityUnit quantityUnit,
+      int maxDecimalPlacesAmount
   ) {
     if (stockItem == null) return;
     if (stockItem.getIsAggregatedAmountInt() == 0) return;
@@ -162,7 +165,7 @@ public class AmountUtil {
     stringBuilder.append(
         context.getString(
             R.string.subtitle_amount,
-            NumUtil.trim(stockItem.getAmountAggregatedDouble()),
+            NumUtil.trimAmount(stockItem.getAmountAggregatedDouble(), maxDecimalPlacesAmount),
             unitAggregated
         )
     );
@@ -171,7 +174,7 @@ public class AmountUtil {
       stringBuilder.append(
           context.getString(
               R.string.subtitle_amount_opened,
-              NumUtil.trim(stockItem.getAmountOpenedAggregatedDouble())
+              NumUtil.trimAmount(stockItem.getAmountOpenedAggregatedDouble(), maxDecimalPlacesAmount)
           )
       );
     }
@@ -181,26 +184,29 @@ public class AmountUtil {
       @NonNull Context context,
       @NonNull PluralUtil pluralUtil,
       @Nullable StockItem stockItem,
-      @Nullable QuantityUnit quantityUnit
+      @Nullable QuantityUnit quantityUnit,
+      int maxDecimalPlacesAmount
   ) {
     if (stockItem == null) return null;
     StringBuilder stringBuilder = new StringBuilder();
-    addStockAmountNormalInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit);
-    addStockAmountAggregatedInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit);
+    addStockAmountNormalInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit, maxDecimalPlacesAmount);
+    addStockAmountAggregatedInfo(context, pluralUtil, stringBuilder, stockItem, quantityUnit, maxDecimalPlacesAmount);
     return stringBuilder.toString();
   }
 
   public static String getStockAmountInfo(
       @NonNull Context context,
       @NonNull PluralUtil pluralUtil,
-      @Nullable ProductDetails productDetails
+      @Nullable ProductDetails productDetails,
+      int maxDecimalPlacesAmount
   ) {
     if (productDetails == null) return null;
     return getStockAmountInfo(
         context,
         pluralUtil,
         new StockItem(productDetails),
-        productDetails.getQuantityUnitStock()
+        productDetails.getQuantityUnitStock(),
+        maxDecimalPlacesAmount
     );
   }
 
@@ -208,11 +214,12 @@ public class AmountUtil {
       @NonNull Context context,
       @NonNull PluralUtil pluralUtil,
       @Nullable StockEntry stockEntry,
-      @Nullable QuantityUnit quantityUnit
+      @Nullable QuantityUnit quantityUnit,
+      int maxDecimalPlacesAmount
   ) {
     if (stockEntry == null) return null;
     StringBuilder stringBuilder = new StringBuilder();
-    addStockEntryAmountNormalInfo(context, pluralUtil, stringBuilder, stockEntry, quantityUnit);
+    addStockEntryAmountNormalInfo(context, pluralUtil, stringBuilder, stockEntry, quantityUnit, maxDecimalPlacesAmount);
     return stringBuilder.toString();
   }
 }

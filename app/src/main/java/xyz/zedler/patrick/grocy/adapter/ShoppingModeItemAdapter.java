@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.text.Html;
@@ -31,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -39,6 +41,10 @@ import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingGroupBinding;
@@ -74,6 +80,7 @@ public class ShoppingModeItemAdapter extends
   private final boolean useSmallerFonts;
   private final boolean showProductDescription;
   private final boolean showDoneItems;
+  private final int maxDecimalPlacesAmount;
 
   public ShoppingModeItemAdapter(
       Context context,
@@ -88,21 +95,32 @@ public class ShoppingModeItemAdapter extends
       ArrayList<Integer> missingProductIds,
       ShoppingModeItemClickListener listener,
       String shoppingListNotes,
-      String groupingMode,
-      boolean useSmallerFonts,
-      boolean showProductDescription,
-      boolean showDoneItems
+      String groupingMode
   ) {
     this.context = context;
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     this.linearLayoutManager = linearLayoutManager;
     this.productHashMap = new HashMap<>(productHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
     this.shoppingListItemAmountsHashMap = new HashMap<>(shoppingListItemAmountsHashMap);
     this.missingProductIds = new ArrayList<>(missingProductIds);
     this.listener = listener;
-    this.useSmallerFonts = useSmallerFonts;
-    this.showProductDescription = showProductDescription;
-    this.showDoneItems = showDoneItems;
+    this.useSmallerFonts = sharedPrefs.getBoolean(
+        SHOPPING_MODE.USE_SMALLER_FONT,
+        SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
+    );
+    this.showProductDescription = sharedPrefs.getBoolean(
+        SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
+        SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
+    );
+    this.showDoneItems = sharedPrefs.getBoolean(
+        Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
+        Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
+    );
+    this.maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     this.pluralUtil = new PluralUtil(context);
     this.groupedListItems = getGroupedListItems(context, shoppingListItems,
         productGroupHashMap, productHashMap, productNamesHashMap, storeHashMap,
@@ -389,10 +407,10 @@ public class ShoppingModeItemAdapter extends
       if (quStr != null) {
         binding.amount.setText(
             binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
+                .getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
         );
       } else {
-        binding.amount.setText(NumUtil.trim(amountInQuUnit));
+        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
       }
     } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
@@ -400,13 +418,13 @@ public class ShoppingModeItemAdapter extends
       if (quStr != null) {
         binding.amount.setText(
             binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+                .getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
         );
       } else {
-        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
+        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
     } else {
-      binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
+      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
     }
 
     if (item.isUndone()) {

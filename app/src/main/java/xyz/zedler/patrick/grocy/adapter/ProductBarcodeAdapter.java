@@ -20,14 +20,18 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowProductBarcodeBinding;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
@@ -43,9 +47,10 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
   private final ProductBarcodeAdapterListener listener;
   private final List<QuantityUnit> quantityUnits;
   private final List<Store> stores;
-
+  private final int maxDecimalPlacesAmount;
 
   public ProductBarcodeAdapter(
+      Context context,
       ArrayList<ProductBarcode> productBarcodes,
       ProductBarcodeAdapterListener listener,
       List<QuantityUnit> quantityUnits,
@@ -55,6 +60,10 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
     this.listener = listener;
     this.quantityUnits = quantityUnits;
     this.stores = stores;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -92,7 +101,7 @@ public class ProductBarcodeAdapter extends RecyclerView.Adapter<ProductBarcodeAd
     if (NumUtil.isStringDouble(productBarcode.getAmount())) {
       String amountStr = holder.binding.amount.getContext().getString(
           R.string.subtitle_barcode_amount,
-          NumUtil.trim(Double.parseDouble(productBarcode.getAmount()))
+          NumUtil.trimAmount(Double.parseDouble(productBarcode.getAmount()), maxDecimalPlacesAmount)
       );
       holder.binding.amount.setText(amountStr);
       holder.binding.amount.setVisibility(View.VISIBLE);

@@ -33,6 +33,8 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -228,7 +230,10 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
     formData.getQuantityUnitsLive().setValue(quantityUnits);
     formData.getQuantityUnitFromLive().setValue(getQuantityUnit(conversion.getFromQuId()));
     formData.getQuantityUnitToLive().setValue(getQuantityUnit(conversion.getToQuId()));
-    formData.getFactorLive().setValue(NumUtil.trim(conversion.getFactor()));
+    formData.getFactorLive().setValue(NumUtil.trimAmount(
+        conversion.getFactor(),
+        sharedPrefs.getInt(STOCK.DECIMAL_PLACES_AMOUNT, SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT)
+    ));
     formData.setFilledWithConversion(true);
   }
 

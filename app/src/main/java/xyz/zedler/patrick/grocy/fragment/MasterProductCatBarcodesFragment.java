@@ -142,6 +142,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
         ((ProductBarcodeAdapter) binding.recycler.getAdapter()).updateData(barcodes);
       } else {
         binding.recycler.setAdapter(new ProductBarcodeAdapter(
+            requireContext(),
             barcodes,
             this,
             viewModel.getQuantityUnits(),

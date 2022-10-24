@@ -29,6 +29,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -56,6 +58,7 @@ public class FormDataMasterProductCatAmount {
   private final LiveData<Boolean> tareWeightErrorLive;
   private final MutableLiveData<Boolean> disableStockCheckLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
+  private final int maxDecimalPlacesAmount;
 
   private boolean filledWithProduct;
 
@@ -66,6 +69,10 @@ public class FormDataMasterProductCatAmount {
   ) {
     this.application = application;
     this.sharedPrefs = sharedPrefs;
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     displayHelpLive = new MutableLiveData<>(beginnerMode);
     quantityUnitLive = new MutableLiveData<>();
     minAmountLive = new MutableLiveData<>();
@@ -252,10 +259,10 @@ public class FormDataMasterProductCatAmount {
       return;
     }
 
-    String minAmount = NumUtil.trim(product.getMinStockAmountDouble());
-    String quickAmount = NumUtil.trim(product.getQuickConsumeAmountDouble());
-    String factor = NumUtil.trim(product.getQuFactorPurchaseToStockDouble());
-    String tareWeight = NumUtil.trim(product.getTareWeightDouble());
+    String minAmount = NumUtil.trimAmount(product.getMinStockAmountDouble(), maxDecimalPlacesAmount);
+    String quickAmount = NumUtil.trimAmount(product.getQuickConsumeAmountDouble(), maxDecimalPlacesAmount);
+    String factor = NumUtil.trimAmount(product.getQuFactorPurchaseToStockDouble(), maxDecimalPlacesAmount);
+    String tareWeight = NumUtil.trimAmount(product.getTareWeightDouble(), maxDecimalPlacesAmount);
     minAmountLive.setValue(minAmount);
     accumulateMinAmount.setValue(product.getAccumulateSubProductsMinStockAmountBoolean());
     treatOpenedAsOutOfStock.setValue(product.getTreatOpenedAsOutOfStockBoolean());

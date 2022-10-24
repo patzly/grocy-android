@@ -33,6 +33,8 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
@@ -83,6 +85,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   private Runnable queueEmptyAction;
   private final boolean debug;
   private final boolean isActionEdit;
+  private final int maxDecimalPlacesAmount;
 
   public ShoppingListItemEditViewModel(
       @NonNull Application application,
@@ -92,6 +95,10 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -303,7 +310,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
         return;
       }
     }
-    formData.getAmountLive().setValue(NumUtil.trim(amount));
+    formData.getAmountLive().setValue(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
     formData.getQuantityUnitLive().setValue(quantityUnit);
 
     formData.getNoteLive().setValue(item.getNote());

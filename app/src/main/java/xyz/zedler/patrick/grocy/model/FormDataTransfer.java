@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.TransferFragmentArgs;
 import xyz.zedler.patrick.grocy.Constants;
@@ -76,6 +78,7 @@ public class FormDataTransfer {
   private final MutableLiveData<StockEntry> specificStockEntryLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
+  private final int maxDecimalPlacesAmount;
 
   public FormDataTransfer(
       Application application,
@@ -88,6 +91,10 @@ public class FormDataTransfer {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     scannerVisibilityLive = new MutableLiveData<>(false);
     if (getCameraScannerWasVisibleLastTime() && !getExternalScannerEnabled() && !args
         .getCloseWhenFinished()) {
@@ -270,7 +277,7 @@ public class FormDataTransfer {
     } else {
       amountMultiplied = amount / (double) currentFactor;
     }
-    return NumUtil.trim(amountMultiplied);
+    return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
   }
 
   private String getAmountHelpText() {
@@ -295,7 +302,7 @@ public class FormDataTransfer {
       }
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
-      amountLive.setValue(NumUtil.trim(amountNew));
+      amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -308,7 +315,7 @@ public class FormDataTransfer {
         amountNew = amountCurrent - 1;
       }
       if (amountNew != null) {
-        amountLive.setValue(NumUtil.trim(amountNew));
+        amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
     }
   }
@@ -319,7 +326,7 @@ public class FormDataTransfer {
     assert productDetails != null && stock != null;
     return application.getString(
         R.string.msg_transferred,
-        NumUtil.trim(amountTransferred),
+        NumUtil.trimAmount(amountTransferred, maxDecimalPlacesAmount),
         pluralUtil.getQuantityUnitPlural(stock, amountTransferred),
         productDetails.getProduct().getName()
     );
@@ -426,6 +433,12 @@ public class FormDataTransfer {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
       return false;
     }
+    if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      ));
+      return false;
+    }
     // below
     if (Double.parseDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
@@ -464,7 +477,7 @@ public class FormDataTransfer {
 
     if (Double.parseDouble(amountLive.getValue()) > maxAmount) {
       amountErrorLive.setValue(application.getString(
-          R.string.error_bounds_max, NumUtil.trim(maxAmount)
+          R.string.error_bounds_max, NumUtil.trimAmount(maxAmount, maxDecimalPlacesAmount)
       ));
       return false;
     }
@@ -505,7 +518,7 @@ public class FormDataTransfer {
     assert qU != null && fromLocation != null && toLocation != null;
     return application.getString(
         R.string.msg_quick_mode_confirm_transfer,
-        NumUtil.trim(amountRemoved),
+        NumUtil.trimAmount(amountRemoved, maxDecimalPlacesAmount),
         pluralUtil.getQuantityUnitPlural(qU, amountRemoved),
         productDetails.getProduct().getName(),
         fromLocation.getLocationName(),

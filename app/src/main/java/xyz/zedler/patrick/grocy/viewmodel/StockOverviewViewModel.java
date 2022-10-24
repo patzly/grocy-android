@@ -113,12 +113,17 @@ public class StockOverviewViewModel extends BaseViewModel {
   private String searchInput;
   private ArrayList<String> searchResultsFuzzy;
   private final boolean debug;
+  private final int maxDecimalPlacesAmount;
 
   public StockOverviewViewModel(@NonNull Application application, StockOverviewFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -470,7 +475,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
           String msg = getApplication().getString(
               spoiled ? R.string.msg_consumed_spoiled : R.string.msg_consumed,
-              NumUtil.trim(amountConsumed),
+              NumUtil.trimAmount(amountConsumed, maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   stockItem.getProduct().getQuIdStockInt(),
@@ -544,7 +549,7 @@ public class StockOverviewViewModel extends BaseViewModel {
 
           String msg = getApplication().getString(
               R.string.msg_opened,
-              NumUtil.trim(amountOpened),
+              NumUtil.trimAmount(amountOpened, maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(
                   quantityUnitHashMap,
                   stockItem.getProduct().getQuIdStockInt(),

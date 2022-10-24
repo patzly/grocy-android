@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -33,6 +34,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEditListEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -55,6 +58,7 @@ public class RecipeEditIngredientListEntryAdapter extends
   private final RecipeEditIngredientListEntryAdapterListener listener;
 
   private final PluralUtil pluralUtil;
+  private final int maxDecimalPlacesAmount;
 
   public RecipeEditIngredientListEntryAdapter(
       Context context,
@@ -71,6 +75,10 @@ public class RecipeEditIngredientListEntryAdapter extends
     this.quantityUnits = new ArrayList<>(quantityUnits);
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   @Override
@@ -126,7 +134,7 @@ public class RecipeEditIngredientListEntryAdapter extends
       holder.binding.quantity.setText(
           context.getString(
               R.string.subtitle_amount,
-              NumUtil.trim(recipePosition.getAmount()),
+              NumUtil.trimAmount(recipePosition.getAmount(), maxDecimalPlacesAmount),
               pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount())
           )
       );
