@@ -76,7 +76,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchBeginner.setChecked(!switchBeginner.isChecked())}">
@@ -108,7 +108,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> viewModel.showShortcutsBottomSheet()}"
@@ -135,7 +135,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchOpenFoodFacts.setChecked(!switchOpenFoodFacts.isChecked())}">
@@ -166,7 +166,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchExpand.setChecked(!switchExpand.isChecked())}">
@@ -198,7 +198,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchSpeedUpStart.setChecked(!switchSpeedUpStart.isChecked())}">
@@ -228,7 +228,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchDateKeyboardInput.setChecked(!switchDateKeyboardInput.isChecked())}">
@@ -258,7 +258,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchDateKeyboardReverse.setChecked(!switchDateKeyboardReverse.isChecked())}">
@@ -288,7 +288,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{v -> switchKeepScreenOnRecipes.setChecked(!switchKeepScreenOnRecipes.isChecked())}">
@@ -318,7 +318,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:onClick="@{() -> viewModel.showMessageDurationBottomSheet()}"
             clickUtil="@{clickUtil}">
 

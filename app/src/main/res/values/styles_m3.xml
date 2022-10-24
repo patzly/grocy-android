@@ -490,22 +490,18 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem">
-    <item name="android:clickable">true</item>
-    <item name="android:background">@drawable/ripple_list_item_bg</item>
-  </style>
-
-  <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine"
     parent="Widget.Grocy.LinearLayout.ListItem">
-    <item name="android:minHeight">48dp</item>
+    <item name="android:minHeight">56dp</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">24dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
   </style>
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
-    <item name="android:minHeight">56dp</item>
   </style>
 
   <style
@@ -517,21 +513,29 @@
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
-    <item name="android:clickable">true</item>
-    <item name="android:background">@drawable/ripple_list_item_bg</item>
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
   </style>
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine"
     parent="Widget.Grocy.LinearLayout.ListItem">
-    <item name="android:minHeight">64dp</item>
+    <item name="android:minHeight">72dp</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">24dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:paddingBottom">8dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.More"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
   </style>
 
   <style
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
     parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
-    <item name="android:minHeight">72dp</item>
   </style>
 
   <style
@@ -542,8 +546,31 @@
   </style>
 
   <style
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
+  </style>
+
+  <style
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.ThreeLine"
+    parent="Widget.Grocy.LinearLayout.ListItem">
+    <item name="android:minHeight">88dp</item>
+    <item name="android:gravity">top</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">24dp</item>
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.ThreeLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/ripple_list_item_bg</item>
   </style>
@@ -566,7 +593,6 @@
   <style name="Widget.Grocy.ImageView.ListItem.Icon" parent="">
     <item name="android:layout_width">24dp</item>
     <item name="android:layout_height">24dp</item>
-    <item name="android:layout_gravity">start|center_vertical</item>
     <item name="android:layout_marginEnd">16dp</item>
     <item name="tint">?attr/colorOnSurfaceVariant</item>
     <item name="android:importantForAccessibility">no</item>
@@ -646,7 +672,7 @@
 
   <!-- Other text widget styles -->
 
-  <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView.Medium">
+  <style name="Widget.Grocy.TextView.Toolbar" parent="Widget.Grocy.TextView">
     <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
     <item name="android:singleLine">true</item>
     <item name="android:textColor">?attr/colorOnSurface</item>

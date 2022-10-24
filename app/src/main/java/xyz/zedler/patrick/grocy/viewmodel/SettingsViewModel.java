@@ -142,6 +142,10 @@ public class SettingsViewModel extends BaseViewModel {
     );
   }
 
+  public boolean getIsVersionCompatible() {
+    return isVersionCompatible();
+  }
+
   public void showCompatibilityBottomSheet() {
     if (isVersionCompatible()) {
       return;

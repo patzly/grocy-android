@@ -93,7 +93,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.openServerWebsite()}"
@@ -120,7 +120,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:visibility="@{viewModel.serverUrl != null ? View.VISIBLE : View.GONE}"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

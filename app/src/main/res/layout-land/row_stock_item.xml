@@ -23,11 +23,14 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="48dp"
+  android:minHeight="56dp"
   android:clickable="true"
   android:focusable="true"
   android:background="@drawable/ripple_list_item_swipeable"
-  android:padding="16dp"
+  android:paddingStart="16dp"
+  android:paddingEnd="24dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
   android:gravity="center_vertical">
 
   <LinearLayout
@@ -76,8 +79,7 @@
       android:layout_height="3dp"
       android:layout_gravity="center_vertical"
       android:layout_marginEnd="10dp"
-      android:backgroundTint="?attr/colorOnBackground"
-      android:alpha="0.61"
+      android:backgroundTint="?attr/colorOnSurfaceVariant"
       android:background="@drawable/shape_circle" />
 
     <TextView
@@ -96,23 +98,25 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginStart="16dp"
+    android:layout_gravity="top"
     android:visibility="gone">
 
     <TextView
       android:id="@+id/extra_field"
-      style="@style/Widget.Grocy.TextView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="end" />
-
-    <TextView
-      android:id="@+id/extra_field_subtitle"
-      style="@style/Widget.Grocy.TextView"
+      style="@style/Widget.Grocy.TextView.LabelSmall"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="end"
-      android:textAppearance="@style/TextAppearance.Grocy.BodySmall"
-      android:visibility="gone"/>
+      android:textColor="?attr/colorOnSurfaceVariant" />
+
+    <TextView
+      android:id="@+id/extra_field_subtitle"
+      style="@style/Widget.Grocy.TextView.LabelSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:visibility="gone"
+      android:textColor="?attr/colorOnSurfaceVariant" />
 
   </LinearLayout>
 

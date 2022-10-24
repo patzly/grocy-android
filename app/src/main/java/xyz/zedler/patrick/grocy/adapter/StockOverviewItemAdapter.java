@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
 import xyz.zedler.patrick.grocy.databinding.RowStockItemBinding;
@@ -47,12 +48,12 @@ import xyz.zedler.patrick.grocy.model.ProductLastPurchased;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class StockOverviewItemAdapter extends
     RecyclerView.Adapter<StockOverviewItemAdapter.ViewHolder> {
@@ -365,6 +366,13 @@ public class StockOverviewItemAdapter extends
       holder.binding.textDays.setText(dateUtil.getHumanForDaysFromNow(date));
       if (Integer.parseInt(days) <= daysExpiringSoon) {
         colorDays = true;
+      }
+      if (holder.binding.linearDays.getChildCount() == 1) { // not in landscape/tablet mode
+        int dp4 = UiUtil.dpToPx(context, 4);
+        boolean isRtl = UiUtil.isLayoutRtl(context);
+        holder.binding.linearContainer.setPadding(
+            isRtl ? dp4 * 6 : dp4 * 4, dp4 * 3 , isRtl ? dp4 * 4 : dp4 * 6, dp4 * 3
+        );
       }
     } else {
       holder.binding.linearDays.setVisibility(View.GONE);
