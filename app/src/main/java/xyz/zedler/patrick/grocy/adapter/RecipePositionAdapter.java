@@ -131,11 +131,11 @@ public class RecipePositionAdapter extends
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
     QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
-    QuantityUnitConversion quantityUnitConversion = product != null ? QuantityUnitConversion.getFromTwoUnits(quantityUnitConversions, product.getQuIdStockInt(), recipePosition.getQuantityUnitId()) : null;
+    QuantityUnitConversion quantityUnitConversion = product != null ? QuantityUnitConversion.getFromTwoUnits(quantityUnitConversions, product.getQuIdStockInt(), recipePosition.getQuantityUnitId(), product.getId()) : null;
 
     // AMOUNT
     double amount = recipePosition.getAmount() / recipe.getBaseServings() * recipe.getDesiredServings();
-    if (quantityUnitConversion != null) {
+    if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
       amount *= quantityUnitConversion.getFactor();
     }
     if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
@@ -286,8 +286,8 @@ public class RecipePositionAdapter extends
       Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
       QuantityUnit newQuantityUnit = QuantityUnit.getFromId(newQuantityUnits, newItem.getQuantityUnitId());
       QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(oldQuantityUnits, oldItem.getQuantityUnitId());
-      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(newQuantityUnitConversions, newItemProduct.getQuIdStockInt(), newItem.getQuantityUnitId()) : null;
-      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(oldQuantityUnitConversions, oldItemProduct.getQuIdStockInt(), oldItem.getQuantityUnitId()) : null;
+      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(newQuantityUnitConversions, newItemProduct.getQuIdStockInt(), newItem.getQuantityUnitId(), newItemProduct.getId()) : null;
+      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(oldQuantityUnitConversions, oldItemProduct.getQuIdStockInt(), oldItem.getQuantityUnitId(), oldItemProduct.getId()) : null;
 
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
