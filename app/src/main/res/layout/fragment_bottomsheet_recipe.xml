@@ -141,7 +141,7 @@
             <com.google.android.material.chip.Chip
               android:id="@+id/chip_consume"
               style="@style/Widget.Grocy.Chip.Assist"
-              android:text="@string/title_consume"
+              android:text="@string/action_consume"
               app:chipIcon="@drawable/ic_round_consume_product"
               app:longClickToastText="@{@string/action_consume_recipe}" />
 
@@ -207,15 +207,15 @@
             android:id="@+id/amount_more"
             style="@style/Widget.Grocy.Button.IconButton"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:onClick="@{() -> bottomSheet.changeAmount(true)}"
             app:icon="@drawable/ic_round_expand_less" />
 
           <com.google.android.material.button.MaterialButton
             android:id="@+id/amount_less"
             style="@style/Widget.Grocy.Button.IconButton"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="4dp"
             android:onClick="@{() -> bottomSheet.changeAmount(false)}"
             app:icon="@drawable/ic_round_expand_more" />
 

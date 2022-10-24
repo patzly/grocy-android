@@ -24,7 +24,6 @@
 
   <TextView
     android:id="@+id/text_master_item_name"
-    style="@style/Widget.Grocy.TextView.ListItem.Title"
-    android:layout_gravity="center_vertical|start" />
+    style="@style/Widget.Grocy.TextView.ListItem.Title" />
 
 </LinearLayout>

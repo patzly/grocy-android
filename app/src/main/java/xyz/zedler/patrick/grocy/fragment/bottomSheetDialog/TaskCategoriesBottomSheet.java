@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
     implements TaskCategoryAdapterListener {
@@ -84,6 +85,7 @@ public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
     }
     int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
+    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_task_categories));
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)

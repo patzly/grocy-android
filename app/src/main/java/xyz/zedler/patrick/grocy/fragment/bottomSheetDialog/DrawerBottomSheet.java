@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import androidx.appcompat.widget.TooltipCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.button.MaterialButton;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDrawerBinding;
@@ -91,18 +93,6 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     binding.linearDrawerShoppingList.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
-    binding.linearDrawerConsume.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext(), 8, 4)
-    );
-    binding.linearDrawerPurchase.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 4)
-    );
-    binding.linearDrawerTransfer.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 4)
-    );
-    binding.linearDrawerInventory.setBackground(
-        ViewUtil.getRippleBgListItemSurface(requireContext(), 4, 8)
-    );
     binding.linearDrawerRecipes.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
@@ -135,26 +125,26 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         binding.buttonDrawerShoppingMode, getString(R.string.title_shopping_mode)
     );
     TooltipCompat.setTooltipText(
-        binding.linearDrawerConsume, getString(R.string.title_consume)
+        binding.buttonDrawerConsume, getString(R.string.title_consume)
     );
     TooltipCompat.setTooltipText(
-        binding.linearDrawerPurchase, getString(R.string.title_purchase)
+        binding.buttonDrawerPurchase, getString(R.string.title_purchase)
     );
     TooltipCompat.setTooltipText(
-        binding.linearDrawerTransfer, getString(R.string.title_transfer)
+        binding.buttonDrawerTransfer, getString(R.string.title_transfer)
     );
     TooltipCompat.setTooltipText(
-        binding.linearDrawerInventory, getString(R.string.title_inventory)
+        binding.buttonDrawerInventory, getString(R.string.title_inventory)
     );
 
     ClickUtil.setOnClickListeners(
         this,
         binding.linearDrawerStock,
         binding.linearDrawerShoppingList,
-        binding.linearDrawerConsume,
-        binding.linearDrawerPurchase,
-        binding.linearDrawerTransfer,
-        binding.linearDrawerInventory,
+        binding.buttonDrawerConsume,
+        binding.buttonDrawerPurchase,
+        binding.buttonDrawerTransfer,
+        binding.buttonDrawerInventory,
         binding.linearDrawerChores,
         binding.linearDrawerTasks,
         binding.linearDrawerRecipes,
@@ -175,33 +165,13 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
           binding.imageDrawerShoppingList
       );
     } else if (currentFragment instanceof ConsumeFragment) {
-      select(
-          binding.linearDrawerConsume,
-          null,
-          binding.imageDrawerConsume,
-          8, 4
-      );
+      select(binding.buttonDrawerConsume);
     } else if (currentFragment instanceof PurchaseFragment) {
-      select(
-          binding.linearDrawerPurchase,
-          null,
-          binding.imageDrawerPurchase,
-          4, 4
-      );
+      select(binding.buttonDrawerPurchase);
     } else if (currentFragment instanceof TransferFragment) {
-      select(
-          binding.linearDrawerTransfer,
-          null,
-          binding.imageDrawerTransfer,
-          4, 4
-      );
+      select(binding.buttonDrawerTransfer);
     } else if (currentFragment instanceof InventoryFragment) {
-      select(
-          binding.linearDrawerInventory,
-          null,
-          binding.imageDrawerInventory,
-          4, 8
-      );
+      select(binding.buttonDrawerInventory);
     } else if (currentFragment instanceof ChoresFragment) {
       select(binding.linearDrawerChores, binding.textDrawerChores, binding.imageDrawerChores);
     } else if (currentFragment instanceof TasksFragment) {
@@ -242,16 +212,16 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     } else if (v.getId() == R.id.linear_drawer_shopping_list) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
-    } else if (v.getId() == R.id.linear_drawer_consume) {
+    } else if (v.getId() == R.id.button_drawer_consume) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
-    } else if (v.getId() == R.id.linear_drawer_purchase) {
+    } else if (v.getId() == R.id.button_drawer_purchase) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
-    } else if (v.getId() == R.id.linear_drawer_transfer) {
+    } else if (v.getId() == R.id.button_drawer_transfer) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToTransferFragment());
-    } else if (v.getId() == R.id.linear_drawer_inventory) {
+    } else if (v.getId() == R.id.button_drawer_inventory) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToInventoryFragment());
     } else if (v.getId() == R.id.linear_drawer_chores) {
@@ -357,13 +327,22 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     select(linearLayout, textView, imageView, 8, 8);
   }
 
+  private void select(@NonNull MaterialButton button) {
+    button.setClickable(false);
+    button.setIconTint(
+        ColorStateList.valueOf(ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary))
+    );
+    button.setBackgroundColor(
+        ResUtil.getColorAttr(requireContext(), R.attr.colorSecondaryContainer)
+    );
+  }
+
   private void hideDisabledFeatures() {
     if (isFeatureDisabled(PREF.FEATURE_SHOPPING_LIST)) {
       binding.frameShoppingList.setVisibility(View.GONE);
     }
     if (isFeatureDisabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
-      binding.linearDrawerTransfer.setVisibility(View.GONE);
-      binding.transactionsContainer.setWeightSum(75f);
+      binding.buttonDrawerTransfer.setVisibility(View.GONE);
     }
     if (isFeatureDisabled(PREF.FEATURE_RECIPES)) {
       binding.containerRecipes.setVisibility(View.GONE);

@@ -578,21 +578,21 @@ public class ShoppingListFragment extends BaseFragment implements
       QuantityUnit quantityUnit = viewModel.getQuantityUnitHashMap().get(item.getQuIdInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
       if (quStr != null) {
-        amountStr = getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr);
+        amountStr = getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, viewModel.getMaxDecimalPlacesAmount()), quStr);
       } else {
-        amountStr = NumUtil.trim(amountInQuUnit);
+        amountStr = NumUtil.trimAmount(amountInQuUnit, viewModel.getMaxDecimalPlacesAmount());
       }
     } else if (product != null) {
       bundle.putString(Constants.ARGUMENT.PRODUCT_NAME, product.getName());
       QuantityUnit quantityUnit = viewModel.getQuantityUnitHashMap().get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
-        amountStr = getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr);
+        amountStr = getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), viewModel.getMaxDecimalPlacesAmount()), quStr);
       } else {
-        amountStr = NumUtil.trim(item.getAmountDouble());
+        amountStr = NumUtil.trimAmount(item.getAmountDouble(), viewModel.getMaxDecimalPlacesAmount());
       }
     } else {
-      amountStr = NumUtil.trim(item.getAmountDouble());
+      amountStr = NumUtil.trimAmount(item.getAmountDouble(), viewModel.getMaxDecimalPlacesAmount());
     }
     bundle.putString(ARGUMENT.AMOUNT, amountStr);
     bundle.putParcelable(Constants.ARGUMENT.SHOPPING_LIST_ITEM, item);

@@ -23,14 +23,46 @@ import java.text.DecimalFormat;
 
 public class NumUtil {
 
-  public static String trim(double value) {
-    DecimalFormat decimalFormat = new DecimalFormat("###.##");
+  public static String outputSpoilRate(double value) {
+    // server cuts off to 0 decimal places
+    return String.valueOf(Math.round(value));
+  }
+
+  public static String trimAmount(double value, int decimalPlaces) {
+    // also is applied to servings, qu factors and calories
+
+    StringBuilder formatPattern = new StringBuilder("#");
+    if (decimalPlaces > 0) {
+      formatPattern.append(".");
+      for (int i=0; i<=decimalPlaces-1; i++) {
+        formatPattern.append("#");
+      }
+    }
+    DecimalFormat decimalFormat = new DecimalFormat(formatPattern.toString());
     return decimalFormat.format(value).replace(",", ".");
   }
 
-  public static String trimPrice(double value) {
-    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+  public static String trimPrice(double value, int decimalPlaces) {
+    StringBuilder formatPattern = new StringBuilder("0");
+    if (decimalPlaces > 0) {
+      formatPattern.append(".");
+      for (int i=0; i<=decimalPlaces-1; i++) {
+        formatPattern.append("0");
+      }
+    }
+    DecimalFormat decimalFormat = new DecimalFormat(formatPattern.toString());
     return decimalFormat.format(value).replace(",", ".");
+  }
+
+  public static int getDecimalPlacesCount(String input) {
+    if (!isStringDouble(input)) return 0;
+    String text = Double.toString(Math.abs(toDouble(input)));
+    if (text.endsWith(".0")) {
+      return 0;
+    }
+    int integerPlaces = text.indexOf('.');
+    if (integerPlaces == -1) return 0;
+    return text.length() - integerPlaces - 1;
   }
 
   public static double toDouble(String input) {

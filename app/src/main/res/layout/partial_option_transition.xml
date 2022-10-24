@@ -22,7 +22,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linear_other_transition"
-  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More">
 
   <ImageView
     android:id="@+id/image_other_transition"

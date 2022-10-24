@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.text.Html;
 import android.text.Spanned;
@@ -30,12 +31,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListBottomNotesBinding;
 import xyz.zedler.patrick.grocy.databinding.RowShoppingListGroupBinding;
@@ -72,6 +76,8 @@ public class ShoppingListItemAdapter extends
   private final PluralUtil pluralUtil;
   private String groupingMode;
   private String extraField;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
 
   public ShoppingListItemAdapter(
       Context context,
@@ -89,6 +95,15 @@ public class ShoppingListItemAdapter extends
       String groupingMode,
       String extraField
   ) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    this.maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    this.decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
     this.productHashMap = new HashMap<>(productHashMap);
     this.productLastPurchasedHashMap = new HashMap<>(productLastPurchasedHashMap);
     this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
@@ -368,10 +383,10 @@ public class ShoppingListItemAdapter extends
       if (quStr != null) {
         binding.amount.setText(
             binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
+                .getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
         );
       } else {
-        binding.amount.setText(NumUtil.trim(amountInQuUnit));
+        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
       }
     } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
@@ -379,13 +394,13 @@ public class ShoppingListItemAdapter extends
       if (quStr != null) {
         binding.amount.setText(
             binding.amount.getContext()
-                .getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+                .getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
         );
       } else {
-        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
+        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
     } else {
-      binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
+      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
     }
 
     if (item.hasProduct() && missingProductIds.contains(item.getProductIdInt())) {
@@ -468,10 +483,10 @@ public class ShoppingListItemAdapter extends
             .equals(FilterChipLiveDataShoppingListExtraField.EXTRA_FIELD_LAST_PRICE_TOTAL)) {
           double amount = amountInQuUnit != null ? amountInQuUnit : item.getAmountDouble();
           price = NumUtil.isStringDouble(p.getPrice())
-              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount) : p.getPrice();
+              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()) * amount, decimalPlacesPriceDisplay) : p.getPrice();
         } else {
           price = NumUtil.isStringDouble(p.getPrice())
-              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice())) : p.getPrice();
+              ? NumUtil.trimPrice(NumUtil.toDouble(p.getPrice()), decimalPlacesPriceDisplay) : p.getPrice();
         }
         binding.extraField.setText(price);
         binding.extraField.setVisibility(View.VISIBLE);
@@ -512,6 +527,7 @@ public class ShoppingListItemAdapter extends
       HashMap<Integer, Product> productHashMap,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       HashMap<Integer, Double> shoppingListItemAmountsHashMap,
+      int maxDecimalPlacesAmount,
       PluralUtil pluralUtil
   ) {
 
@@ -552,23 +568,23 @@ public class ShoppingListItemAdapter extends
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, amountInQuUnit);
       if (quStr != null) {
         binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trim(amountInQuUnit), quStr)
+            context.getString(R.string.subtitle_amount, NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount), quStr)
         );
       } else {
-        binding.amount.setText(NumUtil.trim(amountInQuUnit));
+        binding.amount.setText(NumUtil.trimAmount(amountInQuUnit, maxDecimalPlacesAmount));
       }
     } else if (product != null) {
       QuantityUnit quantityUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
       String quStr = pluralUtil.getQuantityUnitPlural(quantityUnit, item.getAmountDouble());
       if (quStr != null) {
         binding.amount.setText(
-            context.getString(R.string.subtitle_amount, NumUtil.trim(item.getAmountDouble()), quStr)
+            context.getString(R.string.subtitle_amount, NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount), quStr)
         );
       } else {
-        binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
+        binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
       }
     } else {
-      binding.amount.setText(NumUtil.trim(item.getAmountDouble()));
+      binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
     }
 
     binding.amount.setTypeface(

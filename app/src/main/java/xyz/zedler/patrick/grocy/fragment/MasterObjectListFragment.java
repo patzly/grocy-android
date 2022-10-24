@@ -33,13 +33,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterObjectListAdapter;
@@ -47,6 +48,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterObjectListBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -61,8 +63,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel;
@@ -78,6 +78,7 @@ public class MasterObjectListFragment extends BaseFragment
   private InfoFullscreenHelper infoFullscreenHelper;
   private FragmentMasterObjectListBinding binding;
   private MasterObjectListViewModel viewModel;
+  private SystemBarBehavior systemBarBehavior;
 
   private String entity;
 
@@ -111,7 +112,7 @@ public class MasterObjectListFragment extends BaseFragment
       default: // STORES
         title = R.string.property_stores;
     }
-    binding.title.setText(title);
+    binding.toolbarDefault.setTitle(title);
     return binding.getRoot();
   }
 
@@ -134,6 +135,12 @@ public class MasterObjectListFragment extends BaseFragment
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
 
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
     viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
         .MasterObjectListViewModelFactory(activity.getApplication(), entity)
     ).get(MasterObjectListViewModel.class);
@@ -148,10 +155,6 @@ public class MasterObjectListFragment extends BaseFragment
     binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
     // for offline info in app bar
     binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-    binding.swipe.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipe.setColorSchemeColors(ContextCompat.getColor(activity, R.color.secondary));
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
       if (objects == null) {
@@ -221,7 +224,7 @@ public class MasterObjectListFragment extends BaseFragment
 
     // INITIALIZE VIEWS
 
-    binding.back.setOnClickListener(v -> activity.onBackPressed());
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.searchClose.setOnClickListener(v -> dismissSearch());
     binding.editTextSearch.addTextChangedListener(new TextWatcher() {
       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -275,12 +278,11 @@ public class MasterObjectListFragment extends BaseFragment
     }
 
     // UPDATE UI
-    updateUI();
-  }
 
-  private void updateUI() {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         !entity.equals(GrocyApi.ENTITY.PRODUCTS)
@@ -410,7 +412,7 @@ public class MasterObjectListFragment extends BaseFragment
   @Override
   public void editObject(Object object) {
     if (ENTITY.PRODUCTS.equals(entity)) {
-      navigate(MasterObjectListFragmentDirections
+      activity.navigateFragment(MasterObjectListFragmentDirections
           .actionMasterObjectListFragmentToMasterProductFragment(
               ACTION.EDIT
           ).setProduct((Product) object));
@@ -444,7 +446,7 @@ public class MasterObjectListFragment extends BaseFragment
 
   @Override
   public void copyProduct(Product product) {
-    navigate(MasterObjectListFragmentDirections
+    activity.navigateFragment(MasterObjectListFragmentDirections
         .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE)
         .setProduct(product));
   }
@@ -474,6 +476,7 @@ public class MasterObjectListFragment extends BaseFragment
     }
     viewModel.setOfflineLive(!online);
     viewModel.downloadData();
+    systemBarBehavior.refresh();
   }
 
   @NonNull

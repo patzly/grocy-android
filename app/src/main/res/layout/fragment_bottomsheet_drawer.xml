@@ -39,22 +39,57 @@
       android:paddingTop="8dp"
       android:paddingBottom="8dp">
 
-      <LinearLayout
-        android:id="@+id/linear_drawer_stock"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageView
-          android:id="@+id/image_drawer_stock"
-          style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-          android:src="@drawable/ic_round_kitchen"
-          tools:ignore="ContentDescription" />
+        <LinearLayout
+          android:id="@+id/linear_drawer_stock"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
 
-        <TextView
-          android:id="@+id/text_drawer_stock"
-          style="@style/Widget.Grocy.TextView.DrawerItem"
-          android:text="@string/title_stock_overview" />
+          <ImageView
+            android:id="@+id/image_drawer_stock"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_kitchen"
+            tools:ignore="ContentDescription" />
 
-      </LinearLayout>
+          <TextView
+            android:id="@+id/text_drawer_stock"
+            style="@style/Widget.Grocy.TextView.DrawerItem"
+            android:text="@string/title_stock_overview" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|end"
+          android:paddingStart="0dp"
+          android:paddingEnd="4dp">
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_drawer_consume"
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_consume_product" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_drawer_purchase"
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_local_grocery_store" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_drawer_transfer"
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_swap_horiz" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_drawer_inventory"
+            style="@style/Widget.Grocy.Button.IconButton"
+            app:icon="@drawable/ic_round_inventory" />
+
+        </LinearLayout>
+
+      </FrameLayout>
 
       <FrameLayout
         android:id="@+id/frame_shopping_list"
@@ -86,92 +121,6 @@
           app:icon="@drawable/ic_round_storefront" />
 
       </FrameLayout>
-
-      <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_drawer_shopping_list"
-        style="@style/Widget.Grocy.Divider.Margin" />
-
-      <LinearLayout
-        android:id="@+id/transactions_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100"
-        android:baselineAligned="false">
-
-        <LinearLayout
-          android:id="@+id/linear_drawer_consume"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="25"
-          android:gravity="center_horizontal">
-
-          <ImageView
-            android:id="@+id/image_drawer_consume"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:layout_marginEnd="0dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_consume_product"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-          android:id="@+id/linear_drawer_purchase"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="25"
-          android:gravity="center_horizontal">
-
-          <ImageView
-            android:id="@+id/image_drawer_purchase"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:layout_marginEnd="0dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_local_grocery_store"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-          android:id="@+id/linear_drawer_transfer"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="25"
-          android:gravity="center_horizontal">
-
-          <ImageView
-            android:id="@+id/image_drawer_transfer"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:layout_marginEnd="0dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_swap_horiz"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-          android:id="@+id/linear_drawer_inventory"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="25"
-          android:gravity="center_horizontal">
-
-          <ImageView
-            android:id="@+id/image_drawer_inventory"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:layout_marginEnd="0dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_inventory"/>
-
-        </LinearLayout>
-
-      </LinearLayout>
 
       <LinearLayout
         android:id="@+id/container_recipes"

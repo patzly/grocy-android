@@ -23,58 +23,62 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="64dp"
+  android:minHeight="72dp"
   android:clickable="true"
   android:focusable="true"
   android:background="@drawable/ripple_list_item_swipeable"
-  android:padding="16dp"
-  android:gravity="center_vertical"
-  android:weightSum="1">
+  android:paddingStart="16dp"
+  android:paddingEnd="24dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
+  android:gravity="center_vertical">
 
   <LinearLayout
-      android:layout_width="0dp"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/name"
+      style="@style/Widget.Grocy.TextView.ListItem.Title"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:orientation="vertical">
+      android:singleLine="true" />
 
     <TextView
-        android:id="@+id/name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true" />
+      android:id="@+id/note_as_name"
+      style="@style/Widget.Grocy.TextView.ListItem.Title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textStyle="italic"
+      android:visibility="gone" />
 
     <TextView
-        android:id="@+id/note_as_name"
-        style="@style/Widget.Grocy.TextView.ListItem.Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:visibility="gone" />
+      android:id="@+id/amount"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true" />
 
     <TextView
-        android:id="@+id/amount"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true" />
-
-    <TextView
-        android:id="@+id/note"
-        style="@style/Widget.Grocy.TextView.ListItem.Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:visibility="gone"/>
+      android:id="@+id/note"
+      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textStyle="italic"
+      android:visibility="gone" />
 
   </LinearLayout>
 
   <TextView
-      android:id="@+id/extra_field"
-      style="@style/Widget.Grocy.TextView"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:visibility="gone"/>
+    android:id="@+id/extra_field"
+    style="@style/Widget.Grocy.TextView.LabelSmall"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_gravity="top"
+    android:visibility="gone"
+    android:textColor="?attr/colorOnSurfaceVariant" />
 
 </LinearLayout>

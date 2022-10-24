@@ -28,8 +28,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.ProductDetails;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
@@ -48,6 +51,7 @@ public class StockLocationAdapter
   private final PluralUtil pluralUtil;
   private final int selectedId;
   private final StockLocationAdapterListener listener;
+  private final int maxDecimalPlacesAmount;
 
   public StockLocationAdapter(
       Context context,
@@ -63,6 +67,10 @@ public class StockLocationAdapter
     this.selectedId = selectedId;
     this.listener = listener;
     pluralUtil = new PluralUtil(context);
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -135,7 +143,7 @@ public class StockLocationAdapter
     holder.textViewAmount.setText(
         holder.textViewAmount.getContext().getString(
             R.string.subtitle_amount,
-            NumUtil.trim(stockLocation.getAmountDouble()),
+            NumUtil.trimAmount(stockLocation.getAmountDouble(), maxDecimalPlacesAmount),
             unit
         )
     );

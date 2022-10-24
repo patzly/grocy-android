@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
@@ -28,7 +29,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -50,10 +54,16 @@ public class FormDataMasterProductCatConversionsEdit {
   private final LiveData<String> quantityUnitToNameLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithConversion;
+  private final int maxDecimalPlacesAmount;
 
   public FormDataMasterProductCatConversionsEdit(Application application, Product product) {
     this.application = application;
     this.product = product;
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     factorLive = new MutableLiveData<>();
     factorErrorLive = new MutableLiveData<>();
     quantityUnitsLive = new MutableLiveData<>();
@@ -98,7 +108,7 @@ public class FormDataMasterProductCatConversionsEdit {
       factorLive.setValue(String.valueOf(1));
     } else {
       double factorNew = Double.parseDouble(factorLive.getValue()) + 1;
-      factorLive.setValue(NumUtil.trim(factorNew));
+      factorLive.setValue(NumUtil.trimAmount(factorNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -107,7 +117,7 @@ public class FormDataMasterProductCatConversionsEdit {
     if (factorLive.getValue() != null && !factorLive.getValue().isEmpty()) {
       double factorNew = Double.parseDouble(factorLive.getValue()) - 1;
       if (factorNew >= 1) {
-        factorLive.setValue(NumUtil.trim(factorNew));
+        factorLive.setValue(NumUtil.trimAmount(factorNew, maxDecimalPlacesAmount));
       }
     }
   }
@@ -148,7 +158,7 @@ public class FormDataMasterProductCatConversionsEdit {
     return application.getString(
         R.string.subtitle_factor_means,
         application.getString(R.string.subtitle_amount, "1", pluralUtil.getQuantityUnitPlural(quantityUnitFromLive.getValue(), 1)),
-        application.getString(R.string.subtitle_amount, NumUtil.trim(Double.parseDouble(factorLive.getValue())), pluralUtil.getQuantityUnitPlural(quantityUnitToLive.getValue(), Double.parseDouble(factorLive.getValue())))
+        application.getString(R.string.subtitle_amount, NumUtil.trimAmount(Double.parseDouble(factorLive.getValue()), maxDecimalPlacesAmount), pluralUtil.getQuantityUnitPlural(quantityUnitToLive.getValue(), Double.parseDouble(factorLive.getValue())))
     );
   }
 

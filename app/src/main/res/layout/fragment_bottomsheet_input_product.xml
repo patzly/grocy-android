@@ -32,9 +32,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/title_unknown_input" />
+    <com.google.android.material.appbar.MaterialToolbar
+      style="@style/Widget.Grocy.Toolbar"
+      app:title="@string/title_unknown_input"
+      app:titleCentered="false" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />

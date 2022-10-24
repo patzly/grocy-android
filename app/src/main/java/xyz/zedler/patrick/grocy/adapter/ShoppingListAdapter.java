@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -122,10 +121,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
       holder.delete.setVisibility(View.GONE);
     }
 
-    holder.delete.setOnTouchListener((v, event) -> {
-      listener.onTouchDelete(v, event, shoppingList);
-      return true;
-    });
+    holder.delete.setOnClickListener(v -> listener.onClickDelete(shoppingList));
 
     holder.edit.setOnClickListener(v -> listener.onClickEdit(shoppingList));
 
@@ -161,7 +157,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     void onItemRowClicked(ShoppingList shoppingList);
 
-    void onTouchDelete(View view, MotionEvent event, ShoppingList shoppingList);
+    void onClickDelete(ShoppingList shoppingList);
 
     void onClickEdit(ShoppingList shoppingList);
   }

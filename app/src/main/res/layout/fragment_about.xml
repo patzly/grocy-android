@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView

@@ -23,14 +23,16 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="64dp"
-  android:padding="16dp"
-  android:gravity="center_vertical"
-  android:baselineAligned="false">
+  android:minHeight="72dp"
+  android:paddingStart="16dp"
+  android:paddingEnd="24dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
+  android:gravity="center_vertical">
 
   <TextView
     android:id="@+id/text_property"
-    style="@style/Widget.Grocy.TextView.LabelLarge"
+    style="@style/Widget.Grocy.TextView.LabelMedium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="?attr/colorSecondary" />

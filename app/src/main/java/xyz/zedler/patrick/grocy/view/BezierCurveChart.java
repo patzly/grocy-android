@@ -30,11 +30,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.color.ColorRoles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
@@ -94,11 +97,16 @@ public class BezierCurveChart extends View {
   private final int dotRadius;
   private final int labelMargin, paddingEnd;
   private final boolean isRtl;
+  private final int decimalPlacesPriceDisplay;
 
   public BezierCurveChart(Context context, AttributeSet attrs) {
     super(context, attrs);
 
     isRtl = UiUtil.isLayoutRtl(context);
+    decimalPlacesPriceDisplay = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
 
     cornerRadiusBadge = UiUtil.dpToPx(context, 8);
     cornerRadiusBg = UiUtil.dpToPx(context, 12);
@@ -178,7 +186,7 @@ public class BezierCurveChart extends View {
       if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
-      int labelWidth = getTextWidth(paintLabel, NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1)));
+      int labelWidth = getTextWidth(paintLabel, NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1), decimalPlacesPriceDisplay));
       if (labelWidth > maxPriceWidth) {
         maxPriceWidth = labelWidth;
       }
@@ -226,7 +234,7 @@ public class BezierCurveChart extends View {
       if (maxY >= 100 && y % 20 != 0) {
         continue;
       }
-      String label = NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1));
+      String label = NumUtil.trimPrice(y / (maxY <= 1 ? 10 : 1), decimalPlacesPriceDisplay);
       centerY = rectChart.bottom - y * scaleY;
       centerY = centerY + getTextHeight(paintLabel, label) / 2;
       canvas.drawText(label, centerX, centerY, paintLabel);

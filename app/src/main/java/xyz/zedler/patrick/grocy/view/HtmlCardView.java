@@ -33,7 +33,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
@@ -106,9 +105,9 @@ public class HtmlCardView extends LinearLayout {
 
       binding.webview.setBackgroundColor(Color.TRANSPARENT);
       binding.webview.setOnTouchListener((v, event) -> binding.card.onTouchEvent(event));
-      binding.webview.setWebViewClient(new WebViewClient() {
+      /*binding.webview.setWebViewClient(new WebViewClient() {
         @Override
-        public void onPageFinished(WebView view, String url) {
+        public void onPageFinished(WebView view, String url) {*/
           new Handler(Looper.getMainLooper()).postDelayed(() -> {
             ViewTreeObserver observer = binding.webview.getViewTreeObserver();
             observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -139,9 +138,9 @@ public class HtmlCardView extends LinearLayout {
                 }
               }
             });
-          }, 0);
-        }
-      });
+          }, 100);
+        /*}
+      });*/
       binding.card.setOnClickListener(v -> showHtmlDialog());
     } else {
       setVisibility(View.GONE);

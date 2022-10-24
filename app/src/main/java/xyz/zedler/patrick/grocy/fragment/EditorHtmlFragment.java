@@ -26,13 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.FAB;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentEditorHtmlBinding;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.FAB;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class EditorHtmlFragment extends BaseFragment {
 
@@ -67,7 +66,6 @@ public class EditorHtmlFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.summernote);
     systemBarBehavior.setUp();
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     activity.getScrollBehavior().setUpScroll(

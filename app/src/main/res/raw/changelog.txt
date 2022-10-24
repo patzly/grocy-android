@@ -2,6 +2,7 @@
 
 - New: Material You redesign with dynamic colors for Android 12 and later
 - New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)
+- New: Support for more than two decimal places for amounts & prices, uses option from server (#459)
 - New: Product option "Move on open" (#569)
 - Improved: (not F-Droid) ML Kit scanner now only recognises barcodes in preview field
 - Improved: Shopping mode page now can be opened with deeplink "grocy://shoppingmodepage" (#519)

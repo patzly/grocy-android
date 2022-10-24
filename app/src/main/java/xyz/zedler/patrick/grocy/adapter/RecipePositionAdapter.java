@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -32,6 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -58,6 +61,7 @@ public class RecipePositionAdapter extends
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
+  private final int maxDecimalPlacesAmount;
 
   public RecipePositionAdapter(
       Context context,
@@ -70,6 +74,10 @@ public class RecipePositionAdapter extends
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     this.linearLayoutManager = linearLayoutManager;
     this.recipe = recipe;
     this.recipePositions = new ArrayList<>(recipePositions);
@@ -131,7 +139,7 @@ public class RecipePositionAdapter extends
       amount *= quantityUnitConversion.getFactor();
     }
     if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
-      holder.binding.amount.setText(NumUtil.trim(amount));
+      holder.binding.amount.setText(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
       holder.binding.variableAmount.setVisibility(View.GONE);
     } else {
       holder.binding.amount.setText(recipePosition.getVariableAmount());

@@ -83,7 +83,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginBottom="5dp"
-          android:layout_marginEnd="8dp"
+          android:layout_marginEnd="4dp"
           app:icon="@drawable/ic_round_expand_more"
           app:tint="@color/icon" />
 

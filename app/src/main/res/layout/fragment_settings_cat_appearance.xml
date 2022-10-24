@@ -73,7 +73,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> fragment.showLanguageSelection()}">
@@ -87,12 +87,12 @@
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
               android:text="@string/setting_language" />
 
             <TextView
               android:id="@+id/text_language"
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
               android:text="@{fragment.language}" />
 
           </LinearLayout>
@@ -100,7 +100,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.ThreeLine"
           android:paddingTop="12dp"
           android:paddingBottom="0dp"
           android:paddingStart="16dp"
@@ -109,7 +109,8 @@
           <ImageView
             android:id="@+id/image_other_theme"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_round_palette_anim"
             tools:ignore="ContentDescription" />
 
@@ -144,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingStart="0dp"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="20dp" />
 
             </HorizontalScrollView>
 
@@ -160,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="0dp"
-                android:paddingEnd="16dp"
+                android:paddingEnd="24dp"
                 app:singleSelection="true"
                 app:selectionRequired="true">
 

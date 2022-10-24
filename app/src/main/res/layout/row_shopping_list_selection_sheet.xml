@@ -38,7 +38,7 @@
     android:visibility="invisible"
     tools:ignore="ContentDescription"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="32dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     app:tint="?attr/colorPrimary" />

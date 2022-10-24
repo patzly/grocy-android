@@ -67,6 +67,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -122,6 +124,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private MutableLiveData<Boolean> servingsDesiredSaveEnabledLive;
 
   private boolean servingsDesiredChanged;
+  private int maxDecimalPlacesAmount;
+  private int decimalPlacesPriceDisplay;
 
   @Override
   public View onCreateView(
@@ -192,6 +196,15 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         isLoading -> networkLoadingLive.setValue(isLoading));
     recipesRepository = new RecipesRepository(activity.getApplication());
 
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+
     binding.recycler.setLayoutManager(
             new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     );
@@ -246,7 +259,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       return false;
     });
 
-    servingsDesiredLive = new MutableLiveData<>(NumUtil.trim(recipe.getDesiredServings()));
+    servingsDesiredLive = new MutableLiveData<>(NumUtil.trimAmount(recipe.getDesiredServings(), maxDecimalPlacesAmount));
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
 
     servingsDesiredSaveEnabledLive.observe(
@@ -368,7 +381,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       double servings = Double.parseDouble(servingsDesiredLive.getValue());
       double servingsNew = more ? servings + 1 : servings - 1;
       if (servingsNew <= 0) servingsNew = 1;
-      servingsDesiredLive.setValue(NumUtil.trim(servingsNew));
+      servingsDesiredLive.setValue(NumUtil.trimAmount(servingsNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -444,7 +457,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       return true;
     });
     binding.textInputServings.setHelperText(
-        getString(R.string.property_servings_base_insert, NumUtil.trim(recipe.getBaseServings()))
+        getString(R.string.property_servings_base_insert, NumUtil.trimAmount(recipe.getBaseServings(), maxDecimalPlacesAmount))
     );
     binding.textInputServings.setHelperTextColor(ColorStateList.valueOf(colorBlue.getAccent()));
     assert binding.textInputServings.getEditText() != null;
@@ -456,7 +469,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     });
     binding.calories.setText(
         getString(R.string.property_energy),
-        NumUtil.trim(recipeFulfillment.getCalories()),
+        NumUtil.trimAmount(recipeFulfillment.getCalories(), maxDecimalPlacesAmount),
         getString(R.string.subtitle_per_serving)
     );
     boolean isPriceTrackingEnabled = sharedPrefs.getBoolean(
@@ -465,7 +478,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     if (isPriceTrackingEnabled) {
       binding.costs.setText(
           getString(R.string.property_costs),
-          NumUtil.trimPrice(recipeFulfillment.getCosts()) + " "
+          NumUtil.trimPrice(recipeFulfillment.getCosts(), decimalPlacesPriceDisplay) + " "
               + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
       );
     } else {
@@ -537,13 +550,13 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       servingsDesired = NumUtil.toDouble(servingsDesiredLive.getValue());
     } else {
       servingsDesired = 1;
-      servingsDesiredLive.setValue(NumUtil.trim(servingsDesired));
+      servingsDesiredLive.setValue(NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount));
     }
     servingsDesiredSaveEnabledLive.setValue(false);
 
     JSONObject body = new JSONObject();
     try {
-      body.put("desired_servings", NumUtil.trim(servingsDesired));
+      body.put("desired_servings", NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount));
     } catch (JSONException e) {
       showToast(R.string.error_undefined);
       servingsDesiredSaveEnabledLive.setValue(true);
@@ -630,7 +643,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         activity, R.style.ThemeOverlay_Grocy_AlertDialog
     ).setTitle(R.string.title_confirmation)
         .setMessage(getString(R.string.msg_recipe_consume_ask, recipe.getName()))
-        .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        .setPositiveButton(R.string.action_consume_all, (dialog, which) -> {
           performHapticClick();
           activity.getCurrentFragment().consumeRecipe(recipe.getId());
           dismiss();
@@ -697,7 +710,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
             getString(
                 R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()
             )
-        ).setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
           performHapticClick();
           activity.getCurrentFragment().deleteRecipe(recipe.getId());
           dismiss();

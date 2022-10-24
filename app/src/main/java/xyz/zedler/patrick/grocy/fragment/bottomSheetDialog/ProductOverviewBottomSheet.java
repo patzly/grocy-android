@@ -42,6 +42,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetProductOverviewBinding;
@@ -83,6 +85,8 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
   private PluralUtil pluralUtil;
   private Location location;
   private DownloadHelper dlHelper;
+  private int maxDecimalPlacesAmount;
+  private int decimalPlacesPriceDisplay;
 
   @Override
   public View onCreateView(
@@ -103,6 +107,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     activity = (MainActivity) requireActivity();
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
     pluralUtil = new PluralUtil(activity);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
 
     ProductOverviewBottomSheetArgs args =
         ProductOverviewBottomSheetArgs.fromBundle(requireArguments());
@@ -321,9 +333,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     StringBuilder amountNormal = new StringBuilder();
     StringBuilder amountAggregated = new StringBuilder();
     AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem,
-        quantityUnitStock);
+        quantityUnitStock, maxDecimalPlacesAmount);
     AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem,
-        quantityUnitStock);
+        quantityUnitStock, maxDecimalPlacesAmount);
     binding.itemAmount.setText(
         activity.getString(R.string.property_amount),
         amountNormal.toString(),
@@ -368,7 +380,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
           && NumUtil.isStringDouble(productDetails.getStockValue())) {
         binding.itemValue.setText(
             activity.getString(R.string.property_stock_value),
-            NumUtil.trimPrice(Double.parseDouble(productDetails.getStockValue()))
+            NumUtil.trimPrice(Double.parseDouble(productDetails.getStockValue()), decimalPlacesPriceDisplay)
                 + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, "")
         );
       }
@@ -408,13 +420,13 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(Double.parseDouble(lastPrice)
-                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble())
+                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(Double.parseDouble(lastPrice))
+                NumUtil.trimPrice(Double.parseDouble(lastPrice), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitStock.getName()
             ) : null
@@ -430,13 +442,13 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
             activity.getString(
                 R.string.property_price_unit_insert,
                 NumUtil.trimPrice(Double.parseDouble(averagePrice)
-                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble())
+                    * productDetails.getProduct().getQuFactorPurchaseToStockDouble(), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitPurchase.getName()
             ),
             quantityUnitsAreNotEqual ? activity.getString(
                 R.string.property_price_unit_insert,
-                NumUtil.trimPrice(Double.parseDouble(averagePrice))
+                NumUtil.trimPrice(Double.parseDouble(averagePrice), decimalPlacesPriceDisplay)
                     + " " + sharedPrefs.getString(Constants.PREF.CURRENCY, ""),
                 quantityUnitStock.getName()
             ) : null
@@ -458,7 +470,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       // SPOIL RATE
       binding.itemSpoilRate.setText(
           activity.getString(R.string.property_spoil_rate),
-          NumUtil.trim(productDetails.getSpoilRatePercent()) + "%",
+          NumUtil.outputSpoilRate(productDetails.getSpoilRatePercent()) + "%",
           null
       );
     }
