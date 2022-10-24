@@ -26,6 +26,7 @@ import androidx.room.RoomDatabase;
 import xyz.zedler.patrick.grocy.dao.ChoreDao;
 import xyz.zedler.patrick.grocy.dao.ChoreEntryDao;
 import xyz.zedler.patrick.grocy.dao.LocationDao;
+import xyz.zedler.patrick.grocy.dao.MealPlanEntryDao;
 import xyz.zedler.patrick.grocy.dao.MissingItemDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductBarcodeDao;
 import xyz.zedler.patrick.grocy.dao.PendingProductDao;
@@ -54,6 +55,7 @@ import xyz.zedler.patrick.grocy.dao.VolatileItemDao;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.model.MealPlanEntry;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.PendingProduct;
 import xyz.zedler.patrick.grocy.model.PendingProductBarcode;
@@ -109,9 +111,10 @@ import xyz.zedler.patrick.grocy.model.VolatileItem;
         Server.class,
         Recipe.class,
         RecipeFulfillment.class,
-        RecipePosition.class
+        RecipePosition.class,
+        MealPlanEntry.class
     },
-    version = 42
+    version = 43
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -168,6 +171,8 @@ public abstract class AppDatabase extends RoomDatabase {
   public abstract RecipeFulfillmentDao recipeFulfillmentDao();
 
   public abstract RecipePositionDao recipePositionDao();
+
+  public abstract MealPlanEntryDao mealPlanEntryDao();
 
   public abstract StockEntryDao stockEntryDao();
 
