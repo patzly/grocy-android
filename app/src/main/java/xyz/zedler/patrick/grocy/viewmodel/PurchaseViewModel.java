@@ -393,9 +393,9 @@ public class PurchaseViewModel extends BaseViewModel {
           lastPrice = barcode.getLastPrice();
         } else {
           lastPrice = productDetails.getLastPrice();
-        }
-        if (lastPrice != null && !lastPrice.isEmpty()) {
-          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) * initialUnitFactor, decimalPlacesPriceInput);
+          if (lastPrice != null && !lastPrice.isEmpty()) {
+            lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice) / initialUnitFactor, decimalPlacesPriceInput);
+          }
         }
         formData.getPriceLive().setValue(lastPrice);
       }

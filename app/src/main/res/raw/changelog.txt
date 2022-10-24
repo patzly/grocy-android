@@ -10,6 +10,7 @@
 - Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
 - Fixed: Wrong ingredient amount in the recipe view with base servings other than 1 (#584)
 - Fixed: Wrong ingredient amount in the recipe view with quantity unit conversions (#584)
+- Fixed: Wrong price calculation when last price was stored for barcode (#578)
 - Fixed: Crash on chores overview page with wrong rescheduled date format (#564)
 - Fixed: Rescheduling chore with time tracking enabled did not set chosen time
 - Fixed: Note field on purchase and inventory page was limited to 10 characters (#577)
