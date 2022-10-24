@@ -218,7 +218,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
                 R.string.msg_master_delete, getString(R.string.title_shopping_list),
                 shoppingListDelete.getName()
             )
-        ).setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
           performHapticClick();
           activity.getCurrentFragment().deleteShoppingList(shoppingListDelete);
           dismiss();

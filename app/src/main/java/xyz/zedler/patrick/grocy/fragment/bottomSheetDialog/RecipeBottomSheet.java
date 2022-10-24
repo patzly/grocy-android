@@ -630,7 +630,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         activity, R.style.ThemeOverlay_Grocy_AlertDialog
     ).setTitle(R.string.title_confirmation)
         .setMessage(getString(R.string.msg_recipe_consume_ask, recipe.getName()))
-        .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        .setPositiveButton(R.string.action_consume_all, (dialog, which) -> {
           performHapticClick();
           activity.getCurrentFragment().consumeRecipe(recipe.getId());
           dismiss();
@@ -697,7 +697,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
             getString(
                 R.string.msg_master_delete, getString(R.string.title_recipe), recipe.getName()
             )
-        ).setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
           performHapticClick();
           activity.getCurrentFragment().deleteRecipe(recipe.getId());
           dismiss();

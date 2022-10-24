@@ -89,37 +89,37 @@ public class MasterDataOverviewFragment extends BaseFragment {
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
     ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
 
-    binding.linearProducts.setOnClickListener(v -> navigate(
+    binding.linearProducts.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCTS
             ))
     );
-    binding.linearQuantityUnits.setOnClickListener(v -> navigate(
+    binding.linearQuantityUnits.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.QUANTITY_UNITS
             ))
     );
-    binding.linearLocations.setOnClickListener(v -> navigate(
+    binding.linearLocations.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.LOCATIONS
             ))
     );
-    binding.linearProductGroups.setOnClickListener(v -> navigate(
+    binding.linearProductGroups.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.PRODUCT_GROUPS
             ))
     );
-    binding.linearStores.setOnClickListener(v -> navigate(
+    binding.linearStores.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.STORES
             ))
     );
-    binding.linearTaskCategories.setOnClickListener(v -> navigate(
+    binding.linearTaskCategories.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections
             .actionMasterDataOverviewFragmentToMasterObjectListFragment(
                 GrocyApi.ENTITY.TASK_CATEGORIES
@@ -210,10 +210,7 @@ public class MasterDataOverviewFragment extends BaseFragment {
     hideDisabledFeatures();
 
     // UPDATE UI
-    updateUI();
-  }
 
-  private void updateUI() {
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
