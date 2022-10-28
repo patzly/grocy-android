@@ -38,6 +38,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -326,7 +328,10 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
 
     setProduct(entry.getProductId(), null, null);
     formData.getOnlyCheckSingleUnitInStockLive().setValue(entry.isOnlyCheckSingleUnitInStock());
-    formData.getAmountLive().setValue(NumUtil.trim(entry.getAmount()));
+    formData.getAmountLive().setValue(NumUtil.trimAmount(entry.getAmount(), sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    )));
     formData.setQuantityUnit(QuantityUnit.getFromId(quantityUnits, entry.getQuantityUnitId()));
     formData.getVariableAmountLive().setValue(entry.getVariableAmount());
     formData.getNotCheckStockFulfillmentLive().setValue(entry.isNotCheckStockFulfillment());

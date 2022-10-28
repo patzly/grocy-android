@@ -28,6 +28,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientEditFragmentArgs;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
@@ -50,7 +52,7 @@ public class FormDataRecipeEditIngredientEdit {
   private final MutableLiveData<Boolean> scannerVisibilityLive;
   private final MutableLiveData<Boolean> onlyCheckSingleUnitInStockLive;
   private final MutableLiveData<String> amountLive;
-  private final MutableLiveData<Integer> amountErrorLive;
+  private final MutableLiveData<String> amountErrorLive;
   private final MutableLiveData<QuantityUnit> quantityUnitLive;
   private final MutableLiveData<String> quantityUnitLabelLive;
   private final MutableLiveData<String> variableAmountLive;
@@ -61,6 +63,7 @@ public class FormDataRecipeEditIngredientEdit {
   private final MutableLiveData<Integer> priceFactorErrorLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithRecipePosition;
+  private final int maxDecimalPlacesAmount;
 
   public FormDataRecipeEditIngredientEdit(Application application,
                                           SharedPreferences sharedPrefs,
@@ -72,6 +75,10 @@ public class FormDataRecipeEditIngredientEdit {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     productsLive = new MutableLiveData<>();
     productDetailsLive = new MutableLiveData<>();
     productDetailsLive.setValue(null);
@@ -79,7 +86,7 @@ public class FormDataRecipeEditIngredientEdit {
     productNameInfoStockLive = Transformations.map(
             productDetailsLive,
             productDetails -> {
-              String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails);
+              String info = AmountUtil.getStockAmountInfo(application, pluralUtil, productDetails, maxDecimalPlacesAmount);
               return info != null ? application.getString(R.string.property_in_stock, info) : " ";
             }
     );
@@ -150,7 +157,7 @@ public class FormDataRecipeEditIngredientEdit {
     return amountLive;
   }
 
-  public MutableLiveData<Integer> getAmountErrorLive() {
+  public MutableLiveData<String> getAmountErrorLive() {
     return amountErrorLive;
   }
 
@@ -229,13 +236,20 @@ public class FormDataRecipeEditIngredientEdit {
 
   public boolean isAmountValid() {
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      amountErrorLive.setValue(R.string.error_invalid_base_servings);
+      amountErrorLive.setValue(application.getString(R.string.error_invalid_base_servings));
+      return false;
+    }
+
+    if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      ));
       return false;
     }
 
     double baseServings = Double.parseDouble(amountLive.getValue());
     if (baseServings <= 0) {
-      amountErrorLive.setValue(R.string.error_invalid_base_servings);
+      amountErrorLive.setValue(application.getString(R.string.error_invalid_base_servings));
       return false;
     }
     amountErrorLive.setValue(null);
@@ -245,24 +259,24 @@ public class FormDataRecipeEditIngredientEdit {
   public void moreAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      amountLive.setValue(NumUtil.trim(1.0));
+      amountLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
       double currentValue = Double.parseDouble(amountLive.getValue());
-      amountLive.setValue(NumUtil.trim(currentValue + 1));
+      amountLive.setValue(NumUtil.trimAmount(currentValue + 1, maxDecimalPlacesAmount));
     }
   }
 
   public void lessAmount(ImageView view) {
     ViewUtil.startIcon(view);
     if (amountLive.getValue() == null || amountLive.getValue().isEmpty()) {
-      amountLive.setValue(NumUtil.trim(1.0));
+      amountLive.setValue(NumUtil.trimAmount(1.0, maxDecimalPlacesAmount));
     } else {
       double currentValue = Double.parseDouble(amountLive.getValue());
 
       if (currentValue == 1)
         return;
 
-      amountLive.setValue(NumUtil.trim(currentValue - 1));
+      amountLive.setValue(NumUtil.trimAmount(currentValue - 1, maxDecimalPlacesAmount));
     }
   }
 

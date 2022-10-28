@@ -36,6 +36,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.Timer;
 import java.util.TimerTask;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingModeItemAdapter;
@@ -52,9 +53,6 @@ import xyz.zedler.patrick.grocy.model.ShoppingList;
 import xyz.zedler.patrick.grocy.model.ShoppingListItem;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingModeViewModel;
 
@@ -189,19 +187,7 @@ public class ShoppingModeFragment extends BaseFragment implements
                 viewModel.getMissingProductIds(),
                 this,
                 viewModel.getShoppingListNotes(),
-                viewModel.getGroupingMode(),
-                sharedPrefs.getBoolean(
-                    SHOPPING_MODE.USE_SMALLER_FONT,
-                    SETTINGS_DEFAULT.SHOPPING_MODE.USE_SMALLER_FONT
-                ),
-                sharedPrefs.getBoolean(
-                    SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION,
-                    SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_PRODUCT_DESCRIPTION
-                ),
-                sharedPrefs.getBoolean(
-                    Constants.SETTINGS.SHOPPING_MODE.SHOW_DONE_ITEMS,
-                    Constants.SETTINGS_DEFAULT.SHOPPING_MODE.SHOW_DONE_ITEMS
-                )
+                viewModel.getGroupingMode()
             )
         );
         binding.recycler.scheduleLayoutAnimation();

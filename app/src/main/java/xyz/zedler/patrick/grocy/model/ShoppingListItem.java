@@ -118,7 +118,7 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     dest.writeInt(doneSynced);
   }
 
-  public static final Creator<ShoppingListItem> CREATOR = new Creator<ShoppingListItem>() {
+  public static final Creator<ShoppingListItem> CREATOR = new Creator<>() {
 
     @Override
     public ShoppingListItem createFromParcel(Parcel in) {
@@ -177,8 +177,8 @@ public class ShoppingListItem extends GroupedListItem implements Parcelable {
     this.amount = amount;
   }
 
-  public void setAmountDouble(double amount) {
-    this.amount = NumUtil.trim(amount);
+  public void setAmountDouble(double amount, int maxDecimalPlacesAmount) {
+    this.amount = NumUtil.trimAmount(amount, maxDecimalPlacesAmount);
   }
 
   public String getShoppingListId() {

@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.database.AppDatabase;
 import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
@@ -100,7 +102,9 @@ public class FormDataPurchase {
   private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
-  private final boolean noScanner;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceDisplay;
+  private final int decimalPlacesPriceInput;
 
   public FormDataPurchase(
       Application application,
@@ -118,6 +122,18 @@ public class FormDataPurchase {
         Constants.SETTINGS.BEHAVIOR.BEGINNER_MODE,
         Constants.SETTINGS_DEFAULT.BEHAVIOR.BEGINNER_MODE
     ));
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceDisplay = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_DISPLAY
+    );
+    decimalPlacesPriceInput = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_INPUT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_INPUT
+    );
     batchModeItemIndexLive = new MutableLiveData<>(args.getShoppingListItems() != null ? 0 : null);
     batchModeTextLive = Transformations.map(
         batchModeItemIndexLive,
@@ -260,7 +276,6 @@ public class FormDataPurchase {
     );
     noteLive = new MutableLiveData<>();
     pluralUtil = new PluralUtil(application);
-    noScanner = args.getStoredPurchaseId() != null;
   }
 
   public MutableLiveData<Boolean> getDisplayHelpLive() {
@@ -416,7 +431,7 @@ public class FormDataPurchase {
     } else {
       amountMultiplied = amount / (double) currentFactor;
     }
-    return NumUtil.trim(amountMultiplied);
+    return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
   }
 
   private String getAmountHelpText() {
@@ -439,13 +454,13 @@ public class FormDataPurchase {
       if (!isTareWeightEnabled() || productDetailsLive.getValue() == null) {
         amountLive.setValue(String.valueOf(1));
       } else {
-        amountLive.setValue(NumUtil.trim(productDetailsLive.getValue()
+        amountLive.setValue(NumUtil.trimAmount(productDetailsLive.getValue()
             .getProduct().getTareWeightDouble()
-            + productDetailsLive.getValue().getStockAmount() + 1));
+            + productDetailsLive.getValue().getStockAmount() + 1, maxDecimalPlacesAmount));
       }
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
-      amountLive.setValue(NumUtil.trim(amountNew));
+      amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -458,7 +473,7 @@ public class FormDataPurchase {
         amountNew = amountCurrent - 1;
       }
       if (amountNew != null) {
-        amountLive.setValue(NumUtil.trim(amountNew));
+        amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
     }
   }
@@ -471,7 +486,7 @@ public class FormDataPurchase {
         ? pendingProductLive.getValue().getName() : null;
     return application.getString(
         R.string.msg_purchased,
-        NumUtil.trim(amountPurchased),
+        NumUtil.trimAmount(amountPurchased, maxDecimalPlacesAmount),
         stock != null ? pluralUtil.getQuantityUnitPlural(stock, amountPurchased) : "",
         pendingProductName != null ? pendingProductName : productDetailsName
     );
@@ -543,7 +558,7 @@ public class FormDataPurchase {
     if (isTotalPriceLive.getValue() != null && isTotalPriceLive.getValue()) {
       priceMultiplied /= amount;
     }
-    return NumUtil.trimPrice(priceMultiplied);
+    return NumUtil.trimPrice(priceMultiplied, decimalPlacesPriceInput);
   }
 
   public MediatorLiveData<String> getPriceStockLive() {
@@ -585,10 +600,10 @@ public class FormDataPurchase {
 
   public void morePrice() {
     if (priceLive.getValue() == null || priceLive.getValue().isEmpty()) {
-      priceLive.setValue(NumUtil.trimPrice(1));
+      priceLive.setValue(NumUtil.trimPrice(1, decimalPlacesPriceInput));
     } else {
       double priceNew = NumUtil.toDouble(priceLive.getValue()) + 1;
-      priceLive.setValue(NumUtil.trimPrice(priceNew));
+      priceLive.setValue(NumUtil.trimPrice(priceNew, decimalPlacesPriceInput));
     }
   }
 
@@ -598,7 +613,7 @@ public class FormDataPurchase {
     }
     double priceNew = NumUtil.toDouble(priceLive.getValue()) - 1;
     if (priceNew >= 0) {
-      priceLive.setValue(NumUtil.trimPrice(priceNew));
+      priceLive.setValue(NumUtil.trimPrice(priceNew, decimalPlacesPriceInput));
     } else {
       priceLive.setValue(null);
     }
@@ -646,10 +661,6 @@ public class FormDataPurchase {
 
   public void setCurrentProductFlowInterrupted(boolean currentProductFlowInterrupted) {
     this.currentProductFlowInterrupted = currentProductFlowInterrupted;
-  }
-
-  public boolean isNoScanner() {
-    return noScanner;
   }
 
   public boolean isProductNameValid() {
@@ -705,6 +716,12 @@ public class FormDataPurchase {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
       return false;
     }
+    if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      ));
+      return false;
+    }
     if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
@@ -717,8 +734,8 @@ public class FormDataPurchase {
     ) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher,
-          NumUtil.trim(productDetailsLive.getValue().getProduct()
-              .getTareWeightDouble() + productDetailsLive.getValue().getStockAmount())
+          NumUtil.trimAmount(productDetailsLive.getValue().getProduct()
+              .getTareWeightDouble() + productDetailsLive.getValue().getStockAmount(), maxDecimalPlacesAmount)
       ));
       return false;
     }
@@ -743,6 +760,12 @@ public class FormDataPurchase {
     }
     if (!NumUtil.isStringNum(priceLive.getValue())) {
       priceErrorLive.setValue(getString(R.string.error_invalid_price));
+      return false;
+    }
+    if (NumUtil.getDecimalPlacesCount(priceLive.getValue()) > decimalPlacesPriceInput) {
+      priceErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(decimalPlacesPriceInput)
+      ));
       return false;
     }
     priceErrorLive.setValue(null);
@@ -780,7 +803,7 @@ public class FormDataPurchase {
     if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       price = priceLive.getValue();
       if (NumUtil.isStringDouble(price)) {
-        price = NumUtil.trimPrice(Double.parseDouble(price));
+        price = NumUtil.trimPrice(Double.parseDouble(price), decimalPlacesPriceDisplay);
         if (currency != null && !currency.isEmpty()) {
           price += " " + currency;
         }
@@ -805,7 +828,7 @@ public class FormDataPurchase {
 
     return application.getString(
         R.string.msg_quick_mode_confirm_purchase,
-        NumUtil.trim(amountAdded),
+        NumUtil.trimAmount(amountAdded, maxDecimalPlacesAmount),
         qU != null ? pluralUtil.getQuantityUnitPlural(qU, amountAdded) : "",
         details != null ? details.getProduct().getName() : pendingProductLive.getValue().getName(),
         dueDateTextLive.getValue(),

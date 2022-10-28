@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.InventoryFragmentArgs;
@@ -93,12 +95,22 @@ public class InventoryViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> quickModeEnabled;
 
   private Runnable queueEmptyAction;
+  private final int maxDecimalPlacesAmount;
+  private final int decimalPlacesPriceInput;
 
   public InventoryViewModel(@NonNull Application application, InventoryFragmentArgs args) {
     super(application);
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplication());
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
+    decimalPlacesPriceInput = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_PRICES_INPUT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_PRICES_INPUT
+    );
 
     isLoadingLive = new MutableLiveData<>(false);
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
@@ -237,7 +249,7 @@ public class InventoryViewModel extends BaseViewModel {
       // amount
       boolean isTareWeightEnabled = formData.isTareWeightEnabled();
       if (!isTareWeightEnabled && !isQuickModeEnabled()) {
-        formData.getAmountLive().setValue(NumUtil.trim(productDetails.getStockAmount()));
+        formData.getAmountLive().setValue(NumUtil.trimAmount(productDetails.getStockAmount(), maxDecimalPlacesAmount));
       }
 
       // purchased date
@@ -262,7 +274,7 @@ public class InventoryViewModel extends BaseViewModel {
       if (isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
         String lastPrice = productDetails.getLastPrice();
         if (lastPrice != null && !lastPrice.isEmpty()) {
-          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice));
+          lastPrice = NumUtil.trimPrice(Double.parseDouble(lastPrice), decimalPlacesPriceInput);
         }
         formData.getPriceLive().setValue(lastPrice);
       }

@@ -193,6 +193,31 @@ public class ConfigUtil {
             jsonObject.getInt(SHOPPING_LIST.AUTO_ADD_LIST_ID)
         ).apply();
       }
+      if (jsonObject.has(STOCK.DECIMAL_PLACES_AMOUNT)) {
+        prefs.edit().putInt(
+            STOCK.DECIMAL_PLACES_AMOUNT,
+            jsonObject.getInt(STOCK.DECIMAL_PLACES_AMOUNT)
+        ).apply();
+      }
+      if (jsonObject.has(STOCK.DECIMAL_PLACES_PRICES_INPUT)) {
+        prefs.edit().putInt(
+            STOCK.DECIMAL_PLACES_PRICES_INPUT,
+            jsonObject.getInt(STOCK.DECIMAL_PLACES_PRICES_INPUT)
+        ).apply();
+      }
+      if (jsonObject.has(STOCK.DECIMAL_PLACES_PRICES_DISPLAY)) {
+        prefs.edit().putInt(
+            STOCK.DECIMAL_PLACES_PRICES_DISPLAY,
+            jsonObject.getInt(STOCK.DECIMAL_PLACES_PRICES_DISPLAY)
+        ).apply();
+      }
+      if (jsonObject.has(STOCK.AUTO_DECIMAL_SEPARATOR_PRICES)) {
+        prefs.edit().putBoolean(
+            STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
+            getBoolean(jsonObject, STOCK.AUTO_DECIMAL_SEPARATOR_PRICES,
+                SETTINGS_DEFAULT.STOCK.AUTO_DECIMAL_SEPARATOR_PRICES, prefs)
+        ).apply();
+      }
     } catch (JSONException e) {
       if (debug) {
         Log.e(TAG, "downloadUserSettings: " + e);

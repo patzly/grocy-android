@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.model;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
@@ -28,9 +29,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -63,10 +67,15 @@ public class FormDataShoppingListItemEdit {
   private final MutableLiveData<Integer> noteErrorLive;
   private final PluralUtil pluralUtil;
   private boolean filledWithShoppingListItem;
-  private boolean torchOn = false;
+  private final int maxDecimalPlacesAmount;
 
   public FormDataShoppingListItemEdit(Application application) {
     this.application = application;
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
+    maxDecimalPlacesAmount = sharedPrefs.getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     scannerVisibilityLive = new MutableLiveData<>(false);
     shoppingListLive = new MutableLiveData<>();
     shoppingListNameLive = Transformations.map(
@@ -134,14 +143,6 @@ public class FormDataShoppingListItemEdit {
     scannerVisibilityLive.setValue(!isScannerVisible());
   }
 
-  public boolean isTorchOn() {
-    return torchOn;
-  }
-
-  public void setTorchOn(boolean torchOn) {
-    this.torchOn = torchOn;
-  }
-
   public MutableLiveData<ShoppingList> getShoppingListLive() {
     return shoppingListLive;
   }
@@ -192,7 +193,7 @@ public class FormDataShoppingListItemEdit {
       amountLive.setValue(String.valueOf(1));
     } else {
       double amountNew = Double.parseDouble(amountLive.getValue()) + 1;
-      amountLive.setValue(NumUtil.trim(amountNew));
+      amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
     }
   }
 
@@ -201,7 +202,7 @@ public class FormDataShoppingListItemEdit {
     if (amountLive.getValue() != null && !amountLive.getValue().isEmpty()) {
       double amountNew = Double.parseDouble(amountLive.getValue()) - 1;
       if (amountNew >= 1) {
-        amountLive.setValue(NumUtil.trim(amountNew));
+        amountLive.setValue(NumUtil.trimAmount(amountNew, maxDecimalPlacesAmount));
       }
     }
   }
@@ -264,7 +265,7 @@ public class FormDataShoppingListItemEdit {
       } else {
         amountMultiplied = amount / (double) currentFactor;
       }
-      return NumUtil.trim(amountMultiplied);
+      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
     } else {
       return null;
     }
@@ -347,6 +348,12 @@ public class FormDataShoppingListItemEdit {
       amountErrorLive.setValue(getString(R.string.error_invalid_amount));
       return false;
     }
+    if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
+      amountErrorLive.setValue(application.getString(
+          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      ));
+      return false;
+    }
     if (Double.parseDouble(amountLive.getValue()) <= 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_higher, String.valueOf(0)
@@ -393,7 +400,7 @@ public class FormDataShoppingListItemEdit {
     item.setProductId(product != null ? String.valueOf(product.getId()) : null);
     item.setQuId(unit != null ? String.valueOf(unit.getId()) : null);
     item.setAmountDouble(amountStock != null
-        ? Double.parseDouble(amountStock) : Double.parseDouble(amount));
+        ? Double.parseDouble(amountStock) : Double.parseDouble(amount), maxDecimalPlacesAmount);
     item.setNote(note != null ? note.trim() : null);
     return item;
   }

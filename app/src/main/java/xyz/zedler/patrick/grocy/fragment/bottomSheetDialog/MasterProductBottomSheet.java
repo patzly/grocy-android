@@ -28,9 +28,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetMasterProductBinding;
@@ -57,6 +60,7 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
   private QuantityUnit quantityUnitPurchase, quantityUnitStock;
   private ProductGroup productGroup;
   private AlertDialog dialogDelete;
+  private int maxDecimalPlacesAmount;
 
   @Override
   public View onCreateView(
@@ -74,6 +78,10 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) getActivity();
     assert activity != null;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(activity).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
 
     Bundle bundle = getArguments();
     if (bundle != null) {
@@ -151,7 +159,7 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
     // MIN STOCK AMOUNT
     binding.itemMinStockAmount.setText(
         activity.getString(R.string.property_amount_min_stock),
-        NumUtil.trim(product.getMinStockAmountDouble())
+        NumUtil.trimAmount(product.getMinStockAmountDouble(), maxDecimalPlacesAmount)
     );
 
     // QUANTITY UNIT PURCHASE
@@ -177,7 +185,7 @@ public class MasterProductBottomSheet extends BaseBottomSheetDialogFragment {
     // QUANTITY UNIT FACTOR
     binding.itemQuFactor.setText(
         activity.getString(R.string.property_qu_factor),
-        NumUtil.trim(product.getQuFactorPurchaseToStockDouble())
+        NumUtil.trimAmount(product.getQuFactorPurchaseToStockDouble(), maxDecimalPlacesAmount)
     );
 
     // PRODUCT GROUP

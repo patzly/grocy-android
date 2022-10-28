@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
@@ -32,6 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipePositionEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -58,6 +61,7 @@ public class RecipePositionAdapter extends
   private final RecipePositionsItemAdapterListener listener;
 
   private final PluralUtil pluralUtil;
+  private final int maxDecimalPlacesAmount;
 
   public RecipePositionAdapter(
       Context context,
@@ -70,6 +74,10 @@ public class RecipePositionAdapter extends
       RecipePositionsItemAdapterListener listener
   ) {
     this.context = context;
+    maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
+        STOCK.DECIMAL_PLACES_AMOUNT,
+        SETTINGS_DEFAULT.STOCK.DECIMAL_PLACES_AMOUNT
+    );
     this.linearLayoutManager = linearLayoutManager;
     this.recipe = recipe;
     this.recipePositions = new ArrayList<>(recipePositions);
@@ -123,15 +131,15 @@ public class RecipePositionAdapter extends
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
     QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
-    QuantityUnitConversion quantityUnitConversion = product != null ? QuantityUnitConversion.getFromTwoUnits(quantityUnitConversions, product.getQuIdStockInt(), recipePosition.getQuantityUnitId()) : null;
+    QuantityUnitConversion quantityUnitConversion = product != null ? QuantityUnitConversion.getFromTwoUnits(quantityUnitConversions, product.getQuIdStockInt(), recipePosition.getQuantityUnitId(), product.getId()) : null;
 
     // AMOUNT
     double amount = recipePosition.getAmount() / recipe.getBaseServings() * recipe.getDesiredServings();
-    if (quantityUnitConversion != null) {
+    if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
       amount *= quantityUnitConversion.getFactor();
     }
     if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
-      holder.binding.amount.setText(NumUtil.trim(amount));
+      holder.binding.amount.setText(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
       holder.binding.variableAmount.setVisibility(View.GONE);
     } else {
       holder.binding.amount.setText(recipePosition.getVariableAmount());
@@ -278,8 +286,8 @@ public class RecipePositionAdapter extends
       Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
       QuantityUnit newQuantityUnit = QuantityUnit.getFromId(newQuantityUnits, newItem.getQuantityUnitId());
       QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(oldQuantityUnits, oldItem.getQuantityUnitId());
-      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(newQuantityUnitConversions, newItemProduct.getQuIdStockInt(), newItem.getQuantityUnitId()) : null;
-      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(oldQuantityUnitConversions, oldItemProduct.getQuIdStockInt(), oldItem.getQuantityUnitId()) : null;
+      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(newQuantityUnitConversions, newItemProduct.getQuIdStockInt(), newItem.getQuantityUnitId(), newItemProduct.getId()) : null;
+      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(oldQuantityUnitConversions, oldItemProduct.getQuIdStockInt(), oldItem.getQuantityUnitId(), oldItemProduct.getId()) : null;
 
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
