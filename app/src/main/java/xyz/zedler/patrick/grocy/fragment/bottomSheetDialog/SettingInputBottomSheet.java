@@ -26,16 +26,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SHOPPING_MODE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class SettingInputBottomSheet extends BaseBottomSheetDialogFragment {
@@ -73,7 +73,7 @@ public class SettingInputBottomSheet extends BaseBottomSheetDialogFragment {
 
     // INITIALIZE VIEWS
 
-    TextView textViewTitle = view.findViewById(R.id.text_setting_input_title);
+    MaterialToolbar toolbar = view.findViewById(R.id.toolbar_setting_input);
 
     TextInputLayout textInput = view.findViewById(R.id.text_input_setting_input);
     editText = textInput.getEditText();
@@ -151,7 +151,7 @@ public class SettingInputBottomSheet extends BaseBottomSheetDialogFragment {
         break;
     }
 
-    textViewTitle.setText(title);
+    toolbar.setTitle(title);
 
     textInput.setHint(hint);
 

@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,17 +75,24 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
 
   @Override
   public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    Context context = holder.binding.getRoot().getContext();
     holder.binding.linearLanguageContainer.setBackground(
-        ViewUtil.getRippleBgListItemSurface(holder.binding.getRoot().getContext())
+        ViewUtil.getRippleBgListItemSurface(context)
     );
 
     if (position == 0) {
       holder.binding.textLanguageName.setText(R.string.setting_language_system);
       holder.binding.textLanguageTranslators.setText(R.string.setting_language_not_available);
 
+      boolean isSelected = selectedCode == null;
       holder.binding.imageLanguageSelected.setVisibility(
-          selectedCode != null ? View.INVISIBLE : View.VISIBLE
+          isSelected ? View.VISIBLE : View.INVISIBLE
       );
+      if (isSelected) {
+        holder.binding.linearLanguageContainer.setBackground(
+            ViewUtil.getBgListItemSelected(context)
+        );
+      }
       holder.binding.linearLanguageContainer.setOnClickListener(
           view -> listener.onItemRowClicked(null)
       );
@@ -97,9 +105,11 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
 
     // SELECTED
 
-    holder.binding.imageLanguageSelected.setVisibility(
-        language.getCode().equals(selectedCode) ? View.VISIBLE : View.INVISIBLE
-    );
+    boolean isSelected = language.getCode().equals(selectedCode);
+    holder.binding.imageLanguageSelected.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
+    if (isSelected) {
+      holder.binding.linearLanguageContainer.setBackground(ViewUtil.getBgListItemSelected(context));
+    }
 
     // CONTAINER
 

@@ -33,9 +33,8 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
-      style="@style/Widget.Grocy.Toolbar"
-      app:title="@string/title_unknown_input"
-      app:titleCentered="false" />
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/title_unknown_input" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />

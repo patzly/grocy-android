@@ -24,9 +24,9 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <TextView
-    android:id="@+id/text_text_edit_title"
-    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet" />
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar_text_edit"
+    style="@style/Widget.Grocy.Toolbar.Start" />
 
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />

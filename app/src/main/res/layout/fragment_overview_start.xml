@@ -214,13 +214,12 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView"
+                  style="@style/Widget.Grocy.TextView.TitleLarge"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginStart="16dp"
                   android:layout_marginEnd="16dp"
                   android:layout_marginBottom="4dp"
-                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_stock_overview" />
 
                 <TextView
@@ -501,11 +500,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView"
+                  style="@style/Widget.Grocy.TextView.TitleLarge"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="4dp"
-                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_shopping_list" />
 
                 <TextView
@@ -537,11 +535,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView"
+                  style="@style/Widget.Grocy.TextView.TitleLarge"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="4dp"
-                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_recipes" />
 
                 <TextView
@@ -574,11 +571,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView"
+                  style="@style/Widget.Grocy.TextView.TitleLarge"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="4dp"
-                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_chores" />
 
                 <LinearLayout
@@ -760,11 +756,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView"
+                  style="@style/Widget.Grocy.TextView.TitleLarge"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="4dp"
-                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_tasks" />
 
                 <LinearLayout
@@ -870,11 +865,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView"
+                  style="@style/Widget.Grocy.TextView.TitleLarge"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="4dp"
-                  android:textAppearance="@style/TextAppearance.Grocy.TitleLarge"
                   android:text="@string/title_master_data" />
 
                 <TextView

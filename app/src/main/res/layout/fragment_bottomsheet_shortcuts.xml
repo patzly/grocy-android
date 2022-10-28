@@ -36,10 +36,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/text_logout_title"
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/setting_manage_shortcuts" />
+    <com.google.android.material.appbar.MaterialToolbar
+      style="@style/Widget.Grocy.Toolbar"
+      app:title="@string/setting_manage_shortcuts" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />

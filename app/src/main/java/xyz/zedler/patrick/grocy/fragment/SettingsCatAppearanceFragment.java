@@ -95,7 +95,6 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
     systemBarBehavior.setUp();
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     setUpThemeSelection();

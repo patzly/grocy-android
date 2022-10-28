@@ -42,60 +42,31 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/primary">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-          android:id="@+id/frame_master_product_simple_cancel"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.onBackPressed()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:text="@string/title_product_cat_optional"
-          android:layout_marginEnd="16dp" />
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:title="@string/title_product_cat_optional" />
 
         <FrameLayout
           android:id="@+id/frame_help"
           android:layout_width="48dp"
           android:layout_height="48dp"
-          android:layout_marginStart="4dp"
           android:layout_marginEnd="4dp"
           android:background="?attr/actionBarItemBackground"
           android:clickable="true"
           android:gravity="center"
+          android:layout_gravity="end|center_vertical"
           android:contentDescription="@string/action_display_help"
           android:tooltipText="@string/action_display_help"
           android:focusable="true"
@@ -103,15 +74,14 @@
           android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
 
           <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+            android:src="@{formData.displayHelpLive ? @drawable/ic_round_help : @drawable/ic_round_help_outline_anim}" />
 
         </FrameLayout>
 
-      </LinearLayout>
+      </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -121,8 +91,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -138,16 +106,17 @@
           android:overScrollMode="never">
 
           <LinearLayout
+            android:id="@+id/linear_container_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:paddingBottom="90dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             transitionTypeChanging="@{true}">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{() -> formData.toggleActiveLive()}"
@@ -178,22 +147,18 @@
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginTop="8dp"
               android:layout_marginBottom="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
               android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.Paragraph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:text="@string/msg_help_parent_product_deactivated" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -216,7 +181,7 @@
                 android:id="@+id/image_product"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 android:src="@drawable/ic_round_account_tree"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="10dp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
@@ -224,7 +189,6 @@
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_round_barcode_scan"
-                app:endIconTint="@color/icon"
                 app:endIconContentDescription="Scan barcode"
                 android:hint="@string/property_parent_product"
                 app:helperTextEnabled="true"
@@ -238,7 +202,6 @@
                   android:id="@+id/auto_complete_parent_product"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:inputType="text|textCapSentences|textNoSuggestions"
                   android:imeOptions="actionDone"
                   android:completionThreshold="1"
@@ -254,7 +217,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{() -> fragment.navigateToHtmlEditor()}">
@@ -267,30 +230,26 @@
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
                   android:text="@string/property_description" />
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
+                  style="@style/Widget.Grocy.TextView.ListItem.Title"
                   android:text="@{formData.descriptionSpannedLive ?? fragment.getString(R.string.subtitle_empty)}"
                   android:singleLine="true" />
 
               </LinearLayout>
 
               <ImageView
+                style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_marginStart="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:src="@drawable/ic_round_expand_more"
-                android:rotation="-90"
-                tools:ignore="ContentDescription"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
+                android:src="@drawable/ic_round_chevron_right"
+                tools:ignore="ContentDescription" />
 
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> fragment.showProductGroupsBottomSheet()}">
 
               <ImageView
@@ -321,7 +280,7 @@
                 android:id="@+id/image_master_product_simple_name"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 android:src="@drawable/ic_round_local_fire_department"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
@@ -334,7 +293,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:inputType="number|numberDecimal"
                   android:imeOptions="actionDone"
                   android:text="@={formData.energyLive}"
@@ -345,28 +303,24 @@
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginTop="8dp"
               android:layout_marginBottom="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
               android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.Paragraph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:text="@string/msg_help_hide_on_stock" />
 
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{() -> formData.toggleNeverShowOnStockLive()}">
@@ -392,28 +346,24 @@
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginTop="8dp"
               android:layout_marginBottom="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
               android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
 
               <TextView
                 style="@style/Widget.Grocy.TextView.Paragraph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:text="@string/msg_help_disable_own_stock" />
 
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{() -> formData.toggleNoOwnStockLive()}"
@@ -441,10 +391,10 @@
 
             <LinearLayout
               android:id="@+id/category_picture"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:alpha="@{viewModel.actionEdit ? 1.0f : 0.4f}"
+              android:alpha="@{viewModel.actionEdit ? 1.0f : 0.38f}"
               android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet)}">
 
               <ImageView
@@ -466,14 +416,10 @@
               </LinearLayout>
 
               <ImageView
+                style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_marginStart="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:src="@drawable/ic_round_expand_more"
-                android:rotation="-90"
-                tools:ignore="ContentDescription"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
+                android:src="@drawable/ic_round_chevron_right"
+                tools:ignore="ContentDescription" />
 
             </LinearLayout>
 

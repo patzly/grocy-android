@@ -27,14 +27,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
@@ -71,8 +71,8 @@ public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
       return view;
     }
 
-    TextView textView = view.findViewById(R.id.text_text_edit_title);
-    textView.setText(getArguments().getString(Constants.ARGUMENT.TITLE));
+    MaterialToolbar toolbar = view.findViewById(R.id.toolbar_text_edit);
+    toolbar.setTitle(getArguments().getString(Constants.ARGUMENT.TITLE));
 
     TextInputLayout textInputLayout = view.findViewById(R.id.text_input_text_edit_text);
     if (getArguments().getString(Constants.ARGUMENT.HINT) != null) {

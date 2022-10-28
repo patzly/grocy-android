@@ -42,7 +42,7 @@
         style="@style/Widget.Grocy.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Grocy.HeadlineMedium" />
+        android:textAppearance="?textAppearanceHeadlineMedium" />
 
       <TextView
         android:id="@+id/note_as_name"
@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:textAppearance="@style/TextAppearance.Grocy.HeadlineMedium"
+        android:textAppearance="?textAppearanceHeadlineMedium"
         android:textStyle="italic"
         android:visibility="gone" />
 

@@ -20,7 +20,6 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -42,24 +41,24 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
-import xyz.zedler.patrick.grocy.fragment.BaseFragment;
-import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.DATE;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
+import xyz.zedler.patrick.grocy.fragment.BaseFragment;
+import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.util.DateUtil;
-import xyz.zedler.patrick.grocy.view.ActionButton;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class DateBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -80,12 +79,6 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
   private SimpleDateFormat dateFormatKeyboardInputShort;
   private String defaultDueDays;
   private boolean keyboardInputEnabled;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @SuppressLint("SimpleDateFormat")
   @Override
@@ -179,8 +172,8 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
             return false;
           });
 
-      ActionButton moreMonth = reverseDateFormat ? binding.moreMonthReverse : binding.moreMonth;
-      ActionButton lessMonth = reverseDateFormat ? binding.lessMonthReverse : binding.lessMonth;
+      MaterialButton moreMonth = reverseDateFormat ? binding.moreMonthReverse : binding.moreMonth;
+      MaterialButton lessMonth = reverseDateFormat ? binding.lessMonthReverse : binding.lessMonth;
       binding.linearMonth.setVisibility(reverseDateFormat ? View.GONE : View.VISIBLE);
       binding.linearMonthReverse.setVisibility(reverseDateFormat ? View.VISIBLE : View.GONE);
 
@@ -270,22 +263,24 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
             .start()
     );
 
+    binding.linearNeverExpires.setBackground(ViewUtil.getRippleBgListItemSurface(activity));
+    binding.linearNeverExpires.setOnClickListener(
+        v -> binding.checkboxNeverExpires.setChecked(!binding.checkboxNeverExpires.isChecked())
+    );
+
     if (args.getInt(DATE_TYPE) == DUE_DATE) {
-      binding.linearNeverExpires.setOnClickListener(
-          v -> binding.checkboxNeverExpires.setChecked(!binding.checkboxNeverExpires.isChecked())
-      );
       if (!args.getBoolean(ARGUMENT.SHOW_OPTION_NEVER_EXPIRES, true)) {
         binding.linearNeverExpires.setVisibility(View.GONE);
       }
     } else if (args.getInt(DATE_TYPE) == PURCHASED_DATE) {
       binding.linearNeverExpires.setVisibility(View.GONE);
-      binding.title.setText(R.string.property_purchased_date);
+      binding.toolbar.setTitle(R.string.property_purchased_date);
     } else {
       if (!(args.getInt(FormDataMasterProductCatDueDate.DUE_DAYS_ARG, -1)
           == FormDataMasterProductCatDueDate.DUE_DAYS)) {
         binding.linearNeverExpires.setVisibility(View.GONE);
       }
-      binding.title.setText(R.string.property_due_days_default);
+      binding.toolbar.setTitle(R.string.property_due_days_default);
     }
     binding.reset.setOnClickListener(
         v -> {
@@ -301,13 +296,10 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
   private void fillDatePickerForm(String selectedBestBeforeDate) {
     if (selectedBestBeforeDate != null
         && selectedBestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)) {
-
       binding.datePicker.setEnabled(false);
       binding.datePicker.setAlpha(0.5f);
       binding.checkboxNeverExpires.setChecked(true);
-
     } else if (selectedBestBeforeDate != null) {
-
       try {
         Date date = dateFormatGrocy.parse(selectedBestBeforeDate);
         if (date != null) {
@@ -321,9 +313,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
       binding.datePicker.setEnabled(true);
       binding.datePicker.setAlpha(1.0f);
       binding.checkboxNeverExpires.setChecked(false);
-
     } else if (defaultDueDays != null) {
-
       if (Integer.parseInt(defaultDueDays) < 0) {
         binding.datePicker.setEnabled(false);
         binding.datePicker.setAlpha(0.5f);
@@ -334,13 +324,10 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
         binding.checkboxNeverExpires.setChecked(false);
         calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(defaultDueDays));
       }
-
     } else {
-
       binding.datePicker.setEnabled(false);
       binding.datePicker.setAlpha(0.5f);
       binding.checkboxNeverExpires.setChecked(true);
-
     }
 
     binding.datePicker.updateDate(

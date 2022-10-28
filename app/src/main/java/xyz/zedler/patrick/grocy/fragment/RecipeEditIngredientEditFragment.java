@@ -100,7 +100,6 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     binding.categoryQuantityUnit.setOnClickListener(v -> {

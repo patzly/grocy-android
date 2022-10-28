@@ -24,27 +24,11 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
-
-    <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:layout_width="0dp"
-      android:layout_weight="1"
-      android:text="@string/title_list_entry" />
-
-    <com.google.android.material.appbar.MaterialToolbar
-      android:id="@+id/toolbar_shopping_list_item"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:visibility="visible"
-      app:contentInsetStart="12dp"
-      app:menu="@menu/menu_shopping_list_item" />
-
-  </LinearLayout>
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar_shopping_list_item"
+    style="@style/Widget.Grocy.Toolbar.Start"
+    app:title="@string/title_list_entry"
+    app:menu="@menu/menu_shopping_list_item" />
 
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />

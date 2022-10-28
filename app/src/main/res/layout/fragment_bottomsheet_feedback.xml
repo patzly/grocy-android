@@ -26,7 +26,7 @@
   android:orientation="vertical">
 
   <com.google.android.material.appbar.MaterialToolbar
-    style="@style/Widget.Grocy.Toolbar.Centered"
+    style="@style/Widget.Grocy.Toolbar"
     app:title="@string/title_feedback" />
 
   <com.google.android.material.divider.MaterialDivider
