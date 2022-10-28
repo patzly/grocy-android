@@ -58,6 +58,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class DateBottomSheet extends BaseBottomSheetDialogFragment {
@@ -470,6 +471,16 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
   public void navigateToSettingsCatBehavior() {
     dismiss();
     navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

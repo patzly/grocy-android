@@ -104,8 +104,7 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
             setCornerRadius(background, radius);
             sheet.setBackground(background);
 
-            int peakHeightHalf = UiUtil.getDisplayHeight(requireContext()) / 2
-                + UiUtil.dpToPx(activity, 64); // height of bottom sheet top bar
+            int peakHeightHalf = UiUtil.getDisplayHeight(requireContext()) / 2;
 
             BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(sheet);
 

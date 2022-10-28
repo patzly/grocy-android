@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
@@ -30,14 +29,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputBinding;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class InputBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -48,12 +46,6 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
 
   private MutableLiveData<String> inputLive;
   private int maxDecimalPlacesAmount;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog_SoftInput);
-  }
 
   @Override
   public View onCreateView(
@@ -143,6 +135,16 @@ public class InputBottomSheet extends BaseBottomSheetDialogFragment {
     }
     String nextInput = NumUtil.trimAmount(Double.parseDouble(currentInput) - 1, maxDecimalPlacesAmount);
     inputLive.setValue(nextInput);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull
