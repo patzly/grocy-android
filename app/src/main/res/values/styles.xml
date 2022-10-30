@@ -241,18 +241,6 @@
 
   <!-- RADIO BUTTON -->
 
-  <style
-    name="Widget.Grocy.RadioButton"
-    parent="Widget.MaterialComponents.CompoundButton.RadioButton">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:textSize">16.5sp</item>
-    <item name="android:paddingStart">12dp</item>
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="android:textColor">@color/on_background</item>
-    <item name="android:textAlignment">viewStart</item>
-  </style>
-
   <style name="Widget.Grocy.RadioButton.BottomSheet" parent="Widget.Grocy.RadioButton">
     <item name="android:textSize">16.5sp</item>
   </style>

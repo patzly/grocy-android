@@ -23,11 +23,14 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="48dp"
+  android:minHeight="56dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
-  android:padding="16dp"
+  android:background="@drawable/ripple_list_item_bg"
+  android:paddingStart="16dp"
+  android:paddingEnd="24dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
   android:gravity="center_vertical">
 
   <TextView
@@ -35,8 +38,7 @@
     style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|start"
-    android:singleLine="true" />
+    android:layout_gravity="center_vertical|start" />
 
   <TextView
     android:id="@+id/amount"

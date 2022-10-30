@@ -400,6 +400,19 @@
     <item name="android:textAlignment">viewStart</item>
   </style>
 
+  <!-- Radio Button -->
+
+  <style
+    name="Widget.Grocy.RadioButton"
+    parent="Widget.Material3.CompoundButton.RadioButton">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingStart">12dp</item>
+    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="android:textAppearance">?attr/textAppearanceBodyLarge</item>
+    <item name="android:textColor">?attr/colorOnBackground</item>
+  </style>
+
   <!-- Switch -->
 
   <style name="Widget.Grocy.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
@@ -410,15 +423,10 @@
 
   <!-- NumberPicker -->
 
-  <!-- Base style -->
-  <style name="Base.Grocy.DatePicker" parent="">
+  <style name="Widget.Grocy.DatePicker" parent="">
     <item name="android:textSize">16sp</item>
-  </style>
-
-  <!-- Localized style -->
-  <style name="Widget.Grocy.DatePicker" parent="Base.Grocy.DatePicker">
-    <item name="android:fontFamily">@font/jost_medium</item>
-    <item name="fontFamily">@font/jost_medium</item>
+    <item name="android:fontFamily">@font/jost_400_book</item>
+    <item name="fontFamily">@font/jost_400_book</item>
   </style>
 
   <!-- Slider -->

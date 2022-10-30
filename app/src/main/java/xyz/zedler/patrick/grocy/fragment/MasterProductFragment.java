@@ -41,6 +41,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
 
 public class MasterProductFragment extends BaseFragment {
@@ -200,7 +201,29 @@ public class MasterProductFragment extends BaseFragment {
 
     viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
       //if(isOnline ) viewModel.downloadData();
+      systemBarBehavior.refresh();
     });
+
+    viewModel.getFormData().getCatOptionalErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatOptional.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatDueDateErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatDueDate.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatQuErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatQu.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
+    viewModel.getFormData().getCatAmountErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatAmount.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);

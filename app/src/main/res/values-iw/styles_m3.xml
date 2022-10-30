@@ -83,12 +83,6 @@
     <item name="android:textStyle">bold</item>
   </style>
 
-  <!-- NumberPicker -->
-
-  <style name="Widget.Grocy.DatePicker" parent="Base.Grocy.DatePicker">
-    <item name="android:textStyle">bold</item>
-  </style>
-
   <!-- ExtendedFloatingActionButton -->
 
   <style

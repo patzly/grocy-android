@@ -82,6 +82,8 @@ import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.ArrayList;
@@ -723,6 +725,47 @@ public class MainActivity extends AppCompatActivity {
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
     }
+  }
+
+  public void navigateDeepLink(@StringRes int uri) {
+    navigateDeepLink(Uri.parse(getString(uri)), true);
+  }
+
+  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+    navigateDeepLink(getUriWithArgs(getString(uri), args), true);
+  }
+
+  private static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+    String[] parts = uri.split("\\?");
+    if (parts.length == 1) {
+      return Uri.parse(uri);
+    }
+    String linkPart = parts[0];
+    String argsPart = parts[parts.length - 1];
+    String[] pairs = argsPart.split("&");
+    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
+    for (int i = 0; i <= pairs.length - 1; i++) {
+      String pair = pairs[i];
+      String key = pair.split("=")[0];
+      Object valueBundle = argsBundle.get(key);
+      if (valueBundle == null) {
+        continue;
+      }
+      try {
+        String encoded;
+        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+          encoded = URLEncoder.encode(valueBundle.toString(), StandardCharsets.UTF_8);
+        } else {
+          encoded = URLEncoder.encode(valueBundle.toString(), "UTF-8");
+        }
+        finalDeepLink.append(key).append("=").append(encoded);
+      } catch (Throwable ignore) {
+      }
+      if (i != pairs.length - 1) {
+        finalDeepLink.append("&");
+      }
+    }
+    return Uri.parse(finalDeepLink.toString());
   }
 
   public void showToastTextLong(@StringRes int resId, boolean showLong) {

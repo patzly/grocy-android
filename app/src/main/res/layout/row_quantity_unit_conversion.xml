@@ -23,13 +23,15 @@
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="48dp"
+  android:minHeight="56dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
-  android:padding="16dp"
-  android:gravity="center_vertical"
-  android:weightSum="100">
+  android:background="@drawable/ripple_list_item_bg"
+  android:paddingStart="16dp"
+  android:paddingEnd="24dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
+  android:gravity="center_vertical">
 
   <TextView
     android:id="@+id/from_amount_unit"
@@ -40,11 +42,9 @@
     android:text="1 Packung"/>
 
   <ImageView
-    android:layout_width="24dp"
-    android:layout_height="24dp"
+    style="@style/Widget.Grocy.ImageView.Icon"
     android:importantForAccessibility="no"
-    android:rotation="180"
-    android:src="@drawable/ic_round_arrow_back" />
+    android:src="@drawable/ic_round_chevron_right" />
 
   <TextView
     android:id="@+id/to_amount_unit"

@@ -80,6 +80,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
   private SimpleDateFormat dateFormatKeyboardInputShort;
   private String defaultDueDays;
   private boolean keyboardInputEnabled;
+  private boolean isHelpShown;
 
   @SuppressLint("SimpleDateFormat")
   @Override
@@ -118,10 +119,14 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
     defaultDueDays = args.getString(Constants.ARGUMENT.DEFAULT_DAYS_FROM_NOW);
 
     binding.frameHelpButton.setOnClickListener(v -> {
+      isHelpShown = !isHelpShown;
+      binding.imageHelpButton.setImageResource(
+          isHelpShown ? R.drawable.ic_round_help : R.drawable.ic_round_help_outline_anim
+      );
       if (keyboardInputEnabled) {
-        binding.helpKeyboard.setVisibility(View.VISIBLE);
+        binding.helpKeyboard.setVisibility(isHelpShown ? View.VISIBLE : View.GONE);
       } else {
-        binding.help.setVisibility(View.VISIBLE);
+        binding.help.setVisibility(isHelpShown ? View.VISIBLE : View.GONE);
       }
     });
     binding.help.setOnClickListener(v -> navigateToSettingsCatBehavior());
@@ -258,9 +263,9 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
 
     binding.checkboxNeverExpires.setOnCheckedChangeListener(
         (v, isChecked) -> binding.datePicker.animate()
-            .alpha(isChecked ? 0.5f : 1)
+            .alpha(isChecked ? 0.38f : 1)
             .withEndAction(() -> binding.datePicker.setEnabled(!isChecked))
-            .setDuration(200)
+            .setDuration(150)
             .start()
     );
 
@@ -298,7 +303,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
     if (selectedBestBeforeDate != null
         && selectedBestBeforeDate.equals(Constants.DATE.NEVER_OVERDUE)) {
       binding.datePicker.setEnabled(false);
-      binding.datePicker.setAlpha(0.5f);
+      binding.datePicker.setAlpha(0.38f);
       binding.checkboxNeverExpires.setChecked(true);
     } else if (selectedBestBeforeDate != null) {
       try {
@@ -317,7 +322,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
     } else if (defaultDueDays != null) {
       if (Integer.parseInt(defaultDueDays) < 0) {
         binding.datePicker.setEnabled(false);
-        binding.datePicker.setAlpha(0.5f);
+        binding.datePicker.setAlpha(0.38f);
         binding.checkboxNeverExpires.setChecked(true);
       } else {
         binding.datePicker.setEnabled(true);
@@ -327,7 +332,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
       }
     } else {
       binding.datePicker.setEnabled(false);
-      binding.datePicker.setAlpha(0.5f);
+      binding.datePicker.setAlpha(0.38f);
       binding.checkboxNeverExpires.setChecked(true);
     }
 
@@ -470,7 +475,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
 
   public void navigateToSettingsCatBehavior() {
     dismiss();
-    navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
+    activity.navigateDeepLink(R.string.deep_link_settingsCatBehaviorFragment);
   }
 
   @Override
