@@ -97,7 +97,7 @@
 
             <LinearLayout
               android:id="@+id/qu_from_container"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet(true)}">
 
               <ImageView
@@ -122,7 +122,7 @@
 
             <LinearLayout
               android:id="@+id/qu_to_container"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet(false)}">
 
               <ImageView

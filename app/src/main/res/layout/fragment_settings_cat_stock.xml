@@ -80,7 +80,7 @@
           android:text="@string/title_presets_new_products" />
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showLocationsBottomSheet()}"
           clickUtil="@{clickUtil}">
 
@@ -104,7 +104,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showProductGroupsBottomSheet()}"
           clickUtil="@{clickUtil}">
 
@@ -128,7 +128,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet()}"
           clickUtil="@{clickUtil}">
 
@@ -152,7 +152,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showDefaultDueDaysBottomSheet()}"
           clickUtil="@{clickUtil}">
 
@@ -208,7 +208,7 @@
           android:text="@string/title_stock_overview" />
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showDueSoonDaysBottomSheet()}"
           clickUtil="@{clickUtil}">
 
@@ -267,7 +267,7 @@
           android:text="@string/title_purchase" />
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showDefaultPurchaseAmountBottomSheet()}"
           clickUtil="@{clickUtil}"
           iconToAnimate="@{imageDefaultAmountPurchase}">

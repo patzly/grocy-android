@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -33,17 +32,17 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShortcutsBinding;
 import xyz.zedler.patrick.grocy.fragment.ShoppingListItemEditFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.TaskEntryEditFragmentArgs;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -52,26 +51,18 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
   private MainActivity activity;
   private FragmentBottomsheetShortcutsBinding binding;
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
-
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetShortcutsBinding
-        .inflate(inflater, container, false);
+    binding = FragmentBottomsheetShortcutsBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    setSkipCollapsedInPortrait();
     super.onViewCreated(view, savedInstanceState);
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
@@ -192,6 +183,16 @@ public class ShortcutsBottomSheet extends BaseBottomSheetDialogFragment {
     shortcutManager.setDynamicShortcuts(shortcutInfos);
     activity.getCurrentFragment().updateShortcuts();
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

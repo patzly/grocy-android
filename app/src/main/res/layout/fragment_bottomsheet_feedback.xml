@@ -58,7 +58,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_issue"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
         <ImageView
           android:id="@+id/image_feedback_issue"
@@ -82,7 +82,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_rate"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
         <ImageView
           android:id="@+id/image_feedback_rate"
@@ -106,7 +106,7 @@
 
       <LinearLayout
         android:id="@+id/linear_feedback_share"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable">
 
         <ImageView
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"

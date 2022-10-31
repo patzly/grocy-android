@@ -122,7 +122,7 @@
             app:transitionTypeChanging="@{true}">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:visibility="@{viewModel.featureMultiShoppingListsEnabled ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> fragment.showShoppingListsBottomSheet()}">
 
@@ -244,7 +244,7 @@
 
             <LinearLayout
               android:id="@+id/quantity_unit_container"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:focusableInTouchMode="true"
               android:onClick="@{() -> fragment.showQuantityUnitsBottomSheet(true)}"
               android:visibility="@{formData.quantityUnitsFactorsLive.size > 1 ? View.VISIBLE : View.GONE}"

@@ -167,7 +167,7 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:minHeight">56dp</item>
   </style>
@@ -180,8 +180,8 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
@@ -193,7 +193,7 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine"
     parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:minHeight">72dp</item>
   </style>
@@ -206,8 +206,8 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>

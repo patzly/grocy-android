@@ -275,7 +275,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:onClick="@{() -> checkboxExactAmount.setChecked(!checkboxExactAmount.isChecked())}"
               android:visibility="@{formData.isTareWeightEnabledLive ? View.VISIBLE : View.GONE}">
 
@@ -320,7 +320,7 @@
 
             <LinearLayout
               android:id="@+id/quantity_unit_container"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:focusableInTouchMode="true"
               android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet(true)}"
               app:onFocusChangeListener="@{(v, focus) -> viewModel.showQuantityUnitsBottomSheet(focus)}"
@@ -425,7 +425,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
               android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
 
@@ -449,7 +449,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:onClick="@{() -> checkboxSpoiled.setChecked(!checkboxSpoiled.isChecked())}">
 
               <ImageView
@@ -474,7 +474,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:onClick="@{() -> checkboxOpen.setChecked(!checkboxOpen.isChecked())}"
               android:visibility="@{formData.openVisibilityLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}">
 
@@ -499,7 +499,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:onClick="@{() -> checkboxSpecific.setChecked(!checkboxSpecific.isChecked())}">
 
               <ImageView
@@ -545,7 +545,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> viewModel.showStockEntriesBottomSheet()}"
               android:visibility="@{formData.useSpecificLive ? View.VISIBLE : View.GONE}">
 
@@ -589,7 +589,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}"
               android:visibility="@{View.GONE}">
 

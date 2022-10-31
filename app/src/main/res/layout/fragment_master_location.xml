@@ -152,7 +152,7 @@
 
         <LinearLayout
           android:id="@+id/linear_master_location_freezer"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
           android:layout_marginTop="12dp"
           android:paddingEnd="0dp"
           android:paddingStart="16dp">

@@ -45,7 +45,7 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_stock"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
           <ImageView
             android:id="@+id/image_drawer_stock"
@@ -98,7 +98,7 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_shopping_list"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
           <ImageView
             android:id="@+id/image_drawer_shopping_list"
@@ -133,7 +133,7 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_recipes"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
           <ImageView
             android:id="@+id/image_drawer_recipes"
@@ -161,7 +161,7 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_chores"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
           <ImageView
             android:id="@+id/image_drawer_chores"
@@ -178,7 +178,7 @@
 
         <LinearLayout
           android:id="@+id/linear_drawer_tasks"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
           <ImageView
             android:id="@+id/image_drawer_tasks"
@@ -200,7 +200,7 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_master_data"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_master_data"
@@ -220,7 +220,7 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_settings"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_settings"
@@ -237,7 +237,7 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_feedback"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_feedback"
@@ -253,7 +253,7 @@
 
       <LinearLayout
         android:id="@+id/linear_drawer_help"
-        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable">
+        style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
         <ImageView
           android:id="@+id/image_drawer_help"

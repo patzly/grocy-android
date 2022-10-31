@@ -128,7 +128,7 @@
           </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false">
@@ -245,7 +245,7 @@
           </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_OPENED)}"
             android:onLongClick="@{() -> fragment.showInputDateBottomSheet(formData.DUE_DAYS_OPENED)}">
@@ -290,7 +290,7 @@
           </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
             android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_FREEZING_TRACKING) ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.showInputNumberBottomSheet(formData.DUE_DAYS_FREEZING)}"
             android:onLongClick="@{() -> fragment.showInputDateBottomSheet(formData.DUE_DAYS_FREEZING)}">

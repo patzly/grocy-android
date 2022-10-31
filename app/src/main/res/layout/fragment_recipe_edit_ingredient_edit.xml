@@ -210,7 +210,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{v -> switchOnlyCheckSingleUnitInStock.setChecked(!switchOnlyCheckSingleUnitInStock.isChecked())}">
@@ -306,7 +306,7 @@
 
             <LinearLayout
               android:id="@+id/category_quantity_unit"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:animateLayoutChanges="true"
@@ -364,7 +364,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{v -> switchDoNotCheckStockFulfillment.setChecked(!switchDoNotCheckStockFulfillment.isChecked())}">
