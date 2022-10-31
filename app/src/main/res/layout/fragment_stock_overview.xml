@@ -152,9 +152,12 @@
 
           <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/container_scanner"
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="4dp"
             android:visibility="@{viewModel.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
             android:onClick="@{() -> fragment.toggleTorch()}"/>
 

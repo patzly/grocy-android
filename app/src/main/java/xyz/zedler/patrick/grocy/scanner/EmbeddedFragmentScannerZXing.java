@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.scanner;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -27,10 +28,8 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import androidx.annotation.ColorRes;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -41,11 +40,11 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.journeyapps.barcodescanner.camera.CameraSettings.FocusMode;
 import java.util.ArrayList;
 import java.util.Set;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
 import xyz.zedler.patrick.grocy.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.scanner.ZXingScanCaptureManager.BarcodeListener;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implements
@@ -66,7 +65,6 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
       Fragment fragment,
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
-      @ColorRes int viewfinderMaskColor,
       boolean qrCodeFormat,
       boolean takeSmallQrCodeFormat
   ) {
@@ -76,8 +74,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     this.qrCodeFormat = qrCodeFormat;
 
     // set container size
-    int width;
-    int height;
+    int width, height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
       width = UiUtil.dpToPx(fragment.requireContext(), 250);
       height = UiUtil.dpToPx(fragment.requireContext(), 250);
@@ -85,15 +82,19 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
       width = UiUtil.dpToPx(fragment.requireContext(), 180);
       height = UiUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UiUtil.dpToPx(fragment.requireContext(), 350);
-      height = UiUtil.dpToPx(fragment.requireContext(), 160);
+      width = ViewGroup.LayoutParams.MATCH_PARENT;
+      height = UiUtil.dpToPx(fragment.requireContext(), 140);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
-      LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
+      LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(
+          width, height
+      );
       layoutParamsContainer.gravity = Gravity.CENTER;
       containerScanner.setLayoutParams(layoutParamsContainer);
     } else if (containerScanner.getParent() instanceof RelativeLayout) {
-      RelativeLayout.LayoutParams layoutParamsContainer = new RelativeLayout.LayoutParams(width, height);
+      RelativeLayout.LayoutParams layoutParamsContainer = new RelativeLayout.LayoutParams(
+          width, height
+      );
       layoutParamsContainer.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
       containerScanner.setLayoutParams(layoutParamsContainer);
       ((RelativeLayout) containerScanner.getParent()).setGravity(Gravity.CENTER_HORIZONTAL);
@@ -114,9 +115,7 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     }
     containerScanner.addView(viewStub);
     barcodeView = (DecoratedBarcodeView) viewStub.inflate();
-    barcodeView.getViewFinder().setMaskColor(
-        ContextCompat.getColor(fragment.requireContext(), viewfinderMaskColor)
-    );
+    barcodeView.getViewFinder().setMaskColor(Color.TRANSPARENT);
 
     barcodeView.setTorchListener(new TorchListener() {
       @Override

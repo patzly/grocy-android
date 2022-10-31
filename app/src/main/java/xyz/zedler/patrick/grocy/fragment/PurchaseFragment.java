@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,10 +31,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
 import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.ShoppingListItemAdapter;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentPurchaseBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
@@ -54,6 +57,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.PurchaseViewModel;
 
@@ -109,6 +113,14 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     binding.setFormData(viewModel.getFormData());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
     // INITIALIZE VIEWS
@@ -125,12 +137,11 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
     );
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isDownloading ->
-        binding.swipePurchase.setRefreshing(isDownloading)
+        binding.swipe.setRefreshing(isDownloading)
     );
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.TRANSACTION_SUCCESS) {
@@ -162,7 +173,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        navigate(PurchaseFragmentDirections
+        activity.navigateFragment(PurchaseFragmentDirections
             .actionPurchaseFragmentToChooseProductFragment(barcode)
             .setPendingProductsActive(viewModel.isQuickModeEnabled()));
       }
@@ -229,6 +240,25 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
             ? backFromChooseProductPage : false
     );
 
+    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    viewModel.getQuickModeEnabled().observe(
+        getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
+            value ? roles.getAccent() : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+        )
+    );
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputPurchasePrice.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    viewModel.getFormData().getDueDateErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textDueDate.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuantityUnitErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+
     // following lines are necessary because no observers are set in Views
     viewModel.getFormData().getPriceStockLive().observe(getViewLifecycleOwner(), i -> {
     });
@@ -241,14 +271,10 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     focusProductInputIfNecessary();
 
-    setHasOptionsMenu(true);
+    // UPDATE UI
 
-    updateUI(args.getAnimateStart() && savedInstanceState == null);
-  }
-
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_purchase);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         args.getShoppingListItems() != null
@@ -261,7 +287,7 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
             : R.drawable.ic_round_local_grocery_store,
         R.string.action_purchase,
         Constants.FAB.TAG.PURCHASE,
-        animated,
+        args.getAnimateStart() && savedInstanceState == null,
         () -> {
           if (viewModel.isQuickModeEnabled()
               && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {
@@ -385,7 +411,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void navigateToPendingProductsPage() {
-    navigate(PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment());
+    activity.navigateFragment(
+        PurchaseFragmentDirections.actionPurchaseFragmentToPendingPurchasesFragment()
+    );
   }
 
   public void clearFocusAndCheckProductInput() {

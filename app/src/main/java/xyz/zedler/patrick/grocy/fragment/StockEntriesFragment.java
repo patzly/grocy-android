@@ -80,8 +80,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
         this,
         binding.containerScanner,
-        this,
-        R.color.primary
+        this
     );
     return binding.getRoot();
   }

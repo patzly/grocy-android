@@ -399,6 +399,11 @@
     <item name="android:textAlignment">viewStart</item>
   </style>
 
+  <style name="Widget.Grocy.CheckBox.Dense" parent="Widget.Material3.CompoundButton.CheckBox">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
   <!-- Radio Button -->
 
   <style
@@ -573,6 +578,13 @@
   </style>
 
   <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.More"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
+  </style>
+
+  <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
   </style>
@@ -582,6 +594,13 @@
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/ripple_list_item_bg</item>
+  </style>
+
+  <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
+    <item name="android:paddingTop">12dp</item>
+    <item name="android:paddingBottom">12dp</item>
   </style>
 
   <style

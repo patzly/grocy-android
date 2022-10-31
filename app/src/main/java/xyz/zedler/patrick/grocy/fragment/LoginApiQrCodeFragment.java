@@ -62,7 +62,6 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
         this,
         binding.containerScanner,
         this,
-        R.color.background,
         true,
         false
     );

@@ -80,7 +80,7 @@ public class StockOverviewFragment extends BaseFragment implements
   ) {
     binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this, binding.containerScanner, this, R.color.primary
+        this, binding.containerScanner, this
     );
     return binding.getRoot();
   }

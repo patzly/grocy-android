@@ -77,7 +77,7 @@
             style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@{viewModel.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+            android:src="@{viewModel.displayHelpLive ? @drawable/ic_round_help : @drawable/ic_round_help_outline_anim}" />
 
         </FrameLayout>
 
