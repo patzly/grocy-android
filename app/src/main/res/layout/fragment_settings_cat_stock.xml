@@ -45,71 +45,34 @@
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{v -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/app_bar_title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="@string/category_stock" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/category_stock" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
       <LinearLayout
-        android:id="@+id/linear_body"
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:orientation="vertical">
 
         <TextView
@@ -213,7 +176,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchTreatOpened.setChecked(!switchTreatOpened.isChecked())}"
@@ -269,7 +232,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchIndicator.setChecked(!switchIndicator.isChecked())}">
@@ -330,27 +293,25 @@
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
+          style="@style/Widget.Grocy.Card.Text"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
           android:layout_marginBottom="8dp"
-          android:layout_marginTop="8dp"
-          app:contentPadding="16dp"
-          app:cardElevation="0dp"
-          app:cardCornerRadius="12dp"
-          app:cardBackgroundColor="@color/on_background_variant">
+          android:layout_marginTop="8dp">
 
           <TextView
             style="@style/Widget.Grocy.TextView.Paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:text="@string/msg_help_purchased_date_settings" />
 
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchPurchaseDate.setChecked(!switchPurchaseDate.isChecked())}">
@@ -385,7 +346,7 @@
           android:text="@string/title_consume" />
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
           android:onClick="@{() -> viewModel.showDefaultConsumeAmountBottomSheet()}"
           clickUtil="@{clickUtil}"
           iconToAnimate="@{imageDefaultAmountConsume}">
@@ -411,7 +372,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchQuickConsumeAmount.setChecked(!switchQuickConsumeAmount.isChecked())}">

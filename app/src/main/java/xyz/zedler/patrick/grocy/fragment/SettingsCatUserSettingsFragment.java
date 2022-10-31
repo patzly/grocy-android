@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatUserSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.Constants;
@@ -51,6 +52,14 @@ public class SettingsCatUserSettingsFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     return binding.getRoot();
   }
 
@@ -63,8 +72,10 @@ public class SettingsCatUserSettingsFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-      activity.getScrollBehaviorOld().setHideOnScroll(true);
+      activity.getScrollBehavior().setUpScroll(
+          binding.appBar, true, binding.scroll, false
+      );
+      activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }

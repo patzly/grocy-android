@@ -29,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatShoppingListBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -72,10 +73,16 @@ public class SettingsCatShoppingListFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.BOTTOM_SHEET) {
@@ -85,8 +92,10 @@ public class SettingsCatShoppingListFragment extends BaseFragment {
     });
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-      activity.getScrollBehaviorOld().setHideOnScroll(true);
+      activity.getScrollBehavior().setUpScroll(
+          binding.appBar, true, binding.scroll, false
+      );
+      activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }

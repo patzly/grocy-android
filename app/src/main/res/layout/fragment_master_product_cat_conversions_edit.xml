@@ -174,7 +174,6 @@
                   android:hint="@string/property_factor"
                   app:helperTextEnabled="true"
                   app:helperText="@{formData.factorHelperLive ?? ` `}"
-                  app:helperTextTextColor="@color/retro_blue_fg"
                   app:errorText="@{formData.factorErrorLive}"
                   app:endIconMode="clear_text"
                   app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">

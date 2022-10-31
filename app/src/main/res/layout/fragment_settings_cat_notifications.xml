@@ -40,72 +40,34 @@
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/app_bar_title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="Notifications" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/title_notifications" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
-      android:overScrollMode="never"
-      android:fillViewport="true">
+      android:overScrollMode="never">
 
       <LinearLayout
-        android:id="@+id/linear_body"
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:orientation="vertical"
         android:animateLayoutChanges="true"
         app:transitionTypeChanging="@{true}">
@@ -115,7 +77,7 @@
           android:text="@string/setting_notifications_due_soon" />
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchStockEnableNotifications.setChecked(!switchStockEnableNotifications.isChecked())}">
@@ -141,34 +103,34 @@
             android:id="@+id/switch_stock_enable_notifications"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setDueSoonNotificationsEnabled(checked)}"
-            app:initialChecked="@{viewModel.getDueSoonNotificationsEnabled()}"/>
+            app:initialChecked="@{viewModel.getDueSoonNotificationsEnabled()}" />
 
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           app:clickUtil="@{clickUtil}"
           android:visibility="@{viewModel.dueSoonNotificationsEnabledLive ? View.VISIBLE : View.GONE}"
           android:onClick="@{() -> fragment.showDueSoonTimePickerDialog()}">
 
           <ImageView
-              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_schedule"
-              tools:ignore="ContentDescription" />
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            android:src="@drawable/ic_round_schedule"
+            tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
             <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                android:text="@string/setting_notification_time" />
+              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+              android:text="@string/setting_notification_time" />
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.dueSoonNotificationsTimeTextLive}"/>
+              android:text="@{viewModel.dueSoonNotificationsTimeTextLive}" />
 
             <TextView
-                style="@style/Widget.Grocy.TextView.ListItem.Description"
-                android:text="@string/setting_notification_time_description"/>
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_notification_time_description" />
 
           </LinearLayout>
 
@@ -180,11 +142,11 @@
 
         <TextView
           style="@style/Widget.Grocy.TextView.ListItem.Description"
-          android:layout_height="wrap_content"
           android:layout_width="wrap_content"
-          android:layout_marginHorizontal="72dp"
-          android:layout_marginTop="16dp"
-          android:text="Coming soon..." />
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginStart="56dp"
+          android:text="@string/msg_coming_soon" />
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
@@ -214,7 +176,7 @@
             android:id="@+id/switch_chores_enable_notifications"
             style="@style/Widget.Grocy.Switch"
             android:onCheckedChanged="@{(view, checked) -> viewModel.setChoresNotificationsEnabled(checked)}"
-            app:initialChecked="@{viewModel.getChoresNotificationsEnabled()}"/>
+            app:initialChecked="@{viewModel.getChoresNotificationsEnabled()}" />
 
         </LinearLayout>
 
@@ -237,11 +199,11 @@
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.choresNotificationsTimeTextLive}"/>
+              android:text="@{viewModel.choresNotificationsTimeTextLive}" />
 
             <TextView
               style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_notification_time_description"/>
+              android:text="@string/setting_notification_time_description" />
 
           </LinearLayout>
 

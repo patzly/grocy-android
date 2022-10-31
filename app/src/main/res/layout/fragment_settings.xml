@@ -228,7 +228,7 @@
 
         <LinearLayout
           style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView

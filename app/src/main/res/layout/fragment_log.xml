@@ -17,7 +17,7 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
     <import type="android.view.View" />
@@ -30,63 +30,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
-      android:id="@+id/app_bar_log"
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_log_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_log_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:layout_weight="1"
-          android:text="@string/title_logs" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/title_logs" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-      android:id="@+id/scroll_log"
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
-      android:layout_marginBottom="?attr/actionBarSize"
       android:scrollbars="vertical"
       android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
 
@@ -97,15 +60,22 @@
         android:scrollbars="horizontal"
         android:scrollbarThumbHorizontal="@drawable/shape_scrollbar_rounded">
 
-        <TextView
-          android:id="@+id/text_log"
+        <FrameLayout
+          android:id="@+id/frame_container"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/on_background"
-          android:textSize="8.5sp"
-          android:textIsSelectable="true"
-          android:padding="16dp"
-          tools:ignore="SmallSp" />
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="8.5sp"
+            android:textColor="?attr/colorOnBackground"
+            android:textIsSelectable="true"
+            android:padding="16dp"
+            tools:ignore="SmallSp" />
+
+        </FrameLayout>
 
       </HorizontalScrollView>
 

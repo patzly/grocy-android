@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
 import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -133,6 +135,9 @@ public class MasterProductCatConversionsEditFragment extends BaseFragment {
       ) : null;
       viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
     });
+
+    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    binding.textInputFactor.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
 
     // necessary because else getValue() doesn't give current value (?)
     viewModel.getFormData().getQuantityUnitsLive().observe(getViewLifecycleOwner(), qUs -> {
