@@ -425,6 +425,10 @@
     <item name="android:layout_marginStart">16dp</item>
   </style>
 
+  <style name="Widget.Grocy.Switch.Dense" parent="Widget.Grocy.Switch">
+    <item name="android:minHeight">40dp</item>
+  </style>
+
   <!-- NumberPicker -->
 
   <style name="Widget.Grocy.DatePicker" parent="">
