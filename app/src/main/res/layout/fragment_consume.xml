@@ -182,11 +182,8 @@
               android:focusableInTouchMode="true"/>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.More"
-              android:paddingTop="8dp"
-              android:paddingBottom="0dp"
-              android:paddingStart="16dp"
-              android:paddingEnd="16dp">
+              style="@style/Widget.Grocy.LinearLayout.ListItem"
+              android:paddingTop="8dp">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -235,7 +232,7 @@
 
               <xyz.zedler.patrick.grocy.view.InputChip
                 android:id="@+id/barcode_chip"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:text="@={formData.barcodeLive}" />
 
@@ -245,12 +242,8 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
               android:onClick="@{() -> checkboxExactAmount.setChecked(!checkboxExactAmount.isChecked())}"
               android:visibility="@{formData.isTareWeightEnabledLive ? View.VISIBLE : View.GONE}"
-              android:paddingStart="16dp"
-              android:paddingEnd="8dp">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                tools:ignore="ContentDescription" />
+              android:paddingStart="56dp"
+              android:paddingEnd="9dp">
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -320,11 +313,10 @@
               transitionTypeChanging="@{true}">
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:paddingTop="4dp"
-                android:paddingBottom="0dp"
+                android:paddingTop="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:animateLayoutChanges="true"
@@ -366,14 +358,14 @@
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_more"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_less" />
 
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_less"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginEnd="4dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_more" />
@@ -408,7 +400,7 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
               android:onClick="@{() -> checkboxSpoiled.setChecked(!checkboxSpoiled.isChecked())}"
               android:paddingStart="16dp"
-              android:paddingEnd="8dp">
+              android:paddingEnd="9dp">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -436,7 +428,7 @@
               android:onClick="@{() -> checkboxOpen.setChecked(!checkboxOpen.isChecked())}"
               android:visibility="@{formData.openVisibilityLive &amp;&amp; viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_OPENED_TRACKING) ? View.VISIBLE : View.GONE}"
               android:paddingStart="16dp"
-              android:paddingEnd="8dp">
+              android:paddingEnd="9dp">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -462,7 +454,7 @@
               style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
               android:onClick="@{() -> checkboxSpecific.setChecked(!checkboxSpecific.isChecked())}"
               android:paddingStart="16dp"
-              android:paddingEnd="8dp">
+              android:paddingEnd="9dp">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"

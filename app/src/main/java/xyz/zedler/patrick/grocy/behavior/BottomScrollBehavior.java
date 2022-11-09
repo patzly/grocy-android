@@ -246,7 +246,7 @@ public class BottomScrollBehavior {
   }
 
   private void measureScrollView() {
-    if (scrollView == null || !(scrollView instanceof RecyclerView)) {
+    if (scrollView == null || scrollView instanceof RecyclerView) {
       return;
     }
     ViewTreeObserver observer = scrollView.getViewTreeObserver();

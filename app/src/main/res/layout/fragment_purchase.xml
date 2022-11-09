@@ -266,11 +266,8 @@
               android:focusableInTouchMode="true" />
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-              android:paddingTop="8dp"
-              android:paddingBottom="0dp"
-              android:paddingStart="16dp"
-              android:paddingEnd="16dp">
+              style="@style/Widget.Grocy.LinearLayout.ListItem"
+              android:paddingTop="8dp">
 
               <ImageView
                 android:id="@+id/image_purchase_product"
@@ -317,7 +314,7 @@
 
               <xyz.zedler.patrick.grocy.view.InputChip
                 android:id="@+id/barcode_chip"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:text="@={formData.barcodeLive}" />
 
@@ -376,11 +373,10 @@
               transitionTypeChanging="@{true}">
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
-                android:paddingBottom="0dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:animateLayoutChanges="true"
@@ -390,7 +386,7 @@
                   android:id="@+id/image_amount"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                   android:src="@{formData.isTareWeightEnabledLive ? @drawable/ic_round_scale_anim : @drawable/ic_round_scatter_plot_anim}"
-                  android:layout_marginBottom="4dp"
+                  android:layout_marginBottom="10dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -422,14 +418,14 @@
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_more"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_less" />
 
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_less"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginEnd="4dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_more" />
@@ -509,11 +505,10 @@
               transitionTypeChanging="@{true}">
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
-                android:paddingBottom="0dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:animateLayoutChanges="true"
@@ -523,7 +518,7 @@
                   android:id="@+id/image_price"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                   android:src="@drawable/ic_round_cash_multiple"
-                  android:layout_marginBottom="4dp"
+                  android:layout_marginBottom="10dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -552,14 +547,14 @@
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_purchase_price_more"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:onClick="@{() -> formData.morePrice()}"
                 app:icon="@drawable/ic_round_expand_less" />
 
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_purchase_price_less"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="5dp"
                 android:layout_marginEnd="4dp"
                 android:onClick="@{() -> formData.lessPrice()}"
                 app:icon="@drawable/ic_round_expand_more" />
@@ -568,22 +563,21 @@
 
             <LinearLayout
               android:id="@+id/linear_purchase_total_price"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:background="@null"
+              style="@style/Widget.Grocy.LinearLayout.ListItem"
               android:paddingTop="0dp"
               android:paddingBottom="0dp"
               android:paddingStart="0dp"
               android:paddingEnd="0dp"
-              android:layout_marginStart="72dp"
+              android:layout_marginStart="56dp"
               android:weightSum="2"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_PRICE_TRACKING) &amp;&amp; formData.priceLive != null &amp;&amp; !formData.priceLive.empty ? View.VISIBLE : View.GONE}">
 
               <com.google.android.material.radiobutton.MaterialRadioButton
                 style="@style/Widget.Grocy.RadioButton"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingEnd="12dp"
+                android:paddingEnd="4dp"
                 android:paddingStart="0dp"
                 android:text="@{formData.unitPriceTextLive ?? @string/title_unit_price}"
                 android:checked="@{!formData.isTotalPriceLive}"
@@ -592,9 +586,9 @@
               <com.google.android.material.radiobutton.MaterialRadioButton
                 style="@style/Widget.Grocy.RadioButton"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingEnd="12dp"
+                android:paddingEnd="16dp"
                 android:paddingStart="0dp"
                 android:text="@string/title_total_price"
                 android:checked="@{formData.isTotalPriceLive}"
