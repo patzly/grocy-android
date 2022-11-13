@@ -27,13 +27,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -76,7 +75,7 @@ public class SettingsFragment extends BaseFragment {
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
+          binding.appBar, false, binding.scroll, false
       );
       activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);

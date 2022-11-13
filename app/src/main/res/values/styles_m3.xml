@@ -20,8 +20,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- For languages not supported by Jost*, the system font will be used as fallback.
-       If the Jost* Medium is used, the system will automatically switch to the font-xx folder for
-       the unsupported language where Roboto Medium is used instead.
+       If the system font is used, the medium variant of Jost* won't be replaced by a medium/bold
+       variant of the system font, so we have to configure these texts to be styled bold for these
+       locales with textStyle="bold".
+       Untranslated text (names or untranslated strings) with textStyle set to bold will look like
+       the medium variant of Jost*, so there is no extra attention needed for e.g. the app bar.
        Affected languages: Hebrew,... TODO: any other? -->
 
   <style name="ThemeOverlay.Grocy.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
@@ -33,8 +36,9 @@
   </style>
 
   <style name="ThemeOverlay.Grocy.AlertDialog.Caution" parent="ThemeOverlay.Grocy.AlertDialog">
-    <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.UnelevatedButton.Dialog.Caution</item>
+    <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog.Caution</item>
     <item name="buttonBarNegativeButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog.Caution</item>
+    <item name="buttonBarNeutralButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog</item>
   </style>
 
   <!-- Prevents title from being displayed with smaller text size when it's long -->
@@ -122,14 +126,6 @@
     parent="Base.Grocy.Button.UnelevatedButton">
     <item name="android:fontFamily">@font/jost_medium</item>
     <item name="fontFamily">@font/jost_medium</item>
-  </style>
-
-  <style
-    name="Widget.Grocy.Button.UnelevatedButton.Dialog.Caution"
-    parent="Widget.Grocy.Button.TextButton.Dialog">
-    <item name="android:textColor">?attr/colorOnError</item>
-    <item name="backgroundTint">?attr/colorError</item>
-    <item name="rippleColor">@color/selector_highlight_error_container</item>
   </style>
 
   <!-- Base style -->

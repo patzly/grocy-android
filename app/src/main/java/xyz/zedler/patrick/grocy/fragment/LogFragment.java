@@ -77,7 +77,7 @@ public class LogFragment extends BaseFragment {
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, true
+          binding.appBar, false, binding.scroll, true
       );
       activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_log, this::onMenuItemClick);

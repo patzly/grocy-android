@@ -163,25 +163,36 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-              android:id="@+id/container_scanner"
-              android:layout_width="350dp"
-              android:layout_height="160dp"
-              android:layout_gravity="center"
-              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.toggleTorch()}"/>
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp"
+              android:gravity="center"
+              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}">
+
+              <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/container_scanner"
+                android:layout_width="350dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:onClick="@{() -> fragment.toggleTorch()}"/>
+
+            </LinearLayout>
 
             <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
               android:paddingTop="8dp"
-              android:paddingBottom="0dp"
-              android:alpha="@{formData.parentProductEnabled ? 1.0f : 0.5f}">
+              android:paddingBottom="0dp">
 
               <ImageView
                 android:id="@+id/image_product"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 android:src="@drawable/ic_round_account_tree"
                 android:layout_marginBottom="10dp"
+                android:alpha="@{formData.parentProductEnabled ? 1.0f : 0.38f}"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout

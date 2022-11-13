@@ -93,7 +93,7 @@ public class SettingsCatShoppingListFragment extends BaseFragment {
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
+          binding.appBar, false, binding.scroll, false
       );
       activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);

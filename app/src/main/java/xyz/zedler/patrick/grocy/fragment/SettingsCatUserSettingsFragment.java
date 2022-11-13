@@ -73,7 +73,7 @@ public class SettingsCatUserSettingsFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
+          binding.appBar, false, binding.scroll, false
       );
       activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);

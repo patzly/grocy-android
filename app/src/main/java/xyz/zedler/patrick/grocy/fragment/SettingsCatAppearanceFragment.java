@@ -145,7 +145,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
+          binding.appBar, false, binding.scroll, false
       );
       activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);

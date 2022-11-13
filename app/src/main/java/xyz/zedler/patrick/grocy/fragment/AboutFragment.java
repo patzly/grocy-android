@@ -93,7 +93,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
     );
 
     activity.getScrollBehavior().setUpScroll(
-        binding.appBarAbout, true, binding.scrollAbout
+        binding.appBarAbout, false, binding.scrollAbout
     );
     boolean showBottomBar = activity.binding.bottomAppBar.getVisibility() == View.VISIBLE;
     activity.getScrollBehavior().setBottomBarVisibility(showBottomBar, !showBottomBar);
