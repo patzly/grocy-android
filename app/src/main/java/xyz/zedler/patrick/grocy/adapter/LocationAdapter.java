@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.Location;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
@@ -83,6 +86,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
       @NonNull final LocationAdapter.ViewHolder holder,
       int position
   ) {
+    Context context = holder.linearLayoutContainer.getContext();
     Location location = locations.get(holder.getAdapterPosition());
 
     // NAME
@@ -93,13 +97,20 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     if (location.getId() == selectedId) {
       holder.imageViewSelected.setVisibility(View.VISIBLE);
+      holder.textViewName.setTextColor(
+          ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer)
+      );
+      holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
+    } else {
+      holder.imageViewSelected.setVisibility(View.INVISIBLE);
+      holder.textViewName.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
+      holder.linearLayoutContainer.setOnClickListener(
+          view -> listener.onItemRowClicked(holder.getAdapterPosition())
+      );
+      holder.linearLayoutContainer.setBackground(
+          ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context)
+      );
     }
-
-    // CONTAINER
-
-    holder.linearLayoutContainer.setOnClickListener(
-        view -> listener.onItemRowClicked(holder.getAdapterPosition())
-    );
   }
 
   @Override
