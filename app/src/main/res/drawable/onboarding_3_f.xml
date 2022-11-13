@@ -25,8 +25,8 @@
   android:viewportHeight="24">
   <path
     android:pathData="M5,16.94l15.58,0.4 0.5,-0.66z"
-    android:fillColor="@color/retro_red" />
+    android:fillColor="@color/custom_red_35" />
   <path
     android:pathData="M8.73,14c-0.4,0 -0.73,0.33 -0.73,0.73v4.54c0,0.4 0.33,0.73 0.73,0.73h9.54c0.4,0 0.73,-0.33 0.73,-0.73v-4.54c0,-0.4 -0.33,-0.73 -0.73,-0.73zM8.8,14.25h9.4c0.31,0 0.56,0.26 0.56,0.57v4.36c0,0.31 -0.25,0.57 -0.57,0.57L8.8,19.75a0.57,0.57 0,0 1,-0.57 -0.57v-4.36c0,-0.31 0.26,-0.57 0.57,-0.57z"
-    android:fillColor="@color/on_background" />
+    android:fillColor="?attr/colorOnSurfaceVariant" />
 </vector>

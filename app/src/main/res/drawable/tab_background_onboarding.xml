@@ -24,9 +24,11 @@
     android:left="4dp"
     android:right="4dp">
 
-    <shape android:shape="oval">
+    <shape android:shape="rectangle">
 
-      <solid android:color="@color/stroke_secondary" />
+      <solid android:color="?attr/colorSurfaceVariant" />
+
+      <corners android:radius="4dp" />
 
       <size
         android:width="8dp"

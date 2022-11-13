@@ -39,6 +39,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.HashMap;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingBinding;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingPageBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -78,18 +79,22 @@ public class OnboardingFragment extends BaseFragment {
 
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-    binding.frameOnboardingPrevious.setOnClickListener(v -> {
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setContainer(binding.linearContainer);
+    systemBarBehavior.setUp();
+
+    binding.buttonOnboardingPrevious.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 0) {
         return;
       }
-      ViewUtil.startIcon(binding.imageOnboardingPrevious);
+      ViewUtil.startIcon(binding.buttonOnboardingPrevious.getIcon());
       binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() - 1);
     });
-    binding.frameOnboardingNext.setOnClickListener(v -> {
+    binding.buttonOnboardingNext.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 3) {
         return;
       }
-      ViewUtil.startIcon(binding.imageOnboardingNext);
+      ViewUtil.startIcon(binding.buttonOnboardingNext.getIcon());
       binding.pagerOnboarding.setCurrentItem(binding.pagerOnboarding.getCurrentItem() + 1);
     });
     setArrows(0, false);
@@ -159,6 +164,11 @@ public class OnboardingFragment extends BaseFragment {
     for (int i = 0; i < tabStrip.getChildCount(); i++) {
       tabStrip.getChildAt(i).setOnTouchListener((v, event) -> true);
     }
+
+    // UPDATE UI
+
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false);
   }
 
   @Override
@@ -174,7 +184,7 @@ public class OnboardingFragment extends BaseFragment {
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
     if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition
-      navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
+      activity.navigate(OnboardingFragmentDirections.actionOnboardingFragmentToNavigationLogin());
       return true;
     } else {
       return false;
@@ -183,18 +193,18 @@ public class OnboardingFragment extends BaseFragment {
 
   private void setArrows(int position, boolean animated) {
     if (animated) {
-      binding.frameOnboardingPrevious.animate().alpha(
+      binding.buttonOnboardingPrevious.animate().alpha(
           position > 0 ? 1 : 0
       ).setDuration(200).start();
-      binding.frameOnboardingNext.animate().alpha(
+      binding.buttonOnboardingNext.animate().alpha(
           position < 2 ? 1 : 0
       ).setDuration(200).start();
     } else {
-      binding.frameOnboardingPrevious.setAlpha(position > 0 ? 1 : 0);
-      binding.frameOnboardingNext.setAlpha(position < 2 ? 1 : 0);
+      binding.buttonOnboardingPrevious.setAlpha(position > 0 ? 1 : 0);
+      binding.buttonOnboardingNext.setAlpha(position < 2 ? 1 : 0);
     }
-    binding.frameOnboardingPrevious.setEnabled(position > 0);
-    binding.frameOnboardingNext.setEnabled(position < 2);
+    binding.buttonOnboardingPrevious.setEnabled(position > 0);
+    binding.buttonOnboardingNext.setEnabled(position < 2);
   }
 
   private void setOffset(int targetPos, int scrollPos, float offset) {
@@ -329,9 +339,6 @@ public class OnboardingFragment extends BaseFragment {
 
     public void setOffset(int position, float offset) {
       if (binding == null) {
-        return;
-      }
-      if (binding.imageOnboardingFront == null || binding.imageOnboardingBack == null) {
         return;
       }
       int frontOffset = 200, backOffset = -200;

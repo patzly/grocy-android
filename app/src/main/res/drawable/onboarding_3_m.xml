@@ -29,10 +29,10 @@
     android:fillAlpha="0.4" />
   <path
     android:pathData="M8,7a1,1 0,0 0,-1 1v2h10V8a1,1 0,0 0,-1 -1z"
-    android:fillColor="@color/retro_green" />
+    android:fillColor="?attr/colorPrimary" />
   <path
     android:pathData="M7,12v6a1,1 0,0 0,1 1h8a1,1 0,0 0,1 -1v-6z"
-    android:fillColor="@color/retro_yellow" />
+    android:fillColor="@color/custom_yellow_80" />
   <path
     android:pathData="M9,13h8v5H9z"
     android:fillColor="@color/white" />

@@ -21,10 +21,11 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/linear_container"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/background"
+  android:background="?android:attr/colorBackground"
   android:gravity="center_horizontal">
 
   <androidx.viewpager2.widget.ViewPager2
@@ -72,28 +73,14 @@
     android:gravity="center_vertical"
     android:baselineAligned="false">
 
-    <FrameLayout
-      android:id="@+id/frame_onboarding_previous"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
-      android:layout_marginStart="16dp"
-      android:background="?attr/actionBarItemBackground"
-      android:clickable="true"
-      android:gravity="start|center_vertical"
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/button_onboarding_previous"
+      style="@style/Widget.Grocy.Button.IconButton"
       android:contentDescription="@string/action_prev"
       android:tooltipText="@string/action_prev"
-      android:focusable="true"
-      tools:targetApi="o">
-
-      <ImageView
-        android:id="@+id/image_onboarding_previous"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_round_chevron_left_anim" />
-
-    </FrameLayout>
+      android:layout_marginStart="16dp"
+      app:icon="@drawable/ic_round_chevron_left_anim"
+      tools:targetApi="o" />
 
     <LinearLayout
       android:layout_width="0dp"
@@ -106,37 +93,18 @@
         style="@style/Widget.Grocy.TabLayout.PageIndicator"
         android:layout_width="wrap_content"
         android:layout_height="8dp"
-        android:background="@null"
-        app:tabMaxWidth="16dp"
-        app:tabIndicatorFullWidth="true"
-        app:tabIndicator="@drawable/tab_indicator_onboarding"
-        app:tabIndicatorColor="@color/secondary"
-        app:tabBackground="@drawable/tab_background_onboarding" />
+        app:tabMaxWidth="16dp" />
 
     </LinearLayout>
 
-    <FrameLayout
-      android:id="@+id/frame_onboarding_next"
-      android:layout_width="48dp"
-      android:layout_height="48dp"
-      android:layout_marginEnd="16dp"
-      android:background="?attr/actionBarItemBackground"
-      android:clickable="true"
-      android:gravity="end"
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/button_onboarding_next"
+      style="@style/Widget.Grocy.Button.IconButton"
       android:contentDescription="@string/action_next"
       android:tooltipText="@string/action_next"
-      android:focusable="true"
-      tools:targetApi="o">
-
-      <ImageView
-        android:id="@+id/image_onboarding_next"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_round_chevron_right_anim" />
-
-    </FrameLayout>
+      android:layout_marginEnd="16dp"
+      app:icon="@drawable/ic_round_chevron_right_anim"
+      tools:targetApi="o" />
 
   </LinearLayout>
 

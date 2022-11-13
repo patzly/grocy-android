@@ -201,6 +201,13 @@ public class BottomScrollBehavior {
     setUpScroll(appBar, liftOnScroll, scrollView, true);
   }
 
+  public void setProvideTopScroll(boolean provideTopScroll) {
+    this.provideTopScroll = provideTopScroll;
+    if (fabTopScroll != null && !provideTopScroll) {
+      fabTopScroll.hide();
+    }
+  }
+
   public void setBottomBarVisibility(boolean visible, boolean stay, boolean animated) {
     bottomAppBar.setHideOnScroll(!stay);
     new Handler(Looper.getMainLooper()).post(() -> {

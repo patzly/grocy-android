@@ -74,17 +74,6 @@
     <item name="android:minHeight">0dp</item>
   </style-->
 
-  <!-- TAB LAYOUT -->
-
-  <style
-    name="Widget.Grocy.TabLayout.PageIndicator"
-    parent="@style/Widget.MaterialComponents.TabLayout">
-    <item name="android:background">@color/primary</item>
-    <item name="tabIndicatorColor">@color/secondary</item>
-    <item name="tabIndicatorFullWidth">false</item>
-    <item name="tabRippleColor">@color/highlight</item>
-  </style>
-
   <!-- BUTTON -->
 
   <!--style

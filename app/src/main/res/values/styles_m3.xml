@@ -385,6 +385,15 @@
     <item name="android:layout_width">56dp</item>
   </style>
 
+  <!-- TAB LAYOUT -->
+
+  <style name="Widget.Grocy.TabLayout.PageIndicator" parent="@style/Widget.Material3.TabLayout">
+    <item name="tabIndicator">@drawable/tab_indicator_onboarding</item>
+    <item name="tabBackground">@drawable/tab_background_onboarding</item>
+    <item name="tabIndicatorFullWidth">true</item>
+    <item name="android:background">@null</item>
+  </style>
+
   <!-- CheckBox -->
 
   <style name="Widget.Grocy.CheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
