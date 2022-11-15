@@ -246,7 +246,7 @@
     parent="Widget.Material3.Button.IconButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    <item name="iconTint">@color/selector_icon_button_icon_color</item>
     <item name="iconSize">24dp</item>
   </style>
 
@@ -263,7 +263,6 @@
     parent="Widget.Material3.Button.IconButton.Outlined">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="iconTint">?attr/colorOnSurfaceVariant</item>
     <item name="iconSize">24dp</item>
   </style>
 

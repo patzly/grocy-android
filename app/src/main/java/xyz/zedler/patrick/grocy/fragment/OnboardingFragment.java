@@ -342,7 +342,7 @@ public class OnboardingFragment extends BaseFragment {
         return;
       }
       int frontOffset = 200, backOffset = -200;
-      int rotation = 100;
+      int rotation = 90;
       int titleOffset = 150;
       binding.imageOnboardingFront.setTranslationX(
           position == this.position
