@@ -251,7 +251,7 @@
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:paddingTop="8dp"
+                android:paddingTop="4dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp">
 

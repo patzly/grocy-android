@@ -65,6 +65,7 @@ import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -149,6 +150,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     // TOOLBAR
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     boolean isInStock = stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
