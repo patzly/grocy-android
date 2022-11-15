@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -34,9 +35,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
 import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentShoppingListItemEditBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSheet;
@@ -55,6 +58,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.ShoppingListItemEditViewModel;
 
@@ -99,10 +103,18 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
+        Snackbar snack = message.getSnackbar(activity.binding.coordinatorMain);
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -146,6 +158,14 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       }
     });
 
+    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    viewModel.getFormData().getQuantityUnitErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+
     viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
       InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
           InfoFullscreen.ERROR_OFFLINE,
@@ -187,12 +207,10 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(args.getAnimateStart() && savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_shopping_list_item_edit);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
@@ -204,7 +222,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        args.getAnimateStart() && savedInstanceState == null,
         () -> {
           if (!viewModel.getFormData().isProductNameValid()) {
             clearFocusAndCheckProductInput();
@@ -275,7 +293,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     binding.textInputProduct.clearFocus();
     binding.textInputAmount.clearFocus();
     binding.textInputNote.clearFocus();
-    binding.shoppingListContainer.clearFocus();
+    binding.linearContainerScroll.clearFocus();
     binding.quantityUnitContainer.clearFocus();
   }
 
