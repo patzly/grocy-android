@@ -31,14 +31,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/title_confirmation" />
+    <com.google.android.material.appbar.MaterialToolbar
+      style="@style/Widget.Grocy.Toolbar"
+      app:title="@string/title_confirmation" />
 
     <ProgressBar
       android:id="@+id/progress_timeout"
       android:layout_width="match_parent"
-      style="@style/Widget.Grocy.ProgressBar.Horizontal.Green"
+      style="@style/Widget.Grocy.ProgressBar.Horizontal.Primary"
       android:layout_gravity="bottom"
       android:indeterminate="false"
       android:max="100"
@@ -60,7 +60,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:padding="16dp"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="12dp"
       android:clickable="true"
       android:focusable="true">
 
@@ -79,20 +82,14 @@
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_cancel"
-          style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:backgroundTint="@color/retro_red_bg_white"
+          style="@style/Widget.Grocy.Button.TextButton"
           android:text="@string/action_cancel" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_proceed"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
-          android:text="@string/action_proceed"
-          app:backgroundTint="@color/retro_green_bg_white" />
+          android:text="@string/action_proceed" />
 
       </LinearLayout>
 

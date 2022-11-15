@@ -208,7 +208,7 @@ public class MasterObjectListFragment extends BaseFragment
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity, activity.binding.coordinatorMain);
+        Snackbar snackbar = msg.getSnackbar(activity.binding.coordinatorMain);
         activity.showSnackbar(snackbar);
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
@@ -298,27 +298,27 @@ public class MasterObjectListFragment extends BaseFragment
         () -> {
           switch (entity) {
             case GrocyApi.ENTITY.QUANTITY_UNITS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterQuantityUnitFragment());
               break;
             case GrocyApi.ENTITY.PRODUCT_GROUPS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductGroupFragment());
               break;
             case GrocyApi.ENTITY.LOCATIONS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterLocationFragment());
               break;
             case GrocyApi.ENTITY.STORES:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterStoreFragment());
               break;
             case GrocyApi.ENTITY.PRODUCTS:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterProductFragment(Constants.ACTION.CREATE));
               break;
             case ENTITY.TASK_CATEGORIES:
-              navigate(MasterObjectListFragmentDirections
+              activity.navigateFragment(MasterObjectListFragmentDirections
                   .actionMasterObjectListFragmentToMasterTaskCategoryFragment());
               break;
           }
@@ -379,27 +379,27 @@ public class MasterObjectListFragment extends BaseFragment
     }
     switch (entity) {
       case GrocyApi.ENTITY.QUANTITY_UNITS:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterQuantityUnitFragment()
             .setQuantityUnit((QuantityUnit) object));
         break;
       case GrocyApi.ENTITY.PRODUCT_GROUPS:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterProductGroupFragment()
             .setProductGroup((ProductGroup) object));
         break;
       case GrocyApi.ENTITY.LOCATIONS:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterLocationFragment()
             .setLocation((Location) object));
         break;
       case GrocyApi.ENTITY.STORES:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterStoreFragment()
             .setStore((Store) object));
         break;
       case GrocyApi.ENTITY.TASK_CATEGORIES:
-        navigate(MasterObjectListFragmentDirections
+        activity.navigateFragment(MasterObjectListFragmentDirections
             .actionMasterObjectListFragmentToMasterTaskCategoryFragment()
             .setTaskCategory((TaskCategory) object));
         break;

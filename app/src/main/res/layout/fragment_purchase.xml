@@ -309,7 +309,7 @@
               android:id="@+id/barcode_container"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingStart="68dp"
+              android:paddingStart="52dp"
               android:paddingEnd="16dp">
 
               <xyz.zedler.patrick.grocy.view.InputChip

@@ -22,35 +22,25 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.transition.TransitionManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetScanModeConfirmBinding;
 
 public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static int CONFIRMATION_DURATION = 3000;
   private final static String TAG = QuickModeConfirmBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetScanModeConfirmBinding binding;
   private MainActivity activity;
-
-  private ProgressBar progressTimeout;
   private ValueAnimator confirmProgressAnimator;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -58,33 +48,38 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_scan_mode_confirm, container, false
+    binding = FragmentBottomsheetScanModeConfirmBinding.inflate(
+        inflater, container, false
     );
 
     activity = (MainActivity) requireActivity();
     Bundle args = requireArguments();
 
-    view.findViewById(R.id.header).setOnClickListener(v -> hideAndStopProgress());
-    view.findViewById(R.id.container).setOnClickListener(v -> hideAndStopProgress());
-    view.findViewById(R.id.button_cancel).setOnClickListener(v -> {
+    binding.header.setOnClickListener(v -> hideAndStopProgress());
+    binding.container.setOnClickListener(v -> hideAndStopProgress());
+    binding.buttonCancel.setOnClickListener(v -> {
       activity.getCurrentFragment().interruptCurrentProductFlow();
       dismiss();
     });
-    view.findViewById(R.id.button_proceed).setOnClickListener(v -> {
+    binding.buttonProceed.setOnClickListener(v -> {
       activity.getCurrentFragment().startTransaction();
       dismiss();
     });
 
     String msg = args.getString(Constants.ARGUMENT.TEXT);
-    ((TextView) view.findViewById(R.id.text)).setText(msg);
+    binding.text.setText(msg);
 
-    progressTimeout = view.findViewById(R.id.progress_timeout);
     startProgress();
 
     setCancelable(false);
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
   }
 
   @Override
@@ -99,7 +94,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
   private void startProgress() {
     int startValue = 0;
     if (confirmProgressAnimator != null) {
-      startValue = progressTimeout.getProgress();
+      startValue = binding.progressTimeout.getProgress();
       if (startValue == 100) {
         startValue = 0;
       }
@@ -107,16 +102,16 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       confirmProgressAnimator.cancel();
       confirmProgressAnimator = null;
     }
-    confirmProgressAnimator = ValueAnimator.ofInt(startValue, progressTimeout.getMax());
+    confirmProgressAnimator = ValueAnimator.ofInt(startValue, binding.progressTimeout.getMax());
     confirmProgressAnimator.setDuration((long) CONFIRMATION_DURATION
-        * (progressTimeout.getMax() - startValue) / progressTimeout.getMax());
+        * (binding.progressTimeout.getMax() - startValue) / binding.progressTimeout.getMax());
     confirmProgressAnimator.addUpdateListener(
-        animation -> progressTimeout.setProgress((Integer) animation.getAnimatedValue())
+        animation -> binding.progressTimeout.setProgress((Integer) animation.getAnimatedValue())
     );
     confirmProgressAnimator.addListener(new AnimatorListenerAdapter() {
       @Override
       public void onAnimationEnd(Animator animation) {
-        if (progressTimeout.getProgress() != progressTimeout.getMax()) {
+        if (binding.progressTimeout.getProgress() != binding.progressTimeout.getMax()) {
           return;
         }
         activity.getCurrentFragment().startTransaction();
@@ -129,7 +124,14 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
   private void hideAndStopProgress() {
     confirmProgressAnimator.cancel();
     TransitionManager.beginDelayedTransition((ViewGroup) requireView());
-    progressTimeout.setVisibility(View.GONE);
+    binding.progressTimeout.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, bottom);
+    binding.container.setLayoutParams(params);
   }
 
   @NonNull

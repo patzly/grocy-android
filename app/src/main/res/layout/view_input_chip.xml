@@ -22,9 +22,9 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/frame_input_chip_container"
+  android:orientation="vertical"
   android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:minHeight="48dp"
+  android:layout_height="40dp"
   android:gravity="center">
 
   <com.google.android.material.card.MaterialCardView
@@ -33,10 +33,11 @@
     android:layout_gravity="center"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
-    app:cardCornerRadius="16dp"
-    app:strokeWidth="0dp"
+    app:cardCornerRadius="8dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutline"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/on_background_tertiary">
+    app:cardBackgroundColor="@color/transparent">
 
     <LinearLayout
       android:layout_width="wrap_content"
@@ -49,43 +50,37 @@
 
       <FrameLayout
         android:id="@+id/frame_input_chip_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp">
-
-        <ImageView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:src="@drawable/bg_chip_icon"
-          tools:ignore="ContentDescription" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp">
 
         <ImageView
           android:id="@+id/image_input_chip_icon"
-          android:layout_width="16dp"
-          android:layout_height="16dp"
-          android:layout_gravity="center"
-          tools:ignore="ContentDescription,UseAppTint"
-          android:tint="@color/icon" />
+          android:layout_width="18dp"
+          android:layout_height="18dp"
+          android:src="@drawable/ic_round_filter_list_in_anim"
+          app:tint="?attr/colorOnSurfaceVariant"
+          tools:ignore="ContentDescription" />
 
       </FrameLayout>
 
       <TextView
         android:id="@+id/text_input_chip"
+        style="@style/TextAppearance.Grocy.LabelLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:fontFamily="@font/jost_medium"
-        android:textColor="@color/on_background"
-        android:textSize="14sp" />
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/filter_chip_text_inactive" />
 
       <ImageView
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_round_cancel"
-        tools:ignore="ContentDescription,UseAppTint"
-        android:tint="@color/on_background_secondary" />
+        android:src="@drawable/ic_round_close"
+        tools:ignore="ContentDescription"
+        app:tint="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
 
@@ -93,9 +88,9 @@
 
   <View
     android:id="@+id/view_input_chip_close"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_gravity="end|center_vertical"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_gravity="end"
     android:clickable="true"
     android:focusable="true" />
 
