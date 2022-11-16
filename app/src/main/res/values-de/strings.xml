@@ -314,8 +314,9 @@
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)?</string>
   <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntferne den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
-  <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
-  <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
+  <string name="msg_welcome">Willkommen bei Grocy Android!</string>
+  <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
+  <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
   <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
   <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
   <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
