@@ -143,13 +143,11 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     );
     binding.partialOptionTransition.switchOtherTransition.setOnCheckedChangeListener(this);
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, false, binding.scroll, false
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-    }
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }

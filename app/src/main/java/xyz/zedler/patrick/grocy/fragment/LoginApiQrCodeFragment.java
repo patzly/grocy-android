@@ -162,7 +162,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
   }
 
   public void openHelpWebsite() {
-    boolean success = NetUtil.openURL(requireContext(), Constants.URL.HELP);
+    boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
     if (!success) {
       activity.showSnackbar(R.string.error_no_browser);
     }

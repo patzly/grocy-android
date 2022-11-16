@@ -244,45 +244,23 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   private void navigateCustom(NavDirections directions) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      NavOptions.Builder builder = new NavOptions.Builder();
-      builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-      builder.setPopUpTo(R.id.overviewStartFragment, false);
-      if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
-        builder.setExitAnim(R.anim.slide_out_down);
-      } else {
-        builder.setExitAnim(R.anim.slide_no);
-      }
-      navigate(directions, builder.build());
-    } else {
-      navigate(directions, getNavOptionsFragmentFade());
+    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(true);
+    builder.setPopUpTo(R.id.overviewStartFragment, false);
+    if (activity.getCurrentFragment() instanceof OverviewStartFragment) {
+      builder.setExitAnim(R.anim.slide_no);
     }
+    activity.navigate(directions, builder.build());
     dismiss();
   }
 
   @Override
   public void navigateDeepLink(@StringRes int uri) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      NavOptions.Builder builder = new NavOptions.Builder();
-      builder.setEnterAnim(R.anim.slide_in_up).setPopExitAnim(R.anim.slide_out_down);
-      builder.setPopUpTo(R.id.overviewStartFragment, false);
-      if (!(activity.getCurrentFragment() instanceof OverviewStartFragment)) {
-        builder.setExitAnim(R.anim.slide_out_down);
-      } else {
-        builder.setExitAnim(R.anim.slide_no);
-      }
-      findNavController().navigate(Uri.parse(getString(uri)), builder.build());
-    } else {
-      findNavController().navigate(Uri.parse(getString(uri)), getNavOptionsFragmentFade());
+    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(true);
+    builder.setPopUpTo(R.id.overviewStartFragment, false);
+    if (activity.getCurrentFragment() instanceof OverviewStartFragment) {
+      builder.setExitAnim(R.anim.slide_no);
     }
+    findNavController().navigate(Uri.parse(getString(uri)), builder.build());
     dismiss();
   }
 

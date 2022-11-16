@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
 
   // NAVIGATION
 
-  private NavOptions getNavOptionsFragmentFadeOrSlide(boolean slideVertically) {
+  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
     boolean useSliding = getSharedPrefs().getBoolean(
         Constants.SETTINGS.APPEARANCE.USE_SLIDING,
         Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
@@ -604,23 +604,20 @@ public class MainActivity extends AppCompatActivity {
         return new NavOptions.Builder()
             .setEnterAnim(R.anim.slide_in_up)
             .setPopExitAnim(R.anim.slide_out_down)
-            .setExitAnim(R.anim.slide_no)
-            .build();
+            .setExitAnim(R.anim.slide_no);
       } else {
         return new NavOptions.Builder()
             .setEnterAnim(R.anim.slide_from_end)
             .setPopExitAnim(R.anim.slide_to_end)
             .setPopEnterAnim(R.anim.slide_from_start)
-            .setExitAnim(R.anim.slide_to_start)
-            .build();
+            .setExitAnim(R.anim.slide_to_start);
       }
     } else {
       return new NavOptions.Builder()
           .setEnterAnim(R.anim.enter_end_fade)
           .setExitAnim(R.anim.exit_start_fade)
           .setPopEnterAnim(R.anim.enter_start_fade)
-          .setPopExitAnim(R.anim.exit_end_fade)
-          .build();
+          .setPopExitAnim(R.anim.exit_end_fade);
     }
   }
 
@@ -684,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
     }
     try {
       navController.navigate(
-          destination, arguments, getNavOptionsFragmentFadeOrSlide(true)
+          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
       );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
@@ -697,7 +694,9 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
     try {
-      navController.navigate(directions, getNavOptionsFragmentFadeOrSlide(true));
+      navController.navigate(
+          directions, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
+      );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigate: " + directions, e);
     }
@@ -721,7 +720,7 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
     try {
-      navController.navigate(uri, getNavOptionsFragmentFadeOrSlide(slideVertically));
+      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide(slideVertically).build());
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
     }

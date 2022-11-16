@@ -66,6 +66,7 @@ public class BottomScrollBehavior {
   private int currentState;
   private final int topScrollLimit;
   private boolean isTopScroll = false;
+  private boolean canBottomAppBarBeVisible;
 
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
@@ -117,6 +118,7 @@ public class BottomScrollBehavior {
     });
 
     topScrollLimit = UiUtil.dpToPx(context, 150);
+    canBottomAppBarBeVisible = true;
   }
 
   private void test(MainActivity activity) {
@@ -208,13 +210,24 @@ public class BottomScrollBehavior {
     }
   }
 
+  public void setCanBottomAppBarBeVisible(boolean canBeVisible) {
+    canBottomAppBarBeVisible = canBeVisible;
+  }
+
   public void setBottomBarVisibility(boolean visible, boolean stay, boolean animated) {
-    bottomAppBar.setHideOnScroll(!stay);
-    new Handler(Looper.getMainLooper()).post(() -> {
-      if (visible) {
-        bottomAppBar.performShow(animated);
-      } else {
-        bottomAppBar.performHide(animated);
+    bottomAppBar.setHideOnScroll(canBottomAppBarBeVisible && !stay);
+    ViewTreeObserver observer = bottomAppBar.getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        if (visible && canBottomAppBarBeVisible) {
+          bottomAppBar.performShow(animated);
+        } else {
+          bottomAppBar.performHide(animated);
+        }
+        if (bottomAppBar.getViewTreeObserver().isAlive()) {
+          bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
       }
     });
   }

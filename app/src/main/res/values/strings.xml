@@ -322,8 +322,9 @@
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_recipe_consume_ask">Are you sure to consume all ingredients needed by recipe \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure to put all missing ingredients for recipe \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
-  <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
-  <string name="msg_choose_option_below">Please choose one option from below.</string>
+  <string name="msg_welcome">Welcome to Grocy Android!</string>
+  <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
+  <string name="msg_choose_option_below">Please choose an option below.</string>
   <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
   <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>

@@ -85,7 +85,6 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     setCancelable(false);
-    setSkipCollapsedInPortrait();
 
     return binding.getRoot();
   }
