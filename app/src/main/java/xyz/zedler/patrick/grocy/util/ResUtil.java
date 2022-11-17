@@ -98,6 +98,7 @@ public class ResUtil {
         R.color.custom_red_60,
         R.color.custom_red_50,
         R.color.custom_red_35,
+        R.color.custom_red_30,
 
         R.color.custom_brown_90,
         R.color.custom_brown_70,
