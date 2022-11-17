@@ -88,8 +88,8 @@
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/enter_manually"
-          style="@style/Widget.Grocy.Button.OutlinedButton"
-          android:layout_marginTop="12dp"
+          style="@style/Widget.Grocy.Button.TextButton"
+          android:layout_marginTop="6dp"
           android:layout_gravity="center_horizontal"
           android:text="@string/action_enter_data_manually"
           android:onClick="@{() -> fragment.enterDataManually()}"

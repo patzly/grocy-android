@@ -41,9 +41,11 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/coordinate_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_gravity="center"
@@ -51,14 +53,15 @@
       android:fillViewport="true">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
-        android:layout_marginStart="@dimen/main_side_margin"
-        android:layout_marginEnd="@dimen/main_side_margin"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:animateLayoutChanges="true"
         transitionTypeChanging="@{true}">
 
@@ -89,43 +92,34 @@
           android:layout_marginTop="16dp">
 
           <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Grocy.Card.Text"
+            style="@style/Widget.Grocy.Card.Text.Error"
             android:layout_marginBottom="8dp"
             android:visibility="@{viewModel.loginErrorMsg != null ? View.VISIBLE : View.GONE}">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card.Error"
               android:text="@{viewModel.loginErrorMsg}" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Grocy.Card.Text"
+            style="@style/Widget.Grocy.Card.Text.Error"
             android:layout_marginBottom="8dp"
             android:visibility="@{viewModel.loginErrorExactMsg != null ? View.VISIBLE : View.GONE}">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card.Error"
               android:text="@{viewModel.loginErrorExactMsg}" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Grocy.Card.Text"
-            android:layout_marginBottom="12dp"
+            style="@style/Widget.Grocy.Card.Text.Error"
+            android:layout_marginBottom="8dp"
             android:visibility="@{viewModel.loginErrorHassMsg != null ? View.VISIBLE : View.GONE}">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card.Error"
               android:text="@{viewModel.loginErrorHassMsg}" />
 
           </com.google.android.material.card.MaterialCardView>
@@ -133,6 +127,7 @@
           <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 

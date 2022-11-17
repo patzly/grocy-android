@@ -41,21 +41,20 @@
     android:background="?android:attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_gravity="center"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      android:fillViewport="true">
 
       <LinearLayout
         android:id="@+id/linear_container_scroll"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
-        android:layout_marginStart="@dimen/main_side_margin"
-        android:layout_marginEnd="@dimen/main_side_margin">
+        android:gravity="center"
+        android:padding="16dp">
 
         <ImageView
           android:id="@+id/image_logo"

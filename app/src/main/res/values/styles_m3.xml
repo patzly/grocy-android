@@ -730,6 +730,16 @@
     <item name="android:justificationMode" tools:targetApi="o">inter_word</item>
   </style>
 
+  <style name="Widget.Grocy.TextView.Paragraph.Card" parent="Widget.Grocy.TextView.Paragraph">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+  </style>
+
+  <style name="Widget.Grocy.TextView.Paragraph.Card.Error" parent="Widget.Grocy.TextView.Paragraph.Card">
+    <item name="android:textColor">?attr/colorOnErrorContainer</item>
+  </style>
+
   <style
     name="Widget.Grocy.TextView.Paragraph.BodyMedium"
     parent="Widget.Grocy.TextView.Paragraph">

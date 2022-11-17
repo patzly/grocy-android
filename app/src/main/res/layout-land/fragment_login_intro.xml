@@ -37,18 +37,21 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/coordinate_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_gravity="center"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      android:fillViewport="true">
 
       <LinearLayout
         android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:baselineAligned="false">
 
@@ -58,9 +61,10 @@
           android:orientation="vertical"
           android:layout_weight="1"
           android:gravity="center"
-          android:paddingStart="@dimen/main_side_margin"
-          android:paddingEnd="0dp"
-          android:layout_marginEnd="32dp">
+          android:paddingStart="16dp"
+          android:paddingEnd="8dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp">
 
           <TextView
             style="@style/Widget.Grocy.TextView.TitleLarge"
@@ -76,10 +80,7 @@
 
             <TextView
               android:id="@+id/text"
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
               android:text="@string/msg_welcome_introduce" />
 
           </com.google.android.material.card.MaterialCardView>
@@ -92,8 +93,10 @@
           android:layout_weight="1"
           android:gravity="center"
           android:orientation="vertical"
-          android:paddingStart="0dp"
-          android:paddingEnd="@dimen/main_side_margin">
+          android:paddingStart="8dp"
+          android:paddingEnd="16dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp">
 
           <ImageView
             android:id="@+id/image_logo"
@@ -109,39 +112,26 @@
             android:layout_marginBottom="12dp">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
               android:text="@string/msg_choose_option_below" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.OutlinedButton"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_gravity="center_horizontal"
               android:layout_marginEnd="4dp"
-              android:layout_weight="1"
-              android:gravity="center"
               android:text="@string/action_demo_server"
               android:onClick="@{() -> fragment.loginDemoInstance()}"
               app:clickUtil="@{clickUtil}" />
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.UnelevatedButton"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_gravity="center_horizontal"
               android:layout_marginStart="4dp"
-              android:layout_weight="1"
-              android:gravity="center"
               android:text="@string/action_own_server"
               android:onClick="@{() -> fragment.loginOwnInstance()}"
               app:clickUtil="@{clickUtil}" />

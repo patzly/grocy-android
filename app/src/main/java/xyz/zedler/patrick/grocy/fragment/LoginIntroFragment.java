@@ -68,7 +68,7 @@ public class LoginIntroFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
-    systemBarBehavior.setContainer(binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
 
     binding.imageLogo.setOnClickListener(v -> ViewUtil.startIcon(binding.imageLogo));

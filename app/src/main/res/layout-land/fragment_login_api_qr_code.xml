@@ -72,7 +72,10 @@
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:layout_weight="1"
-          android:padding="16dp">
+          android:paddingStart="16dp"
+          android:paddingEnd="8dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp">
 
           <com.google.android.material.card.MaterialCardView
             android:id="@+id/hint_card"
@@ -80,10 +83,7 @@
             android:layout_marginBottom="12dp">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:textColor="?attr/colorOnSurfaceVariant"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
               android:text="@{fragment.isPageForGrocyKey() ? @string/msg_qr_code_scan : @string/msg_qr_code_scan_token}" />
 
           </com.google.android.material.card.MaterialCardView>
@@ -98,20 +98,23 @@
 
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
           android:layout_width="0dp"
-          android:layout_height="match_parent"
+          android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:padding="16dp">
+          android:gravity="center"
+          android:paddingStart="8dp"
+          android:paddingEnd="16dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp">
 
           <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/container_scanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:onClick="@{() -> fragment.toggleTorch()}"/>
 
-        </FrameLayout>
+        </LinearLayout>
 
       </LinearLayout>
 

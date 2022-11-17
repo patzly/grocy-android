@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginRequestBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -90,7 +91,15 @@ public class LoginRequestFragment extends BaseFragment {
       }
     });
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
     ViewUtil.startIcon(binding.imageLogo);
+
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
   }
 
   private void navigateToStartDestination() {
