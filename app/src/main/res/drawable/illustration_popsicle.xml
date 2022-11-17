@@ -26,32 +26,34 @@
   <path
     android:pathData="M2.46,2.55l6,10.4"
     android:strokeWidth="2"
-    android:strokeColor="@color/retro_dirt"
+    android:strokeColor="@color/custom_brown_90"
     android:strokeLineCap="round" />
   <path
     android:pathData="M4.5,19h15a2,2 0,1 1,0 4h-15a2,2 0,1 1,0 -4zM10.3,7.36a1,1 0,0 0,-0.38 0.12l-6.93,4a1,1 0,0 0,-0.36 1.37l1,1.73 8.66,-5 -1,-1.73a1,1 0,0 0,-1 -0.5z"
-    android:fillColor="@color/retro_yellow_bg" />
+    android:fillColor="@color/custom_yellow_80" />
   <path
     android:pathData="M6.1,17.95l-2.08,0.32c-0.78,0.13 -1,0.9 -0.27,1.48 0.74,0.57 1.56,1.25 1.56,1.25h-1m10.9,-5.61l2.28,1.45c0.7,0.43 1.01,0.68 0.95,1.84l-0.1,2.32h1.05"
     android:strokeLineJoin="round"
     android:strokeWidth=".3"
-    android:strokeColor="?attr/colorOnBackground"
+    android:strokeColor="?attr/colorOnSurfaceVariant"
     android:strokeLineCap="round" />
   <path
     android:pathData="M12.29,9.58l-8.66,5 3.14,5.44a0.95,0.95 0,0 0,-0.88 0.94v0.08c0,0.53 0.43,0.96 0.97,0.96h10.03c0.54,0 0.97,-0.43 0.97,-0.96v-0.08a0.96,0.96 0,0 0,-0.97 -0.96h-0.05a4.94,4.94 0,0 0,-0.55 -3.5l-4,-6.92z"
-    android:fillColor="@color/retro_red" />
+    android:fillColor="@color/custom_red_60" />
   <path
     android:pathData="M11.85,15.75l-1.04,0.15 0.68,-0.83m-2.4,1.34l1.04,-0.15 -0.68,0.83"
     android:strokeLineJoin="round"
     android:strokeWidth=".3"
-    android:strokeColor="#111111"
+    android:strokeColor="@color/custom_red_30"
     android:strokeLineCap="round" />
   <path
     android:pathData="M9.155,14.8236L9.9807,14.3337A0.4,0.4 104.32,0 1,10.5288 14.4736L10.5339,14.4822A0.4,0.4 104.32,0 1,10.394 15.0303L9.5683,15.5202A0.4,0.4 104.32,0 1,9.0202 15.3803L9.0151,15.3717A0.4,0.4 104.32,0 1,9.155 14.8236z"
-    android:fillColor="@color/retro_dirt" />
+    android:fillColor="#fff"
+    android:strokeColor="@color/custom_red_30"
+    android:strokeWidth=".3" />
   <path
     android:pathData="M15.8,19.02s0.24,-0.9 -0.44,-2.09"
     android:strokeWidth=".6"
-    android:strokeColor="@color/retro_red_bg_black"
+    android:strokeColor="@color/custom_red_50"
     android:strokeLineCap="round" />
 </vector>

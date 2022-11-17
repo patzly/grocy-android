@@ -34,6 +34,7 @@
 
   <color name="custom_yellow_80">#e8c349</color>
   <color name="custom_yellow_50">#907400</color>
+  <color name="custom_yellow_30">#574500</color>
 
   <color name="custom_green_80">#a8d473</color>
   <color name="custom_green_50">#5b822c</color>
@@ -41,11 +42,19 @@
   <color name="custom_red_60">#db716f</color>
   <color name="custom_red_50">#bc5957</color>
   <color name="custom_red_35">#8d3535</color>
+  <color name="custom_red_30">#7e2a2b</color>
 
-  <color name="toast_brown_90">#ffdeac</color>
-  <color name="toast_brown_70">#dca030</color>
-  <color name="toast_brown_50">#9e6e00</color>
-  <color name="toast_brown_30">#604100</color>
+  <color name="custom_brown_90">#ffdeac</color>
+  <color name="custom_brown_70">#dca030</color>
+  <color name="custom_brown_50">#9e6e00</color>
+  <color name="custom_brown_30">#604100</color>
+
+  <color name="custom_dirt_95">#fff39e</color>
+  <color name="custom_dirt_90">#f5e568</color>
+  <color name="custom_dirt_80">#d8c950</color>
+  <color name="custom_dirt_60">#9f921b</color>
+  <color name="custom_dirt_40">#695f00</color>
+  <color name="custom_dirt_30">#4f4800</color>
 
   <!-- RED -->
 
