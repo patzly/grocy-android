@@ -29,15 +29,16 @@ import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginApiQrCodeBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 
 public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListener {
@@ -80,9 +81,39 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     args = LoginApiQrCodeFragmentArgs.fromBundle(requireArguments());
     pageStatus = args.getGrocyApiKey() == null ? SCAN_GROCY_KEY : SCAN_HASS_TOKEN;
 
+    binding.setActivity(activity);
     binding.setFragment(this);
     binding.setClickUtil(new ClickUtil());
     embeddedFragmentScanner.setScannerVisibilityLive(new MutableLiveData<>(true));
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+    binding.toolbar.setOnMenuItemClickListener(item -> {
+      int id = item.getItemId();
+      if (id == R.id.action_help) {
+        openHelpWebsite();
+      } else if (id == R.id.action_feedback) {
+        showFeedbackBottomSheet();
+      } else if (id == R.id.action_website) {
+        openGrocyWebsite();
+      } else if (id == R.id.action_settings) {
+        activity.navigateDeepLink(R.string.deep_link_settingsFragment);
+      } else if (id == R.id.action_about) {
+        activity.navigateDeepLink(R.string.deep_link_aboutFragment);
+      }
+      return true;
+    });
+
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
   }
 
   @Override
@@ -127,10 +158,10 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       String apiKey = resultSplit[1];
 
       if (ingressProxyId == null) {
-        navigate(LoginApiQrCodeFragmentDirections
+        activity.navigateFragment(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentToLoginRequestFragment(serverURL, apiKey));
       } else { // grocy home assistant add-on used
-        navigate(LoginApiQrCodeFragmentDirections
+        activity.navigateFragment(LoginApiQrCodeFragmentDirections
             .actionLoginApiQrCodeFragmentSelf()
             .setServerURL(serverURLHomeAssistant)
             .setGrocyIngressProxyId(ingressProxyId)
@@ -143,7 +174,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }
-      navigate(LoginApiQrCodeFragmentDirections
+      activity.navigateFragment(LoginApiQrCodeFragmentDirections
           .actionLoginApiQrCodeFragmentToLoginApiFormFragment()
           .setServerUrl(args.getServerURL())
           .setGrocyIngressProxyId(args.getGrocyIngressProxyId())
@@ -157,8 +188,9 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
   }
 
   public void enterDataManually() {
-    navigate(LoginApiQrCodeFragmentDirections
-        .actionLoginApiQrCodeFragmentToLoginApiFormFragment());
+    activity.navigateFragment(
+        LoginApiQrCodeFragmentDirections.actionLoginApiQrCodeFragmentToLoginApiFormFragment()
+    );
   }
 
   public void openHelpWebsite() {

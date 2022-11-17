@@ -726,6 +726,10 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  public void navigateDeepLink(String uri) {
+    navigateDeepLink(Uri.parse(uri), true);
+  }
+
   public void navigateDeepLink(@StringRes int uri) {
     navigateDeepLink(Uri.parse(getString(uri)), true);
   }

@@ -150,16 +150,23 @@
 
           </LinearLayout>
 
-          <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/container_scanner"
+          <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="4dp"
-            android:visibility="@{viewModel.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-            android:onClick="@{() -> fragment.toggleTorch()}"/>
+            android:gravity="center"
+            android:visibility="@{viewModel.scannerVisibilityLive ? View.VISIBLE : View.GONE}">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+              android:id="@+id/container_scanner"
+              android:layout_width="match_parent"
+              android:layout_height="160dp"
+              android:layout_gravity="center"
+              android:onClick="@{() -> fragment.toggleTorch()}"/>
+
+          </LinearLayout>
 
         </LinearLayout>
 

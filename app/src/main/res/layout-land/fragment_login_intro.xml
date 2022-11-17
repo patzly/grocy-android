@@ -24,6 +24,9 @@
 
   <data>
     <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
       name="fragment"
       type="xyz.zedler.patrick.grocy.fragment.LoginIntroFragment" />
     <variable
@@ -153,13 +156,6 @@
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
-              app:clickUtil="@{clickUtil}"
-              app:tooltipText="@{@string/title_feedback}"
-              app:icon="@drawable/ic_round_feedback_anim" />
-
-            <com.google.android.material.button.MaterialButton
-              style="@style/Widget.Grocy.Button.IconButton"
               android:onClick="@{() -> fragment.openHelpWebsite()}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_help}"
@@ -167,10 +163,10 @@
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_aboutFragment)}"
+              android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
               app:clickUtil="@{clickUtil}"
-              app:tooltipText="@{@string/title_about}"
-              app:icon="@drawable/ic_round_info_outline_anim" />
+              app:tooltipText="@{@string/title_feedback}"
+              app:icon="@drawable/ic_round_feedback_anim" />
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
@@ -181,10 +177,17 @@
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_settingsFragment)}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_settings}"
               app:icon="@drawable/ic_round_settings_anim" />
+
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_aboutFragment)}"
+              app:clickUtil="@{clickUtil}"
+              app:tooltipText="@{@string/title_about}"
+              app:icon="@drawable/ic_round_info_outline_anim" />
 
           </LinearLayout>
 

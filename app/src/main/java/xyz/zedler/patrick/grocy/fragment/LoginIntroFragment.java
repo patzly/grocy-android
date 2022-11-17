@@ -63,6 +63,7 @@ public class LoginIntroFragment extends BaseFragment {
   @Override
   public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
+    binding.setActivity(activity);
     binding.setFragment(this);
     binding.setClickUtil(new ClickUtil());
 

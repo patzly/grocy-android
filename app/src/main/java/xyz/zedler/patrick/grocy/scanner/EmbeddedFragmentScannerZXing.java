@@ -76,8 +76,8 @@ public class EmbeddedFragmentScannerZXing extends EmbeddedFragmentScanner implem
     // set container size
     int width, height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UiUtil.dpToPx(fragment.requireContext(), 250);
-      height = UiUtil.dpToPx(fragment.requireContext(), 250);
+      width = UiUtil.dpToPx(fragment.requireContext(), 200);
+      height = UiUtil.dpToPx(fragment.requireContext(), 200);
     } else if (qrCodeFormat) {
       width = UiUtil.dpToPx(fragment.requireContext(), 180);
       height = UiUtil.dpToPx(fragment.requireContext(), 180);
