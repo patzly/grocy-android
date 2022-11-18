@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +39,8 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDrawerBinding;
@@ -55,10 +58,9 @@ import xyz.zedler.patrick.grocy.fragment.StockOverviewFragment;
 import xyz.zedler.patrick.grocy.fragment.TasksFragment;
 import xyz.zedler.patrick.grocy.fragment.TransferFragment;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements View.OnClickListener {
@@ -90,6 +92,18 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
     binding.linearDrawerShoppingList.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerConsume.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerPurchase.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerTransfer.setBackground(
+        ViewUtil.getRippleBgListItemSurface(requireContext())
+    );
+    binding.linearDrawerInventory.setBackground(
         ViewUtil.getRippleBgListItemSurface(requireContext())
     );
     binding.linearDrawerRecipes.setBackground(
@@ -133,6 +147,43 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         binding.buttonDrawerInventory, getString(R.string.title_inventory)
     );
 
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerConsume, getString(R.string.title_consume)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerPurchase, getString(R.string.title_purchase)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerTransfer, getString(R.string.title_transfer)
+    );
+    TooltipCompat.setTooltipText(
+        binding.linearDrawerInventory, getString(R.string.title_inventory)
+    );
+
+    ViewTreeObserver observerText = binding.textDrawerStock.getViewTreeObserver();
+    observerText.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        boolean isLayoutRtl = UiUtil.isLayoutRtl(activity);
+        int textEnd = isLayoutRtl
+            ? binding.textDrawerStock.getLeft()
+            : binding.textDrawerStock.getRight();
+        int iconsStart = isLayoutRtl
+            ? binding.linearDrawerContainerTransactionIcons.getRight()
+            : binding.linearDrawerContainerTransactionIcons.getLeft();
+        boolean hasEnoughSpace = isLayoutRtl ? textEnd >= iconsStart : textEnd <= iconsStart;
+        binding.linearDrawerContainerTransactions.setVisibility(
+            hasEnoughSpace ? View.GONE : View.VISIBLE
+        );
+        binding.linearDrawerContainerTransactionIcons.setVisibility(
+            hasEnoughSpace ? View.VISIBLE : View.GONE
+        );
+        if (binding.textDrawerStock.getViewTreeObserver().isAlive()) {
+          binding.textDrawerStock.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+      }
+    });
+
     ClickUtil.setOnClickListeners(
         this,
         binding.linearDrawerStock,
@@ -141,6 +192,10 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
         binding.buttonDrawerPurchase,
         binding.buttonDrawerTransfer,
         binding.buttonDrawerInventory,
+        binding.linearDrawerConsume,
+        binding.linearDrawerPurchase,
+        binding.linearDrawerTransfer,
+        binding.linearDrawerInventory,
         binding.linearDrawerChores,
         binding.linearDrawerTasks,
         binding.linearDrawerRecipes,
@@ -161,12 +216,16 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
       );
     } else if (currentFragment instanceof ConsumeFragment) {
       select(binding.buttonDrawerConsume);
+      select(binding.linearDrawerConsume, null, binding.imageDrawerConsume);
     } else if (currentFragment instanceof PurchaseFragment) {
       select(binding.buttonDrawerPurchase);
+      select(binding.linearDrawerPurchase, null, binding.imageDrawerPurchase);
     } else if (currentFragment instanceof TransferFragment) {
       select(binding.buttonDrawerTransfer);
+      select(binding.linearDrawerTransfer, null, binding.imageDrawerTransfer);
     } else if (currentFragment instanceof InventoryFragment) {
       select(binding.buttonDrawerInventory);
+      select(binding.linearDrawerInventory, null, binding.imageDrawerInventory);
     } else if (currentFragment instanceof ChoresFragment) {
       select(binding.linearDrawerChores, binding.textDrawerChores, binding.imageDrawerChores);
     } else if (currentFragment instanceof TasksFragment) {
@@ -195,49 +254,49 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   public void onClick(View v) {
-    if (clickUtil.isDisabled()) {
+    int id = v.getId();
+    if (getViewUtil().isClickDisabled(id)) {
       return;
     }
-
-    if (v.getId() == R.id.linear_drawer_stock) {
+    if (id == R.id.linear_drawer_stock) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToStockOverviewFragment());
-    } else if (v.getId() == R.id.linear_drawer_shopping_list) {
+    } else if (id == R.id.linear_drawer_shopping_list) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToShoppingListFragment());
-    } else if (v.getId() == R.id.button_drawer_consume) {
+    } else if (id == R.id.button_drawer_consume || id == R.id.linear_drawer_consume) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToConsumeFragment());
-    } else if (v.getId() == R.id.button_drawer_purchase) {
+    } else if (id == R.id.button_drawer_purchase || id == R.id.linear_drawer_purchase) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToPurchaseFragment());
-    } else if (v.getId() == R.id.button_drawer_transfer) {
+    } else if (id == R.id.button_drawer_transfer || id == R.id.linear_drawer_transfer) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToTransferFragment());
-    } else if (v.getId() == R.id.button_drawer_inventory) {
+    } else if (id == R.id.button_drawer_inventory || id == R.id.linear_drawer_inventory) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToInventoryFragment());
-    } else if (v.getId() == R.id.linear_drawer_chores) {
+    } else if (id == R.id.linear_drawer_chores) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToChoresFragment());
-    } else if (v.getId() == R.id.linear_drawer_tasks) {
+    } else if (id == R.id.linear_drawer_tasks) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToTasksFragment());
-    } else if (v.getId() == R.id.linear_drawer_master_data) {
+    } else if (id == R.id.linear_drawer_master_data) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToNavigationMasterObjects());
-    } else if (v.getId() == R.id.linear_drawer_settings) {
+    } else if (id == R.id.linear_drawer_settings) {
       navigateCustom(DrawerBottomSheetDirections
           .actionDrawerBottomSheetDialogFragmentToSettingsFragment());
-    } else if (v.getId() == R.id.linear_drawer_feedback) {
+    } else if (id == R.id.linear_drawer_feedback) {
       activity.showBottomSheet(new FeedbackBottomSheet());
       dismiss();
-    } else if (v.getId() == R.id.linear_drawer_help) {
+    } else if (id == R.id.linear_drawer_help) {
       if (!NetUtil.openURL(activity, Constants.URL.HELP)) {
         activity.showSnackbar(R.string.error_no_browser);
       }
       dismiss();
-    } else if (v.getId() == R.id.linear_drawer_recipes) {
+    } else if (id == R.id.linear_drawer_recipes) {
       navigateCustom(DrawerBottomSheetDirections
               .actionDrawerBottomSheetDialogFragmentToRecipesFragment());
     }

@@ -599,6 +599,15 @@
   </style>
 
   <style
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.NoPadding.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
+    <item name="android:paddingStart">0dp</item>
+    <item name="android:paddingEnd">0dp</item>
+    <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/ripple_list_item_bg</item>
+  </style>
+
+  <style
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
   </style>
