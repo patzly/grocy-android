@@ -87,7 +87,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.6.0-rc01' // set version to 1.6.0 as soon as stable version is released
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'

@@ -332,8 +332,9 @@
   <string name="msg_press_hold_confirm">Appuyez longuement pour confirmer la suppression</string>
   <string name="msg_recipe_consume_ask">Êtes-vous sûr de vouloir consommer tous les ingrédients nécessaires à la recette \"%1$s\" ? (Les ingrédients marqués avec \"uniquement vérifier si une quantité est en stock\" seront ignorés)</string>
   <string name="msg_recipe_shopping_list_ask">Êtes-vous sûr de vouloir ajouter tous les ingrédients manquants pour la recette \"%1$s\" sur la liste de courses ?\n\nDécochez les ingrédients pour ne pas les ajouter à la liste de courses :</string>
-  <string name="msg_welcome_to_grocy">Bienvenue sur Grocy Android !\n\nPour utiliser grocy de manière productive vous avez besoin de votre propre serveur ou de l\'add-on pour Home Assistant.\nSi vous voulez seulement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
-  <string name="msg_choose_option_below">Merci de choisir une des options ci-dessous.</string>
+  <string name="msg_welcome">Bienvenue sur Grocy Android !</string>
+  <string name="msg_welcome_introduce">Pour utiliser grocy de manière productive, vous avez besoin de votre propre serveur ou du module complémentaire grocy pour Home Assistant.\nSi vous souhaitez simplement essayer cette application, vous pouvez utiliser le serveur de démonstration de Bernd Bestel, le créateur de grocy.</string>
+  <string name="msg_choose_option_below">Veuillez choisir une option ci-dessous.</string>
   <string name="msg_qr_code_scan">Sur un autre appareil, visitez votre site web grocy et allez sur la page \"Clefs API\". Cliquez sur \"Ajouter\", puis cliquez sur la petite icône avec un code QR et scannez le code QR.</string>
   <string name="msg_qr_code_scan_token">Vous utilisez le module complémentaire Grocy Home Assistant. Créez un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Sous le champ du jeton, cliquez sur \"Générer le QR code\" et scannez-le ici.</string>
   <string name="msg_port_connection_info_without_port">L\'application se connectera au port %1$s.\nSi vous souhaitez qu\'elle se connecte à un autre port, vous pouvez en ajouter un à l\'URL.\nExemple : http://domain.com:81/</string>
