@@ -395,15 +395,6 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     return !sharedPrefs.getBoolean(pref, true);
   }
 
-  private NavOptions getNavOptionsFragmentFade() {
-    return new NavOptions.Builder()
-        .setEnterAnim(R.anim.enter_end_fade)
-        .setExitAnim(R.anim.exit_start_fade)
-        .setPopEnterAnim(R.anim.enter_start_fade)
-        .setPopExitAnim(R.anim.exit_end_fade)
-        .build();
-  }
-
   @Override
   public void applyBottomInset(int bottom) {
     LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);

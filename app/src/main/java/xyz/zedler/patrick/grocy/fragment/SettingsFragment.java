@@ -98,12 +98,12 @@ public class SettingsFragment extends BaseFragment {
       if (shouldNavigateToBehavior()) {
         setArguments(new SettingsFragmentArgs.Builder(args)
             .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
+        new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
             .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
       } else if (shouldNavigateToServer()) {
         setArguments(new SettingsFragmentArgs.Builder(args)
             .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
+        new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
             .actionSettingsFragmentToSettingsCatServerFragment()), 200);
       }
     });

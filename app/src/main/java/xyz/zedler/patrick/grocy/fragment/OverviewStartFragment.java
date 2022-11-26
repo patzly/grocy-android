@@ -178,7 +178,7 @@ public class OverviewStartFragment extends BaseFragment {
           .build().toBundle();
       navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+      activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
   }
 
