@@ -300,8 +300,8 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
         paintBg.setColor(ColorUtils.blendARGB(colorBg, colorBgSwipe, friction));
         paintDivider.setColor(ColorUtils.blendARGB(colorBg, colorDivider, friction));
       } else {
-        paintBg.setAlpha(0);
-        paintDivider.setAlpha(0);
+        paintBg.setColor(colorBg);
+        paintDivider.setColor(colorBg);
       }
     } else {
       paintBg.setColor(colorBgSwipe);

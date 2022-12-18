@@ -121,6 +121,7 @@ import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -595,30 +596,39 @@ public class MainActivity extends AppCompatActivity {
   // NAVIGATION
 
   public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      if (slideVertically) {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_in_up)
-            .setPopExitAnim(R.anim.slide_out_down)
-            .setExitAnim(R.anim.slide_no);
+    if (UiUtil.areAnimationsEnabled(this)) {
+      boolean useSliding = getSharedPrefs().getBoolean(
+          Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+          Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+      );
+      if (useSliding) {
+        if (slideVertically) {
+          return new NavOptions.Builder()
+              .setEnterAnim(R.anim.slide_in_up)
+              .setPopExitAnim(R.anim.slide_out_down)
+              .setExitAnim(R.anim.slide_no);
+        } else {
+          return new NavOptions.Builder()
+              .setEnterAnim(R.anim.slide_from_end)
+              .setPopExitAnim(R.anim.slide_to_end)
+              .setPopEnterAnim(R.anim.slide_from_start)
+              .setExitAnim(R.anim.slide_to_start);
+        }
       } else {
         return new NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_from_end)
-            .setPopExitAnim(R.anim.slide_to_end)
-            .setPopEnterAnim(R.anim.slide_from_start)
-            .setExitAnim(R.anim.slide_to_start);
+            .setEnterAnim(R.anim.enter_end_fade)
+            .setExitAnim(R.anim.exit_start_fade)
+            .setPopEnterAnim(R.anim.enter_start_fade)
+            .setPopExitAnim(R.anim.exit_end_fade);
       }
     } else {
       return new NavOptions.Builder()
-          .setEnterAnim(R.anim.enter_end_fade)
-          .setExitAnim(R.anim.exit_start_fade)
-          .setPopEnterAnim(R.anim.enter_start_fade)
-          .setPopExitAnim(R.anim.exit_end_fade);
+          .setEnterAnim(R.anim.fade_in_a11y)
+          .setExitAnim(R.anim.fade_out_a11y)
+          .setPopEnterAnim(R.anim.fade_in_a11y)
+          .setPopExitAnim(R.anim.fade_out_a11y);
     }
+
   }
 
   public void navigate(NavDirections directions) {
