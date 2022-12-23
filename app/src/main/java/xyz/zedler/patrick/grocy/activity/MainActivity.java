@@ -628,7 +628,6 @@ public class MainActivity extends AppCompatActivity {
           .setPopEnterAnim(R.anim.fade_in_a11y)
           .setPopExitAnim(R.anim.fade_out_a11y);
     }
-
   }
 
   public void navigate(NavDirections directions) {

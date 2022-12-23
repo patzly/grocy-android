@@ -451,8 +451,6 @@
   <string name="error_bounds_max">Must be lower than or equal to %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Must be higher than %1$s</string>
-  <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_max_decimal_places">Max. %1$s decimal places</string>
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
   <string name="error_no_done_items">There are no items marked as done</string>
@@ -738,6 +736,11 @@
   <plurals name="description_overview_master_data">
     <item quantity="one">Your database contains %1$d product.</item>
     <item quantity="other">Your database contains %1$d products.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s decimal place</item>
+    <item quantity="other">Max. %1$s decimal places</item>
   </plurals>
 
   <string name="property_name">Name</string>
