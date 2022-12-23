@@ -443,8 +443,6 @@
   <string name="error_bounds_max">Muss kleiner oder gleich %1$s sein</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Muss größer als %1$s sein</string>
-  <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_max_decimal_places">Max. %1$s Nachkommastellen</string>
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">Diese Seite funktioniert nur mit Internet-Zugriff. Überprüfen Sie Ihre Verbindung.</string>
   <string name="error_no_done_items">Es sind keine Einträge als erledigt markiert</string>
@@ -724,6 +722,11 @@
   <plurals name="description_overview_master_data">
     <item quantity="one">Ihre Datenbank enthält ein Produkt.</item>
     <item quantity="other">Ihre Datenbank enthält %1$d Produkte.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s Nachkommastelle</item>
+    <item quantity="other">Max. %1$s Nachkommastellen</item>
   </plurals>
 
   <string name="property_name">Name</string>
