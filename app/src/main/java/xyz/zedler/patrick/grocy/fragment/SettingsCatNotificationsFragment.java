@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import java.util.Locale;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -39,7 +40,6 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
@@ -143,13 +143,15 @@ public class SettingsCatNotificationsFragment extends BaseFragment {
         .setTitleText(R.string.setting_notification_time)
         .setNegativeButtonText(R.string.action_cancel)
         .setPositiveButtonText(R.string.action_save)
-        .setTheme(R.style.Theme_Grocy_TimePicker)
+        .setTheme(R.style.ThemeOverlay_Grocy_TimePicker)
         .build();
-
-    picker.addOnPositiveButtonClickListener(v -> finishedListener.onFinished(
-        String.format(Locale.getDefault(), "%02d:%02d",
-        picker.getHour(), picker.getMinute())));
-    picker.show(getParentFragmentManager(), "time_picker_dialog");
+    picker.addOnPositiveButtonClickListener(
+        v -> finishedListener.onFinished(
+            String.format(Locale.getDefault(), "%02d:%02d",
+                picker.getHour(), picker.getMinute())
+        )
+    );
+    picker.show(activity.getSupportFragmentManager(), "time");
   }
 
   public interface TimePickerTimeListener {

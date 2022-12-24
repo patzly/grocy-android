@@ -518,16 +518,11 @@
   <!-- TimePicker -->
 
   <style name="ThemeOverlay.Grocy.TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
-    <item name="materialTimePickerStyle">@style/Widget.Grocy.TimePicker</item>
     <item name="chipStyle">@style/Widget.Grocy.TimePicker.Display</item>
     <item name="textInputStyle">@style/Widget.Grocy.TimePicker.Display.TextInputLayout</item>
     <item name="materialDisplayDividerStyle">@style/Widget.Grocy.TimePicker.Display.Divider</item>
     <item name="materialTimePickerTitleStyle">@style/TextAppearance.Grocy.TimePicker.Title</item>
     <item name="materialButtonStyle">@style/Widget.Grocy.Button.TextButton.Dialog.Flush</item>
-  </style>
-
-  <style name="Widget.Grocy.TimePicker" parent="Widget.Material3.MaterialTimePicker">
-    <item name="shapeAppearance">?attr/shapeAppearanceCornerLarge</item>
   </style>
 
   <!-- Localized style, no empty base style needed -->
