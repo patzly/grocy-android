@@ -207,6 +207,7 @@
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                 <TextView
+                  android:id="@+id/text_cat_location"
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
                   android:text="@string/title_product_cat_location" />
 

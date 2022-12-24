@@ -209,6 +209,11 @@ public class MasterProductFragment extends BaseFragment {
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
         )
     );
+    viewModel.getFormData().getCatLocationErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textCatLocation.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
+        )
+    );
     viewModel.getFormData().getCatDueDateErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatDueDate.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)

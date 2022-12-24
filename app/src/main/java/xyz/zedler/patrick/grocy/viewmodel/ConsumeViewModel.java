@@ -259,16 +259,26 @@ public class ConsumeViewModel extends BaseViewModel {
           formData.getAmountLive().setValue(NumUtil.trimAmount(productDetails.getStockAmount(), maxDecimalPlacesAmount));
         }
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
-        String defaultAmount = sharedPrefs.getString(
-            Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
-            Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
+        boolean useQuickConsumeAmount = sharedPrefs.getBoolean(
+            Constants.SETTINGS.STOCK.USE_QUICK_CONSUME_AMOUNT,
+            Constants.SETTINGS_DEFAULT.STOCK.USE_QUICK_CONSUME_AMOUNT
         );
-        if (NumUtil.isStringDouble(defaultAmount)) {
-          defaultAmount = NumUtil.trimAmount(Double.parseDouble(defaultAmount), maxDecimalPlacesAmount);
+        String amount = null;
+        if (useQuickConsumeAmount) {
+          amount = product.getQuickConsumeAmount();
         }
-        if (NumUtil.isStringDouble(defaultAmount)
-            && Double.parseDouble(defaultAmount) > 0) {
-          formData.getAmountLive().setValue(defaultAmount);
+        if (!useQuickConsumeAmount || amount == null) {
+          amount = sharedPrefs.getString(
+              Constants.SETTINGS.STOCK.DEFAULT_CONSUME_AMOUNT,
+              Constants.SETTINGS_DEFAULT.STOCK.DEFAULT_CONSUME_AMOUNT
+          );
+        }
+        if (NumUtil.isStringDouble(amount)) {
+          amount = NumUtil.trimAmount(Double.parseDouble(amount), maxDecimalPlacesAmount);
+        }
+        if (NumUtil.isStringDouble(amount)
+            && Double.parseDouble(amount) > 0) {
+          formData.getAmountLive().setValue(amount);
         }
       } else if (!isTareWeightEnabled) {
         // if quick mode enabled, always fill with amount 1
