@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.fragment;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -366,6 +367,12 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
+  public void selectProduct(Product product) {
+    clearInputFocus();
+    viewModel.setProduct(product.getId(), null, null);
+  }
+
+  @Override
   public void addBarcodeToExistingProduct(String barcode) {
     viewModel.addBarcodeToExistingProduct(barcode);
     binding.autoCompletePurchaseProduct.requestFocus();
@@ -390,14 +397,16 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   }
 
   public void clearInputFocus() {
-    activity.hideKeyboard();
-    binding.dummyFocusView.requestFocus();
-    binding.autoCompletePurchaseProduct.clearFocus();
-    binding.quantityUnitContainer.clearFocus();
-    binding.textInputAmount.clearFocus();
-    binding.linearDueDate.clearFocus();
-    binding.textInputPurchasePrice.clearFocus();
-    binding.textInputPurchaseNote.clearFocus();
+    new Handler().postDelayed(() -> {
+      activity.hideKeyboard();
+      binding.dummyFocusView.requestFocus();
+      binding.autoCompletePurchaseProduct.clearFocus();
+      binding.quantityUnitContainer.clearFocus();
+      binding.textInputAmount.clearFocus();
+      binding.linearDueDate.clearFocus();
+      binding.textInputPurchasePrice.clearFocus();
+      binding.textInputPurchaseNote.clearFocus();
+    }, 50);
   }
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {

@@ -6,6 +6,7 @@
 - New: Product option "Move on open" (#569)
 - Improved: (not F-Droid) ML Kit scanner now only recognises barcodes in preview field
 - Improved: Shopping mode page now can be opened with deeplink "grocy://shoppingmodepage" (#519)
+- Improved: Selection of child products in purchase form if parent product has no own stock (#508)
 - Fixed: F-Droid build should work again (#566)
 - Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
 - Fixed: Wrong ingredient amount in the recipe view with base servings other than 1 (#584)

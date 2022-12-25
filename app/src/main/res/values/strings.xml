@@ -441,6 +441,7 @@
   <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
   <string name="error_token_qr_code">Not a QR code with a long-lived access token from Home Assistant</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
+  <string name="error_no_children">The selected product has no children</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Cannot be equal to %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
