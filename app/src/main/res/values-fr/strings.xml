@@ -451,6 +451,7 @@
   <string name="error_api_qr_code">Pas un code QR avec des identifiants pour l\'API grocy</string>
   <string name="error_token_qr_code">Ce n\'est pas un QR code avec un jeton d\'accès de longue durée provenant de Home Assistant.</string>
   <string name="error_loading_qus">Echec de chargement du format des produits</string>
+  <string name="error_no_children">Le produit sélectionné n\'a pas d\'enfant</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Ne peut pas être égal à %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -461,8 +462,6 @@
   <string name="error_bounds_max">Doit être inférieur ou égal à %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Doit être supérieur à %1$s</string>
-  <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_max_decimal_places">Max. %1$s décimales</string>
   <string name="error_offline">Hors ligne</string>
   <string name="error_offline_subtitle">Cette page ne fonctionne qu\'avec un accès internet. Vérifiez votre connexion.</string>
   <string name="error_no_done_items">Il n\'y a aucun article coché</string>
@@ -760,6 +759,12 @@
     <item quantity="one">Votre base de données contient %1$d produit.</item>
     <item quantity="many">Votre base de données contient %1$d produits.</item>
     <item quantity="other">Votre base de données contient %1$d produits.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s decimale</item>
+    <item quantity="many">Max. %1$s décimales</item>
+    <item quantity="other">Max. %1$s décimales</item>
   </plurals>
 
   <string name="property_name">Nom</string>
