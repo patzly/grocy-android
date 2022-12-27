@@ -23,6 +23,7 @@
 - Fixed: Use quick consume amount when option enabled in stock user settings (#604)
 - Fixed: Crash on stock journal page
 - Fixed: Crash on master product page when saving changes
+- Fixed: Crash on recipes page during search (#607)
 - Fixed: (not F-Droid) ML Kit scanner doesn't ask for contacts permission anymore
 
 ## 2.3.0
