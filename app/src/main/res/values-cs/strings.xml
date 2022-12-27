@@ -350,8 +350,9 @@
   <string name="msg_press_hold_confirm">Podržením potvrdíte odstranění</string>
   <string name="msg_recipe_consume_ask">Opravdu si přejete spotřebovat všechny ingredience receptu „%1$s“? Suroviny označené „Zkontrolovat pouze zda je v zásobě jakékoliv množství“ budou ignorovány.</string>
   <string name="msg_recipe_shopping_list_ask">Chcete přidat všechny chybějící ingredience z receptu „%1$s“ do nákupního seznamu?\nOdškrtněte ty, které v nákupním seznamu nechcete.</string>
-  <string name="msg_welcome_to_grocy">Vítejte v grocy klientu pro Android!\n\nChcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
-  <string name="msg_choose_option_below">Prosím, vyberte jednu z možností.</string>
+  <string name="msg_welcome">Grocy pro Android vás vítá</string>
+  <string name="msg_welcome_introduce">Chcete-li grocy používat, musíte si ji nejprve nainstalovat na svůj server nebo jako grocy add-on pro Home Assistant.\nPokud si jen chcete aplikaci vyzkoušet, můžete použít demo server od Bernda Bestela, tvůrce grocy.</string>
+  <string name="msg_choose_option_below">Vyberte si jednu z možností</string>
   <string name="msg_qr_code_scan">Nejprve navštivte web vašeho grocy serveru a přejděte na stránku \'Spravovat API klíče\'. Klikněte na „Přidat”. Poté API klíč zkopírujte a použijte v této aplikaci. Pokud půjdete na web grocy na jiném zařízení, klikněte na ikonu QR kódu a API klíč naskenujte.</string>
   <string name="msg_qr_code_scan_token">Používáte doplněk pro Home Assistant. Vytvořte přístupový kód s dlouhou životností ve svém profilu aplikace Home Assistant. Funkci najdete v poslední sekci. Po vytvoření klikněte na Generate QR Code a sejměte ho tu.</string>
   <string name="msg_port_connection_info_without_port">Aplikace se připojuje k portu %1$s.\nJestliže ji chcete připojit k jinému číslu portu, přidejte toto číslo (např. 81) k URL vašeho serveru.\nPříklad: http://mujserver.cz:81/</string>
@@ -472,6 +473,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_api_qr_code">Tento QR kód neobsahuje přihlašovací údaje Grocy API</string>
   <string name="error_token_qr_code">Toto není správný QR kód z Home Assistant s dlouhou životností</string>
   <string name="error_loading_qus">Nepodařilo se načíst měrné jednotky produktu</string>
+  <string name="error_no_children">Vybraný produkt nemá žádné podřízené produkty</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Nemůže být roven %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -797,6 +799,13 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
     <item quantity="few">Máte uloženy %1$d produkty</item>
     <item quantity="many">Máte uloženo %1$d produktů</item>
     <item quantity="other">Máte uloženo %1$d produktů</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s desetinné místo</item>
+    <item quantity="few">Max. %1$s desetinná místa</item>
+    <item quantity="many">Max. %1$s desetinných míst</item>
+    <item quantity="other">Max. %1$s desetinných míst</item>
   </plurals>
 
   <string name="property_name">Jméno</string>
