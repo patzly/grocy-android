@@ -53,6 +53,7 @@
     <item name="colorOnSurfaceVariant">@color/red_neutral_variant_80</item>
 
     <item name="colorOutline">@color/red_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/red_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Yellow" parent="Theme.GrocyM3">
@@ -89,6 +90,7 @@
     <item name="colorOnSurfaceVariant">@color/yellow_neutral_variant_80</item>
 
     <item name="colorOutline">@color/yellow_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/yellow_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Lime" parent="Theme.GrocyM3">
@@ -125,6 +127,7 @@
     <item name="colorOnSurfaceVariant">@color/lime_neutral_variant_80</item>
 
     <item name="colorOutline">@color/lime_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/lime_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Green" parent="Theme.GrocyM3">
@@ -161,6 +164,7 @@
     <item name="colorOnSurfaceVariant">@color/green_neutral_variant_80</item>
 
     <item name="colorOutline">@color/green_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/green_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Turquoise" parent="Theme.GrocyM3">
@@ -197,6 +201,7 @@
     <item name="colorOnSurfaceVariant">@color/turquoise_neutral_variant_80</item>
 
     <item name="colorOutline">@color/turquoise_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/turquoise_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Teal" parent="Theme.GrocyM3">
@@ -233,6 +238,7 @@
     <item name="colorOnSurfaceVariant">@color/teal_neutral_variant_80</item>
 
     <item name="colorOutline">@color/teal_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/teal_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Blue" parent="Theme.GrocyM3">
@@ -269,6 +275,7 @@
     <item name="colorOnSurfaceVariant">@color/blue_neutral_variant_80</item>
 
     <item name="colorOutline">@color/blue_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/blue_neutral_variant_30</item>
   </style>
 
   <style name="Theme.Grocy.Purple" parent="Theme.GrocyM3">
@@ -305,6 +312,7 @@
     <item name="colorOnSurfaceVariant">@color/purple_neutral_variant_80</item>
 
     <item name="colorOutline">@color/purple_neutral_variant_60</item>
+    <item name="colorOutlineVariant">@color/purple_neutral_variant_30</item>
   </style>
 
 </resources>
