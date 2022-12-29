@@ -28,6 +28,9 @@
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+  <uses-feature
+    android:name="android.hardware.camera"
+    android:required="false" />
 
   <queries>
     <package android:name="org.torproject.android" />
