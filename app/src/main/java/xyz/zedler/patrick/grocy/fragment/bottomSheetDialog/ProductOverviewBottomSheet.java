@@ -489,9 +489,14 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       if (hasDetails()) {
         location = productDetails.getLocation(); // refresh
       }
+      ArrayList<Integer> idsAlreadyInString = new ArrayList<>();
       StringBuilder locationsString = new StringBuilder();
       for (StockLocation stockLocation : stockLocations) {
+        if (idsAlreadyInString.contains(stockLocation.getLocationId())) {
+          continue;
+        }
         locationsString.append(stockLocation.getLocationName());
+        idsAlreadyInString.add(stockLocation.getLocationId());
         if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size() - 1)
             .getLocationId()) {
           locationsString.append(", ");
