@@ -41,7 +41,7 @@
     android:icon="@mipmap/ic_launcher"
     android:theme="@style/Theme.GrocyM3"
     android:supportsRtl="true"
-    android:enableOnBackInvokedCallback="true"
+    android:enableOnBackInvokedCallback="false"
     android:hardwareAccelerated="true"
     android:localeConfig="@xml/locales_config"
     android:allowBackup="true"
