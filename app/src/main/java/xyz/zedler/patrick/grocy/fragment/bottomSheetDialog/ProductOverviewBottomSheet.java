@@ -42,6 +42,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -60,8 +62,6 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -489,16 +489,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       if (hasDetails()) {
         location = productDetails.getLocation(); // refresh
       }
-      ArrayList<Integer> idsAlreadyInString = new ArrayList<>();
-      StringBuilder locationsString = new StringBuilder();
+
+      ArrayList<String> stockLocationNames = new ArrayList<>();
       for (StockLocation stockLocation : stockLocations) {
-        if (idsAlreadyInString.contains(stockLocation.getLocationId())) {
+        if (stockLocationNames.contains(stockLocation.getLocationName())) {
           continue;
         }
-        locationsString.append(stockLocation.getLocationName());
-        idsAlreadyInString.add(stockLocation.getLocationId());
-        if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size() - 1)
-            .getLocationId()) {
+        stockLocationNames.add(stockLocation.getLocationName());
+      }
+      StringBuilder locationsString = new StringBuilder();
+      for (String name : stockLocationNames) {
+        locationsString.append(name);
+        if (!name.equals(stockLocationNames.get(stockLocationNames.size() - 1))) {
           locationsString.append(", ");
         }
       }
