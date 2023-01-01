@@ -17,14 +17,30 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:autoMirrored="true">
 
-    <solid android:color="@color/surface" />
+  <item>
 
-  <corners android:radius="8dp" />
+    <ripple android:color="@color/highlight">
 
-  <padding
-    android:bottom="8dp"
-    android:top="8dp" />
+      <item
+          android:left="4dp"
+          android:bottom="1dp"
+          android:top="1dp">
+        <shape android:shape="rectangle">
 
-</shape>
+          <corners
+              android:topLeftRadius="32dp"
+              android:bottomLeftRadius="32dp" />
+
+          <solid android:color="@color/surface" />
+        </shape>
+      </item>
+
+    </ripple>
+
+  </item>
+
+</layer-list>

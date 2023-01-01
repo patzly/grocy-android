@@ -21,11 +21,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:autoMirrored="true">
 
-  <item>
-
-    <ripple android:color="@color/highlight">
-
-      <item
+    <item
         android:left="4dp"
         android:bottom="1dp"
         android:top="1dp">
@@ -36,10 +32,6 @@
 
           <solid android:color="@color/surface" />
         </shape>
-      </item>
-
-    </ripple>
-
-  </item>
+    </item>
 
 </layer-list>
