@@ -31,6 +31,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -418,14 +419,24 @@ public abstract class SwipeBehavior extends ItemTouchHelper.SimpleCallback {
       float centerX = rect.centerX() + offsetX;
       float centerY = rect.centerY();
       int sizeHalf = bgSize / 2;
-      canvas.drawRoundRect(
-          centerX - sizeHalf,
-          centerY - sizeHalf,
-          centerX + sizeHalf,
-          centerY + sizeHalf,
-          bgCornerRadius, bgCornerRadius,
-          paintButton
-      );
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        canvas.drawRoundRect(
+                centerX - sizeHalf,
+                centerY - sizeHalf,
+                centerX + sizeHalf,
+                centerY + sizeHalf,
+                bgCornerRadius, bgCornerRadius,
+                paintButton
+        );
+      } else {
+        canvas.drawRect(
+                centerX - sizeHalf,
+                centerY - sizeHalf,
+                centerX + sizeHalf,
+                centerY + sizeHalf,
+                paintButton
+        );
+      }
 
       // DRAW ICON
 

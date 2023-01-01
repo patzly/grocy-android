@@ -23,6 +23,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
@@ -79,9 +81,18 @@ public class InputChip extends LinearLayout {
   }
 
   public InputChip(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-    this(context, attrs, defStyleAttr, 0);
+      super(context, attrs, defStyleAttr);
+      int iconRes = -1;
+      if (attrs != null) {
+        iconRes = attrs.getAttributeResourceValue(
+                "app", "icon", -1
+        );
+      }
+      this.context = context;
+      init(null, iconRes, false, null);
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   public InputChip(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
     int iconRes = attrs.getAttributeResourceValue(

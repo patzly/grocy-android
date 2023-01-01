@@ -28,6 +28,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -155,9 +156,11 @@ public class ResUtil {
     if (item == null || item.getIcon() == null) {
       return;
     }
-    item.getIcon().setTintList(
-        ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
-    );
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      item.getIcon().setTintList(
+              ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
+      );
+    }
   }
 
   public static void tintMenuItemIcons(Context context, Menu menu) {
@@ -166,9 +169,11 @@ public class ResUtil {
       if (item == null || item.getIcon() == null) {
         return;
       }
-      item.getIcon().setTintList(
-          ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
-      );
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        item.getIcon().setTintList(
+                ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
+        );
+      }
     }
   }
 
@@ -229,7 +234,9 @@ public class ResUtil {
     paint.setColor(ContextCompat.getColor(context, R.color.icon));
     paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
-    paint.setLetterSpacing(0.1f);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      paint.setLetterSpacing(0.1f);
+    }
 
     Rect bounds = new Rect();
     paint.getTextBounds(

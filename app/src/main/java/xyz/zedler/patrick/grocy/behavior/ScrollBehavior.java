@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.elevation.SurfaceColors;
@@ -232,18 +233,23 @@ public class ScrollBehavior {
     if (appBarColor == targetColor) {
       return;
     }
-    if (valueAnimator != null) {
-      valueAnimator.pause();
-      valueAnimator.cancel();
-      valueAnimator = null;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      if (valueAnimator != null) {
+        valueAnimator.pause();
+        valueAnimator.cancel();
+        valueAnimator = null;
+      }
+
+      valueAnimator = ValueAnimator.ofArgb(appBarColor, targetColor);
+      valueAnimator.addUpdateListener(
+              animation -> appBarLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue())
+      );
+      valueAnimator.setDuration(
+              activity.getResources().getInteger(R.integer.app_bar_elevation_anim_duration)
+      ).start();
+    } else {
+        appBarLayout.setBackgroundColor(targetColor);
     }
-    valueAnimator = ValueAnimator.ofArgb(appBarColor, targetColor);
-    valueAnimator.addUpdateListener(
-        animation -> appBarLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue())
-    );
-    valueAnimator.setDuration(
-        activity.getResources().getInteger(R.integer.app_bar_elevation_anim_duration)
-    ).start();
   }
 
   private int getAppBarLayoutColor() {

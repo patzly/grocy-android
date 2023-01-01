@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.widget.NestedScrollView;
@@ -400,7 +401,7 @@ public class SystemBarBehavior {
       } else {
         window.setNavigationBarColor(isDarkModeActive ? colorScrim : UiUtil.SCRIM);
       }
-    } else { // 21
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       window.setStatusBarColor(isDarkModeActive ? Color.TRANSPARENT : UiUtil.SCRIM);
       if (isOrientationPortrait) {
         window.setNavigationBarColor(
@@ -409,6 +410,9 @@ public class SystemBarBehavior {
       } else {
         window.setNavigationBarColor(Color.BLACK);
       }
+    } else {
+      window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
+              View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
   }
 

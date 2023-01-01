@@ -23,6 +23,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -83,12 +84,16 @@ public class FilterChip extends LinearLayout {
     int bgColorTo = data.isActive()
         ? ResUtil.getColorAttr(getContext(), R.attr.colorSecondaryContainer)
         : Color.TRANSPARENT;
-    ValueAnimator colorAnimation = ValueAnimator.ofArgb(bgColorFrom, bgColorTo);
-    colorAnimation.setDuration(250);
-    colorAnimation.addUpdateListener(
-        animation -> binding.card.setCardBackgroundColor((int) animation.getAnimatedValue())
-    );
-    colorAnimation.start();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      ValueAnimator colorAnimation = ValueAnimator.ofArgb(bgColorFrom, bgColorTo);
+      colorAnimation.setDuration(250);
+      colorAnimation.addUpdateListener(
+              animation -> binding.card.setCardBackgroundColor((int) animation.getAnimatedValue())
+      );
+      colorAnimation.start();
+    } else {
+      binding.text.setBackgroundColor(bgColorTo);
+    }
 
     // text
     binding.text.setText(data.getText());
@@ -100,12 +105,14 @@ public class FilterChip extends LinearLayout {
     ));
 
     // expand icon color
-    binding.imageIconExpand.setImageTintList(ColorStateList.valueOf(
-        ResUtil.getColorAttr(getContext(), data.isActive()
-                ? R.attr.colorOnSecondaryContainer
-                : R.attr.colorOnSurfaceVariant
-        )
-    ));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      binding.imageIconExpand.setImageTintList(ColorStateList.valueOf(
+              ResUtil.getColorAttr(getContext(), data.isActive()
+                      ? R.attr.colorOnSecondaryContainer
+                      : R.attr.colorOnSurfaceVariant
+              )
+      ));
+    }
 
     if (data.getDrawable() == -1) {
       binding.frameIcon.setVisibility(GONE);

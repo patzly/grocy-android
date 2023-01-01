@@ -26,9 +26,11 @@ import android.graphics.Path;
 import android.graphics.Path.Op;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.color.ColorRoles;
@@ -286,8 +288,9 @@ public class BezierCurveChart extends View {
 
   private void drawGrid(Canvas canvas) {
     canvas.drawRoundRect(rectChart, cornerRadiusBg, cornerRadiusBg, paintChartBg);
-    getRoundedRectAsPath(pathFillMask, rectChart, cornerRadiusBg, cornerRadiusBg);
-
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getRoundedRectAsPath(pathFillMask, rectChart, cornerRadiusBg, cornerRadiusBg);
+    }
     int gridCount = labels.size() - 1;
     float part = rectChart.width() / gridCount;
 
@@ -312,6 +315,7 @@ public class BezierCurveChart extends View {
     }
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   private static void getRoundedRectAsPath(Path target, RectF rect, float rx, float ry) {
     target.reset();
     if (rx < 0) {

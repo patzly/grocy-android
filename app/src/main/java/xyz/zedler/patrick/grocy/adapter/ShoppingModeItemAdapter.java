@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -334,9 +335,11 @@ public class ShoppingModeItemAdapter extends
           binding.name.getContext().getString(R.string.subtitle_done)
       );
       binding.name.setTextColor(isDone ? colorTertiary : colorPrimary);
-      binding.separator.setBackgroundTintList(
-          ColorStateList.valueOf(isDone ? colorTertiary : colorPrimary)
-      );
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        binding.separator.setBackgroundTintList(
+                ColorStateList.valueOf(isDone ? colorTertiary : colorPrimary)
+        );
+      }
       return;
     }
     if (type == GroupedListItem.TYPE_BOTTOM_NOTES) {

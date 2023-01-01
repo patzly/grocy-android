@@ -55,6 +55,7 @@ import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -145,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
 
   public boolean isScrollRestored = false;
   private boolean debug;
+
+  static {
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -434,7 +439,10 @@ public class MainActivity extends AppCompatActivity {
   public void updateStartDestination() {
     NavInflater navInflater = navController.getNavInflater();
     NavGraph graph = navInflater.inflate(R.navigation.navigation_main);
-    boolean introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
+    boolean introShown = true;
+    if (VERSION.SDK_INT > VERSION_CODES.LOLLIPOP) {
+      introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
+    }
     if (!introShown) {
       graph.setStartDestination(R.id.onboardingFragment);
     } else if (isServerUrlEmpty()) {
@@ -454,6 +462,7 @@ public class MainActivity extends AppCompatActivity {
     return scrollBehaviorOld;
   }
 
+  @RequiresApi(api = VERSION_CODES.LOLLIPOP)
   public void updateBottomAppBar(
       boolean showFab,
       @MenuRes int newMenuId,
@@ -475,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
         if (item.getIcon() != null) {
           if (VERSION.SDK_INT >= VERSION_CODES.O) {
             item.setIconTintList(ColorStateList.valueOf(tint));
-          } else {
+          } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             item.getIcon().setTint(tint);
           }
         }
@@ -485,7 +494,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {
-    updateBottomAppBar(showFab, newMenuId, null);
+    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+      updateBottomAppBar(showFab, newMenuId, null);
+    }
   }
 
   public void updateFab(

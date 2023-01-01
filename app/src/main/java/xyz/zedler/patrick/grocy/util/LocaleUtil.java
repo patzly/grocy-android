@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class LocaleUtil {
     return languages;
   }
 
+  @RequiresApi(api = VERSION_CODES.LOLLIPOP)
   public static String getLanguageCode(LocaleListCompat locales) {
     if (!locales.isEmpty()) {
       return Objects.requireNonNull(locales.get(0)).toLanguageTag();

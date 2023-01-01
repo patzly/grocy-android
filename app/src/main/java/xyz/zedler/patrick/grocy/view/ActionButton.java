@@ -33,6 +33,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
 import xyz.zedler.patrick.grocy.R;
 
 public class ActionButton extends LinearLayout {
@@ -85,12 +87,14 @@ public class ActionButton extends LinearLayout {
   }
 
   public void setIconTint(int color) {
-    imageViewIcon.setImageTintList(new ColorStateList(new int[][]{
-        new int[]{android.R.attr.state_enabled},
-        new int[]{-android.R.attr.state_enabled}
-    }, new int[]{
-        color, color
-    }));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      imageViewIcon.setImageTintList(new ColorStateList(new int[][]{
+              new int[]{android.R.attr.state_enabled},
+              new int[]{-android.R.attr.state_enabled}
+      }, new int[]{
+              color, color
+      }));
+    }
   }
 
   public void setState(boolean enabled) {

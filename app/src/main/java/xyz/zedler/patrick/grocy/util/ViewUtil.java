@@ -307,9 +307,12 @@ public class ViewUtil {
         UiUtil.dpToPx(context, isRtl ? paddingStart : paddingEnd),
         UiUtil.dpToPx(context, 2)
     );
-    return new RippleDrawable(
-        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
-    );
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      return new RippleDrawable(
+              ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
+      );
+    }
+    return null;
   }
 
   public static Drawable getBgListItemSelected(Context context) {
@@ -357,9 +360,12 @@ public class ViewUtil {
         UiUtil.dpToPx(context, isRtl ? paddingStart : paddingEnd),
         UiUtil.dpToPx(context, 2)
     );
-    return new RippleDrawable(
-        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
-    );
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      return new RippleDrawable(
+          ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
+      );
+    }
+    return null;
   }
 
   // Enable/disable views

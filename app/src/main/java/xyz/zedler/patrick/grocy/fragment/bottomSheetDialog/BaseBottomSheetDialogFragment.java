@@ -35,6 +35,7 @@ import android.view.Window;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
@@ -189,6 +190,7 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
     drawable.setCornerRadii(new float[]{radius, radius, radius, radius, 0, 0, 0, 0});
   }
 
+  @RequiresApi(api = VERSION_CODES.LOLLIPOP)
   private void layoutEdgeToEdge(Window window, int insetBottom) {
     boolean isOrientationPortraitOrNavAtBottom =
         UiUtil.isOrientationPortrait(requireContext()) || insetBottom > 0;
