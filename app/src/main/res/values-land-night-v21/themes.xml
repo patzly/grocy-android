@@ -19,4 +19,18 @@
 
 <resources>
 
+  <style name="Theme.Grocy" parent="Base.Grocy">
+    <item name="android:statusBarColor">@color/status_bar_lollipop</item>
+    <item name="android:navigationBarColor">@color/background</item>
+  </style>
+
+  <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
+    <item name="android:navigationBarColor">@color/black</item>
+  </style>
+
+  <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
+    <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+  </style>
+
 </resources>

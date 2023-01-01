@@ -21,6 +21,12 @@
 <resources>
 
   <style name="Base.GrocyM3" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="android:colorPrimaryDark">?android:attr/colorBackground</item>
+    <item name="android:navigationBarColor">?android:attr/colorBackground</item>
+
+    <item name="android:colorControlNormal">?attr/colorOnBackground</item>
+    <item name="android:colorControlActivated">?attr/colorSecondary</item>
+    <item name="android:colorEdgeEffect">?attr/colorSecondary</item>
     <item name="android:textColorHighlight">@color/selector_highlighted_text</item>
 
     <item name="android:fontFamily">@font/jost_book</item>
@@ -43,6 +49,7 @@
 
   <style name="Theme.GrocyM3.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
     <item name="enableEdgeToEdge">true</item>
+    <item name="android:navigationBarColor">@color/transparent</item>
   </style>
 
   <style name="Theme.Grocy.Red" parent="Theme.GrocyM3">

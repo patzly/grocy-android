@@ -19,18 +19,6 @@
 
 <resources>
 
-  <style name="Theme.Grocy" parent="Base.Grocy">
-    <item name="android:navigationBarColor">@color/background</item>
-    <item name="android:statusBarColor">@color/background</item>
-  </style>
 
-  <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
-    <item name="android:navigationBarColor">@color/surface</item>
-  </style>
-
-  <style name="Theme.Grocy.BottomAppBar" parent="Theme.Grocy">
-    <item name="android:navigationBarColor">@color/primary</item>
-    <item name="android:statusBarColor">@color/primary</item>
-  </style>
 
 </resources>

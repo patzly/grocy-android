@@ -387,6 +387,7 @@
     <item name="buttonBarPositiveButtonStyle">@style/Widget.Grocy.Button.UnelevatedButton</item>
     <item name="buttonBarStyle">@style/AlertDialogButtonBarStyle</item>
     <item name="colorAccent">@color/retro_green</item>
+    <item name="android:colorAccent">@color/retro_green</item>
   </style>
 
   <style name="AlertDialogCustomWithNegativeOnly" parent="AlertDialogCustom">

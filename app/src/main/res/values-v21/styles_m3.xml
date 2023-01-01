@@ -57,6 +57,7 @@
     <item name="titleTextAppearance">@style/TextAppearance.Grocy.TitleLarge</item>
     <item name="titleMarginStart">0dp</item>
     <item name="titleCentered">true</item>
+    <item name="android:actionOverflowMenuStyle">@style/ThemeOverlay.Grocy.OverFlow</item>
   </style>
 
   <style name="Widget.Grocy.Toolbar.Back" parent="@style/Widget.Grocy.Toolbar">
@@ -237,6 +238,7 @@
     name="Widget.Grocy.Button.TextButton.Dialog.Caution"
     parent="Widget.Grocy.Button.TextButton.Dialog">
     <item name="android:textColor">?attr/colorError</item>
+    <item name="rippleColor">@color/selector_highlight_error</item>
   </style>
 
   <style
@@ -284,10 +286,12 @@
     <item name="contentPadding">16dp</item>
     <item name="cardElevation">0dp</item>
     <item name="cardCornerRadius">16dp</item>
+    <item name="rippleColor">@color/selector_highlight</item>
   </style>
 
   <style name="Widget.Grocy.Card.Text.Error" parent="Widget.Grocy.Card.Text">
     <item name="cardBackgroundColor">?attr/colorErrorContainer</item>
+    <item name="rippleColor">@color/selector_highlight_error</item>
   </style>
 
   <style name="Widget.Grocy.Card.Outlined" parent="Widget.Material3.CardView.Outlined">
@@ -296,6 +300,7 @@
     <item name="contentPadding">16dp</item>
     <item name="cardElevation">0dp</item>
     <item name="cardCornerRadius">16dp</item>
+    <item name="rippleColor">@color/selector_highlight</item>
   </style>
 
   <!-- TextInputLayout -->
@@ -407,7 +412,7 @@
     <item name="tabIndicatorFullWidth">true</item>
     <item name="android:background">@null</item>
   </style>
-appcompat floating action button
+
   <!-- CheckBox -->
 
   <style name="Widget.Grocy.CheckBox" parent="Widget.Material3.CompoundButton.CheckBox">
@@ -606,6 +611,7 @@ appcompat floating action button
     <item name="android:paddingStart">0dp</item>
     <item name="android:paddingEnd">0dp</item>
     <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/ripple_list_item_bg</item>
   </style>
 
   <style
@@ -617,6 +623,7 @@ appcompat floating action button
     name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/ripple_list_item_bg</item>
   </style>
 
   <style
@@ -647,6 +654,7 @@ appcompat floating action button
     name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
     parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/ripple_list_item_bg</item>
   </style>
 
   <style
@@ -671,6 +679,7 @@ appcompat floating action button
     name="Widget.Grocy.LinearLayout.ListItem.ThreeLine.Clickable"
     parent="Widget.Grocy.LinearLayout.ListItem.ThreeLine">
     <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/ripple_list_item_bg</item>
   </style>
 
   <style name="Widget.Grocy.LinearLayout.ListItem.TextBox" parent="">
