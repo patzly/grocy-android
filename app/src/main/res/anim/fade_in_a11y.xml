@@ -23,4 +23,4 @@
   android:fromAlpha="0"
   android:toAlpha="1"
   android:duration="@android:integer/config_shortAnimTime"
-  android:interpolator="@android:interpolator/fast_out_slow_in" />
+  android:interpolator="@android:interpolator/linear" />

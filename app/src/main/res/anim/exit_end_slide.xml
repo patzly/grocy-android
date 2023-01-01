@@ -21,6 +21,6 @@
   <translate
     android:fromXDelta="0"
     android:toXDelta="100%p"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:interpolator="@android:interpolator/linear"
     android:duration="@integer/navigation_slide_duration" />
 </set>

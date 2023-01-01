@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Grocy Android.
   ~
   ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
@@ -18,9 +17,8 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<alpha
+<layoutAnimation
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:fromAlpha="1"
-  android:toAlpha="0"
-  android:duration="@android:integer/config_shortAnimTime"
-  android:interpolator="@android:interpolator/linear" />
+  android:animation="@anim/item_fall_down"
+  android:animationOrder="normal"
+  android:delay="10%" />

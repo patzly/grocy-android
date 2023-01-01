@@ -21,13 +21,13 @@
   <translate
     android:duration="300"
     android:startOffset="100"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:interpolator="@android:interpolator/linear"
     android:fromXDelta="-7.5%p"
     android:toXDelta="0" />
   <alpha
     android:duration="200"
     android:startOffset="200"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
+    android:interpolator="@android:interpolator/linear"
     android:fromAlpha="0"
     android:toAlpha="1" />
 </set>
