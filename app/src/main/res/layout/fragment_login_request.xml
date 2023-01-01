@@ -70,7 +70,7 @@
           android:layout_width="64dp"
           android:layout_height="64dp"
           android:scaleType="centerCrop"
-          android:src="@drawable/ic_round_grocy_anim"
+          app:srcCompat="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator

@@ -78,7 +78,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_round_cloud_pending"
+            app:srcCompat="@drawable/ic_round_cloud_pending"
             android:visibility="visible"
             tools:ignore="ContentDescription" />
 
@@ -88,7 +88,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_round_cloud_done_outline"
+            app:srcCompat="@drawable/ic_round_cloud_done_outline"
             android:visibility="gone"
             tools:ignore="ContentDescription" />
 
@@ -107,7 +107,7 @@
         android:layout_marginStart="16dp"
         android:clickable="false"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_round_chevron_right"
+        app:srcCompat="@drawable/ic_round_chevron_right"
         tools:ignore="ContentDescription" />
 
     </LinearLayout>
@@ -174,7 +174,7 @@
         android:layout_marginHorizontal="16dp"
         android:clickable="false"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_round_chevron_right"
+        app:srcCompat="@drawable/ic_round_chevron_right"
         tools:ignore="ContentDescription" />
 
     </LinearLayout>

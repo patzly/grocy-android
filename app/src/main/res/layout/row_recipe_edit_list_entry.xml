@@ -26,7 +26,6 @@
   android:minHeight="48dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
   android:padding="16dp"
   android:baselineAligned="false">
 

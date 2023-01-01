@@ -126,7 +126,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_done" />
+                app:srcCompat="@drawable/ic_round_done" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -190,7 +190,7 @@
               <ImageView
                 android:id="@+id/image_product"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_account_tree"
+                app:srcCompat="@drawable/ic_round_account_tree"
                 android:layout_marginBottom="10dp"
                 android:alpha="@{formData.parentProductEnabled ? 1.0f : 0.38f}"
                 tools:ignore="ContentDescription" />
@@ -236,7 +236,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_short_text" />
+                app:srcCompat="@drawable/ic_round_short_text" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -254,7 +254,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
+                app:srcCompat="@drawable/ic_round_chevron_right"
                 tools:ignore="ContentDescription" />
 
             </LinearLayout>
@@ -265,7 +265,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_category"
+                app:srcCompat="@drawable/ic_round_category"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -290,7 +290,7 @@
               <ImageView
                 android:id="@+id/image_master_product_simple_name"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_local_fire_department"
+                app:srcCompat="@drawable/ic_round_local_fire_department"
                 android:layout_marginBottom="10dp"
                 tools:ignore="ContentDescription" />
 
@@ -339,7 +339,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_visibility_off" />
+                app:srcCompat="@drawable/ic_round_visibility_off" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -383,7 +383,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_lock" />
+                app:srcCompat="@drawable/ic_round_lock" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -410,7 +410,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_image"
+                app:srcCompat="@drawable/ic_round_image"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -429,7 +429,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.Icon"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
+                app:srcCompat="@drawable/ic_round_chevron_right"
                 tools:ignore="ContentDescription" />
 
             </LinearLayout>

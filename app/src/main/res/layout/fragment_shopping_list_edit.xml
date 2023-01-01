@@ -71,7 +71,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
+            app:srcCompat="@drawable/ic_round_arrow_back" />
 
         </FrameLayout>
 
@@ -125,7 +125,7 @@
               <ImageView
                 android:id="@+id/image_name"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                android:src="@drawable/ic_round_label_anim"
+                  app:srcCompat="@drawable/ic_round_label_anim"
                 android:layout_marginTop="16sp"
                 tools:ignore="ContentDescription" />
 

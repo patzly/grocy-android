@@ -93,7 +93,7 @@
               android:id="@+id/image"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_widgets"
+              app:srcCompat="@drawable/ic_round_widgets"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -120,7 +120,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_place"
+              app:srcCompat="@drawable/ic_round_place"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -147,7 +147,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_store"
+              app:srcCompat="@drawable/ic_round_store"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -174,7 +174,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_weights"
+              app:srcCompat="@drawable/ic_round_weights"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -201,7 +201,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_category"
+              app:srcCompat="@drawable/ic_round_category"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -228,7 +228,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_view_list"
+              app:srcCompat="@drawable/ic_round_view_list"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -255,7 +255,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_home"
+              app:srcCompat="@drawable/ic_round_home"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">

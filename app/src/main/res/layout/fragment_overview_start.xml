@@ -63,7 +63,7 @@
           android:layout_height="30dp"
           android:layout_marginStart="16dp"
           android:layout_gravity="start|center_vertical"
-          android:src="@drawable/ic_round_grocy_anim"
+          app:srcCompat="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
 
         <TextView

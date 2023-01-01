@@ -50,7 +50,7 @@
           <ImageView
             android:id="@+id/image_drawer_stock"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_kitchen"
+            app:srcCompat="@drawable/ic_round_kitchen"
             tools:ignore="ContentDescription" />
 
           <TextView
@@ -109,7 +109,7 @@
             android:id="@+id/image_drawer_shopping_list"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_shopping_list" />
+            app:srcCompat="@drawable/ic_round_shopping_list" />
 
           <TextView
             android:id="@+id/text_drawer_shopping_list"
@@ -156,7 +156,7 @@
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:layout_marginEnd="0dp"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_consume_product"/>
+              app:srcCompat="@drawable/ic_round_consume_product"/>
 
           </LinearLayout>
 
@@ -172,7 +172,7 @@
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:layout_marginEnd="0dp"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_local_grocery_store"/>
+              app:srcCompat="@drawable/ic_round_local_grocery_store"/>
 
           </LinearLayout>
 
@@ -188,7 +188,7 @@
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:layout_marginEnd="0dp"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_swap_horiz"/>
+              app:srcCompat="@drawable/ic_round_swap_horiz"/>
 
           </LinearLayout>
 
@@ -204,7 +204,7 @@
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               android:layout_marginEnd="0dp"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_inventory"/>
+              app:srcCompat="@drawable/ic_round_inventory"/>
 
           </LinearLayout>
 
@@ -229,7 +229,7 @@
             android:id="@+id/image_drawer_recipes"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_pasta" />
+            app:srcCompat="@drawable/ic_round_pasta" />
 
           <TextView
             android:id="@+id/text_drawer_recipes"
@@ -257,7 +257,7 @@
             android:id="@+id/image_drawer_chores"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_home" />
+            app:srcCompat="@drawable/ic_round_home" />
 
           <TextView
             android:id="@+id/text_drawer_chores"
@@ -274,7 +274,7 @@
             android:id="@+id/image_drawer_tasks"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_checklist" />
+            app:srcCompat="@drawable/ic_round_checklist" />
 
           <TextView
             android:id="@+id/text_drawer_tasks"
@@ -296,7 +296,7 @@
           android:id="@+id/image_drawer_master_data"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_view_list" />
+          app:srcCompat="@drawable/ic_round_view_list" />
 
         <TextView
           android:id="@+id/text_drawer_master_data"
@@ -316,7 +316,7 @@
           android:id="@+id/image_drawer_settings"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_settings_anim" />
+            app:srcCompat="@drawable/ic_round_settings_anim" />
 
         <TextView
           android:id="@+id/text_drawer_settings"
@@ -333,7 +333,7 @@
           android:id="@+id/image_drawer_feedback"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_feedback_anim" />
+            app:srcCompat="@drawable/ic_round_feedback_anim" />
 
         <TextView
           style="@style/Widget.Grocy.TextView.DrawerItem"
@@ -349,7 +349,7 @@
           android:id="@+id/image_drawer_help"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
           android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_help" />
+          app:srcCompat="@drawable/ic_round_help" />
 
         <TextView
           style="@style/Widget.Grocy.TextView.DrawerItem"

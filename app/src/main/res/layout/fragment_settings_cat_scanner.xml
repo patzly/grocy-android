@@ -91,7 +91,7 @@
             android:id="@+id/image_front_cam"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_camera_front" />
+            app:srcCompat="@drawable/ic_round_camera_front" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -122,7 +122,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_category" />
+            app:srcCompat="@drawable/ic_round_category" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -152,7 +152,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_barcode"
+            app:srcCompat="@drawable/ic_round_barcode"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -184,7 +184,7 @@
             android:id="@+id/image_external_scanner"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_barcode_scan" />
+            app:srcCompat="@drawable/ic_round_barcode_scan" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 

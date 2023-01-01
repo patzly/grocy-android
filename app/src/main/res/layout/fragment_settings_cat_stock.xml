@@ -86,7 +86,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_place"
+            app:srcCompat="@drawable/ic_round_place"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -110,7 +110,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_category"
+            app:srcCompat="@drawable/ic_round_category"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -134,7 +134,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_weights"
+            app:srcCompat="@drawable/ic_round_weights"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -158,7 +158,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_event"
+            app:srcCompat="@drawable/ic_round_event"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -184,7 +184,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_open"
+            app:srcCompat="@drawable/ic_round_open"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -214,7 +214,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_event"
+            app:srcCompat="@drawable/ic_round_event"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -239,7 +239,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_shopping_list_long"
+            app:srcCompat="@drawable/ic_round_shopping_list_long"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -275,7 +275,7 @@
           <ImageView
             android:id="@+id/image_default_amount_purchase"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_scatter_plot_anim"
+              app:srcCompat="@drawable/ic_round_scatter_plot_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -318,7 +318,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_event"
+            app:srcCompat="@drawable/ic_round_event"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -354,7 +354,7 @@
           <ImageView
             android:id="@+id/image_default_amount_consume"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_scatter_plot_anim"
+              app:srcCompat="@drawable/ic_round_scatter_plot_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -379,7 +379,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_consume_product"
+            app:srcCompat="@drawable/ic_round_consume_product"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">

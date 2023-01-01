@@ -85,7 +85,7 @@
           <ImageView
             android:id="@+id/image_version"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_info_outline_anim"
+            app:srcCompat="@drawable/ic_round_info_outline_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -109,7 +109,7 @@
           <ImageView
             android:id="@+id/image_changelog"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_history_anim"
+              app:srcCompat="@drawable/ic_round_history_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -133,7 +133,7 @@
           <ImageView
             android:id="@+id/image_developers"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_person_anim"
+              app:srcCompat="@drawable/ic_round_person_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -156,7 +156,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_github"
+            app:srcCompat="@drawable/ic_round_github"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -180,7 +180,7 @@
           <ImageView
             android:id="@+id/image_intro"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_view_carousel_anim"
+              app:srcCompat="@drawable/ic_round_view_carousel_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -201,7 +201,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_date_range"
+            app:srcCompat="@drawable/ic_round_date_range"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -229,7 +229,7 @@
           <ImageView
             android:id="@+id/image_license_conscrypt"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -253,7 +253,7 @@
           <ImageView
             android:id="@+id/image_license_fuzzywuzzy"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -277,7 +277,7 @@
           <ImageView
             android:id="@+id/image_license_gson"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -301,7 +301,7 @@
           <ImageView
             android:id="@+id/image_license_jost"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -325,7 +325,7 @@
           <ImageView
             android:id="@+id/image_license_material_components"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -349,7 +349,7 @@
           <ImageView
             android:id="@+id/image_license_material_icons"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -373,7 +373,7 @@
           <ImageView
             android:id="@+id/image_license_netcipher"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -397,7 +397,7 @@
           <ImageView
             android:id="@+id/image_license_volley"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -421,7 +421,7 @@
           <ImageView
             android:id="@+id/image_license_xzing_android"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_copyright_anim"
+              app:srcCompat="@drawable/ic_round_copyright_anim"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">

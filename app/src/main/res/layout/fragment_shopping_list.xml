@@ -101,7 +101,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.Icon.Navigation"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_close" />
+              app:srcCompat="@drawable/ic_round_close" />
 
           </FrameLayout>
 

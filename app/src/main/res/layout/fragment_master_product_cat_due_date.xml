@@ -136,7 +136,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_event"
+              app:srcCompat="@drawable/ic_round_event"
               android:layout_gravity="start" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -207,7 +207,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_date_range"
+              app:srcCompat="@drawable/ic_round_date_range"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -252,7 +252,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_open"
+              app:srcCompat="@drawable/ic_round_open"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -297,7 +297,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_ac_unit"
+              app:srcCompat="@drawable/ic_round_ac_unit"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -342,7 +342,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_ac_unit"
+              app:srcCompat="@drawable/ic_round_ac_unit"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">

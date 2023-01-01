@@ -115,7 +115,7 @@
             <ImageView
               android:id="@+id/image_min_amount"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_scatter_plot_anim"
+                app:srcCompat="@drawable/ic_round_scatter_plot_anim"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -162,7 +162,7 @@
               android:id="@+id/image_accumulate_amount"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_factor"
+              app:srcCompat="@drawable/ic_round_factor"
               android:rotation="180" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -212,7 +212,7 @@
               android:id="@+id/image_treat_opened"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_open" />
+              app:srcCompat="@drawable/ic_round_open" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -256,7 +256,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_consume_product"
+              app:srcCompat="@drawable/ic_round_consume_product"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -280,7 +280,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_factor"
+              app:srcCompat="@drawable/ic_round_factor"
               tools:ignore="ContentDescription" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -327,7 +327,7 @@
               android:id="@+id/image_tare_weight"
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_scale_anim" />
+                app:srcCompat="@drawable/ic_round_scale_anim" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -399,7 +399,7 @@
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_category" />
+              app:srcCompat="@drawable/ic_round_category" />
 
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 

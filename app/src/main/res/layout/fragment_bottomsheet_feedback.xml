@@ -63,7 +63,7 @@
         <ImageView
           android:id="@+id/image_feedback_issue"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-          android:src="@drawable/ic_round_github"
+          app:srcCompat="@drawable/ic_round_github"
           tools:ignore="ContentDescription" />
 
         <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -87,7 +87,7 @@
         <ImageView
           android:id="@+id/image_feedback_rate"
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-          android:src="@drawable/ic_round_star_anim"
+            app:srcCompat="@drawable/ic_round_star_anim"
           tools:ignore="ContentDescription" />
 
         <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -110,7 +110,7 @@
 
         <ImageView
           style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-          android:src="@drawable/ic_round_share"
+          app:srcCompat="@drawable/ic_round_share"
           tools:ignore="ContentDescription" />
 
         <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">

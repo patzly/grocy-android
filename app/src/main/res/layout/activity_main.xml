@@ -47,7 +47,7 @@
     style="@style/Widget.Material3.FloatingActionButton.Secondary"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_round_barcode_scan"
+    app:srcCompat="@drawable/ic_round_barcode_scan"
     android:contentDescription="@string/action_scan"
     app:layout_anchor="@id/bottom_app_bar"
     app:fabSize="auto" />
@@ -59,7 +59,7 @@
     android:layout_marginBottom="16dp"
     android:layout_marginEnd="16dp"
     android:layout_gravity="bottom|end"
-    android:src="@drawable/ic_round_expand_less"
+    app:srcCompat="@drawable/ic_round_expand_less"
     android:tooltipText="@string/action_top_scroll"
     android:contentDescription="@string/action_top_scroll"
     app:backgroundTint="?attr/colorSurface"

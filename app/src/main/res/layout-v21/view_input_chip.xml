@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/frame_input_chip_container"
+  android:orientation="vertical"
+  android:layout_width="wrap_content"
+  android:layout_height="40dp"
+  android:gravity="center">
+
+  <com.google.android.material.card.MaterialCardView
+    android:layout_width="wrap_content"
+    android:layout_height="32dp"
+    android:layout_gravity="center"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardCornerRadius="8dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutline"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/transparent">
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:paddingStart="4dp"
+      android:paddingEnd="0dp"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      android:animateLayoutChanges="true">
+
+      <FrameLayout
+        android:id="@+id/frame_input_chip_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp">
+
+        <ImageView
+          android:id="@+id/image_input_chip_icon"
+          android:layout_width="18dp"
+          android:layout_height="18dp"
+          android:src="@drawable/ic_round_filter_list_in_anim"
+          app:tint="?attr/colorOnSurfaceVariant"
+          tools:ignore="ContentDescription" />
+
+      </FrameLayout>
+
+      <TextView
+        android:id="@+id/text_input_chip"
+        style="@style/TextAppearance.Grocy.LabelLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/filter_chip_text_inactive" />
+
+      <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_round_close"
+        tools:ignore="ContentDescription"
+        app:tint="?attr/colorOnSurfaceVariant" />
+
+    </LinearLayout>
+
+  </com.google.android.material.card.MaterialCardView>
+
+  <View
+    android:id="@+id/view_input_chip_close"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_gravity="end"
+    android:clickable="true"
+    android:focusable="true" />
+
+</FrameLayout>

@@ -81,7 +81,7 @@
               android:layout_height="24dp"
               android:layout_gravity="center"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_arrow_back" />
+              app:srcCompat="@drawable/ic_round_arrow_back" />
 
           </FrameLayout>
 
@@ -220,7 +220,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_widgets"
+                app:srcCompat="@drawable/ic_round_widgets"
                 android:layout_marginBottom="8dp"
                 tools:ignore="ContentDescription" />
 
@@ -279,7 +279,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_transfer_from"
+                app:srcCompat="@drawable/ic_round_transfer_from"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -306,7 +306,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_weights"
+                app:srcCompat="@drawable/ic_round_weights"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -346,7 +346,7 @@
                 <ImageView
                   android:id="@+id/image_amount"
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                  android:src="@drawable/ic_round_scatter_plot_anim"
+                    app:srcCompat="@drawable/ic_round_scatter_plot_anim"
                   android:layout_marginBottom="8dp"
                   tools:ignore="ContentDescription" />
 
@@ -411,7 +411,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_transfer_to"
+                app:srcCompat="@drawable/ic_round_transfer_to"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -436,7 +436,7 @@
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                 tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_gps_fixed" />
+                app:srcCompat="@drawable/ic_round_gps_fixed" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 

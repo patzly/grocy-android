@@ -58,7 +58,7 @@
           android:id="@+id/image_icon"
           android:layout_width="18dp"
           android:layout_height="18dp"
-          android:src="@drawable/ic_round_filter_list_in_anim"
+            app:srcCompat="@drawable/ic_round_filter_list_in_anim"
           app:tint="?attr/colorOnSurfaceVariant"
           tools:ignore="ContentDescription" />
 
@@ -78,7 +78,7 @@
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_round_expand_more"
+        app:srcCompat="@drawable/ic_round_expand_more"
         app:tint="?attr/colorOnSurfaceVariant"
         tools:ignore="ContentDescription" />
 

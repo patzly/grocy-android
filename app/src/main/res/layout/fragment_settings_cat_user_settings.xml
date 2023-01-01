@@ -95,7 +95,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_kitchen"
+            app:srcCompat="@drawable/ic_round_kitchen"
             tools:ignore="ContentDescription" />
 
           <TextView
@@ -107,7 +107,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
+            app:srcCompat="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
         </LinearLayout>
@@ -121,7 +121,7 @@
 
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_shopping_list"
+            app:srcCompat="@drawable/ic_round_shopping_list"
             tools:ignore="ContentDescription" />
 
           <TextView
@@ -133,7 +133,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
+            app:srcCompat="@drawable/ic_round_chevron_right"
             tools:ignore="ContentDescription" />
 
         </LinearLayout>

@@ -34,7 +34,7 @@
   <ImageView
     android:id="@+id/image_selected"
     style="@style/Widget.Grocy.ImageView.Icon"
-    android:src="@drawable/ic_round_check_circle"
+    app:srcCompat="@drawable/ic_round_check_circle"
     android:visibility="invisible"
     tools:ignore="ContentDescription"
     android:layout_marginStart="16dp"

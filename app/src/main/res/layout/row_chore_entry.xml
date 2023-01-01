@@ -76,7 +76,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="12dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_round_schedule"
+        app:srcCompat="@drawable/ic_round_schedule"
         android:visibility="gone"
         tools:ignore="ContentDescription"
         app:tint="@color/on_background_secondary" />
@@ -102,7 +102,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="12dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_round_swap_horiz"
+        app:srcCompat="@drawable/ic_round_swap_horiz"
         android:visibility="gone"
         tools:ignore="ContentDescription"
         app:tint="@color/on_background_secondary" />

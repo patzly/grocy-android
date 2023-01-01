@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<layout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
+      name="fragment"
+      type="xyz.zedler.patrick.grocy.fragment.LoginIntroFragment" />
+    <variable
+      name="clickUtil"
+      type="xyz.zedler.patrick.grocy.util.ClickUtil" />
+  </data>
+
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinate_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:overScrollMode="never"
+      android:fillViewport="true">
+
+      <LinearLayout
+        android:id="@+id/linear_container_scroll"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <ImageView
+          android:id="@+id/image_logo"
+          android:layout_width="64dp"
+          android:layout_height="64dp"
+          android:scaleType="centerCrop"
+          android:src="@drawable/ic_round_grocy_anim"
+          tools:ignore="ContentDescription"
+          android:layout_marginBottom="16dp" />
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.TitleLarge"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAlignment="center"
+          android:gravity="center_horizontal"
+          android:layout_marginBottom="24dp"
+          android:text="@string/msg_welcome" />
+
+        <com.google.android.material.card.MaterialCardView
+          style="@style/Widget.Grocy.Card.Text"
+          android:layout_marginBottom="12dp">
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="12dp"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_welcome_introduce" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_choose_option_below" />
+
+          </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.OutlinedButton"
+            android:layout_marginEnd="4dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/action_demo_server"
+            android:onClick="@{() -> fragment.loginDemoInstance()}"
+            app:clickUtil="@{clickUtil}" />
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/action_own_server"
+            android:onClick="@{() -> fragment.loginOwnInstance()}"
+            app:clickUtil="@{clickUtil}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_marginTop="12dp">
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:onClick="@{() -> fragment.openHelpWebsite()}"
+            app:clickUtil="@{clickUtil}"
+            app:tooltipText="@{@string/title_help}"
+            app:icon="@drawable/ic_round_help_outline_anim" />
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
+            app:clickUtil="@{clickUtil}"
+            app:tooltipText="@{@string/title_feedback}"
+            app:icon="@drawable/ic_round_feedback_anim" />
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:onClick="@{() -> fragment.openGrocyWebsite()}"
+            app:clickUtil="@{clickUtil}"
+            app:tooltipText="@{@string/info_website}"
+            app:icon="@drawable/ic_round_open_in_browser_anim" />
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_settingsFragment)}"
+            app:clickUtil="@{clickUtil}"
+            app:tooltipText="@{@string/title_settings}"
+            app:icon="@drawable/ic_round_settings_anim" />
+
+          <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_aboutFragment)}"
+            app:clickUtil="@{clickUtil}"
+            app:tooltipText="@{@string/title_about}"
+            app:icon="@drawable/ic_round_info_outline_anim" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
+  -->
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/property_due_date" />
+
+    <FrameLayout
+      android:id="@+id/frame_help_button"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_marginEnd="4dp"
+      android:background="?attr/actionBarItemBackground"
+      android:clickable="true"
+      android:gravity="center"
+      android:layout_gravity="center_vertical|end"
+      android:contentDescription="@string/action_display_help"
+      android:tooltipText="@string/action_display_help"
+      android:focusable="true"
+      tools:targetApi="o">
+
+      <ImageView
+        android:id="@+id/image_help_button"
+        style="@style/Widget.Grocy.ImageView.Icon"
+        android:layout_gravity="center"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_round_help_outline_anim" />
+
+    </FrameLayout>
+
+  </FrameLayout>
+
+  <com.google.android.material.divider.MaterialDivider
+    style="@style/Widget.Grocy.Divider" />
+
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
+    <LinearLayout
+      android:id="@+id/linear_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:paddingBottom="12dp">
+
+      <LinearLayout
+        android:id="@+id/linear_body_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
+        <com.google.android.material.card.MaterialCardView
+          android:id="@+id/help"
+          style="@style/Widget.Grocy.Card.Text"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:visibility="gone"
+          android:clickable="true"
+          android:focusable="true">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:text="@string/msg_help_date_chooser" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+          android:id="@+id/linear_never_expires"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:paddingStart="16dp"
+          android:paddingEnd="4dp">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.ListItem.Title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/subtitle_never_overdue" />
+
+          <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkbox_never_expires"
+            style="@style/Widget.Grocy.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <DatePicker
+          android:id="@+id/date_picker"
+          android:theme="@style/Widget.Grocy.DatePicker"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:calendarViewShown="false"
+          android:datePickerMode="spinner"
+          android:fontFamily="@font/jost_medium" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:gravity="end"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp">
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/reset"
+            style="@style/Widget.Grocy.Button.TextButton"
+            android:text="@string/action_reset" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/save"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_marginStart="8dp"
+            android:text="@string/action_save" />
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/linear_body_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.google.android.material.card.MaterialCardView
+          android:id="@+id/help_keyboard"
+          style="@style/Widget.Grocy.Card.Text"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="8dp"
+          android:visibility="gone"
+          android:clickable="true"
+          android:focusable="true">
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:text="@string/msg_help_date_chooser_keyboard" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+          android:id="@+id/text_input_hint"
+          style="@style/Widget.Grocy.TextView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          android:paddingTop="16dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:paddingTop="12dp"
+          android:paddingBottom="12dp"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp">
+
+          <LinearLayout
+            android:id="@+id/linear_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/more_month"
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:clickable="true"
+              android:focusable="true"
+              android:longClickable="true"
+              app:icon="@drawable/ic_round_expand_less" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="M"
+              android:layout_gravity="center_vertical" />
+
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/less_month"
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:layout_marginEnd="12dp"
+              android:clickable="true"
+              android:focusable="true"
+              android:longClickable="true"
+              app:icon="@drawable/ic_round_expand_more" />
+
+          </LinearLayout>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/more_day"
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:clickable="true"
+            android:focusable="true"
+            android:longClickable="true"
+            app:icon="@drawable/ic_round_expand_less" />
+
+          <TextView
+            style="@style/Widget.Grocy.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D"
+            android:layout_gravity="center_vertical" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/less_day"
+            style="@style/Widget.Grocy.Button.IconButton"
+            android:layout_marginEnd="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:longClickable="true"
+            app:icon="@drawable/ic_round_expand_more" />
+
+          <LinearLayout
+            android:id="@+id/linear_month_reverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/more_month_reverse"
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:clickable="true"
+              android:focusable="true"
+              android:longClickable="true"
+              app:icon="@drawable/ic_round_expand_less" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="M"
+              android:layout_gravity="center_vertical"
+              android:textColor="@color/icon"/>
+
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/less_month_reverse"
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:layout_marginEnd="12dp"
+              app:icon="@drawable/ic_round_expand_more" />
+
+          </LinearLayout>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/clear"
+            style="@style/Widget.Grocy.Button.TextButton"
+            android:text="@string/action_clear"
+            android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="0dp"
+          android:paddingBottom="4dp"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp">
+
+          <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_date"
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:hint="MMDD | YYMMDD"
+            app:helperTextEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/edit_text_date"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="number"
+              android:imeOptions="actionDone"
+              android:selectAllOnFocus="true"/>
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

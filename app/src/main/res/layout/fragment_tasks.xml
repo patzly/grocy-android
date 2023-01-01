@@ -83,7 +83,7 @@
               android:layout_height="24dp"
               android:layout_gravity="center"
               android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_arrow_back" />
+              app:srcCompat="@drawable/ic_round_arrow_back" />
 
           </FrameLayout>
 
@@ -132,7 +132,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
-                android:src="@drawable/ic_round_close" />
+                app:srcCompat="@drawable/ic_round_close" />
 
             </FrameLayout>
 

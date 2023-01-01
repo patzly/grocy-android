@@ -74,7 +74,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
+            app:srcCompat="@drawable/ic_round_arrow_back" />
 
         </FrameLayout>
 
@@ -137,7 +137,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                android:src="@drawable/ic_round_label_anim"
+                app:srcCompat="@drawable/ic_round_label_anim"
                 android:layout_marginTop="16sp"
                 tools:ignore="ContentDescription" />
 
@@ -204,7 +204,7 @@
               <ImageView
                 android:id="@+id/image_note"
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                android:src="@drawable/ic_round_subject_anim"
+                app:srcCompat="@drawable/ic_round_subject_anim"
                 android:layout_marginTop="16sp"
                 tools:ignore="ContentDescription" />
 
@@ -235,7 +235,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_event"
+                app:srcCompat="@drawable/ic_round_event"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox"
@@ -276,7 +276,7 @@
                   android:layout_height="24dp"
                   android:layout_gravity="center"
                   android:importantForAccessibility="no"
-                  android:src="@drawable/ic_round_close" />
+                  app:srcCompat="@drawable/ic_round_close" />
 
               </FrameLayout>
 
@@ -288,7 +288,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_category"
+                app:srcCompat="@drawable/ic_round_category"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
@@ -311,7 +311,7 @@
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_person_anim"
+                  app:srcCompat="@drawable/ic_round_person_anim"
                 tools:ignore="ContentDescription" />
 
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">

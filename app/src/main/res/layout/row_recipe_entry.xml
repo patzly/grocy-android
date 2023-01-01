@@ -32,7 +32,6 @@
   android:minHeight="88dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
   android:gravity="center_vertical">
 
   <ImageView
@@ -59,7 +58,7 @@
 
     <ImageView
       style="@style/Widget.Grocy.ImageView.Icon"
-      android:src="@drawable/ic_round_image"
+      app:srcCompat="@drawable/ic_round_image"
       android:layout_gravity="center"
       tools:ignore="ContentDescription" />
 
