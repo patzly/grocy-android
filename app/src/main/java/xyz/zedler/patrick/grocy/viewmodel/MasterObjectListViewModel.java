@@ -290,7 +290,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
         }
       }
 
-      // sort items
       sortObjectsByName(searchedItems);
 
       for (Object object : searchResultsFuzzy) {
@@ -301,6 +300,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
       }
     } else {
       searchedItems = new ArrayList<>(objects);
+      sortObjectsByName(searchedItems);
     }
 
     // filter items
