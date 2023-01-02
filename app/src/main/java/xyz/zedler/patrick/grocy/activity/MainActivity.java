@@ -462,7 +462,6 @@ public class MainActivity extends AppCompatActivity {
     return scrollBehaviorOld;
   }
 
-  @RequiresApi(api = VERSION_CODES.LOLLIPOP)
   public void updateBottomAppBar(
       boolean showFab,
       @MenuRes int newMenuId,
@@ -494,9 +493,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void updateBottomAppBar(boolean showFab, @MenuRes int newMenuId) {
-    if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
       updateBottomAppBar(showFab, newMenuId, null);
-    }
   }
 
   public void updateFab(
