@@ -439,10 +439,7 @@ public class MainActivity extends AppCompatActivity {
   public void updateStartDestination() {
     NavInflater navInflater = navController.getNavInflater();
     NavGraph graph = navInflater.inflate(R.navigation.navigation_main);
-    boolean introShown = true;
-    if (VERSION.SDK_INT > VERSION_CODES.LOLLIPOP) {
-      introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
-    }
+    boolean  introShown = sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false);
     if (!introShown) {
       graph.setStartDestination(R.id.onboardingFragment);
     } else if (isServerUrlEmpty()) {
