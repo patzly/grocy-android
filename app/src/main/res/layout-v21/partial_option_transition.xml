@@ -19,16 +19,15 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linear_other_transition"
-    style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/linear_other_transition"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More">
 
   <ImageView
     android:id="@+id/image_other_transition"
     style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-    app:srcCompat="@drawable/ic_round_swap_horiz_anim"
+    android:src="@drawable/ic_round_swap_horiz_anim"
     tools:ignore="ContentDescription" />
 
   <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">

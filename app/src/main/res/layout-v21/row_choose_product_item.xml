@@ -18,12 +18,11 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
-    style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-    tools:ignore="UseCompoundDrawables">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/container"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+  tools:ignore="UseCompoundDrawables">
 
   <TextView
     android:id="@+id/name"
@@ -37,7 +36,7 @@
     android:id="@+id/image_pending"
     style="@style/Widget.Grocy.ImageView.Icon"
     android:layout_marginStart="16dp"
-    app:srcCompat="@drawable/ic_round_cloud_pending"
+    android:src="@drawable/ic_round_cloud_pending"
     android:visibility="gone"
     android:layout_gravity="center_vertical"
     tools:ignore="ContentDescription" />
