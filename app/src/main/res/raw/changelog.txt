@@ -23,6 +23,7 @@
 - Fixed: FAB displayed after rotation on pages where no FAB is used (#552)
 - Fixed: Use quick consume amount when option enabled in stock user settings (#604)
 - Fixed: Displaying of stock locations in product overview bottom sheet
+- Fixed: Wrong amount helper text on barcode edit page of master product (#611)
 - Fixed: Crash on stock journal page
 - Fixed: Crash on master product page when saving changes
 - Fixed: Crash on recipes page during search (#607)

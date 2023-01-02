@@ -33,19 +33,25 @@ public class QuantityUnitConversionUtil {
       Context context,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       List<QuantityUnitConversion> unitConversions,
-      Product product
+      Product product,
+      boolean relativeToStockUnit
   ) {
-    QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
-    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    QuantityUnit relativeToUnit = relativeToStockUnit
+        ? quantityUnitHashMap.get(product.getQuIdStockInt())
+        : quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    QuantityUnit stockUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
+    QuantityUnit purchaseUnit = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
 
-    if (stock == null || purchase == null) {
+    if (relativeToUnit == null || stockUnit == null || purchaseUnit == null) {
       throw new IllegalArgumentException(context.getString(R.string.error_loading_qus));
     }
 
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-    unitFactors.put(stock, (double) -1);
-    if (!unitFactors.containsKey(purchase)) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
+    unitFactors.put(relativeToUnit, (double) -1);
+    if (relativeToStockUnit && !unitFactors.containsKey(purchaseUnit)) {
+      unitFactors.put(purchaseUnit, product.getQuFactorPurchaseToStockDouble());
+    } else if (!relativeToStockUnit && !unitFactors.containsKey(stockUnit)) {
+      unitFactors.put(stockUnit, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (!NumUtil.isStringInt(conversion.getProductId())
@@ -62,7 +68,7 @@ public class QuantityUnitConversionUtil {
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (NumUtil.isStringInt(conversion.getProductId())
-          || stock.getId() != conversion.getFromQuId()) {
+          || relativeToUnit.getId() != conversion.getFromQuId()) {
         continue;
       }
       // Only add standard unit conversions
@@ -73,6 +79,15 @@ public class QuantityUnitConversionUtil {
       unitFactors.put(unit, conversion.getFactor());
     }
     return unitFactors;
+  }
+
+  public static HashMap<QuantityUnit, Double> getUnitFactors(
+      Context context,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversion> unitConversions,
+      Product product
+  ) {
+    return getUnitFactors(context, quantityUnitHashMap, unitConversions, product, true);
   }
 
 }
