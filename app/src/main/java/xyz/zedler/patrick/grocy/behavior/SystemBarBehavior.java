@@ -411,7 +411,7 @@ public class SystemBarBehavior {
         window.setNavigationBarColor(Color.BLACK);
       }
     } else {
-      window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+      window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
   }
 
