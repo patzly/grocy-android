@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -96,7 +97,11 @@ public class MasterProductViewModel extends BaseViewModel {
 
     pendingProductBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
-    isOnlineLive = new ConnectivityLiveData(application);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      isOnlineLive = new ConnectivityLiveData(application);
+    } else {
+      isOnlineLive = null;
+    }
 
     if (isActionEdit()) {
       if (args.getProduct() != null) {
@@ -182,9 +187,10 @@ public class MasterProductViewModel extends BaseViewModel {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
     }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
+    if (isOnlineLive != null) {
+      if (isOffline()) { // skip downloading
+        isLoadingLive.setValue(false);
+      }
     }
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));

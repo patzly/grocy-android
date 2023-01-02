@@ -199,10 +199,12 @@ public class MasterProductFragment extends BaseFragment {
       }
     }
 
-    viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
-      //if(isOnline ) viewModel.downloadData();
-      systemBarBehavior.refresh();
-    });
+    if (viewModel.getIsOnlineLive() != null) {
+      viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
+        //if(isOnline ) viewModel.downloadData();
+        systemBarBehavior.refresh();
+      });
+    }
 
     viewModel.getFormData().getCatOptionalErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatOptional.setTextColor(
