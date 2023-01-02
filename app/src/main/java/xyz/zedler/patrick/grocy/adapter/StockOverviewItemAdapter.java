@@ -23,6 +23,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -337,9 +339,11 @@ public class StockOverviewItemAdapter extends
     if (shoppingListItemsProductIds.contains(String.valueOf(stockItem.getProduct().getId()))
         && shoppingListFeatureEnabled) {
       holder.binding.viewOnShoppingList.setVisibility(View.VISIBLE);
-      holder.binding.viewOnShoppingList.setBackgroundTintList(
-          ColorStateList.valueOf(colorBlue.getAccent())
-      );
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        holder.binding.viewOnShoppingList.setBackgroundTintList(
+                ColorStateList.valueOf(colorBlue.getAccent())
+        );
+      }
     } else {
       holder.binding.viewOnShoppingList.setVisibility(View.GONE);
     }
