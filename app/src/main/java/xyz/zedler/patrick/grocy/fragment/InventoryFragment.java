@@ -148,12 +148,12 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate));
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate, null));
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new InventoryFragmentArgs.Builder(args)
           .setProductId(null).build().toBundle());
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId));
+      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId, null));
     }
     String barcode = (String) getFromThisDestinationNow(ARGUMENT.BARCODE);
     if (barcode != null) {
@@ -301,7 +301,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId());
+    viewModel.setProduct(product.getId(), null);
   }
 
   public void clearFocusAndCheckProductInput() {

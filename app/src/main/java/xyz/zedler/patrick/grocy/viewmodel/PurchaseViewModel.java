@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -426,6 +427,15 @@ public class PurchaseViewModel extends BaseViewModel {
       // location
       if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
         formData.getLocationLive().setValue(productDetails.getLocation());
+      }
+
+      // note
+      if (barcode != null
+          && barcode.getNote() != null
+          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
+          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
+      ) {
+        formData.getNoteLive().setValue(barcode.getNote());
       }
 
       formData.isFormValid();

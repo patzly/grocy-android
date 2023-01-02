@@ -327,6 +327,18 @@ public class SettingsViewModel extends BaseViewModel {
             .putBoolean(Constants.SETTINGS.RECIPES.KEEP_SCREEN_ON, enabled).apply();
   }
 
+  public boolean getCopyBarcodeNoteEnabled() {
+    return sharedPrefs.getBoolean(
+        BEHAVIOR.COPY_BARCODE_NOTE,
+        SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE
+    );
+  }
+
+  public void setCopyBarcodeNoteEnabled(boolean enabled) {
+    sharedPrefs.edit()
+        .putBoolean(Constants.SETTINGS.BEHAVIOR.COPY_BARCODE_NOTE, enabled).apply();
+  }
+
   public boolean getFrontCamEnabled() {
     return sharedPrefs.getBoolean(
         Constants.SETTINGS.SCANNER.FRONT_CAM,
