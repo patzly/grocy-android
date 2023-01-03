@@ -85,7 +85,7 @@
             android:id="@+id/image_help"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_live_help" />
+            app:srcCompat="@drawable/ic_round_live_help" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -117,7 +117,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_shortcut" />
+            app:srcCompat="@drawable/ic_round_shortcut" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -143,7 +143,7 @@
           <ImageView
             android:id="@+id/image_open_food_facts"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_barcode"
+            app:srcCompat="@drawable/ic_round_barcode"
             tools:ignore="ContentDescription" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
@@ -175,7 +175,7 @@
             android:id="@+id/image_expand"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_vertical_align_top_anim" />
+              app:srcCompat="@drawable/ic_round_vertical_align_top_anim" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -206,7 +206,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_speed" />
+            app:srcCompat="@drawable/ic_round_speed" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -236,7 +236,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_event" />
+            app:srcCompat="@drawable/ic_round_event" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -266,7 +266,7 @@
           <ImageView
             style="@style/Widget.Grocy.ImageView.ListItem.Icon"
             tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_event" />
+            app:srcCompat="@drawable/ic_round_event" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -296,7 +296,7 @@
           <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
               tools:ignore="ContentDescription"
-              android:src="@drawable/ic_round_preview" />
+              app:srcCompat="@drawable/ic_round_preview" />
 
           <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -342,6 +342,36 @@
               android:text="@string/setting_message_duration_description" />
 
           </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{v -> switchCopyBarcodeNote.setChecked(!switchCopyBarcodeNote.isChecked())}">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_round_content_copy" />
+
+          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Title"
+              android:text="@string/setting_copy_barcode_note" />
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.ListItem.Description"
+              android:text="@string/setting_copy_barcode_note_description" />
+
+          </LinearLayout>
+
+          <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_copy_barcode_note"
+            style="@style/Widget.Grocy.Switch"
+            android:checked="@={viewModel.copyBarcodeNoteEnabled}" />
 
         </LinearLayout>
 
