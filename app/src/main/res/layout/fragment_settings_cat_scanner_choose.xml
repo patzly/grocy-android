@@ -152,7 +152,7 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
       android:fillViewport="true"
-      android:visibility="gone">
+      android:visibility="@{viewModel.appUnlocked ? View.VISIBLE : View.GONE}">
 
       <LinearLayout
         android:id="@+id/linear_body"
