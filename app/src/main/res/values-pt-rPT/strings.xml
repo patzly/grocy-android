@@ -105,6 +105,7 @@
   <string name="action_purchase_all_items">Comprar todos os itens</string>
   <string name="action_skip_entry">Ignorar registo</string>
   <string name="action_toggle_flash">Ligar/Desligar flash</string>
+  <string name="action_edit_recipe">Editar receita</string>
   <string name="action_delete_shopping_list">Apagar lista de compras</string>
   <string name="action_create_key">Criar chave</string>
   <string name="action_login">Login</string>
@@ -330,8 +331,6 @@
   <string name="msg_press_hold_confirm">Mantenha premido para confirmar a eliminação</string>
   <string name="msg_recipe_consume_ask">Tem a certeza que quer consumir todos os ingredientes necessários para a receita \"%1$s\"? (ingredientes marcados com \"apenas validar se a quantidade estiver em stock\" serão ignorados)</string>
   <string name="msg_recipe_shopping_list_ask">Tem a certeza que quer adicionar todos os ingredientes da receita \"%1$s\" à lista de compras?\n\nDesmarque ingredientes para não os adicionar à lista de compras:</string>
-  <string name="msg_welcome_to_grocy">Bem-vindo ao Grocy Android!\n\nPara usar o grocy de forma mais produtiva precisa do seu próprio servidor ou do add-on do grocy para o Home Assistant.\nSe apenas pretende experimentar esta aplicação pode usar o servidor de demonstração de Bernd Bestel, o criador do grocy.</string>
-  <string name="msg_choose_option_below">Por favor seleccione uma das seguintes opções.</string>
   <string name="msg_qr_code_scan">Noutro dispositivo, visite o seu website do grocy e navegue até à página \'API keys\'. Seleccione \"Adicionar\", depois seleccione o pequeno símbolo de código QR e digitalize o código QR.</string>
   <string name="msg_qr_code_scan_token">Está a usar o add-on do grocy par ao Home Assistant. Crie um token de acesso de longa duração nas definições do seu perfil do Home Assistant (última secção). Em baixo do campo do token seleccione \"Gerar código QR\" e leia-o aqui.</string>
   <string name="msg_port_connection_info_without_port">A aplicação vai-se conectar à porta %1$s.\nSe prefere ligar-se a uma porta diferente pode acrescentar a porta no URL.\nExemplo: http://domain.com:81/</string>
@@ -377,10 +376,6 @@
   <string name="msg_help_inventory_fields">Os campos seguintes aplicam-se a novos produtos adicionados.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Pode escolher um leitor de código de barras para ler códigos de barras.</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") usa os dados de contraste da câmara para detectar um código de barras. Depois calcula a largura relativa de todas as linhas. \n- Por vezes pode gerar resultados incorrectors\n- O Código de barras tem que estar alinhado horizontalmente\n- Requer bom contraste e nitidez\n- É analisado apenas no dispositivo\n- A framework é em código aberto</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit usa \"machine learning\" com as tecnologias mais recentes para detecção de código de barras.\n- Practicamente nenhuns resultados errados\n- Orientação do dispositivo não é importante\n- Funciona mesmo com imagem de baixa qualidade e pouco nítida\n- É analisado offline no dispositivo\n- Framework não é em código aberto</string>
   <string name="msg_help_external_scanner_ready">Pode usar um scanner externo para o campo abaixo enquanto estiver seleccionado e vazio.</string>
   <string name="msg_help_external_scanner_settings">Esta applicação suporta dispositivos de scanner externos que podem ser usados como teclado e podem ser connectados por USB ou Bluetooth. As seguintes opções tem que ser configuradas no scanner externo:\n\nPrefixo: Nenhum\nSufixo: TAB ou ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -569,9 +564,6 @@
   <string name="title_product_cat_qu_conversions">Conversões de unidades</string>
   <string name="title_unknown_input">Valor desconhecido</string>
   <string name="title_presets_new_products">Pré-definições para novos produtos</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Usar %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -751,7 +743,6 @@
     <item quantity="many">A sua base de dados contém %1$d produtos.</item>
     <item quantity="other">A sua base de dados contém %1$d produtos.</item>
   </plurals>
-
   <string name="property_name">Nome</string>
   <string name="property_name_singular">Nome (singular)</string>
   <string name="property_name_plural">Nome (Plural)</string>
