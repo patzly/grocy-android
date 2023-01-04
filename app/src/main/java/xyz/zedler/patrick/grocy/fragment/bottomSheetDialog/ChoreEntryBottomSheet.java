@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,13 +27,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetChoreEntryBinding;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -46,12 +44,6 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
   private MainActivity activity;
   private FragmentBottomsheetChoreEntryBinding binding;
   private Chore chore;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(

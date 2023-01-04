@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +27,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntrySelectionAdapter;
 import xyz.zedler.patrick.grocy.model.StockEntry;
-import xyz.zedler.patrick.grocy.Constants;
 
 public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
     implements StockEntrySelectionAdapter.StockEntrySelectionAdapterListener {
@@ -43,12 +41,6 @@ public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
 
   private MainActivity activity;
   private ArrayList<StockEntry> stockEntries;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(

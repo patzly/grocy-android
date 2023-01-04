@@ -161,7 +161,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         .setTitleText(R.string.property_next_estimated_tracking_time)
         .setNegativeButtonText(R.string.action_cancel)
         .setPositiveButtonText(R.string.action_save)
-        .setTheme(R.style.Theme_Grocy_TimePicker)
+        .setTheme(R.style.ThemeOverlay_Grocy_TimePicker)
         .build();
 
     picker.addOnPositiveButtonClickListener(v -> viewModel.getNextTrackingTimeLive().setValue(
@@ -177,7 +177,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
         .setTitleText(R.string.property_next_estimated_tracking)
         .setNegativeButtonText(R.string.action_cancel)
         .setPositiveButtonText(R.string.action_save)
-        .setTheme(R.style.Theme_Grocy_DatePicker)
+        .setTheme(R.style.ThemeOverlay_Grocy_DatePicker)
         .build();
 
     picker.addOnPositiveButtonClickListener(v -> {

@@ -569,6 +569,12 @@
     <item name="boxCornerRadiusBottomEnd">16dp</item>
   </style>
 
+  <!-- DatePicker -->
+
+  <style name="ThemeOverlay.Grocy.DatePicker" parent="ThemeOverlay.Material3.MaterialCalendar">
+
+  </style>
+
   <!-- Localized style, no empty base style needed -->
   <style
     name="Widget.Grocy.Button.TextButton.Dialog.Flush"

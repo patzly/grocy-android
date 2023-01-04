@@ -20,17 +20,9 @@
 <resources>
 
   <style name="Theme.Grocy" parent="Base.Grocy">
-    <item name="android:statusBarColor">@color/status_bar_lollipop</item>
-    <item name="android:navigationBarColor">@color/background</item>
-  </style>
-
-  <style name="Theme.Grocy.BottomSheetDialog" parent="Base.Grocy.BottomSheetDialog">
-    <item name="android:navigationBarColor">@color/black</item>
-  </style>
-
-  <style name="Theme.Grocy.Camera" parent="Theme.Grocy">
-    <item name="android:windowTranslucentStatus">true</item>
-    <item name="android:windowTranslucentNavigation">true</item>
+    <item name="android:windowSplashScreenBackground">@android:color/system_neutral1_900</item>
+    <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_anim</item>
+    <item name="android:windowSplashScreenAnimationDuration">970</item>
   </style>
 
 </resources>
