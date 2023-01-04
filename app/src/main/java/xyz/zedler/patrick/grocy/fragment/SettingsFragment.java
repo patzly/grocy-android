@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.Constants;
@@ -94,18 +95,33 @@ public class SettingsFragment extends BaseFragment {
 
   @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary, () -> {
-      if (shouldNavigateToBehavior()) {
-        setArguments(new SettingsFragmentArgs.Builder(args)
-            .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
-            .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
-      } else if (shouldNavigateToServer()) {
-        setArguments(new SettingsFragmentArgs.Builder(args)
-            .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
-            .actionSettingsFragmentToSettingsCatServerFragment()), 200);
+    if (nextAnim == 0) {
+      return null;
+    }
+    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+    anim.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+      }
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+      }
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        if (!enter) return;
+        if (shouldNavigateToBehavior()) {
+          setArguments(new SettingsFragmentArgs.Builder(args)
+              .setShowCategory(null).build().toBundle());
+          new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
+              .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
+        } else if (shouldNavigateToServer()) {
+          setArguments(new SettingsFragmentArgs.Builder(args)
+              .setShowCategory(null).build().toBundle());
+          new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
+              .actionSettingsFragmentToSettingsCatServerFragment()), 200);
+        }
       }
     });
+    return anim;
   }
 }

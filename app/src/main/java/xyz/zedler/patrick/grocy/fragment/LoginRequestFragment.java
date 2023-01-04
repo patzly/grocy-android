@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -119,12 +120,23 @@ public class LoginRequestFragment extends BaseFragment {
   }
 
   @Override
-  protected void onEnterAnimationEnd() {
-    login(true);
-  }
-
-  @Override
   public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
+    if (nextAnim == 0) {
+      return null;
+    }
+    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+    anim.setAnimationListener(new Animation.AnimationListener() {
+      @Override
+      public void onAnimationStart(Animation animation) {
+      }
+      @Override
+      public void onAnimationRepeat(Animation animation) {
+      }
+      @Override
+      public void onAnimationEnd(Animation animation) {
+        if (enter) login(true);
+      }
+    });
+    return anim;
   }
 }

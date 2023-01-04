@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import xyz.zedler.patrick.grocy.Constants;
@@ -119,10 +118,5 @@ public class LoginIntroFragment extends BaseFragment {
   public boolean onBackPressed() {
     activity.finish();
     return true;
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
   }
 }

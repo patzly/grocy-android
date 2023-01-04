@@ -694,7 +694,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         names,
         toPrimitiveBooleanArray(namesChecked),
         (dialog, which, isChecked) -> dialogShoppingListMultiChoiceItems.put(
-            (String) names[which], isChecked
+            names[which], isChecked
         )
     );
 

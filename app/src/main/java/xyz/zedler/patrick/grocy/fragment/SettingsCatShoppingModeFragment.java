@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -110,10 +109,5 @@ public class SettingsCatShoppingModeFragment extends BaseFragment {
     if (type != null && type.equals(SHOPPING_MODE.UPDATE_INTERVAL)) {
       viewModel.setShoppingModeUpdateInterval(text);
     }
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }
