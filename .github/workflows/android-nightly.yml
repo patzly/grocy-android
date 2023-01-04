@@ -35,6 +35,16 @@ jobs:
         mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d').apk
         cp app/src/main/res/raw/changelog.txt app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d')-changelog.txt
     
+    - name: Upload artifacts
+      uses: pyTooling/Actions/releaser@r0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        rm: true
+        tag: nightly
+        files: |
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/debug/*.txt
+          
     - name: Checkout branch
       uses: actions/checkout@v3
       with:
@@ -55,7 +65,7 @@ jobs:
       uses: pyTooling/Actions/releaser@r0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        rm: true
+        rm: false
         tag: nightly
         files: |
           app/build/outputs/apk/debug/*.apk
