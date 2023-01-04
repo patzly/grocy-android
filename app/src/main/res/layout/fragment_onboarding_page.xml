@@ -94,24 +94,23 @@
 
     <TextView
       android:id="@+id/text_onboarding_title"
-      style="@style/Widget.Grocy.TextView.Title"
+      style="@style/Widget.Grocy.TextView.HeadlineSmall"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:textAlignment="center"
-      android:textSize="24sp"
-      android:maxLines="2" />
+      android:maxLines="3" />
 
     <TextView
       android:id="@+id/text_onboarding_description"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
+      style="@style/Widget.Grocy.TextView"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
       android:textAlignment="center"
-      android:lineSpacingExtra="8sp"
-      android:textSize="15sp"
-      android:maxLines="4"
-      android:minLines="2" />
+      android:textColor="?attr/colorOnSurfaceVariant"
+      android:gravity="center_horizontal"
+      android:maxLines="3"
+      android:minLines="3" />
 
   </LinearLayout>
 

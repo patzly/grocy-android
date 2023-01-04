@@ -788,6 +788,16 @@ public class Product extends GroupedListItem implements Parcelable {
     return null;
   }
 
+  public static ArrayList<Product> getProductChildren(List<Product> allProducts, int parentProductId) {
+    ArrayList<Product> productChildren = new ArrayList<>();
+    for (Product product : allProducts) {
+      if (NumUtil.isStringInt(product.getParentProductId()) && Integer.parseInt(product.getParentProductId()) == parentProductId) {
+        productChildren.add(product);
+      }
+    }
+    return productChildren;
+  }
+
   public static ArrayList<Product> getActiveProductsOnly(List<Product> allProducts) {
     ArrayList<Product> activeProductsOnly = new ArrayList<>();
     for (Product product : allProducts) {

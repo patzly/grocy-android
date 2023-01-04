@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,27 +95,20 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
       @NonNull final ShoppingListAdapter.ViewHolder holder,
       int position
   ) {
+    Context context = holder.container.getContext();
     ShoppingList shoppingList = shoppingLists.get(holder.getAdapterPosition());
 
     holder.name.setText(shoppingList.getName());
 
     if (shoppingList.getId() == selectedId) {
       holder.imageSelected.setVisibility(View.VISIBLE);
-      holder.name.setTextColor(
-          ResUtil.getColorAttr(holder.container.getContext(), R.attr.colorOnSecondaryContainer)
-      );
-      holder.container.setBackground(
-          ViewUtil.getBgListItemSelected(holder.container.getContext())
-      );
+      holder.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSecondaryContainer));
+      holder.container.setBackground(ViewUtil.getBgListItemSelected(context));
     } else {
       holder.imageSelected.setVisibility(View.INVISIBLE);
-      holder.name.setTextColor(
-          ResUtil.getColorAttr(holder.container.getContext(), R.attr.colorOnSurface)
-      );
+      holder.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
       holder.container.setOnClickListener(view -> listener.onItemRowClicked(shoppingList));
-      holder.container.setBackground(
-          ViewUtil.getRippleBgListItemSurfaceRecyclerItem(holder.container.getContext())
-      );
+      holder.container.setBackground(ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context));
     }
 
     if (shoppingList.getId() == 1) {

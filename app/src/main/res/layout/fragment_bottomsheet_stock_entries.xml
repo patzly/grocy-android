@@ -19,13 +19,14 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <TextView
-    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-    android:text="@string/title_stock_entries" />
+  <com.google.android.material.appbar.MaterialToolbar
+    style="@style/Widget.Grocy.Toolbar"
+    app:title="@string/title_stock_entries" />
 
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />

@@ -215,6 +215,9 @@ public class BaseFragment extends Fragment {
   public void selectShoppingList(ShoppingList shoppingList) {
   }
 
+  public void selectProduct(Product product) {
+  }
+
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
   }
 

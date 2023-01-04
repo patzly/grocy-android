@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -224,7 +225,7 @@ public class InventoryViewModel extends BaseViewModel {
     showMessage(getString(R.string.msg_no_connection));
   }
 
-  public void setProduct(int productId) {
+  public void setProduct(int productId, ProductBarcode barcode) {
     DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
       Product updatedProduct = productDetails.getProduct();
       formData.getProductDetailsLive().setValue(productDetails);
@@ -290,6 +291,15 @@ public class InventoryViewModel extends BaseViewModel {
         formData.getLocationLive().setValue(productDetails.getLocation());
       }
 
+      // note
+      if (barcode != null
+          && barcode.getNote() != null
+          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
+          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
+      ) {
+        formData.getNoteLive().setValue(barcode.getNote());
+      }
+
       formData.isFormValid();
         if (isQuickModeEnabled()) {
             sendEvent(Event.FOCUS_INVALID_VIEWS);
@@ -324,13 +334,14 @@ public class InventoryViewModel extends BaseViewModel {
       showMessageAndContinueScanning(R.string.error_wrong_grocycode_type);
       return;
     }
+    ProductBarcode productBarcode = null;
     if (product == null) {
-      ProductBarcode productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
+      productBarcode = ProductBarcode.getFromBarcode(barcodes, barcode);
       product = productBarcode != null
           ? Product.getProductFromId(products, productBarcode.getProductIdInt()) : null;
     }
     if (product != null) {
-      setProduct(product.getId());
+      setProduct(product.getId(), productBarcode);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(ARGUMENT.BARCODE, barcode);
@@ -358,13 +369,15 @@ public class InventoryViewModel extends BaseViewModel {
       return;
     }
     if (product == null) {
+      ProductBarcode barcode = null;
       for (ProductBarcode code : barcodes) {
         if (code.getBarcode().equals(input.trim())) {
+          barcode = code;
           product = Product.getProductFromId(products, code.getProductIdInt());
         }
       }
       if (product != null) {
-        setProduct(product.getId());
+        setProduct(product.getId(), barcode);
         return;
       }
     }
@@ -377,7 +390,7 @@ public class InventoryViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product.getId());
+      setProduct(product.getId(), null);
     } else {
       showInputProductBottomSheet(input);
     }

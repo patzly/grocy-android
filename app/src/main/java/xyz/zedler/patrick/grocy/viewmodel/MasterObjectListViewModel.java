@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -69,7 +71,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> offlineLive;
   private final MutableLiveData<ArrayList<Object>> displayedItemsLive;
 
-  private List objects;
+  private List<?> objects;
   private List<ProductGroup> productGroups;
   private List<QuantityUnit> quantityUnits;
   private List<Location> locations;
@@ -262,18 +264,43 @@ public class MasterObjectListViewModel extends BaseViewModel {
     // search items
     ArrayList<Object> searchedItems;
     if (search != null && !search.isEmpty()) {
+
+      ArrayList<Object> searchResultsFuzzy = new ArrayList<>(objects.size());
+      List results = FuzzySearch.extractSorted(
+          search,
+          objects,
+          item -> {
+            String name = ObjectUtil.getObjectName(item, entity);
+            return name != null ? name.toLowerCase() : "";
+          },
+          70
+      );
+      for (Object result : results) {
+        searchResultsFuzzy.add(((BoundExtractedResult<?>) result).getReferent());
+      }
+
       searchedItems = new ArrayList<>();
+      ArrayList<Integer> objectIdsInList = new ArrayList<>();
       for (Object object : objects) {
         String name = ObjectUtil.getObjectName(object, entity);
-        String description = ObjectUtil.getObjectDescription(object, entity);
         name = name != null ? name.toLowerCase() : "";
-        description = description != null ? description.toLowerCase() : "";
-        if (name.contains(search) || description.contains(search)) {
+        if (name.contains(search)) {
           searchedItems.add(object);
+          objectIdsInList.add(ObjectUtil.getObjectId(object, entity));
         }
       }
+
+      sortObjectsByName(searchedItems);
+
+      for (Object object : searchResultsFuzzy) {
+        if (objectIdsInList.contains(ObjectUtil.getObjectId(object, entity))) {
+          continue;
+        }
+        searchedItems.add(object);
+      }
     } else {
-      searchedItems = new ArrayList<Object>(objects);
+      searchedItems = new ArrayList<>(objects);
+      sortObjectsByName(searchedItems);
     }
 
     // filter items
@@ -295,8 +322,6 @@ public class MasterObjectListViewModel extends BaseViewModel {
       filteredItems = searchedItems;
     }
 
-    // sort items
-    sortObjectsByName(filteredItems);
     displayedItemsLive.setValue(filteredItems);
   }
 

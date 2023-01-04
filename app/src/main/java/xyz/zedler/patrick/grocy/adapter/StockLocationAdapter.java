@@ -39,6 +39,7 @@ import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class StockLocationAdapter
     extends RecyclerView.Adapter<StockLocationAdapter.ViewHolder> {
@@ -112,6 +113,7 @@ public class StockLocationAdapter
       @NonNull final StockLocationAdapter.ViewHolder holder,
       int position
   ) {
+    Context context = holder.linearLayoutContainer.getContext();
     StockLocation stockLocation = stockLocations.get(holder.getAdapterPosition());
 
     // NAME
@@ -150,8 +152,12 @@ public class StockLocationAdapter
 
     // SELECTED
 
-    if (stockLocation.getLocationId() == selectedId) {
-      holder.imageViewSelected.setVisibility(View.VISIBLE);
+    boolean isSelected = stockLocation.getLocationId() == selectedId;
+    holder.imageViewSelected.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
+    if (isSelected) {
+      holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
+    } else {
+      holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
     }
 
     // CONTAINER

@@ -30,10 +30,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:paddingTop="32dp"
-    android:paddingBottom="32dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:padding="16dp">
 
     <ImageView
       android:id="@+id/image"
@@ -47,6 +44,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:textAlignment="center"
+      android:gravity="center"
       android:layout_margin="16dp" />
 
     <TextView
@@ -54,24 +52,24 @@
       style="@style/Widget.Grocy.TextView.ListItem.Description"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:gravity="center"
       android:textAlignment="center" />
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/retry"
       style="@style/Widget.Grocy.Button.UnelevatedButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
       android:layout_margin="16dp"
       android:text="@string/action_retry" />
 
     <TextView
       android:id="@+id/exact"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:textSize="12sp"
+      style="@style/Widget.Grocy.TextView.BodySmall"
       android:visibility="gone"
+      android:textColor="?attr/colorOnSurfaceVariant"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:gravity="center" />
+      android:gravity="center"
+      android:textAlignment="center" />
 
     <View
       android:layout_width="match_parent"

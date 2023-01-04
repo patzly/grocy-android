@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -31,16 +30,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import java.util.HashSet;
 import java.util.Set;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetBarcodeFormatsBinding;
 import xyz.zedler.patrick.grocy.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetBarcodeFormatsBinding;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class BarcodeFormatsBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -50,20 +49,15 @@ public class BarcodeFormatsBottomSheet extends BaseBottomSheetDialogFragment {
   private FragmentBottomsheetBarcodeFormatsBinding binding;
   private SharedPreferences sharedPrefs;
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
-
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetBarcodeFormatsBinding
-        .inflate(inflater, container, false);
+    binding = FragmentBottomsheetBarcodeFormatsBinding.inflate(
+        inflater, container, false
+    );
     return binding.getRoot();
   }
 
@@ -79,10 +73,11 @@ public class BarcodeFormatsBottomSheet extends BaseBottomSheetDialogFragment {
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (enabledBarcodeFormats != null && !enabledBarcodeFormats.isEmpty()) {
+    if (!enabledBarcodeFormats.isEmpty()) {
       for (String barcodeFormat : enabledBarcodeFormats) {
-        int resId = getResources()
-            .getIdentifier(barcodeFormat, "id", activity.getPackageName());
+        int resId = getResources().getIdentifier(
+            barcodeFormat, "id", activity.getPackageName()
+        );
         View checkBox = binding.checkboxContainer.findViewById(resId);
         if (checkBox != null) ((MaterialCheckBox) checkBox).setChecked(true);
       }
@@ -140,21 +135,30 @@ public class BarcodeFormatsBottomSheet extends BaseBottomSheetDialogFragment {
         SCANNER.BARCODE_FORMATS,
         SETTINGS_DEFAULT.SCANNER.BARCODE_FORMATS
     );
-    if (enabledBarcodeFormats == null || enabledBarcodeFormats.isEmpty()
-        || enabledBarcodeFormats.size() == 15
-    ) {
+    if (enabledBarcodeFormats.isEmpty() || enabledBarcodeFormats.size() == 15) {
       return context.getString(R.string.setting_barcode_formats_description_all);
     }
     StringBuilder enabledBarcodeFormatsBuilder = new StringBuilder();
     for (String barcodeFormat : enabledBarcodeFormats) {
-      int stringResId = context.getResources()
-          .getIdentifier(barcodeFormat, "string", context.getPackageName());
+      int stringResId = context.getResources().getIdentifier(
+          barcodeFormat, "string", context.getPackageName()
+      );
       enabledBarcodeFormatsBuilder.append(context.getString(stringResId));
       enabledBarcodeFormatsBuilder.append(", ");
     }
     return context.getString(
         R.string.setting_barcode_formats_description,
         enabledBarcodeFormatsBuilder.substring(0, enabledBarcodeFormatsBuilder.length()-2)
+    );
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainer.setPadding(
+        binding.linearContainer.getPaddingLeft(),
+        binding.linearContainer.getPaddingTop(),
+        binding.linearContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
     );
   }
 

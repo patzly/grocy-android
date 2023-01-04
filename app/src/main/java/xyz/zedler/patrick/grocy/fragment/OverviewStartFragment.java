@@ -140,12 +140,10 @@ public class OverviewStartFragment extends BaseFragment {
     }
 
     // UPDATE UI
-    updateUI((getArguments() == null
-        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-        && savedInstanceState == null);
-  }
 
-  private void updateUI(boolean animated) {
+    boolean animated = (getArguments() == null
+        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+        && savedInstanceState == null;
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_empty);
@@ -180,7 +178,7 @@ public class OverviewStartFragment extends BaseFragment {
           .build().toBundle();
       navigateDeepLink(R.string.deep_link_settingsFragment, bundle);
     } else {
-      navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
+      activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
   }
 

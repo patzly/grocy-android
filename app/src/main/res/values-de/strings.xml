@@ -314,8 +314,9 @@
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)?</string>
   <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntferne den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
-  <string name="msg_welcome_to_grocy">Willkommen zu Grocy Android!\n\nUm grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
-  <string name="msg_choose_option_below">Bitte wählen Sie unten eine Option.</string>
+  <string name="msg_welcome">Willkommen bei Grocy Android!</string>
+  <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
+  <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>
   <string name="msg_qr_code_scan">Besuchen Sie Ihren grocy-Server auf einem anderen Gerät und navigieren Sie zu der Seite \'API-Schlüssel\'. Danach auf \'Hinzufügen\' und das kleine QR-Code-Symbol klicken und den QR-Code scannen.</string>
   <string name="msg_qr_code_scan_token">Sie benutzen das grocy Home Assistant Add-on. Erstellen Sie einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen (letzter Abschnitt). Dann klicken Sie unter dem Feld mit dem Token auf \"Generate QR code\" und scannen den Code hier.</string>
   <string name="msg_port_connection_info_without_port">Die App wird sich zu Port %1$s verbinden.\nWenn sie sich zu einem anderen Port verbinden soll, können Sie einen in der URL hinzufügen.\nBeispiel: http://domain.com:81/</string>
@@ -379,7 +380,7 @@
   <string name="msg_help_produces_product">Wenn ein Produkt ausgewählt ist, wird beim Verbrauch dieses Rezeptes eine Einheit (pro Portion in Bestandsmengeneinheit) dem Bestand hinzugefügt.</string>
   <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_only_check_any_amount">Eine andere Menge/Einheit kann dann unten verwendet werden, wobei es für die Bestandsprüfung ausreichend ist, wenn eine beliebige Menge des Produkts verfügbar ist.</string>
-  <string name="msg_help_date_chooser">Sie können in den Einstellungen zu Tastatureingabe wechseln, damit ist es vielleicht möglich, Ihre Eingabegeschwindigkeit erhöhen.</string>
+  <string name="msg_help_date_chooser">Sie können in den Einstellungen zur Tastatureingabe wechseln, womit Sie eventuell eine höhere Eingabegeschwindigkeit erreichen.</string>
   <string name="msg_help_date_chooser_keyboard">Sie können in den Einstellungen ein umgekehrtes Datumsformat aktivieren, falls DDMMYY in Ihrem Land bevorzugt ist.\nUm die Eingabe zu übernehmen und diese Seite zu schließen, drücken Sie die Erledigt-Taste auf Ihrer Tastatur.</string>
   <string name="msg_help_quick_mode">Sie können lange auf die Titelleiste oben tippen, um den Schnellmodus zu aktivieren. In diesem Modus wird eine Transaktion sofort ausgeführt, wenn ein Produkt eingegeben oder gescannt wurde und alle Felder automatisch befüllt werden konnten (mit Produkt- oder Barcode-Standardwerten).</string>
   <string name="msg_help_loading_circle_settings">Auf jeder Seite wo etwas vom Server geladen werden muss, überprüft die App erst mit einer winzigen Anfrage, ob sich die Server-Datenbank seit dem letzten Laden verändert hat und aktualisiert nur veraltete Daten. Aktivieren Sie diese Option, wenn bei dieser Anfrage auch ein Ladekreis angezeigt werden soll.</string>
@@ -721,6 +722,11 @@
   <plurals name="description_overview_master_data">
     <item quantity="one">Ihre Datenbank enthält ein Produkt.</item>
     <item quantity="other">Ihre Datenbank enthält %1$d Produkte.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s Nachkommastelle</item>
+    <item quantity="other">Max. %1$s Nachkommastellen</item>
   </plurals>
 
   <string name="property_name">Name</string>

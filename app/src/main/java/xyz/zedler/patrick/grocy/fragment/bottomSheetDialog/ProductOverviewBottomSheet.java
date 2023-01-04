@@ -42,6 +42,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -60,11 +62,10 @@ import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.AmountUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -149,6 +150,7 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     // TOOLBAR
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     boolean isInStock = stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
@@ -487,11 +489,18 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       if (hasDetails()) {
         location = productDetails.getLocation(); // refresh
       }
-      StringBuilder locationsString = new StringBuilder();
+
+      ArrayList<String> stockLocationNames = new ArrayList<>();
       for (StockLocation stockLocation : stockLocations) {
-        locationsString.append(stockLocation.getLocationName());
-        if (stockLocation.getLocationId() != stockLocations.get(stockLocations.size() - 1)
-            .getLocationId()) {
+        if (stockLocationNames.contains(stockLocation.getLocationName())) {
+          continue;
+        }
+        stockLocationNames.add(stockLocation.getLocationName());
+      }
+      StringBuilder locationsString = new StringBuilder();
+      for (String name : stockLocationNames) {
+        locationsString.append(name);
+        if (!name.equals(stockLocationNames.get(stockLocationNames.size() - 1))) {
           locationsString.append(", ");
         }
       }

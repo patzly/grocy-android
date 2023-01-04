@@ -74,17 +74,6 @@
     <item name="android:minHeight">0dp</item>
   </style-->
 
-  <!-- TAB LAYOUT -->
-
-  <style
-    name="Widget.Grocy.TabLayout.PageIndicator"
-    parent="@style/Widget.MaterialComponents.TabLayout">
-    <item name="android:background">@color/primary</item>
-    <item name="tabIndicatorColor">@color/secondary</item>
-    <item name="tabIndicatorFullWidth">false</item>
-    <item name="tabRippleColor">@color/highlight</item>
-  </style>
-
   <!-- BUTTON -->
 
   <!--style
@@ -167,7 +156,7 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon"
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine"
     parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:minHeight">56dp</item>
   </style>
@@ -180,8 +169,8 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon">
+    name="Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.SingleLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
@@ -193,7 +182,7 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon"
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine"
     parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:minHeight">72dp</item>
   </style>
@@ -206,8 +195,8 @@
   </style>
 
   <style
-    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
-    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon">
+    name="Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+    parent="Widget.Grocy.LinearLayout.ListItem.TwoLine">
     <item name="android:clickable">true</item>
     <item name="android:background">@drawable/bg_list_item</item>
   </style>
@@ -241,18 +230,6 @@
 
   <!-- RADIO BUTTON -->
 
-  <style
-    name="Widget.Grocy.RadioButton"
-    parent="Widget.MaterialComponents.CompoundButton.RadioButton">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:textSize">16.5sp</item>
-    <item name="android:paddingStart">12dp</item>
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="android:textColor">@color/on_background</item>
-    <item name="android:textAlignment">viewStart</item>
-  </style>
-
   <style name="Widget.Grocy.RadioButton.BottomSheet" parent="Widget.Grocy.RadioButton">
     <item name="android:textSize">16.5sp</item>
   </style>
@@ -271,10 +248,6 @@
     <item name="android:textColor">@color/on_background</item>
     <item name="android:textAlignment">viewStart</item>
   </style-->
-
-  <style name="Widget.Grocy.CheckBox.Dense" parent="Widget.Grocy.CheckBox">
-    <item name="android:minHeight">24dp</item>
-  </style>
 
   <!-- TOOLTIP -->
 

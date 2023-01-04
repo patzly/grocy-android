@@ -204,8 +204,11 @@ public class RecipesViewModel extends BaseViewModel {
       if (searchInput != null && !searchInput.isEmpty()) {
         searchContainsItem = recipe.getName().toLowerCase().contains(searchInput);
 
-        if (!searchContainsItem && recipeFulfillment != null)
-          searchContainsItem = recipeFulfillment.getProductNamesCommaSeparated().toLowerCase().contains(searchInput);
+        if (!searchContainsItem && recipeFulfillment != null
+            && recipeFulfillment.getProductNamesCommaSeparated() != null) {
+          searchContainsItem = recipeFulfillment.getProductNamesCommaSeparated()
+              .toLowerCase().contains(searchInput);
+        }
       }
 
       if (!searchContainsItem) {

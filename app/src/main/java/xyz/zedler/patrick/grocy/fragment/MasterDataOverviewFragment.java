@@ -87,7 +87,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
 
     binding.linearProducts.setOnClickListener(v -> activity.navigateFragment(
         MasterDataOverviewFragmentDirections

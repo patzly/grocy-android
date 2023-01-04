@@ -19,15 +19,10 @@
 
 <com.google.android.material.card.MaterialCardView
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/card_expandable_card"
+  style="@style/Widget.Grocy.Card.Text"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  app:contentPadding="16dp"
-  app:cardElevation="0dp"
-  app:cardCornerRadius="12dp"
-  app:cardBackgroundColor="@color/on_background_tertiary"
-  app:rippleColor="@color/transparent">
+  android:layout_height="match_parent">
 
   <FrameLayout
     android:layout_width="match_parent"
@@ -38,6 +33,7 @@
       style="@style/Widget.Grocy.TextView.Paragraph"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:textColor="?attr/colorOnSurfaceVariant"
       android:layout_gravity="top"
       android:maxLines="3"
       android:visibility="invisible" />
@@ -46,7 +42,8 @@
       android:id="@+id/text_expandable_card_expanded"
       style="@style/Widget.Grocy.TextView.Paragraph"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:textColor="?attr/colorOnSurfaceVariant" />
 
   </FrameLayout>
 

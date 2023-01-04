@@ -80,7 +80,7 @@ public class StockOverviewFragment extends BaseFragment implements
   ) {
     binding = FragmentStockOverviewBinding.inflate(inflater, container, false);
     embeddedFragmentScanner = new EmbeddedFragmentScannerBundle(
-        this, binding.containerScanner, this, R.color.primary
+        this, binding.containerScanner, this
     );
     return binding.getRoot();
   }
@@ -200,7 +200,6 @@ public class StockOverviewFragment extends BaseFragment implements
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       }
@@ -351,10 +350,14 @@ public class StockOverviewFragment extends BaseFragment implements
       setUpSearch();
       return true;
     } else if (item.getItemId() == R.id.action_stock_journal) {
-      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment());
+      activity.navigateFragment(
+          StockOverviewFragmentDirections.actionStockOverviewFragmentToStockJournalFragment()
+      );
       return true;
     } else if (item.getItemId() == R.id.action_stock_entries) {
-      navigate(StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment());
+      activity.navigateFragment(
+          StockOverviewFragmentDirections.actionStockOverviewFragmentToStockEntriesFragment()
+      );
       return true;
     }
     return false;
@@ -387,7 +390,7 @@ public class StockOverviewFragment extends BaseFragment implements
       activity.showSnackbar(R.string.error_undefined);
       return;
     }
-    navigate(StockOverviewFragmentDirections
+    activity.navigateFragment(StockOverviewFragmentDirections
         .actionStockOverviewFragmentToProductOverviewBottomSheetDialogFragment()
         .setShowActions(true)
         .setStockItem(stockItem)

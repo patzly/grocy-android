@@ -36,10 +36,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/text_logout_title"
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/setting_manage_shortcuts" />
+    <com.google.android.material.appbar.MaterialToolbar
+      style="@style/Widget.Grocy.Toolbar"
+      app:title="@string/setting_manage_shortcuts" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />
@@ -51,10 +50,14 @@
       android:overScrollMode="ifContentScrolls">
 
       <LinearLayout
+        android:id="@+id/linear_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
           android:id="@+id/text"
@@ -164,27 +167,21 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal"
-          android:gravity="end">
+          android:gravity="end"
+          android:layout_marginTop="8dp">
 
           <com.google.android.material.button.MaterialButton
             android:id="@+id/cancel"
             style="@style/Widget.Grocy.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/on_background_secondary"
             android:text="@string/action_cancel"
-            android:onClick="@{() -> sheet.dismiss()}"
-            app:rippleColor="@color/highlight" />
+            android:onClick="@{() -> sheet.dismiss()}" />
 
           <com.google.android.material.button.MaterialButton
             android:id="@+id/save"
             style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/action_save"
-            android:onClick="@{() -> sheet.saveShortcuts()}"
-            app:backgroundTint="@color/retro_green_bg_white" />
+            android:onClick="@{() -> sheet.saveShortcuts()}" />
 
         </LinearLayout>
 

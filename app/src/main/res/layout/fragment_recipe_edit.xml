@@ -328,7 +328,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:onClick="@{v -> switchDoNotCheckShoppingList.setChecked(!switchDoNotCheckShoppingList.isChecked())}">
@@ -362,7 +362,7 @@
 
             <LinearLayout
               android:id="@+id/ingredients"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:animateLayoutChanges="true"
@@ -392,7 +392,7 @@
 
             <LinearLayout
               android:id="@+id/preparation"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:animateLayoutChanges="true"

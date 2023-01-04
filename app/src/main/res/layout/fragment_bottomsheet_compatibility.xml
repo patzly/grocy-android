@@ -24,10 +24,9 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <TextView
-    android:id="@+id/text_compatibility_title"
-    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-    android:text="@string/title_compatibility" />
+  <com.google.android.material.appbar.MaterialToolbar
+    style="@style/Widget.Grocy.Toolbar"
+    app:title="@string/title_compatibility" />
 
   <com.google.android.material.divider.MaterialDivider
     style="@style/Widget.Grocy.Divider" />
@@ -39,10 +38,14 @@
     android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:id="@+id/linear_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:padding="16dp">
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="12dp">
 
       <TextView
         android:id="@+id/text_compatibility_msg"
@@ -61,10 +64,6 @@
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_compatibility_cancel"
           style="@style/Widget.Grocy.Button.TextButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:rippleColor="@color/highlight"
-          android:textColor="@color/on_background_secondary"
           android:text="@string/action_cancel" />
 
         <com.google.android.material.button.MaterialButton
@@ -73,9 +72,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
-          android:textColor="@color/white"
-          app:backgroundTint="@color/retro_red_bg_white"
-          app:rippleColor="@color/highlight_on_secondary"
           android:text="@string/action_ignore" />
 
       </LinearLayout>

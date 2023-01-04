@@ -82,6 +82,8 @@ import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.ArrayList;
@@ -120,6 +122,7 @@ import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -595,33 +598,38 @@ public class MainActivity extends AppCompatActivity {
 
   // NAVIGATION
 
-  private NavOptions getNavOptionsFragmentFadeOrSlide(boolean slideVertically) {
-    boolean useSliding = getSharedPrefs().getBoolean(
-        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
-        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
-    );
-    if (useSliding) {
-      if (slideVertically) {
-        return new NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_in_up)
-            .setPopExitAnim(R.anim.slide_out_down)
-            .setExitAnim(R.anim.slide_no)
-            .build();
+  public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
+    if (UiUtil.areAnimationsEnabled(this)) {
+      boolean useSliding = getSharedPrefs().getBoolean(
+          Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+          Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+      );
+      if (useSliding) {
+        if (slideVertically) {
+          return new NavOptions.Builder()
+              .setEnterAnim(R.anim.slide_in_up)
+              .setPopExitAnim(R.anim.slide_out_down)
+              .setExitAnim(R.anim.slide_no);
+        } else {
+          return new NavOptions.Builder()
+              .setEnterAnim(R.anim.slide_from_end)
+              .setPopExitAnim(R.anim.slide_to_end)
+              .setPopEnterAnim(R.anim.slide_from_start)
+              .setExitAnim(R.anim.slide_to_start);
+        }
       } else {
         return new NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_from_end)
-            .setPopExitAnim(R.anim.slide_to_end)
-            .setPopEnterAnim(R.anim.slide_from_start)
-            .setExitAnim(R.anim.slide_to_start)
-            .build();
+            .setEnterAnim(R.anim.enter_end_fade)
+            .setExitAnim(R.anim.exit_start_fade)
+            .setPopEnterAnim(R.anim.enter_start_fade)
+            .setPopExitAnim(R.anim.exit_end_fade);
       }
     } else {
       return new NavOptions.Builder()
-          .setEnterAnim(R.anim.enter_end_fade)
-          .setExitAnim(R.anim.exit_start_fade)
-          .setPopEnterAnim(R.anim.enter_start_fade)
-          .setPopExitAnim(R.anim.exit_end_fade)
-          .build();
+          .setEnterAnim(R.anim.fade_in_a11y)
+          .setExitAnim(R.anim.fade_out_a11y)
+          .setPopEnterAnim(R.anim.fade_in_a11y)
+          .setPopExitAnim(R.anim.fade_out_a11y);
     }
   }
 
@@ -685,7 +693,7 @@ public class MainActivity extends AppCompatActivity {
     }
     try {
       navController.navigate(
-          destination, arguments, getNavOptionsFragmentFadeOrSlide(true)
+          destination, arguments, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
       );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
@@ -698,7 +706,9 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
     try {
-      navController.navigate(directions, getNavOptionsFragmentFadeOrSlide(true));
+      navController.navigate(
+          directions, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
+      );
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigate: " + directions, e);
     }
@@ -722,10 +732,55 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
     try {
-      navController.navigate(uri, getNavOptionsFragmentFadeOrSlide(slideVertically));
+      navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide(slideVertically).build());
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "navigateFragment: ", e);
     }
+  }
+
+  public void navigateDeepLink(String uri) {
+    navigateDeepLink(Uri.parse(uri), true);
+  }
+
+  public void navigateDeepLink(@StringRes int uri) {
+    navigateDeepLink(Uri.parse(getString(uri)), true);
+  }
+
+  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
+    navigateDeepLink(getUriWithArgs(getString(uri), args), true);
+  }
+
+  private static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+    String[] parts = uri.split("\\?");
+    if (parts.length == 1) {
+      return Uri.parse(uri);
+    }
+    String linkPart = parts[0];
+    String argsPart = parts[parts.length - 1];
+    String[] pairs = argsPart.split("&");
+    StringBuilder finalDeepLink = new StringBuilder(linkPart + "?");
+    for (int i = 0; i <= pairs.length - 1; i++) {
+      String pair = pairs[i];
+      String key = pair.split("=")[0];
+      Object valueBundle = argsBundle.get(key);
+      if (valueBundle == null) {
+        continue;
+      }
+      try {
+        String encoded;
+        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+          encoded = URLEncoder.encode(valueBundle.toString(), StandardCharsets.UTF_8);
+        } else {
+          encoded = URLEncoder.encode(valueBundle.toString(), "UTF-8");
+        }
+        finalDeepLink.append(key).append("=").append(encoded);
+      } catch (Throwable ignore) {
+      }
+      if (i != pairs.length - 1) {
+        finalDeepLink.append("&");
+      }
+    }
+    return Uri.parse(finalDeepLink.toString());
   }
 
   public void showToastTextLong(@StringRes int resId, boolean showLong) {

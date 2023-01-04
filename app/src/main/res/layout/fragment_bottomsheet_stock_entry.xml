@@ -28,32 +28,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:gravity="center_vertical">
-
-      <TextView
-        style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="@string/title_stock_entry" />
-
-      <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:contentInsetStart="12dp"
-        app:menu="@menu/menu_stock_entry" />
-
-    </LinearLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/title_stock_entry"
+      app:menu="@menu/menu_stock_entry" />
 
     <ProgressBar
       android:id="@+id/progress_confirmation"
       android:layout_width="match_parent"
-      style="@style/Widget.Grocy.ProgressBar.Horizontal.Red"
+      style="@style/Widget.Grocy.ProgressBar.Horizontal.Error"
       android:layout_gravity="bottom"
       android:indeterminate="false"
       android:max="100"

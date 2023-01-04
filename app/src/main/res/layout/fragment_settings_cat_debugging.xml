@@ -47,74 +47,38 @@
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:id="@+id/linear_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/primary">
-
-        <FrameLayout
-          android:id="@+id/frame_back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{v -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="16dp"
-          android:text="@string/category_debugging" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/category_debugging" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
-      android:background="@color/background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
       <LinearLayout
-        android:id="@+id/linear_body"
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:orientation="vertical">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchLogging.setChecked(!switchLogging.isChecked())}">
@@ -146,10 +110,10 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> fragment.navigate(SettingsCatDebuggingFragmentDirections.actionSettingsCatDebuggingFragmentToLogFragment())}"
+          android:onClick="@{v -> activity.navigateFragment(SettingsCatDebuggingFragmentDirections.actionSettingsCatDebuggingFragmentToLogFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -170,14 +134,10 @@
           </LinearLayout>
 
           <ImageView
+            style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_marginStart="16dp"
-            android:clickable="false"
-            android:focusable="false"
-            android:src="@drawable/ic_round_expand_more"
-            android:rotation="-90"
-            tools:ignore="ContentDescription"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:src="@drawable/ic_round_chevron_right"
+            tools:ignore="ContentDescription" />
 
         </LinearLayout>
 

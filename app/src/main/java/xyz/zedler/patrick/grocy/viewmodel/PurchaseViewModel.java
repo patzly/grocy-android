@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -44,6 +45,7 @@ import xyz.zedler.patrick.grocy.fragment.PurchaseFragmentArgs;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.DateBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.LocationsBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuantityUnitsBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.QuickModeConfirmBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.StoresBottomSheet;
@@ -176,7 +178,7 @@ public class PurchaseViewModel extends BaseViewModel {
       this.products = data.getProducts();
       this.pendingProducts = data.getPendingProducts();
       formData.getProductsLive().setValue(
-              appendPendingProducts(Product.getActiveAndStockEnabledProductsOnly(products), pendingProducts)
+              appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
       );
       productHashMap = ArrayUtil.getProductsHashMap(products);
       this.pendingProductBarcodes = data.getPendingProductBarcodes();
@@ -215,7 +217,7 @@ public class PurchaseViewModel extends BaseViewModel {
           this.products = products;
           productHashMap = ArrayUtil.getProductsHashMap(products);
           formData.getProductsLive().setValue(
-                  appendPendingProducts(Product.getActiveAndStockEnabledProductsOnly(products), pendingProducts)
+                  appendPendingProducts(Product.getActiveProductsOnly(products), pendingProducts)
           );
         }), dlHelper.updateQuantityUnitConversions(dbChangedTime, conversions -> {
           this.unitConversions = conversions;
@@ -297,6 +299,12 @@ public class PurchaseViewModel extends BaseViewModel {
 
     DownloadHelper.OnProductDetailsResponseListener listener = productDetails -> {
       Product updatedProduct = productDetails.getProduct();
+
+      if (updatedProduct.getNoOwnStockBoolean()) {
+        showProductChildrenBottomSheet(updatedProduct);
+        return;
+      }
+
       formData.getProductDetailsLive().setValue(productDetails);
       formData.getProductNameLive().setValue(updatedProduct.getName());
 
@@ -419,6 +427,15 @@ public class PurchaseViewModel extends BaseViewModel {
       // location
       if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
         formData.getLocationLive().setValue(productDetails.getLocation());
+      }
+
+      // note
+      if (barcode != null
+          && barcode.getNote() != null
+          && sharedPrefs.getBoolean(BEHAVIOR.COPY_BARCODE_NOTE,
+          SETTINGS_DEFAULT.BEHAVIOR.COPY_BARCODE_NOTE)
+      ) {
+        formData.getNoteLive().setValue(barcode.getNote());
       }
 
       formData.isFormValid();
@@ -951,6 +968,18 @@ public class PurchaseViewModel extends BaseViewModel {
             : -1
     );
     showBottomSheet(new LocationsBottomSheet(), bundle);
+  }
+
+  public void showProductChildrenBottomSheet(Product parentProduct) {
+    ArrayList<Product> childrenProducts = Product.getProductChildren(products, parentProduct.getId());
+    if (childrenProducts.isEmpty()) {
+      showMessage(R.string.error_no_children);
+      return;
+    }
+    Bundle bundle = new Bundle();
+    bundle.putParcelableArrayList(ARGUMENT.PRODUCTS, childrenProducts);
+    bundle.putInt(Constants.ARGUMENT.SELECTED_ID, -1);
+    showBottomSheet(new ProductsBottomSheet(), bundle);
   }
 
   public void showConfirmationBottomSheet() {

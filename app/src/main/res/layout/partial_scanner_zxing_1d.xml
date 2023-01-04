@@ -17,11 +17,14 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<com.google.android.material.card.MaterialCardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  app:cardCornerRadius="16dp"
+  app:strokeColor="?attr/colorOutline"
+  app:strokeWidth="1dp">
 
   <com.journeyapps.barcodescanner.BarcodeView
     android:id="@+id/zxing_barcode_surface"
@@ -38,22 +41,9 @@
 
   <View
     android:layout_width="match_parent"
-    android:layout_height="3dp"
-    android:background="@color/retro_red_bg_white"
+    android:layout_height="1dp"
+    android:background="@color/custom_red_35"
     android:alpha="0.7"
-    android:layout_gravity="center"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp" />
+    android:layout_gravity="center" />
 
-  <com.google.android.material.card.MaterialCardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:layout_margin="12dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/transparent"
-    app:strokeWidth="5dp"
-    app:strokeColor="@color/grey800" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</com.google.android.material.card.MaterialCardView>

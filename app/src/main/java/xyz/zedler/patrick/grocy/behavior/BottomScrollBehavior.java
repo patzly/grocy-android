@@ -66,6 +66,7 @@ public class BottomScrollBehavior {
   private int currentState;
   private final int topScrollLimit;
   private boolean isTopScroll = false;
+  private boolean canBottomAppBarBeVisible;
 
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
@@ -117,6 +118,7 @@ public class BottomScrollBehavior {
     });
 
     topScrollLimit = UiUtil.dpToPx(context, 150);
+    canBottomAppBarBeVisible = true;
   }
 
   private void test(MainActivity activity) {
@@ -201,13 +203,31 @@ public class BottomScrollBehavior {
     setUpScroll(appBar, liftOnScroll, scrollView, true);
   }
 
+  public void setProvideTopScroll(boolean provideTopScroll) {
+    this.provideTopScroll = provideTopScroll;
+    if (fabTopScroll != null && !provideTopScroll) {
+      fabTopScroll.hide();
+    }
+  }
+
+  public void setCanBottomAppBarBeVisible(boolean canBeVisible) {
+    canBottomAppBarBeVisible = canBeVisible;
+  }
+
   public void setBottomBarVisibility(boolean visible, boolean stay, boolean animated) {
-    bottomAppBar.setHideOnScroll(!stay);
-    new Handler(Looper.getMainLooper()).post(() -> {
-      if (visible) {
-        bottomAppBar.performShow(animated);
-      } else {
-        bottomAppBar.performHide(animated);
+    bottomAppBar.setHideOnScroll(canBottomAppBarBeVisible && !stay);
+    ViewTreeObserver observer = bottomAppBar.getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        if (visible && canBottomAppBarBeVisible) {
+          bottomAppBar.performShow(animated);
+        } else {
+          bottomAppBar.performHide(animated);
+        }
+        if (bottomAppBar.getViewTreeObserver().isAlive()) {
+          bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
       }
     });
   }
@@ -246,7 +266,7 @@ public class BottomScrollBehavior {
   }
 
   private void measureScrollView() {
-    if (scrollView == null || !(scrollView instanceof RecyclerView)) {
+    if (scrollView == null || scrollView instanceof RecyclerView) {
       return;
     }
     ViewTreeObserver observer = scrollView.getViewTreeObserver();

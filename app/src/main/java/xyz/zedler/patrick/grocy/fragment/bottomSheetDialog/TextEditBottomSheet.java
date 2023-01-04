@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -27,29 +26,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextEditBinding;
 import xyz.zedler.patrick.grocy.util.TextUtil;
 
 public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = TextEditBottomSheet.class.getSimpleName();
 
+  private FragmentBottomsheetTextEditBinding binding;
   private MainActivity activity;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(
-        requireContext(), R.style.Theme_Grocy_BottomSheetDialog_SoftInput
-    );
-  }
 
   @Override
   public View onCreateView(
@@ -57,9 +48,7 @@ public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_text_edit, container, false
-    );
+    binding = FragmentBottomsheetTextEditBinding.inflate(inflater, container, false);
 
     activity = (MainActivity) getActivity();
     assert activity != null;
@@ -67,18 +56,17 @@ public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
     if (getArguments() == null
         || getArguments().getString(Constants.ARGUMENT.TITLE) == null
     ) {
-      dismissWithMessage(activity.getString(R.string.error_undefined));
-      return view;
+      activity.showSnackbar(activity.getSnackbar(R.string.error_undefined, Snackbar.LENGTH_SHORT));
+      dismiss();
+      return binding.getRoot();
     }
 
-    TextView textView = view.findViewById(R.id.text_text_edit_title);
-    textView.setText(getArguments().getString(Constants.ARGUMENT.TITLE));
+    binding.toolbarTextEdit.setTitle(getArguments().getString(Constants.ARGUMENT.TITLE));
 
-    TextInputLayout textInputLayout = view.findViewById(R.id.text_input_text_edit_text);
     if (getArguments().getString(Constants.ARGUMENT.HINT) != null) {
-      textInputLayout.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
+      binding.textInputTextEditText.setHint(getArguments().getString(Constants.ARGUMENT.HINT));
     }
-    EditText editText = textInputLayout.getEditText();
+    EditText editText = binding.textInputTextEditText.getEditText();
     assert editText != null;
     if (getArguments().getString(Constants.ARGUMENT.TEXT) != null) {
       editText.setText(getArguments().getString(Constants.ARGUMENT.TEXT));
@@ -87,24 +75,30 @@ public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
       editText.setText(TextUtil.trimCharSequence(text));
     }
 
-    view.findViewById(R.id.button_text_edit_save).setOnClickListener(v -> {
+    binding.buttonTextEditSave.setOnClickListener(v -> {
       Spanned spanned = (Spanned) TextUtil.trimCharSequence(editText.getText());
       activity.getCurrentFragment().saveText(spanned);
       dismiss();
     });
 
-    view.findViewById(R.id.button_text_edit_clear).setOnClickListener(
+    binding.buttonTextEditClear.setOnClickListener(
         v -> editText.setText(null)
     );
 
-    return view;
+    return binding.getRoot();
   }
 
-  private void dismissWithMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.findViewById(R.id.coordinator_main), msg, Snackbar.LENGTH_SHORT)
-    );
-    dismiss();
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, bottom);
+    binding.linearContainerScroll.setLayoutParams(params);
   }
 
   @NonNull

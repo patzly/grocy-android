@@ -30,11 +30,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginRequestBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.LoginRequestViewModel;
 
 public class LoginRequestFragment extends BaseFragment {
@@ -75,10 +77,12 @@ public class LoginRequestFragment extends BaseFragment {
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.LOGIN_SUCCESS) {
+        // BottomAppBar should now be visible when navigating
+        activity.getScrollBehavior().setCanBottomAppBarBeVisible(true);
+
         activity.updateGrocyApi();
         navigateToStartDestination();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
@@ -86,15 +90,23 @@ public class LoginRequestFragment extends BaseFragment {
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    ViewUtil.startIcon(binding.imageLogo);
+
+    activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true, false);
   }
 
   private void navigateToStartDestination() {
     activity.updateStartDestination();
-    NavOptions.Builder builder = new NavOptions.Builder();
-    builder.setEnterAnim(R.anim.slide_from_end);
-    builder.setExitAnim(R.anim.slide_to_start);
-    builder.setPopEnterAnim(R.anim.slide_from_start);
-    builder.setPopExitAnim(R.anim.slide_to_end);
+    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(
+        false
+    );
     builder.setPopUpTo(R.id.navigation_main, true);
     activity.navigateFragment(
         findNavController().getGraph().getStartDestinationId(), builder.build()

@@ -274,7 +274,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> viewModel.showStockLocationsBottomSheet()}">
 
               <ImageView
@@ -298,7 +298,7 @@
 
             <LinearLayout
               android:id="@+id/quantity_unit_container"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:focusableInTouchMode="true"
               android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet(true)}"
               app:onFocusChangeListener="@{(v, focus) -> viewModel.showQuantityUnitsBottomSheet(focus)}"
@@ -404,7 +404,7 @@
 
             <LinearLayout
               android:id="@+id/linear_to_location"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:focusableInTouchMode="true"
               android:onClick="@{() -> viewModel.showLocationsBottomSheet(true)}"
               app:onFocusChangeListener="@{(v, focus) -> viewModel.showLocationsBottomSheet(focus)}">
@@ -430,7 +430,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
               android:onClick="@{() -> checkboxSpecific.setChecked(!checkboxSpecific.isChecked())}">
 
               <ImageView
@@ -476,7 +476,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:onClick="@{() -> viewModel.showStockEntriesBottomSheet()}"
               android:visibility="@{formData.useSpecificLive ? View.VISIBLE : View.GONE}">
 

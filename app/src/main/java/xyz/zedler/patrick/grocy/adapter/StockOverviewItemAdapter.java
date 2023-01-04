@@ -225,7 +225,9 @@ public class StockOverviewItemAdapter extends
         groupString = group;
       }
       GroupHeader groupHeader = new GroupHeader(groupString);
-      groupHeader.setDisplayDivider(!ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group));
+      groupHeader.setDisplayDivider(
+          !ungroupedItems.isEmpty() || !groupsSorted.get(0).equals(group)
+      );
       groupedListItems.add(groupHeader);
       sortStockItems(context, itemsFromGroup, sortMode, sortAscending);
       groupedListItems.addAll(itemsFromGroup);
@@ -344,24 +346,26 @@ public class StockOverviewItemAdapter extends
 
     // AMOUNT
 
-    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(stockItem.getProduct().getQuIdStockInt());
+    QuantityUnit quantityUnitStock = quantityUnitHashMap.get(
+        stockItem.getProduct().getQuIdStockInt()
+    );
     holder.binding.textAmount.setText(
-        AmountUtil.getStockAmountInfo(context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount)
+        AmountUtil.getStockAmountInfo(
+            context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount
+        )
     );
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
       );
       holder.binding.textAmount.setTextColor(colorBlue.getAccent());
-      holder.binding.textAmount.setAlpha(1);
     } else {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.textAmount.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnBackground)
+          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
       );
-      holder.binding.textAmount.setAlpha(0.61f);
     }
 
     // BEST BEFORE
@@ -409,15 +413,13 @@ public class StockOverviewItemAdapter extends
         color = ResUtil.getColorAttr(context, R.attr.colorError);
       }
       holder.binding.textDays.setTextColor(color);
-      holder.binding.textDays.setAlpha(1);
     } else {
       holder.binding.textDays.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_book)
       );
       holder.binding.textDays.setTextColor(
-          ResUtil.getColorAttr(context, R.attr.colorOnBackground)
+          ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant)
       );
-      holder.binding.textDays.setAlpha(0.61f);
     }
 
     double factorPurchaseToStock = stockItem.getProduct().getQuFactorPurchaseToStockDouble();
@@ -426,7 +428,9 @@ public class StockOverviewItemAdapter extends
     switch (extraField) {
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_VALUE:
         if (NumUtil.isStringDouble(stockItem.getValue())) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay);
+          extraFieldText = NumUtil.trimPrice(
+              NumUtil.toDouble(stockItem.getValue()), decimalPlacesPriceDisplay
+          );
         }
         if (currency != null && !currency.isEmpty()) {
           extraFieldSubtitleText = currency;
@@ -448,7 +452,9 @@ public class StockOverviewItemAdapter extends
       case FilterChipLiveDataStockExtraField.EXTRA_FIELD_AVERAGE_PRICE:
         String avg = productAveragePriceHashMap.get(stockItem.getProductId());
         if (NumUtil.isStringDouble(avg)) {
-          extraFieldText = NumUtil.trimPrice(NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay);
+          extraFieldText = NumUtil.trimPrice(
+              NumUtil.toDouble(avg) * factorPurchaseToStock, decimalPlacesPriceDisplay
+          );
           QuantityUnit quantityUnitPurchase = quantityUnitHashMap
               .get(stockItem.getProduct().getQuIdPurchaseInt());
           if (quantityUnitPurchase != null && quantityUnitStock != null
@@ -720,7 +726,8 @@ public class StockOverviewItemAdapter extends
           ProductLastPurchased purchasedNew = productLastPurchasedHashMapNew
               .get(newItem.getProductId());
           if (purchasedOld == null && purchasedNew != null
-              || purchasedOld != null && purchasedNew != null && !purchasedOld.equals(purchasedNew)) {
+              || purchasedOld != null && purchasedNew != null
+              && !purchasedOld.equals(purchasedNew)) {
             return false;
           }
         }

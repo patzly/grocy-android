@@ -99,6 +99,7 @@ public class ResUtil {
 
         R.color.custom_yellow_80,
         R.color.custom_yellow_50,
+        R.color.custom_yellow_30,
 
         R.color.custom_green_80,
         R.color.custom_green_50,
@@ -106,11 +107,19 @@ public class ResUtil {
         R.color.custom_red_60,
         R.color.custom_red_50,
         R.color.custom_red_35,
+        R.color.custom_red_30,
 
-        R.color.toast_brown_90,
-        R.color.toast_brown_70,
-        R.color.toast_brown_50,
-        R.color.toast_brown_30,
+        R.color.custom_brown_90,
+        R.color.custom_brown_70,
+        R.color.custom_brown_50,
+        R.color.custom_brown_30,
+
+        R.color.custom_dirt_95,
+        R.color.custom_dirt_90,
+        R.color.custom_dirt_80,
+        R.color.custom_dirt_60,
+        R.color.custom_dirt_40,
+        R.color.custom_dirt_30,
     };
     HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
         .setColorResourceIds(resIds)

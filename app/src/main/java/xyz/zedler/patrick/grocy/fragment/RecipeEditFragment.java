@@ -98,7 +98,6 @@ public class RecipeEditFragment extends BaseFragment implements EmbeddedFragment
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
 
     binding.ingredients.setOnClickListener(v -> {
       if (viewModel.isActionEdit()) {

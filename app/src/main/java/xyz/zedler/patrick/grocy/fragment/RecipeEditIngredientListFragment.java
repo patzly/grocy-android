@@ -138,8 +138,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
       if (binding.recycler.getAdapter() instanceof RecipeEntryAdapter) {
         ((RecipeEditIngredientListEntryAdapter) binding.recycler.getAdapter()).updateData(
                 items,
-                viewModel.getProducts(),
-                viewModel.getQuantityUnits()
+                viewModel.getProducts()
         );
       } else {
         binding.recycler.setAdapter(
@@ -148,7 +147,8 @@ public class RecipeEditIngredientListFragment extends BaseFragment
                         (LinearLayoutManager) binding.recycler.getLayoutManager(),
                         items,
                         viewModel.getProducts(),
-                        viewModel.getQuantityUnits(),
+                        viewModel.getQuantityUnitHashMap(),
+                        viewModel.getUnitConversions(),
                         this
                 )
         );

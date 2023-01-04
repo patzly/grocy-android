@@ -296,15 +296,8 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
         formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
         quantityUnit = quantityUnitHashMap.get(item.getQuIdInt());
-        if (quantityUnit != null && unitFactors.containsKey(quantityUnit)) {
-          Double factor = unitFactors.get(quantityUnit);
-          assert factor != null;
-          if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
-            amount = amount / factor;
-          } else if (factor != -1) {
-            amount = amount * factor;
-          }
-        }
+        amount = QuantityUnitConversionUtil
+            .getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
       } catch (IllegalArgumentException e) {
         showMessage(e.getMessage());
         return;

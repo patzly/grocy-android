@@ -29,10 +29,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.ProductBarcodeAdapter;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductCatBarcodesBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -41,7 +43,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatBarcodesViewModel;
 
 public class MasterProductCatBarcodesFragment extends BaseFragment implements
@@ -54,6 +55,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
   private FragmentMasterProductCatBarcodesBinding binding;
   private MasterProductCatBarcodesViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -97,10 +99,18 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity, activity.binding.coordinatorMain);
+        Snackbar snack = message.getSnackbar(activity.binding.coordinatorMain);
         activity.showSnackbar(snack);
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
@@ -155,12 +165,12 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         R.menu.menu_master_product_edit,
@@ -176,12 +186,13 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     activity.updateFab(R.drawable.ic_round_add_anim,
         R.string.action_add,
         Constants.FAB.TAG.ADD,
-        animated,
-        () -> navigate(MasterProductCatBarcodesFragmentDirections
+        savedInstanceState == null,
+        () -> activity.navigateFragment(MasterProductCatBarcodesFragmentDirections
             .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(
                 viewModel.getFilledProduct()
             )
-        ));
+        )
+    );
   }
 
   @Override
@@ -189,7 +200,7 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     if (clickUtil.isDisabled()) {
       return;
     }
-    navigate(MasterProductCatBarcodesFragmentDirections
+    activity.navigateFragment(MasterProductCatBarcodesFragmentDirections
         .actionMasterProductCatBarcodesFragmentToMasterProductCatBarcodesEditFragment(viewModel.getFilledProduct())
         .setProductBarcode(productBarcode)
     );
@@ -203,6 +214,9 @@ public class MasterProductCatBarcodesFragment extends BaseFragment implements
     viewModel.setOfflineLive(!isOnline);
     if (isOnline) {
       viewModel.downloadData();
+    }
+    if (systemBarBehavior != null) {
+      systemBarBehavior.refresh();
     }
   }
 

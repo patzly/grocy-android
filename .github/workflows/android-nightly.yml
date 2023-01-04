@@ -11,8 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: set up JDK 11
+    
+    - name: Checkout branch
+      uses: actions/checkout@v3
+      with:
+        ref: 'master'
+        
+    - name: Set up JDK 11
       uses: actions/setup-java@v3
       with:
         java-version: '11'
@@ -21,17 +26,47 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      
     - name: Build with Gradle
       run: ./gradlew build
-
-    # Update tag and pre-release
-    # - Update (force-push) tag to the commit that is used in the workflow.
-    # - Upload artifacts defined by the user.
-    - uses: pyTooling/Actions/releaser@r0
+    
+    - name: Rename artifacts
+      run: |
+        mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d').apk
+        cp app/src/main/res/raw/changelog.txt app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d')-changelog.txt
+    
+    - name: Upload artifacts
+      uses: pyTooling/Actions/releaser@r0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         rm: true
         tag: nightly
         files: |
-          app/build/outputs/apk/debug/app-debug.apk
-          app/src/main/res/raw/changelog.txt
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/debug/*.txt
+          
+    - name: Checkout branch
+      uses: actions/checkout@v3
+      with:
+        ref: 'feature/mlkit_scanner'
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew build
+      
+    - name: Rename artifacts
+      run: |
+        mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Grocy-Android-mlkit-$(date +'%Y%m%d').apk
+        cp app/src/main/res/raw/changelog.txt app/build/outputs/apk/debug/Grocy-Android-mlkit-$(date +'%Y%m%d')-changelog.txt
+
+    - name: Upload artifacts
+      uses: pyTooling/Actions/releaser@r0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        rm: false
+        tag: nightly
+        files: |
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/debug/*.txt

@@ -19,7 +19,6 @@
 
 <layout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
@@ -34,49 +33,49 @@
       type="xyz.zedler.patrick.grocy.activity.MainActivity" />
   </data>
 
-  <RelativeLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/action_login"
+        app:menu="@menu/menu_login" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_gravity="center"
       android:overScrollMode="never"
-      android:fillViewport="true">
+      android:layout_marginTop="?attr/actionBarSize">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp"
-        android:layout_marginStart="@dimen/main_side_margin"
-        android:layout_marginEnd="@dimen/main_side_margin">
-
-        <ImageView
-          android:layout_width="56dp"
-          android:layout_height="56dp"
-          android:scaleType="centerCrop"
-          android:src="@drawable/ic_round_grocy_anim"
-          android:layout_marginBottom="16dp"
-          tools:ignore="ContentDescription" />
+        android:padding="16dp">
 
         <com.google.android.material.card.MaterialCardView
           android:id="@+id/hint_card"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="16dp"
-          app:cardBackgroundColor="@color/on_background_variant"
-          app:cardCornerRadius="10dp"
-          app:cardElevation="0dp"
-          app:contentPadding="12dp">
+          style="@style/Widget.Grocy.Card.Text"
+          android:layout_marginBottom="16dp">
 
           <TextView
             style="@style/Widget.Grocy.TextView.Paragraph"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:text="@{fragment.isPageForGrocyKey() ? @string/msg_qr_code_scan : @string/msg_qr_code_scan_token}" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -90,69 +89,16 @@
         <com.google.android.material.button.MaterialButton
           android:id="@+id/enter_manually"
           style="@style/Widget.Grocy.Button.TextButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_marginTop="6dp"
           android:layout_gravity="center_horizontal"
           android:text="@string/action_enter_data_manually"
           android:onClick="@{() -> fragment.enterDataManually()}"
           app:clickUtil="@{clickUtil}" />
 
-        <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:layout_marginTop="4dp">
-
-          <xyz.zedler.patrick.grocy.view.ActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
-            app:clickUtil="@{clickUtil}"
-            app:tooltipText="@{@string/title_feedback}"
-            app:icon="@drawable/ic_round_feedback_anim"
-            app:tint="@color/icon" />
-
-          <xyz.zedler.patrick.grocy.view.ActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> fragment.openHelpWebsite()}"
-            app:clickUtil="@{clickUtil}"
-            app:tooltipText="@{@string/title_help}"
-            app:icon="@drawable/ic_round_help_outline_anim"
-            app:tint="@color/icon" />
-
-          <xyz.zedler.patrick.grocy.view.ActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_aboutFragment)}"
-            app:clickUtil="@{clickUtil}"
-            app:tooltipText="@{@string/title_about}"
-            app:icon="@drawable/ic_round_info_outline_anim"
-            app:tint="@color/icon" />
-
-          <xyz.zedler.patrick.grocy.view.ActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> fragment.openGrocyWebsite()}"
-            app:clickUtil="@{clickUtil}"
-            app:tooltipText="@{@string/info_website}"
-            app:icon="@drawable/ic_round_open_in_browser_anim"
-            app:tint="@color/icon" />
-
-          <xyz.zedler.patrick.grocy.view.ActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsFragment)}"
-            app:clickUtil="@{clickUtil}"
-            app:tooltipText="@{@string/title_settings}"
-            app:icon="@drawable/ic_round_settings_anim"
-            app:tint="@color/icon" />
-
-        </LinearLayout>
-
       </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-  </RelativeLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

@@ -17,26 +17,9 @@
   ~ Copyright (c) 2020-2022 by Patrick Zedler and Dominic Zedler
   -->
 
-<layer-list
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:autoMirrored="true">
-  <item>
-    <shape android:shape="rectangle">
-      <solid android:color="@color/background" />
-      <corners
-        android:topLeftRadius="12dp"
-        android:bottomLeftRadius="12dp" />
-    </shape>
-  </item>
-  <item
-    android:left="8dp"
-    android:top="2dp"
-    android:bottom="2dp">
-    <shape android:shape="rectangle">
-      <corners
-        android:topLeftRadius="16dp"
-        android:bottomLeftRadius="16dp" />
-      <solid android:color="@color/highlight" />
-    </shape>
-  </item>
-</layer-list>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Disabled state -->
+  <item android:color="?attr/colorOnSurface" android:alpha="@dimen/material_emphasis_disabled" android:state_enabled="false"/>
+  <!-- Default, Enabled state -->
+  <item android:color="?attr/colorOnSurfaceVariant"/>
+</selector>

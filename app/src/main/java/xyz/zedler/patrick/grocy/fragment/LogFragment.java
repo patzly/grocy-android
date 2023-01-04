@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLogBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.Constants;
@@ -67,9 +68,18 @@ public class LogFragment extends BaseFragment {
     activity = (MainActivity) requireActivity();
     binding.setActivity(activity);
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.frameContainer);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_log);
-      activity.getScrollBehaviorOld().setHideOnScroll(false);
+      activity.getScrollBehavior().setUpScroll(
+          binding.appBar, false, binding.scroll, true
+      );
+      activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_log, this::onMenuItemClick);
     }
 
@@ -84,7 +94,7 @@ public class LogFragment extends BaseFragment {
     new Handler().postDelayed(
         () -> new loadAsyncTask(
             getLogcatCommand(),
-            log -> binding.textLog.setText(log)
+            log -> binding.text.setText(log)
         ).execute(),
         300
     );
@@ -151,7 +161,7 @@ public class LogFragment extends BaseFragment {
 
   private boolean onMenuItemClick(MenuItem item) {
     if (item.getItemId() == R.id.action_refresh) {
-      new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
+      new loadAsyncTask(getLogcatCommand(), log -> binding.text.setText(log)).execute();
       return true;
     } else if (item.getItemId() == R.id.action_feedback) {
       activity.showBottomSheet(new FeedbackBottomSheet(), null);
@@ -165,11 +175,11 @@ public class LogFragment extends BaseFragment {
       return true;
     } else if (item.getItemId() == R.id.action_error_logs) {
       showInfo = false;
-      new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
+      new loadAsyncTask(getLogcatCommand(), log -> binding.text.setText(log)).execute();
       return true;
     } else if (item.getItemId() == R.id.action_info_logs) {
       showInfo = true;
-      new loadAsyncTask(getLogcatCommand(), log -> binding.textLog.setText(log)).execute();
+      new loadAsyncTask(getLogcatCommand(), log -> binding.text.setText(log)).execute();
       return true;
     }
     return false;

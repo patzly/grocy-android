@@ -21,11 +21,9 @@ package xyz.zedler.patrick.grocy.scanner;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.ColorRes;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 
@@ -38,7 +36,6 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
       Fragment fragment,
       CoordinatorLayout containerScanner,
       BarcodeListener barcodeListener,
-      @ColorRes int viewfinderMaskColorZXing,
       boolean qrCodeFormat,
       boolean takeSmallQrCodeFormat
   ) {
@@ -56,27 +53,11 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
           fragment,
           containerScanner,
           barcodeListener,
-          viewfinderMaskColorZXing,
+
           qrCodeFormat,
           takeSmallQrCodeFormat
       );
     }
-  }
-
-  public EmbeddedFragmentScannerBundle(
-      Fragment fragment,
-      CoordinatorLayout containerScanner,
-      BarcodeListener barcodeListener,
-      @ColorRes int viewfinderMaskColorZXing
-  ) {
-    this(
-        fragment,
-        containerScanner,
-        barcodeListener,
-        viewfinderMaskColorZXing,
-        useScannerFormat2d(fragment),
-        true
-    );
   }
 
   public EmbeddedFragmentScannerBundle(
@@ -88,7 +69,6 @@ public class EmbeddedFragmentScannerBundle extends EmbeddedFragmentScanner {
         fragment,
         containerScanner,
         barcodeListener,
-        R.color.background,
         useScannerFormat2d(fragment),
         true
     );

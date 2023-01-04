@@ -32,9 +32,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-      android:text="@string/action_clear_shopping_list" />
+    <com.google.android.material.appbar.MaterialToolbar
+      style="@style/Widget.Grocy.Toolbar.Start"
+      app:title="@string/action_clear_shopping_list" />
 
     <com.google.android.material.divider.MaterialDivider
       style="@style/Widget.Grocy.Divider" />

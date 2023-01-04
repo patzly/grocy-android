@@ -284,8 +284,8 @@ public class FormDataMasterProductCatBarcodesEdit {
       return false;
     }
     if (NumUtil.getDecimalPlacesCount(amountLive.getValue()) > maxDecimalPlacesAmount) {
-      amountErrorLive.setValue(application.getString(
-          R.string.error_max_decimal_places, String.valueOf(maxDecimalPlacesAmount)
+      amountErrorLive.setValue(application.getResources().getQuantityString(
+          R.plurals.error_max_decimal_places, maxDecimalPlacesAmount, maxDecimalPlacesAmount
       ));
       return false;
     }

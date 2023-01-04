@@ -1,15 +1,18 @@
 ## 3.0.0
 
-- New: Material You redesign with dynamic colors for Android 12 and later
+- New: Material You redesign with dynamic colors for Android 12+
 - New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)
 - New: Support for more than two decimal places for amounts & prices, uses option from server (#459)
 - New: Product option "Move on open" (#569)
+- New: Option in behavior settings for copying barcode note to stock entry note field (#609)
 - Improved: (not F-Droid) ML Kit scanner now only recognises barcodes in preview field
 - Improved: Shopping mode page now can be opened with deeplink "grocy://shoppingmodepage" (#519)
+- Improved: Selection of child products in purchase form if parent product has no own stock (#508)
+- Improved: Master object lists now have fuzzy search (#610)
 - Fixed: F-Droid build should work again (#566)
 - Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
 - Fixed: Wrong ingredient amount in the recipe view with base servings other than 1 (#584)
-- Fixed: Wrong ingredient amount in the recipe view with quantity unit conversions (#584)
+- Fixed: Wrong ingredient amount on recipe pages related to unit conversions (#584, #585, #612)
 - Fixed: Wrong price calculation when last price was stored for barcode (#578)
 - Fixed: Crash on chores overview page with wrong rescheduled date format (#564)
 - Fixed: Rescheduling chore with time tracking enabled did not set chosen time
@@ -19,7 +22,12 @@
 - Fixed: Crash on shopping list item edit page when product contains deleted quantity units (#582)
 - Fixed: On shopping list item edit page the change of product prevented saving (#583)
 - Fixed: FAB displayed after rotation on pages where no FAB is used (#552)
+- Fixed: Use quick consume amount when option enabled in stock user settings (#604)
+- Fixed: Displaying of stock locations in product overview bottom sheet
+- Fixed: Wrong amount helper text on barcode edit page of master product (#611)
 - Fixed: Crash on stock journal page
+- Fixed: Crash on master product page when saving changes
+- Fixed: Crash on recipes page during search (#607)
 - Fixed: (not F-Droid) ML Kit scanner doesn't ask for contacts permission anymore
 
 ## 2.3.0

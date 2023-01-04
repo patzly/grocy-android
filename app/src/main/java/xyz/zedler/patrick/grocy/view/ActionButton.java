@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -115,6 +116,7 @@ public class ActionButton extends LinearLayout {
     frameLayoutButton.setOnClickListener(l);
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   @Override
   public void setOnTouchListener(OnTouchListener l) {
     frameLayoutButton.setOnTouchListener(l);

@@ -20,6 +20,7 @@
 package xyz.zedler.patrick.grocy.util;
 
 import android.content.Context;
+import androidx.lifecycle.LiveData;
 import java.util.HashMap;
 import java.util.List;
 import xyz.zedler.patrick.grocy.R;
@@ -33,19 +34,25 @@ public class QuantityUnitConversionUtil {
       Context context,
       HashMap<Integer, QuantityUnit> quantityUnitHashMap,
       List<QuantityUnitConversion> unitConversions,
-      Product product
+      Product product,
+      boolean relativeToStockUnit
   ) {
-    QuantityUnit stock = quantityUnitHashMap.get(product.getQuIdStockInt());
-    QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    QuantityUnit relativeToUnit = relativeToStockUnit
+        ? quantityUnitHashMap.get(product.getQuIdStockInt())
+        : quantityUnitHashMap.get(product.getQuIdPurchaseInt());
+    QuantityUnit stockUnit = quantityUnitHashMap.get(product.getQuIdStockInt());
+    QuantityUnit purchaseUnit = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
 
-    if (stock == null || purchase == null) {
+    if (relativeToUnit == null || stockUnit == null || purchaseUnit == null) {
       throw new IllegalArgumentException(context.getString(R.string.error_loading_qus));
     }
 
     HashMap<QuantityUnit, Double> unitFactors = new HashMap<>();
-    unitFactors.put(stock, (double) -1);
-    if (!unitFactors.containsKey(purchase)) {
-      unitFactors.put(purchase, product.getQuFactorPurchaseToStockDouble());
+    unitFactors.put(relativeToUnit, (double) -1);
+    if (relativeToStockUnit && !unitFactors.containsKey(purchaseUnit)) {
+      unitFactors.put(purchaseUnit, product.getQuFactorPurchaseToStockDouble());
+    } else if (!relativeToStockUnit && !unitFactors.containsKey(stockUnit)) {
+      unitFactors.put(stockUnit, product.getQuFactorPurchaseToStockDouble());
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (!NumUtil.isStringInt(conversion.getProductId())
@@ -62,7 +69,7 @@ public class QuantityUnitConversionUtil {
     }
     for (QuantityUnitConversion conversion : unitConversions) {
       if (NumUtil.isStringInt(conversion.getProductId())
-          || stock.getId() != conversion.getFromQuId()) {
+          || relativeToUnit.getId() != conversion.getFromQuId()) {
         continue;
       }
       // Only add standard unit conversions
@@ -75,4 +82,66 @@ public class QuantityUnitConversionUtil {
     return unitFactors;
   }
 
+  public static HashMap<QuantityUnit, Double> getUnitFactors(
+      Context context,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversion> unitConversions,
+      Product product
+  ) {
+    return getUnitFactors(context, quantityUnitHashMap, unitConversions, product, true);
+  }
+
+  public static String getAmountStock(
+      Product product,
+      QuantityUnit stock,
+      QuantityUnit current,
+      LiveData<String> amountLive,
+      LiveData<HashMap<QuantityUnit, Double>> quantityUnitsFactorsLive,
+      int maxDecimalPlacesAmount
+  ) {
+    if (!NumUtil.isStringDouble(amountLive.getValue())
+        || quantityUnitsFactorsLive.getValue() == null
+    ) {
+      return null;
+    }
+    assert amountLive.getValue() != null;
+
+    if (stock != null && current != null && stock.getId() != current.getId()) {
+      HashMap<QuantityUnit, Double> hashMap = quantityUnitsFactorsLive.getValue();
+      double amount = Double.parseDouble(amountLive.getValue());
+      Object currentFactor = hashMap.get(current);
+      if (currentFactor == null) {
+        //amountHelperLive.setValue(null);
+        return null;
+      }
+      double amountMultiplied;
+      if (product != null && current.getId() == product.getQuIdPurchaseInt()) {
+        amountMultiplied = amount * (double) currentFactor;
+      } else {
+        amountMultiplied = amount / (double) currentFactor;
+      }
+      return NumUtil.trimAmount(amountMultiplied, maxDecimalPlacesAmount);
+    } else {
+      return null;
+    }
+  }
+
+  public static double getAmountRelativeToUnit(
+      HashMap<QuantityUnit, Double> unitFactors,
+      Product product,
+      QuantityUnit quantityUnit,
+      double inputAmount
+  ) {
+    if (quantityUnit == null || !unitFactors.containsKey(quantityUnit)) {
+      return inputAmount;
+    }
+    Double factor = unitFactors.get(quantityUnit);
+    assert factor != null;
+    if (factor != -1 && quantityUnit.getId() == product.getQuIdPurchaseInt()) {
+      return inputAmount / factor;
+    } else if (factor != -1) {
+      return inputAmount * factor;
+    }
+    return inputAmount;
+  }
 }

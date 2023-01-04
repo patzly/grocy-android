@@ -69,8 +69,8 @@
         android:orientation="vertical">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatServerFragment())}"
           android:background="@{fragment.shouldNavigateToServer ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
           app:clickUtil="@{clickUtil}">
 
@@ -96,8 +96,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatUserSettingsFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatUserSettingsFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -122,8 +122,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatAppearanceFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -148,8 +148,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatNetworkFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -174,8 +174,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatBehaviorFragment())}"
           android:background="@{fragment.shouldNavigateToBehavior ? @drawable/ripple_list_item_bg_selected : @drawable/ripple_list_item_bg}"
           app:clickUtil="@{clickUtil}">
 
@@ -201,8 +201,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatScannerFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatScannerFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -227,8 +227,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatShoppingModeFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -251,8 +251,8 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-            android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
+            style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+            android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationsFragment())}"
             app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -275,8 +275,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatDebuggingFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToSettingsCatDebuggingFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView
@@ -301,8 +301,8 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
-          android:onClick="@{v -> fragment.navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())}"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+          android:onClick="@{v -> activity.navigateFragment(SettingsFragmentDirections.actionSettingsFragmentToAboutFragment())}"
           app:clickUtil="@{clickUtil}">
 
           <ImageView

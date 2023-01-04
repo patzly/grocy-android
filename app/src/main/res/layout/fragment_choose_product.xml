@@ -77,7 +77,7 @@
             style="@style/Widget.Grocy.ImageView.Icon"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@{viewModel.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+            android:src="@{viewModel.displayHelpLive ? @drawable/ic_round_help : @drawable/ic_round_help_outline_anim}" />
 
         </FrameLayout>
 
@@ -221,7 +221,7 @@
                 android:text="@string/category_new_product" />
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.createNewPendingProduct()}"
@@ -239,7 +239,7 @@
               </LinearLayout>
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Icon.Clickable"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> fragment.createNewProduct()}"

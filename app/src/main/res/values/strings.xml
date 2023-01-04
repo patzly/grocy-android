@@ -322,8 +322,9 @@
   <string name="msg_press_hold_confirm">Press and hold to confirm deletion</string>
   <string name="msg_recipe_consume_ask">Are you sure to consume all ingredients needed by recipe \"%1$s\"? (ingredients marked with \"only check if any amount is in stock\" will be ignored)</string>
   <string name="msg_recipe_shopping_list_ask">Are you sure to put all missing ingredients for recipe \"%1$s\" on the shopping list?\n\nUncheck ingredients to not put them on the shopping list:</string>
-  <string name="msg_welcome_to_grocy">Welcome to Grocy Android!\n\nTo use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
-  <string name="msg_choose_option_below">Please choose one option from below.</string>
+  <string name="msg_welcome">Welcome to Grocy Android!</string>
+  <string name="msg_welcome_introduce">To use grocy productively you need your own server or the grocy add-on for Home Assistant.\nIf you just want to try out this app you can use the demo server from Bernd Bestel, the creator of grocy.</string>
+  <string name="msg_choose_option_below">Please choose an option below.</string>
   <string name="msg_qr_code_scan">On another device, visit your grocy website and go to \'API keys\' page. Click \'Add\', then click on the little QR code symbol and scan the QR code.</string>
   <string name="msg_qr_code_scan_token">You\'re using the grocy Home Assistant add-on. Create a long-lived access token in your Home Assistant profile settings (last section). Below the token field, click on \"Generate QR code\" and scan it here.</string>
   <string name="msg_port_connection_info_without_port">The app will connect to port %1$s.\nIf you want it to connect to a different port, you can add one to the URL.\nExample: http://domain.com:81/</string>
@@ -440,6 +441,7 @@
   <string name="error_api_qr_code">Not a QR code with grocy API credentials</string>
   <string name="error_token_qr_code">Not a QR code with a long-lived access token from Home Assistant</string>
   <string name="error_loading_qus">Failed to load quantity units from product</string>
+  <string name="error_no_children">The selected product has no children</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Cannot be equal to %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -450,8 +452,6 @@
   <string name="error_bounds_max">Must be lower than or equal to %1$s</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_bounds_higher">Must be higher than %1$s</string>
-  <!-- %1$s is a number like 0, 1, 2 -->
-  <string name="error_max_decimal_places">Max. %1$s decimal places</string>
   <string name="error_offline">Offline</string>
   <string name="error_offline_subtitle">This page only works with internet access. Check your connection.</string>
   <string name="error_no_done_items">There are no items marked as done</string>
@@ -737,6 +737,11 @@
   <plurals name="description_overview_master_data">
     <item quantity="one">Your database contains %1$d product.</item>
     <item quantity="other">Your database contains %1$d products.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s decimal place</item>
+    <item quantity="other">Max. %1$s decimal places</item>
   </plurals>
 
   <string name="property_name">Name</string>
@@ -1096,6 +1101,8 @@
   <string name="setting_date_keyboard_input_description">Instead of date picker wheels</string>
   <string name="setting_date_keyboard_reverse">Use reverse date format for input</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY instead of YYMMDD</string>
+  <string name="setting_copy_barcode_note">Copy barcode note to stock entry note</string>
+  <string name="setting_copy_barcode_note_description">When purchasing a product</string>
   <string name="setting_loading_circle">Show loading circle for all requests</string>
   <string name="setting_loading_circle_description">Helpful for slow networks</string>
   <string name="setting_tor">Use Tor</string>

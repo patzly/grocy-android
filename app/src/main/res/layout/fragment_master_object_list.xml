@@ -40,8 +40,7 @@
 
       <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_default"
-        style="@style/Widget.Grocy.Toolbar.Back"
-        app:titleCentered="true" />
+        style="@style/Widget.Grocy.Toolbar.Back" />
 
     </LinearLayout>
 

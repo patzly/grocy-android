@@ -22,19 +22,17 @@ package xyz.zedler.patrick.grocy.viewmodel;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
-
 import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.RecipeEditIngredientListFragmentArgs;
@@ -43,10 +41,11 @@ import xyz.zedler.patrick.grocy.model.FormDataRecipeEditIngredientList;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipeEditRepository;
-import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 
 public class RecipeEditIngredientListViewModel extends BaseViewModel {
 
@@ -67,7 +66,8 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
 
   private ArrayList<RecipePosition> recipePositions;
   private List<Product> products;
-  private List<QuantityUnit> quantityUnits;
+  private HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private List<QuantityUnitConversion> unitConversions;
 
   private final boolean isActionEdit;
 
@@ -110,11 +110,11 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
 
       this.recipePositions = (ArrayList<RecipePosition>) RecipePosition.getRecipePositionsFromRecipeId(data.getRecipePositions(), recipe.getId());
       this.products = Product.getProductsForRecipePositions(data.getProducts(), recipePositions);
-      this.quantityUnits = QuantityUnit.getQuantityUnitsForRecipePositions(data.getQuantityUnits(), recipePositions);
+      this.quantityUnitHashMap = ArrayUtil.getQuantityUnitsHashMap(data.getQuantityUnits());
+      this.unitConversions = data.getQuantityUnitConversions();
 
       formData.getRecipePositionsLive().setValue(recipePositions);
       formData.getProductsLive().setValue(products);
-      formData.getQuantityUnitsLive().setValue(quantityUnits);
       if (downloadAfterLoading) {
         downloadData();
       }
@@ -145,6 +145,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_RECIPE_POSITIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
+    editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
     downloadData();
   }
@@ -204,8 +205,12 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     return new ArrayList<>(products);
   }
 
-  public ArrayList<QuantityUnit> getQuantityUnits() {
-    return new ArrayList<>(quantityUnits);
+  public HashMap<Integer, QuantityUnit> getQuantityUnitHashMap() {
+    return quantityUnitHashMap;
+  }
+
+  public List<QuantityUnitConversion> getUnitConversions() {
+    return unitConversions;
   }
 
   public void deleteRecipePosition(int recipePositionId) {

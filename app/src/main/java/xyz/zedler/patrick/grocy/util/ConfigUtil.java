@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.util;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants;
@@ -40,8 +41,8 @@ public class ConfigUtil {
       DownloadHelper dlHelper,
       GrocyApi api,
       SharedPreferences prefs,
-      Runnable onSuccessAction,
-      DownloadHelper.OnErrorListener onError
+      @Nullable Runnable onSuccessAction,
+      @Nullable DownloadHelper.OnErrorListener onError
   ) {
 
     boolean debug = prefs.getBoolean(

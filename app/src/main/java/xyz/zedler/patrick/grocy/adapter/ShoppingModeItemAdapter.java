@@ -485,6 +485,7 @@ public class ShoppingModeItemAdapter extends
       description = (Spanned) TextUtil.trimCharSequence(description);
       if (description != null && !description.toString().isEmpty()) {
         binding.cardDescription.setText(description.toString());
+        binding.cardDescription.setRadius(UiUtil.dpToPx(context, 8));
         binding.cardDescription.setVisibility(View.VISIBLE);
       } else {
         binding.cardDescription.setVisibility(View.GONE);

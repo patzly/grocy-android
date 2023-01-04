@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
@@ -587,12 +586,6 @@ public class ShoppingListItemAdapter extends
       binding.amount.setText(NumUtil.trimAmount(item.getAmountDouble(), maxDecimalPlacesAmount));
     }
 
-    binding.amount.setTypeface(
-        ResourcesCompat.getFont(context, R.font.jost_book)
-    );
-    binding.amount.setTextColor(
-        ContextCompat.getColor(context, R.color.on_background_secondary)
-    );
     if (item.isUndone()) {
       binding.amount.setPaintFlags(
           binding.amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)

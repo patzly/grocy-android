@@ -20,32 +20,25 @@
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetCompatibilityBinding;
 
 public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = CompatibilityBottomSheet.class.getSimpleName();
 
-  private MainActivity activity;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
+  private FragmentBottomsheetCompatibilityBinding binding;
 
   @SuppressLint("ApplySharedPref")
   @Override
@@ -54,11 +47,11 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_compatibility, container, false
+    binding = FragmentBottomsheetCompatibilityBinding.inflate(
+        inflater, container, false
     );
 
-    activity = (MainActivity) requireActivity();
+    MainActivity activity = (MainActivity) requireActivity();
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
@@ -73,19 +66,18 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
       supportedVersionsSingle.append("- ").append(version).append("\n");
     }
 
-    TextView textViewMsg = view.findViewById(R.id.text_compatibility_msg);
-    textViewMsg.setText(activity.getString(
+    binding.textCompatibilityMsg.setText(activity.getString(
         R.string.msg_compatibility,
         currentVersion,
         supportedVersionsSingle
     ));
 
-    view.findViewById(R.id.button_compatibility_cancel).setOnClickListener(v -> {
+    binding.buttonCompatibilityCancel.setOnClickListener(v -> {
       dismiss();
       activity.getCurrentFragment().enableLoginButtons();
     });
 
-    view.findViewById(R.id.button_compatibility_ignore).setOnClickListener(v -> {
+    binding.buttonCompatibilityIgnore.setOnClickListener(v -> {
       prefs.edit().putString(Constants.PREF.VERSION_COMPATIBILITY_IGNORED, currentVersion)
           .apply();
       activity.getCurrentFragment().login(false);
@@ -93,9 +85,21 @@ public class CompatibilityBottomSheet extends BaseBottomSheetDialogFragment {
     });
 
     setCancelable(false);
-    setSkipCollapsedInPortrait();
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, bottom);
+    binding.linearContainer.setLayoutParams(params);
   }
 
   @NonNull

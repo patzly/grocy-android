@@ -27,7 +27,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import androidx.browser.customtabs.CustomTabsIntent;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
 
 public class NetUtil {
 
@@ -55,13 +57,22 @@ public class NetUtil {
     return networkInfo != null && networkInfo.isConnectedOrConnecting();
   }
 
-  public static boolean openURL(Context context, String url) {
+  public static boolean openURL(MainActivity activity, String url) {
+    boolean useSliding = activity.getSharedPrefs().getBoolean(
+        Constants.SETTINGS.APPEARANCE.USE_SLIDING,
+        Constants.SETTINGS_DEFAULT.APPEARANCE.USE_SLIDING
+    );
     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-    builder.setStartAnimations(context, R.anim.slide_in_up, R.anim.slide_no);
-    builder.setExitAnimations(context, R.anim.slide_no, R.anim.fade_out);
+    if (useSliding) {
+      builder.setStartAnimations(activity, R.anim.slide_from_end, R.anim.slide_to_start);
+      builder.setExitAnimations(activity, R.anim.slide_from_start, R.anim.slide_to_end);
+    } else {
+      builder.setStartAnimations(activity, R.anim.enter_end_fade, R.anim.exit_start_fade);
+      builder.setExitAnimations(activity, R.anim.enter_start_fade, R.anim.exit_end_fade);
+    }
     CustomTabsIntent customTabsIntent = builder.build();
     try {
-      customTabsIntent.launchUrl(context, Uri.parse(url));
+      customTabsIntent.launchUrl(activity, Uri.parse(url));
       return true;
     } catch (ActivityNotFoundException ex) {
       return false;

@@ -24,6 +24,9 @@
 
   <data>
     <variable
+      name="activity"
+      type="xyz.zedler.patrick.grocy.activity.MainActivity" />
+    <variable
       name="fragment"
       type="xyz.zedler.patrick.grocy.fragment.LoginIntroFragment" />
     <variable
@@ -34,17 +37,21 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/coordinate_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
+      android:id="@+id/scroll"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_gravity="center"
-      android:overScrollMode="never">
+      android:overScrollMode="never"
+      android:fillViewport="true">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:baselineAligned="false">
 
@@ -54,24 +61,27 @@
           android:orientation="vertical"
           android:layout_weight="1"
           android:gravity="center"
-          android:paddingStart="@dimen/main_side_margin"
-          android:paddingEnd="0dp"
-          android:layout_marginEnd="32dp">
+          android:paddingStart="16dp"
+          android:paddingEnd="8dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp">
 
-          <com.google.android.material.card.MaterialCardView
+          <TextView
+            style="@style/Widget.Grocy.TextView.TitleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentPadding="16dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/on_background_variant">
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="12dp"
+            android:text="@string/msg_welcome" />
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text">
 
             <TextView
               android:id="@+id/text"
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/msg_welcome_to_grocy" />
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@string/msg_welcome_introduce" />
 
           </com.google.android.material.card.MaterialCardView>
 
@@ -83,59 +93,45 @@
           android:layout_weight="1"
           android:gravity="center"
           android:orientation="vertical"
-          android:paddingStart="0dp"
-          android:paddingEnd="@dimen/main_side_margin">
+          android:paddingStart="8dp"
+          android:paddingEnd="16dp"
+          android:paddingTop="16dp"
+          android:paddingBottom="16dp">
 
           <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:id="@+id/image_logo"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_round_grocy_anim"
             tools:ignore="ContentDescription" />
 
           <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="@color/on_background_variant"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:contentPadding="16dp">
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="12dp">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.Paragraph"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
               android:text="@string/msg_choose_option_below" />
 
           </com.google.android.material.card.MaterialCardView>
 
           <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.OutlinedButton"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_gravity="center_horizontal"
               android:layout_marginEnd="4dp"
-              android:layout_weight="1"
-              android:gravity="center"
               android:text="@string/action_demo_server"
               android:onClick="@{() -> fragment.loginDemoInstance()}"
               app:clickUtil="@{clickUtil}" />
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.UnelevatedButton"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_gravity="center_horizontal"
               android:layout_marginStart="4dp"
-              android:layout_weight="1"
-              android:gravity="center"
               android:text="@string/action_own_server"
               android:onClick="@{() -> fragment.loginOwnInstance()}"
               app:clickUtil="@{clickUtil}" />
@@ -145,57 +141,43 @@
           <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
 
-            <xyz.zedler.patrick.grocy.view.ActionButton
-              android:id="@+id/button_login_feedback"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
-              app:clickUtil="@{clickUtil}"
-              app:tooltipText="@{@string/title_feedback}"
-              app:icon="@drawable/ic_round_feedback_anim"
-              app:tint="@color/icon" />
-
-            <xyz.zedler.patrick.grocy.view.ActionButton
-              android:id="@+id/button_login_help"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
               android:onClick="@{() -> fragment.openHelpWebsite()}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_help}"
-              app:icon="@drawable/ic_round_help_outline_anim"
-              app:tint="@color/icon" />
+              app:icon="@drawable/ic_round_help_outline_anim" />
 
-            <xyz.zedler.patrick.grocy.view.ActionButton
-              android:id="@+id/button_login_about"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_aboutFragment)}"
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
               app:clickUtil="@{clickUtil}"
-              app:tooltipText="@{@string/title_about}"
-              app:icon="@drawable/ic_round_info_outline_anim"
-              app:tint="@color/icon" />
+              app:tooltipText="@{@string/title_feedback}"
+              app:icon="@drawable/ic_round_feedback_anim" />
 
-            <xyz.zedler.patrick.grocy.view.ActionButton
-              android:id="@+id/button_login_website"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
               android:onClick="@{() -> fragment.openGrocyWebsite()}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/info_website}"
-              app:icon="@drawable/ic_round_open_in_browser_anim"
-              app:tint="@color/icon" />
+              app:icon="@drawable/ic_round_open_in_browser_anim" />
 
-            <xyz.zedler.patrick.grocy.view.ActionButton
-              android:id="@+id/button_login_settings"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_settingsFragment)}"
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_settingsFragment)}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_settings}"
-              app:icon="@drawable/ic_round_settings_anim"
-              app:tint="@color/icon" />
+              app:icon="@drawable/ic_round_settings_anim" />
+
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.IconButton"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_aboutFragment)}"
+              app:clickUtil="@{clickUtil}"
+              app:tooltipText="@{@string/title_about}"
+              app:icon="@drawable/ic_round_info_outline_anim" />
 
           </LinearLayout>
 

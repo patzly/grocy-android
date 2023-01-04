@@ -27,13 +27,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class SettingsFragment extends BaseFragment {
 
@@ -72,17 +71,14 @@ public class SettingsFragment extends BaseFragment {
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
     systemBarBehavior.setUp();
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) { // not from login screen
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, true, binding.scroll, false
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, false
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
+    activity.binding.fabMain.hide();
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
 
@@ -102,12 +98,12 @@ public class SettingsFragment extends BaseFragment {
       if (shouldNavigateToBehavior()) {
         setArguments(new SettingsFragmentArgs.Builder(args)
             .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
+        new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
             .actionSettingsFragmentToSettingsCatBehaviorFragment()), 200);
       } else if (shouldNavigateToServer()) {
         setArguments(new SettingsFragmentArgs.Builder(args)
             .setShowCategory(null).build().toBundle());
-        new Handler().postDelayed(() -> navigate(SettingsFragmentDirections
+        new Handler().postDelayed(() -> activity.navigateFragment(SettingsFragmentDirections
             .actionSettingsFragmentToSettingsCatServerFragment()), 200);
       }
     });

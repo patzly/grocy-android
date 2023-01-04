@@ -100,7 +100,6 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
 
-    ViewUtil.centerToolbarTitleOnLargeScreens(binding.toolbar);
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     binding.categoryQuantityUnit.setOnClickListener(v -> {
@@ -113,6 +112,11 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       QuantityUnit quantityUnit = viewModel.getFormData().getQuantityUnitLive().getValue();
       bundle.putInt(Constants.ARGUMENT.SELECTED_ID, quantityUnit != null ? quantityUnit.getId() : -1);
       activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
+    });
+
+    viewModel.getFormData().getOnlyCheckSingleUnitInStockLive().observe(getViewLifecycleOwner(), state -> {
+      if (state) return;
+      viewModel.setStockQuantityUnit();
     });
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
@@ -208,7 +212,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null);
+    viewModel.setProduct(product.getId(), null, null, null);
   }
 
   public void clearFocusAndCheckProductInput() {
