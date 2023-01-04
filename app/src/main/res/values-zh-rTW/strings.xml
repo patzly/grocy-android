@@ -97,6 +97,7 @@
   <string name="action_purchase_all_items">購買所有項目</string>
   <string name="action_skip_entry">略過條目</string>
   <string name="action_toggle_flash">開/關 閃光燈</string>
+  <string name="action_edit_recipe">編輯食譜</string>
   <string name="action_delete_shopping_list">刪除購物清單</string>
   <string name="action_create_key">新增金鑰</string>
   <string name="action_login">登入</string>
@@ -281,8 +282,6 @@
   <string name="msg_press_hold_confirm">按住以確認</string>
   <string name="msg_recipe_consume_ask">確定要消耗食譜「%1$s」中需要的所有食材嗎（被標記為「僅檢查有無存貨」的食材將被忽略）？</string>
   <string name="msg_recipe_shopping_list_ask">確定要將食譜「%1$s」中所有庫存不足的食材加入購物清單嗎？\n\n取消勾選不加入購物清單的食材：</string>
-  <string name="msg_welcome_to_grocy">歡迎使用Grocy Android！\n\n如果要使用Grocy，您需要有自己的伺服器或是Home Assistant的Grocy add-on插件。 \n 如果您只是想試用這個應用程式，可以使用Grocy作者Bernd Bestel的測試伺服器</string>
-  <string name="msg_choose_option_below">請從以下選項中選擇一個</string>
   <string name="msg_qr_code_scan">在其他裝置上開啟Grocy中的\"API 金鑰\"。依序點擊\"新增\"和二維條碼圖示，並且掃描條碼</string>
   <string name="msg_qr_code_scan_token">您正在使用Home Assistant中的Grocy add-on插件。在Home Assistant側邊欄的個人設定頁面最底部新增一個永久有效存取權杖。創建權杖後，點擊「Generate QR code」並掃描</string>
   <string name="msg_port_connection_info_without_port">此應用程式將連線至連接埠%1$s\n如果想要使用其他連接埠，您可以新增一個到URL\n範例:http://domain.com:81/</string>
@@ -329,10 +328,6 @@
   <string name="msg_help_disable_stock_check">此為將物品設定為食譜食材時的預設設定</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">您可以選擇條碼掃描器用於相機條碼掃描</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") 使用相機的畫面偵測條碼，然後計算每個條紋的相對寬度。\n- 有時會產生錯誤的結果\n- 條碼必須與掃描器平行\n- 需要良好的對比度及銳利度\n- 在裝置上完全離線執行\n- 框架是開源的</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit 使用機器學習技術執行條碼掃描。\n- 幾乎不會產生錯誤的結果\n- 對模糊或低對比度ˇ的條碼也適用\n- 在裝置上完全離線直行\n- 框架不是開源的</string>
   <string name="msg_help_external_scanner_settings">此應用程式支援以鍵盤格式輸入的USB及藍牙掃描器。請在掃描器上做以下設定：\n\n前綴：None\n後綴：TAB或ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_specific_item">清單中的第一個項目將被預設消耗規則選取，即「最先開封，然後最先到期，最後先入先出」</string>
@@ -512,9 +507,6 @@
   <string name="title_product_cat_qu_conversions">數量單位轉換</string>
   <string name="title_unknown_input">未知的輸入</string>
   <string name="title_presets_new_products">新物品預設設定</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">使用%1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
@@ -650,7 +642,6 @@
   <plurals name="description_overview_master_data">
     <item quantity="other">您的資料庫包含%1$d項物品</item>
   </plurals>
-
   <string name="property_name">名稱</string>
   <string name="property_name_singular">名稱 (單)</string>
   <string name="property_name_plural">名稱 (多)</string>

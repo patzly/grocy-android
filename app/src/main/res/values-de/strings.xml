@@ -365,9 +365,9 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Sie können einen Barcode-Scanner für das Barcode-Scannen mit der Kamera wählen.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n- Manchmal falsche Ergebnisse\n- Barcodes müssen horizontal ausgerichtet sein\n- Benötigt guten Kontrast und gute Schärfe\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") benutzt die Kontrastdaten vom Kamera-Stream, um einen Barcode zu erkennen. Danach berechnet es die relative Breite aller Linien.\n\n- Manchmal falsche Ergebnisse\n- Barcodes müssen horizontal ausgerichtet sein\n- Benötigt guten Kontrast und gute Schärfe\n- Ausführung komplett auf dem Gerät\n- Framework ist open source</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit benutzt maschinelles Lernen mit den neuesten Technologien für das Barcode-Scannen.\n- Fast nie falschen Ergebnisse\n- Ausrichtung der Barcodes spielt keine Rolle\n- Funktioniert sogar mit unscharfen Barcodes oder mit wenig Kontrast\n- Ausführung komplett auf dem Gerät\n- Framework ist nicht open source</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit benutzt maschinelles Lernen mit den neuesten Technologien für das Barcode-Scannen.\n\n- Fast nie falschen Ergebnisse\n- Ausrichtung der Barcodes spielt keine Rolle\n- Funktioniert sogar mit unscharfen Barcodes oder mit wenig Kontrast\n- Ausführung komplett auf dem Gerät\n- Framework ist nicht open source</string>
   <string name="msg_help_external_scanner_ready">Sie können einen externen Scanner für das Feld unten verwenden, während es fokussiert und leer ist.</string>
   <string name="msg_help_external_scanner_settings">Diese App unterstützt externe Scanner-Geräte, welche wie eine Tastatur Eingaben senden und über USB oder Bluetooth verbunden werden können. Die folgenden Optionen müssen in Ihrem externen Scanner eingestellt sein:\n\nPräfix: Keines\nSuffix: TAB oder ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -559,9 +559,6 @@
   <string name="title_product_cat_qu_conversions">ME-Umrechnungen</string>
   <string name="title_unknown_input">Unbekannte Eingabe</string>
   <string name="title_presets_new_products">Vorgaben für neue Produkte</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">%1$s benutzen</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -1077,6 +1074,8 @@
   <string name="setting_timeout_descriptions">Nach der das Laden abgebrochen wird</string>
   <string name="setting_beginner_mode">Anfängermodus</string>
   <string name="setting_beginner_mode_description">Hilfe-Texte standardmäßig einblenden</string>
+  <string name="setting_haptic">Haptische Effekte</string>
+  <string name="setting_haptic_description">Ein immersives Erlebnis</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Bottom sheets vollständig ausfahren</string>
   <string name="setting_expand_bottom_sheets_description">Im Querformat</string>

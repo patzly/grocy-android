@@ -382,10 +382,6 @@
   <string name="msg_help_inventory_fields">Les champs suivants s\'appliquent aux produits nouvellement ajoutés.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Vous pouvez choisir un scanner de codes-barres pour la numérisation de codes-barres avec l\'appareil photo.</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") utilise les données de contraste du flux de la caméra pour détecter un code-barres. Il calcule ensuite la largeur relative de toutes les lignes.\n- Parfois les résultats sont incorrects\n- Le code-barre doit être aligné horizontalement\n- Nécessite un bon contraste et une bonne netteté\n- Est exécuté complètement hors ligne sur votre appareil\n- Le framework est open source</string>
-  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit utilise le machine learning avec les dernières technologies pour la lecture de codes-barres.\n- Presque aucun résultat incorrect\n- L\'orientation n\'a pas d\'importance\n- Fonctionne même avec les codes-barres flous ou avec un faible contraste\n- Est effectué complètement hors ligne sur votre appareil\ n- Le framework n\'est pas open source</string>
   <string name="msg_help_external_scanner_ready">Vous pouvez utiliser un scanner externe pour le champ ci-dessous tant qu\'il est sélectionné et vide.</string>
   <string name="msg_help_external_scanner_settings">Cette application supporte les scanner externes qui agissent comme des claviers et peuvent être connectés via USB ou Bluetooth. Les options suivantes doivent être configurées dans votre scanner externe:\n\nPréfix : Aucun\nSuffix : TAB ou ENTRÉE</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -578,9 +574,6 @@
   <string name="title_product_cat_qu_conversions">Conversions d\'UQ</string>
   <string name="title_unknown_input">Entrée inconnue</string>
   <string name="title_presets_new_products">Préréglages pour de nouveaux produits</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Utiliser %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
