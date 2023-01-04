@@ -339,14 +339,6 @@ public class SettingsViewModel extends BaseViewModel {
     showBarcodeScannerZXingInfo.setValue(!enabled);
   }
 
-  public String getUseScannerToolString(boolean isMlKitButton) {
-    if (isMlKitButton) {
-      return getApplication().getString(R.string.title_use_scanner_tool, "ML Kit");
-    } else {
-      return getApplication().getString(R.string.title_use_scanner_tool, "ZXing");
-    }
-  }
-
   public boolean getKeepScreenOnRecipesEnabled() {
     return sharedPrefs.getBoolean(
             RECIPES.KEEP_SCREEN_ON,
