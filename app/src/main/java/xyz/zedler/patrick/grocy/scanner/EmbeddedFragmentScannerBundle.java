@@ -20,7 +20,7 @@
 package xyz.zedler.patrick.grocy.scanner;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;

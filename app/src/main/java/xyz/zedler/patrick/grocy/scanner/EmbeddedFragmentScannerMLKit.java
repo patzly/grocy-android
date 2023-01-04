@@ -23,7 +23,6 @@ import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
-import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -42,6 +41,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.card.MaterialCardView;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
@@ -51,14 +51,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PurchasePromptBottomSheet;
 import xyz.zedler.patrick.grocy.Constants.BarcodeFormats;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PurchasePromptBottomSheet;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 
@@ -96,24 +97,27 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(fragment.requireContext());
 
     // set container size
-    int width;
-    int height;
+    int width, height;
     if (qrCodeFormat && !takeSmallQrCodeFormat) {
-      width = UiUtil.dpToPx(fragment.requireContext(), 250);
-      height = UiUtil.dpToPx(fragment.requireContext(), 250);
+      width = UiUtil.dpToPx(fragment.requireContext(), 200);
+      height = UiUtil.dpToPx(fragment.requireContext(), 200);
     } else if (qrCodeFormat) {
       width = UiUtil.dpToPx(fragment.requireContext(), 180);
       height = UiUtil.dpToPx(fragment.requireContext(), 180);
     } else {
-      width = UiUtil.dpToPx(fragment.requireContext(), 350);
-      height = UiUtil.dpToPx(fragment.requireContext(), 160);
+      width = ViewGroup.LayoutParams.MATCH_PARENT;
+      height = UiUtil.dpToPx(fragment.requireContext(), 140);
     }
     if (containerScanner.getParent() instanceof LinearLayout) {
-      LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(width, height);
+      LinearLayout.LayoutParams layoutParamsContainer = new LinearLayout.LayoutParams(
+          width, height
+      );
       layoutParamsContainer.gravity = Gravity.CENTER;
       containerScanner.setLayoutParams(layoutParamsContainer);
     } else if (containerScanner.getParent() instanceof RelativeLayout) {
-      RelativeLayout.LayoutParams layoutParamsContainer = new RelativeLayout.LayoutParams(width, height);
+      RelativeLayout.LayoutParams layoutParamsContainer = new RelativeLayout.LayoutParams(
+          width, height
+      );
       layoutParamsContainer.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
       containerScanner.setLayoutParams(layoutParamsContainer);
       ((RelativeLayout) containerScanner.getParent()).setGravity(Gravity.CENTER_HORIZONTAL);
@@ -121,27 +125,18 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
     // fill container with necessary views
     int matchParent = ViewGroup.LayoutParams.MATCH_PARENT;
-    LayoutParams layoutParamsPreview = new LayoutParams(matchParent, matchParent);
-    int size16dp = UiUtil.dpToPx(fragment.requireContext(), 16);
-    layoutParamsPreview.setMargins(size16dp, size16dp, size16dp, size16dp);
     previewView = new PreviewView(fragment.requireContext());
-    previewView.setLayoutParams(layoutParamsPreview);
+    previewView.setLayoutParams(new LayoutParams(matchParent, matchParent));
     previewView.setImplementationMode(ImplementationMode.COMPATIBLE);
     previewView.setOnClickListener(v -> toggleTorch());
-    containerScanner.addView(previewView);
-    LayoutParams layoutParamsCard = new LayoutParams(matchParent, matchParent);
-    int size12dp = UiUtil.dpToPx(fragment.requireContext(), 12);
-    layoutParamsCard.setMargins(size12dp, size12dp, size12dp, size12dp);
     MaterialCardView cardView = new MaterialCardView(fragment.requireContext());
-    cardView.setLayoutParams(layoutParamsCard);
+    cardView.setLayoutParams(new LayoutParams(matchParent, matchParent));
     cardView.setCardElevation(0);
-    int backgroundColor = ContextCompat.getColor(fragment.requireContext(), R.color.transparent);
-    cardView.setCardBackgroundColor(backgroundColor);
-    strokeWidth = UiUtil.dpToPx(fragment.requireContext(), 5);
+    strokeWidth = UiUtil.dpToPx(fragment.requireContext(), 1);
     cardView.setStrokeWidth(strokeWidth);
-    int strokeColor = ContextCompat.getColor(fragment.requireContext(), R.color.grey800);
-    cardView.setStrokeColor(strokeColor);
-    cardView.setRadius(UiUtil.dpToPx(fragment.requireContext(), 10));
+    cardView.setStrokeColor(ResUtil.getColorAttr(fragment.requireContext(), R.attr.colorOutline));
+    cardView.setRadius(UiUtil.dpToPx(fragment.requireContext(), 16));
+    cardView.addView(previewView);
     containerScanner.addView(cardView);
 
     ArrayList<Integer> enabledBarcodeFormats = getEnabledBarcodeFormats();
