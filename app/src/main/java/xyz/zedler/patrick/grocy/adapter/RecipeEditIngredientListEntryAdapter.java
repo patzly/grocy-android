@@ -24,25 +24,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.List;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowRecipeEditListEntryBinding;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
+import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.QuantityUnitConversionUtil;
 
 public class RecipeEditIngredientListEntryAdapter extends
     RecyclerView.Adapter<RecipeEditIngredientListEntryAdapter.ViewHolder> {
@@ -54,7 +55,8 @@ public class RecipeEditIngredientListEntryAdapter extends
   private final LinearLayoutManager linearLayoutManager;
   private final ArrayList<RecipePosition> recipePositions;
   private final ArrayList<Product> products;
-  private final ArrayList<QuantityUnit> quantityUnits;
+  private final HashMap<Integer, QuantityUnit> quantityUnitHashMap;
+  private final List<QuantityUnitConversion> unitConversions;
   private final RecipeEditIngredientListEntryAdapterListener listener;
 
   private final PluralUtil pluralUtil;
@@ -65,14 +67,16 @@ public class RecipeEditIngredientListEntryAdapter extends
       LinearLayoutManager linearLayoutManager,
       ArrayList<RecipePosition> recipePositions,
       ArrayList<Product> products,
-      ArrayList<QuantityUnit> quantityUnits,
+      HashMap<Integer, QuantityUnit> quantityUnitHashMap,
+      List<QuantityUnitConversion> unitConversions,
       RecipeEditIngredientListEntryAdapterListener listener
   ) {
     this.context = context;
     this.linearLayoutManager = linearLayoutManager;
     this.recipePositions = new ArrayList<>(recipePositions);
     this.products = new ArrayList<>(products);
-    this.quantityUnits = new ArrayList<>(quantityUnits);
+    this.quantityUnitHashMap = new HashMap<>(quantityUnitHashMap);
+    this.unitConversions = new ArrayList<>(unitConversions);
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
     maxDecimalPlacesAmount = PreferenceManager.getDefaultSharedPreferences(context).getInt(
@@ -123,7 +127,7 @@ public class RecipeEditIngredientListEntryAdapter extends
 
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
-    QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
+    QuantityUnit quantityUnit = quantityUnitHashMap.get(recipePosition.getQuantityUnitId());
 
     if (product == null || quantityUnit == null)
       return;
@@ -131,11 +135,20 @@ public class RecipeEditIngredientListEntryAdapter extends
     holder.binding.title.setText(product.getName());
 
     if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
+      double amount = recipePosition.getAmount();
+      if (!recipePosition.isOnlyCheckSingleUnitInStock()) {
+        try {
+          HashMap<QuantityUnit, Double> unitFactors = QuantityUnitConversionUtil
+              .getUnitFactors(context, quantityUnitHashMap, unitConversions, product);
+          amount = QuantityUnitConversionUtil.getAmountRelativeToUnit(unitFactors, product, quantityUnit, amount);
+        } catch (IllegalArgumentException ignored) {
+        }
+      }
       holder.binding.quantity.setText(
           context.getString(
               R.string.subtitle_amount,
-              NumUtil.trimAmount(recipePosition.getAmount(), maxDecimalPlacesAmount),
-              pluralUtil.getQuantityUnitPlural(quantityUnit, recipePosition.getAmount())
+              NumUtil.trimAmount(amount, maxDecimalPlacesAmount),
+              pluralUtil.getQuantityUnitPlural(quantityUnit, amount)
           )
       );
       holder.binding.variableAmount.setVisibility(View.GONE);
@@ -149,8 +162,6 @@ public class RecipeEditIngredientListEntryAdapter extends
       );
       holder.binding.variableAmount.setVisibility(View.VISIBLE);
     }
-
-
 
     holder.binding.linearRecipeIngredientContainer.setOnClickListener(
             view -> listener.onItemRowClicked(recipePosition, position)
@@ -169,25 +180,20 @@ public class RecipeEditIngredientListEntryAdapter extends
 
   public void updateData(
       ArrayList<RecipePosition> newList,
-      ArrayList<Product> newProducts,
-      ArrayList<QuantityUnit> newQuantityUnits
+      ArrayList<Product> newProducts
   ) {
 
     RecipeEditIngredientListEntryAdapter.DiffCallback diffCallback = new RecipeEditIngredientListEntryAdapter.DiffCallback(
         this.recipePositions,
         newList,
         this.products,
-        newProducts,
-        this.quantityUnits,
-        newQuantityUnits
+        newProducts
     );
     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
     this.recipePositions.clear();
     this.recipePositions.addAll(newList);
     this.products.clear();
     this.products.addAll(newProducts);
-    this.quantityUnits.clear();
-    this.quantityUnits.addAll(newQuantityUnits);
     diffResult.dispatchUpdatesTo(new AdapterListUpdateCallback(this, linearLayoutManager));
   }
 
@@ -197,23 +203,17 @@ public class RecipeEditIngredientListEntryAdapter extends
     ArrayList<RecipePosition> newItems;
     ArrayList<Product> oldProducts;
     ArrayList<Product> newProducts;
-    ArrayList<QuantityUnit> oldQuantityUnits;
-    ArrayList<QuantityUnit> newQuantityUnits;
 
     public DiffCallback(
         ArrayList<RecipePosition> oldItems,
         ArrayList<RecipePosition> newItems,
         ArrayList<Product> oldProducts,
-        ArrayList<Product> newProducts,
-        ArrayList<QuantityUnit> oldQuantityUnits,
-        ArrayList<QuantityUnit> newQuantityUnits
+        ArrayList<Product> newProducts
     ) {
       this.oldItems = oldItems;
       this.newItems = newItems;
       this.oldProducts = oldProducts;
       this.newProducts = newProducts;
-      this.oldQuantityUnits = oldQuantityUnits;
-      this.newQuantityUnits = newQuantityUnits;
     }
 
     @Override
@@ -241,18 +241,12 @@ public class RecipeEditIngredientListEntryAdapter extends
       RecipePosition oldItem = oldItems.get(oldItemPos);
       Product newItemProduct = Product.getProductFromId(newProducts, newItem.getProductId());
       Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
-      QuantityUnit newQuantityUnit = QuantityUnit.getFromId(newQuantityUnits, newItem.getQuantityUnitId());
-      QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(oldQuantityUnits, oldItem.getQuantityUnitId());
 
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
       }
 
       if (newItemProduct == null || oldItemProduct == null || !newItemProduct.equals(oldItemProduct)) {
-        return false;
-      }
-
-      if (newQuantityUnit == null || oldQuantityUnit == null || !newQuantityUnit.equals(oldQuantityUnit)) {
         return false;
       }
 

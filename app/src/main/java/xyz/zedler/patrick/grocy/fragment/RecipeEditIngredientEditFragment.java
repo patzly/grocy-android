@@ -114,6 +114,11 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       activity.showBottomSheet(new QuantityUnitsBottomSheet(), bundle);
     });
 
+    viewModel.getFormData().getOnlyCheckSingleUnitInStockLive().observe(getViewLifecycleOwner(), state -> {
+      if (state) return;
+      viewModel.setStockQuantityUnit();
+    });
+
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         SnackbarMessage message = (SnackbarMessage) event;
@@ -207,7 +212,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
     if (product == null) {
       return;
     }
-    viewModel.setProduct(product.getId(), null, null);
+    viewModel.setProduct(product.getId(), null, null, null);
   }
 
   public void clearFocusAndCheckProductInput() {
