@@ -117,7 +117,7 @@
         </LinearLayout>
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Icon.Clickable"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:onClick="@{v -> switchFrontCam.setChecked(!switchFrontCam.isChecked())}">
