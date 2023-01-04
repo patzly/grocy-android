@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -38,7 +39,6 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
@@ -77,23 +77,46 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    boolean isUnlocked = UnlockUtil.isKeyInstalled(activity);
+    boolean isPlayStoreInstalled = UnlockUtil.isPlayStoreInstalled(activity);
+
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearBody);
+    if (isUnlocked) {
+      systemBarBehavior.setScroll(binding.scroll, binding.linearBody);
+    } else {
+      systemBarBehavior.setContainer(binding.linearContainerUnlock);
+    }
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
-    boolean isPlayStoreInstalled = UnlockUtil.isPlayStoreInstalled(activity);
-    binding.textMlKitIntro.setText(
-        ResUtil.getBulletList(
-            activity,
-            "- ",
-            ResUtil.getRawText(
-                activity,
-                isPlayStoreInstalled ? R.raw.ml_kit_intro : R.raw.ml_kit_intro_no_vending
-            ),
-            ""
+    binding.formattedMlKitIntro.setText(
+        ResUtil.getRawText(
+            activity, isPlayStoreInstalled ? R.raw.ml_kit_intro : R.raw.ml_kit_intro_no_vending
+        )
+    );
+
+    if (viewModel.getUseMlKitScanner()) {
+      binding.toggleSelectScanner.check(R.id.button_mlkit);
+    } else {
+      binding.toggleSelectScanner.check(R.id.button_xzing);
+    }
+    binding.toggleSelectScanner.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+      if (!isChecked) {
+        return;
+      }
+      viewModel.setUseMlKitScanner(checkedId == R.id.button_mlkit);
+      performHapticClick();
+    });
+
+    viewModel.getShowBarcodeScannerZXingInfo().observe(
+        getViewLifecycleOwner(), value -> binding.formattedScannerInfo.setText(
+            getString(
+                value
+                    ? R.string.msg_help_barcode_scanner_info_zxing
+                    : R.string.msg_help_barcode_scanner_info_mlkit
+            )
         )
     );
 
@@ -115,9 +138,9 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, false, binding.scroll, true
+          binding.appBar, false, isUnlocked ? binding.scroll : null, true
       );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
+      activity.getScrollBehavior().setBottomBarVisibility(true, true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
       activity.binding.fabMain.hide();
     }

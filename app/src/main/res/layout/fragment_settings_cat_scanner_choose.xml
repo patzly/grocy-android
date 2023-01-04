@@ -61,15 +61,16 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+      android:id="@+id/linear_container_unlock"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
       android:visibility="@{viewModel.appUnlocked ? View.GONE : View.VISIBLE}"
-      android:background="@color/background"
       android:layout_marginTop="?attr/actionBarSize"
-      android:paddingBottom="?attr/actionBarSize">
+      android:paddingBottom="92dp">
 
       <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Grocy.Card.Text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -77,10 +78,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="0dp"
-        app:contentPadding="0dp"
-        app:cardElevation="0dp"
-        app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="@color/on_background_variant">
+        app:contentPadding="0dp">
 
         <androidx.core.widget.NestedScrollView
           android:layout_width="match_parent"
@@ -88,12 +86,10 @@
           android:scrollbars="vertical"
           android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
 
-          <TextView
-            android:id="@+id/text_ml_kit_intro"
-            style="@style/Widget.Grocy.TextView.Paragraph.Fix"
+          <xyz.zedler.patrick.grocy.view.FormattedTextView
+            android:id="@+id/formatted_ml_kit_intro"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
+            android:layout_height="wrap_content" />
 
         </androidx.core.widget.NestedScrollView>
 
@@ -105,40 +101,29 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_github"
-          style="@style/Widget.Grocy.Button.TextButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/on_background_secondary"
+          style="@style/Widget.Grocy.Button.OutlinedButton"
           android:text="@string/action_github"
           android:onClick="@{() -> fragment.openGitHub()}"
-          app:rippleColor="@color/highlight"
           clickUtil="@{clickUtil}"/>
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_github_no_vending"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:text="@string/action_github"
           android:onClick="@{() -> fragment.openGitHub()}"
-          app:backgroundTint="@color/retro_green_bg_white"
           clickUtil="@{clickUtil}"/>
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_vending"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
           android:text="@string/action_play_store"
           android:onClick="@{() -> fragment.openPlayStore()}"
-          app:backgroundTint="@color/retro_green_bg_white"
           clickUtil="@{clickUtil}"/>
 
       </LinearLayout>
@@ -151,7 +136,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      android:fillViewport="true"
       android:visibility="@{viewModel.appUnlocked ? View.VISIBLE : View.GONE}">
 
       <LinearLayout
@@ -165,8 +149,7 @@
         app:transitionTypeChanging="@{true}">
 
         <com.google.android.material.card.MaterialCardView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          style="@style/Widget.Grocy.Card.Text"
           android:layout_marginTop="8dp"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
@@ -180,46 +163,44 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-          android:id="@+id/radio_button_use_zxing"
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
-          android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+          android:id="@+id/toggle_select_scanner"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="0dp"
-          android:text="@{viewModel.getUseScannerToolString(false)}"
-          android:checked="@{!viewModel.useMlKitScanner}"
-          android:onClick="@{() -> radioButtonUseMlkit.setChecked(!radioButtonUseZxing.isChecked())}"/>
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          android:layout_marginTop="12dp"
+          android:layout_marginBottom="12dp"
+          android:layout_gravity="center_horizontal"
+          app:singleSelection="true"
+          app:selectionRequired="true"
+          tools:ignore="HardcodedText">
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
-          android:id="@+id/radio_button_use_mlkit"
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="0dp"
-          android:text="@{viewModel.getUseScannerToolString(true)}"
-          android:checked="@={viewModel.useMlKitScanner}"
-          android:onClick="@{() -> radioButtonUseZxing.setChecked(!radioButtonUseMlkit.isChecked())}"/>
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_xzing"
+            style="@style/Widget.Grocy.Button.OutlinedButton"
+            android:text="XZing" />
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_mlkit"
+            style="@style/Widget.Grocy.Button.OutlinedButton"
+            android:text="ML Kit" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.card.MaterialCardView
           android:id="@+id/card_info_mlkit"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          style="@style/Widget.Grocy.Card.Text"
           android:layout_marginTop="0dp"
           android:layout_marginStart="16dp"
           android:layout_marginEnd="16dp"
-          android:layout_marginBottom="0dp">
+          android:layout_marginBottom="0dp"
+          app:contentPadding="0dp">
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph"
+          <xyz.zedler.patrick.grocy.view.FormattedTextView
+            android:id="@+id/formatted_scanner_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.showBarcodeScannerZXingInfo ? @string/msg_help_barcode_scanner_info_zxing : @string/msg_help_barcode_scanner_info_mlkit}" />
+            android:layout_height="wrap_content" />
 
         </com.google.android.material.card.MaterialCardView>
 
