@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatScannerChooseBinding;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
@@ -76,6 +77,13 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     binding.setClickUtil(new ClickUtil());
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearBody);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
+
     boolean isPlayStoreInstalled = UnlockUtil.isPlayStoreInstalled(activity);
     binding.textMlKitIntro.setText(
         ResUtil.getBulletList(
@@ -107,7 +115,7 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
 
     if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
       activity.getScrollBehavior().setUpScroll(
-          binding.appBar, false, binding.scroll, true, true
+          binding.appBar, false, binding.scroll, true
       );
       activity.getScrollBehavior().setBottomBarVisibility(true);
       activity.updateBottomAppBar(false, R.menu.menu_empty);
