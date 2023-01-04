@@ -373,9 +373,9 @@
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">You can choose a barcode scanner for camera barcode scanning.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") uses the contrast data from the camera stream to detect a barcode. It then calculates the relative width of all lines.\n- Sometimes incorrect results\n- Barcode has to be horizontally aligned\n- Requires good contrast and sharpness\n- Is performed completely offline on your device\n- Framework is open source</string>
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") uses the contrast data from the camera stream to detect a barcode. It then calculates the relative width of all lines.\n\n- Sometimes incorrect results\n- Barcode has to be horizontally aligned\n- Requires good contrast and sharpness\n- Is performed completely offline on your device\n- Framework is open source</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit uses machine learning with the latest technologies for barcode scanning.\n- Almost no incorrect results\n- Orientation doesn\'t matter\n- Even works for fuzzy or low contrast barcodes\n- Is performed completely offline on your device\n- Framework is not open source</string>
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit uses machine learning with the latest technologies for barcode scanning.\n\n- Almost no incorrect results\n- Orientation doesn\'t matter\n- Even works for fuzzy or low contrast barcodes\n- Is performed completely offline on your device\n- Framework is not open source</string>
   <string name="msg_help_external_scanner_ready">You can use an external scanner for the field below while it\'s focused and empty.</string>
   <string name="msg_help_external_scanner_settings">This app supports external scanner devices which act as a keyboard and can be connected via USB or Bluetooth. The following options must be configured in your external scanner:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -574,9 +574,6 @@
   <string name="title_product_cat_qu_conversions">QU conversions</string>
   <string name="title_unknown_input">Unknown input</string>
   <string name="title_presets_new_products">Presets for new products</string>
-  <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
-   Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Use %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
