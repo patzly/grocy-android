@@ -32,8 +32,8 @@ jobs:
     
     - name: Rename artifact
       run: |
-        mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/Grocy-Android-master-$(date +"%Y%m%d").apk
-        cp app/src/main/res/raw/changelog.txt app/build/outputs/apk/debug/Grocy-Android-master-$(date +"%Y%m%d")-changelog.txt
+        mv app/build/outputs/apk/debug/app-debug.apk "app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d').apk"
+        cp app/src/main/res/raw/changelog.txt "app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d')-changelog.txt"
 
     - name: Upload artifacts
       uses: pyTooling/Actions/releaser@r0
@@ -42,5 +42,5 @@ jobs:
         rm: true
         tag: nightly
         files: |
-          app/build/outputs/apk/debug/Grocy-Android-master-$(date +"%Y%m%d").apk
-          Grocy-Android-master-$(date +"%Y%m%d")-changelog.txt
+          "app/build/outputs/apk/debug/Grocy-Android-master-$(date +'%Y%m%d').apk"
+          "Grocy-Android-master-$(date +#%Y%m%d')-changelog.txt"
