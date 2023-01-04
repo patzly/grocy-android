@@ -23,11 +23,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -37,7 +37,6 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatScannerFragment extends BaseFragment {
@@ -108,10 +107,5 @@ public class SettingsCatScannerFragment extends BaseFragment {
   public void updateBarcodeFormats() {
     binding.enabledBarcodeFormats.setText(BarcodeFormatsBottomSheet
         .getEnabledBarcodeFormats(requireContext()));
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

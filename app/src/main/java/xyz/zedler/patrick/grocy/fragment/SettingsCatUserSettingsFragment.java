@@ -23,15 +23,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentSettingsCatUserSettingsBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 
 public class SettingsCatUserSettingsFragment extends BaseFragment {
 
@@ -79,10 +78,5 @@ public class SettingsCatUserSettingsFragment extends BaseFragment {
     activity.binding.fabMain.hide();
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

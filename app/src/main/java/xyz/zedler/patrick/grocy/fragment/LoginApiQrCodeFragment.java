@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -210,10 +209,5 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
 
   public boolean isPageForGrocyKey() {
     return pageStatus == SCAN_GROCY_KEY;
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
   }
 }

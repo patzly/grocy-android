@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,13 +36,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.HashMap;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingBinding;
 import xyz.zedler.patrick.grocy.databinding.FragmentOnboardingPageBinding;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class OnboardingFragment extends BaseFragment {
@@ -169,11 +168,6 @@ public class OnboardingFragment extends BaseFragment {
 
     activity.getScrollBehavior().setProvideTopScroll(false);
     activity.getScrollBehavior().setBottomBarVisibility(false);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.background);
   }
 
   @SuppressLint("RestrictedApi")

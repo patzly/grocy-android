@@ -25,9 +25,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.KeyEvent;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -130,9 +127,6 @@ public class BaseFragment extends Fragment {
 
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     return false;
-  }
-
-  public void clearFields() {
   }
 
   public void editObject(Object object) {
@@ -291,38 +285,6 @@ public class BaseFragment extends Fragment {
   }
 
   public void login(boolean checkVersion) {
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    if (nextAnim == 0) {
-      return null;
-    }
-
-    Animation anim = AnimationUtils.loadAnimation(getActivity(), nextAnim);
-
-    anim.setAnimationListener(new Animation.AnimationListener() {
-
-      @Override
-      public void onAnimationStart(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        if (enter) {
-          BaseFragment.this.onEnterAnimationEnd();
-        }
-      }
-    });
-
-    return anim;
-  }
-
-  protected void onEnterAnimationEnd() {
   }
 
   @NonNull
@@ -488,59 +450,6 @@ public class BaseFragment extends Fragment {
     NavBackStackEntry backStackEntry = findNavController().getPreviousBackStackEntry();
     assert backStackEntry != null;
     return backStackEntry.getDestination();
-  }
-
-  @Deprecated
-  @Nullable
-  public Animation setStatusBarColor(
-      int transit,
-      boolean enter,
-      int nextAnim,
-      MainActivity activity,
-      @ColorRes int color,
-      Runnable onAnimationEnd
-  ) {
-    if (!enter) {
-      return super.onCreateAnimation(transit, false, nextAnim);
-    }
-    if (nextAnim == 0) {
-      // set color of statusBar immediately after popBackStack, when previous fragment appears
-      // activity.setStatusBarColor(color);
-      return super.onCreateAnimation(transit, true, nextAnim);
-    }
-    // set color of statusBar after transition is finished (when shown)
-    Animation anim = AnimationUtils.loadAnimation(requireActivity(), nextAnim);
-    anim.setAnimationListener(new Animation.AnimationListener() {
-      @Override
-      public void onAnimationStart(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationRepeat(Animation animation) {
-      }
-
-      @Override
-      public void onAnimationEnd(Animation animation) {
-        //activity.setStatusBarColor(color);
-        if (onAnimationEnd != null) {
-          onAnimationEnd.run();
-        }
-        BaseFragment.this.onEnterAnimationEnd();
-      }
-    });
-    return anim;
-  }
-
-  @Deprecated
-  @Nullable
-  public Animation setStatusBarColor(
-      int transit,
-      boolean enter,
-      int nextAnim,
-      MainActivity activity,
-      @ColorRes int color
-  ) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, color, null);
   }
 
   public void setOption(Object value, String option) {

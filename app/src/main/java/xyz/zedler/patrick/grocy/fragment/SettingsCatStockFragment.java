@@ -23,11 +23,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -39,9 +41,6 @@ import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatStockFragment extends BaseFragment {
@@ -137,10 +136,5 @@ public class SettingsCatStockFragment extends BaseFragment {
   @Override
   public void selectQuantityUnit(QuantityUnit quantityUnit) {
     viewModel.setPresetQuantityUnit(quantityUnit);
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 }

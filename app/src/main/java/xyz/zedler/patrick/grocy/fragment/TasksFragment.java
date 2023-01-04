@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,6 +33,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
@@ -50,9 +52,6 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TasksViewModel;
@@ -355,11 +354,6 @@ public class TasksFragment extends BaseFragment implements
     activity.showSnackbar(
         Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
     );
-  }
-
-  @Override
-  public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-    return setStatusBarColor(transit, enter, nextAnim, activity, R.color.primary);
   }
 
   @NonNull

@@ -1089,6 +1089,8 @@
   <string name="setting_timeout_descriptions">After which loading is cancelled</string>
   <string name="setting_beginner_mode">Beginner mode</string>
   <string name="setting_beginner_mode_description">Display help texts by default</string>
+  <string name="setting_haptic">Haptic effects</string>
+  <string name="setting_haptic_description">An immersive experience</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Expand bottom sheets</string>
   <string name="setting_expand_bottom_sheets_description">In landscape mode</string>
