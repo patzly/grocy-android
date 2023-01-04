@@ -41,7 +41,9 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.SettingsViewModel;
 
 public class SettingsCatBehaviorFragment extends BaseFragment {
@@ -94,6 +96,18 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
+    });
+
+    binding.switchHaptic.setChecked(
+        getSharedPrefs().getBoolean(
+            Constants.SETTINGS.BEHAVIOR.HAPTIC, HapticUtil.areSystemHapticsTurnedOn(activity)
+        )
+    );
+    binding.switchHaptic.setOnCheckedChangeListener((buttonView, isChecked) -> {
+      activity.setHapticEnabled(isChecked);
+      getSharedPrefs().edit().putBoolean(Constants.SETTINGS.BEHAVIOR.HAPTIC, isChecked).apply();
+      performHapticClick();
+      ViewUtil.startIcon(binding.imageHaptic);
     });
 
     activity.getScrollBehavior().setUpScroll(

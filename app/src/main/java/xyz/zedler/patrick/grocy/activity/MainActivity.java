@@ -39,6 +39,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -238,6 +239,12 @@ public class MainActivity extends AppCompatActivity {
     // UTILS
 
     hapticUtil = new HapticUtil(this);
+    hapticUtil.setEnabled(
+        sharedPrefs.getBoolean(
+            Constants.SETTINGS.BEHAVIOR.HAPTIC, HapticUtil.areSystemHapticsTurnedOn(this)
+        )
+    );
+
     clickUtil = new ClickUtil();
     netUtil = new NetUtil(this);
 
@@ -399,7 +406,9 @@ public class MainActivity extends AppCompatActivity {
     if (runAsSuperClass) {
       return;
     }
-    hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
+    if (!sharedPrefs.contains(Constants.SETTINGS.BEHAVIOR.HAPTIC)) {
+      hapticUtil.setEnabled(HapticUtil.areSystemHapticsTurnedOn(this));
+    }
   }
 
   @Override
@@ -796,6 +805,22 @@ public class MainActivity extends AppCompatActivity {
     toast.show();
   }
 
+  public void restartToApply(long delay, @NonNull Bundle bundle) {
+    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+      onSaveInstanceState(bundle);
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        finish();
+      }
+      Intent intent = new Intent(this, MainActivity.class);
+      intent.putExtra(ARGUMENT.INSTANCE_STATE, bundle);
+      startActivity(intent);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        finish();
+      }
+      overridePendingTransition(R.anim.fade_in_restart, R.anim.fade_out_restart);
+    }, delay);
+  }
+
   public boolean isOnline() {
     return netUtil.isOnline();
   }
@@ -1028,6 +1053,10 @@ public class MainActivity extends AppCompatActivity {
       Log.e(TAG, "insertConscrypt: NoSuchAlgorithmException");
       Log.e(TAG, e.getMessage() != null ? e.getMessage() : e.toString());
     }
+  }
+
+  public void setHapticEnabled(boolean enabled) {
+    hapticUtil.setEnabled(enabled);
   }
 
   public void performHapticClick() {

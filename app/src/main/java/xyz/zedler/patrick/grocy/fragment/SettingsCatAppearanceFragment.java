@@ -19,11 +19,8 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,7 +124,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       }
       getSharedPrefs().edit().putInt(SETTINGS.APPEARANCE.DARK_MODE, pref).apply();
       performHapticClick();
-      restartToApply(0, getInstanceState());
+      activity.restartToApply(0, getInstanceState());
     });
 
     binding.partialOptionTransition.linearOtherTransition.setOnClickListener(
@@ -246,7 +243,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
           ViewUtil.uncheckAllChildren(container);
           card.setChecked(true);
           getSharedPrefs().edit().putString(SETTINGS.APPEARANCE.THEME, name).apply();
-          restartToApply(100, getInstanceState());
+          activity.restartToApply(100, getInstanceState());
         }
       });
 
@@ -296,21 +293,5 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       bundle.putInt(ARGUMENT.SCROLL_POSITION + 1, binding.scrollOtherTheme.getScrollX());
     }
     return bundle;
-  }
-
-  public void restartToApply(long delay, @NonNull Bundle bundle) {
-    new Handler(Looper.getMainLooper()).postDelayed(() -> {
-      onSaveInstanceState(bundle);
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-        activity.finish();
-      }
-      Intent intent = new Intent(activity, MainActivity.class);
-      intent.putExtra(ARGUMENT.INSTANCE_STATE, bundle);
-      startActivity(intent);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        activity.finish();
-      }
-      activity.overridePendingTransition(R.anim.fade_in_restart, R.anim.fade_out_restart);
-    }, delay);
   }
 }
