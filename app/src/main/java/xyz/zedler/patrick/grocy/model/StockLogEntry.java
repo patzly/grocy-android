@@ -148,7 +148,7 @@ public class StockLogEntry implements Parcelable {
     dest.writeString(note);
   }
 
-  public static final Creator<StockLogEntry> CREATOR = new Creator<StockLogEntry>() {
+  public static final Creator<StockLogEntry> CREATOR = new Creator<>() {
 
     @Override
     public StockLogEntry createFromParcel(Parcel in) {

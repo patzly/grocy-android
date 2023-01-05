@@ -35,7 +35,7 @@
 
   <TextView
     android:id="@+id/product_name"
-    style="@style/Widget.Grocy.TextView.ListItem.Title.Stock"
+    style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:singleLine="true" />

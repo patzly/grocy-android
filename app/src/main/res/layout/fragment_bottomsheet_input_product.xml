@@ -76,7 +76,7 @@
           android:text="@string/description_input_product_part2" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          style="@style/Widget.Grocy.RadioButton"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:textColor="@color/on_background"
@@ -85,7 +85,7 @@
           android:onClick="@{v -> bottomsheet.setSelectionLive(1)}" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          style="@style/Widget.Grocy.RadioButton"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:textColor="@color/on_background"
@@ -94,7 +94,7 @@
           android:onClick="@{v -> bottomsheet.setSelectionLive(2)}" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          style="@style/Widget.Grocy.RadioButton.BottomSheet"
+          style="@style/Widget.Grocy.RadioButton"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:textColor="@color/on_background"

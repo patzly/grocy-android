@@ -22,24 +22,16 @@ package xyz.zedler.patrick.grocy.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import xyz.zedler.patrick.grocy.util.NumUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Entity(tableName = "recipe_table")
 public class Recipe implements Parcelable {
@@ -110,7 +102,7 @@ public class Recipe implements Parcelable {
     dest.writeInt(notCheckShoppingList);
   }
 
-  public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+  public static final Creator<Recipe> CREATOR = new Creator<>() {
 
     @Override
     public Recipe createFromParcel(Parcel in) {

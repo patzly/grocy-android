@@ -229,7 +229,6 @@
                 android:hint="@string/property_product"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_round_barcode_scan"
-                app:endIconTint="@color/icon"
                 app:endIconContentDescription="Scan barcode"
                 app:helperTextEnabled="true"
                 app:helperText=" "
@@ -241,7 +240,6 @@
                   android:id="@+id/auto_complete_consume_product"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:inputType="text|textCapSentences|textNoSuggestions"
                   android:imeOptions="actionNext"
                   android:completionThreshold="1"
@@ -386,7 +384,7 @@
                 android:layout_marginBottom="4dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_less"
-                app:tint="@color/icon"
+                app:tint="?attr/colorOnSurfaceVariant"
                 app:dense="true" />
 
               <xyz.zedler.patrick.grocy.view.ActionButton
@@ -397,7 +395,7 @@
                 android:layout_marginBottom="4dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_more"
-                app:tint="@color/icon"
+                app:tint="?attr/colorOnSurfaceVariant"
                 app:dense="true" />
 
             </LinearLayout>

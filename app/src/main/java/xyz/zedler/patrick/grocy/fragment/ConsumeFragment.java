@@ -317,9 +317,9 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
     Product product = (Product) adapterView.getItemAtPosition(pos);
     if (!viewModel.isQuickModeEnabled()) clearInputFocus();
-      if (product == null) {
-          return;
-      }
+    if (product == null) {
+      return;
+    }
     viewModel.setProduct(product.getId(), null, null);
   }
 

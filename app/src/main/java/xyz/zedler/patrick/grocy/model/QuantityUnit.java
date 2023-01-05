@@ -83,7 +83,7 @@ public class QuantityUnit implements Parcelable {
     dest.writeString(pluralForms);
   }
 
-  public static final Creator<QuantityUnit> CREATOR = new Creator<QuantityUnit>() {
+  public static final Creator<QuantityUnit> CREATOR = new Creator<>() {
 
     @Override
     public QuantityUnit createFromParcel(Parcel in) {

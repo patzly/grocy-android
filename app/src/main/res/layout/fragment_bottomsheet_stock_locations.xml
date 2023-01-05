@@ -29,12 +29,14 @@
     android:orientation="vertical">
 
     <TextView
-      style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet.Center"
+      style="@style/Widget.Grocy.TextView.TitleLarge"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:paddingTop="12dp"
       android:paddingStart="16dp"
       android:paddingEnd="16dp"
+      android:textAlignment="center"
+      android:gravity="center_horizontal"
       android:text="@string/property_locations" />
 
     <TextView

@@ -226,7 +226,7 @@ public class ResUtil {
     Canvas canvas = new Canvas(bitmap);
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paint.setColor(ContextCompat.getColor(context, R.color.icon));
+    paint.setColor(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
     paint.setTextSize(UiUtil.dpToPx(context, textSize));
     paint.setTypeface(ResourcesCompat.getFont(context, R.font.material_digits_round));
     paint.setLetterSpacing(0.1f);

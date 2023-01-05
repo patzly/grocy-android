@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.BEHAVIOR;
@@ -353,11 +354,12 @@ public class PurchaseViewModel extends BaseViewModel {
         Double amountInUnit = AmountUtil.getShoppingListItemAmount(
             shoppingListItem, productHashMap, quantityUnitHashMap, unitConversionHashMap
         );
-        if (amountInUnit != null) {
-          formData.getAmountLive().setValue(NumUtil.trimAmount(amountInUnit, maxDecimalPlacesAmount));
-        } else {
-          formData.getAmountLive().setValue(NumUtil.trimAmount(shoppingListItem.getAmountDouble(), maxDecimalPlacesAmount));
-        }
+        formData.getAmountLive().setValue(
+            NumUtil.trimAmount(
+                Objects.requireNonNullElseGet(amountInUnit, shoppingListItem::getAmountDouble),
+                maxDecimalPlacesAmount
+            )
+        );
       } else if (!isTareWeightEnabled && !isQuickModeEnabled()) {
         String defaultAmount = sharedPrefs.getString(
             Constants.SETTINGS.STOCK.DEFAULT_PURCHASE_AMOUNT,

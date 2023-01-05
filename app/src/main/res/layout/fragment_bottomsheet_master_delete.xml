@@ -19,21 +19,18 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
   <TextView
     android:id="@+id/text_master_delete_question"
-    style="@style/Widget.Grocy.TextView.Title.BottomSheet"
+    style="@style/Widget.Grocy.TextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:paddingTop="16dp"
-    android:textAlignment="viewStart"
-    android:textSize="16sp" />
+    android:paddingTop="16dp" />
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -47,9 +44,7 @@
       style="@style/Widget.Grocy.Button.TextButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/action_cancel"
-      android:textColor="@color/on_background_secondary"
-      app:rippleColor="@color/highlight" />
+      android:text="@string/action_cancel" />
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/button_master_delete_delete"
@@ -57,10 +52,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
-      android:text="@string/action_delete"
-      android:textColor="@color/white"
-      app:rippleColor="@color/highlight_on_secondary"
-      app:backgroundTint="@color/retro_red_bg_white" />
+      android:text="@string/action_delete" />
 
   </LinearLayout>
 

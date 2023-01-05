@@ -91,7 +91,7 @@ public class User  implements Parcelable {
     dest.writeString(rowCreatedFilestamp);
   }
 
-  public static final Creator<User> CREATOR = new Creator<User>() {
+  public static final Creator<User> CREATOR = new Creator<>() {
 
     @Override
     public User createFromParcel(Parcel in) {

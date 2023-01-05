@@ -88,7 +88,7 @@ public class HtmlCardView extends LinearLayout {
   @SuppressLint("ClickableViewAccessibility")
   public void setHtml(String html) {
     if (html != null) {
-      html = html.replaceAll("<[/]?font[^>]*>", ""); // remove font
+      html = html.replaceAll("</?font[^>]*>", ""); // remove font
       html = html.replaceAll(
           "<p[^>]*> *(<br ?/>)*</p[^>]*>[\\n\\r\\s]*$", "" // trim empty paragraphs at end
       );

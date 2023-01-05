@@ -68,7 +68,7 @@ public class VolatileItem implements Parcelable {
     dest.writeInt(volatileType);
   }
 
-  public static final Creator<VolatileItem> CREATOR = new Creator<VolatileItem>() {
+  public static final Creator<VolatileItem> CREATOR = new Creator<>() {
 
     @Override
     public VolatileItem createFromParcel(Parcel in) {

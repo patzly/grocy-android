@@ -129,10 +129,10 @@ public class TaskEntryEditViewModel extends BaseViewModel {
 
     NetworkQueue queue = dlHelper.newQueue(this::onQueueEmpty, this::onDownloadError);
     queue.append(
-        dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
-          this.taskCategories = taskCategories;
-        }), dlHelper.updateUsers(dbChangedTime, users -> this.users = users
-        )
+        dlHelper.updateTaskCategories(
+            dbChangedTime, taskCategories -> this.taskCategories = taskCategories
+        ),
+        dlHelper.updateUsers(dbChangedTime, users -> this.users = users)
     );
     if (queue.isEmpty()) {
       onQueueEmpty();

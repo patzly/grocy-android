@@ -28,6 +28,8 @@
   <color name="orange">#885122</color>
   <color name="red">#8f4b49</color>
 
+  <color name="shortcut_bg">#f5f5f5</color>
+
   <color name="logo_yellow">@color/custom_yellow_80</color>
   <color name="logo_green">@color/custom_green_80</color>
   <color name="logo_red">@color/custom_red_60</color>

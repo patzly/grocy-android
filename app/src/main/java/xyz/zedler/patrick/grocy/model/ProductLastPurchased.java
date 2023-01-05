@@ -21,22 +21,13 @@ package xyz.zedler.patrick.grocy.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
 import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Objects;
-
-import xyz.zedler.patrick.grocy.util.NumUtil;
 
 @Entity(tableName = "product_last_purchased_table")
 public class ProductLastPurchased implements Parcelable {
@@ -95,7 +86,7 @@ public class ProductLastPurchased implements Parcelable {
     dest.writeString(shoppingLocationId);
   }
 
-  public static final Creator<ProductLastPurchased> CREATOR = new Creator<ProductLastPurchased>() {
+  public static final Creator<ProductLastPurchased> CREATOR = new Creator<>() {
 
     @Override
     public ProductLastPurchased createFromParcel(Parcel in) {

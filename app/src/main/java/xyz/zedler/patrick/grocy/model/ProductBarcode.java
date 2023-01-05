@@ -103,7 +103,7 @@ public class ProductBarcode implements Parcelable {
     dest.writeString(rowCreatedTimestamp);
   }
 
-  public static final Creator<ProductBarcode> CREATOR = new Creator<ProductBarcode>() {
+  public static final Creator<ProductBarcode> CREATOR = new Creator<>() {
 
     @Override
     public ProductBarcode createFromParcel(Parcel in) {

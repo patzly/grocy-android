@@ -167,7 +167,7 @@ public class Chore implements Parcelable {
     dest.writeString(rescheduledNextExecutionAssignedToUserId);
   }
 
-  public static final Creator<Chore> CREATOR = new Creator<Chore>() {
+  public static final Creator<Chore> CREATOR = new Creator<>() {
 
     @Override
     public Chore createFromParcel(Parcel in) {

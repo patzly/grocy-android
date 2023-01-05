@@ -139,7 +139,7 @@ public class ProductDetails implements Parcelable {
     dest.writeString(hasChilds);
   }
 
-  public static final Creator<ProductDetails> CREATOR = new Creator<ProductDetails>() {
+  public static final Creator<ProductDetails> CREATOR = new Creator<>() {
 
     @Override
     public ProductDetails createFromParcel(Parcel in) {
