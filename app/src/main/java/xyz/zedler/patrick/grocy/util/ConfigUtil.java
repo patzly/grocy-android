@@ -123,6 +123,9 @@ public class ConfigUtil {
           .putBoolean(
               PREF.FEATURE_CHORES_ASSIGNMENTS,
               jsonObject.getBoolean("FEATURE_FLAG_CHORES_ASSIGNMENTS")
+          ).putBoolean(
+              PREF.FEATURE_LABEL_PRINTER,
+              jsonObject.getBoolean("FEATURE_FLAG_LABEL_PRINTER")
           ).apply();
       if (jsonObject.has("FEATURE_FLAG_STOCK_PRODUCT_FREEZING")) {
         prefs.edit().putBoolean(

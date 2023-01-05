@@ -30,6 +30,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import java.util.ArrayList;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
@@ -52,9 +53,9 @@ public class FormDataMasterProductCatOptional {
   private final MutableLiveData<ProductGroup> productGroupLive;
   private final LiveData<String> productGroupNameLive;
   private final MutableLiveData<String> energyLive;
+  private final MutableLiveData<Integer> defaultStockLabelTypeLive;
   private final MutableLiveData<Boolean> neverShowOnStockLive;
   private final MutableLiveData<Boolean> noOwnStockLive;
-
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
@@ -86,6 +87,7 @@ public class FormDataMasterProductCatOptional {
         productGroup -> productGroup != null ? productGroup.getName() : null
     );
     energyLive = new MutableLiveData<>();
+    defaultStockLabelTypeLive = new MutableLiveData<>(0);
     neverShowOnStockLive = new MutableLiveData<>();
     noOwnStockLive = new MutableLiveData<>();
 
@@ -152,6 +154,14 @@ public class FormDataMasterProductCatOptional {
 
   public MutableLiveData<String> getEnergyLive() {
     return energyLive;
+  }
+
+  public MutableLiveData<Integer> getDefaultStockLabelTypeLive() {
+    return defaultStockLabelTypeLive;
+  }
+
+  public void setDefaultStockLabelTypeLive(int type) {
+    defaultStockLabelTypeLive.setValue(type);
   }
 
   public MutableLiveData<Boolean> getNeverShowOnStockLive() {
@@ -283,6 +293,11 @@ public class FormDataMasterProductCatOptional {
         ? descriptionLive.getValue() : null);
     product.setProductGroupId(pGroup != null ? String.valueOf(pGroup.getId()) : null);
     product.setCalories(energyLive.getValue());
+    if (isFeatureLabelPrintEnabled()) {
+      product.setDefaultStockLabelType(String.valueOf(defaultStockLabelTypeLive.getValue()));
+    } else {
+      product.setDefaultStockLabelType(String.valueOf(0));
+    }
     product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
     product.setNoOwnStockBoolean(noOwnStockLive.getValue());
     return product;
@@ -311,8 +326,13 @@ public class FormDataMasterProductCatOptional {
         ? Html.fromHtml(product.getDescription()) : null);
     productGroupLive.setValue(getProductGroupFromId(product.getProductGroupId()));
     energyLive.setValue(product.getCalories());
+    defaultStockLabelTypeLive.setValue(product.getDefaultStockLabelTypeInt());
     neverShowOnStockLive.setValue(product.getHideOnStockOverviewBoolean());
     noOwnStockLive.setValue(product.getNoOwnStockBoolean());
     filledWithProduct = true;
+  }
+
+  public boolean isFeatureLabelPrintEnabled() {
+    return sharedPrefs.getBoolean(PREF.FEATURE_LABEL_PRINTER, false);
   }
 }

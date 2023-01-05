@@ -5,6 +5,7 @@
 - New: Support for more than two decimal places for amounts & prices, uses option from server (#459)
 - New: Product option "Move on open" (#569)
 - New: Option in behavior settings for copying barcode note to stock entry note field (#609)
+- New: Option on purchase page to print stock label and default option on master product page (#570)
 - Improved: (not F-Droid) ML Kit scanner now only recognises barcodes in preview field
 - Improved: Shopping mode page now can be opened with deeplink "grocy://shoppingmodepage" (#519)
 - Improved: Selection of child products in purchase form if parent product has no own stock (#508)

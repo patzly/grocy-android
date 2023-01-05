@@ -431,6 +431,12 @@ public class PurchaseViewModel extends BaseViewModel {
         formData.getLocationLive().setValue(productDetails.getLocation());
       }
 
+      // stock label type
+      if (isFeatureEnabled(PREF.FEATURE_LABEL_PRINTER)) {
+        formData.getPrintLabelTypeLive()
+            .setValue(productDetails.getProduct().getDefaultStockLabelTypeInt());
+      }
+
       // note
       if (barcode != null
           && barcode.getNote() != null

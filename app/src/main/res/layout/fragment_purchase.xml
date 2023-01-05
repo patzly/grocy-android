@@ -652,6 +652,70 @@
             </LinearLayout>
 
             <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:layout_marginTop="8dp"
+              android:visibility="@{formData.isFeatureEnabled(Constants.PREF.FEATURE_LABEL_PRINTER) ? View.VISIBLE : View.GONE}">
+
+              <ImageView
+                android:id="@+id/image_label_print"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                android:src="@drawable/ic_round_printer"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                tools:ignore="ContentDescription" />
+
+              <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:overScrollMode="ifContentScrolls"
+                android:layout_marginBottom="8dp">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                  android:id="@+id/toggle_other_theme"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingStart="0dp"
+                  android:paddingEnd="24dp"
+                  app:singleSelection="true"
+                  app:selectionRequired="true">
+
+                  <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subtitle_print_label_no"
+                    android:checked="@{formData.printLabelTypeLive == 0}"
+                    android:onClick="@{() -> formData.setPrintLabelTypeLive(0)}"
+                    tools:ignore="TextContrastCheck" />
+
+                  <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subtitle_print_label_per_purchase"
+                    android:checked="@{formData.printLabelTypeLive == 1}"
+                    android:onClick="@{() -> formData.setPrintLabelTypeLive(1)}"
+                    tools:ignore="TextContrastCheck" />
+
+                  <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subtitle_print_label_per_unit"
+                    android:checked="@{formData.printLabelTypeLive == 2}"
+                    android:onClick="@{() -> formData.setPrintLabelTypeLive(2)}"
+                    tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+              </HorizontalScrollView>
+
+            </LinearLayout>
+
+            <LinearLayout
               style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
               android:paddingTop="8dp"
               android:paddingBottom="8dp"

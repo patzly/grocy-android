@@ -93,6 +93,7 @@ public class FormDataInventory {
   private final LiveData<String> storeNameLive;
   private final MutableLiveData<Location> locationLive;
   private final LiveData<String> locationNameLive;
+  private final MutableLiveData<Integer> printLabelTypeLive;
   private final MutableLiveData<String> noteLive;
   private final PluralUtil pluralUtil;
   private boolean currentProductFlowInterrupted = false;
@@ -269,6 +270,7 @@ public class FormDataInventory {
         locationLive,
         location -> location != null ? location.getName() : null
     );
+    printLabelTypeLive = new MutableLiveData<>(0);
     noteLive = new MutableLiveData<>();
   }
 
@@ -652,6 +654,14 @@ public class FormDataInventory {
     return locationNameLive;
   }
 
+  public MutableLiveData<Integer> getPrintLabelTypeLive() {
+    return printLabelTypeLive;
+  }
+
+  public void setPrintLabelTypeLive(int type) {
+    printLabelTypeLive.setValue(type);
+  }
+
   public MutableLiveData<String> getNoteLive() {
     return noteLive;
   }
@@ -877,6 +887,9 @@ public class FormDataInventory {
         if (isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) && location != null) {
           json.put("location_id", String.valueOf(location.getId()));
         }
+        if (isFeatureEnabled(PREF.FEATURE_LABEL_PRINTER)) {
+          json.put("stock_label_type", String.valueOf(printLabelTypeLive.getValue()));
+        }
         if (noteLive.getValue() != null && !noteLive.getValue().isEmpty()) {
           json.put("note", noteLive.getValue());
         }
@@ -921,6 +934,7 @@ public class FormDataInventory {
     storeLive.setValue(null);
     showStoreSection.setValue(true);
     locationLive.setValue(null);
+    printLabelTypeLive.setValue(0);
     noteLive.setValue(null);
     new Handler().postDelayed(() -> {
       productNameErrorLive.setValue(null);

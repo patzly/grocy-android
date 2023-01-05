@@ -323,6 +323,8 @@
   <string name="msg_port_connection_info_with_port">Die App wird sich zu Port %1$s verbinden.</string>
   <string name="msg_clear_form_first">Leeren Sie zuerst das Formular, bevor Sie einen anderen bekannten Barcode scannen.</string>
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">Dies ist die Standardeinstellung für das Bestandseintragsetikett, die beim Einkauf vorbelegt wird.</string>
   <string name="stock_disabled">Sie haben in Ihrer grocy-Konfiguration das Bestandsfeature deaktiviert, wahrscheinlich weil Sie es nicht brauchen. Diese App kann aber im Moment nur Bestandsverwaltung, also kann es sein, dass sie Ihnen nicht viel nützt.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Die Bestand-Seite listet alle Produkte auf, die derzeit im Bestand oder unter ihrem Mindestbestand sind. Aktiviere dies, um dieses Produkt nie dort anzuzeigen.</string>
@@ -433,6 +435,7 @@
   <string name="error_api_qr_code">Kein QR-Code mit grocy API-Zugangsdaten</string>
   <string name="error_token_qr_code">Kein QR-Code mit einem langlebigen Zugangsschlüssel von Home Assistant</string>
   <string name="error_loading_qus">Mengeneinheiten konnten nicht vom Produkt geladen werden</string>
+  <string name="error_no_children">Das ausgewählte Produkt hat keine untergeordneten Produkte</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Darf nicht gleich %1$s sein</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -619,6 +622,12 @@
   <string name="subtitle_recipe_due_score">Fällig.-Punkte: %1$s</string>
   <string name="subtitle_per_serving">pro Portion</string>
   <string name="subtitle_tap_preparation_mode">Hier tippen für Zubereitungsmodus</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Kein Etikett</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Pro Einkauf</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Pro Einheit</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>
@@ -1085,6 +1094,8 @@
   <string name="setting_date_keyboard_input_description">Anstatt mit Auswahlrädern</string>
   <string name="setting_date_keyboard_reverse">Umgekehrtes Datumsformat für Eingabe benutzen</string>
   <string name="setting_date_keyboard_reverse_description">DDMMYY anstatt YYMMDD</string>
+  <string name="setting_copy_barcode_note">Barcode-Notiz zu Bestandseintrag-Notiz kopieren</string>
+  <string name="setting_copy_barcode_note_description">Beim Kauf eines Produkts</string>
   <string name="setting_loading_circle">Ladekreis für alle Serveranfragen anzeigen</string>
   <string name="setting_loading_circle_description">Hilfreich für langsame Netzwerke</string>
   <string name="setting_tor">Tor verwenden</string>
