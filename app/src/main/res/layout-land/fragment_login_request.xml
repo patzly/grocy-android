@@ -76,8 +76,8 @@
 
           <ImageView
             android:id="@+id/image_logo"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_round_grocy_anim"
             tools:ignore="ContentDescription" />
