@@ -23,7 +23,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,12 +36,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Task;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 
 public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
@@ -55,12 +53,6 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
   private ProgressBar progressConfirm;
   private ValueAnimator confirmProgressAnimator;
   private Task task;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(

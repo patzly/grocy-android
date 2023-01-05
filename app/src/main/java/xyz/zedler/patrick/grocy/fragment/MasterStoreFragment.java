@@ -426,7 +426,7 @@ public class MasterStoreFragment extends BaseFragment {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.STORES, storeId),
         response -> activity.navigateUp(),
-        error -> showErrorMessage(error)
+        this::showErrorMessage
     );
   }
 

@@ -17,10 +17,12 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-  <translate
-    android:fromXDelta="100%p"
-    android:toXDelta="0"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:duration="@integer/navigation_slide_duration" />
-</set>
+<resources>
+
+  <style name="Theme.Grocy" parent="Base.Grocy">
+    <item name="android:windowSplashScreenBackground">@android:color/system_neutral1_900</item>
+    <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_anim</item>
+    <item name="android:windowSplashScreenAnimationDuration">970</item>
+  </style>
+
+</resources>

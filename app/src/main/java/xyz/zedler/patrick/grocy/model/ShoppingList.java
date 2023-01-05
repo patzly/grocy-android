@@ -63,7 +63,7 @@ public class ShoppingList implements Parcelable {
     dest.writeString(notes);
   }
 
-  public static final Creator<ShoppingList> CREATOR = new Creator<ShoppingList>() {
+  public static final Creator<ShoppingList> CREATOR = new Creator<>() {
 
     @Override
     public ShoppingList createFromParcel(Parcel in) {

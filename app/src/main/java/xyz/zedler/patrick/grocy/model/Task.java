@@ -98,7 +98,7 @@ public class Task implements Parcelable {
     dest.writeString(assignedToUserId);
   }
 
-  public static final Creator<Task> CREATOR = new Creator<Task>() {
+  public static final Creator<Task> CREATOR = new Creator<>() {
 
     @Override
     public Task createFromParcel(Parcel in) {

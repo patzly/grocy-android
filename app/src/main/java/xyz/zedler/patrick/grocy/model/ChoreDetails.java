@@ -69,7 +69,7 @@ public class ChoreDetails implements Parcelable {
     dest.writeString(averageExecutionFrequencyHours);
   }
 
-  public static final Creator<ChoreDetails> CREATOR = new Creator<ChoreDetails>() {
+  public static final Creator<ChoreDetails> CREATOR = new Creator<>() {
 
     @Override
     public ChoreDetails createFromParcel(Parcel in) {

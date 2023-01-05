@@ -294,7 +294,7 @@ public class BottomScrollBehavior {
     if (Build.VERSION.SDK_INT >= 31) {
       // Stretch effect is always nice
       if (scrollView instanceof RecyclerView) {
-        ((RecyclerView) scrollView).setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+        scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
       } else {
         scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
       }

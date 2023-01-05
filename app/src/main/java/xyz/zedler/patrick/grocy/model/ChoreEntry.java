@@ -90,7 +90,7 @@ public class ChoreEntry implements Parcelable {
     dest.writeString(nextExecutionAssignedToUserId);
   }
 
-  public static final Creator<ChoreEntry> CREATOR = new Creator<ChoreEntry>() {
+  public static final Creator<ChoreEntry> CREATOR = new Creator<>() {
 
     @Override
     public ChoreEntry createFromParcel(Parcel in) {

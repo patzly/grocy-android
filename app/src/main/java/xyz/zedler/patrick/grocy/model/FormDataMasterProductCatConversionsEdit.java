@@ -229,9 +229,7 @@ public class FormDataMasterProductCatConversionsEdit {
     quantityUnitToLive.setValue(null);
     quantityUnitToErrorLive.setValue(false);
     factorLive.setValue(null);
-    new Handler().postDelayed(() -> {
-      factorErrorLive.setValue(null);
-    }, 50);
+    new Handler().postDelayed(() -> factorErrorLive.setValue(null), 50);
   }
 
   private String getString(@StringRes int res) {

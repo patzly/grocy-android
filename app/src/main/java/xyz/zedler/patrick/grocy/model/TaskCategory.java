@@ -84,7 +84,7 @@ public class TaskCategory extends GroupedListItem implements Parcelable {
     dest.writeInt(displayDivider);
   }
 
-  public static final Creator<TaskCategory> CREATOR = new Creator<TaskCategory>() {
+  public static final Creator<TaskCategory> CREATOR = new Creator<>() {
 
     @Override
     public TaskCategory createFromParcel(Parcel in) {

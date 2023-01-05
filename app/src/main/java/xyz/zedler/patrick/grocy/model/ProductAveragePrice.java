@@ -56,7 +56,7 @@ public class ProductAveragePrice implements Parcelable {
     dest.writeString(price);
   }
 
-  public static final Creator<ProductAveragePrice> CREATOR = new Creator<ProductAveragePrice>() {
+  public static final Creator<ProductAveragePrice> CREATOR = new Creator<>() {
 
     @Override
     public ProductAveragePrice createFromParcel(Parcel in) {

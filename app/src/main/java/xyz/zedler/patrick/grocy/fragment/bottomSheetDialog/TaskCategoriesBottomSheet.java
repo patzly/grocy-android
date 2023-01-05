@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.TaskCategoryAdapter;
@@ -37,7 +36,6 @@ import xyz.zedler.patrick.grocy.adapter.TaskCategoryAdapter.TaskCategoryAdapterL
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
@@ -49,20 +47,15 @@ public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
   private MainActivity activity;
   private FragmentBottomsheetListSelectionBinding binding;
 
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
-
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentBottomsheetListSelectionBinding
-        .inflate(inflater, container, false);
+    binding = FragmentBottomsheetListSelectionBinding.inflate(
+        inflater, container, false
+    );
     return binding.getRoot();
   }
 

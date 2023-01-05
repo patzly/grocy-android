@@ -282,7 +282,6 @@
                 style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_round_barcode_scan"
-                app:endIconTint="@color/icon"
                 app:endIconContentDescription="Scan barcode"
                 android:hint="@string/property_produces_product"
                 app:helperTextEnabled="true"

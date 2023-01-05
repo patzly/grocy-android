@@ -122,7 +122,7 @@ public class RecipePosition implements Parcelable {
     dest.writeDouble(priceFactor);
   }
 
-  public static final Creator<RecipePosition> CREATOR = new Creator<RecipePosition>() {
+  public static final Creator<RecipePosition> CREATOR = new Creator<>() {
 
     @Override
     public RecipePosition createFromParcel(Parcel in) {

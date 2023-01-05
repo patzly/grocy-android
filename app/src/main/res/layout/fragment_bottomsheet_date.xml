@@ -278,8 +278,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="M"
-              android:layout_gravity="center_vertical"
-              android:textColor="@color/icon"/>
+              android:layout_gravity="center_vertical" />
 
             <com.google.android.material.button.MaterialButton
               android:id="@+id/less_month_reverse"

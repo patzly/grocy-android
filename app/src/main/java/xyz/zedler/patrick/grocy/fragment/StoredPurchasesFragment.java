@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -137,9 +136,9 @@ public class StoredPurchasesFragment extends BaseFragment
       // product id.
       removeForThisDestination(ARGUMENT.PENDING_PRODUCT_ID);
       removeForThisDestination(ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> {
-        viewModel.setPendingProductNameToOnlineProductName(pendingProductId, productId);
-      });
+      viewModel.setQueueEmptyAction(
+          () -> viewModel.setPendingProductNameToOnlineProductName(pendingProductId, productId)
+      );
     }
 
     // INITIALIZE VIEWS
@@ -162,7 +161,7 @@ public class StoredPurchasesFragment extends BaseFragment
     activity.updateBottomAppBar(
         false,
         R.menu.menu_empty,
-        (OnMenuItemClickListener) null
+        null
     );
   }
 

@@ -108,6 +108,7 @@ public class RecipeEntryAdapter extends
       String pictureFileName = recipe.getPictureFileName();
       if (pictureFileName != null && !pictureFileName.isEmpty()) {
         containsPictures = true;
+        break;
       }
     }
   }

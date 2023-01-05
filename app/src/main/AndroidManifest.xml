@@ -40,7 +40,7 @@
   <application
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
-    android:theme="@style/Theme.GrocyM3"
+    android:theme="@style/Theme.Grocy"
     android:supportsRtl="true"
     android:enableOnBackInvokedCallback="false"
     android:hardwareAccelerated="true"

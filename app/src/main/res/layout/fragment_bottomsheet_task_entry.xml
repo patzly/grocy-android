@@ -34,18 +34,13 @@
       android:orientation="horizontal"
       android:gravity="center_vertical">
 
-      <TextView
-        style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:text="@string/title_task_entry" />
-
       <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        android:layout_width="wrap_content"
+        style="@style/Widget.Grocy.Toolbar.Start"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:contentInsetStart="12dp"
+        android:layout_weight="1"
+        app:title="@string/title_task_entry"
         app:menu="@menu/menu_task_entry" />
 
       <xyz.zedler.patrick.grocy.view.ActionButton
@@ -54,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
         app:icon="@drawable/ic_round_delete_anim"
-        app:tint="@color/icon" />
+        app:tint="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
 

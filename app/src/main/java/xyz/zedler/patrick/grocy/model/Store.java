@@ -71,7 +71,7 @@ public class Store implements Parcelable {
     dest.writeString(rowCreatedTimestamp);
   }
 
-  public static final Creator<Store> CREATOR = new Creator<Store>() {
+  public static final Creator<Store> CREATOR = new Creator<>() {
 
     @Override
     public Store createFromParcel(Parcel in) {

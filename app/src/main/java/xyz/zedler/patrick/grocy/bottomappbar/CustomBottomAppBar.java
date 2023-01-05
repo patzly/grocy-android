@@ -37,7 +37,8 @@ import androidx.annotation.MenuRes;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import com.google.android.material.animation.AnimationUtils;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -80,7 +81,7 @@ public class CustomBottomAppBar extends BottomAppBar {
     animateTo(
         0,
         ENTER_ANIMATION_DURATION,
-        AnimationUtils.LINEAR_OUT_SLOW_IN_INTERPOLATOR
+        new LinearOutSlowInInterpolator()
     );
     if (runnableOnShow != null) {
       runnableOnShow.run();
@@ -99,7 +100,7 @@ public class CustomBottomAppBar extends BottomAppBar {
             + params.bottomMargin
             + addOffset,
         EXIT_ANIMATION_DURATION,
-        AnimationUtils.FAST_OUT_LINEAR_IN_INTERPOLATOR
+        new FastOutLinearInInterpolator()
     );
     if (runnableOnHide != null) {
       runnableOnHide.run();

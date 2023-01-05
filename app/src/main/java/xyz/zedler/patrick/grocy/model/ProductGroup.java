@@ -85,7 +85,7 @@ public class ProductGroup extends GroupedListItem implements Parcelable {
     dest.writeInt(displayDivider);
   }
 
-  public static final Creator<ProductGroup> CREATOR = new Creator<ProductGroup>() {
+  public static final Creator<ProductGroup> CREATOR = new Creator<>() {
 
     @Override
     public ProductGroup createFromParcel(Parcel in) {

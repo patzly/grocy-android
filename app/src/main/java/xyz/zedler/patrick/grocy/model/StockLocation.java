@@ -77,7 +77,7 @@ public class StockLocation implements Parcelable {
     dest.writeString(isFreezer);
   }
 
-  public static final Creator<StockLocation> CREATOR = new Creator<StockLocation>() {
+  public static final Creator<StockLocation> CREATOR = new Creator<>() {
 
     @Override
     public StockLocation createFromParcel(Parcel in) {

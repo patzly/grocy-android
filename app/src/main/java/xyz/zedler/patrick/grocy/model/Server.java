@@ -80,7 +80,7 @@ public class Server implements Parcelable {
     dest.writeString(homeAssistantToken);
   }
 
-  public static final Creator<Server> CREATOR = new Creator<Server>() {
+  public static final Creator<Server> CREATOR = new Creator<>() {
 
     @Override
     public Server createFromParcel(Parcel in) {

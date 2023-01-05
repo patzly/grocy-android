@@ -443,7 +443,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     dlHelper.delete(
         grocyApi.getObject(GrocyApi.ENTITY.PRODUCT_GROUPS, productGroupId),
         response -> activity.navigateUp(),
-        error -> showErrorMessage(error)
+        this::showErrorMessage
     );
   }
 

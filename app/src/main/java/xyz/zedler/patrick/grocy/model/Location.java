@@ -26,8 +26,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,7 +75,7 @@ public class Location implements Parcelable {
     dest.writeString(isFreezer);
   }
 
-  public static final Creator<Location> CREATOR = new Creator<Location>() {
+  public static final Creator<Location> CREATOR = new Creator<>() {
 
     @Override
     public Location createFromParcel(Parcel in) {

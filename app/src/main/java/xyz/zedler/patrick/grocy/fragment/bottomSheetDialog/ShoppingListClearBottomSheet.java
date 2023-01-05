@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +26,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShoppingListClearBinding;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
-import xyz.zedler.patrick.grocy.Constants;
 
 public class ShoppingListClearBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -43,12 +40,6 @@ public class ShoppingListClearBottomSheet extends BaseBottomSheetDialogFragment 
 
   private ShoppingList shoppingList;
   private MutableLiveData<Integer> selectionLive;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(

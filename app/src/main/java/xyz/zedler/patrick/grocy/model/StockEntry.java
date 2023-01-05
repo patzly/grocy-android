@@ -129,7 +129,7 @@ public class StockEntry extends GroupedListItem implements Parcelable {
     dest.writeString(note);
   }
 
-  public static final Creator<StockEntry> CREATOR = new Creator<StockEntry>() {
+  public static final Creator<StockEntry> CREATOR = new Creator<>() {
 
     @Override
     public StockEntry createFromParcel(Parcel in) {

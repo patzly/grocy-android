@@ -67,7 +67,7 @@ public class MissingItem implements Parcelable {
     dest.writeString(isPartlyInStock);
   }
 
-  public static final Creator<MissingItem> CREATOR = new Creator<MissingItem>() {
+  public static final Creator<MissingItem> CREATOR = new Creator<>() {
 
     @Override
     public MissingItem createFromParcel(Parcel in) {
