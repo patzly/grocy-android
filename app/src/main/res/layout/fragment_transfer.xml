@@ -42,63 +42,33 @@
   <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:orientation="vertical"
-      android:background="@color/primary">
+      android:layout_height="wrap_content">
 
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
 
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar"
+          style="@style/Widget.Grocy.Toolbar.Back"
+          app:title="@string/title_transfer"
+          android:onLongClick="@{() -> viewModel.toggleQuickModeEnabled()}" />
+
         <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:gravity="center_vertical"
-          android:orientation="horizontal"
-          android:onLongClick="@{() -> viewModel.toggleQuickModeEnabled()}">
-
-          <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="20dp"
-            android:background="?attr/actionBarItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:contentDescription="@string/action_back"
-            android:tooltipText="@string/action_back"
-            android:focusable="true"
-            tools:targetApi="o"
-            android:onClick="@{() -> activity.navigateUp()}">
-
-            <ImageView
-              android:layout_width="24dp"
-              android:layout_height="24dp"
-              android:layout_gravity="center"
-              android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_arrow_back" />
-
-          </FrameLayout>
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/title_transfer"
-            android:layout_marginEnd="16dp"
-            android:textColor="@{viewModel.quickModeEnabled ? @color/retro_blue : @color/on_primary}" />
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="end|center_vertical">
 
           <FrameLayout
             android:id="@+id/frame_help"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:background="?attr/actionBarItemBackground"
             android:clickable="true"
@@ -110,11 +80,10 @@
             android:onClick="@{() -> formData.toggleDisplayHelpLive()}">
 
             <ImageView
-              android:layout_width="24dp"
-              android:layout_height="24dp"
+              style="@style/Widget.Grocy.ImageView.Icon"
               android:layout_gravity="center"
               android:importantForAccessibility="no"
-              android:src="@{formData.displayHelpLive ? @drawable/ic_round_help_anim : @drawable/ic_round_help_outline_anim}" />
+              android:src="@{formData.displayHelpLive ? @drawable/ic_round_help : @drawable/ic_round_help_outline_anim}" />
 
           </FrameLayout>
 
@@ -130,8 +99,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -141,13 +108,14 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-          android:id="@+id/scroll_transfer"
+          android:id="@+id/scroll"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:overScrollMode="never"
           android:fillViewport="true">
 
           <LinearLayout
+            android:id="@+id/linear_container_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
@@ -310,9 +278,9 @@
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
                 <TextView
+                  android:id="@+id/text_quantity_unit"
                   style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_quantity_unit"
-                  android:textColor="@{formData.quantityUnitErrorLive ? @color/retro_red : @color/on_background_secondary}" />
+                  android:text="@string/property_quantity_unit" />
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
@@ -354,7 +322,6 @@
                   android:hint="@{formData.amountHintLive ?? @string/property_amount}"
                   app:helperTextEnabled="true"
                   app:helperText="@{formData.amountHelperLive ?? ` `}"
-                  app:helperTextTextColor="@color/retro_blue_fg"
                   app:errorText="@{formData.amountErrorLive}"
                   app:endIconMode="clear_text"
                   app:endIconOnClickListener="@{v -> fragment.clearAmountFieldAndFocusIt()}">
@@ -364,7 +331,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number|numberDecimal"
-                    android:textColor="@color/on_background"
                     android:imeOptions="actionDone"
                     android:maxLength="10"
                     android:text="@={formData.amountLive}"
@@ -415,9 +381,9 @@
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
                 <TextView
+                  android:id="@+id/text_location_to"
                   style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/title_location_to"
-                  android:textColor="@{formData.toLocationErrorLive ? @color/retro_red : @color/on_background_secondary}"/>
+                  android:text="@string/title_location_to"/>
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.Title"
