@@ -381,29 +381,22 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
               </LinearLayout>
 
-              <xyz.zedler.patrick.grocy.view.ActionButton
+              <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:layout_marginBottom="5dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
-                app:icon="@drawable/ic_round_expand_less"
-                app:tint="?attr/colorOnSurfaceVariant"
-                app:dense="true" />
+                app:icon="@drawable/ic_round_expand_less" />
 
-              <xyz.zedler.patrick.grocy.view.ActionButton
+              <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_less"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="4dp"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="4dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
-                app:icon="@drawable/ic_round_expand_more"
-                app:tint="?attr/colorOnSurfaceVariant"
-                app:dense="true" />
+                app:icon="@drawable/ic_round_expand_more" />
 
             </LinearLayout>
 
