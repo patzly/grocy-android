@@ -41,27 +41,28 @@
     android:layout_weight="1">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
 
       <TextView
-          android:id="@+id/text_name"
-          style="@style/Widget.Grocy.TextView.ListItem.Title"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:singleLine="true" />
+        android:id="@+id/text_name"
+        style="@style/Widget.Grocy.TextView.ListItem.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:singleLine="true" />
 
       <View
-          android:id="@+id/view_on_shopping_list"
-          android:layout_width="5dp"
-          android:layout_height="5dp"
-          android:layout_gravity="center_vertical"
-          android:layout_marginTop="1dp"
-          android:layout_marginStart="6dp"
-          android:visibility="gone"
-          android:background="@drawable/shape_circle" />
+        android:id="@+id/view_on_shopping_list"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="1dp"
+        android:layout_marginStart="6dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_circle" />
 
     </LinearLayout>
 
