@@ -331,6 +331,8 @@
   <string name="msg_port_connection_info_with_port">The app will connect to port %1$s.</string>
   <string name="msg_clear_form_first">Clear the form first before scanning another known barcode.</string>
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">This is the default stock entry label type which will be prefilled on purchase.</string>
   <string name="stock_disabled">You have disabled the stock feature in your grocy configuration, probably because you don\'t need it. But this app can only do stock management at the moment, so it may not be of much use to you.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
