@@ -119,57 +119,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:paddingBottom="90dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             transitionTypeChanging="@{true}">
 
             <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginBottom="8dp"
               android:layout_marginTop="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
               android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_quick_mode" />
 
             </com.google.android.material.card.MaterialCardView>
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
-              android:id="@+id/container_scanner"
-              android:layout_width="350dp"
-              android:layout_height="160dp"
-              android:layout_gravity="center"
-              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.toggleTorch()}"/>
-
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp"
+              android:gravity="center"
+              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}">
+
+              <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/container_scanner"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:onClick="@{() -> fragment.toggleTorch()}"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginBottom="8dp"
               android:layout_marginTop="8dp"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant"
               android:visibility="@{formData.externalScannerEnabled ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_external_scanner_ready" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -182,14 +179,13 @@
               android:focusableInTouchMode="true"/>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-              android:paddingTop="8dp"
-              android:paddingBottom="0dp">
+              style="@style/Widget.Grocy.LinearLayout.ListItem"
+              android:paddingTop="8dp">
 
               <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
                 android:src="@drawable/ic_round_widgets"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
@@ -299,11 +295,10 @@
               transitionTypeChanging="@{true}">
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:paddingTop="8dp"
-                android:paddingBottom="0dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:animateLayoutChanges="true"
@@ -311,9 +306,9 @@
 
                 <ImageView
                   android:id="@+id/image_amount"
-                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
                   android:src="@drawable/ic_round_scatter_plot_anim"
-                  android:layout_marginBottom="8dp"
+                  android:layout_marginTop="16dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -340,29 +335,24 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
               </LinearLayout>
 
-              <xyz.zedler.patrick.grocy.view.ActionButton
+              <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:layout_gravity="top"
+                android:layout_marginTop="12dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
-                app:icon="@drawable/ic_round_expand_less"
-                app:tint="?attr/colorOnSurfaceVariant"
-                app:dense="true" />
+                app:icon="@drawable/ic_round_expand_less" />
 
-              <xyz.zedler.patrick.grocy.view.ActionButton
+              <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_less"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="4dp"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:layout_gravity="top"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
-                app:icon="@drawable/ic_round_expand_more"
-                app:tint="?attr/colorOnSurfaceVariant"
-                app:dense="true" />
+                app:icon="@drawable/ic_round_expand_more" />
 
             </LinearLayout>
 
@@ -394,8 +384,10 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:onClick="@{() -> checkboxSpecific.setChecked(!checkboxSpecific.isChecked())}">
+              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+              android:onClick="@{() -> checkboxSpecific.setChecked(!checkboxSpecific.isChecked())}"
+              android:paddingStart="16dp"
+              android:paddingEnd="9dp">
 
               <ImageView
                 style="@style/Widget.Grocy.ImageView.ListItem.Icon"
@@ -413,28 +405,21 @@
 
               <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/checkbox_specific"
-                style="@style/Widget.Grocy.Switch"
+                style="@style/Widget.Grocy.CheckBox.Dense"
                 android:checked="@={formData.useSpecificLive}" />
 
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              style="@style/Widget.Grocy.Card.Text"
               android:layout_marginStart="16dp"
               android:layout_marginEnd="16dp"
               android:layout_marginBottom="8dp"
               android:layout_marginTop="8dp"
-              android:visibility="@{formData.displayHelpLive &amp;&amp; formData.useSpecificLive ? View.VISIBLE : View.GONE}"
-              app:contentPadding="16dp"
-              app:cardElevation="0dp"
-              app:cardCornerRadius="12dp"
-              app:cardBackgroundColor="@color/on_background_variant">
+              android:visibility="@{formData.displayHelpLive &amp;&amp; formData.useSpecificLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_specific_item" />
 
             </com.google.android.material.card.MaterialCardView>

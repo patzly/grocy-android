@@ -130,10 +130,7 @@
               android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_quick_mode" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -166,10 +163,7 @@
               android:visibility="@{formData.externalScannerEnabled ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_external_scanner_ready" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -186,9 +180,9 @@
               android:paddingTop="8dp">
 
               <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
                 android:src="@drawable/ic_round_widgets"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="16dp"
                 tools:ignore="ContentDescription" />
 
               <com.google.android.material.textfield.TextInputLayout
@@ -268,10 +262,7 @@
               android:visibility="@{formData.isTareWeightEnabledLive &amp;&amp; !formData.consumeExactAmountLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_tare_weight_purchase" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -316,7 +307,7 @@
                 style="@style/Widget.Grocy.LinearLayout.ListItem"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:paddingTop="8dp"
+                android:paddingTop="4dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:animateLayoutChanges="true"
@@ -324,9 +315,9 @@
 
                 <ImageView
                   android:id="@+id/image_amount"
-                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
                   android:src="@{formData.isTareWeightEnabledLive ? @drawable/ic_round_scale_anim : @drawable/ic_round_scatter_plot_anim}"
-                  android:layout_marginBottom="10dp"
+                  android:layout_marginTop="16dp"
                   tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -358,15 +349,17 @@
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_more"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="5dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="8dp"
                 android:onClick="@{() -> formData.moreAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_less" />
 
               <com.google.android.material.button.MaterialButton
                 android:id="@+id/amount_less"
                 style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="4dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:onClick="@{() -> formData.lessAmount(imageAmount)}"
                 app:icon="@drawable/ic_round_expand_more" />
 
@@ -486,10 +479,7 @@
               android:visibility="@{formData.displayHelpLive &amp;&amp; formData.useSpecificLive ? View.VISIBLE : View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_specific_item" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -526,10 +516,7 @@
               android:visibility="@{View.GONE}">
 
               <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                style="@style/Widget.Grocy.TextView.Paragraph.Card"
                 android:text="@string/msg_help_recipe_consume" />
 
             </com.google.android.material.card.MaterialCardView>
