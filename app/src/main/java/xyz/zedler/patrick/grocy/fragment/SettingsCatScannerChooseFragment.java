@@ -96,9 +96,13 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
         )
     );
 
-    if (viewModel.getUseMlKitScanner()) {
+    boolean useMlKitScanner = viewModel.getUseMlKitScanner();
+    viewModel.setUseMlKitScanner(useMlKitScanner);
+    if (useMlKitScanner) {
+      binding.formattedScannerInfo.setText(getString(R.string.msg_help_barcode_scanner_info_mlkit));
       binding.toggleSelectScanner.check(R.id.button_mlkit);
     } else {
+      binding.formattedScannerInfo.setText(getString(R.string.msg_help_barcode_scanner_info_zxing));
       binding.toggleSelectScanner.check(R.id.button_xzing);
     }
     binding.toggleSelectScanner.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
