@@ -64,7 +64,7 @@
     android:contentDescription="@string/action_top_scroll"
     app:backgroundTint="?attr/colorSurface"
     app:tint="?attr/colorOnSurface"
-    app:rippleColor="@color/highlight"
+    app:rippleColor="?attr/colorSecondaryContainer"
     app:fabCustomSize="40dp"
     app:elevation="1dp"
     tools:targetApi="o" />
