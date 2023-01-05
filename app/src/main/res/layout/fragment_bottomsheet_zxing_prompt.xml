@@ -24,18 +24,16 @@
   android:layout_height="wrap_content"
   android:orientation="vertical">
 
-  <TextView
-    style="@style/Widget.Grocy.TextView.Toolbar.BottomSheet"
-    android:text="One small interruption" />
+  <com.google.android.material.appbar.MaterialToolbar
+    style="@style/Widget.Grocy.Toolbar"
+    app:title="One small interruption" />
 
-  <View
-    style="@style/Widget.Grocy.Divider"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="0dp" />
+  <com.google.android.material.divider.MaterialDivider
+    style="@style/Widget.Grocy.Divider" />
 
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:scrollbars="none"
     android:overScrollMode="ifContentScrolls">
 
@@ -43,7 +41,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:padding="16dp">
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="12dp">
 
       <TextView
         android:id="@+id/text"
@@ -61,21 +62,14 @@
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_ignore"
           style="@style/Widget.Grocy.Button.TextButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/on_background_secondary"
           android:text="@string/action_ignore"
-          app:rippleColor="@color/highlight"
           clickUtil="@{clickUtil}"/>
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/button_settings"
           style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginStart="8dp"
           android:text="@string/title_settings"
-          app:backgroundTint="@color/retro_green_bg_white"
           clickUtil="@{clickUtil}"/>
 
       </LinearLayout>
