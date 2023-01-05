@@ -636,6 +636,7 @@
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
   <string name="subtitle_tap_preparation_mode">Tap here for preparation mode</string>
+  <!-- Context is Label printer -->
   <string name="subtitle_print_label_no">No label</string>
   <!-- Short form for "One label per purchase" -->
   <string name="subtitle_print_label_per_purchase">Per purchase</string>
