@@ -634,6 +634,11 @@
   <string name="subtitle_recipe_due_score">Due score: %1$s</string>
   <string name="subtitle_per_serving">per serving</string>
   <string name="subtitle_tap_preparation_mode">Tap here for preparation mode</string>
+  <string name="subtitle_print_label_no">No label</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Per purchase</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Per unit</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>
