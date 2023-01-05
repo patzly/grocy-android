@@ -38,6 +38,7 @@
     android:overScrollMode="ifContentScrolls">
 
     <LinearLayout
+      android:id="@+id/linear_purchase_prompt_scroll"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"

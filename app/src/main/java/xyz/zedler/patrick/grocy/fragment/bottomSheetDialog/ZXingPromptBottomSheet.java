@@ -19,34 +19,27 @@
 
 package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetZxingPromptBinding;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 
-public class ZXingPromptBottomSheet extends BaseBottomSheet {
+public class ZXingPromptBottomSheet extends BaseBottomSheetDialogFragment {
 
   private final static String TAG = "PurchasePromptBottomSheet";
 
   private FragmentBottomsheetZxingPromptBinding binding;
   private SharedPreferences sharedPrefs;
-
-  @NonNull
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    return new BottomSheetDialog(requireContext(), R.style.Theme_Grocy_BottomSheetDialog);
-  }
 
   @Override
   public View onCreateView(
@@ -88,6 +81,13 @@ public class ZXingPromptBottomSheet extends BaseBottomSheet {
   public void onDismiss(@NonNull DialogInterface dialog) {
     sharedPrefs.edit().putInt(PREF.ZXING_PROMPT, 0).apply();
     super.onDismiss(dialog);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, bottom);
+    binding.linearZxingPromptScroll.setLayoutParams(params);
   }
 
   @NonNull
