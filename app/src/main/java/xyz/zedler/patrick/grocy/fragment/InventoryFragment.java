@@ -19,6 +19,7 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,8 +30,10 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.color.ColorRoles;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentInventoryBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
@@ -50,6 +53,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.FAB;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.InventoryViewModel.InventoryViewModelFactory;
@@ -102,6 +106,14 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     binding.setFragment(this);
     binding.setFormData(viewModel.getFormData());
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
 
@@ -165,6 +177,25 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         viewModel.getFormData().getScannerVisibilityLive()
     );
 
+    ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
+    viewModel.getQuickModeEnabled().observe(
+        getViewLifecycleOwner(), value -> binding.toolbar.setTitleTextColor(
+            value ? roles.getAccent() : ResUtil.getColorAttr(activity, R.attr.colorOnSurface)
+        )
+    );
+    binding.textInputAmount.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    binding.textInputPurchasePrice.setHelperTextColor(ColorStateList.valueOf(roles.getAccent()));
+    viewModel.getFormData().getDueDateErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textDueDate.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+    viewModel.getFormData().getQuantityUnitErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuantityUnit.setTextColor(
+            ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
+        )
+    );
+
     // following lines are necessary because no observers are set in Views
     viewModel.getFormData().getQuantityUnitStockLive().observe(getViewLifecycleOwner(), i -> {
     });
@@ -181,8 +212,8 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   }
 
   private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll_inventory);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_inventory, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_inventory,
