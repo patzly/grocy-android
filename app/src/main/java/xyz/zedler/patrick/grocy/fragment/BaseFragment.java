@@ -275,6 +275,9 @@ public class BaseFragment extends Fragment {
   public void updateBarcodeFormats() {
   }
 
+  public void setMarkAsOpenToggle(boolean markAsOpen) {
+  }
+
   public void startTransaction() {
   }
 

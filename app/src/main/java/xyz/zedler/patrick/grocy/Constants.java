@@ -426,6 +426,7 @@ public final class Constants {
     public final static String DEFAULT_DAYS_FROM_NOW = "default_best_before_days";
     public final static String NUMBER = "number";
     public final static String TEXT = "text";
+    public final static String TEXT_ALTERNATIVE = "text_alt";
     public final static String FILE = "file";
     public final static String LINK = "link";
     public final static String HTML = "html";

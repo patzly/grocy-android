@@ -552,7 +552,7 @@ public class FormDataConsume {
     return valid;
   }
 
-  public String getConfirmationText() {
+  public String getConfirmationText(boolean open) {
     ProductDetails productDetails = productDetailsLive.getValue();
     assert productDetails != null && amountStockLive.getValue() != null
         && openLive.getValue() != null;
@@ -572,7 +572,7 @@ public class FormDataConsume {
       stockLocationName = getString(R.string.subtitle_feature_disabled);
     }
     return application.getString(
-        openLive.getValue()
+        open
             ? R.string.msg_quick_mode_confirm_open
             : R.string.msg_quick_mode_confirm_consume,
         NumUtil.trimAmount(amountRemoved, maxDecimalPlacesAmount),

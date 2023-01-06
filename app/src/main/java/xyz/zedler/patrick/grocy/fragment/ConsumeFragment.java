@@ -377,6 +377,11 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
   }
 
   @Override
+  public void setMarkAsOpenToggle(boolean markAsOpen) {
+    viewModel.getFormData().getOpenLive().setValue(markAsOpen);
+  }
+
+  @Override
   public void startTransaction() {
     viewModel.consumeProduct();
   }
