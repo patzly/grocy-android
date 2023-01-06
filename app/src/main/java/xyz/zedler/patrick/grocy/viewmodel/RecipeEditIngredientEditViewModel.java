@@ -180,7 +180,9 @@ public class RecipeEditIngredientEditViewModel extends BaseViewModel {
         );
         formData.getQuantityUnitsFactorsLive().setValue(unitFactors);
 
-        productLoadedListener.onProductLoaded(product, unitFactors);
+        if (productLoadedListener != null) {
+          productLoadedListener.onProductLoaded(product, unitFactors);
+        }
       } catch (IllegalArgumentException e) {
         showMessage(e.getMessage());
         formData.getQuantityUnitsFactorsLive().setValue(null);
