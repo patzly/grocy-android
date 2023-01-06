@@ -352,12 +352,6 @@ public final class Constants {
     public final static String BARCODE_FORMAT_RSSE = "barcode_format_rsse";  // only ZXing
   }
 
-  public final static class URL {
-
-    public final static String FAQ = "https://github.com/patzly/grocy-android/blob/master/FAQ.md";
-    public final static String HELP = "https://github.com/patzly/grocy-android/blob/master/FAQ.md#user-content-pagetop";
-  }
-
   public final static class DATE {
 
     public final static String NEVER_OVERDUE = "2999-12-31";

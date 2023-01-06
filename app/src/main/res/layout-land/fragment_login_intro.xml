@@ -146,14 +146,14 @@
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> fragment.openHelpWebsite()}"
+              android:onClick="@{() -> activity.showHelpBottomSheet()}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_help}"
               app:icon="@drawable/ic_round_help_outline_anim" />
 
             <com.google.android.material.button.MaterialButton
               style="@style/Widget.Grocy.Button.IconButton"
-              android:onClick="@{() -> fragment.showFeedbackBottomSheet()}"
+              android:onClick="@{() -> activity.showFeedbackBottomSheet()}"
               app:clickUtil="@{clickUtil}"
               app:tooltipText="@{@string/title_feedback}"
               app:icon="@drawable/ic_round_feedback_anim" />

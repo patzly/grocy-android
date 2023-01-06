@@ -123,9 +123,11 @@ public class OverviewStartFragment extends BaseFragment {
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_settings) {
-        navigateDeepLink(getString(R.string.deep_link_settingsFragment));
+        activity.navigateDeepLink(getString(R.string.deep_link_settingsFragment));
+      } else if (id == R.id.action_help) {
+        activity.showHelpBottomSheet();
       } else if (id == R.id.action_about) {
-        navigateDeepLink(getString(R.string.deep_link_aboutFragment));
+        activity.navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());
       } else if (id == R.id.action_changelog) {
