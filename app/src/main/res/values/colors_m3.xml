@@ -58,6 +58,18 @@
   <color name="custom_dirt_40">#695f00</color>
   <color name="custom_dirt_30">#4f4800</color>
 
+  <color name="custom_blue_90">#d3e4ff</color>
+  <color name="custom_blue_70">#72aef8</color>
+  <color name="custom_blue_60">#5694db</color>
+  <color name="custom_blue_40">#1260a4</color>
+  <color name="custom_blue_10">#001c38</color>
+
+  <color name="custom_grey_95">#f5eefa</color>
+  <color name="custom_grey_90">#e7e0ec</color>
+  <color name="custom_grey_80">#cac4d0</color>
+  <color name="custom_grey_60">#938f99</color>
+  <color name="custom_grey_10">#1d1a22</color>
+
   <!-- RED -->
 
   <color name="red_primary_90">#ffdadb</color>

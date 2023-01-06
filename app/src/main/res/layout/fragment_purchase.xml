@@ -669,7 +669,6 @@
                 android:layout_marginBottom="8dp">
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
-                  android:id="@+id/toggle_other_theme"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:paddingStart="0dp"

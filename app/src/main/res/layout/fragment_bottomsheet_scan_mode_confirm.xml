@@ -20,6 +20,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/header"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -66,6 +67,33 @@
       android:paddingBottom="12dp"
       android:clickable="true"
       android:focusable="true">
+
+      <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggle_group_consume_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        app:singleSelection="true"
+        app:selectionRequired="true">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/toggle_consume"
+          style="@style/Widget.Grocy.Button.OutlinedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/action_consume"
+          tools:ignore="TextContrastCheck" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/toggle_open"
+          style="@style/Widget.Grocy.Button.OutlinedButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/action_open"
+          tools:ignore="TextContrastCheck" />
+
+      </com.google.android.material.button.MaterialButtonToggleGroup>
 
       <TextView
         android:id="@+id/text"

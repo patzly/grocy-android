@@ -109,6 +109,7 @@ import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
+import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Language;
@@ -891,6 +892,17 @@ public class MainActivity extends AppCompatActivity {
         new String[]{"New:", "Improved:", "Fixed:"}
     );
     showBottomSheet(new TextBottomSheet(), bundle);
+  }
+
+  public void showHelpBottomSheet() {
+    Bundle bundle = new Bundle();
+    bundle.putInt(Constants.ARGUMENT.TITLE, R.string.title_help);
+    bundle.putInt(Constants.ARGUMENT.FILE, R.raw.help);
+    showBottomSheet(new TextBottomSheet(), bundle);
+  }
+
+  public void showFeedbackBottomSheet() {
+    showBottomSheet(new FeedbackBottomSheet());
   }
 
   public Locale getLocale() {

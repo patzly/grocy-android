@@ -301,7 +301,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Transaction which will be executed:\n\nRemove %1$s %2$s of %3$s from stock\nLocation: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Transaction which will be executed:\n\Mark %1$s %2$s of %3$s as opened\nLocation: %4$s</string>
+  <string name="msg_quick_mode_confirm_open">Transaction which will be executed:\n\nMark %1$s %2$s of %3$s as opened\nLocation: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transaction which will be executed:\n\nTransfer %1$s %2$s of %3$s\nFrom Location: %4$s\nTo Location: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->

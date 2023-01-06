@@ -29,14 +29,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginApiFormBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.viewmodel.LoginApiFormViewModel;
 
 public class LoginApiFormFragment extends BaseFragment {
@@ -85,9 +82,9 @@ public class LoginApiFormFragment extends BaseFragment {
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
       if (id == R.id.action_help) {
-        openHelpWebsite();
+        activity.showHelpBottomSheet();
       } else if (id == R.id.action_feedback) {
-        showFeedbackBottomSheet();
+        activity.showFeedbackBottomSheet();
       } else if (id == R.id.action_website) {
         openGrocyWebsite();
       } else if (id == R.id.action_settings) {
@@ -177,18 +174,7 @@ public class LoginApiFormFragment extends BaseFragment {
     startActivity(intent);
   }
 
-  public void openHelpWebsite() {
-    boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
-    if (!success) {
-      activity.showSnackbar(R.string.error_no_browser);
-    }
-  }
-
   public void openGrocyWebsite() {
     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
-  }
-
-  public void showFeedbackBottomSheet() {
-    activity.showBottomSheet(new FeedbackBottomSheet());
   }
 }

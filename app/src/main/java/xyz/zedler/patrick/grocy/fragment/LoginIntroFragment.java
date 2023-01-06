@@ -28,14 +28,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentLoginIntroBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
-import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LoginIntroFragment extends BaseFragment {
@@ -99,19 +96,8 @@ public class LoginIntroFragment extends BaseFragment {
     }
   }
 
-  public void openHelpWebsite() {
-    boolean success = NetUtil.openURL(activity, Constants.URL.HELP);
-    if (!success) {
-      activity.showSnackbar(R.string.error_no_browser);
-    }
-  }
-
   public void openGrocyWebsite() {
     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_grocy))));
-  }
-
-  public void showFeedbackBottomSheet() {
-    activity.showBottomSheet(new FeedbackBottomSheet());
   }
 
   @Override

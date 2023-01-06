@@ -30,6 +30,8 @@ import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.transition.TransitionManager;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetScanModeConfirmBinding;
 
@@ -41,6 +43,8 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
   private FragmentBottomsheetScanModeConfirmBinding binding;
   private MainActivity activity;
   private ValueAnimator confirmProgressAnimator;
+  private boolean openAction = false;
+  private boolean progressStopped = false;
 
   @Override
   public View onCreateView(
@@ -57,6 +61,35 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
     binding.header.setOnClickListener(v -> hideAndStopProgress());
     binding.container.setOnClickListener(v -> hideAndStopProgress());
+
+    if (args.containsKey(ARGUMENT.ACTION)) {
+      openAction = args.getString(ARGUMENT.ACTION).equals(ACTION.OPEN);
+      binding.toggleGroupConsumeType.setVisibility(View.VISIBLE);
+      updateToggleGroup();
+    } else {
+      binding.toggleGroupConsumeType.setVisibility(View.GONE);
+    }
+
+    if (savedInstanceState != null) {
+      openAction = savedInstanceState.getBoolean("open");
+      progressStopped = savedInstanceState.getBoolean("stopped");
+    }
+
+    binding.toggleConsume.setOnClickListener(v -> {
+      openAction = false;
+      updateToggleGroup();
+      binding.text.setText(openAction
+          ? args.getString(ARGUMENT.TEXT_ALTERNATIVE)
+          : args.getString(ARGUMENT.TEXT));
+    });
+    binding.toggleOpen.setOnClickListener(v -> {
+      openAction = true;
+      updateToggleGroup();
+      binding.text.setText(openAction
+          ? args.getString(ARGUMENT.TEXT_ALTERNATIVE)
+          : args.getString(ARGUMENT.TEXT));
+    });
+
     binding.buttonCancel.setOnClickListener(v -> {
       activity.getCurrentFragment().interruptCurrentProductFlow();
       dismiss();
@@ -66,10 +99,19 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
 
-    String msg = args.getString(Constants.ARGUMENT.TEXT);
-    binding.text.setText(msg);
+    if (args.containsKey(ARGUMENT.ACTION)) {
+      binding.text.setText(openAction
+          ? args.getString(ARGUMENT.TEXT_ALTERNATIVE)
+          : args.getString(ARGUMENT.TEXT));
+    } else {
+      binding.text.setText(args.getString(Constants.ARGUMENT.TEXT));
+    }
 
-    startProgress();
+    if (!progressStopped) {
+      startProgress();
+    } else {
+      binding.progressTimeout.setVisibility(View.GONE);
+    }
 
     setCancelable(false);
 
@@ -89,6 +131,23 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
       confirmProgressAnimator = null;
     }
     super.onDestroyView();
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putBoolean("open", openAction);
+    outState.putBoolean("stopped", progressStopped);
+  }
+
+  private void updateToggleGroup() {
+    if (openAction) {
+      binding.toggleConsume.setChecked(false);
+      binding.toggleOpen.setChecked(true);
+    } else {
+      binding.toggleConsume.setChecked(true);
+      binding.toggleOpen.setChecked(false);
+    }
   }
 
   private void startProgress() {
@@ -114,6 +173,9 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
         if (binding.progressTimeout.getProgress() != binding.progressTimeout.getMax()) {
           return;
         }
+        if (binding.toggleGroupConsumeType.getVisibility() == View.VISIBLE) {
+          activity.getCurrentFragment().setMarkAsOpenToggle(openAction);
+        }
         activity.getCurrentFragment().startTransaction();
         dismiss();
       }
@@ -125,6 +187,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
     confirmProgressAnimator.cancel();
     TransitionManager.beginDelayedTransition((ViewGroup) requireView());
     binding.progressTimeout.setVisibility(View.GONE);
+    progressStopped = true;
   }
 
   @Override

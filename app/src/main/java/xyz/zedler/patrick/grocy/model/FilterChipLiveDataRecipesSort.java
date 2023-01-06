@@ -74,12 +74,15 @@ public class FilterChipLiveDataRecipesSort extends FilterChipLiveData {
   }
 
   private void setFilterText() {
-    setText(application.getString(
-        R.string.property_sort_mode,
-        sortMode.equals(SORT_NAME)
-            ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_score)
-    ));
+    String text;
+    if (sortMode.equals(SORT_NAME)) {
+      text = application.getString(R.string.property_name);
+    } else if (sortMode.equals(SORT_CALORIES)) {
+      text = application.getString(R.string.property_calories);
+    } else {
+      text = application.getString(R.string.property_due_score);
+    }
+    setText(application.getString(R.string.property_sort_mode, text));
   }
 
   public void setValues(int id) {

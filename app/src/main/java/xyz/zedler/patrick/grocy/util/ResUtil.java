@@ -120,6 +120,18 @@ public class ResUtil {
         R.color.custom_dirt_60,
         R.color.custom_dirt_40,
         R.color.custom_dirt_30,
+
+        R.color.custom_blue_90,
+        R.color.custom_blue_70,
+        R.color.custom_blue_60,
+        R.color.custom_blue_40,
+        R.color.custom_blue_10,
+
+        R.color.custom_grey_95,
+        R.color.custom_grey_90,
+        R.color.custom_grey_80,
+        R.color.custom_grey_60,
+        R.color.custom_grey_10,
     };
     HarmonizedColorsOptions options = new HarmonizedColorsOptions.Builder()
         .setColorResourceIds(resIds)

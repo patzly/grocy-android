@@ -36,6 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -60,9 +64,6 @@ import xyz.zedler.patrick.grocy.model.StockEntry;
 import xyz.zedler.patrick.grocy.model.StockLocation;
 import xyz.zedler.patrick.grocy.repository.ConsumeRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil;
 import xyz.zedler.patrick.grocy.util.GrocycodeUtil.Grocycode;
 import xyz.zedler.patrick.grocy.util.NumUtil;
@@ -608,7 +609,16 @@ public class ConsumeViewModel extends BaseViewModel {
 
   public void showConfirmationBottomSheet() {
     Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText());
+    bundle.putString(Constants.ARGUMENT.TEXT, formData.getConfirmationText(false));
+    if (formData.getOpenVisibilityLive().getValue() != null
+        && formData.getOpenVisibilityLive().getValue()) {
+      bundle.putString(ARGUMENT.TEXT_ALTERNATIVE, formData.getConfirmationText(true));
+      bundle.putString(
+          Constants.ARGUMENT.ACTION,
+          formData.getOpenLive().getValue() != null && formData.getOpenLive().getValue()
+              ? ACTION.OPEN : ACTION.CONSUME
+      );
+    }
     showBottomSheet(new QuickModeConfirmBottomSheet(), bundle);
   }
 
