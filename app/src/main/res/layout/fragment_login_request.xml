@@ -67,8 +67,8 @@
 
         <ImageView
           android:id="@+id/image_logo"
-          android:layout_width="80dp"
-          android:layout_height="80dp"
+          android:layout_width="90dp"
+          android:layout_height="90dp"
           android:scaleType="centerCrop"
           android:src="@drawable/ic_round_grocy_anim"
           tools:ignore="ContentDescription" />
@@ -76,7 +76,7 @@
         <com.google.android.material.progressindicator.LinearProgressIndicator
           android:layout_width="140dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
+          android:layout_marginTop="12dp"
           android:indeterminate="true"
           android:visibility="@{viewModel.isLoadingLive ? View.VISIBLE : View.GONE}"
           app:trackColor="?attr/colorSurfaceVariant"
