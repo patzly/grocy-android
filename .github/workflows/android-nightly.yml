@@ -42,6 +42,7 @@ jobs:
     
     - name: Upload artifacts
       uses: pyTooling/Actions/releaser@r0
+      continue-on-error: true
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         rm: true
@@ -60,7 +61,7 @@ jobs:
       with:
         ref: 'feature/mlkit_scanner'
         
-    - name: Replace applicationId
+    - name: Replace applicationId and name
       run: |
         sed -i 's/applicationId "xyz.zedler.patrick.grocy"/applicationId "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
         sed -i 's%@string/app_name%Grocy Nightly%' app/src/main/AndroidManifest.xml
@@ -78,6 +79,7 @@ jobs:
 
     - name: Upload artifacts
       uses: pyTooling/Actions/releaser@r0
+      continue-on-error: true
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         rm: false
