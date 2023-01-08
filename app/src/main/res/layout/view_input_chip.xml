@@ -48,30 +48,38 @@
       android:gravity="center_vertical"
       android:animateLayoutChanges="true">
 
-      <FrameLayout
-        android:id="@+id/frame_input_chip_icon"
+      <LinearLayout
+        android:id="@+id/click_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-        <ImageView
-          android:id="@+id/image_input_chip_icon"
-          android:layout_width="18dp"
-          android:layout_height="18dp"
-          android:src="@drawable/ic_round_filter_list_in_anim"
-          app:tint="?attr/colorOnSurfaceVariant"
-          tools:ignore="ContentDescription" />
+        <FrameLayout
+          android:id="@+id/frame_input_chip_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="4dp">
 
-      </FrameLayout>
+          <ImageView
+            android:id="@+id/image_input_chip_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_round_filter_list_in_anim"
+            app:tint="?attr/colorOnSurfaceVariant"
+            tools:ignore="ContentDescription" />
 
-      <TextView
-        android:id="@+id/text_input_chip"
-        style="@style/TextAppearance.Grocy.LabelLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@color/filter_chip_text_inactive" />
+        </FrameLayout>
+
+        <TextView
+          android:id="@+id/text_input_chip"
+          style="@style/TextAppearance.Grocy.LabelLarge"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          android:textColor="@color/filter_chip_text_inactive" />
+
+      </LinearLayout>
 
       <ImageView
         android:layout_width="18dp"

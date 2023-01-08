@@ -58,7 +58,6 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
   private MasterProductCatBarcodesEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -91,7 +90,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);

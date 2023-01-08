@@ -213,6 +213,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
       binding.textInputPurchaseProduct.setEndIconContentDescription(R.string.action_scan);
       binding.textInputPurchaseProduct.setEndIconOnClickListener(v -> toggleScannerVisibility());
     }
+    binding.barcodeChip.setOnClickListener(v -> {
+
+    });
 
     pluralUtil = new PluralUtil(activity);
     viewModel.getFormData().getShoppingListItemLive().observe(getViewLifecycleOwner(), item -> {

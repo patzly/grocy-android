@@ -25,6 +25,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,7 +47,7 @@ public class InputChip extends LinearLayout {
   private final static String TAG = "InputChip";
 
   private final Context context;
-  private LinearLayout linearLayoutThis;
+  private LinearLayout linearLayoutThis, linearLayoutClick;
   private ImageView imageViewIcon;
   private FrameLayout frameLayoutContainer, frameLayoutIcon;
   private TextView textView;
@@ -135,6 +136,7 @@ public class InputChip extends LinearLayout {
     inflate(context, R.layout.view_input_chip, this);
 
     linearLayoutThis = this;
+    linearLayoutClick = findViewById(R.id.click_container);
     frameLayoutContainer = findViewById(R.id.frame_input_chip_container);
     frameLayoutIcon = findViewById(R.id.frame_input_chip_icon);
     imageViewIcon = findViewById(R.id.image_input_chip_icon);
@@ -159,6 +161,10 @@ public class InputChip extends LinearLayout {
     } else {
       frameLayoutIcon.setVisibility(GONE);
     }
+  }
+
+  public void setOnClickListener(View.OnClickListener listener) {
+    linearLayoutClick.setOnClickListener(listener);
   }
 
   @Override
