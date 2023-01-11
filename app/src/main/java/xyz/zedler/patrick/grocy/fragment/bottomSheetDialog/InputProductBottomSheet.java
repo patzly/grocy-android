@@ -31,6 +31,7 @@ import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetInputProductBinding;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class InputProductBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -102,6 +103,16 @@ public class InputProductBottomSheet extends BaseBottomSheetDialogFragment {
 
   public void setSelectionLive(int selection) {
     selectionLive.setValue(selection);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull
