@@ -150,7 +150,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
 
     // TOOLBAR
 
-    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     boolean isInStock = stockItem.getAmountDouble() > 0;
     MenuCompat.setGroupDividerEnabled(binding.toolbar.getMenu(), true);
     // disable actions if necessary
@@ -195,6 +194,16 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       }
       return false;
     });
+
+    // ACTIONS
+    if (!showActions) {
+      // hide actions when set up with productDetails
+      binding.linearActionContainer.setVisibility(View.GONE);
+      // set info menu
+      binding.toolbar.getMenu().clear();
+      binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
+    }
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
 
     ColorStateList colorSurface3 = ColorStateList.valueOf(
         SurfaceColors.SURFACE_3.getColor(activity)
@@ -259,16 +268,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     } else {
       binding.description.setDialogTitle(R.string.property_description);
       binding.description.setHtml(description);
-    }
-
-    // ACTIONS
-
-    if (!showActions) {
-      // hide actions when set up with productDetails
-      binding.linearActionContainer.setVisibility(View.GONE);
-      // set info menu
-      binding.toolbar.getMenu().clear();
-      binding.toolbar.inflateMenu(R.menu.menu_actions_product_overview_info);
     }
 
     refreshButtonStates();

@@ -16,6 +16,11 @@ jobs:
       uses: actions/checkout@v3
       with:
         ref: 'master'
+    
+    - name: Replace applicationId and name
+      run: |
+        sed -i 's/applicationId "xyz.zedler.patrick.grocy"/applicationId "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
+        sed -i 's%@string/app_name%Grocy Nightly%' app/src/main/AndroidManifest.xml
         
     - name: Set up JDK 11
       uses: actions/setup-java@v3
@@ -37,6 +42,7 @@ jobs:
     
     - name: Upload artifacts
       uses: pyTooling/Actions/releaser@r0
+      continue-on-error: true
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         rm: true
@@ -44,11 +50,21 @@ jobs:
         files: |
           app/build/outputs/apk/debug/*.apk
           app/build/outputs/apk/debug/*.txt
-          
+    
+    - name: Replace applicationId to default for checkout without git commit
+      run: |
+        sed -i 's/applicationId "xyz.zedler.patrick.grocy.nightly"/applicationId "xyz.zedler.patrick.grocy"/' app/build.gradle
+        sed -i 's%Grocy Nightly%@string/app_name%' app/src/main/AndroidManifest.xml
+        
     - name: Checkout branch
       uses: actions/checkout@v3
       with:
         ref: 'feature/mlkit_scanner'
+        
+    - name: Replace applicationId and name
+      run: |
+        sed -i 's/applicationId "xyz.zedler.patrick.grocy"/applicationId "xyz.zedler.patrick.grocy.nightly"/' app/build.gradle
+        sed -i 's%@string/app_name%Grocy Nightly%' app/src/main/AndroidManifest.xml
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -63,6 +79,7 @@ jobs:
 
     - name: Upload artifacts
       uses: pyTooling/Actions/releaser@r0
+      continue-on-error: true
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         rm: false
