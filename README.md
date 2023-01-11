@@ -32,7 +32,7 @@ If you want to try new features right after development, you can download an uns
 * Fast barcode scanning
 * OpenFoodFacts/OpenBeautyFacts implementation
 * Master data editing
-* Dark mode
+* Dark mode and dynamic color support
 * No ads or analytics
 
 ## Compatibility
@@ -47,7 +47,7 @@ This app supports `https` encryption
 
 ## FAQ
 
-Please see [here](https://github.com/patzly/grocy-android/blob/master/FAQ.md) for a list of frequently asked questions.
+Please see the in-app help dialog or the [FAQ](https://github.com/patzly/grocy-android/blob/master/FAQ.md) for a list of frequently asked questions.
 
 ## Contribution
 
@@ -68,7 +68,7 @@ We'd like to thank the developer of grocy, [Bernd Bestel](https://berrnd.de/), w
 
 ## License
 
-Copyright &copy; 2020-2022 Patrick Zedler & Dominic Zedler. All rights reserved.
+Copyright &copy; 2020-2023 Patrick Zedler & Dominic Zedler. All rights reserved.
 
 [GNU General Public License version 3](https://www.gnu.org/licenses/gpl.txt)
 
