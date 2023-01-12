@@ -1,1 +1,1 @@
-Grocy: Self-hosted Groceries Management
+Grocy: Self-hosted Grocery Management
