@@ -30,6 +30,7 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetShoppingListClearBinding;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class ShoppingListClearBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -82,6 +83,16 @@ public class ShoppingListClearBottomSheet extends BaseBottomSheetDialogFragment 
 
   public void setSelectionLive(int selection) {
     selectionLive.setValue(selection);
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

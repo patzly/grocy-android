@@ -811,7 +811,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
     <item name="android:singleLine">true</item>
-    <item name="android:textColor">@color/on_surface</item>
+    <item name="android:textColor">?attr/colorOnSurface</item>
   </style>
 
   <style name="Widget.Grocy.TextView.ListItem.OverLine" parent="Widget.Grocy.TextView.Medium">

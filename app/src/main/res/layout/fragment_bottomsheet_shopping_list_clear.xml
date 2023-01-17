@@ -46,10 +46,14 @@
       android:overScrollMode="ifContentScrolls">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp">
 
         <TextView
           style="@style/Widget.Grocy.TextView"
@@ -59,17 +63,13 @@
           android:text="@string/description_input_product_part2" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:textColor="@color/on_background"
+          style="@style/Widget.Grocy.RadioButton"
           android:text="@string/description_clear_shopping_list_option1"
           android:checked="@{bottomsheet.selectionLive == 1}"
           android:onClick="@{v -> bottomsheet.setSelectionLive(1)}" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:textColor="@color/on_background"
+          style="@style/Widget.Grocy.RadioButton"
           android:text="@string/description_clear_shopping_list_option2"
           android:checked="@{bottomsheet.selectionLive == 2}"
           android:onClick="@{v -> bottomsheet.setSelectionLive(2)}" />
@@ -83,18 +83,12 @@
           <com.google.android.material.button.MaterialButton
             android:id="@+id/button_cancel"
             style="@style/Widget.Grocy.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/action_cancel"
-            android:textColor="@color/on_background_secondary"
-            android:onClick="@{v -> bottomsheet.dismiss()}"
-            app:rippleColor="@color/highlight" />
+            android:onClick="@{v -> bottomsheet.dismiss()}" />
 
           <com.google.android.material.button.MaterialButton
             android:id="@+id/button_proceed"
             style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/action_proceed"
             android:onClick="@{v -> bottomsheet.proceed()}" />
