@@ -47,7 +47,6 @@
   <!-- PRIMARY -->
 
   <color name="primary">@color/white</color>
-  <color name="on_primary">#212121</color>
 
   <!-- SECONDARY -->
 
@@ -57,7 +56,6 @@
 
   <color name="background">@color/white</color>
   <color name="on_background">#000000</color>
-  <color name="on_background_variant">#edeff1</color>
   <color name="on_background_secondary">@color/grey600</color>
 
   <!-- SURFACE -->
@@ -70,9 +68,5 @@
   <color name="filter_chip_background_inactive">@color/grey100</color>
   <color name="filter_chip_stroke_inactive">@color/grey400</color>
   <color name="filter_chip_text_inactive">@color/black</color>
-
-  <!-- HIGHLIGHT -->
-
-  <color name="highlight">#11000000</color>
 
 </resources>

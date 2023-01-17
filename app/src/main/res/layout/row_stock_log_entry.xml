@@ -23,15 +23,16 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="48dp"
+  android:minHeight="72dp"
   android:clickable="true"
   android:focusable="true"
-  android:background="@drawable/bg_list_item"
-  android:paddingTop="10dp"
-  android:paddingBottom="10dp"
+  android:background="@drawable/ripple_list_item_swipeable"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
   android:paddingStart="16dp"
-  android:paddingEnd="20dp"
-  android:gravity="center_vertical">
+  android:paddingEnd="24dp"
+  android:gravity="center_vertical"
+  android:baselineAligned="false">
 
   <TextView
     android:id="@+id/product_name"
@@ -89,8 +90,6 @@
       android:textStyle="italic"/>
 
   </LinearLayout>
-
-
 
   <TextView
     android:id="@+id/transaction_type"
