@@ -20,22 +20,16 @@
 <resources>
 
   <color name="retro_red">#e06a4e</color>
-  <color name="retro_red_fg">#af513a</color>
   <color name="retro_red_bg_black">#ee7e62</color>
 
   <color name="retro_yellow">#deb853</color>
-  <color name="retro_yellow_fg">#ac8f41</color>
   <color name="retro_yellow_bg">#E2C269</color>
-
-  <color name="retro_dirt">#e2d9a2</color>
-  <color name="retro_dirt_fg">#ada47a</color>
 
   <color name="retro_green_fg">#60837a</color>
   <color name="retro_green_bg_black">#98b6a4</color>
   <color name="retro_green_bg_white">#689283</color>
 
   <color name="retro_blue">#5a97aa</color>
-  <color name="retro_blue_fg">#497C8D</color>
   <color name="retro_blue_bg">#96bdc9</color>
 
   <color name="grey100">#f1f3f4</color>
@@ -61,11 +55,9 @@
   <!-- SURFACE -->
 
   <color name="surface">@color/white</color>
-  <color name="on_surface">@color/black</color>
 
   <!-- FILTER CHIPS -->
 
-  <color name="filter_chip_background_inactive">@color/grey100</color>
   <color name="filter_chip_stroke_inactive">@color/grey400</color>
   <color name="filter_chip_text_inactive">@color/black</color>
 
