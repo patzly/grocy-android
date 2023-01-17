@@ -20,18 +20,11 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/container"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="32dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/bg_list_item"
-  android:padding="16dp"
-  android:gravity="center_vertical">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More">
 
   <TextView
     android:id="@+id/notes"
+    style="@style/Widget.Grocy.TextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 

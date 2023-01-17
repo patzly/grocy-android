@@ -37,6 +37,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
 @Deprecated
@@ -342,8 +343,8 @@ public class BottomAppBarRefreshScrollBehavior {
         return;
       }
       int dividerCurrentColor = activity.getWindow().getNavigationBarDividerColor();
-      int dividerTargetColor = ContextCompat.getColor(
-          activity, visible ? R.color.primary : R.color.stroke_secondary
+      int dividerTargetColor = ResUtil.getColorAttr(
+          activity, visible ? android.R.attr.colorBackground : R.attr.colorOutlineVariant
       );
       if (dividerCurrentColor != dividerTargetColor) {
         ValueAnimator valueAnimator = ValueAnimator.ofArgb(

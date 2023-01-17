@@ -52,8 +52,4 @@
 
   <color name="highlight">#11bdbdbd</color>
 
-  <!-- STROKES -->
-
-  <color name="stroke_secondary">#3a3b3e</color>
-
 </resources>

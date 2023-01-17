@@ -75,8 +75,4 @@
 
   <color name="highlight">#11000000</color>
 
-  <!-- STROKES -->
-
-  <color name="stroke_secondary">@color/grey300</color>
-
 </resources>

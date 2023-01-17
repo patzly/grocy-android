@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,8 +173,8 @@ public class StoredPurchaseAdapter extends
     } else {
       holder.binding.container.setClickable(true);
       holder.binding.container.setFocusable(true);
-      holder.binding.container.setBackground(AppCompatResources
-          .getDrawable(holder.binding.container.getContext(), R.drawable.bg_list_item));
+      // TODO: selected ripple or touch-sensitive ripple?
+      holder.binding.container.setBackgroundResource(R.drawable.ripple_list_item_bg);
     }
 
     holder.binding.container.setOnClickListener(view -> listener.onItemRowClicked(item));
