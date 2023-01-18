@@ -210,6 +210,11 @@
 
         </LinearLayout>
 
+
+
+        <com.google.android.material.divider.MaterialDivider
+          style="@style/Widget.Grocy.Divider.Margin" />
+
       </LinearLayout>
 
       <LinearLayout
@@ -217,9 +222,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <com.google.android.material.divider.MaterialDivider
-          style="@style/Widget.Grocy.Divider.Margin" />
 
         <LinearLayout
           android:id="@+id/linear_drawer_recipes"
