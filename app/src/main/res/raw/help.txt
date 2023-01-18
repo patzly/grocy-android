@@ -40,7 +40,7 @@ With this distance, the picture resolution is sometimes too low for the scanning
 
 #### What is ML Kit barcode scanner?
 
-ML Kit is an alternative AI-based barcode scanner which is implemented in the Google Play and GitHub version of our app since v2.0.0, F-Droid doesn't allow closed-source app components and thus we can't offer the same version there. ML Kit is from Google and doesn't make recognition mistakes compared to ZXing (the primary scanner option in our app). Additionaly, you don't have to align the barcode horizontally in your camera because it recognizes barcodes with any orientation. Go to `app settings -> Scanner -> Barcode scanner` to use ML Kit. You can either purchase the required unlock app in Google Play Store (which would make us happy) or you can download the unlock APK on GitHub.
+ML Kit is an alternative AI-based barcode scanner which is implemented in the Google Play and GitHub version of our app since v2.0.0, F-Droid doesn't allow closed-source app components and thus we can't offer the same version there. ML Kit is from Google and doesn't make recognition mistakes compared to ZXing (the primary scanner option in our app). Additionaly, you don't have to align the barcode horizontally in your camera because it recognizes barcodes with any orientation. Go to <b>App settings > Scanner > Choose barcode scanner</b> to use ML Kit. You can either purchase the required unlock app in Google Play Store (which would make us happy) or you can download the unlock APK on GitHub.
 
 #### How can I connect to my instance through Tor Hidden Service or Proxy?
 
