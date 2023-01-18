@@ -516,10 +516,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.divider.MaterialDivider
-              style="@style/Widget.Grocy.Divider.Small"
-              android:layout_marginBottom="16dp" />
-
             <com.google.android.material.card.MaterialCardView
               style="@style/Widget.Grocy.Card.Outlined"
               android:layout_marginStart="@dimen/main_side_margin"
