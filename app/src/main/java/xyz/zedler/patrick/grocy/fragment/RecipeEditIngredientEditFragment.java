@@ -47,6 +47,7 @@ import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientEditViewModel.RecipeEditIngredientEditViewModelFactory;
@@ -118,6 +119,13 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       if (state) return;
       viewModel.setStockQuantityUnit();
     });
+    viewModel.getFormData().getQuantityUnitLive().observe(
+        getViewLifecycleOwner(), value -> binding.textQuantityUnitLabel.setTextColor(
+            ResUtil.getColorAttr(
+                activity, value == null ? R.attr.colorError : R.attr.colorOnSurfaceVariant
+            )
+        )
+    );
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {

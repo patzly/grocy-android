@@ -122,19 +122,19 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(ShoppingListEditFragmentArgs.fromBundle(requireArguments())
-        .getAnimateStart() && savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(true, R.menu.menu_empty);
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_empty, null);
     activity.updateFab(
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        ShoppingListEditFragmentArgs.fromBundle(requireArguments())
+            .getAnimateStart() && savedInstanceState == null,
         () -> viewModel.rescheduleChore()
     );
   }

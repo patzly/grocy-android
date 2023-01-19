@@ -358,10 +358,10 @@
             <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
               <TextView
+                android:id="@+id/text_tare_weight_label"
                 style="@style/Widget.Grocy.TextView.ListItem.OverLine"
                 android:singleLine="false"
-                android:text="@{formData.tareWeightTitleLive}"
-                android:textColor="@{formData.tareWeightErrorLive ? @color/retro_red : @color/on_background_secondary}" />
+                android:text="@{formData.tareWeightTitleLive}" />
 
               <TextView
                 style="@style/Widget.Grocy.TextView.ListItem.Title"

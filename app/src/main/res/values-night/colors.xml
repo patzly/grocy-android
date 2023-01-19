@@ -19,16 +19,8 @@
 
 <resources>
 
-  <color name="retro_green_fg">#98b6a4</color>
-
-  <!-- PRIMARY -->
-
-  <color name="primary">#313235</color>
-
   <!-- BACKGROUND -->
 
-  <color name="background">#1e1f22</color>
-  <color name="on_background">@color/grey100</color>
-  <color name="on_background_secondary">@color/grey600</color>
+  <color name="on_background">#f1f3f4</color>
 
 </resources>

@@ -305,7 +305,7 @@
 
             <LinearLayout
               android:id="@+id/category_quantity_unit"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:animateLayoutChanges="true"
@@ -319,14 +319,14 @@
               <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/title_product_cat_quantity_unit"
-                  android:textColor="@{formData.quantityUnitLive == null ? @color/retro_red : @color/on_background}" />
+                  android:id="@+id/text_quantity_unit_label"
+                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                  android:text="@string/title_product_cat_quantity_unit" />
 
                 <TextView
                   android:id="@+id/quantity_unit"
                   android:text="@{formData.quantityUnitLabelLive}"
-                  style="@style/Widget.Grocy.TextView.ListItem.Description" />
+                  style="@style/Widget.Grocy.TextView.ListItem.Title" />
 
               </LinearLayout>
 

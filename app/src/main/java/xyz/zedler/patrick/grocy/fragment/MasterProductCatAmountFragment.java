@@ -40,6 +40,7 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatAmount;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductCatAmountViewModel;
 
@@ -121,6 +122,14 @@ public class MasterProductCatAmountFragment extends BaseFragment {
         viewModel.setCurrentQueueLoading(null);
       }
     });
+
+    viewModel.getFormData().getTareWeightErrorLive().observe(
+        getViewLifecycleOwner(), value -> binding.textTareWeightLabel.setTextColor(
+            ResUtil.getColorAttr(
+                activity, value == null ? R.attr.colorError : R.attr.colorOnSurfaceVariant
+            )
+        )
+    );
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);

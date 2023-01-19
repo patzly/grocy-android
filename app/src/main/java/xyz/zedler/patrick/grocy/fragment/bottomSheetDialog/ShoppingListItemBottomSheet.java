@@ -46,7 +46,7 @@ public class ShoppingListItemBottomSheet extends BaseBottomSheetDialogFragment {
 
   @Override
   public View onCreateView(
-      LayoutInflater inflater,
+      @NonNull LayoutInflater inflater,
       ViewGroup container,
       Bundle savedInstanceState
   ) {

@@ -156,13 +156,12 @@ public class StoredPurchasesFragment extends BaseFragment
     }
 
     // UPDATE UI
-    activity.getScrollBehaviorOld().setUpScroll(binding.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        false,
-        R.menu.menu_empty,
-        null
-    );
+
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty, null);
   }
 
   public void clearInputFocus() {

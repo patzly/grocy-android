@@ -19,37 +19,8 @@
 
 <resources>
 
-  <color name="retro_red">#e06a4e</color>
-  <color name="retro_red_bg_black">#ee7e62</color>
-
-  <color name="retro_yellow">#deb853</color>
-  <color name="retro_yellow_bg">#E2C269</color>
-
-  <color name="retro_green_fg">#60837a</color>
-  <color name="retro_green_bg_black">#98b6a4</color>
-  <color name="retro_green_bg_white">#689283</color>
-
-  <color name="retro_blue">#5a97aa</color>
-  <color name="retro_blue_bg">#96bdc9</color>
-
-  <color name="grey100">#f1f3f4</color>
-  <color name="grey300">#dadce0</color>
-  <color name="grey400">#bdc1c6</color>
-  <color name="grey600">#80868b</color>
-  <color name="grey700">#5f6368</color>
-
-  <!-- PRIMARY -->
-
-  <color name="primary">@color/white</color>
-
-  <!-- SECONDARY -->
-
-  <color name="secondary">@color/retro_green_fg</color>
-
   <!-- BACKGROUND -->
 
-  <color name="background">@color/white</color>
   <color name="on_background">#000000</color>
-  <color name="on_background_secondary">@color/grey600</color>
 
 </resources>

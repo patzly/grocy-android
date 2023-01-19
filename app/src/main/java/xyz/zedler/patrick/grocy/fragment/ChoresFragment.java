@@ -241,12 +241,12 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI();
-  }
+    // UPDATE UI
 
-  private void updateUI() {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_tasks, this::onMenuItemClick);
   }
 

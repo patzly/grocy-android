@@ -38,14 +38,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:minHeight="?android:actionBarSize"
-      android:background="@color/primary"
       android:layout_alignParentTop="true"
       android:orientation="vertical"
       android:animateLayoutChanges="true"
@@ -211,18 +210,16 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/retro_red_bg_black"
+        android:background="?attr/colorError"
         android:gravity="center"
-        android:alpha="0.9"
         android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
 
         <TextView
           style="@style/Widget.Grocy.TextView.OfflineIndicator"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="6dp"
-          android:layout_marginBottom="6dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
           android:text="@string/error_offline" />
 
       </LinearLayout>

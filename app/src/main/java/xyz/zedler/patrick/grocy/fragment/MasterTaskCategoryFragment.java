@@ -153,14 +153,11 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     }
 
     // UPDATE UI
-    updateUI((getArguments() == null
-        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-        && savedInstanceState == null);
-  }
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         editTaskCategory != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
@@ -170,7 +167,9 @@ public class MasterTaskCategoryFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        (getArguments() == null
+            || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+            && savedInstanceState == null,
         this::saveTaskCategory
     );
   }
