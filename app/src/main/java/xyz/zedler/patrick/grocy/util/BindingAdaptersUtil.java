@@ -30,13 +30,13 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.MutableLiveData;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.List;
 import xyz.zedler.patrick.grocy.adapter.MatchProductsArrayAdapter;
 import xyz.zedler.patrick.grocy.model.Product;
-import xyz.zedler.patrick.grocy.view.ActionButton;
 import xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout;
 
 public class BindingAdaptersUtil {
@@ -152,10 +152,10 @@ public class BindingAdaptersUtil {
       if (clickUtil != null && clickUtil.isDisabled()) {
         return;
       }
-      if (iconToAnimate instanceof ActionButton && ((ActionButton) view).hasAnimatable()) {
-        ((ActionButton) iconToAnimate).startIconAnimation();
-      } else if (view instanceof ActionButton && ((ActionButton) view).hasAnimatable()) {
-        ((ActionButton) view).startIconAnimation();
+      if (iconToAnimate instanceof MaterialButton) {
+        ViewUtil.startIcon(((MaterialButton) iconToAnimate).getIcon());
+      } else if (view instanceof MaterialButton) {
+        ViewUtil.startIcon(((MaterialButton) view).getIcon());
       } else if (iconToAnimate instanceof ImageView) {
         ViewUtil.startIcon(iconToAnimate);
       }

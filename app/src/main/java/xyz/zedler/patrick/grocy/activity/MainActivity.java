@@ -141,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
   private BottomScrollBehavior scrollBehavior;
   private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
-
-  public boolean isScrollRestored = false;
   private boolean debug;
 
   @Override

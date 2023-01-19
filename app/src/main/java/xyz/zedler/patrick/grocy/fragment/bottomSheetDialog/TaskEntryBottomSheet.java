@@ -23,25 +23,25 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
+import com.google.android.material.button.MaterialButton;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -139,14 +139,14 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
   public void onTouchDelete(View view, MotionEvent event) {
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-      showAndStartProgress(view);
+      showAndStartProgress((MaterialButton) view);
     } else if (event.getAction() == MotionEvent.ACTION_UP
         || event.getAction() == MotionEvent.ACTION_CANCEL) {
       hideAndStopProgress();
     }
   }
 
-  private void showAndStartProgress(View buttonView) {
+  private void showAndStartProgress(MaterialButton button) {
     assert getView() != null;
     TransitionManager.beginDelayedTransition((ViewGroup) getView());
     progressConfirm.setVisibility(View.VISIBLE);
@@ -173,8 +173,7 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
         if (currentProgress == progressConfirm.getMax()) {
           TransitionManager.beginDelayedTransition((ViewGroup) requireView());
           progressConfirm.setVisibility(View.GONE);
-          ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
-          ((Animatable) buttonImage.getDrawable()).start();
+          ViewUtil.startIcon(button.getIcon());
           activity.getCurrentFragment().deleteTask(task);
           dismiss();
           return;

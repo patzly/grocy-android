@@ -58,6 +58,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.elevation.SurfaceColors;
 import java.util.Arrays;
@@ -427,14 +428,14 @@ public class ViewUtil {
 
     public void onTouchDelete(View view, MotionEvent event) {
       if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        showAndStartProgress(view, null);
+        showAndStartProgress((MaterialButton) view, null);
       } else if (event.getAction() == MotionEvent.ACTION_UP
           || event.getAction() == MotionEvent.ACTION_CANCEL) {
         hideAndStopProgress();
       }
     }
 
-    public void showAndStartProgress(View buttonView, @Nullable Object objectOptional) {
+    public void showAndStartProgress(MaterialButton button, @Nullable Object objectOptional) {
       TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
       progressConfirm.setVisibility(View.VISIBLE);
       int startValue = 0;
@@ -460,10 +461,7 @@ public class ViewUtil {
           if (currentProgress == progressConfirm.getMax()) {
             TransitionManager.beginDelayedTransition((ViewGroup) progressConfirm.getParent());
             progressConfirm.setVisibility(View.GONE);
-            ImageView buttonImage = buttonView.findViewById(R.id.image_action_button);
-            if (buttonImage != null) {
-              ((Animatable) buttonImage.getDrawable()).start();
-            }
+            ViewUtil.startIcon(button.getIcon());
             onConfirmedListener.onConfirmed(objectOptional);
             return;
           }
