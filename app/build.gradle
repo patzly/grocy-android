@@ -131,5 +131,5 @@ dependencies {
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     //noinspection GradleDependency
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.0'
 }
