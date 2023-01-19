@@ -43,6 +43,7 @@ import xyz.zedler.patrick.grocy.adapter.StockLogEntryAdapter.StockLogEntryAdapte
 import xyz.zedler.patrick.grocy.adapter.StockPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentStockJournalBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -69,6 +70,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
   private InfoFullscreenHelper infoFullscreenHelper;
   private AlertDialog dialog;
   private StockLogEntry dialogEntry;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -107,6 +109,14 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -232,13 +242,11 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
     // UPDATE UI
 
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        false,
-        R.menu.menu_empty,
-        this::onMenuItemClick
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
     );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty, this::onMenuItemClick);
   }
 
   @Override
@@ -295,6 +303,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
       return;
     }
     viewModel.setOfflineLive(!isOnline);
+    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }
