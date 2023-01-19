@@ -28,24 +28,15 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.BulletSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
@@ -92,7 +83,7 @@ public class ResUtil {
   }
 
   public static void applyColorHarmonization(Context context) {
-    int[] resIds = new int[] {
+    int[] resIds = new int[]{
         R.color.logo_yellow,
         R.color.logo_green,
         R.color.logo_red,
@@ -142,7 +133,7 @@ public class ResUtil {
   public static ColorRoles getHarmonizedRoles(Context context, @ColorRes int resId) {
     return MaterialColors.getColorRoles(
         context,
-        MaterialColors.harmonizeWithPrimary(context,  ContextCompat.getColor(context, resId))
+        MaterialColors.harmonizeWithPrimary(context, ContextCompat.getColor(context, resId))
     );
   }
 
@@ -193,57 +184,6 @@ public class ResUtil {
     }
   }
 
-  @Deprecated
-  public static CharSequence getBulletList(
-      Context context, String prefixToReplace, @Nullable String text, String... highlights
-  ) {
-    if (context == null || text == null) {
-      return null;
-    }
-
-    // BulletSpan doesn't support RTL, use original text instead
-    int direction = context.getResources().getConfiguration().getLayoutDirection();
-    if (direction == View.LAYOUT_DIRECTION_RTL) {
-      String formatted = text;
-      for (String highlight : highlights) {
-        formatted = formatted.replaceAll(highlight, "<b>" + highlight + "</b>");
-        formatted = formatted.replaceAll("\n", "<br/>");
-      }
-      return Html.fromHtml(formatted);
-    }
-
-    int color = ContextCompat.getColor(context, R.color.on_background);
-    int margin = UiUtil.spToPx(context, 6);
-
-    String[] lines = text.split("\n");
-    SpannableStringBuilder builder = new SpannableStringBuilder();
-    for (int i = 0; i < lines.length; i++) {
-      String line = lines[i] + (i < lines.length - 1 ? "\n" : "");
-      if (!line.startsWith(prefixToReplace)) {
-        builder.append(Html.fromHtml(line.replaceAll("\n", "<br/>")));
-        continue;
-      }
-      line = line.substring(prefixToReplace.length());
-
-      BulletSpan bulletSpan;
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        bulletSpan = new BulletSpan(margin, color, UiUtil.spToPx(context, 2));
-      } else {
-        bulletSpan = new BulletSpan(margin, color);
-      }
-
-      for (String highlight : highlights) {
-        line = line.replaceAll(highlight, "<b>" + highlight + "</b>");
-        line = line.replaceAll("\n", "<br/>");
-      }
-
-      Spannable spannable = new SpannableString(Html.fromHtml(line));
-      spannable.setSpan(bulletSpan, 0, spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-      builder.append(spannable);
-    }
-    return builder;
-  }
-
   public static Bitmap getBitmapFromDrawable(Context context, @DrawableRes int resId) {
     Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
     if (drawable != null) {
@@ -270,28 +210,30 @@ public class ResUtil {
   ) {
     int count = pendingPurchases != null ? pendingPurchases.size() : 0;
     view.setImageDrawable(new BitmapDrawable(
-            view.getResources(),
-            getFromDrawableWithNumber(
-                    view.getContext(),
-                    R.drawable.ic_round_shopping_cart,
-                    count,
-                    7.3f,
-                    -1.5f,
-                    8
-            )
+        view.getResources(),
+        getFromDrawableWithNumber(
+            view.getContext(),
+            R.drawable.ic_round_shopping_cart,
+            count,
+            7.3f,
+            -1.5f,
+            8
+        )
     ));
   }
 
   public static Bitmap getFromDrawableWithNumber(
-          Context context,
-          @DrawableRes int resId,
-          int number,
-          float textSize,
-          float textOffsetX,
-          float textOffsetY
+      Context context,
+      @DrawableRes int resId,
+      int number,
+      float textSize,
+      float textOffsetX,
+      float textOffsetY
   ) {
     Bitmap bitmap = getBitmapFromDrawable(context, resId);
-    if(bitmap == null) return null;
+    if (bitmap == null) {
+      return null;
+    }
     // make mutable
     bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 
@@ -305,19 +247,19 @@ public class ResUtil {
 
     Rect bounds = new Rect();
     paint.getTextBounds(
-            String.valueOf(number),
-            0,
-            String.valueOf(number).length(),
-            bounds
+        String.valueOf(number),
+        0,
+        String.valueOf(number).length(),
+        bounds
     );
     int x = (bitmap.getWidth() - bounds.width()) / 2;
     int y = (bitmap.getHeight() + bounds.height()) / 2;
 
     canvas.drawText(
-            String.valueOf(number),
-            x + UiUtil.dpToPx(context, textOffsetX),
-            y - UiUtil.dpToPx(context, textOffsetY),
-            paint
+        String.valueOf(number),
+        x + UiUtil.dpToPx(context, textOffsetX),
+        y - UiUtil.dpToPx(context, textOffsetY),
+        paint
     );
     return bitmap;
   }
