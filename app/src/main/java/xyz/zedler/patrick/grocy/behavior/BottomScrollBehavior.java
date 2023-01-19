@@ -104,9 +104,9 @@ public class BottomScrollBehavior {
         return; // no translation change
       }
       bottomBarTranslationY = translationY;
-      if (fabMain.isOrWillBeShown() && bottomAppBar.getY() > fabMain.getTop() ) {
+      if (fabMain.isOrWillBeShown() && bottomAppBar.getY() > fabMain.getY()) {
         fabTopScroll.setTranslationY(
-            fabMain.getTop() - fabMainMarginTop - fabTopScroll.getBottom()
+            fabMain.getY() - fabMainMarginTop - fabTopScroll.getBottom()
         );
       } else if (bottomAppBar.getY() > insetBottomY) {
         fabTopScroll.setTranslationY(
