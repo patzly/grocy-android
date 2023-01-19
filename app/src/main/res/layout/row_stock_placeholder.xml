@@ -17,35 +17,38 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
+
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="64dp"
-  android:padding="16dp">
+  android:minHeight="72dp"
+  android:clickable="true"
+  android:focusable="true"
+  android:background="@drawable/ripple_list_item_swipeable"
+  android:paddingStart="16dp"
+  android:paddingEnd="24dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp"
+  android:gravity="center_vertical"
+  android:baselineAligned="false">
 
-  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+  <TextView
+    style="@style/Widget.Grocy.TextView.ListItem.Title"
+    android:layout_width="150dp"
+    android:singleLine="true"
+    android:layout_marginEnd="11dp"
+    android:background="@drawable/bg_placeholder_text"
+    android:backgroundTint="?attr/colorSurfaceVariant" />
 
-    <TextView
-      style="@style/Widget.Grocy.TextView.ListItem.Title"
-      android:layout_width="150dp"
-      android:singleLine="true"
-      android:layout_gravity="start|center_vertical"
-      android:background="@drawable/bg_placeholder_text"
-      android:backgroundTint="?attr/colorSurfaceVariant" />
-
-    <TextView
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="100dp"
-      android:layout_marginTop="4dp"
-      android:minHeight="20dp"
-      android:singleLine="true"
-      android:layout_gravity="start|center_vertical"
-      android:background="@drawable/bg_placeholder_text"
-      android:backgroundTint="?attr/colorSurfaceVariant" />
-
-  </LinearLayout>
+  <TextView
+    android:id="@+id/text_amount"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
+    android:layout_width="100dp"
+    android:layout_marginTop="4dp"
+    android:singleLine="true"
+    android:background="@drawable/bg_placeholder_text"
+    android:backgroundTint="?attr/colorSurfaceVariant" />
 
 </LinearLayout>

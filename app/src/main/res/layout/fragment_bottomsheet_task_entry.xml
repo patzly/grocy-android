@@ -43,13 +43,11 @@
         app:title="@string/title_task_entry"
         app:menu="@menu/menu_task_entry" />
 
-      <xyz.zedler.patrick.grocy.view.ActionButton
+      <com.google.android.material.button.MaterialButton
         android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Widget.Grocy.Button.IconButton"
         android:layout_gravity="end|center_vertical"
-        app:icon="@drawable/ic_round_delete_anim"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        app:icon="@drawable/ic_round_delete_anim" />
 
     </LinearLayout>
 
