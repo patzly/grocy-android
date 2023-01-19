@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -39,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -46,7 +46,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Store;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -109,12 +108,6 @@ public class MasterStoreFragment extends BaseFragment {
     binding.frameMasterStoreCancel.setOnClickListener(v -> activity.onBackPressed());
 
     // swipe refresh
-    binding.swipeMasterStore.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipeMasterStore.setColorSchemeColors(
-        ContextCompat.getColor(activity, R.color.secondary)
-    );
     binding.swipeMasterStore.setOnRefreshListener(this::refresh);
 
     // name

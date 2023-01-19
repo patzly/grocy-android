@@ -96,8 +96,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 

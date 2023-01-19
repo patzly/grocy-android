@@ -52,13 +52,4 @@
   <color name="on_background">#000000</color>
   <color name="on_background_secondary">@color/grey600</color>
 
-  <!-- SURFACE -->
-
-  <color name="surface">@color/white</color>
-
-  <!-- FILTER CHIPS -->
-
-  <color name="filter_chip_stroke_inactive">@color/grey400</color>
-  <color name="filter_chip_text_inactive">@color/black</color>
-
 </resources>

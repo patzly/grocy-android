@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/filter_chip_text_inactive" />
+            android:textColor="?attr/colorOnSurface" />
 
         </com.google.android.material.card.MaterialCardView>
 

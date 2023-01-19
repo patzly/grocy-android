@@ -192,7 +192,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_gravity="center_vertical"
-            android:background="@color/filter_chip_stroke_inactive"/>
+            android:background="?attr/colorOutlineVariant"/>
 
           <xyz.zedler.patrick.grocy.view.FilterChip
             android:layout_width="wrap_content"
@@ -232,8 +232,6 @@
       android:layout_below="@id/app_bar"
       android:animateLayoutChanges="true"
       app:transitionTypeChanging="@{true}"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
