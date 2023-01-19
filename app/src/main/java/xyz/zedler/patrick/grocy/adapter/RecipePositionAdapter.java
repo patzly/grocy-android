@@ -44,6 +44,7 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class RecipePositionAdapter extends
     RecyclerView.Adapter<RecipePositionAdapter.ViewHolder> {
@@ -171,6 +172,9 @@ public class RecipePositionAdapter extends
     }
 
     // CONTAINER
+    holder.binding.linearRecipePositionContainer.setBackground(
+        ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context)
+    );
     holder.binding.linearRecipePositionContainer.setOnClickListener(
         view -> listener.onItemRowClicked(recipePosition, position)
     );
