@@ -23,12 +23,11 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/background">
+  android:background="?android:attr/colorBackground">
 
   <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="@color/primary">
+    android:layout_height="?attr/actionBarSize">
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -114,7 +113,6 @@
               android:id="@+id/edit_text_master_location_name"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:textColor="@color/on_background"
               android:inputType="text|textCapSentences|textNoSuggestions"
               android:imeOptions="actionDone" />
 
@@ -143,7 +141,6 @@
               android:id="@+id/edit_text_master_location_description"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:textColor="@color/on_background"
               android:inputType="text|textCapSentences|textMultiLine" />
 
           </com.google.android.material.textfield.TextInputLayout>

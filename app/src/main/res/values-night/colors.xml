@@ -19,25 +19,8 @@
 
 <resources>
 
-  <color name="retro_green_fg">#98b6a4</color>
-
-  <!-- PRIMARY -->
-
-  <color name="primary">#313235</color>
-
-  <!-- BACKGROUND -->
-
-  <color name="background">#1e1f22</color>
-  <color name="on_background">@color/grey100</color>
-  <color name="on_background_secondary">@color/grey600</color>
-
-  <!-- SURFACE -->
-
-  <color name="surface">#303030</color>
-
-  <!-- FILTER CHIPS -->
-
-  <color name="filter_chip_stroke_inactive">@color/grey700</color>
-  <color name="filter_chip_text_inactive">@color/white</color>
+  <color name="logo_yellow">@color/custom_yellow_50</color>
+  <color name="logo_green">@color/custom_green_50</color>
+  <color name="logo_red">@color/custom_red_35</color>
 
 </resources>

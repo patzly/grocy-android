@@ -227,24 +227,21 @@ public class TasksFragment extends BaseFragment implements
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(binding.recycler);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
-    activity.updateBottomAppBar(
-        true,
-        R.menu.menu_tasks,
-        this::onMenuItemClick
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
     );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(true, R.menu.menu_tasks, this::onMenuItemClick);
     activity.updateFab(
         R.drawable.ic_round_add_anim,
         R.string.action_add,
         Constants.FAB.TAG.ADD,
-        animated,
-        () -> navigate(TasksFragmentDirections
-            .actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE))
+        savedInstanceState == null,
+        () -> activity.navigateFragment(
+            TasksFragmentDirections.actionTasksFragmentToTaskEntryEditFragment(ACTION.CREATE)
+        )
     );
   }
 

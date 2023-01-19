@@ -45,6 +45,8 @@ import xyz.zedler.patrick.grocy.util.AmountUtil;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -191,6 +193,7 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
       binding.purchasedDate.setVisibility(View.GONE);
     }
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_consume) {
         activity.getCurrentFragment().performAction(ACTION.CONSUME, stockEntry);
@@ -214,6 +217,16 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
     if (stockEntry.getOpen() == 1 || product.getEnableTareWeightHandlingBoolean()) {
       binding.toolbar.getMenu().findItem(R.id.action_open).setVisible(false);
     }
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

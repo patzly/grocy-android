@@ -33,21 +33,18 @@
       type="xyz.zedler.patrick.grocy.fragment.StockJournalFragment" />
   </data>
 
-  <RelativeLayout
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:minHeight="?attr/actionBarSize"
-      android:background="@color/primary"
-      android:layout_alignParentTop="true"
       android:orientation="vertical"
       android:animateLayoutChanges="true"
       transitionTypeChanging="@{true}">
@@ -62,40 +59,14 @@
           android:layout_height="?attr/actionBarSize"
           android:gravity="center_vertical"
           android:orientation="horizontal"
-          android:baselineAligned="false">
+          android:baselineAligned="false"
+          android:visibility="gone">
 
-          <FrameLayout
-            android:id="@+id/frame_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="20dp"
-            android:background="?attr/actionBarItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:contentDescription="@string/action_back"
-            android:tooltipText="@string/action_back"
-            android:focusable="true"
-            tools:targetApi="o"
-            android:onClick="@{() -> activity.navigateUp()}">
-
-            <ImageView
-              android:layout_width="24dp"
-              android:layout_height="24dp"
-              android:layout_gravity="center"
-              android:importantForAccessibility="no"
-              android:src="@drawable/ic_round_arrow_back" />
-
-          </FrameLayout>
-
-          <TextView
-            android:id="@+id/text_title"
-            style="@style/Widget.Grocy.TextView.Toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:ellipsize="end"
-            android:text="@string/title_stock_journal" />
+          <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_default"
+            style="@style/Widget.Grocy.Toolbar.Back"
+            app:title="@string/title_stock_journal"
+            app:titleCentered="true" />
 
         </LinearLayout>
 
@@ -105,7 +76,7 @@
           android:layout_height="wrap_content"
           android:minHeight="?attr/actionBarSize"
           android:orientation="vertical"
-          android:visibility="gone">
+          android:visibility="visible">
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -118,7 +89,7 @@
               android:layout_width="48dp"
               android:layout_height="48dp"
               android:layout_marginStart="4dp"
-              android:layout_marginEnd="20dp"
+              android:layout_marginEnd="8dp"
               android:background="?attr/actionBarItemBackground"
               android:clickable="true"
               android:gravity="center"
@@ -129,9 +100,7 @@
               android:onClick="@{() -> fragment.dismissSearch()}">
 
               <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
+                style="@style/Widget.Grocy.ImageView.Icon.Navigation"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_round_close" />
 
@@ -144,7 +113,7 @@
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:layout_marginStart="0dp"
-              android:layout_marginEnd="0dp"
+              android:layout_marginEnd="56dp"
               app:endIconMode="clear_text">
 
               <com.google.android.material.textfield.TextInputEditText
@@ -155,7 +124,6 @@
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
                 android:singleLine="true"
-                android:textColor="@color/on_background"
                 android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
                 app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}" />
 
@@ -170,18 +138,16 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/retro_red_bg_black"
+        android:background="?attr/colorError"
         android:gravity="center"
-        android:alpha="0.9"
         android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
 
         <TextView
           style="@style/Widget.Grocy.TextView.OfflineIndicator"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="6dp"
-          android:layout_marginBottom="6dp"
+          android:layout_marginTop="4dp"
+          android:layout_marginBottom="4dp"
           android:text="@string/error_offline" />
 
       </LinearLayout>
@@ -193,11 +159,9 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:overScrollMode="never"
-      android:layout_below="@id/app_bar"
+      android:layout_marginTop="?attr/actionBarSize"
       android:animateLayoutChanges="true"
       app:transitionTypeChanging="@{true}"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -211,8 +175,8 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:paddingTop="8dp"
-          android:paddingBottom="120dp"
-          android:overScrollMode="never"
+          android:paddingBottom="@dimen/global_scroll_bottom_padding"
+          android:overScrollMode="ifContentScrolls"
           android:clipToPadding="false"
           android:layoutAnimation="@anim/recycler_layout"
           android:scrollbarStyle="outsideOverlay"/>
@@ -221,6 +185,6 @@
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-  </RelativeLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

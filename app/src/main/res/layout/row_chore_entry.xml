@@ -73,14 +73,12 @@
 
       <ImageView
         android:id="@+id/image_reschedule"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        style="@style/Widget.Grocy.ImageView.Icon"
         android:layout_marginStart="12dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_round_schedule"
         android:visibility="gone"
-        tools:ignore="ContentDescription"
-        app:tint="@color/on_background_secondary" />
+        tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
@@ -99,14 +97,12 @@
 
       <ImageView
         android:id="@+id/image_reassign"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        style="@style/Widget.Grocy.ImageView.Icon"
         android:layout_marginStart="12dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_round_swap_horiz"
         android:visibility="gone"
-        tools:ignore="ContentDescription"
-        app:tint="@color/on_background_secondary" />
+        tools:ignore="ContentDescription" />
 
     </LinearLayout>
 

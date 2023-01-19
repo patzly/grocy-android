@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,6 +39,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.databinding.FragmentMasterTaskCategoryBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
-import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -114,12 +113,6 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     binding.frameCancel.setOnClickListener(v -> activity.onBackPressed());
 
     // swipe refresh
-    binding.swipe.setProgressBackgroundColorSchemeColor(
-        ContextCompat.getColor(activity, R.color.surface)
-    );
-    binding.swipe.setColorSchemeColors(
-        ContextCompat.getColor(activity, R.color.secondary)
-    );
     binding.swipe.setOnRefreshListener(this::refresh);
 
     // name
@@ -160,14 +153,11 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     }
 
     // UPDATE UI
-    updateUI((getArguments() == null
-        || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
-        && savedInstanceState == null);
-  }
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(false);
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         editTaskCategory != null ? R.menu.menu_master_item_edit : R.menu.menu_empty,
@@ -177,7 +167,9 @@ public class MasterTaskCategoryFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        (getArguments() == null
+            || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
+            && savedInstanceState == null,
         this::saveTaskCategory
     );
   }

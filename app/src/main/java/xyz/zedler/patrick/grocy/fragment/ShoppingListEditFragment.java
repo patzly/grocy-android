@@ -125,13 +125,12 @@ public class ShoppingListEditFragment extends BaseFragment {
       );
     }
 
-    updateUI(ShoppingListEditFragmentArgs.fromBundle(requireArguments())
-        .getAnimateStart() && savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         startUpShoppingList != null && startUpShoppingList.getId() != 1
@@ -142,7 +141,8 @@ public class ShoppingListEditFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        ShoppingListEditFragmentArgs.fromBundle(requireArguments())
+            .getAnimateStart() && savedInstanceState == null,
         () -> {
           clearInputFocus();
           viewModel.saveShoppingList();

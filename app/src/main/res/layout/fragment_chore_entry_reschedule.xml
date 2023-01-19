@@ -38,12 +38,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/primary">
+      android:layout_height="?attr/actionBarSize">
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -94,8 +93,6 @@
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never"
-      app:progressBackgroundColor="@{@color/surface}"
-      app:progressForegroundColor="@{@color/secondary}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -228,8 +225,7 @@
               android:layout_marginEnd="16dp"
               android:layout_marginTop="16dp"
               android:text="@string/action_reset"
-              android:onClick="@{() -> viewModel.resetReschedule()}"
-              app:backgroundTint="@color/retro_green_bg_white" />
+              android:onClick="@{() -> viewModel.resetReschedule()}" />
 
           </LinearLayout>
 

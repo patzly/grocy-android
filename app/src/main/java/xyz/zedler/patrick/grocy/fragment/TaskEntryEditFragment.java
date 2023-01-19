@@ -147,12 +147,12 @@ public class TaskEntryEditFragment extends BaseFragment {
       viewModel.loadFromDatabase(true);
     }
 
-    updateUI(savedInstanceState == null);
-  }
+    // UPDATE UI
 
-  private void updateUI(boolean animated) {
-    activity.getScrollBehaviorOld().setUpScroll(R.id.scroll);
-    activity.getScrollBehaviorOld().setHideOnScroll(true);
+    /*activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.recycler, true, true
+    );*/
+    activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
         viewModel.isActionEdit()
@@ -164,7 +164,7 @@ public class TaskEntryEditFragment extends BaseFragment {
         R.drawable.ic_round_backup,
         R.string.action_save,
         Constants.FAB.TAG.SAVE,
-        animated,
+        savedInstanceState == null,
         () -> {
           if (!viewModel.getFormData().isNameValid()) {
             clearInputFocus();

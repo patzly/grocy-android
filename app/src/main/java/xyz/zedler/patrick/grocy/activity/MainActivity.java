@@ -74,7 +74,6 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
@@ -104,7 +103,6 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
-import xyz.zedler.patrick.grocy.behavior.BottomAppBarRefreshScrollBehavior;
 import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
@@ -141,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
   private Locale locale;
   private NavController navController;
   private BroadcastReceiver networkReceiver;
-  private BottomAppBarRefreshScrollBehavior scrollBehaviorOld;
   private BottomScrollBehavior scrollBehavior;
   private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
@@ -353,11 +350,6 @@ public class MainActivity extends AppCompatActivity {
         this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
     );
 
-    // TODO: remove old behavior
-    scrollBehaviorOld = new BottomAppBarRefreshScrollBehavior(this);
-    scrollBehaviorOld.setUpBottomAppBar(new BottomAppBar(this));
-    //scrollBehavior.setUpTopScroll(R.id.fab_main_scroll);
-
     Runnable onSuccessConfigLoad = () -> {
       String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
       if (version == null || version.isEmpty()) {
@@ -460,11 +452,6 @@ public class MainActivity extends AppCompatActivity {
 
   public BottomScrollBehavior getScrollBehavior() {
     return scrollBehavior;
-  }
-
-  @Deprecated
-  public BottomAppBarRefreshScrollBehavior getScrollBehaviorOld() {
-    return scrollBehaviorOld;
   }
 
   public void updateBottomAppBar(
