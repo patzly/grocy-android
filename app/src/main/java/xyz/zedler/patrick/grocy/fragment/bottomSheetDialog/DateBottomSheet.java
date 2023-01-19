@@ -39,7 +39,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.button.MaterialButton;
 import java.lang.reflect.Field;
@@ -58,6 +57,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetDateBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.FormDataMasterProductCatDueDate;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
@@ -449,7 +449,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
         .getChildAt(0);
     if (!(linearLayoutPickersView instanceof LinearLayout)) return;
 
-    @ColorInt int color = ContextCompat.getColor(requireContext(), R.color.on_background);
+    @ColorInt int color = ResUtil.getColorAttr(requireContext(), R.attr.colorOnBackground);
 
     LinearLayout linearLayoutPickers = (LinearLayout) linearLayoutPickersView;
     for (int i=0; i < linearLayoutPickers.getChildCount(); i++) {

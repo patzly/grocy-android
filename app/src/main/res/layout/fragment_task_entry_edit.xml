@@ -147,7 +147,6 @@
                   android:id="@+id/edit_text_name"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:inputType="text|textCapSentences"
                   android:scrollHorizontally="false"
                   android:maxLines="4"
@@ -213,7 +212,6 @@
                   android:id="@+id/edit_text_description"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:text="@={formData.descriptionLive}"
                   app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 

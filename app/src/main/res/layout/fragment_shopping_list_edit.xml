@@ -137,7 +137,6 @@
                   android:text="@={formData.nameLive}"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:textColor="@color/on_background"
                   android:inputType="text|textCapSentences"
                   android:imeOptions="actionDone"
                   android:afterTextChanged="@{() -> formData.isNameValid()}"

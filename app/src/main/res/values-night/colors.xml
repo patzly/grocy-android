@@ -19,8 +19,8 @@
 
 <resources>
 
-  <!-- BACKGROUND -->
-
-  <color name="on_background">#f1f3f4</color>
+  <color name="logo_yellow">@color/custom_yellow_50</color>
+  <color name="logo_green">@color/custom_green_50</color>
+  <color name="logo_red">@color/custom_red_35</color>
 
 </resources>

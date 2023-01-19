@@ -153,7 +153,6 @@
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
                 android:singleLine="true"
-                android:textColor="@color/on_background"
                 android:afterTextChanged="@{(s) -> viewModel.updateSearchInput(s.toString())}"
                 app:onSearchClickInSoftKeyboard="@{() -> activity.hideKeyboard()}" />
 
