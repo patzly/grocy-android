@@ -94,6 +94,7 @@ import java.util.Objects;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import org.conscrypt.Conscrypt;
+import xyz.zedler.patrick.grocy.BuildConfig;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.PREF;
@@ -101,6 +102,7 @@ import xyz.zedler.patrick.grocy.Constants.SETTINGS;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.Constants.THEME;
+import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
@@ -108,7 +110,6 @@ import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TextBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Language;
 import xyz.zedler.patrick.grocy.repository.MainRepository;
@@ -384,6 +385,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     sharedPrefs.edit().putBoolean(PREF.PURCHASED, UnlockUtil.isKeyInstalled(this)).apply();
+
+    // Show changelog if app was updated
+    int versionNew = BuildConfig.VERSION_CODE;
+    int versionOld = sharedPrefs.getInt(PREF.LAST_VERSION, 0);
+    if (versionOld == 0) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+    } else if (versionOld != versionNew) {
+      sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
+      showChangelogBottomSheet();
+    }
   }
 
   @Override
@@ -859,31 +870,27 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showTextBottomSheet(@RawRes int file, @StringRes int title, @StringRes int link) {
-    Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.TITLE, title);
-    bundle.putInt(Constants.ARGUMENT.FILE, file);
+    NavigationMainDirections.ActionGlobalTextDialog action
+        = NavigationMainDirections.actionGlobalTextDialog();
+    action.setTitle(title);
+    action.setFile(file);
     if (link != 0) {
-      bundle.putString(Constants.ARGUMENT.LINK, getString(link));
+      action.setLink(link);
     }
-    showBottomSheet(new TextBottomSheet(), bundle);
+    navigate(action);
   }
 
   public void showChangelogBottomSheet() {
-    Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.TITLE, R.string.info_changelog);
-    bundle.putInt(Constants.ARGUMENT.FILE, R.raw.changelog);
-    bundle.putStringArray(
-        Constants.ARGUMENT.HIGHLIGHTS,
-        new String[]{"New:", "Improved:", "Fixed:"}
-    );
-    showBottomSheet(new TextBottomSheet(), bundle);
+    NavigationMainDirections.ActionGlobalTextDialog action
+        = NavigationMainDirections.actionGlobalTextDialog();
+    action.setTitle(R.string.info_changelog);
+    action.setFile(R.raw.changelog);
+    action.setHighlights(new String[]{"New:", "Improved:", "Fixed:"});
+    navigate(action);
   }
 
   public void showHelpBottomSheet() {
-    Bundle bundle = new Bundle();
-    bundle.putInt(Constants.ARGUMENT.TITLE, R.string.title_help);
-    bundle.putInt(Constants.ARGUMENT.FILE, R.raw.help);
-    showBottomSheet(new TextBottomSheet(), bundle);
+    showTextBottomSheet(R.raw.help, R.string.title_help);
   }
 
   public void showFeedbackBottomSheet() {

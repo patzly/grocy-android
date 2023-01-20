@@ -23,9 +23,13 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="48dp"
+  android:minHeight="56dp"
   android:clickable="true"
   android:focusable="true"
+  android:paddingStart="16dp"
+  android:paddingEnd="16dp"
+  android:paddingTop="12dp"
+  android:paddingBottom="12dp"
   android:gravity="center_vertical">
 
   <LinearLayout
@@ -60,6 +64,7 @@
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_gravity="center_vertical" />
+
       </LinearLayout>
 
       <TextView
@@ -68,39 +73,27 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:textSize="12sp"
         android:text="@string/property_variable_amount" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
+      android:id="@+id/title"
+      style="@style/Widget.Grocy.TextView.ListItem.Title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:gravity="end">
+      android:gravity="end"
+      android:textAlignment="viewEnd"
+      android:maxLines="1" />
 
-      <TextView
-        android:id="@+id/title"
-        style="@style/Widget.Grocy.TextView.ListItem.Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewEnd" />
-
-    </LinearLayout>
   </LinearLayout>
 
-  <LinearLayout
+  <TextView
+    android:id="@+id/note"
+    style="@style/Widget.Grocy.TextView.ListItem.Description"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="end">
-
-    <TextView
-      android:id="@+id/note"
-      style="@style/Widget.Grocy.TextView.ListItem.Description"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
-
-  </LinearLayout>
+    android:gravity="end"
+    android:textAlignment="viewEnd" />
 
 </LinearLayout>

@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class RecipePositionAdapter extends
     RecyclerView.Adapter<RecipePositionAdapter.ViewHolder> {
@@ -130,15 +132,25 @@ public class RecipePositionAdapter extends
 
     RecipePosition recipePosition = recipePositions.get(position);
     Product product = Product.getProductFromId(products, recipePosition.getProductId());
-    QuantityUnit quantityUnit = QuantityUnit.getFromId(quantityUnits, recipePosition.getQuantityUnitId());
-    QuantityUnitConversion quantityUnitConversion = product != null ? QuantityUnitConversion.getFromTwoUnits(quantityUnitConversions, product.getQuIdStockInt(), recipePosition.getQuantityUnitId(), product.getId()) : null;
+    QuantityUnit quantityUnit = QuantityUnit.getFromId(
+        quantityUnits, recipePosition.getQuantityUnitId()
+    );
+    QuantityUnitConversion quantityUnitConversion = product != null
+        ? QuantityUnitConversion.getFromTwoUnits(
+            quantityUnitConversions,
+            product.getQuIdStockInt(),
+            recipePosition.getQuantityUnitId(),
+            product.getId()
+        ) : null;
 
     // AMOUNT
-    double amount = recipePosition.getAmount() / recipe.getBaseServings() * recipe.getDesiredServings();
+    double amount = recipePosition.getAmount() /
+        recipe.getBaseServings() * recipe.getDesiredServings();
     if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
       amount *= quantityUnitConversion.getFactor();
     }
-    if (recipePosition.getVariableAmount() == null || recipePosition.getVariableAmount().isEmpty()) {
+    if (recipePosition.getVariableAmount() == null
+        || recipePosition.getVariableAmount().isEmpty()) {
       holder.binding.amount.setText(NumUtil.trimAmount(amount, maxDecimalPlacesAmount));
       holder.binding.variableAmount.setVisibility(View.GONE);
     } else {
@@ -150,7 +162,9 @@ public class RecipePositionAdapter extends
     holder.binding.quantityUnit.setText(pluralUtil.getQuantityUnitPlural(quantityUnit, amount));
 
     // NAME
-    holder.binding.title.setText(product != null ? product.getName() : context.getString(R.string.error_undefined));
+    holder.binding.title.setText(
+        product != null ? product.getName() : context.getString(R.string.error_undefined)
+    );
 
     // NOTE
     if (recipePosition.getNote() == null || recipePosition.getNote().trim().isEmpty()) {
@@ -162,15 +176,20 @@ public class RecipePositionAdapter extends
 
     if (recipePosition.isChecked()) {
       holder.binding.linearRecipePositionContainer.setAlpha(0.5f);
-      //holder.binding.title.setPaintFlags(holder.binding.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-      //holder.binding.title.setTextColor(ContextCompat.getColor(context, R.color.on_background_secondary));
+      holder.binding.title.setPaintFlags(
+          holder.binding.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+      );
     } else {
       holder.binding.linearRecipePositionContainer.setAlpha(1f);
-      //holder.binding.title.setPaintFlags(holder.binding.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-      //holder.binding.title.setTextColor(ContextCompat.getColor(context, R.color.on_background));
+      holder.binding.title.setPaintFlags(
+          holder.binding.title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
+      );
     }
 
     // CONTAINER
+    holder.binding.linearRecipePositionContainer.setBackground(
+        ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context)
+    );
     holder.binding.linearRecipePositionContainer.setOnClickListener(
         view -> listener.onItemRowClicked(recipePosition, position)
     );
@@ -284,10 +303,26 @@ public class RecipePositionAdapter extends
       RecipePosition oldItem = oldItems.get(oldItemPos);
       Product newItemProduct = Product.getProductFromId(newProducts, newItem.getProductId());
       Product oldItemProduct = Product.getProductFromId(oldProducts, oldItem.getProductId());
-      QuantityUnit newQuantityUnit = QuantityUnit.getFromId(newQuantityUnits, newItem.getQuantityUnitId());
-      QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(oldQuantityUnits, oldItem.getQuantityUnitId());
-      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(newQuantityUnitConversions, newItemProduct.getQuIdStockInt(), newItem.getQuantityUnitId(), newItemProduct.getId()) : null;
-      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null ? QuantityUnitConversion.getFromTwoUnits(oldQuantityUnitConversions, oldItemProduct.getQuIdStockInt(), oldItem.getQuantityUnitId(), oldItemProduct.getId()) : null;
+      QuantityUnit newQuantityUnit = QuantityUnit.getFromId(
+          newQuantityUnits, newItem.getQuantityUnitId()
+      );
+      QuantityUnit oldQuantityUnit = QuantityUnit.getFromId(
+          oldQuantityUnits, oldItem.getQuantityUnitId()
+      );
+      QuantityUnitConversion newQuantityUnitConversion = newItemProduct != null
+          ? QuantityUnitConversion.getFromTwoUnits(
+              newQuantityUnitConversions,
+              newItemProduct.getQuIdStockInt(),
+              newItem.getQuantityUnitId(),
+              newItemProduct.getId()
+          ) : null;
+      QuantityUnitConversion oldQuantityUnitConversion = oldItemProduct != null
+          ? QuantityUnitConversion.getFromTwoUnits(
+              oldQuantityUnitConversions,
+              oldItemProduct.getQuIdStockInt(),
+              oldItem.getQuantityUnitId(),
+              oldItemProduct.getId()
+          ) : null;
 
       if (!compareContent) {
         return newItem.getId() == oldItem.getId();
