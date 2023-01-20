@@ -130,8 +130,6 @@ public class OverviewStartFragment extends BaseFragment {
         activity.navigateDeepLink(getString(R.string.deep_link_aboutFragment));
       } else if (id == R.id.action_feedback) {
         activity.showBottomSheet(new FeedbackBottomSheet());
-      } else if (id == R.id.action_changelog) {
-        activity.showChangelogBottomSheet();
       }
       return false;
     });

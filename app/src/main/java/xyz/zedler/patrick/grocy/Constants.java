@@ -110,7 +110,7 @@ public final class Constants {
     public final static String INTRO_SHOWN = "intro_shown";
     public final static String VERSION_COMPATIBILITY_IGNORED = "version_ignored_compatibility";
     public final static String UPDATE_INFO_READ = "update_info_read";
-    public static final String RUN_AS_SUPER_CLASS = "run_as_super_class";
+    public static final String LAST_VERSION = "last_version";
   }
 
   public final static class SETTINGS {
@@ -451,13 +451,6 @@ public final class Constants {
   }
 
   public final static class FAB {
-
-    public final static class POSITION {
-
-      public final static int GONE = 0;
-      public final static int CENTER = 1;
-      public final static int END = 2;
-    }
 
     public final static class TAG {
 
