@@ -195,9 +195,11 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
       return;
     }
     dismiss();
-    navigate(ShoppingListFragmentDirections
-        .actionShoppingListFragmentToShoppingListEditFragment()
-        .setShoppingList(shoppingList));
+    activity.navigateFragment(
+        ShoppingListFragmentDirections
+            .actionShoppingListFragmentToShoppingListEditFragment()
+            .setShoppingList(shoppingList)
+    );
   }
 
   @Override
