@@ -1,0 +1,1131 @@
+<!--
+  ~ This file is part of Grocy Android.
+  ~
+  ~ Grocy Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Grocy Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Grocy Android. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
+  -->
+
+<resources>
+
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in purchase screen for example. -->
+  <string name="action_purchase">Osta</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in consume screen for example. -->
+  <string name="action_consume">Tarbi</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in transfer screen for example. -->
+  <string name="action_transfer">Kanna üle</string>
+  <!-- This is an action – in English, it contains a verb.
+   The string is visible after clicking long on the action button in inventory screen for example. -->
+  <string name="action_inventory">Uuenda kogust</string>
+  <!-- This is an action – in English, it contains a verb. -->
+  <string name="action_consume_all">Tarbi kõik</string>
+
+  <string name="action_consume_spoiled">Tarbi kui riknenud</string>
+  <string name="action_consume_one_spoiled">Tarbi 1 kui riknenud</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_consume_one">Tarbi üks %1$s toodet %2$s</string>
+  <string name="action_open">Märgi avatuks</string>
+  <!-- %1$s is a quantity unit and %2$s is a product name -->
+  <string name="action_open_one">Ava üks %1$s toodet %2$s</string>
+  <string name="action_edit_product">Muuda toodet</string>
+  <string name="action_shopping_list_add">Lisa poenimekirja</string>
+  <string name="action_consume_recipe">Tarbi kõik selle retsepti jaoks vajalikud koostisosad</string>
+  <string name="action_copy_recipe">Kopeeri retsept</string>
+  <string name="action_apply_desired_servings">Rakendage selle retsepti jaoks soovitud portsjonid ja ajakohastage andmeid.</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_product_opened">Toode avatud</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_from">Kanna üle kohast</string>
+  <!-- This is displayed as transaction type on the stock journal page -->
+  <string name="action_transfer_to">Kanna üle kohta</string>
+
+  <string name="action_back">Tagasi</string>
+  <string name="action_search">Otsi</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_next">Järgmine</string>
+  <string name="action_new">Uus</string>
+  <!-- This string is visible after clicking long on an arrow button in the FeatureActivity -->
+  <string name="action_prev">Eelmine</string>
+  <string name="action_feedback">Saada tagasisidet</string>
+  <string name="action_reset">Lähtesta</string>
+  <string name="action_reload">Taaslaadi</string>
+  <string name="action_top_scroll">Keri üles</string>
+  <string name="action_send">Saada</string>
+  <string name="action_close">Sulge</string>
+  <string name="action_scan">Skaneeri</string>
+  <string name="action_cancel">Tühista</string>
+  <string name="action_add">Lisa</string>
+  <string name="action_clear">Puhasta</string>
+  <string name="action_clear_shopping_list">Puhasta poenimekiri</string>
+  <string name="action_rate">Hinda Google Plays</string>
+  <string name="action_rate_description">Motiveeri arendajaid</string>
+  <string name="action_email">Saada e-mail</string>
+  <string name="action_email_description">Võta ühendust arendajatega</string>
+  <string name="action_new_issue">Ava uus veateade GitHubis</string>
+  <string name="action_new_issue_description">Teata vigadest või taotle uut funktsiooni</string>
+  <string name="action_get_started">Alusta</string>
+  <string name="action_ascending">Tõusvalt</string>
+  <string name="action_filter">Filtreeri</string>
+  <string name="action_sort">Sorteeri</string>
+  <string name="action_undo">Võta tagasi</string>
+  <string name="action_retry">Proovi uuesti</string>
+  <string name="action_edit">Muuda</string>
+  <string name="action_copy">Kopeeri</string>
+  <string name="action_proceed">Jätka</string>
+  <string name="action_delete">Kustuta</string>
+  <string name="action_save">Salvesta</string>
+  <string name="action_save_close">Salvasta ja sulge</string>
+  <string name="action_save_not_close">Salvesta sulgemata</string>
+  <string name="action_logout">Logi välja</string>
+  <string name="action_restart">Taaskäivita</string>
+  <string name="action_create">Loo</string>
+  <string name="action_link">Link</string>
+  <string name="action_try_again">Proovi uuesti</string>
+  <string name="action_open_scanner">Ava skanner</string>
+  <string name="action_discard">Loobu</string>
+  <string name="action_clear_form">Puhasta vorm</string>
+  <string name="action_toggle_done">Lülita valmis</string>
+  <string name="action_edit_notes">Muuda märkmeid</string>
+  <string name="action_add_missing">Lisa puuduolevad tooted</string>
+  <string name="action_purchase_done_items">Osta valmis asjad</string>
+  <string name="action_purchase_all_items">Osta kõik asjad</string>
+  <string name="action_skip_entry">Jäta sisend vahele</string>
+  <string name="action_toggle_flash">Lülita välk</string>
+  <string name="action_edit_recipe">Muuda retsepti</string>
+  <string name="action_delete_recipe">Kustuta retsept</string>
+  <string name="action_delete_shopping_list">Kustuta poenimekiri</string>
+  <string name="action_create_key">Loo võti</string>
+  <string name="action_login">Logi sisse</string>
+  <string name="action_ignore">Eira</string>
+  <!-- This string should follow the equality between "all" and "Clear all items" -->
+  <string name="action_clear_all">Kõik</string>
+  <!-- This string should follow the equality between "done" and "Clear done items" -->
+  <string name="action_clear_done">Valmis</string>
+  <string name="action_display_help">Kuva abitekstid</string>
+  <string name="action_demo_server">Demo server</string>
+  <string name="action_own_server">Oma server</string>
+  <string name="action_enter_data_manually">Sisesta andmed käsitsi</string>
+  <string name="action_perform">Soortia tegevus</string>
+  <string name="action_share">Jaga</string>
+  <string name="action_share_description">Räägi oma sõpradele Grocy Androidist</string>
+  <string name="action_no_filter">Filter puudub</string>
+  <string name="action_show_done_tasks">Näita valmis ülesandeid</string>
+  <string name="action_track_chore_execution">Jälgi ülesannete täitmist</string>
+  <string name="action_skip_next_chore_schedule">Jäta järgmine ülesande ajakava vahele</string>
+  <string name="action_reschedule_next_execution">Kavanda ümber järgmine täitmine</string>
+  <string name="action_put_missing_products_on_shopping_list">Pane puuduvad tooted poenimekirja</string>
+
+  <!-- %1$s is the number of products which are due soon. This string is the short form of e.g. "3 products are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_products">
+    <item quantity="one">%1$dpeatselt möödas</item>
+    <item quantity="other">%1$dpeatselt tähtajatu</item>
+  </plurals>
+  <!-- %1$s is the number of products which are overdue. This string is the short form of e.g. "3 products are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_products">
+    <item quantity="one">%1$d üle tähtaja</item>
+    <item quantity="other">%1$d üle tähtaja</item>
+  </plurals>
+  <!-- %1$s is the number of products which are expired. This string is the short form of e.g. "3 products are expired" -> "3 expired" -->
+  <plurals name="msg_expired_products">
+    <item quantity="one">%1$d aegunud</item>
+    <item quantity="other">%1$d aegunud</item>
+  </plurals>
+  <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
+  <plurals name="msg_missing_products">
+    <item quantity="one">%1$d alla min. varude koguse</item>
+    <item quantity="other">%1$d alla min. varude koguse</item>
+  </plurals>
+  <!-- %1$s is the number of products which are in stock. This string is the short form of e.g. "3 products are in stock" -> "3 in stock" -->
+  <plurals name="msg_in_stock_products">
+    <item quantity="one">%1$d varudes olemas</item>
+    <item quantity="other">%1$d varudes olemas</item>
+  </plurals>
+  <!-- %1$s is the number of products which are opened. This string is the short form of e.g. "3 products are opened" -> "3 opened" -->
+  <plurals name="msg_opened_products">
+    <item quantity="one">%1$d avatud</item>
+    <item quantity="other">%1$d avatud</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed">Tarbitud %1$s %2$s toodet %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_consumed_spoiled">Tarbitud %1$s %2$s toodet %3$s riknenuna</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_opened">Märgi %1$s %2$s toodet %3$s avatuks</string>
+  <!-- %1$s is the number of undone items in shopping list. This string is the short form of e.g. "3 undone items are in shopping list" -> "3 undone" -->
+  <plurals name="msg_undone_items">
+    <item quantity="one">%1$d loobutud</item>
+    <item quantity="other">%1$d tagasi võetud</item>
+  </plurals>
+  <!-- %1$s is the number of done items in shopping list. This string is the short form of e.g. "3 done items are in shopping list" -> "3 done" -->
+  <plurals name="msg_done_items">
+    <item quantity="one">%1$d tehtud</item>
+    <item quantity="other">%1$d tehtud</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are done. This string is the short form of e.g. "3 tasks are done" -> "3 done" -->
+  <plurals name="msg_done_tasks">
+    <item quantity="one">%1$d tehtud</item>
+    <item quantity="other">%1$d tehtud</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are not done. This string is the short form of e.g. "3 tasks are not done" -> "3 not done" -->
+  <plurals name="msg_not_done_tasks">
+    <item quantity="one">%1$d tegemata</item>
+    <item quantity="other">%1$d tegemata</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due soon. This string is the short form of e.g. "3 tasks are due soon" -> "3 due soon" -->
+  <plurals name="msg_due_tasks">
+    <item quantity="one">%1$dpeatselt möödas</item>
+    <item quantity="other">%1$dpeatselt tähtaeg käes</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are due today. This string is the short form of e.g. "3 tasks are due today" -> "3 due today" -->
+  <plurals name="msg_due_today_tasks">
+    <item quantity="one">%1$d tähtaeg täna</item>
+    <item quantity="other">%1$d tähtaeg täna</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are overdue. This string is the short form of e.g. "3 tasks are overdue" -> "3 overdue" -->
+  <plurals name="msg_overdue_tasks">
+    <item quantity="one">%1$d üle tähtaja</item>
+    <item quantity="other">%1$d üle tähtaja</item>
+  </plurals>
+  <!-- %1$s is the number of tasks which are assigned to the user. This string is the short form of e.g. "3 tasks are assigned to you" -> "3 assigned" -->
+  <plurals name="msg_assigned_tasks">
+    <item quantity="one">%1$d määratud</item>
+    <item quantity="other">%1$d määratud</item>
+  </plurals>
+  <string name="msg_task_mark">Märgi ülesanne tehtuks</string>
+  <string name="msg_task_completed">Ülesanne märgitud tehtuks</string>
+  <string name="msg_task_not_completed">Ülesanne märgitud mittetehtuks</string>
+  <string name="msg_task_undo">Võta ülesanne tagasi </string>
+  <string name="msg_recipes_enough_in_stock">Varudes piisavalt</string>
+  <string name="msg_recipes_enough_in_stock_filter">(%1$d) Piisavalt varudes</string>
+  <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Pole piisavalt varudes, kuid on poenimekirjas</string>
+  <string name="msg_recipes_not_enough_filter">(%1$d) Pole piisvalt varudes</string>
+  <string name="msg_recipes_not_enough">Pole piisavalt varudes</string>
+  <plurals name="msg_recipes_ingredients_missing_but_on_shopping_list">
+    <item quantity="one">%1$d koostisosa puudu, kuid on juba poenimekirjas</item>
+    <item quantity="other">%1$d koostisosa puudu, kuid on juba poenimekirjas</item>
+  </plurals>
+  <plurals name="msg_recipes_ingredients_missing">
+    <item quantity="one">%1$d koostisosa puudu</item>
+    <item quantity="other">%1$d koostisosa puudu</item>
+  </plurals>
+  <string name="msg_chore_executed">Jälgitud ülesannete täitmist</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_purchased">Ostetud %1$s %2$s toodet %3$s</string>
+  <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
+  <string name="msg_transferred">Üle viidud %1$s %2$s toodet %3$s</string>
+  <!-- %1$s is a product name, %2$s a number, %3$s is a quantity unit and %4$s a number (e.g. -3) -->
+  <string name="msg_inventoried">Toote %1$s varude kogus on nüüd %2$s %3$s (%4$s) </string>
+  <!-- %1$s is a product name -->
+  <string name="msg_not_in_stock">Toodet %1$s ei ole varudes</string>
+  <string name="msg_no_connection">Ühendus puudub</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_locations">Tootel %1$s ei ole varude asukohti</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_no_stock_entries">Tootel %1$s ei ole varude sisendit</string>
+  <string name="msg_not_found">Toodet ei leitud</string>
+  <string name="msg_editor_hint">Kirjuta tekst siia</string>
+  <string name="msg_coming_soon">See funktsioon on saadaval varsti</string>
+  <string name="msg_undo_transaction">Võta tehing tagasi?</string>
+  <string name="msg_undone_transaction">Tehing tagasi võetud</string>
+  <!-- %1$s is a date -->
+  <string name="msg_undone_transaction_description">Tagasi võetud kuupäeval %1$s</string>
+  <string name="msg_failed_to_sync">Sisendite sünkroonimine ebaõnnestus</string>
+  <string name="msg_synced">Sisendid sünkroniseeriti edukalt</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_added_missing_products">Puuduvad tooted lisati poenimekirja %1$s</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_cleared">%1$s puhastati edukalt</string>
+  <!-- %1$s is a shopping list name -->
+  <string name="msg_shopping_list_deleted">%1$s eemaldatud edukalt</string>
+  <string name="msg_barcode_duplicate">Triipkood juba eksisteerib</string>
+  <!-- %1$s is a master data type like "Product group" or "Location"; %2$s is the name of it. -->
+  <string name="msg_master_delete">Kas oled kindel, et tahad kustutada %1$s nimega \"%2$s\"?</string>
+  <!-- %1$s is a product name -->
+  <string name="msg_master_delete_product">Kas oled kindel, et soovid kustutada toote \"%1$s\"?\n\nSee eemaldab ka kõik varude kogused, logiraamatu ja kõik muud viited sellele tootele - kaalu selle keelamist, kui soovid seda säilitada ja toodet lihtsalt peita.</string>
+  <!-- %1$s is a master data type like "location" or "product" -->
+  <string name="msg_master_delete_usage">See %1$s on veel kasutuses</string>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_add">
+    <item quantity="one">%1$s %2$s lisatakse varudesse</item>
+    <item quantity="other">%1$s %2$s lisatakse varudesse</item>
+  </plurals>
+  <!-- %1$s is an amount and %2$s is a quantity unit.  -->
+  <plurals name="msg_inventory_transaction_remove">
+    <item quantity="one">%1$s %2$s eemaldatakse varudest</item>
+    <item quantity="other">%1$s%2$s eemaldatakse varudest</item>
+  </plurals>
+  <string name="msg_transfer_tare_weight">Omakaaluga toodete üleviimine ei ole praegu toetatud.</string>
+  <string name="msg_item_marked_as_done">Märgitud asi valmiks</string>
+  <string name="msg_item_marked_as_undone">Märgitud asi tagasivõetuks</string>
+  <string name="option_synced_success">Valik sünkroonitud edukalt</string>
+  <string name="option_synced_error">Valikut ei saanud sünkroonida</string>
+  <string name="msg_recipe_added_to_cart">Retsepti koostisosad lisati ostukorvi</string>
+  <string name="msg_recipe_consumed">Kõik retsepti \"%1$s\" koostisosad eemaldati varudest</string>
+  <string name="msg_stored_purchases_overview">Seadmes on ostud, mis ei ole veel serverisse üle kandtud. Vajuta siia, et näha lisainfot.</string>
+  <string name="msg_stored_purchases">Siin kuvatakse ostud, mis ei ole veel serverisse üle kandtud. Need salvestati koos ajutiste toodetega selles rakenduses, et saaksid kiirrežiimis oma ostu kiiremini skannida ja ei peaks põhiandmete jaoks otse uusi tooteid looma.</string>
+  <string name="msg_stored_purchases_product_offline">Vajuta toodel ja täida nõutavad andmed. Pärast seda kuvatakse toode siin kui online ja salvestatud ostud saab saata serverisse.</string>
+  <string name="msg_stored_purchases_product_online">Vajuta siia, et saata selle toote jaoks salvestatud ostud serverisse.</string>
+  <string name="msg_choose_product">Triipkood, mida skaneerisid ei ole lingitud ühegi tootega. Saad linkida selle olemasoleva tootega või luua selle jaoks uue toote.</string>
+  <string name="msg_product_name_off">Toote nimi triipkoodi jaoks on pärit Open Food Factsist.</string>
+  <string name="msg_product_name_obf">Toote nimi triipkoodi jaoks on pärit Open Beaty Factsist.</string>
+  <string name="msg_product_name_lookup_error">Triipkoodi ei saanud otsida ei Open Food Factsist ega Open Beauty Factsist.</string>
+  <string name="msg_product_name_lookup_empty">Triipkood ei ole Open Food Facts ega Open Beauty Facts andmebaasides.</string>
+  <string name="msg_off_option_deactivated">Toote nime automaatseks soovituseks saad seadetes sisse lülitada Open Food Facts otsimise.</string>
+  <string name="msg_create_new_product_filled">Loo uus toode \"%1$s\"</string>
+  <string name="msg_create_new_product">Loo uus toode</string>
+  <string name="msg_create_new_pending_product_filled">Loo uus ajutine toode \"%1$s\"</string>
+  <string name="msg_create_new_pending_product">Loo uus ajutine toode</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_purchase">Teostatakse järgmine tehing: \n\nLisa %1$s %2$s toodet %3$s varudesse\nTähtaeg: %4$s\nHind: %5$s\nPood: %6$s\nAsukoht: %7$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_consume">Teostatakse järgmine tehing:\n\nEemalda %1$s %2$s toodet %3$s varudest\nAsukoht: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
+  <string name="msg_quick_mode_confirm_open">Teostatakse järgmine tehing:\n\nMärgi %1$s %2$s toodet %3$s avatuks\nAsukoht: %4$s</string>
+  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
+  <string name="msg_quick_mode_confirm_transfer">Teostatakse järgmine tehing:\n\nKanna üle %1$s %2$s toodet %3$s\nAsukohast: %4$s\nAsukohta: %5$s</string>
+  <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
+  <string name="msg_quick_mode_confirm_inventory">Teostatakse järgmine tehing:\n\nSea %1$s varude kogus  %2$s%3$s\nRakenda lisatud asjadele.\nTähtaeg: %4$s\n Hind:  %5$s\nPood: %6$s\nAsukoht: %7$s</string>
+  <string name="msg_compatibility">See rakenduse versioon ei ühildu serveris oleva Grocy versiooniga.\n\nServeri praegune versioon: %1$s\n\nToetatud serveri versioonid:\n%2$s\nKui praeguse serveri versiooni esimene number on suurem kui toetatud versioonidel ja sa eirad seda hoiatust, võib tekkida andmekadu (ebatõenäoline) või krahh (tõenäoline).\nKui erinevus on väike (nt kolmas number on suurem), võid seda hoiatust tõenäoliselt eirata.</string>
+  <string name="msg_logout">Sinu serveris ei muudeta midagi. Sind suunatakse ümber sisselogmislehele.</string>
+  <string name="msg_logout_demo">Sa kasutad avalikku demo serverit.<u>https://grocy.info</u>.\n\n<b>Mitte ükski sinu muudatus ei ole siia salvestatud igaveseks!\nNeed jäävad nähtavaks avalikult kuni server kirjutab need korra automaatselt üle.</b>\n\nSisselogimislehel saad sisestada oma serveri aadressi.</string>
+  <string name="msg_logout_demo_short">Avalik demoserver. Vajuta, et saada lisainfot.</string>
+  <string name="msg_restart">Rakendus vajab taaskäivitust, et rakendada praegune seadistus. Kas soovid taaskäivitada koheselt?</string>
+  <string name="msg_full_description">Vajuta siia, et näha täiskirjeldust.</string>
+  <string name="msg_shortcuts">Saad sisse lülitada kuni 4 otseteed:</string>
+  <string name="msg_shortcuts_not_supported">Otseteed ei ole toetatud selles Androidi versioonis.</string>
+  <string name="msg_barcode_formats">Saad parendada triipkoodi tuvastajat, seadistades seda tuvastama ainult neid formaate, mida kasutad.</string>
+  <string name="msg_features">Alusta tutvustust uuesti rakenduse seadetest</string>
+  <string name="msg_feedback">Kas sul on mingeid soove, küsimusi või vigu? Võta meiega ühendust ja lase meil aidata!\nMuul juhul oleksime väga õnnelikud Play Store\'i hea ülevaate üle.</string>
+  <string name="msg_point_at_barcode">Sihi oma kaamera triipkoodi suunas</string>
+  <string name="msg_press_hold_confirm">Vajuta ja hoia, et eemaldamine kinnitada</string>
+  <string name="msg_recipe_consume_ask">Kas oled kindel, et soovid tarbida kõik retsepti \"%1$s\" koostisosad? (koostisosi, mis on tähistatud märkega \"kontrollige ainult siis, kui mõni kogus on varudes\", ignoreeritakse.)</string>
+  <string name="msg_recipe_shopping_list_ask">Kas oled kindel, et soovid panna kõik retsepti \"%1$s\" puuduvad koostisosad poenimekirja?\n\nEemalda märge koostisainete kohta, et mitte panna neid ostunimekirja.</string>
+  <string name="msg_welcome">Tere tulemast Grocy Androidi!</string>
+  <string name="msg_welcome_introduce">Grocy produktiivseks kasutamiseks on vaja oma serverit või grocy lisaprogrammi Home Assistant\'ile.\nKui soovid seda rakendust lihtsalt proovida, võid kasutada Grocy looja Bernd Besteli demoserverit.</string>
+  <string name="msg_choose_option_below">Palun vali allpool olev valik.</string>
+  <string name="msg_qr_code_scan">Külasta teises seadmes oma Grocy veebisaiti ja mine lehele \"API võtmed\". Klõpsa nupul \"Lisa\", seejärel klõpsa väikesele QR-koodi sümbolile ja skanni QR-kood.</string>
+  <string name="msg_qr_code_scan_token">Sa kasutad Grocy Home Assistant\'i lisa. Loo oma Home Assistant\'i profiili seadetes (viimane lõik) pikaajaline juurdepääsutunnus. Tokenivälja all klõpsa nuppu \"Generate QR code\" ja skaneeri see siia.</string>
+  <string name="msg_port_connection_info_without_port">Rakendus ühendub porti %1$s.\nKui soovid, et see ühenduks mõnda teise porti, võid lisada selle URL-ile.\nNäide: http://domain.com:81/</string>
+  <string name="msg_port_connection_info_with_port">Rakendus ühendub porti %1$s.</string>
+  <string name="msg_clear_form_first">Enne teise teadaoleva triipkoodi skaneerimist tühjendage esmalt vorm.</string>
+  <string name="msg_not_implemented_yet">See funktsionaalsus lisatakse peagi. Palun kasuta nii kaua oma serveri liidest.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_stock_label_type">See on vaikimisi varude sildi tüüp, mis eeltäidetakse ostmisel.</string>
+  <string name="stock_disabled">Sa oled oma Grocy seadistuses varude funktsiooni välja lülitanud, ilmselt seetõttu, et sa ei vaja seda. Kuid see rakendus saab hetkel teha ainult varude haldamist, nii et sellest ei pruugi sulle palju kasu olla.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_hide_on_stock">Varude ülevaate lehel on loetletud kõik tooted, mis on hetkel varudes või alla oma miinimumkoguse. Lülitage see sisse, et see toode oleks seal alati peidetud.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_parent_product_deactivated">Sellel tootel ei saa olla vanemtoodet, sest seda kasutatakse juba teises tootes vanemtootena.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_consume_location">Alljärgnevas asukohas olevad varude sisendid tarbitakse esmajärjekorras.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_move_on_open">Kui see on lubatud, viiakse vastav summa selle toote avamiseks märkimisel vaikimisi tarbimiskohta.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_own_stock">Kui see on lubatud, ei saa vastaval tootel olla oma varusid, mis tähendab, et seda ei saa ostmisel valida (kasulik vanemtoodete puhul, mida kasutatakse lihtsalt alamtoodete kokkuvõttena/kokkuvaatena).</string>
+  <string name="msg_help_due_date_type">Vastavalt valitud tähtpäeva tüübile on varude ülevaatuselehel erinev esiletõstmine. \"Parim enne kuupäeva\" tähendab, et toodet võib olla ohutu tarbida ka pärast selle lõpptähtaja saabumist. \"Aegumiskuupäev\" tähendab, et toodet ei saa pärast selle lõpptähtaja saabumist enam tarbida.</string>
+  <string name="msg_help_default_due_days_format">Numbrite asemel saad sisestada kuupäeva, kui vajutad pikalt alloleval elemendil.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days">Ostude puhul lisatakse see päevade arv tänasele päevale, et teha soovitus tähtajaks (-1 tähendab, et see toode ei ole kunagi üle tähtaja).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_opened">Kui see toode on märgitud avatuks, asendatakse tähtaeg tänase päevaga + selle arvu päevadega (väärtus 0 lülitab selle välja).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_freezing">Kui see toode viiakse sügavkülmikusse (nii et kui see külmutatakse), asendatakse tähtaeg tänase päevaga + selle arvu päevadega (-1 tähendab, et see toode ei ole kunagi üle tähtaja).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_default_due_days_thawing">Selle toote liigutamisel sügavkülmikust (seega selle üles sulatamisel) asendatakse tähtaeg tänase päevaga + selle päevade arvuga.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_stock">Koguseühiku varu ei saa pärast esimest ostu muuta.</string>
+  <string name="msg_help_qu_stock_changeable">Koguseühiku varu saab muuta ainult siis, kui praeguse koguseühiku jaoks on olemas ühikute teisendused.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_qu_purchase">See on vaikimisi koguseühik, mida kasutatakse selle toote lisamisel ostunimekirja.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_accumulate_min_amount">Kui see on lubatud, koguneb alamtoodete minimaalne varude kogus sellesse tootesse, mis tähendab, et alamtoode ei ole kunagi \"puudu\", vaid ainult see toode.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_treat_opened_as_out_of_stock">Kui see on lubatud, loetakse avatud kaubad puuduvateks, kui arvutatakse, kas see toode on alla miinimumvaru.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_quick_consume_amount">Seda summat kasutatakse varude ülevaate lehel olevate \"kiire tarbimise/avamise nuppude\" jaoks (mis on seotud koguseühiku varuga).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight">Taarakaaluga töötlemine on kasulik näiteks jahu puhul purgis - ostu/kasutamise/varumise korral kaalute alati kogu purgi, seejärel arvutatakse postitatav kogus automaatselt selle põhjal, mis on laos ja allpool määratletud taarakaal.</string>
+  <!--The same string is also in the web interface: Purchase form -> select product with tare weight handling enabled (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_tare_weight_purchase">Taarakaalu käitlemine on lubatud - palun kaaluge kogu nõu, postitatav kogus arvutatakse automaatselt.</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_disable_stock_check">Seda kasutatakse vaikimisi seadistusena selle toote lisamisel retsepti koostisosana.</string>
+  <string name="msg_help_inventory_fields">Järgmised väljad kehtivad äsja lisatud toodete puhul.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_choose">Saad valida triipkoodi skaneerija kaamera triipkoodi skaneerimiseks.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") kasutab triipkoodi tuvastamiseks kaameravoo kontrastiandmeid. Seejärel arvutab see kõigi joonte suhtelise laiuse.\n\n- Mõnikord on tulemused ebakorrektsed\n- Triipkood peab olema horisontaalselt joondatud\n- Nõuab head kontrasti ja teravust\n- Toimub täiesti offline sinu seadmes\n- Raamistik on avatud lähtekoodiga.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit kasutab triipkoodi skaneerimiseks masinõpet koos uusimate tehnoloogiatega.\n\n- Peaaegu puuduvad valed tulemused\n- Orienteeritus ei ole oluline\n- Töötab isegi häguste või madala kontrastsusega triipkoodide puhul\n- Toimib täiesti offline sinu seadmes\n- Raamistik ei ole avatud lähtekoodiga.</string>
+  <string name="msg_help_external_scanner_ready">Võid kasutada välisskannerit alloleva välja jaoks, kui see on fookustatud ja tühi.</string>
+  <string name="msg_help_external_scanner_settings">See rakendus toetab väliseid skannerseadmeid, mis toimivad klaviatuurina ja mida saab ühendada USB või Bluetoothi kaudu. Välise skanneri puhul tuleb konfigureerida järgmised valikud:\n\nPrefiks: Puudub\nSuffix: TAB või ENTER</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_specific_item">Esimene asi selles nimekirjas valitakse vaikimisi reegli järgi, milleks on \"kõigepealt avatud, seejärel esimene tähtaeg, seejärel esimene sisse, esimene välja\".</string>
+  <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_recipe_consume">See on ainult statistilisteks eesmärkideks.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_not_check_shopping_list">Vaikimisi on ostunimekirja lisatav summa \"vajaminev summa - varude kogus - ostunimekirja kogus\". Kui see on lubatud, kontrollitakse ainult varudes oleva koguse suhtes, mitte selle suhtes, mis on juba ostunimekirjas.</string>
+  <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_produces_product">Kui toode on valitud, lisatakse selle retsepti tarbimisel üks ühik (ühe portsjoni kohta varudes oleva koguseühikus) varudesse.</string>
+  <!--The same string is also in the web interface: Recipe ingredient edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_only_check_any_amount">Erinevat kogust/ühikut saab seejärel kasutada allpool, samas kui varude täitmise kontrollimiseks piisab, kui toodet on varudes mis tahes koguses.</string>
+  <string name="msg_help_date_chooser">Saad seadetes lülituda klaviatuurisisestusele, see võib suurendada sinu sisestuskiirust.</string>
+  <string name="msg_help_date_chooser_keyboard">Saad seadetes aktiveerida vastupidise kuupäevaformaadi, kui sinu riigis eelistatakse DDMMYY.\nSisendi rakendamiseks ja selle lehe sulgemiseks võid kasutada klaviatuuri klahvi Valmis.</string>
+  <string name="msg_help_quick_mode">Kiirrežiimi aktiveerimiseks saad pikalt puudutada ülalpool asuvat tiitliriba. Selles režiimis käivitub tehing kohe, kui toode on sisestatud või skaneeritud, ning kõik väljad võidakse täita automaatselt (vastavalt toote ja/või triipkoodi vaikimisi seadele).</string>
+  <string name="msg_help_loading_circle_settings">Igal lehel, kus midagi tuleb serverist laadida, kontrollib rakendus kõigepealt pisikese päringuga, kas serveri andmebaas on viimasest ajast muutunud, ja uuendab ainult vananenud andmeid. Luba allolev valik, et näidata laadimisringi ka selle pisikese päringu puhul.</string>
+  <string name="msg_help_start">Algaja režiim on aktiivne: abitekstid kuvatakse vaikimisi kõikidel lehekülgedel, kui need on saadaval. Vajutage muutmiseks.</string>
+  <string name="msg_help_purchased_date_settings">Kui alljärgnev valik on lubatud, kuvatakse ostu ja inventuuri lehel ostetud kuupäeva väli. Vastasel juhul on ostukuupäevaks vaikimisi tänane päev.</string>
+  <string name="msg_help_normal_login">Vajuta sellel kaardil, kui kasutad Home Assistenti koos Grocy lisaga.</string>
+  <string name="msg_help_home_assistant_login">Sa kasutad grocy Home Assistant\'i lisandit. Seetõttu on vajatud veel mõned üksikasjad. Vajuta seda kaarti, et minna üle tavalisele sisselogimisele.</string>
+  <string name="msg_help_home_assistant_login_help_show">Vajuta siia, et näidata abitekste.</string>
+  <string name="msg_help_home_assistant_login_help_hide">Vajuta siia, et peita abitekstid.</string>
+  <string name="msg_help_home_assistant_login_server">Allpool olevale väljale saad sisestada ka oma Nabu Casa pilve URL-i, kui kasutad seda teenust. Vajutage sellel kaardil, et külastada Nabu Casa veebisaiti.</string>
+  <string name="msg_help_home_assistant_login_token">Pikaajalise juurdepääsutunnuse saate luua oma Home Assistenti profiili seadetes (viimane jaotis). Vajutage siia, et avada ülaltoodud URL.</string>
+  <string name="msg_help_home_assistant_login_proxy_id">Navigeeri tagasi või vajuta seda kaarti, et skaneerida QR-koodi, mis täidab allpool olevad väljad.</string>
+  <string name="msg_share">Vaata seda Android äppi Grocy jaoks: \nhttps://github.com/patzly/grocy-android</string>
+
+  <string name="error_api_not_working">API võti ei tööta</string>
+  <string name="error_orbot_not_installed">Orbot ei ole paigaldatud</string>
+  <string name="error_select_product">Vali toode</string>
+  <string name="error_empty">Nõutud</string>
+  <string name="error_empty_stock">Varudes pole midagi</string>
+  <string name="error_empty_stock_sub">Mine osta tooteid</string>
+  <string name="error_empty_shopping_list">Tühi poenimekiri</string>
+  <string name="error_empty_shopping_list_sub">Lisa mõni toode, mida vajad</string>
+  <string name="error_empty_barcodes_sub">Lisa triipkood kasutades allolevat nuppu</string>
+  <string name="error_empty_master_data_sub">Loo mõni kasutades allolevat nuppu</string>
+  <string name="error_empty_product_barcodes">Toote triipkoodid puuduvad</string>
+  <string name="error_empty_locations">Asukohti pole</string>
+  <string name="error_empty_product_groups">Tootegruppe pole</string>
+  <string name="error_empty_products">Tooteid pole</string>
+  <string name="error_empty_qu">Koguseühikuid pole</string>
+  <string name="error_empty_stores">Poode pole</string>
+  <string name="error_empty_tasks">Ülesandeid ei ole</string>
+  <string name="error_empty_task_categories">Ülesannete kategooriaid ei ole</string>
+  <string name="error_empty_unit_conversions">Koguseühikute teisendusi pole</string>
+  <string name="error_empty_chores">Ülesandeid pole</string>
+  <string name="error_empty_chores_sub">Mine põhiandmetesse ja loo mõni</string>
+  <string name="error_empty_recipes">Retsepte pole</string>
+  <string name="error_empty_ingredients">Koostisosi pole</string>
+  <string name="error_search">Otsingutulemusi pole</string>
+  <string name="error_search_sub">Proovi teisi mõisteid</string>
+  <string name="error_filter">Poel midagi kuvada</string>
+  <string name="error_filter_sub">Proovi teisi filtereid</string>
+  <string name="error_duplicate">On juba olemas</string>
+  <string name="error_parent">Ei saa olla iseenda vanem</string>
+  <string name="error_invalid_product">Kehtetu toode</string>
+  <string name="error_invalid_url">Kehtetu URL</string>
+  <string name="error_invalid_amount">Kehtetu kogus</string>
+  <string name="error_invalid_price">Kehtetu hind</string>
+  <string name="error_invalid_factor">Kehtetu tegur</string>
+  <string name="error_invalid_date_format">Kehtetu kuupäevaformaat</string>
+  <string name="error_api_qr_code">See ei ole QR-kood, mis sisaldab Grocy API volitusi</string>
+  <string name="error_token_qr_code">See ei ole QR-kood pikaajalise juurdepääsutunnistusega Home Assistantilt</string>
+  <string name="error_loading_qus">Toote koguseühikute laadimine ebaõnnestus</string>
+  <string name="error_no_children">Valitud tootel ei ole järeltulijaid.</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_amount_equal_stock">Ei saa võrduda numbriga %1$s</string>
+  <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
+  <string name="error_bounds_min_max">Peab olema numbrite %1$s ja %2$s vahel.</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_min">Peab olema võrdne või suurem numbrist %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_max">Peab olema võrdne või väiksem numbrist %1$s</string>
+  <!-- %1$s is a number like 0, 1, 2 -->
+  <string name="error_bounds_higher">Peab olema suurem kui %1$s</string>
+  <string name="error_offline">Offline</string>
+  <string name="error_offline_subtitle">See leht töötab ainult interneti juurdepääsuga. Kontrolli oma ühendust.</string>
+  <string name="error_no_done_items">Pole ühtegi asja märgitud valmis</string>
+  <string name="error_name_exists">Nimi juba kasutuses</string>
+  <string name="error_network">Võrgu viga</string>
+  <string name="error_network_subtitle">Vajaminevaid andmeid ei suudetud täielikult laadida</string>
+  <string name="error_unknown">Ups!</string>
+  <string name="error_not_grocy_instance">Ei ole kehtiv Grocy eksemplar</string>
+  <string name="error_timeout">Ajaületamise viga</string>
+  <string name="error_no_product_selected">Ühtegi toodet pole valitud</string>
+  <string name="error_failed_to_connect_to">Serveriga ühendumine ebaõnnestus</string>
+  <string name="error_missing_information">Mitte kõik nõutud lahtrid pole täidetud</string>
+  <string name="error_handshake">Kehtetu sertifikaat</string>
+  <string name="error_handshake_description">See server nõuab sertifikaati, mida Android ei tunne ega usalda.\nServeri sertifikaat peab olema kas allkirjastatud usaldusväärse sertifitseerimisasutuse poolt (nt letsencrypt.org) või salvestatud selle seadme Androidi kasutaja sertifikaadipanka.</string>
+  <string name="error_unexpected_response_code">Ootamatu vastuse kood</string>
+  <string name="error_unexpected_response">Ootamatu serveri vaste</string>
+  <string name="error_no_browser">Paigalda veebilehitseja abilehe kuvamiseks</string>
+  <string name="error_barcode_not_linked">Triipkood ei ole lingitud tootega</string>
+  <string name="error_no_product_details">Ei saanud kätte toote üksikasju</string>
+  <string name="error_failed_barcode_upload">Ei saanud triipkoodi üles laadida</string>
+  <string name="error_wrong_grocycode_type">grocycode sisaldab valet üksusetüüpi</string>
+  <string name="error_stock_entry_grocycode">Varude sisendit grocycode\'ist ei leitud</string>
+  <string name="error_permission">Selle tegevuse jaoks puudub õigus</string>
+  <string name="error_undefined">Tekkis viga</string>
+  <string name="error_invalid_base_servings">Portsjonid kehtetud</string>
+
+  <string name="title_overview">Ülevaade</string>
+  <string name="title_stock_overview">Varude ülevaade</string>
+  <string name="title_purchase">Osta</string>
+  <string name="title_consume">Tarbi</string>
+  <string name="title_transfer">Kanna üle</string>
+  <string name="title_inventory">Inventuur</string>
+  <string name="title_barcode_input">Triipkoodi sisend</string>
+  <string name="title_product_overview">Toote ülevaade</string>
+  <string name="title_product">Toode</string>
+  <string name="title_product_create">Loo toode</string>
+  <string name="title_product_edit">Muuda toodet</string>
+  <string name="title_tasks">Ülesanded</string>
+  <string name="title_task_entry">Ülesande sisend</string>
+  <string name="title_task_add">Lisa ülesanne</string>
+  <string name="title_master_data">Põhiandmed</string>
+  <string name="title_stock_entries">Varude sisendid</string>
+  <string name="title_stock_entry">Varude sisend</string>
+  <string name="title_stock_journal">Varude logiraamat</string>
+  <string name="title_shopping_list">Poenimekiri</string>
+  <string name="title_feedback">Tagasiside</string>
+  <string name="title_settings">Seaded</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="title_barcode_scanner">Triipkoodi skanneerija</string>
+  <!-- Context: About this app -->
+  <string name="title_about">Rakendusest</string>
+  <string name="title_info">Informatsioon</string>
+  <string name="title_help">Abi</string>
+  <string name="title_logs">Logid</string>
+  <string name="title_compatibility">Ühilduvuse probleemid</string>
+  <string name="title_logout">Logi Grocyist välja?</string>
+  <string name="title_restart">Taaskäivita Grocy?</string>
+  <string name="title_logout_demo">Logi demo režiimist välja?</string>
+  <string name="title_manage_master_data">Halda põhiandmeid</string>
+  <string name="title_edit_description">Muuda kirjeldust</string>
+  <!-- This is the header of a bottom sheet which is used to get numbers or text from the user. -->
+  <string name="title_input">Sisend</string>
+  <string name="title_external_barcode_input">Väline skanner</string>
+  <string name="title_confirmation">Kinnitus</string>
+  <string name="title_choose_product">Vali toode</string>
+  <string name="title_pending_products">Ootel tooted</string>
+  <string name="title_stored_purchases">Salvestatud ostud</string>
+  <string name="title_chores">Majapidamistööd</string>
+  <string name="title_chore">Majapidamistöö</string>
+  <string name="title_recipes">Retseptid</string>
+  <string name="title_recipe_create">Loo retsept</string>
+  <string name="title_recipe_edit">Muuda retsepti</string>
+  <!-- Editor for editing product description or recipe preparation-->
+  <string name="title_editor">Toimeti</string>
+
+  <string name="title_spoiled">Riknenud</string>
+  <string name="title_use_specific">Kasuta spetsiifilist varude eset</string>
+  <string name="title_specific">Täpsusta varude ese</string>
+  <!--The same string is also in the web interface: Consume form -> select product with tare weight handling (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_exact_amount">Tarbi täpne kogus</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_from">Asukohast</string>
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_location_to">Asukohta</string>
+  <string name="title_recipe">Retsept</string>
+  <string name="title_preparation_mode">Ettevalmistusrežiim</string>
+  <string name="title_total_price">Koguhind</string>
+  <string name="title_unit_price">Ühiku hind</string>
+  <!-- %1$s is a quantity unit -->
+  <string name="title_unit_price_specific">%1$s hind</string>
+  <string name="title_stock_entry_no_specific">Spetsiifiline sisend puudub</string>
+  <string name="title_list_entry">Nimekirja sisend</string>
+  <string name="title_edit_list_entry">Muuda nimekirja sisendit</string>
+  <string name="title_create_list_entry">Loo nimekirja sisend</string>
+  <string name="title_edit_barcode">Muuda triipkoodi</string>
+  <string name="title_create_barcode">Loo triipkood</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_edit_qu_conversion">Muuda koguseühiku teisendamist</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_create_qu_conversion">Loo koguseühiku teisendamine</string>
+  <string name="title_shopping_list_edit">Muuda poenimekirja</string>
+  <string name="title_shopping_list_new">Uus poenimekiri</string>
+  <string name="title_shopping_mode">Ostlemisrežiim</string>
+  <string name="title_batch_mode_shopping_list">Hulgirežiimi poenimekiri</string>
+  <string name="title_product_cat_optional">Valikulised atribuudid</string>
+  <string name="title_product_cat_location">Vaikimisi asukoht</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="title_product_cat_due_date">Tähtaeg</string>
+  <string name="title_product_cat_amount">Kogus</string>
+  <string name="title_product_cat_quantity_unit">Koguseühik</string>
+  <string name="title_notifications">Teavitused</string>
+  <string name="title_product_cat_barcodes">Triipkoodid</string>
+  <!-- QU is a short form of Quantity Unit, maybe your language also has such a short form which you can use here. You can look at the web interface translation for that. -->
+  <string name="title_product_cat_qu_conversions">Koguseühiku teisendused</string>
+  <string name="title_unknown_input">Tundmatu sisend</string>
+  <string name="title_presets_new_products">Eelseadistused uute toodete jaoks</string>
+
+  <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
+  <string name="subtitle_amount">%1$s%2$s</string>
+  <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
+  <string name="subtitle_opened">(avatud)</string>
+  <!-- %1$s is a number like 1, 2, 3 -->
+  <string name="subtitle_amount_opened">(%1$s avatud)</string>
+  <!-- %1$s is a product name -->
+  <string name="subtitle_stock_locations">Kus on %1$s varud </string>
+  <string name="subtitle_none_selected">Ükski ei ole valitud</string>
+  <!-- Should follow the equality between 'None' and 'None selected' -->
+  <string name="subtitle_none">Ükski</string>
+  <string name="subtitle_empty">Tühi</string>
+  <string name="subtitle_done">Valmis</string>
+  <string name="subtitle_undone">Tagasi võetud</string>
+  <string name="subtitle_uncategorized">Kategoriseerimata</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_never_overdue">Mitte kunagi üle tähtaja</string>
+  <string name="subtitle_selected">Valitud</string>
+  <string name="subtitle_stock_entry_no_specific">Kõigepealt avatud, siis lähima tähtajaga, ning siis esimesena sisse esimesena välja</string>
+  <!-- %1$s is a purchase date -->
+  <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="subtitle_stock_entry_name">Ostetud %1$s</string>
+  <!-- %1$s is a best before date, %2$s is a number and %3$s is the open state (e.g. opened); The same string is also in the web interface: Consume form -->
+  <string name="subtitle_stock_entry">Tähtaeg %1$s; kogus: %2$s; %3$s</string>
+  <!-- %1$s and %2$s are numbers -->
+  <string name="subtitle_entry_num_of_num">Sisend %1$d, %2$d-st</string>
+  <!-- %1$s is an amount, %2$s is a quantity unit -->
+  <string name="subtitle_amount_compare">See võrdub %1$s %2$s.</string>
+  <!-- %1$s is a price, %2$s is a quantity unit -->
+  <string name="subtitle_price_means">See tähendab %1$s %2$s kohta.</string>
+  <!-- %1$s and %2$s are amounts -->
+  <string name="subtitle_factor_means">See tähendab, et %1$s on sama mis %2$s.</string>
+  <string name="subtitle_product_hidden">Toode on peidetud</string>
+  <string name="subtitle_product_not_hidden">Toode ei ole peidetud</string>
+  <string name="subtitle_product_not_on_server">Toode ei ole serveris</string>
+  <string name="subtitle_barcodes_will_be_added">Saadaval on triipkoodid, mis lisatakse tootele salvestamisel.</string>
+  <string name="subtitle_unknown">Tundmatu</string>
+  <!-- Like the word 'supported' from 'This version is supported.'-->
+  <string name="subtitle_supported">Toetatud</string>
+  <!-- Like the words 'not supported' from 'This version is not supported.'-->
+  <string name="subtitle_not_supported">Ei ole toetatud</string>
+  <!-- %1$s is a number -->
+  <string name="subtitle_barcode_amount">Kogus: %1$s</string>
+  <!-- %1$s is a unit -->
+  <string name="subtitle_barcode_unit">Koguseühik: %1$s</string>
+  <string name="subtitle_barcode">Triipkood: %1$s</string>
+  <string name="subtitle_feature_disabled">Funktsioon välja lülitatud</string>
+  <string name="subtitle_date_from_input">Kuupäev sisendist:\n%1$s</string>
+  <string name="subtitle_product_amount">Min. varud, kiirtarvitamine, Tegur, Omakaalu käsitlemine</string>
+  <string name="subtitle_product_default_location">Asukoht, Pood</string>
+  <string name="subtitle_product_due_date">Tüüp, vaikimisi päevad (pärast avamist, sügavkülmutamist, sulatamist)</string>
+  <string name="subtitle_product_optional_properties">Seisund, Vanemtoode, Kirjeldus, Toodegrupp, Energia, Pilt</string>
+  <string name="subtitle_product_quantity_unit">Varud, Vaikimisi ostmisel</string>
+  <string name="subtitle_synced_with_server">Sünkroonitud serveriga</string>
+  <string name="subtitle_recipe_not_on_server">Retsept ei ole serveris</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">Tähtaja skoor: %1$s</string>
+  <string name="subtitle_per_serving">portsjoni kohta</string>
+  <string name="subtitle_tap_preparation_mode">Vajuta siia ettevalmistusrežiimiks</string>
+  <!-- Context is Label printer -->
+  <string name="subtitle_print_label_no">Silt puudub</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">Ostu kohta</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">Ühiku kohta</string>
+
+  <string name="description_input_product_part1">Toote lahter sisaldab:</string>
+  <string name="description_input_product_part2">Palun vali, kuidas jätkata:</string>
+  <string name="description_input_product_option1">Loo uus toode ja kasuta sisendit nimena</string>
+  <string name="description_input_product_option2">Loo uus toode ja kasuta sisendit triipkoodina</string>
+  <string name="description_input_product_option3">Lisa triipkoodina olemasolevale tootele</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option1">Eemalda ainult valmis asjad</string>
+  <!-- Context: Clear shopping list -->
+  <string name="description_clear_shopping_list_option2">Eemalda kõik asjad</string>
+
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock">
+    <item quantity="one">Sul on %1$d toode varudes.</item>
+    <item quantity="other">Sul on %1$d toodet varudes.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_stock_due_soon">
+    <item quantity="one">%1$d tootel jõub kätte tähtaeg %2$d päeva jooksul.</item>
+    <item quantity="other">%1$d tootel jõub kätte tähtaeg %2$d päeva jooksul. </item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_overdue">
+    <item quantity="one">%1$d toode on üle tähtaja</item>
+    <item quantity="other">%1$d toodet on üle tähtaja</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_expired">
+    <item quantity="one">%1$d toode on riknenud</item>
+    <item quantity="other">%1$d toodet on riknenud</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing">
+    <item quantity="one">%1$d toode on alla min. varude kogust</item>
+    <item quantity="other">%1$d toodet on alla min. varude kogust</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_single">
+    <item quantity="one">%1$d neist on sinu poenimekirjas</item>
+    <item quantity="other">%1$d neist on sinu poenimekirjas</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_stock_missing_shopping_list_multi">
+    <item quantity="one">%1$d neist on sinu poenimekirjades</item>
+    <item quantity="other">%1$d neist on sinu poenimekirjades</item>
+  </plurals>
+  <!-- %1$s is a number, %2$s is a price and %3$s is a currency -->
+  <plurals name="description_overview_stock_value">
+    <item quantity="one">Sul on %1$d toode varudes väärtusega %2$s%3$s.</item>
+    <item quantity="other">Sul on %1$d toodet varudes väärtusega %2$s%3$s.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list_multi">
+    <item quantity="one">%1$d asi on sinu poenimekirjades</item>
+    <item quantity="other">%1$d asja on sinu poenimekirjades</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_shopping_list">
+    <item quantity="one">%1$d asi on sinu poenimekirjas</item>
+    <item quantity="other">%1$d asja on sinu poenimekirjas</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_recipes">
+    <item quantity="one">Sul on %1$d retsept.</item>
+    <item quantity="other">Sul on %1$d retsepti.</item>
+  </plurals>
+  <!-- %1$s and %2$s are numbers -->
+  <plurals name="description_overview_chores_due_soon">
+    <item quantity="one">%1$d majapidamistööl on tähtaeg järgmise %2$d päeva jooksul.</item>
+    <item quantity="other">%1$d majapidamistööl on tähtaeg järgmise %2$d päeva jooksul</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_overdue">
+    <item quantity="one">%1$d majapidamistöö on üle tähtaja</item>
+    <item quantity="other">%1$d majapidamistööd on üle tähtaja</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_due_today">
+    <item quantity="one">%1$d majapidamistöö tähtaeg on täna</item>
+    <item quantity="other">%1$d majapidamistöö tähtaeg on täna</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_chores_assigned">
+    <item quantity="one">%1$d majapidamistöö on määratud sulle</item>
+    <item quantity="other">%1$d majapidamistööd on määratud sulle </item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks">
+    <item quantity="one">%1$d ülesanne vajab tegemist</item>
+    <item quantity="other">%1$d ülesannet vajab tegemist</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_tasks_user">
+    <item quantity="one">Sulle on määratud %1$d ülesanne.</item>
+    <item quantity="other">Sulle on määratud %1$d ülesannet.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="description_overview_master_data">
+    <item quantity="one">Sinu andmebaas sisaldab %1$d toodet.</item>
+    <item quantity="other">Sinu andmebaas sisaldab %1$d toodet.</item>
+  </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Max. %1$s koht peale koma</item>
+    <item quantity="other">Max. %1$s kohta peale koma</item>
+  </plurals>
+
+  <string name="property_name">Nimi</string>
+  <string name="property_name_singular">Nimi (ainsuse vorm)</string>
+  <string name="property_name_plural">Nimi (mitmuse vorm)</string>
+  <string name="property_product">Toode</string>
+  <string name="property_products">Tooted</string>
+  <string name="property_product_name">Toote nimi</string>
+  <string name="property_parent_product">Vanemtoode</string>
+  <string name="property_description">Kirjeldus</string>
+  <string name="property_note">Märkmed</string>
+  <string name="property_status">Staatus</string>
+  <string name="property_amount">Kogus</string>
+  <string name="property_amount_insert">Kogus: %1$s</string>
+  <string name="property_seconds">Sekundit</string>
+  <!-- %1$s is a number (amount of seconds) -->
+  <plurals name="property_seconds_num">
+    <item quantity="one">%1$d sekund</item>
+    <item quantity="other">%1$d sekundit</item>
+  </plurals>
+  <string name="property_amount_min_stock">Min. varude kogus</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_in">Kogus ühikuna %1$s</string>
+  <string name="property_price">Hind</string>
+  <string name="property_price_average">Keskmine hind</string>
+  <!-- %1$s is a quantity unit-->
+  <string name="property_price_unit">HInd ühe %1$s kohta</string>
+  <!-- %1$s is a price and %2$s is a quantity unit-->
+  <string name="property_price_unit_insert">%1$s koguse %2$s kohta  </string>
+  <!-- %1$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_in">Hind valuutas %1$s</string>
+  <!-- %1$s is a quantity unit and %2$s is a currency like "USD", or "EUR" -->
+  <string name="property_price_unit_in">HInd ühe %1$s kohta valuutas %2$s</string>
+  <string name="property_quantity_unit">Koguseühik</string>
+  <string name="property_quantity_units">Koguseühikud</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_default_qu_purchase">Vaikimisi koguseühik ostes</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_stock">Koguseühik varudes</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_qu_factor">Arvesta ostmine varude koguseühikusse</string>
+  <!-- This string is part of a pair, there is also 'quantity unit to' -->
+  <string name="property_quantity_unit_from">Koguseühikust</string>
+  <!-- This string is part of a pair, there is also 'quantity unit from' -->
+  <string name="property_quantity_unit_to">Koguseühikusse</string>
+  <string name="property_factor">Tegur</string>
+  <string name="property_barcode">Triipkood</string>
+  <string name="property_barcodes">Triipkoodid</string>
+  <string name="property_barcodes_insert">Triipkoodid: %1$s</string>
+  <string name="property_days">Päeva</string>
+  <string name="property_purchased_date">Ostetud kuupäeval</string>
+  <string name="property_purchased_date_fill">Ostetud kuupäeval: %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_type">Tähtaja tüüp</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_best_before">Parim enne kuupäev</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_type_expiration">Kõlblik kuni kuupäev</string>
+  <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date">Tähtaeg</string>
+  <!-- %1$s is a due date-->
+  <string name="property_due_date_fill">Tähtaeg: %1$s</string>
+  <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_date_next">Järgmine tähtaeg</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default">Vaikimisi tähtaeg päevades</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_opened">Vaikimisi tähtaeg päevades pärast avamist</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_freezing">Vaikimisi tähtaeg päevades pärast külmutamist</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_due_days_default_thawing">Vaikimisi tähtaeg päevades pärast sulatamist</string>
+  <string name="property_location">Asukokht</string>
+  <string name="property_location_insert">Asukoht: %1$s</string>
+  <string name="property_location_default">Vaikimisi asukoht</string>
+  <string name="property_location_default_insert">Vaikimisi asukoht: %1$s</string>
+  <string name="property_location_consume_default">Vaikimisi tarbimise koht</string>
+  <string name="property_move_on_open">Liiguta avamisel</string>
+  <string name="property_notes">Märkmed</string>
+  <string name="property_locations">Asukohad</string>
+  <string name="property_store">Pood</string>
+  <string name="property_store_insert">Pood: %1$s</string>
+  <string name="property_store_unknown">Tundmatu pood</string>
+  <string name="property_store_default">Vaikimisi pood</string>
+  <string name="property_stores">Poed</string>
+  <string name="property_shopping_list">Poenimekiri</string>
+  <string name="property_shopping_lists">Poenimekirjad</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_purchased">Viimati ostetud</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_used">Viimati kasutatud</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_last_price">Viimane hind</string>
+  <string name="property_last_price_unit">Viimane hind (ühiku kohta)</string>
+  <string name="property_last_price_total">Viimane hind (kokku)</string>
+  <string name="property_price_insert">HInd: %1$s</string>
+  <!--The same string is also in the web interface: Product overview card (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_average_shelf_life">Keskmine säilivusaeg</string>
+  <string name="property_spoil_rate">Riknemise määr</string>
+  <string name="property_price_history">Hinna ajalugu</string>
+  <string name="property_product_group">Tootegrupp</string>
+  <string name="property_product_groups">Tootegrupid</string>
+  <string name="property_assignment">Ülesanne</string>
+  <string name="property_value">Väärtus</string>
+  <string name="property_stock_value">Varude väärtus</string>
+  <string name="property_opened">avatud</string>
+  <string name="property_not_opened">ei ole avatud</string>
+  <string name="property_is_freezer">On sügavkülmik</string>
+  <!-- kcal (kilo calories) is a unit for energy -->
+  <string name="property_energy">Energia (kcal) ühe varude koguseühiku kohta</string>
+  <string name="property_active">Aktiivne</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_never_show">Ära näita kunagi varude ülevaates</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_own_stock">Lülita enda varud välja</string>
+  <string name="property_number">Number</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_enable_tare_weight">Lülita sisse omakaali käsitlemine</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_tare_weight">Omakaal</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_tare_weight_in">Omakaal koguseühikus %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_disable_stock_check">Keela selle koostisosa varudeseisu kontrollimine</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_amount_quick_consume">Kiirtarbimise kogus</string>
+  <!-- %1$s is a quantity unit like "bottles" -->
+  <string name="property_amount_quick_consume_in">Kiirtarbimise kogus ühikus %1$s</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_accumulate_amount">Kogu alamtooteid min. varude kogus</string>
+  <string name="property_picture">Pilt</string>
+  <string name="property_note_singleline">Üherealine märkus</string>
+  <string name="property_note_multiline">Mitmerealine märkus</string>
+  <!-- like the words 'Single-line' in 'Single-line description'-->
+  <string name="property_singleline">Üherealine</string>
+  <!-- like the words 'Multi-line' in 'Multi-line description'-->
+  <string name="property_multiline">Mitmerealine</string>
+  <!-- %1$s is an amount together with quantity unit -->
+  <string name="property_in_stock">Varudes: %1$s</string>
+  <!-- %1$s is a sort mode like "name" or "due date" -->
+  <string name="property_sort_mode">Sort: %1$s</string>
+  <!-- %1$s is a grouping mode like "product group" or "due date" -->
+  <string name="property_group_by">Grupeeri: %1$s</string>
+  <string name="property_ungrouped">Grupeerimata</string>
+  <!-- %1$s is a property like "product group" or "due date" -->
+  <string name="property_extra_field">Lisaväli: %1$s</string>
+  <string name="property_task_category">Ülesande kategooria</string>
+  <string name="property_task_categories">Ülesande kategooriad</string>
+  <string name="property_calories">Kalorid</string>
+  <string name="property_calories_unit">Kalorid (ühik)</string>
+  <string name="property_calories_total">Kalorid (kokku)</string>
+  <string name="property_category">Kategooria</string>
+  <string name="property_assigned_to">Määratud</string>
+  <string name="property_users">Kasutajad</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_done_by">Viimati tegi</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_last_tracked">Viimati jälgis</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_tracked_count">Jälgimiste arv</string>
+  <!-- See context for this string on the web interface on the chores page, the chore details popup contains it -->
+  <string name="property_average_execution_frequency">Keskmine täitmise sagedus</string>
+  <!-- See context for this string on the web interface on the chores page, the table has this column -->
+  <string name="property_next_estimated_tracking">Järgmine eeldatav jälgimine</string>
+  <string name="property_next_estimated_tracking_time">Järgmine eeldatav jälgimise aeg</string>
+  <!-- See context for this string on the web interface on the recipes edit page -->
+  <string name="property_servings">Portsjonid</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it (hover over help icon) -->
+  <string name="property_servings_base_insert">Põhiportsjonid: %1$s</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_servings_desired">Soovitud portsjonid</string>
+  <string name="property_not_check_shopping_list">Mitte kontrollida poenimekirja alusel</string>
+  <string name="property_not_check_shopping_list_description">Puuduvate esemete lisamisel sellele</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_preparation">Ettevalmistus</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_costs">Kulud</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="property_due_score">Tähtaja skoor</string>
+  <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
+  <string name="property_ingredients">Koostisosad</string>
+  <string name="property_only_check_single_unit_in_stock">Kontrolli ainult, kas mistahes kogus on varudes</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_ingredient_group">Grupp</string>
+  <!-- See context for this string on the web interface on the recipe ingredients edit page -->
+  <string name="property_variable_amount">Muutuv kogus</string>
+  <string name="property_requirements_fulfilled">Nõudmised täidetud</string>
+  <string name="property_produces_product">Valmistab toote</string>
+
+  <string name="date_today">Täna</string>
+  <string name="date_unknown">Tundmatu</string>
+  <!-- This means the 'time' context -->
+  <string name="date_unlimited">Lõputu</string>
+  <!-- This means the 'time' context, like 'Last used date: Never' -->
+  <string name="date_never">Mitte kunagi</string>
+
+  <plurals name="date_days">
+    <item quantity="one">%d päev</item>
+    <item quantity="other">%d päeva</item>
+  </plurals>
+  <plurals name="date_months">
+    <item quantity="one">%d kuu</item>
+    <item quantity="other">%d kuud</item>
+  </plurals>
+  <plurals name="date_years">
+    <item quantity="one">%d aasta</item>
+    <item quantity="other">%d aastat</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_ago">
+    <item quantity="one">%d päev tagasi</item>
+    <item quantity="other">%d päeva tagasi</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_ago">
+    <item quantity="one">%d kuu tagasi</item>
+    <item quantity="other">%d kuud tagasi</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_ago">
+    <item quantity="one">%d aasta tagasi</item>
+    <item quantity="other">%d aastat tagasi</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_days_from_now">
+    <item quantity="one">%d päev praegusest hetkest</item>
+    <item quantity="other">%d päeva praegusest hetkest</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_months_from_now">
+    <item quantity="one"> %d kuu praegusest hetkest</item>
+    <item quantity="other">%d kuud praegusest hetkest</item>
+  </plurals>
+  <!-- This string stands alone, so it can be capitalized at the beginning (if necessary). -->
+  <plurals name="date_years_from_now">
+    <item quantity="one">%d aasta praegusest hetkest</item>
+    <item quantity="other"> %d aastat praegusest hetkest</item>
+  </plurals>
+
+  <string name="info_acknowledgement">Soovime tänada Grocy arendajat Bernd Bestelit, ilma kelle suurepäraste jõupingutusteta poleks see rakendus kunagi võimalik olnud.</string>
+  <string name="info_intro">Mängi tutvustus uuesti</string>
+  <string name="info_intro_description">Funktsioonide tutvustamine</string>
+  <string name="info_dev_beginning">Arendamise algus</string>
+  <string name="info_dev_beginning_date">Aprill 2020</string>
+  <string name="info_version">Versioon</string>
+  <string name="info_grocy_version">Grocy versioon</string>
+  <string name="info_changelog">Muudatuste logi</string>
+  <string name="info_changelog_description">Mis on uut?</string>
+  <string name="info_developers">Arendajad</string>
+  <string name="info_github">Grocy Android GitHubis</string>
+  <string name="info_github_description">Lähtekood</string>
+  <string name="info_website">Ava Grocy veebileht</string>
+
+  <string name="feature_1_title">Grocy Androidi jaoks</string>
+  <string name="feature_1_description">Isehostitav toidukaupade haldamine sinu kodu jaoks</string>
+  <string name="feature_2_title">Intuitiivne disain</string>
+  <string name="feature_2_description">Ava ja tarbi ühe viipega</string>
+  <string name="feature_3_title">Võimas hulgitöötlemine</string>
+  <string name="feature_3_description">Skaneeri oma kogu ost sekunditega</string>
+
+  <string name="category_licenses">Avatud lähtekoodi litsentsid</string>
+  <string name="category_general">Üldine</string>
+  <string name="category_stock">Varud</string>
+  <string name="category_server">Server</string>
+  <string name="category_user_settings">Kasutaja seaded</string>
+  <string name="category_scanner">Skanner</string>
+  <string name="category_scanner_camera">Kaamera skanner</string>
+  <string name="category_scanner_external">Väline skanner</string>
+  <string name="category_appearance">Välimus</string>
+  <string name="category_network">Võrk</string>
+  <string name="category_network_proxy">Puhverserver</string>
+  <string name="category_behavior">Käitumine</string>
+  <string name="category_debugging">Veasilumine</string>
+  <string name="category_new_product">Uus toode</string>
+  <string name="category_existing_products">Olemasolevad tooted</string>
+  <string name="category_existing_products_similar">Sarnased olemasolevad tooted</string>
+
+  <string name="hint_server">Serveri URL</string>
+  <string name="hint_key">Kehtiv API võti</string>
+
+  <string name="setting_theme">Teema</string>
+  <string name="setting_theme_description">Proovi teist väljanägemist</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
+  <string name="setting_theme_auto">Automaatne</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_dark">Tume</string>
+  <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
+  <string name="setting_theme_light">Hele</string>
+  <string name="setting_language">Keel</string>
+  <string name="setting_language_description">Vali keel</string>
+  <string name="setting_language_info">Suur tänu kõigile Transifexi vabatahtlikele tõlkijatele!\nPalun külastage meid GitHubis, et teada saada, kuidas sa saad aidata Grocy Androidi oma keeles kättesaadavaks teha.</string>
+  <string name="setting_language_system">Järgi süsteemi</string>
+  <string name="setting_language_not_available">Inglise, kui tõlget pole saadaval</string>
+  <string name="setting_transition">Kasuta libisevat üleminekut seadete lehekülgede vahel</string>
+  <string name="setting_transition_description">Hääbumise asemel</string>
+  <string name="setting_open_food_facts">Kasuta Open Food Factsi ja Open Beauty Factsi</string>
+  <string name="setting_open_food_facts_description">Saa andmeid triipkoodidelt</string>
+  <string name="setting_choose_barcode_scanner">Vali triipkoodi skanner</string>
+  <string name="setting_choose_barcode_scanner_description">Kaamera triipkoodi skaneerimise jaoks</string>
+  <string name="setting_use_front_cam">Kasuta esikaamerat</string>
+  <string name="setting_use_front_cam_description">Triipkoodi skaneerimise jaoks</string>
+  <string name="setting_use_2d_scanner_format">Kasuta 2D triipkoodi skanneri formaati</string>
+  <string name="setting_use_2d_scanner_format_description">Ruudukuju QR-koodide jaoks</string>
+  <string name="setting_barcode_formats">Triipkoodide formaadid</string>
+  <!-- %1$s are barcode formats -->
+  <string name="setting_barcode_formats_description">Luba ainult: %1$s</string>
+  <string name="setting_barcode_formats_description_all">Pole piiratud</string>
+  <string name="setting_external_support">Välise skanner toetus</string>
+  <string name="setting_external_support_description">Läbi USB või Bluetoothi</string>
+  <string name="setting_reload_config">Taaslaadi konfiguratsioon</string>
+  <string name="setting_reload_config_description">Rakendus vajab taaskäivitamist</string>
+  <string name="setting_logout">Logi välja</string>
+  <string name="setting_logout_description">Naase sisselogimise lehele</string>
+  <string name="setting_manage_shortcuts">Halda otseteid</string>
+  <string name="setting_list_indicator">Näita nimekirja sisendeid</string>
+  <string name="setting_list_indicator_description">Näita sinist täppi, kui toode on poenimekirjas</string>
+  <string name="setting_shopping_mode_update_interval">Ostlemisrežiimi värskendamisintervall</string>
+  <string name="setting_keep_screen_on">Hoia ekraan sisse lülitatud</string>
+  <string name="setting_keep_screen_on_description">Ostlemisrežiimis olles</string>
+  <string name="setting_show_done_items">Näita valmis asju</string>
+  <string name="setting_show_done_items_description">Allpool</string>
+  <string name="setting_smaller_font">Kasuta väiksemat tekstisuurust</string>
+  <string name="setting_smaller_font_description">Et näha rohkem asju korraga</string>
+  <string name="setting_show_product_description">Kuva toote kirjeldus</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_due_soon_days">Tähtaeg päevades</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_purchase">Vaikimisi kogus mida osta</string>
+  <!--The same string is also in the web interface: Stock settings (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="setting_default_amount_consume">Vaikimisi kogus mida tarbida</string>
+  <string name="setting_treat_opened_as_out_of_stock">Käsitle avatuid kui varudest otsas</string>
+  <string name="setting_purchased_date">Küsi ostukuupäeva</string>
+  <string name="setting_purchased_date_description">Ostmisel ja inventuuri lehel</string>
+  <string name="setting_use_quick_consume_amount">Kasuta toote \"Kiirtarbimise kogust\"</string>
+  <string name="setting_auto_add_shopping_list">Automaatselt lisa tooted poenimekirja</string>
+  <string name="setting_auto_add_shopping_list_description">Mis on alla nende määratud min. varude kogust</string>
+  <string name="setting_empty_value">Tühi</string>
+  <string name="setting_sync_off">Sükroonimine väljas</string>
+  <string name="setting_loading">Laadimise väärtus</string>
+  <string name="setting_not_loaded">Ei saanud laadida</string>
+  <string name="setting_debug">Lülita logi pidamine sisse</string>
+  <string name="setting_debug_description">Veasilumise otstarbeks</string>
+  <string name="setting_log_level">Logi pidamise tase</string>
+  <string name="setting_error_logs">Näita ainult vealogisid</string>
+  <string name="setting_info_logs">Näita vea- ja teabelogisid</string>
+  <string name="setting_logs_description">Näita selle protsessi logcati</string>
+  <string name="setting_timeout">Laadmise aegumine</string>
+  <string name="setting_timeout_descriptions">Pärast mida laadimine on tühistatud</string>
+  <string name="setting_beginner_mode">Algaja režiim</string>
+  <string name="setting_beginner_mode_description">Kuva abitekstid vaikimisi</string>
+  <string name="setting_haptic">Haptilised efektid</string>
+  <string name="setting_haptic_description">Kaasahaarav kogemus</string>
+  <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
+  <string name="setting_expand_bottom_sheets">Laienda bottom sheet\'id</string>
+  <string name="setting_expand_bottom_sheets_description">Ekraani laiuti režiimis</string>
+  <string name="setting_speed_up_start">Vähenda rakenduse alustamisaega</string>
+  <string name="setting_speed_up_start_description">Mõjub ainult kiiretel seadmetel</string>
+  <string name="setting_date_keyboard_input">Sisesta kuupäevi klaviatuuriga</string>
+  <string name="setting_date_keyboard_input_description">Kuupäeva valimise ratta asemel</string>
+  <string name="setting_date_keyboard_reverse">Kasuta vastupidist kuupäeva formaati sisestamisel</string>
+  <string name="setting_date_keyboard_reverse_description">DDMMYY formaadi YYMMDD asemel</string>
+  <string name="setting_copy_barcode_note">Kopeeri triipkoodi märkus varude sisendi märkusesse</string>
+  <string name="setting_copy_barcode_note_description">Toodet ostes</string>
+  <string name="setting_loading_circle">Näita laadimisringi kõikide päringute jaoks</string>
+  <string name="setting_loading_circle_description">Kasulik aeglase võrgu korral</string>
+  <string name="setting_tor">Kasuta Tor\'i</string>
+  <string name="setting_tor_description">Vajab Orbot\'i</string>
+  <string name="setting_proxy">Luba HTTP puhverserver</string>
+  <string name="setting_proxy_description">Konfigureeri HTTP puhverserver kõikide võrgupäringute jaoks</string>
+  <string name="setting_proxy_host">Puhverserveri host</string>
+  <string name="setting_proxy_host_description">Sinu puhverserveri hostnimi</string>
+  <string name="setting_proxy_port">Puhverserveri port</string>
+  <string name="setting_proxy_port_description">Sinu puhverserveri pordi number</string>
+  <string name="setting_synchronized">All toodud valik on sünkroonitud sinu serveriga</string>
+  <string name="settings_synchronized">Need seaded on sünkroonitud sinu serveriga</string>
+  <string name="setting_message_duration">Kuva sõnumite aeg</string>
+  <string name="setting_message_duration_description">Puudutab ainult tehingute sõnumeid</string>
+  <string name="setting_notifications_enable">Luba teavitused</string>
+  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
+  few days and therefore should be consumed in the next few days. -->
+  <string name="setting_notifications_due_soon">Tähtaeg lähedal asjadel</string>
+  <string name="setting_notifications_due_soon_description">Kontrollib varusid päevaselt ja teavitab sind kui toodetel on tähtaeg lähenemas</string>
+  <string name="setting_notifications_chores_description">Kontrollib majapidamistöid päevaselt ja teavitab sind kui on töö tähtaeg on samal päeval</string>
+  <string name="setting_notification_time">Teavituse aeg</string>
+  <!-- the description of the notification time preference.
+  With the "Due soon" check enabled, the user will be notified every day at the selected time how
+  many products in stock are due soon, so check means a check of the products in stock -->
+  <string name="setting_notification_time_description">Kui kontrollimine on tehtud</string>
+  <string name="setting_keep_screen_on_recipes_description">Retsepti vaatamise ajal</string>
+
+  <string name="notification_due_soon_content">Tarbi neid järgmise paari päeva jooksul, et vähendada toidujäätmeid.</string>
+
+  <!-- This is the URL of the demo instance on grocy.info . Replace 'en' with the abbreviation of the translation language. If your language is not available as demo language, take 'en'.
+  Examples: 'de' for German; 'fr' for French -->
+  <string name="url_grocy_demo">https://en.demo.grocy.info</string>
+  </resources>
