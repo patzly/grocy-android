@@ -202,7 +202,7 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
-              android:onClick="@{() -> fragment.navigate(R.id.stockOverviewFragment)}"
+              android:onClick="@{() -> activity.navigateFragment(R.id.stockOverviewFragment)}"
               app:clickUtil="@{clickUtil}"
               app:contentPaddingLeft="0dp"
               app:contentPaddingRight="0dp"
@@ -431,7 +431,7 @@
                       style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
                       android:layout_marginEnd="8dp"
                       android:text="@string/title_inventory"
-                      android:onClick="@{() -> fragment.navigate(R.id.inventoryFragment)}"
+                      android:onClick="@{() -> activity.navigateFragment(R.id.inventoryFragment)}"
                       app:clickUtil="@{clickUtil}"
                       app:icon="@drawable/ic_round_inventory" />
 
@@ -440,7 +440,7 @@
                       android:layout_marginEnd="8dp"
                       android:text="@string/title_transfer"
                       android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_STOCK_LOCATION_TRACKING) ? View.VISIBLE : View.GONE}"
-                      android:onClick="@{() -> fragment.navigate(R.id.transferFragment)}"
+                      android:onClick="@{() -> activity.navigateFragment(R.id.transferFragment)}"
                       app:clickUtil="@{clickUtil}"
                       app:icon="@drawable/ic_round_swap_horiz" />
 
@@ -448,14 +448,14 @@
                       style="@style/Widget.Grocy.Button.TonalButton.Icon"
                       android:layout_marginEnd="8dp"
                       android:text="@string/title_consume"
-                      android:onClick="@{() -> fragment.navigate(R.id.consumeFragment)}"
+                      android:onClick="@{() -> activity.navigateFragment(R.id.consumeFragment)}"
                       app:clickUtil="@{clickUtil}"
                       app:icon="@drawable/ic_round_consume_product" />
 
                     <com.google.android.material.button.MaterialButton
                       style="@style/Widget.Grocy.Button.TonalButton.Icon"
                       android:text="@string/title_purchase"
-                      android:onClick="@{() -> fragment.navigate(R.id.purchaseFragment)}"
+                      android:onClick="@{() -> activity.navigateFragment(R.id.purchaseFragment)}"
                       app:clickUtil="@{clickUtil}"
                       app:icon="@drawable/ic_round_local_grocery_store" />
 
@@ -470,7 +470,7 @@
             <com.google.android.material.card.MaterialCardView
               style="@style/Widget.Grocy.Card.Text.Error"
               android:visibility="@{viewModel.storedPurchasesOnDevice ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_storedPurchasesFragment)}"
               android:layout_marginBottom="8dp"
               android:layout_marginHorizontal="16dp"
               app:clickUtil="@{clickUtil}">
@@ -490,8 +490,8 @@
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_SHOPPING_LIST) ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
-              android:onLongClickVoid="@{() -> fragment.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_shoppingListFragment)}"
+              android:onLongClickVoid="@{() -> activity.navigateDeepLink(@string/deep_link_shoppingModeFragment)}"
               app:clickUtil="@{clickUtil}">
 
               <LinearLayout
@@ -522,7 +522,7 @@
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_RECIPES) ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_recipesFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_recipesFragment)}"
               app:clickUtil="@{clickUtil}">
 
               <LinearLayout
@@ -558,7 +558,7 @@
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_CHORES) ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_choresFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_choresFragment)}"
               app:clickUtil="@{clickUtil}">
 
               <LinearLayout
@@ -743,7 +743,7 @@
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="8dp"
               android:visibility="@{viewModel.isFeatureEnabled(Constants.PREF.FEATURE_TASKS) ? View.VISIBLE : View.GONE}"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_tasksFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_tasksFragment)}"
               app:clickUtil="@{clickUtil}">
 
               <LinearLayout
@@ -852,7 +852,7 @@
               android:layout_marginStart="@dimen/main_side_margin"
               android:layout_marginEnd="@dimen/main_side_margin"
               android:layout_marginBottom="16dp"
-              android:onClick="@{() -> fragment.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
+              android:onClick="@{() -> activity.navigateDeepLink(@string/deep_link_masterDataOverviewFragment)}"
               app:clickUtil="@{clickUtil}">
 
               <LinearLayout

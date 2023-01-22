@@ -301,7 +301,9 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       viewModel.showErrorMessage();
       return;
     }
-    navigate(ChoresFragmentDirections.actionChoresFragmentToChoreEntryRescheduleFragment(chore));
+    activity.navigateFragment(
+        ChoresFragmentDirections.actionChoresFragmentToChoreEntryRescheduleFragment(chore)
+    );
   }
 
   @Override

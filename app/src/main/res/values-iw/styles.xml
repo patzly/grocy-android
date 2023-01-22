@@ -107,6 +107,10 @@
 
   <!-- TextAppearance -->
 
+  <style name="TextAppearance.Grocy.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+    <item name="android:textStyle">bold</item>
+  </style>
+
   <style name="TextAppearance.Grocy.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
     <item name="android:textStyle">bold</item>
   </style>

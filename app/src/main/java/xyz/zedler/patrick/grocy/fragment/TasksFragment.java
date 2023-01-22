@@ -300,8 +300,11 @@ public class TasksFragment extends BaseFragment implements
 
   @Override
   public void editTask(Task task) {
-    navigate(TasksFragmentDirections
-        .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT).setTaskEntry(task));
+    activity.navigateFragment(
+        TasksFragmentDirections
+            .actionTasksFragmentToTaskEntryEditFragment(ACTION.EDIT)
+            .setTaskEntry(task)
+    );
   }
 
   @Override

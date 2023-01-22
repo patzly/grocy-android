@@ -20,8 +20,10 @@
 package xyz.zedler.patrick.grocy.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -31,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.text.HtmlCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.preference.PreferenceManager;
@@ -70,7 +71,11 @@ public class FormattedTextView extends LinearLayout {
   public void setText(String text, String... highlights) {
     removeAllViews();
 
-    for (String part : text.split("\n\n")) {
+    String[] parts = text.split("\n\n");
+    for (int i = 0; i < parts.length; i++) {
+      String part = parts[i];
+      String partNext = i < parts.length - 1 ? parts[i + 1] : "";
+
       for (String highlight : highlights) {
         part = part.replaceAll(highlight, "<b>" + highlight + "</b>");
       }
@@ -81,13 +86,16 @@ public class FormattedTextView extends LinearLayout {
         addView(getHeadline(h[0].length(), part.substring(h[0].length() + 1)));
       } else if (part.startsWith("- ")) {
         String[] bullets = part.trim().split("- ");
-        for (int i = 1; i < bullets.length; i++) {
-          addView(getBullet(bullets[i], i == bullets.length - 1));
+        for (int index = 1; index < bullets.length; index++) {
+          addView(getBullet(bullets[index], index == bullets.length - 1));
         }
       } else if (part.startsWith("? ")) {
         addView(getMessage(part.substring(2), false));
       } else if (part.startsWith("! ")) {
         addView(getMessage(part.substring(2), true));
+      } else if (part.startsWith("> ") || part.startsWith("=> ")) {
+        String[] link = part.substring(part.startsWith("> ") ? 2 : 3).trim().split(" ");
+        addView(link.length == 1 ? getLink(link[0], link[0]) : getLink(link[0], link[1]));
       } else if (part.startsWith("---")) {
         addView(getDivider());
       } else if (part.startsWith("OPTION_USE_SLIDING")) {
@@ -113,18 +121,19 @@ public class FormattedTextView extends LinearLayout {
         );
         addView(optionTransition);
       } else {
-        addView(getParagraph(part));
+        boolean keepDistance = !partNext.startsWith("=> ");
+        addView(getParagraph(part, keepDistance));
       }
     }
   }
 
-  private MaterialTextView getParagraph(String text) {
+  private MaterialTextView getParagraph(String text, boolean keepDistance) {
     MaterialTextView textView = new MaterialTextView(
         new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView_Paragraph),
         null,
         0
     );
-    textView.setLayoutParams(getVerticalLayoutParams(16, 16));
+    textView.setLayoutParams(getVerticalLayoutParams(16, keepDistance ? 16 : 0));
     textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
     textView.setText(HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY));
     return textView;
@@ -136,31 +145,41 @@ public class FormattedTextView extends LinearLayout {
     );
     textView.setLayoutParams(getVerticalLayoutParams(16, 16));
     textView.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
-    boolean isMedium = false;
     int resId;
     switch (h) {
       case 1:
-        resId = R.style.TextAppearance_Material3_HeadlineLarge;
+        resId = R.style.TextAppearance_Grocy_HeadlineLarge;
         break;
       case 2:
-        resId = R.style.TextAppearance_Material3_HeadlineMedium;
+        resId = R.style.TextAppearance_Grocy_HeadlineMedium;
         break;
       case 3:
-        resId = R.style.TextAppearance_Material3_HeadlineSmall;
+        resId = R.style.TextAppearance_Grocy_HeadlineSmall;
         break;
       case 4:
-        resId = R.style.TextAppearance_Material3_TitleLarge;
+        resId = R.style.TextAppearance_Grocy_TitleLarge;
         break;
       default:
-        resId = R.style.TextAppearance_Material3_TitleMedium;
-        isMedium = true;
+        resId = R.style.TextAppearance_Grocy_TitleMedium;
         break;
     }
     TextViewCompat.setTextAppearance(textView, resId);
-    textView.setTypeface(
-        ResourcesCompat.getFont(context, isMedium ? R.font.jost_medium : R.font.jost_book)
-    );
     textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
+    return textView;
+  }
+
+  private MaterialTextView getLink(String text, String link) {
+    MaterialTextView textView = new MaterialTextView(
+        new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView_LabelLarge),
+        null,
+        0
+    );
+    textView.setLayoutParams(getVerticalLayoutParams(16, 16));
+    textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorPrimary));
+    textView.setText(text);
+    textView.setOnClickListener(
+        v -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+    );
     return textView;
   }
 
@@ -252,7 +271,7 @@ public class FormattedTextView extends LinearLayout {
     cardView.setStrokeWidth(0);
     cardView.setRadius(padding);
 
-    MaterialTextView textView = getParagraph(text);
+    MaterialTextView textView = getParagraph(text, false);
     textView.setLayoutParams(getVerticalLayoutParams(0, 0));
     textView.setTextColor(colorOnSurface);
     cardView.addView(textView);
