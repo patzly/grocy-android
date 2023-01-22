@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.text.HtmlCompat;
@@ -49,6 +50,7 @@ import xyz.zedler.patrick.grocy.util.ViewUtil;
 public class FormattedTextView extends LinearLayout {
 
   private final Context context;
+  private int textColor;
 
   public FormattedTextView(Context context) {
     super(context);
@@ -66,6 +68,7 @@ public class FormattedTextView extends LinearLayout {
     setOrientation(VERTICAL);
     int padding = UiUtil.dpToPx(context, 16);
     setPadding(0, padding, 0, 0);
+    textColor = ResUtil.getColorAttr(context, R.attr.colorOnBackground);
   }
 
   public void setText(String text, String... highlights) {
@@ -127,6 +130,13 @@ public class FormattedTextView extends LinearLayout {
     }
   }
 
+  /**
+   * Call this before setText().
+   */
+  public void setTextColor(@ColorInt int color) {
+    textColor = color;
+  }
+
   private MaterialTextView getParagraph(String text, boolean keepDistance) {
     MaterialTextView textView = new MaterialTextView(
         new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView_Paragraph),
@@ -134,7 +144,7 @@ public class FormattedTextView extends LinearLayout {
         0
     );
     textView.setLayoutParams(getVerticalLayoutParams(16, keepDistance ? 16 : 0));
-    textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
+    textView.setTextColor(textColor);
     textView.setText(HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY));
     return textView;
   }
@@ -164,7 +174,7 @@ public class FormattedTextView extends LinearLayout {
         break;
     }
     TextViewCompat.setTextAppearance(textView, resId);
-    textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
+    textView.setTextColor(textColor);
     return textView;
   }
 
@@ -208,7 +218,7 @@ public class FormattedTextView extends LinearLayout {
     GradientDrawable shape = new GradientDrawable();
     shape.setShape(GradientDrawable.OVAL);
     shape.setSize(bulletSize, bulletSize);
-    shape.setColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
+    shape.setColor(textColor);
     viewBullet.setBackground(shape);
 
     MaterialTextView textViewHeight = new MaterialTextView(
@@ -239,6 +249,7 @@ public class FormattedTextView extends LinearLayout {
     );
     paramsText.weight = 1;
     textView.setLayoutParams(paramsText);
+    textView.setTextColor(textColor);
 
     if (text.trim().endsWith("<br/>")) {
       text = text.trim().substring(0, text.length() - 5);
