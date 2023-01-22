@@ -97,7 +97,7 @@
             android:id="@+id/image_master_location_description"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
             android:src="@drawable/ic_round_subject_anim"
-            android:layout_marginTop="16sp"
+            android:layout_marginTop="16dp"
             tools:ignore="ContentDescription" />
 
           <com.google.android.material.textfield.TextInputLayout
