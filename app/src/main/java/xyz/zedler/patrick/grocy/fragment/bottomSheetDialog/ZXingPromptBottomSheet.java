@@ -61,7 +61,7 @@ public class ZXingPromptBottomSheet extends BaseBottomSheetDialogFragment {
     binding.buttonIgnore.setOnClickListener(v -> dismiss());
 
     binding.buttonSettings.setOnClickListener(v -> {
-      navigateDeepLink(R.string.deep_link_settingsCatScannerToolFragment);
+      activity.navigateDeepLink(R.string.deep_link_settingsCatScannerToolFragment);
       dismiss();
     });
 
