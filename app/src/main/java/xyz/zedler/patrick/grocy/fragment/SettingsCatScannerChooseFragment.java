@@ -90,6 +90,9 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
+    binding.formattedMlKitIntro.setTextColor(
+        ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant)
+    );
     binding.formattedMlKitIntro.setText(
         ResUtil.getRawText(
             activity, isPlayStoreInstalled ? R.raw.ml_kit_intro : R.raw.ml_kit_intro_no_vending
@@ -98,6 +101,9 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
 
     boolean useMlKitScanner = viewModel.getUseMlKitScanner();
     viewModel.setUseMlKitScanner(useMlKitScanner);
+    binding.formattedScannerInfo.setTextColor(
+        ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant)
+    );
     if (useMlKitScanner) {
       binding.formattedScannerInfo.setText(getString(R.string.msg_help_barcode_scanner_info_mlkit));
       binding.toggleSelectScanner.check(R.id.button_mlkit);

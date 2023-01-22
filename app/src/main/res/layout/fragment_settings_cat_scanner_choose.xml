@@ -156,7 +156,7 @@
           android:layout_marginBottom="0dp">
 
           <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph"
+            style="@style/Widget.Grocy.TextView.Paragraph.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{@string/msg_help_barcode_scanner_choose}" />
