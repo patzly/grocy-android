@@ -83,12 +83,12 @@ public class InputProductBottomSheet extends BaseBottomSheetDialogFragment {
     assert selectionLive.getValue() != null;
     String input = binding.input.getText().toString();
     if (selectionLive.getValue() == 1) {
-      navigateDeepLink(R.string.deep_link_masterProductFragment,
+      activity.navigateDeepLink(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
               .setProductName(input).build().toBundle());
     } else if (selectionLive.getValue() == 2) {
       activity.getCurrentFragment().addBarcodeToNewProduct(input.trim());
-      navigateDeepLink(R.string.deep_link_masterProductFragment,
+      activity.navigateDeepLink(R.string.deep_link_masterProductFragment,
           new MasterProductFragmentArgs.Builder(Constants.ACTION.CREATE)
               .build().toBundle());
     } else {

@@ -604,6 +604,11 @@ public class MainActivity extends AppCompatActivity {
 
   // NAVIGATION
 
+  @NonNull
+  public NavController getNavController() {
+    return navController;
+  }
+
   public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
     if (UiUtil.areAnimationsEnabled(this)) {
       boolean useSliding = getSharedPrefs().getBoolean(
@@ -708,7 +713,7 @@ public class MainActivity extends AppCompatActivity {
 
   public void navigateFragment(NavDirections directions) {
     if (navController == null || directions == null) {
-      Log.e(TAG, "navigate: controller or direction is null");
+      Log.e(TAG, "navigateFragment: controller or direction is null");
       return;
     }
     try {
@@ -716,31 +721,43 @@ public class MainActivity extends AppCompatActivity {
           directions, getNavOptionsBuilderFragmentFadeOrSlide(true).build()
       );
     } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: " + directions, e);
+      Log.e(TAG, "navigateFragment: " + directions, e);
     }
   }
 
   public void navigateFragment(@IdRes int destination, @NonNull NavOptions navOptions) {
     if (navController == null ) {
-      Log.e(TAG, "navigate: controller is null");
+      Log.e(TAG, "navigateFragment: controller is null");
       return;
     }
     try {
       navController.navigate(destination, null, navOptions);
     } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigate: ", e);
+      Log.e(TAG, "navigateFragment: ", e);
     }
   }
 
   public void navigateDeepLink(@NonNull Uri uri, boolean slideVertically) {
     if (navController == null ) {
-      Log.e(TAG, "navigateFragment: controller is null");
+      Log.e(TAG, "navigateDeepLink: controller is null");
       return;
     }
     try {
       navController.navigate(uri, getNavOptionsBuilderFragmentFadeOrSlide(slideVertically).build());
     } catch (IllegalArgumentException e) {
-      Log.e(TAG, "navigateFragment: ", e);
+      Log.e(TAG, "navigateDeepLink: ", e);
+    }
+  }
+
+  public void navigateDeepLink(@NonNull Uri uri, @NonNull NavOptions navOptions) {
+    if (navController == null ) {
+      Log.e(TAG, "navigateDeepLink: controller is null");
+      return;
+    }
+    try {
+      navController.navigate(uri, navOptions);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "navigateDeepLink: ", e);
     }
   }
 
@@ -756,7 +773,7 @@ public class MainActivity extends AppCompatActivity {
     navigateDeepLink(getUriWithArgs(getString(uri), args), true);
   }
 
-  private static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
+  public static Uri getUriWithArgs(@NonNull String uri, @NonNull Bundle argsBundle) {
     String[] parts = uri.split("\\?");
     if (parts.length == 1) {
       return Uri.parse(uri);

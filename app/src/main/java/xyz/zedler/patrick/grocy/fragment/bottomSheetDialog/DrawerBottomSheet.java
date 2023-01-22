@@ -21,7 +21,6 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.widget.TooltipCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
@@ -127,7 +125,7 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     );
 
     binding.buttonDrawerShoppingMode.setOnClickListener(
-        v -> navigateDeepLink(R.string.deep_link_shoppingModeFragment)
+        v -> activity.navigateDeepLink(R.string.deep_link_shoppingModeFragment)
     );
     TooltipCompat.setTooltipText(
         binding.buttonDrawerShoppingMode, getString(R.string.title_shopping_mode)
@@ -305,17 +303,6 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
       builder.setExitAnim(R.anim.slide_no);
     }
     activity.navigate(directions, builder.build());
-    dismiss();
-  }
-
-  @Override
-  public void navigateDeepLink(@StringRes int uri) {
-    NavOptions.Builder builder = activity.getNavOptionsBuilderFragmentFadeOrSlide(true);
-    builder.setPopUpTo(R.id.overviewStartFragment, false);
-    if (activity.getCurrentFragment() instanceof OverviewStartFragment) {
-      builder.setExitAnim(R.anim.slide_no);
-    }
-    findNavController().navigate(Uri.parse(getString(uri)), builder.build());
     dismiss();
   }
 

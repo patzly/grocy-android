@@ -45,16 +45,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import xyz.zedler.patrick.grocy.R;
-import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheetDialogFragment;
-import xyz.zedler.patrick.grocy.helper.DownloadHelper;
-import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
-import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.NETWORK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.fragment.StockOverviewFragmentArgs;
+import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.FilterChipLiveDataStockStatus;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 
 public class DueSoonCheckWorker extends Worker {
@@ -90,7 +89,7 @@ public class DueSoonCheckWorker extends Worker {
 
       Bitmap bitmap = getBitmapFromVectorDrawable(getApplicationContext(), R.drawable.ic_round_grocy);
 
-      Uri uri = BaseBottomSheetDialogFragment.getUriWithArgs(
+      Uri uri = MainActivity.getUriWithArgs(
           getApplicationContext().getString(R.string.deep_link_stockOverviewFragment),
           new StockOverviewFragmentArgs.Builder()
               .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_DUE_SOON))
