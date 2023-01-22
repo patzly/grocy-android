@@ -34,7 +34,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import com.android.volley.VolleyError;
 import java.net.URLEncoder;
@@ -297,30 +296,6 @@ public class BaseFragment extends Fragment {
 
   public void navigateUp() {
     activity.navigateUp();
-  }
-
-  @Deprecated // Use activity.navigate(NavDirections);
-  public void navigate(NavDirections directions) {
-    activity.navigate(directions);
-  }
-
-  @Deprecated // Use activity.navigateFragment(int);
-  public void navigate(@IdRes int destination) {
-    activity.navigateFragment(destination);
-  }
-
-  @Deprecated // Use activity.navigateFragment(int, Bundle);
-  void navigate(@IdRes int destination, Bundle arguments) {
-    activity.navigateFragment(destination, arguments);
-  }
-
-  @Deprecated // Use activity.navigateDeepLink(Uri.parse(String), boolean);
-  public void navigateDeepLink(@NonNull String uri) {
-    activity.navigateDeepLink(Uri.parse(uri), true);
-  }
-
-  public void navigateDeepLink(@StringRes int uri, @NonNull Bundle args) {
-    activity.navigateDeepLink(getUriWithArgs(getString(uri), args), true);
   }
 
   public void navigateDeepLinkHorizontally(@StringRes int uri, @NonNull Bundle args) {

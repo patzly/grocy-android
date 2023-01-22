@@ -839,6 +839,31 @@
 
   <!-- TextAppearance -->
 
+  <style name="TextAppearance.Grocy.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="fontFamily">@font/jost_book</item>
+  </style>
+
+  <style name="TextAppearance.Grocy.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="fontFamily">@font/jost_book</item>
+  </style>
+
+  <style name="TextAppearance.Grocy.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="fontFamily">@font/jost_book</item>
+  </style>
+
+  <style name="TextAppearance.Grocy.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+    <item name="android:fontFamily">@font/jost_book</item>
+    <item name="fontFamily">@font/jost_book</item>
+  </style>
+
+  <style name="TextAppearance.Grocy.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+    <item name="android:fontFamily">@font/jost_medium</item>
+    <item name="fontFamily">@font/jost_medium</item>
+  </style>
+
   <!-- Localized style, no empty base style needed -->
   <style name="TextAppearance.Grocy.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
     <item name="android:fontFamily">@font/jost_medium</item>
@@ -849,11 +874,6 @@
   <style name="TextAppearance.Grocy.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
     <item name="android:fontFamily">@font/jost_medium</item>
     <item name="fontFamily">@font/jost_medium</item>
-  </style>
-
-  <style name="TextAppearance.Grocy.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-    <item name="android:fontFamily">@font/jost_book</item>
-    <item name="fontFamily">@font/jost_book</item>
   </style>
 
   <style name="TextAppearance.Grocy.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">

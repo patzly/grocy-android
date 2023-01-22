@@ -201,8 +201,11 @@ public class StoredPurchasesFragment extends BaseFragment
               .setPendingProductId(String.valueOf(((Product) item).getPendingProductId()))
               .build().toBundle());
     } else if (item instanceof StoredPurchase) {
-      navigate(StoredPurchasesFragmentDirections.actionStoredPurchasesFragmentToPurchaseFragment()
-          .setStoredPurchaseId(String.valueOf(((StoredPurchase) item).getId())));
+      activity.navigateFragment(
+          StoredPurchasesFragmentDirections
+              .actionStoredPurchasesFragmentToPurchaseFragment()
+              .setStoredPurchaseId(String.valueOf(((StoredPurchase) item).getId()))
+      );
     }
 
   }

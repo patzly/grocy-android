@@ -152,7 +152,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         embeddedFragmentScanner.startScannerIfVisible();
       } else if (event.getType() == Event.CHOOSE_PRODUCT) {
         String barcode = event.getBundle().getString(ARGUMENT.BARCODE);
-        navigate(InventoryFragmentDirections
+        activity.navigateFragment(InventoryFragmentDirections
             .actionInventoryFragmentToChooseProductFragment(barcode));
       }
     });
