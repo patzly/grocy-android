@@ -2,7 +2,7 @@
 
 Version 1.1, 26 February 2007
 
-> http://scripts.sil.org/OFL
+=> http://scripts.sil.org/OFL http://scripts.sil.org/OFL
 
 #### PREAMBLE
 

@@ -859,6 +859,7 @@
     <item name="fontFamily">@font/jost_book</item>
   </style>
 
+  <!-- Localized style, no empty base style needed -->
   <style name="TextAppearance.Grocy.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
     <item name="android:fontFamily">@font/jost_medium</item>
     <item name="fontFamily">@font/jost_medium</item>

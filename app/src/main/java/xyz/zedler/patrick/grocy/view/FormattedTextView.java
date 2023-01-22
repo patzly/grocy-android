@@ -71,7 +71,11 @@ public class FormattedTextView extends LinearLayout {
   public void setText(String text, String... highlights) {
     removeAllViews();
 
-    for (String part : text.split("\n\n")) {
+    String[] parts = text.split("\n\n");
+    for (int i = 0; i < parts.length; i++) {
+      String part = parts[i];
+      String partNext = i < parts.length - 1 ? parts[i + 1] : "";
+
       for (String highlight : highlights) {
         part = part.replaceAll(highlight, "<b>" + highlight + "</b>");
       }
@@ -82,8 +86,8 @@ public class FormattedTextView extends LinearLayout {
         addView(getHeadline(h[0].length(), part.substring(h[0].length() + 1)));
       } else if (part.startsWith("- ")) {
         String[] bullets = part.trim().split("- ");
-        for (int i = 1; i < bullets.length; i++) {
-          addView(getBullet(bullets[i], i == bullets.length - 1));
+        for (int index = 1; index < bullets.length; index++) {
+          addView(getBullet(bullets[index], index == bullets.length - 1));
         }
       } else if (part.startsWith("? ")) {
         addView(getMessage(part.substring(2), false));
@@ -117,18 +121,19 @@ public class FormattedTextView extends LinearLayout {
         );
         addView(optionTransition);
       } else {
-        addView(getParagraph(part));
+        boolean keepDistance = !partNext.startsWith("=> ");
+        addView(getParagraph(part, keepDistance));
       }
     }
   }
 
-  private MaterialTextView getParagraph(String text) {
+  private MaterialTextView getParagraph(String text, boolean keepDistance) {
     MaterialTextView textView = new MaterialTextView(
         new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView_Paragraph),
         null,
         0
     );
-    textView.setLayoutParams(getVerticalLayoutParams(16, 16));
+    textView.setLayoutParams(getVerticalLayoutParams(16, keepDistance ? 16 : 0));
     textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnBackground));
     textView.setText(HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY));
     return textView;
@@ -266,7 +271,7 @@ public class FormattedTextView extends LinearLayout {
     cardView.setStrokeWidth(0);
     cardView.setRadius(padding);
 
-    MaterialTextView textView = getParagraph(text);
+    MaterialTextView textView = getParagraph(text, false);
     textView.setLayoutParams(getVerticalLayoutParams(0, 0));
     textView.setTextColor(colorOnSurface);
     cardView.addView(textView);
