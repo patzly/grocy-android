@@ -31,7 +31,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.view.MenuCompat;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
@@ -282,13 +281,13 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
       dismiss();
     });
     // tooltips
-    TooltipCompat.setTooltipText(
+    ViewUtil.setTooltipText(
         binding.buttonConsume,
         activity.getString(
             R.string.action_consume_one, quantityUnitStock.getName(), product.getName()
         )
     );
-    TooltipCompat.setTooltipText(
+    ViewUtil.setTooltipText(
         binding.buttonOpen,
         activity.getString(
             R.string.action_open_one, quantityUnitStock.getName(), product.getName()

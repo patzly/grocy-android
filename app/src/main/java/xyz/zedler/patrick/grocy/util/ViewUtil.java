@@ -372,6 +372,10 @@ public class ViewUtil {
     TooltipCompat.setTooltipText(view, view.getContext().getString(resId));
   }
 
+  public static void setTooltipText(@NonNull View view, @Nullable String text) {
+    TooltipCompat.setTooltipText(view, text);
+  }
+
   // TouchProgressBar
 
   public static class TouchProgressBarUtil {
