@@ -121,7 +121,6 @@ import xyz.zedler.patrick.grocy.util.NetUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.RestartUtil;
-import xyz.zedler.patrick.grocy.util.UnlockUtil;
 import xyz.zedler.patrick.grocy.util.ShortcutUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -383,8 +382,6 @@ public class MainActivity extends AppCompatActivity {
           null
       );
     }
-
-    sharedPrefs.edit().putBoolean(PREF.PURCHASED, UnlockUtil.isKeyInstalled(this)).apply();
 
     // Show changelog if app was updated
     int versionNew = BuildConfig.VERSION_CODE;

@@ -52,16 +52,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import xyz.zedler.patrick.grocy.Constants.BarcodeFormats;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.SCANNER;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.PurchasePromptBottomSheet;
 import xyz.zedler.patrick.grocy.util.HapticUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
-import xyz.zedler.patrick.grocy.util.UnlockUtil;
 
 public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
@@ -281,21 +278,6 @@ public class EmbeddedFragmentScannerMLKit extends EmbeddedFragmentScanner {
 
     new HapticUtil(fragment.requireContext()).tick();
     stopScanner();
-
-    int promptCount = sharedPrefs.getInt(PREF.PURCHASE_PROMPT, 1);
-    if (UnlockUtil.isKeyInstalled(activity) && UnlockUtil.isPlayStoreInstalled(activity)) {
-      if (!sharedPrefs.getBoolean(PREF.PURCHASED, false) && promptCount > 0) {
-        if (promptCount < 50) {
-          sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, promptCount + 1).apply();
-        } else {
-          activity.showBottomSheet(new PurchasePromptBottomSheet());
-        }
-      } else if (promptCount > 1) {
-        sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
-      }
-    } else if (promptCount > 1) {
-      sharedPrefs.edit().putInt(PREF.PURCHASE_PROMPT, 1).apply();
-    }
 
     if (barcodeListener != null) {
       barcodeListener.onBarcodeRecognized(barcodes.get(0).getRawValue());
