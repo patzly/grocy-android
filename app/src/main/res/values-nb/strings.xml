@@ -208,7 +208,6 @@
   <string name="msg_feedback">Har du ønsker, spørsmål eller feil? Kontakt oss og la oss hjelpe!\nEllers vil vi bli veldig glade for god anmeldelse på Play Butikken.</string>
   <string name="msg_point_at_barcode">Rett kameraet mot en strekkode</string>
   <string name="msg_press_hold_confirm">Trykk og hold for å bekrefte</string>
-  <string name="msg_welcome_to_grocy">Velkommen til Grocy Android!\n\nFor å bruke grocy produktivt trenger du din egen server eller grocy-tillegget for Home Assistant.\nHvis du bare vil prøve denne appen, kan du bruke demoserveren fra Bernd Bestel, skaperen av grocy.</string>
   <string name="msg_choose_option_below">Vennligst velg ett alternativ under her.</string>
   <string name="msg_qr_code_scan">Gå til grocy-nettstedet ditt på en annen enhet og gå til siden \"API -nøkler\". Klikk \"Legg til\", klikk deretter på det lille QR-kodesymbolet og skann QR-koden.</string>
   <string name="msg_port_connection_info_without_port">Appen kobles til porten %1$s. \nHvis du vil at den skal koble til en annen port, kan du legge til en i URL-en. \nEksempel: http://domene.no:81/</string>
@@ -353,7 +352,6 @@
   <string name="title_presets_new_products">Forhåndsinnstillinger for nye produkter</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
    Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Bruk %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -623,7 +621,6 @@
 
   <string name="setting_theme">Tema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Følgesystem</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Mørk</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
