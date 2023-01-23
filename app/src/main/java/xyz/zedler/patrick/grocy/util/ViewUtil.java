@@ -337,32 +337,6 @@ public class ViewUtil {
     return layers;
   }
 
-  public static Drawable getRippleBgListItemSurfaceRecyclerItem(Context context) {
-    return getRippleBgListItemSurfaceRecyclerItem(context, 8, 8);
-  }
-
-  public static Drawable getRippleBgListItemSurfaceRecyclerItem(
-      Context context, float paddingStart, float paddingEnd
-  ) {
-    boolean isRtl = UiUtil.isLayoutRtl(context);
-    float[] radii = new float[8];
-    Arrays.fill(radii, UiUtil.dpToPx(context, 16));
-    RoundRectShape rect = new RoundRectShape(radii, null, null);
-    ShapeDrawable shape = new ShapeDrawable(rect);
-    shape.getPaint().setColor(SurfaceColors.SURFACE_3.getColor(context));
-    LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
-    layers.setLayerInset(
-        0,
-        UiUtil.dpToPx(context, isRtl ? paddingEnd : paddingStart),
-        UiUtil.dpToPx(context, 2),
-        UiUtil.dpToPx(context, isRtl ? paddingStart : paddingEnd),
-        UiUtil.dpToPx(context, 2)
-    );
-    return new RippleDrawable(
-        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
-    );
-  }
-
   // Enable/disable views
 
   public static void setEnabled(boolean enabled, View... views) {

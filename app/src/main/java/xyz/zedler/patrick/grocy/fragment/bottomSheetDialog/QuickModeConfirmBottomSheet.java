@@ -59,7 +59,7 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
     activity = (MainActivity) requireActivity();
     Bundle args = requireArguments();
 
-    binding.header.setOnClickListener(v -> hideAndStopProgress());
+    binding.toolbar.setOnClickListener(v -> hideAndStopProgress());
     binding.container.setOnClickListener(v -> hideAndStopProgress());
 
     if (args.containsKey(ARGUMENT.ACTION)) {
