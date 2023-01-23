@@ -45,47 +45,14 @@
     android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <FrameLayout
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:layout_marginEnd="16dp"
-          android:text="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@{viewModel.isActionEdit ? @string/title_edit_list_entry : @string/title_create_list_entry}" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -107,14 +74,14 @@
           android:id="@+id/scroll"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:overScrollMode="never"
-          android:fillViewport="true">
+          android:overScrollMode="ifContentScrolls">
 
           <LinearLayout
+            android:id="@+id/linear_container_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="16dp"
-            android:paddingBottom="90dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             app:transitionTypeChanging="@{true}">
@@ -159,35 +126,35 @@
             </LinearLayout>
 
             <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@null"
-              android:paddingTop="16dp"
-              android:paddingBottom="6dp"
+              style="@style/Widget.Grocy.LinearLayout.ListItem"
+              android:paddingTop="0dp"
+              android:paddingBottom="0dp"
+              android:paddingStart="0dp"
               android:paddingEnd="0dp"
-              android:paddingStart="72dp">
+              android:layout_marginStart="56dp"
+              android:weightSum="2">
 
               <com.google.android.material.radiobutton.MaterialRadioButton
                 style="@style/Widget.Grocy.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingEnd="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="4dp"
                 android:paddingStart="0dp"
-                android:minHeight="0dp"
                 android:text="@string/property_singleline"
                 android:checked="@{!formData.useMultilineDescriptionLive}"
-                android:onClick="@{() -> formData.setUseMultilineDescriptionLive(false)}"/>
+                android:onClick="@{() -> formData.setUseMultilineDescriptionLive(false)}" />
 
               <com.google.android.material.radiobutton.MaterialRadioButton
                 style="@style/Widget.Grocy.RadioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingEnd="6dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="16dp"
                 android:paddingStart="0dp"
-                android:minHeight="0dp"
                 android:text="@string/property_multiline"
                 android:checked="@{formData.useMultilineDescriptionLive}"
-                android:onClick="@{() -> formData.setUseMultilineDescriptionLive(true)}"/>
+                android:onClick="@{() -> formData.setUseMultilineDescriptionLive(true)}" />
 
             </LinearLayout>
 
@@ -221,10 +188,11 @@
 
             <LinearLayout
               android:id="@+id/linear_due_date"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
               android:onClick="@{() -> viewModel.showDueDateBottomSheet()}"
-              android:weightSum="1"
               android:animateLayoutChanges="true"
+              android:paddingStart="16dp"
+              android:paddingEnd="8dp"
               app:transitionTypeChanging="@{true}">
 
               <ImageView
@@ -232,9 +200,7 @@
                 android:src="@drawable/ic_round_event"
                 tools:ignore="ContentDescription" />
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox"
-                android:layout_weight="1"
-                android:layout_width="0dp">
+              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.ListItem.OverLine"
@@ -251,33 +217,19 @@
 
               </LinearLayout>
 
-              <FrameLayout
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+              <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete_due_date"
+                style="@style/Widget.Grocy.Button.IconButton"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="4dp"
-                android:background="?attr/actionBarItemBackground"
-                android:clickable="true"
-                android:gravity="center"
-                android:contentDescription="@string/action_delete"
-                android:tooltipText="@string/action_delete"
-                android:focusable="true"
                 android:visibility="@{formData.dueDateLive != null ? View.VISIBLE : View.GONE}"
-                tools:targetApi="o"
-                android:onClick="@{() -> formData.deleteDueDate()}">
-
-                <ImageView
-                  android:layout_width="24dp"
-                  android:layout_height="24dp"
-                  android:layout_gravity="center"
-                  android:importantForAccessibility="no"
-                  android:src="@drawable/ic_round_close" />
-
-              </FrameLayout>
+                android:onClick="@{() -> formData.deleteDueDate()}"
+                app:icon="@drawable/ic_round_close" />
 
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
               android:onClick="@{() -> viewModel.showCategoriesBottomSheet()}">
 
               <ImageView
@@ -300,7 +252,7 @@
             </LinearLayout>
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
               android:onClick="@{() -> viewModel.showUsersBottomSheet()}">
 
               <ImageView

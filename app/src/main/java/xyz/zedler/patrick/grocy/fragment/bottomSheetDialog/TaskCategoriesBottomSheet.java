@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBind
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
@@ -92,6 +93,16 @@ public class TaskCategoriesBottomSheet extends BaseBottomSheetDialogFragment
     BaseFragment currentFragment = activity.getCurrentFragment();
     currentFragment.selectTaskCategory(taskCategory);
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        binding.recyclerListSelection.getPaddingLeft(),
+        binding.recyclerListSelection.getPaddingTop(),
+        binding.recyclerListSelection.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull
