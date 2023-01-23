@@ -35,6 +35,8 @@ import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Chore;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.VersionUtil;
 
 public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
@@ -85,6 +87,7 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
     binding.toolbar.getMenu().findItem(R.id.action_reschedule_next_execution)
         .setVisible(VersionUtil.isGrocyServerMin330(sharedPrefs));
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_track_chore_execution) {
         activity.getCurrentFragment().trackChoreExecution(chore.getId());
@@ -135,6 +138,16 @@ public class ChoreEntryBottomSheet extends BaseBottomSheetDialogFragment {
         );
       }
     }).perform(dlHelper.getUuid());
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

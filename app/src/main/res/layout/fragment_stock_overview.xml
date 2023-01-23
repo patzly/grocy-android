@@ -62,8 +62,7 @@
           <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_default"
             style="@style/Widget.Grocy.Toolbar.Back"
-            app:title="@string/title_stock_overview"
-            app:titleCentered="true" />
+            app:title="@string/title_stock_overview" />
 
         </FrameLayout>
 
