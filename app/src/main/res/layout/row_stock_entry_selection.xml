@@ -22,10 +22,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:id="@+id/container"
-  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_bg">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More">
 
   <ImageView
     android:id="@+id/selected"

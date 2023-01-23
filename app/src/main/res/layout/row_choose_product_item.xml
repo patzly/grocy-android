@@ -21,7 +21,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/container"
-  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
   tools:ignore="UseCompoundDrawables">
 
   <TextView
@@ -29,8 +29,7 @@
     style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:layout_gravity="center_vertical" />
+    android:layout_weight="1" />
 
   <ImageView
     android:id="@+id/image_pending"
@@ -38,7 +37,6 @@
     android:layout_marginStart="16dp"
     android:src="@drawable/ic_round_cloud_pending"
     android:visibility="gone"
-    android:layout_gravity="center_vertical"
     tools:ignore="ContentDescription" />
 
 </LinearLayout>

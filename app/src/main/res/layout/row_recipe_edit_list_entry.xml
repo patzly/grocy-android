@@ -20,15 +20,9 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/linear_recipe_ingredient_container"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
   android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="48dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
-  android:padding="16dp"
-  android:baselineAligned="false">
+  android:background="@drawable/ripple_list_item_swipeable">
 
   <TextView
     android:id="@+id/title"
