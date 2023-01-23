@@ -56,7 +56,6 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -270,10 +269,6 @@ public class ViewUtil {
   }
 
   // Toolbar
-
-  public static void centerToolbarTitleOnLargeScreens(MaterialToolbar toolbar) {
-    toolbar.setTitleCentered(!UiUtil.isFullWidth(toolbar.getContext()));
-  }
 
   public static void centerTextOnLargeScreens(TextView textView) {
     if (UiUtil.isFullWidth(textView.getContext())) {
