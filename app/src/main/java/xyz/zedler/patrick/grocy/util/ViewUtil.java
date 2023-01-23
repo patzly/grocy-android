@@ -51,7 +51,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -364,6 +366,14 @@ public class ViewUtil {
             ? View.OVER_SCROLL_IF_CONTENT_SCROLLS
             : View.OVER_SCROLL_NEVER
     );
+  }
+
+  public static void setTooltipText(@NonNull View view, @StringRes int resId) {
+    TooltipCompat.setTooltipText(view, view.getContext().getString(resId));
+  }
+
+  public static void setTooltipText(@NonNull View view, @Nullable String text) {
+    TooltipCompat.setTooltipText(view, text);
   }
 
   // TouchProgressBar

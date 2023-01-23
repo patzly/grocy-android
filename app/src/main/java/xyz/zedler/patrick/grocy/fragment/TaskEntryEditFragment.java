@@ -31,8 +31,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentTaskEntryEditBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -41,8 +44,6 @@ import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 import xyz.zedler.patrick.grocy.viewmodel.TaskEntryEditViewModel;
 import xyz.zedler.patrick.grocy.viewmodel.TaskEntryEditViewModel.TaskEntryEditViewModelFactory;
@@ -55,6 +56,7 @@ public class TaskEntryEditFragment extends BaseFragment {
   private FragmentTaskEntryEditBinding binding;
   private TaskEntryEditViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup group, Bundle state) {
@@ -82,6 +84,14 @@ public class TaskEntryEditFragment extends BaseFragment {
     binding.setFormData(viewModel.getFormData());
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -137,6 +147,8 @@ public class TaskEntryEditFragment extends BaseFragment {
       }
     });
 
+    ViewUtil.setTooltipText(binding.buttonDeleteDueDate, R.string.action_delete);
+
     if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
       if (binding.editTextName.getText() == null || binding.editTextName.getText().length() == 0) {
         new Handler().postDelayed(() -> activity.showKeyboard(binding.editTextName), 50);
@@ -149,9 +161,9 @@ public class TaskEntryEditFragment extends BaseFragment {
 
     // UPDATE UI
 
-    /*activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.recycler, true, true
-    );*/
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, true
+    );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,

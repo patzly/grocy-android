@@ -41,6 +41,8 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTaskEntryBinding;
 import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.util.DateUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
@@ -118,6 +120,7 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
             : getString(R.string.subtitle_none_selected)
     );
 
+    ResUtil.tintMenuItemIcons(activity, binding.toolbar.getMenu());
     binding.toolbar.setOnMenuItemClickListener(item -> {
       if (item.getItemId() == R.id.action_toggle_done) {
         activity.getCurrentFragment().toggleDoneStatus(task);
@@ -206,6 +209,16 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
     if (progressConfirm.getProgress() != 100) {
       Toast.makeText(requireContext(), R.string.msg_press_hold_confirm, Toast.LENGTH_LONG).show();
     }
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

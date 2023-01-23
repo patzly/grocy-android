@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.preference.PreferenceManager;
@@ -127,34 +126,16 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     binding.buttonDrawerShoppingMode.setOnClickListener(
         v -> activity.navigateDeepLink(R.string.deep_link_shoppingModeFragment)
     );
-    TooltipCompat.setTooltipText(
-        binding.buttonDrawerShoppingMode, getString(R.string.title_shopping_mode)
-    );
-    TooltipCompat.setTooltipText(
-        binding.buttonDrawerConsume, getString(R.string.title_consume)
-    );
-    TooltipCompat.setTooltipText(
-        binding.buttonDrawerPurchase, getString(R.string.title_purchase)
-    );
-    TooltipCompat.setTooltipText(
-        binding.buttonDrawerTransfer, getString(R.string.title_transfer)
-    );
-    TooltipCompat.setTooltipText(
-        binding.buttonDrawerInventory, getString(R.string.title_inventory)
-    );
+    ViewUtil.setTooltipText(binding.buttonDrawerShoppingMode, R.string.title_shopping_mode);
+    ViewUtil.setTooltipText(binding.buttonDrawerConsume, R.string.title_consume);
+    ViewUtil.setTooltipText(binding.buttonDrawerPurchase, R.string.title_purchase);
+    ViewUtil.setTooltipText(binding.buttonDrawerTransfer, R.string.title_transfer);
+    ViewUtil.setTooltipText(binding.buttonDrawerInventory, R.string.title_inventory);
 
-    TooltipCompat.setTooltipText(
-        binding.linearDrawerConsume, getString(R.string.title_consume)
-    );
-    TooltipCompat.setTooltipText(
-        binding.linearDrawerPurchase, getString(R.string.title_purchase)
-    );
-    TooltipCompat.setTooltipText(
-        binding.linearDrawerTransfer, getString(R.string.title_transfer)
-    );
-    TooltipCompat.setTooltipText(
-        binding.linearDrawerInventory, getString(R.string.title_inventory)
-    );
+    ViewUtil.setTooltipText(binding.linearDrawerConsume, R.string.title_consume);
+    ViewUtil.setTooltipText(binding.linearDrawerPurchase, R.string.title_purchase);
+    ViewUtil.setTooltipText(binding.linearDrawerTransfer, R.string.title_transfer);
+    ViewUtil.setTooltipText(binding.linearDrawerInventory, R.string.title_inventory);
 
     ViewTreeObserver observerText = binding.textDrawerStock.getViewTreeObserver();
     observerText.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

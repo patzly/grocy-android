@@ -42,6 +42,7 @@ import xyz.zedler.patrick.grocy.adapter.MasterPlaceholderAdapter;
 import xyz.zedler.patrick.grocy.adapter.TaskEntryAdapter;
 import xyz.zedler.patrick.grocy.behavior.AppBarBehavior;
 import xyz.zedler.patrick.grocy.behavior.SwipeBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentTasksBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.TaskEntryBottomSheet;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
@@ -68,6 +69,7 @@ public class TasksFragment extends BaseFragment implements
   private SwipeBehavior swipeBehavior;
   private FragmentTasksBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -106,6 +108,14 @@ public class TasksFragment extends BaseFragment implements
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.setUp();
+
+    binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
     // APP BAR BEHAVIOR
 
@@ -318,6 +328,7 @@ public class TasksFragment extends BaseFragment implements
       return;
     }
     viewModel.setOfflineLive(!isOnline);
+    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

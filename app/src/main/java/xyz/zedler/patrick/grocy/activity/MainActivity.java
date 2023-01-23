@@ -60,7 +60,6 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -342,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
     binding.fabMainScroll.setBackgroundTintList(
         ColorStateList.valueOf(SurfaceColors.SURFACE_2.getColor(this))
     );
-    TooltipCompat.setTooltipText(binding.fabMainScroll, getString(R.string.action_top_scroll));
+    ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
 
     scrollBehavior = new BottomScrollBehavior(
         this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
@@ -556,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
       onLongClick.run();
       return true;
     });
-    TooltipCompat.setTooltipText(binding.fabMain, getString(tooltipStringId));
+    ViewUtil.setTooltipText(binding.fabMain, tooltipStringId);
   }
 
   @Override
