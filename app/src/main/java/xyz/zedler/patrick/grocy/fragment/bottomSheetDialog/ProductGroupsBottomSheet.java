@@ -36,6 +36,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBind
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class ProductGroupsBottomSheet extends BaseBottomSheetDialogFragment
     implements ProductGroupAdapter.ProductGroupAdapterListener {
@@ -72,6 +73,7 @@ public class ProductGroupsBottomSheet extends BaseBottomSheetDialogFragment
     }
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
+    ViewUtil.centerText(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_product_groups));
 
     binding.recyclerListSelection.setLayoutManager(

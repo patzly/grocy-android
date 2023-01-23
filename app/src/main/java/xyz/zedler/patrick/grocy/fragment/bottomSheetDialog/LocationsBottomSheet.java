@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBind
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     implements LocationAdapter.LocationAdapterListener {
@@ -71,6 +72,7 @@ public class LocationsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     String title = bundle.getString(ARGUMENT.TITLE);
+    ViewUtil.centerText(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(title != null ? title : activity.getString(R.string.property_locations));
 
     binding.recyclerListSelection.setLayoutManager(

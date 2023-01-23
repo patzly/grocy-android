@@ -285,6 +285,13 @@ public class ViewUtil {
     }
   }
 
+  public static void centerText(TextView... textViews) {
+    for (TextView textView : textViews) {
+      textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+      textView.setGravity(Gravity.CENTER_HORIZONTAL);
+    }
+  }
+
   // Ripple background for surface list items
 
   public static Drawable getRippleBgListItemSurface(Context context) {

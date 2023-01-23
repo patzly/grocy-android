@@ -68,7 +68,7 @@ public class ProductsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_products));
-    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
+    ViewUtil.centerText(binding.textListSelectionTitle);
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(

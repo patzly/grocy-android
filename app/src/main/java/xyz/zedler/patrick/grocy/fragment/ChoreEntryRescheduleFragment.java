@@ -33,6 +33,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import java.util.Locale;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentChoreEntryRescheduleBinding;
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
@@ -54,6 +55,7 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
   private FragmentChoreEntryRescheduleBinding binding;
   private ChoreEntryRescheduleViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
+  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -83,6 +85,14 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
+
+    systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipe);
+    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
@@ -124,9 +134,9 @@ public class ChoreEntryRescheduleFragment extends BaseFragment {
 
     // UPDATE UI
 
-    /*activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.recycler, true, true
-    );*/
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, true
+    );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_empty, null);
     activity.updateFab(

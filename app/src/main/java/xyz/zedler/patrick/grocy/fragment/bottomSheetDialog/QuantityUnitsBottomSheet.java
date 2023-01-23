@@ -74,7 +74,7 @@ public class QuantityUnitsBottomSheet extends BaseBottomSheetDialogFragment
     int selected = bundle.getInt(Constants.ARGUMENT.SELECTED_ID, -1);
 
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_quantity_units));
-    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
+    ViewUtil.centerText(binding.textListSelectionTitle);
 
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(
