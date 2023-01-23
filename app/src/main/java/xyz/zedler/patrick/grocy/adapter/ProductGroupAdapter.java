@@ -110,9 +110,7 @@ public class ProductGroupAdapter extends RecyclerView.Adapter<ProductGroupAdapte
       holder.textViewName.setTextColor(
           ResUtil.getColorAttr(context, R.attr.colorOnSurface)
       );
-      holder.linearLayoutContainer.setBackground(
-          ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context)
-      );
+      holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
       holder.linearLayoutContainer.setOnClickListener(
           view -> listener.onItemRowClicked(holder.getAdapterPosition())
       );

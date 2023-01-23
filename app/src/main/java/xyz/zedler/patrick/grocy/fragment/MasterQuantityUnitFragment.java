@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,8 +46,8 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterQuantityUnitBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.util.PluralUtil;
@@ -56,6 +59,8 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
   private final static String TAG = MasterQuantityUnitFragment.class.getSimpleName();
 
+  private static final String DIALOG_DELETE = "dialog_delete";
+
   private MainActivity activity;
   private Gson gson;
   private GrocyApi grocyApi;
@@ -66,6 +71,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
   private ArrayList<QuantityUnit> quantityUnits = new ArrayList<>();
   private ArrayList<String> quantityUnitNames = new ArrayList<>();
   private QuantityUnit editQuantityUnit;
+  private AlertDialog dialogDelete;
 
   private boolean isRefresh = false;
   private boolean debug;
@@ -85,6 +91,12 @@ public class MasterQuantityUnitFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
+
     binding = null;
     dlHelper.destroy();
   }
@@ -116,7 +128,13 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
     // VIEWS
 
-    binding.frameMasterQuantityUnitCancel.setOnClickListener(v -> activity.onBackPressed());
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipeMasterQuantityUnit);
+    systemBarBehavior.setScroll(binding.scrollMasterQuantityUnit, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 
     // swipe refresh
     binding.swipeMasterQuantityUnit.setOnRefreshListener(this::refresh);
@@ -175,9 +193,9 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
     // UPDATE UI
 
-    /*activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.recycler, true, true
-    );*/
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scrollMasterQuantityUnit, true
+    );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
@@ -193,6 +211,12 @@ public class MasterQuantityUnitFragment extends BaseFragment {
             && savedInstanceState == null,
         this::saveQuantityUnit
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
   }
 
   @Override
@@ -200,6 +224,9 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     if (isHidden()) {
       return;
     }
+
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
 
     outState.putParcelableArrayList("quantityUnits", quantityUnits);
     outState.putStringArrayList("quantityUnitNames", quantityUnitNames);
@@ -451,17 +478,6 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     binding.editTextMasterQuantityUnitDescription.setText(null);
   }
 
-  public void deleteQuantityUnitSafely() {
-    if (editQuantityUnit == null) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.QUANTITY_UNITS);
-    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editQuantityUnit.getId());
-    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editQuantityUnit.getName());
-    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-  }
-
   @Override
   public void deleteObject(int quantityUnitId) {
     dlHelper.delete(
@@ -481,11 +497,33 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     );
   }
 
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            activity.getString(
+                R.string.msg_master_delete,
+                getString(R.string.property_quantity_unit),
+                editQuantityUnit.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          if (editQuantityUnit == null) {
+            return;
+          }
+          deleteObject(editQuantityUnit.getId());
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
-        deleteQuantityUnitSafely();
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;

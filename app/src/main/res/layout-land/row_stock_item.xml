@@ -21,23 +21,11 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linear_container"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="56dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
-  android:paddingStart="16dp"
-  android:paddingEnd="24dp"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp"
-  android:gravity="center_vertical">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+  android:background="@drawable/ripple_list_item_swipeable">
 
   <LinearLayout
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
+    style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch"
     android:orientation="horizontal"
     android:gravity="start">
 

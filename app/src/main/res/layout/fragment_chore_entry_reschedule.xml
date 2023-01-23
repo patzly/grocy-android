@@ -41,49 +41,14 @@
     android:background="?android:attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content">
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <FrameLayout
-          android:id="@+id/back"
-          android:layout_width="48dp"
-          android:layout_height="48dp"
-          android:layout_marginStart="4dp"
-          android:layout_marginEnd="20dp"
-          android:background="?attr/actionBarItemBackground"
-          android:clickable="true"
-          android:gravity="center"
-          android:contentDescription="@string/action_back"
-          android:tooltipText="@string/action_back"
-          android:focusable="true"
-          tools:targetApi="o"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_round_arrow_back" />
-
-        </FrameLayout>
-
-        <TextView
-          android:id="@+id/title"
-          style="@style/Widget.Grocy.TextView.Toolbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:layout_marginEnd="16dp"
-          android:text="@string/action_reschedule_next_execution" />
-
-      </LinearLayout>
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Grocy.Toolbar.Back"
+        app:title="@string/action_reschedule_next_execution" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -105,14 +70,15 @@
           android:id="@+id/scroll"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:overScrollMode="never"
+          android:overScrollMode="ifContentScrolls"
           android:fillViewport="true">
 
           <LinearLayout
+            android:id="@+id/linear_container_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            android:paddingBottom="90dp"
+            android:paddingBottom="@dimen/global_scroll_bottom_padding"
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             app:transitionTypeChanging="@{true}">
@@ -221,9 +187,8 @@
               style="@style/Widget.Grocy.Button.UnelevatedButton"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_marginStart="72dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="16dp"
+              android:layout_marginStart="56dp"
+              android:layout_marginTop="8dp"
               android:text="@string/action_reset"
               android:onClick="@{() -> viewModel.resetReschedule()}" />
 

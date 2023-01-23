@@ -20,17 +20,10 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/linear_recipe_position_container"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
   android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="56dp"
-  android:clickable="true"
-  android:focusable="true"
   android:paddingStart="16dp"
-  android:paddingEnd="16dp"
-  android:paddingTop="12dp"
-  android:paddingBottom="12dp"
-  android:gravity="center_vertical">
+  android:paddingEnd="16dp">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -38,11 +31,7 @@
     android:orientation="horizontal"
     android:baselineAligned="false">
 
-    <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:layout_weight="1">
+    <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
       <LinearLayout
         android:layout_width="wrap_content"

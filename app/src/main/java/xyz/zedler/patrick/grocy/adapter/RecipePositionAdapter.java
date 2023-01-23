@@ -188,7 +188,7 @@ public class RecipePositionAdapter extends
 
     // CONTAINER
     holder.binding.linearRecipePositionContainer.setBackground(
-        ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context)
+        ViewUtil.getRippleBgListItemSurface(context)
     );
     holder.binding.linearRecipePositionContainer.setOnClickListener(
         view -> listener.onItemRowClicked(recipePosition, position)

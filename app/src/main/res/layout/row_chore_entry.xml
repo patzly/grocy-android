@@ -19,28 +19,12 @@
 
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linear_container"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="48dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
-  android:paddingTop="10dp"
-  android:paddingBottom="10dp"
-  android:paddingStart="16dp"
-  android:paddingEnd="20dp"
-  android:gravity="center_vertical"
-  android:baselineAligned="false">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+  android:background="@drawable/ripple_list_item_swipeable">
 
-  <LinearLayout
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_weight="1">
+  <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
     <TextView
       android:id="@+id/title"
@@ -74,7 +58,9 @@
       <ImageView
         android:id="@+id/image_reschedule"
         style="@style/Widget.Grocy.ImageView.Icon"
-        android:layout_marginStart="12dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="5dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_round_schedule"
         android:visibility="gone"
@@ -98,7 +84,9 @@
       <ImageView
         android:id="@+id/image_reassign"
         style="@style/Widget.Grocy.ImageView.Icon"
-        android:layout_marginStart="12dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="5dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_round_swap_horiz"
         android:visibility="gone"

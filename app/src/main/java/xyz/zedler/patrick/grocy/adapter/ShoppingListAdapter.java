@@ -108,7 +108,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
       holder.imageSelected.setVisibility(View.INVISIBLE);
       holder.name.setTextColor(ResUtil.getColorAttr(context, R.attr.colorOnSurface));
       holder.container.setOnClickListener(view -> listener.onItemRowClicked(shoppingList));
-      holder.container.setBackground(ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context));
+      holder.container.setBackground(ViewUtil.getRippleBgListItemSurface(context));
     }
 
     if (shoppingList.getId() == 1) {

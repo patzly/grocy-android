@@ -26,47 +26,14 @@
   android:background="?android:attr/colorBackground">
 
   <com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/app_bar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center_vertical"
-      android:orientation="horizontal">
-
-      <FrameLayout
-        android:id="@+id/frame_master_location_cancel"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="20dp"
-        android:background="?attr/actionBarItemBackground"
-        android:clickable="true"
-        android:gravity="center"
-        android:contentDescription="@string/action_cancel"
-        android:tooltipText="@string/action_cancel"
-        android:focusable="true"
-        tools:targetApi="o">
-
-        <ImageView
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_gravity="center"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_close" />
-
-      </FrameLayout>
-
-      <TextView
-        style="@style/Widget.Grocy.TextView.Toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/property_location"
-        android:layout_marginEnd="16dp" />
-
-    </LinearLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/toolbar"
+      style="@style/Widget.Grocy.Toolbar.Back"
+      app:title="@string/property_location" />
 
   </com.google.android.material.appbar.AppBarLayout>
 
@@ -81,13 +48,14 @@
       android:id="@+id/scroll_master_location"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:overScrollMode="never">
+      android:overScrollMode="ifContentScrolls">
 
       <LinearLayout
+        android:id="@+id/linear_container_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
-        android:paddingBottom="90dp"
+        android:paddingBottom="@dimen/global_scroll_bottom_padding"
         android:orientation="vertical">
 
         <LinearLayout
@@ -97,9 +65,9 @@
 
           <ImageView
             android:id="@+id/image_master_location_name"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+            style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
             android:src="@drawable/ic_round_label_anim"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="16dp"
             tools:ignore="ContentDescription" />
 
           <com.google.android.material.textfield.TextInputLayout
@@ -129,12 +97,13 @@
             android:id="@+id/image_master_location_description"
             style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
             android:src="@drawable/ic_round_subject_anim"
-            android:layout_marginTop="16sp"
+            android:layout_marginTop="16dp"
             tools:ignore="ContentDescription" />
 
           <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_master_location_description"
             style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            app:helperText=" "
             android:hint="@string/property_description">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -149,9 +118,9 @@
 
         <LinearLayout
           android:id="@+id/linear_master_location_freezer"
-          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-          android:layout_marginTop="12dp"
-          android:paddingEnd="0dp"
+          style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+          android:layout_marginTop="4dp"
+          android:paddingEnd="9dp"
           android:paddingStart="16dp">
 
           <ImageView

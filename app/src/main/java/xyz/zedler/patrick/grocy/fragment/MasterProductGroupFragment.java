@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,8 +46,8 @@ import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterProductGroupBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ProductGroup;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -55,6 +58,8 @@ public class MasterProductGroupFragment extends BaseFragment {
 
   private final static String TAG = MasterProductGroupFragment.class.getSimpleName();
 
+  private static final String DIALOG_DELETE = "dialog_delete";
+
   private MainActivity activity;
   private Gson gson;
   private GrocyApi grocyApi;
@@ -64,6 +69,7 @@ public class MasterProductGroupFragment extends BaseFragment {
   private ArrayList<ProductGroup> productGroups;
   private ArrayList<String> productGroupNames;
   private ProductGroup editProductGroup;
+  private AlertDialog dialogDelete;
 
   private boolean isRefresh;
   private boolean debug;
@@ -83,6 +89,12 @@ public class MasterProductGroupFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
+
     binding = null;
     dlHelper.destroy();
   }
@@ -116,7 +128,13 @@ public class MasterProductGroupFragment extends BaseFragment {
 
     // VIEWS
 
-    binding.frameMasterProductGroupCancel.setOnClickListener(v -> activity.onBackPressed());
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
+    systemBarBehavior.setAppBar(binding.appBar);
+    systemBarBehavior.setContainer(binding.swipeMasterProductGroup);
+    systemBarBehavior.setScroll(binding.scrollMasterProductGroup, binding.linearContainerScroll);
+    systemBarBehavior.setUp();
+
+    binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 
     // swipe refresh
     binding.swipeMasterProductGroup.setOnRefreshListener(this::refresh);
@@ -160,9 +178,9 @@ public class MasterProductGroupFragment extends BaseFragment {
 
     // UPDATE UI
 
-    /*activity.getScrollBehavior().setUpScroll(
-        binding.appBar, false, binding.recycler, true, true
-    );*/
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scrollMasterProductGroup, true
+    );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
         true,
@@ -178,6 +196,12 @@ public class MasterProductGroupFragment extends BaseFragment {
             && savedInstanceState == null,
         this::saveProductGroup
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
   }
 
   @Override
@@ -185,6 +209,9 @@ public class MasterProductGroupFragment extends BaseFragment {
     if (isHidden()) {
       return;
     }
+
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
 
     outState.putParcelableArrayList("productGroups", productGroups);
     outState.putStringArrayList("productGroupNames", productGroupNames);
@@ -419,17 +446,6 @@ public class MasterProductGroupFragment extends BaseFragment {
     binding.editTextMasterProductGroupDescription.setText(null);
   }
 
-  public void deleteProductGroupSafely() {
-    if (editProductGroup == null) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.PRODUCT_GROUPS);
-    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editProductGroup.getId());
-    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editProductGroup.getName());
-    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-  }
-
   @Override
   public void deleteObject(int productGroupId) {
     dlHelper.delete(
@@ -449,11 +465,33 @@ public class MasterProductGroupFragment extends BaseFragment {
     );
   }
 
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            activity.getString(
+                R.string.msg_master_delete,
+                getString(R.string.property_product_group),
+                editProductGroup.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          if (editProductGroup == null) {
+            return;
+          }
+          deleteObject(editProductGroup.getId());
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
-        deleteProductGroupSafely();
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;

@@ -20,26 +20,14 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/container"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="56dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_bg"
-  android:paddingStart="16dp"
-  android:paddingEnd="24dp"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp"
-  android:gravity="center_vertical">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable">
 
   <TextView
     android:id="@+id/from_amount_unit"
     style="@style/Widget.Grocy.TextView.ListItem.Title"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="50"
-    android:text="1 Packung"/>
+    android:layout_weight="50" />
 
   <ImageView
     style="@style/Widget.Grocy.ImageView.Icon"
@@ -52,7 +40,6 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="50"
-    android:textAlignment="viewEnd"
-    android:text="10 Scheiben"/>
+    android:textAlignment="viewEnd" />
 
 </LinearLayout>

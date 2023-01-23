@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBind
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class UsersBottomSheet extends BaseBottomSheetDialogFragment
@@ -78,7 +79,7 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     }
     int selected = bundle.getInt(ARGUMENT.SELECTED_ID, -1);
 
-    ViewUtil.centerTextOnLargeScreens(binding.textListSelectionTitle);
+    ViewUtil.centerText(binding.textListSelectionTitle);
     binding.textListSelectionTitle.setText(activity.getString(R.string.property_users));
     binding.recyclerListSelection.setLayoutManager(
         new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -92,6 +93,16 @@ public class UsersBottomSheet extends BaseBottomSheetDialogFragment
     BaseFragment currentFragment = activity.getCurrentFragment();
     currentFragment.selectUser(user);
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        binding.recyclerListSelection.getPaddingLeft(),
+        binding.recyclerListSelection.getPaddingTop(),
+        binding.recyclerListSelection.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

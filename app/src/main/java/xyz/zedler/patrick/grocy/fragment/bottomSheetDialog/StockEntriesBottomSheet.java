@@ -26,18 +26,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.adapter.StockEntrySelectionAdapter;
+import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetStockEntriesBinding;
 import xyz.zedler.patrick.grocy.model.StockEntry;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
     implements StockEntrySelectionAdapter.StockEntrySelectionAdapterListener {
 
   private final static String TAG = StockEntriesBottomSheet.class.getSimpleName();
+
+  private FragmentBottomsheetStockEntriesBinding binding;
 
   private MainActivity activity;
   private ArrayList<StockEntry> stockEntries;
@@ -48,8 +50,8 @@ public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    View view = inflater.inflate(
-        R.layout.fragment_bottomsheet_stock_entries, container, false
+    binding = FragmentBottomsheetStockEntriesBinding.inflate(
+        inflater, container, false
     );
 
     activity = (MainActivity) requireActivity();
@@ -61,20 +63,25 @@ public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
     // Add entry for automatic selection
     stockEntries.add(0, new StockEntry(-1, null));
 
-    RecyclerView recyclerView = view.findViewById(R.id.recycler_stock_entries);
-    recyclerView.setLayoutManager(
+    binding.recyclerStockEntries.setLayoutManager(
         new LinearLayoutManager(
             activity,
             LinearLayoutManager.VERTICAL,
             false
         )
     );
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(
+    binding.recyclerStockEntries.setItemAnimator(new DefaultItemAnimator());
+    binding.recyclerStockEntries.setAdapter(
         new StockEntrySelectionAdapter(activity, stockEntries, selectedStockId, this)
     );
 
-    return view;
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    binding = null;
   }
 
   @Override
@@ -82,6 +89,16 @@ public class StockEntriesBottomSheet extends BaseBottomSheetDialogFragment
     StockEntry stockEntry = stockEntries.get(position);
     activity.getCurrentFragment().selectStockEntry(stockEntry.getId() != -1 ? stockEntry : null);
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerStockEntries.setPadding(
+        binding.recyclerStockEntries.getPaddingLeft(),
+        binding.recyclerStockEntries.getPaddingTop(),
+        binding.recyclerStockEntries.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

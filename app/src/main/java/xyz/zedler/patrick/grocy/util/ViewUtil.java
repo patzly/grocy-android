@@ -56,7 +56,6 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.transition.TransitionManager;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -271,15 +270,18 @@ public class ViewUtil {
 
   // Toolbar
 
-  public static void centerToolbarTitleOnLargeScreens(MaterialToolbar toolbar) {
-    toolbar.setTitleCentered(!UiUtil.isFullWidth(toolbar.getContext()));
-  }
-
   public static void centerTextOnLargeScreens(TextView textView) {
     if (UiUtil.isFullWidth(textView.getContext())) {
       textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
       textView.setGravity(Gravity.START);
     } else {
+      textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+      textView.setGravity(Gravity.CENTER_HORIZONTAL);
+    }
+  }
+
+  public static void centerText(TextView... textViews) {
+    for (TextView textView : textViews) {
       textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
       textView.setGravity(Gravity.CENTER_HORIZONTAL);
     }
@@ -335,32 +337,6 @@ public class ViewUtil {
         UiUtil.dpToPx(context, 2)
     );
     return layers;
-  }
-
-  public static Drawable getRippleBgListItemSurfaceRecyclerItem(Context context) {
-    return getRippleBgListItemSurfaceRecyclerItem(context, 8, 8);
-  }
-
-  public static Drawable getRippleBgListItemSurfaceRecyclerItem(
-      Context context, float paddingStart, float paddingEnd
-  ) {
-    boolean isRtl = UiUtil.isLayoutRtl(context);
-    float[] radii = new float[8];
-    Arrays.fill(radii, UiUtil.dpToPx(context, 16));
-    RoundRectShape rect = new RoundRectShape(radii, null, null);
-    ShapeDrawable shape = new ShapeDrawable(rect);
-    shape.getPaint().setColor(SurfaceColors.SURFACE_3.getColor(context));
-    LayerDrawable layers = new LayerDrawable(new ShapeDrawable[]{shape});
-    layers.setLayerInset(
-        0,
-        UiUtil.dpToPx(context, isRtl ? paddingEnd : paddingStart),
-        UiUtil.dpToPx(context, 2),
-        UiUtil.dpToPx(context, isRtl ? paddingStart : paddingEnd),
-        UiUtil.dpToPx(context, 2)
-    );
-    return new RippleDrawable(
-        ColorStateList.valueOf(ResUtil.getColorHighlight(context)), null, layers
-    );
   }
 
   // Enable/disable views

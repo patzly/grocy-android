@@ -107,9 +107,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
       holder.linearLayoutContainer.setOnClickListener(
           view -> listener.onItemRowClicked(holder.getAdapterPosition())
       );
-      holder.linearLayoutContainer.setBackground(
-          ViewUtil.getRippleBgListItemSurfaceRecyclerItem(context)
-      );
+      holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
     }
   }
 

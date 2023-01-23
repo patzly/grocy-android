@@ -20,18 +20,8 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/container_row"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:minHeight="56dp"
-  android:clickable="true"
-  android:focusable="true"
-  android:background="@drawable/ripple_list_item_swipeable"
-  android:paddingStart="16dp"
-  android:paddingEnd="24dp"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp"
-  android:gravity="center_vertical">
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
+  android:background="@drawable/ripple_list_item_swipeable">
 
   <TextView
     android:id="@+id/name"

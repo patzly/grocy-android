@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.model.User;
+import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
@@ -97,6 +98,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     // CONTAINER
 
+    holder.linearLayoutContainer.setBackground(
+        ViewUtil.getRippleBgListItemSurface(holder.linearLayoutContainer.getContext())
+    );
     holder.linearLayoutContainer.setOnClickListener(
         view -> listener.onItemRowClicked(user)
     );
