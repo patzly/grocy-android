@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,8 +30,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import com.android.volley.VolleyError;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,7 +47,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterStoreBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -55,6 +57,8 @@ public class MasterStoreFragment extends BaseFragment {
 
   private final static String TAG = MasterStoreFragment.class.getSimpleName();
 
+  private static final String DIALOG_DELETE = "dialog_delete";
+
   private MainActivity activity;
   private Gson gson;
   private GrocyApi grocyApi;
@@ -64,6 +68,7 @@ public class MasterStoreFragment extends BaseFragment {
   private ArrayList<Store> stores;
   private ArrayList<String> storeNames;
   private Store editStore;
+  private AlertDialog dialogDelete;
 
   private boolean isRefresh;
   private boolean debug;
@@ -81,6 +86,12 @@ public class MasterStoreFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
+
     binding = null;
     dlHelper.destroy();
   }
@@ -172,6 +183,12 @@ public class MasterStoreFragment extends BaseFragment {
             && savedInstanceState == null,
         this::saveStore
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
   }
 
   @Override
@@ -179,6 +196,9 @@ public class MasterStoreFragment extends BaseFragment {
     if (isHidden()) {
       return;
     }
+
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
 
     outState.putParcelableArrayList("stores", stores);
     outState.putStringArrayList("storeNames", storeNames);
@@ -409,17 +429,6 @@ public class MasterStoreFragment extends BaseFragment {
     binding.editTextMasterStoreDescription.setText(null);
   }
 
-  public void deleteStoreSafely() {
-    if (editStore == null) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.STORES);
-    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editStore.getId());
-    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editStore.getName());
-    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-  }
-
   @Override
   public void deleteObject(int storeId) {
     dlHelper.delete(
@@ -439,11 +448,33 @@ public class MasterStoreFragment extends BaseFragment {
     );
   }
 
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            activity.getString(
+                R.string.msg_master_delete,
+                getString(R.string.property_store),
+                editStore.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          if (editStore == null) {
+            return;
+          }
+          deleteObject(editStore.getId());
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
-        deleteStoreSafely();
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;

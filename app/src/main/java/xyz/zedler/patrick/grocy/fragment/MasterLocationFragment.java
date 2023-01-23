@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -45,7 +48,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterLocationBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.Location;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -56,6 +58,8 @@ public class MasterLocationFragment extends BaseFragment {
 
   private final static String TAG = MasterLocationFragment.class.getSimpleName();
 
+  private static final String DIALOG_DELETE = "dialog_delete";
+
   private MainActivity activity;
   private Gson gson;
   private GrocyApi grocyApi;
@@ -65,6 +69,7 @@ public class MasterLocationFragment extends BaseFragment {
   private ArrayList<Location> locations;
   private ArrayList<String> locationNames;
   private Location editLocation;
+  private AlertDialog dialogDelete;
 
   private boolean isRefresh;
   private boolean debug;
@@ -82,6 +87,12 @@ public class MasterLocationFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
+
     binding = null;
     dlHelper.destroy();
   }
@@ -192,6 +203,12 @@ public class MasterLocationFragment extends BaseFragment {
             && savedInstanceState == null,
         this::saveLocation
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
   }
 
   @Override
@@ -199,6 +216,9 @@ public class MasterLocationFragment extends BaseFragment {
     if (isHidden()) {
       return;
     }
+
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
 
     outState.putParcelableArrayList("locations", locations);
     outState.putStringArrayList("locationNames", locationNames);
@@ -439,17 +459,6 @@ public class MasterLocationFragment extends BaseFragment {
     binding.checkboxMasterLocationFreezer.setChecked(false);
   }
 
-  public void deleteLocationSafely() {
-    if (editLocation == null) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.ENTITY, GrocyApi.ENTITY.LOCATIONS);
-    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editLocation.getId());
-    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editLocation.getName());
-    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-  }
-
   @Override
   public void deleteObject(int locationId) {
     dlHelper.delete(
@@ -469,11 +478,33 @@ public class MasterLocationFragment extends BaseFragment {
     );
   }
 
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            activity.getString(
+                R.string.msg_master_delete,
+                getString(R.string.property_location),
+                editLocation.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          if (editLocation == null) {
+            return;
+          }
+          deleteObject(editLocation.getId());
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
-        deleteLocationSafely();
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;

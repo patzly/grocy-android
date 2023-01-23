@@ -23,6 +23,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,9 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,7 +49,6 @@ import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterTaskCategoryBinding;
-import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.MasterDeleteBottomSheet;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -57,6 +59,8 @@ public class MasterTaskCategoryFragment extends BaseFragment {
 
   private final static String TAG = MasterTaskCategoryFragment.class.getSimpleName();
 
+  private static final String DIALOG_DELETE = "dialog_delete";
+
   private MainActivity activity;
   private Gson gson;
   private GrocyApi grocyApi;
@@ -66,6 +70,7 @@ public class MasterTaskCategoryFragment extends BaseFragment {
   private ArrayList<TaskCategory> taskCategories;
   private ArrayList<String> taskCategoryNames;
   private TaskCategory editTaskCategory;
+  private AlertDialog dialogDelete;
 
   private boolean isRefresh;
   private boolean debug;
@@ -85,6 +90,12 @@ public class MasterTaskCategoryFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+
+    if (dialogDelete != null) {
+      // Else it throws an leak exception because the context is somehow from the activity
+      dialogDelete.dismiss();
+    }
+
     binding = null;
     dlHelper.destroy();
   }
@@ -179,6 +190,12 @@ public class MasterTaskCategoryFragment extends BaseFragment {
             && savedInstanceState == null,
         this::saveTaskCategory
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_DELETE)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showDeleteConfirmationDialog, 1
+      );
+    }
   }
 
   @Override
@@ -186,6 +203,9 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     if (isHidden()) {
       return;
     }
+
+    boolean isShowing = dialogDelete != null && dialogDelete.isShowing();
+    outState.putBoolean(DIALOG_DELETE, isShowing);
 
     outState.putParcelableArrayList("taskCategories", taskCategories);
     outState.putStringArrayList("taskCategoryNames", taskCategoryNames);
@@ -401,17 +421,6 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     binding.editTextDescription.setText(null);
   }
 
-  public void deleteTaskCategorySafely() {
-    if (editTaskCategory == null) {
-      return;
-    }
-    Bundle bundle = new Bundle();
-    bundle.putString(Constants.ARGUMENT.ENTITY, ENTITY.TASK_CATEGORIES);
-    bundle.putInt(Constants.ARGUMENT.OBJECT_ID, editTaskCategory.getId());
-    bundle.putString(Constants.ARGUMENT.OBJECT_NAME, editTaskCategory.getName());
-    activity.showBottomSheet(new MasterDeleteBottomSheet(), bundle);
-  }
-
   @Override
   public void deleteObject(int taskCategoryId) {
     dlHelper.delete(
@@ -431,11 +440,33 @@ public class MasterTaskCategoryFragment extends BaseFragment {
     );
   }
 
+  private void showDeleteConfirmationDialog() {
+    dialogDelete = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution
+    ).setTitle(R.string.title_confirmation)
+        .setMessage(
+            activity.getString(
+                R.string.msg_master_delete,
+                getString(R.string.property_task_category),
+                editTaskCategory.getName()
+            )
+        ).setPositiveButton(R.string.action_delete, (dialog, which) -> {
+          performHapticClick();
+          if (editTaskCategory == null) {
+            return;
+          }
+          deleteObject(editTaskCategory.getId());
+        }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+        .setOnCancelListener(dialog -> performHapticClick())
+        .create();
+    dialogDelete.show();
+  }
+
   public Toolbar.OnMenuItemClickListener getBottomMenuClickListener() {
     return item -> {
       if (item.getItemId() == R.id.action_delete) {
         ViewUtil.startIcon(item);
-        deleteTaskCategorySafely();
+        showDeleteConfirmationDialog();
         return true;
       }
       return false;
