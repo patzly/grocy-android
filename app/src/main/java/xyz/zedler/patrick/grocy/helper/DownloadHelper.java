@@ -1728,6 +1728,7 @@ public class DownloadHelper {
   public QueueItem getStockLogEntries(
       int limit,
       int offset,
+      int filterProductId,  // -1 for no filter
       OnStockLogEntriesResponseListener onResponseListener,
       OnErrorListener onErrorListener
   ) {
@@ -1739,7 +1740,7 @@ public class DownloadHelper {
           @Nullable String uuid
       ) {
         get(
-            grocyApi.getStockLogEntries(limit, offset),
+            grocyApi.getStockLogEntries(limit, offset, filterProductId),
             uuid,
             response -> {
               Type type = new TypeToken<ArrayList<StockLogEntry>>() {
@@ -1773,7 +1774,7 @@ public class DownloadHelper {
       int offset,
       OnStockLogEntriesResponseListener onResponseListener
   ) {
-    return getStockLogEntries(limit, offset, onResponseListener, null);
+    return getStockLogEntries(limit, offset, -1, onResponseListener, null);
   }
 
   public QueueItem updateShoppingListItems(
