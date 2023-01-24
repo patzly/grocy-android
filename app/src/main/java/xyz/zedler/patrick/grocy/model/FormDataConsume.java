@@ -563,10 +563,11 @@ public class FormDataConsume {
       amountRemoved += productDetails.getProduct().getTareWeightDouble();
     }
     QuantityUnit qU = quantityUnitLive.getValue();
-    StockLocation stockLocation = stockLocationLive.getValue();
-    assert qU != null && stockLocation != null;
+    assert qU != null;
     String stockLocationName;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
+      StockLocation stockLocation = stockLocationLive.getValue();
+      assert stockLocation != null;
       stockLocationName = stockLocation.getLocationName();
     } else {
       stockLocationName = getString(R.string.subtitle_feature_disabled);

@@ -24,7 +24,7 @@
   android:id="@+id/container"
   style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
   android:paddingStart="16dp"
-  android:paddingEnd="4dp"
+  android:paddingEnd="8dp"
   android:animateLayoutChanges="true">
 
   <ImageView
