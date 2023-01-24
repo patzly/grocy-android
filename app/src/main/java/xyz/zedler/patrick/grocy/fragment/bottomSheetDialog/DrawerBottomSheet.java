@@ -22,6 +22,8 @@ package xyz.zedler.patrick.grocy.fragment.bottomSheetDialog;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -270,7 +272,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
       dismiss();
     } else if (id == R.id.linear_drawer_help) {
       dismiss();
-      activity.showHelpBottomSheet();
+      new Handler(Looper.getMainLooper()).postDelayed(
+          () -> activity.showHelpBottomSheet(), 10
+      );
     } else if (id == R.id.linear_drawer_recipes) {
       navigateCustom(DrawerBottomSheetDirections
               .actionDrawerBottomSheetDialogFragmentToRecipesFragment());
