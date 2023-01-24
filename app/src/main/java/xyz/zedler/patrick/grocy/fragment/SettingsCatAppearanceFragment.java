@@ -252,7 +252,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
       );
       boolean isSelected;
       if (selected.isEmpty()) {
-        isSelected = hasDynamic ? name.equals(THEME.DYNAMIC) : name.equals(THEME.YELLOW);
+        isSelected = hasDynamic ? name.equals(THEME.DYNAMIC) : name.equals(THEME.GREEN);
       } else {
         isSelected = selected.equals(name);
       }
