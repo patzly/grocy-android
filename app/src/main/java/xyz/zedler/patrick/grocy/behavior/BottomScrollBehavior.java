@@ -67,6 +67,7 @@ public class BottomScrollBehavior {
   private final int topScrollLimit;
   private boolean isTopScroll = false;
   private boolean canBottomAppBarBeVisible;
+  private boolean useOverScrollFix;
 
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
@@ -119,6 +120,7 @@ public class BottomScrollBehavior {
 
     topScrollLimit = UiUtil.dpToPx(context, 150);
     canBottomAppBarBeVisible = true;
+    useOverScrollFix = Build.VERSION.SDK_INT < 31;
   }
 
   private void test(MainActivity activity) {
@@ -254,8 +256,14 @@ public class BottomScrollBehavior {
           appBar.setLifted(true);
         }
       } else {
+        if (useOverScrollFix) {
+          if (scrollView.getScrollY() == 0) {
+            setOverScrollEnabled(false);
+          }
+        } else {
+          setOverScrollEnabled(true);
+        }
         appBar.setLifted(true);
-        setOverScrollEnabled(true);
       }
     } else {
       appBar.setLifted(!lift);
@@ -293,15 +301,18 @@ public class BottomScrollBehavior {
     }
     if (Build.VERSION.SDK_INT >= 31) {
       // Stretch effect is always nice
-      if (scrollView instanceof RecyclerView) {
-        scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-      } else {
-        scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-      }
+      scrollView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
     } else {
       scrollView.setOverScrollMode(
           enabled ? View.OVER_SCROLL_IF_CONTENT_SCROLLS : View.OVER_SCROLL_NEVER
       );
+    }
+  }
+
+  public void setNestedOverScrollFixEnabled(boolean enabled) {
+    useOverScrollFix = enabled;
+    if (enabled && scrollView.getScrollY() == 0) {
+      setOverScrollEnabled(false);
     }
   }
 
@@ -314,7 +325,7 @@ public class BottomScrollBehavior {
           if (currentState != STATE_SCROLLED_UP) {
             onScrollUp();
           }
-          if (liftOnScroll && scrollY < pufferSize) {
+          if ((liftOnScroll || useOverScrollFix) && scrollY < pufferSize) {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
               if (scrollY > 0) {
                 setOverScrollEnabled(false);
@@ -351,7 +362,7 @@ public class BottomScrollBehavior {
             if (currentState != STATE_SCROLLED_UP) {
               onScrollUp();
             }
-            if (liftOnScroll && dy < pufferSize) {
+            if ((liftOnScroll || useOverScrollFix) && dy < pufferSize) {
               new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (scrollAbsoluteY > 0) {
                   setOverScrollEnabled(false);
