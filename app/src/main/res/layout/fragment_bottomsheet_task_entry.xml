@@ -47,6 +47,7 @@
         android:id="@+id/delete"
         style="@style/Widget.Grocy.Button.IconButton"
         android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="8dp"
         app:icon="@drawable/ic_round_delete_anim" />
 
     </LinearLayout>
