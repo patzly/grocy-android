@@ -242,7 +242,6 @@
   <string name="msg_feedback">Kérésed, kérdésed van, esetleg hibákat találtál? Lépj velünk kapcsolatba, hadd segíthessünk!\nEgyéb esetekben nagyon örülnénk egy kedves véleménynek a Play Áruházban.</string>
   <string name="msg_point_at_barcode">Irányítsd a kamerát egy vonalkódra</string>
   <string name="msg_press_hold_confirm">Tartsd lenyomva a megerősítéshez</string>
-  <string name="msg_welcome_to_grocy">Üdv a Grocy Android alkalmazásban!\n\nA Grocy eredményes használatához saját Grocy szerverre vagy a Home Assistant beépülő moduljára lesz szükséged.\nHa csak szeretnéd kipróbálni az alkalmazást, használhatod a demó szervert, amit Berd Bestel, a Grocy készítője működtet.</string>
   <string name="msg_choose_option_below">Válassz egyet a lenti lehetőségek közül.</string>
   <string name="msg_qr_code_scan">Nyisd meg a Grocy weboldalt egy másik eszközön és menj az \"Api kulcsok kezelése\" oldalra. Kattints a \"Hozzáadás\" gombra, majd a kis QR kód szimbólumra, végül olvasd be a QR kódot.</string>
   <string name="msg_port_connection_info_without_port">Az alkalmazás a(z) %1$s porthoz fog kapcsolódni.\nHa másik portot használnál, megadhatod az URL-ben.\nPéldául: http://domain.com:81/</string>
@@ -442,7 +441,6 @@
   <string name="title_presets_new_products">Új termék alapértelmezett tulajdonságok</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
    Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">%1$s használata</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
@@ -754,7 +752,6 @@
 
   <string name="setting_theme">Téma</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Rendszerbeállítás</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Sötét</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -769,9 +766,7 @@
   <string name="setting_choose_barcode_scanner">Vonalkódolvasó kiválasztása</string>
   <string name="setting_choose_barcode_scanner_description">Beépített kamera használatával</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">A kamerakép levágása az előnézetre</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Leolvasás csak az előnézeti kép területéről; Nem biztos, hogy működik az eszközödön!</string>
   <string name="setting_use_front_cam">Előlapi kamera használata</string>
   <string name="setting_use_front_cam_description">Vonalkód olvasáshoz</string>
   <string name="setting_use_2d_scanner_format">2D vonalkód formátum</string>

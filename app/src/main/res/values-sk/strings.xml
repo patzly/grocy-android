@@ -258,7 +258,6 @@
   <string name="msg_shortcuts_not_supported">Táto verzia Androidu nepodporuje skratky.</string>
   <string name="msg_point_at_barcode">Nasmerujte fotoaparát na čiarový kód</string>
   <string name="msg_press_hold_confirm">Stlačením a podržaním potvrdíte</string>
-  <string name="msg_welcome_to_grocy">Vitajte v Grocy Android!\n\nNa produktívne použitie grocy budete potrebovať vlastný server alebo prídavný modul grocy pre Home Assistenta.\nAk chcete len vyskúšať túto aplikáciu, môžete použiť ukážkový server od Bernda Bestela, ktorý grocy vytvoril.</string>
   <string name="msg_choose_option_below">Prosím vyberte jednu z nižšie uvedených možností.</string>
   <string name="msg_qr_code_scan">Na inom zariadení navštívte svoju grocy webstránku a prepnite sa   na stranku s \"API kľúčmi\". Kliknite na \"Pridať\" a potom na piktogram QR kódu pre zosnímanie QR kódu.</string>
   <string name="msg_port_connection_info_without_port">Aplikácia sa pripojí na port %1$s.\nAk ju chcete pripojiť na iný port, môžete ho pridať k URL.\nNapríklad: http://domain.com:81/</string>
@@ -426,7 +425,6 @@
   <string name="title_presets_new_products">Predvoľby pre nové výrobky</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
    Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Použiť %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -754,7 +752,6 @@
 
   <string name="setting_theme">Téma</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Podľa systému</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Tmavá</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -769,9 +766,7 @@
   <string name="setting_choose_barcode_scanner">Zvoliť snímač čiarových kódov</string>
   <string name="setting_choose_barcode_scanner_description">Na snímanie čiarových kódov fotoaparátom</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream">Orezať vstup z fotoaparátu na prehľadný formát</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
-  <string name="setting_crop_stream_description">Zabraňuje snímaču detegovať čiarové kódy mimo prehľadu; Možno nebude fungovať na Vašom zariadení!</string>
   <string name="setting_use_front_cam">Použiť predný fotoaparát</string>
   <string name="setting_use_front_cam_description">Na snímanie čiarových kódov</string>
   <string name="setting_use_2d_scanner_format">Použiť 2D formát snímača čiarových kódov</string>

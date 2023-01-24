@@ -218,7 +218,6 @@
   <string name="msg_feedback">Tienes algún deseo, preguntas o errores? Contáctanos y déjanos ayudar!\nDe otro modo estaríamos muy contentos de recibir una buena reseña en la Play Store.</string>
   <string name="msg_point_at_barcode">Apunta tu cámara al código de barras.</string>
   <string name="msg_press_hold_confirm">Mantén pulsado para confirmar</string>
-  <string name="msg_welcome_to_grocy">¡Bienvenido a Grocy Android!\n\nPara utilizar grocy de forma productiva necesitas tu propio servidor o el add-on de grocy para Home Assistant.\nSi solo quieres probar esta aplicación puedes utilizar el servidor de demostración de Bernd Bestel, el creador de grocy.</string>
   <string name="msg_choose_option_below">Por favor, selecciona una opción de las que aparecen a continuación.</string>
   <string name="msg_qr_code_scan">En otro dispositivo, visita tu sitio web de grocy y ve a la página de \"claves API\". Haz clic en \"Añadir\", luego haz clic en el pequeño símbolo del código QR y escanea el código QR.</string>
   <string name="msg_port_connection_info_without_port">La aplicación se conectará al puerto %1$s.\nSi quieres conectarlo a otro puerto, puedes añadirlo a la URL.\nEjemplo: http://dominio.es:81/</string>
@@ -395,7 +394,6 @@
   <string name="title_presets_new_products">Preajustes para nuevos productos</string>
   <!-- %1$s is name of barcode recognition tool, e.g. ZXing or ML Kit; text is on button;
    Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch.-->
-  <string name="title_use_scanner_tool">Usar %1$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -660,7 +658,6 @@
 
   <string name="setting_theme">Tema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
-  <string name="setting_theme_follow_system">Escoger el del sistema</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
   <string name="setting_theme_dark">Oscuro</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
