@@ -90,12 +90,12 @@ public class SettingsCatShoppingListFragment extends BaseFragment {
       }
     });
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
-    activity.binding.fabMain.hide();
 
     setForPreviousDestination(ARGUMENT.ANIMATED, false);
 

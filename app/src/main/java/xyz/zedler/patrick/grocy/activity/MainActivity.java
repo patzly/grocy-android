@@ -317,14 +317,8 @@ public class MainActivity extends AppCompatActivity {
     updateStartDestination();
 
     navController.addOnDestinationChangedListener((controller, dest, args) -> {
-      if (isServerUrlEmpty() || dest.getId() == R.id.shoppingModeFragment
-          || dest.getId() == R.id.onboardingFragment
-      ) {
-        // TODO: overthink this when finished
-        //binding.bottomAppBar.setVisibility(View.GONE);
+      if (isServerUrlEmpty()) {
         binding.fabMain.hide();
-      } else {
-        binding.bottomAppBar.setVisibility(View.VISIBLE);
       }
     });
 
@@ -466,7 +460,6 @@ public class MainActivity extends AppCompatActivity {
   ) {
     // Handler with postDelayed is necessary for workaround of issue #552
     new Handler().postDelayed(() -> {
-      //scrollBehaviorOld.setTopScrollVisibility(true);
       if (showFab && !binding.fabMain.isShown() && !isServerUrlEmpty()) {
         binding.fabMain.show();
       } else if (!showFab && binding.fabMain.isShown()) {
@@ -1045,10 +1038,6 @@ public class MainActivity extends AppCompatActivity {
       return;
     }
     ViewUtil.startIcon(view);
-  }
-
-  public void executeOnStart() {
-    onStart();
   }
 
   private void insertConscrypt() {

@@ -143,6 +143,7 @@ public class OverviewStartFragment extends BaseFragment {
     boolean animated = (getArguments() == null
         || getArguments().getBoolean(Constants.ARGUMENT.ANIMATED, true))
         && savedInstanceState == null;
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_empty);

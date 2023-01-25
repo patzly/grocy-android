@@ -68,6 +68,7 @@ public class EditorHtmlFragment extends BaseFragment {
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.summernote, false
     );

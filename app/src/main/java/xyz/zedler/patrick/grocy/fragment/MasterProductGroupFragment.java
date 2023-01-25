@@ -178,6 +178,7 @@ public class MasterProductGroupFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scrollMasterProductGroup, true
     );

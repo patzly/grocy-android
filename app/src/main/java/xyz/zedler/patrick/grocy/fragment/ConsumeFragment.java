@@ -205,6 +205,7 @@ public class ConsumeFragment extends BaseFragment implements BarcodeListener {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_consume, this::onMenuItemClick);

@@ -161,6 +161,7 @@ public class TaskEntryEditFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, true
     );

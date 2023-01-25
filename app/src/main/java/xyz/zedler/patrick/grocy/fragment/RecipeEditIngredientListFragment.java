@@ -48,7 +48,6 @@ import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.util.ClickUtil;
 import xyz.zedler.patrick.grocy.viewmodel.RecipeEditIngredientListViewModel;
 
 public class RecipeEditIngredientListFragment extends BaseFragment
@@ -60,7 +59,6 @@ public class RecipeEditIngredientListFragment extends BaseFragment
   private FragmentRecipeEditIngredientListBinding binding;
   private RecipeEditIngredientListViewModel viewModel;
   private SwipeBehavior swipeBehavior;
-  private ClickUtil clickUtil;
   private InfoFullscreenHelper infoFullscreenHelper;
   private SystemBarBehavior systemBarBehavior;
 
@@ -109,7 +107,6 @@ public class RecipeEditIngredientListFragment extends BaseFragment
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
-    clickUtil = new ClickUtil();
 
     binding.recycler.setLayoutManager(
             new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -210,6 +207,7 @@ public class RecipeEditIngredientListFragment extends BaseFragment
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.recycler);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_empty);

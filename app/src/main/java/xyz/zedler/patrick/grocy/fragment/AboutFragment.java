@@ -89,16 +89,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         R.id.linear_license_xzing_android
     );
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBarAbout, false, binding.scrollAbout
     );
-    boolean showBottomBar = activity.binding.bottomAppBar.getVisibility() == View.VISIBLE;
-    activity.getScrollBehavior().setBottomBarVisibility(showBottomBar, !showBottomBar);
-    if (showBottomBar) {
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-    } else {
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
   }
 
   private void setOnClickListeners(View view, @IdRes int... viewIds) {

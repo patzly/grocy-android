@@ -75,13 +75,12 @@ public class LogFragment extends BaseFragment {
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, false, binding.scroll, true
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true);
-      activity.updateBottomAppBar(false, R.menu.menu_log, this::onMenuItemClick);
-    }
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, binding.scroll, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true);
+    activity.updateBottomAppBar(false, R.menu.menu_log, this::onMenuItemClick);
 
     String server = PreferenceManager.getDefaultSharedPreferences(requireContext())
         .getString(Constants.PREF.SERVER_URL, null);

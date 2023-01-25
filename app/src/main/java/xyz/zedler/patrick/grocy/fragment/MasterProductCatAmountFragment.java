@@ -137,6 +137,7 @@ public class MasterProductCatAmountFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );

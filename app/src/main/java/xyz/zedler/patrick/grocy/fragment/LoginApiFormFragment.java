@@ -95,6 +95,7 @@ public class LoginApiFormFragment extends BaseFragment {
       return true;
     });
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setProvideTopScroll(false);
     activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
     activity.getScrollBehavior().setBottomBarVisibility(false, true, false);

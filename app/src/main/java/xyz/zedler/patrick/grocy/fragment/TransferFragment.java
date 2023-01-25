@@ -216,10 +216,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
 
     focusProductInputIfNecessary();
 
-    updateUI(args.getAnimateStart() && savedInstanceState == null);
-  }
-
-  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_transfer, this::onMenuItemClick);
@@ -227,7 +224,7 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
         R.drawable.ic_round_swap_horiz,
         R.string.action_transfer,
         FAB.TAG.TRANSFER,
-        animated,
+        args.getAnimateStart() && savedInstanceState == null,
         () -> {
           if (viewModel.isQuickModeEnabled()
               && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {

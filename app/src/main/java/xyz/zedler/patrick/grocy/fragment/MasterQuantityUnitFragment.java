@@ -193,6 +193,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scrollMasterQuantityUnit, true
     );

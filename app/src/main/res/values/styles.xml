@@ -57,6 +57,7 @@
     <item name="titleTextAppearance">@style/TextAppearance.Grocy.TitleLarge</item>
     <item name="titleMarginStart">0dp</item>
     <item name="titleCentered">true</item>
+    <item name="contentInsetStartWithNavigation">0dp</item>
     <item name="android:actionOverflowMenuStyle">@style/ThemeOverlay.Grocy.OverFlow</item>
   </style>
 

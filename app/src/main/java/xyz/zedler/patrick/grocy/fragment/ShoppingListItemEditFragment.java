@@ -209,6 +209,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
