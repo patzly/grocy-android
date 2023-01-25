@@ -129,7 +129,7 @@ public class MasterLocationFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipeMasterLocation);
-    systemBarBehavior.setScroll(binding.scrollMasterLocation, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scrollMasterLocation, binding.constraint);
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());

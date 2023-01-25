@@ -69,7 +69,7 @@ public class SettingsFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());

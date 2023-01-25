@@ -67,236 +67,249 @@
       android:overScrollMode="never"
       android:layout_marginTop="?attr/actionBarSize">
 
-      <LinearLayout
-        android:id="@+id/linear_container_scroll"
-        android:orientation="vertical"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:animateLayoutChanges="true"
-        transitionTypeChanging="@{true}">
-
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginBottom="8dp"
-          android:onClick="@{() -> formData.toggleUsingGrocyHassAddOn()}">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:text="@{formData.usingGrocyHassAddOnLive ? @string/msg_help_home_assistant_login : @string/msg_help_normal_login}" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
-          android:layout_marginBottom="8dp"
-          android:onClick="@{() -> formData.toggleShowHelpTexts()}">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:text="@{formData.showHelpTexts ? @string/msg_help_home_assistant_login_help_hide : @string/msg_help_home_assistant_login_help_show}" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Category"
-          android:textAlignment="viewStart"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:paddingTop="4dp"
-          android:paddingBottom="0dp"
-          android:layout_marginStart="0dp"
-          android:singleLine="true"
-          android:text="@string/title_home_assistant"
-          android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}" />
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <LinearLayout
-          android:layout_width="match_parent"
+          android:orientation="vertical"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:orientation="horizontal">
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          android:animateLayoutChanges="true"
+          app:transitionTypeChanging="@{true}"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
-          <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/radio_button_https"
-            style="@style/Widget.Grocy.RadioButton"
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{() -> formData.toggleUsingGrocyHassAddOn()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@{formData.usingGrocyHassAddOnLive ? @string/msg_help_home_assistant_login : @string/msg_help_normal_login}" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{() -> formData.toggleShowHelpTexts()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@{formData.showHelpTexts ? @string/msg_help_home_assistant_login_help_hide : @string/msg_help_home_assistant_login_help_show}" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:textAlignment="viewStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="0dp"
+            android:layout_marginStart="0dp"
+            android:singleLine="true"
+            android:text="@string/title_home_assistant"
+            android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}" />
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+              android:id="@+id/radio_button_https"
+              style="@style/Widget.Grocy.RadioButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="16dp"
+              android:text="@string/title_https"
+              android:checked="@{formData.httpsRadioButtonCheckedLive}"
+              android:onClick="@{() -> formData.onCheckedHttpsButton(serverUrl)}" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+              android:id="@+id/radio_button_http"
+              style="@style/Widget.Grocy.RadioButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/title_http"
+              android:checked="@{formData.httpRadioButtonCheckedLive}"
+              android:onClick="@{() -> formData.onCheckedHttpButton(serverUrl)}" />
+          </LinearLayout>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="0dp"
+            android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> fragment.openNabuCasaWebsite()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@string/msg_help_home_assistant_login_server" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/hint_server"
+            app:errorText="@{formData.serverUrlErrorLive}">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/server_url"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="text|textUri"
+              android:imeOptions="actionNext"
+              android:text="@={formData.serverUrlLive}"
+              android:afterTextChanged="@{() -> formData.clearServerUrlErrorAndUpdateRadioButtons()}" />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="8dp"
+            android:visibility="@{formData.serverUrlValidLive ? View.VISIBLE : View.GONE}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@{formData.serverUrlPortInfoLive}" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="8dp"
+            android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> fragment.openHomeAssistantProfileWebsite()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@string/msg_help_home_assistant_login_token" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title_long_lived_access_token"
+            android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
+            app:helperTextEnabled="true"
+            app:helperText=" "
+            app:errorText="@{formData.longLivedAccessTokenErrorLive}">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/token"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="text"
+              android:imeOptions="actionNext"
+              android:text="@={formData.longLivedAccessTokenLive}"
+              android:afterTextChanged="@{() -> formData.accessTokenUrlValid}" />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:paddingTop="0dp"
+            android:paddingBottom="8dp"
+            android:layout_marginStart="0dp"
+            android:singleLine="true"
+            android:text="@string/title_grocy"
+            android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}" />
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginBottom="8dp"
+            android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> activity.navigateUp()}">
+
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:text="@string/msg_help_home_assistant_login_proxy_id" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+          <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title_ingress_proxy_id"
+            android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
+            app:helperTextEnabled="true"
+            app:helperText=" "
+            app:errorText="@{formData.ingressProxyIdErrorLive}">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/ingress_id"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="text"
+              android:imeOptions="actionNext"
+              android:text="@={formData.ingressProxyIdLive}"
+              android:afterTextChanged="@{() -> formData.ingressProxyIdValid}" />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+          <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_key"
+            app:helperTextEnabled="true"
+            app:helperText=" ">
+
+            <com.google.android.material.textfield.TextInputEditText
+              android:id="@+id/api_key"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:inputType="text"
+              android:imeOptions="actionDone"
+              android:text="@={formData.apiKeyLive}"
+              android:afterTextChanged="@{() -> formData.clearApiKeyError()}"
+              app:onDoneClickInSoftKeyboard="@{() -> fragment.proceedWithLogin()}" />
+
+          </com.google.android.material.textfield.TextInputLayout>
+
+          <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/title_https"
-            android:checked="@{formData.httpsRadioButtonCheckedLive}"
-            android:onClick="@{() -> formData.onCheckedHttpsButton(serverUrl)}" />
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
 
-          <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/radio_button_http"
-            style="@style/Widget.Grocy.RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_http"
-            android:checked="@{formData.httpRadioButtonCheckedLive}"
-            android:onClick="@{() -> formData.onCheckedHttpButton(serverUrl)}" />
-        </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.OutlinedButton"
+              android:layout_marginEnd="4dp"
+              android:text="@string/action_create_key"
+              android:onClick="@{() -> fragment.openApiKeysWebsite()}"
+              app:clickUtil="@{clickUtil}" />
 
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="0dp"
-          android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
-          android:onClick="@{() -> fragment.openNabuCasaWebsite()}">
+            <com.google.android.material.button.MaterialButton
+              style="@style/Widget.Grocy.Button.UnelevatedButton"
+              android:layout_marginStart="4dp"
+              android:text="@string/action_login"
+              android:onClick="@{() -> fragment.proceedWithLogin()}"
+              app:clickUtil="@{clickUtil}" />
 
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:text="@string/msg_help_home_assistant_login_server" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="8dp"
-          android:hint="@string/hint_server"
-          app:errorText="@{formData.serverUrlErrorLive}">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/server_url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text|textUri"
-            android:imeOptions="actionNext"
-            android:text="@={formData.serverUrlLive}"
-            android:afterTextChanged="@{() -> formData.clearServerUrlErrorAndUpdateRadioButtons()}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginBottom="8dp"
-          android:visibility="@{formData.serverUrlValidLive ? View.VISIBLE : View.GONE}">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:text="@{formData.serverUrlPortInfoLive}" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginBottom="8dp"
-          android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
-          android:onClick="@{() -> fragment.openHomeAssistantProfileWebsite()}">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:text="@string/msg_help_home_assistant_login_token" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/title_long_lived_access_token"
-          android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
-          app:helperTextEnabled="true"
-          app:helperText=" "
-          app:errorText="@{formData.longLivedAccessTokenErrorLive}">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/token"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionNext"
-            android:text="@={formData.longLivedAccessTokenLive}"
-            android:afterTextChanged="@{() -> formData.accessTokenUrlValid}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Category"
-          android:paddingTop="0dp"
-          android:paddingBottom="8dp"
-          android:layout_marginStart="0dp"
-          android:singleLine="true"
-          android:text="@string/title_grocy"
-          android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}" />
-
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginBottom="8dp"
-          android:visibility="@{formData.usingGrocyHassAddOnLive &amp;&amp; formData.showHelpTexts ? View.VISIBLE : View.GONE}"
-          android:onClick="@{() -> activity.navigateUp()}">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:text="@string/msg_help_home_assistant_login_proxy_id" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/title_ingress_proxy_id"
-          android:visibility="@{formData.usingGrocyHassAddOnLive ? View.VISIBLE : View.GONE}"
-          app:helperTextEnabled="true"
-          app:helperText=" "
-          app:errorText="@{formData.ingressProxyIdErrorLive}">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ingress_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionNext"
-            android:text="@={formData.ingressProxyIdLive}"
-            android:afterTextChanged="@{() -> formData.ingressProxyIdValid}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="@string/hint_key"
-          app:helperTextEnabled="true"
-          app:helperText=" ">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/api_key"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionDone"
-            android:text="@={formData.apiKeyLive}"
-            android:afterTextChanged="@{() -> formData.clearApiKeyError()}"
-            app:onDoneClickInSoftKeyboard="@{() -> fragment.proceedWithLogin()}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:layout_gravity="center_horizontal">
-
-          <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Grocy.Button.OutlinedButton"
-            android:layout_marginEnd="4dp"
-            android:text="@string/action_create_key"
-            android:onClick="@{() -> fragment.openApiKeysWebsite()}"
-            app:clickUtil="@{clickUtil}" />
-
-          <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Grocy.Button.UnelevatedButton"
-            android:layout_marginStart="4dp"
-            android:text="@string/action_login"
-            android:onClick="@{() -> fragment.proceedWithLogin()}"
-            app:clickUtil="@{clickUtil}" />
+          </LinearLayout>
 
         </LinearLayout>
 
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

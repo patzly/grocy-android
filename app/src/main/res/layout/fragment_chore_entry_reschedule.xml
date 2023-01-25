@@ -73,126 +73,136 @@
           android:overScrollMode="ifContentScrolls"
           android:fillViewport="true">
 
-          <LinearLayout
-            android:id="@+id/linear_container_scroll"
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            android:paddingBottom="@dimen/global_scroll_bottom_padding"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            app:transitionTypeChanging="@{true}">
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginBottom="8dp">
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/title_chore"
-                  android:textColor="?attr/colorOnSurfaceVariant" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:textColor="?attr/colorOnSurfaceVariant"
-                  android:text="@{viewModel.chore.name}" />
-
-              </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
-              android:id="@+id/linear_due_date"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-              android:onClick="@{() -> fragment.showNextTrackingDatePicker()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_event"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_next_estimated_tracking" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.nextTrackingDateTextLive}" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@{viewModel.nextTrackingDateHumanTextLive}"
-                  android:visibility="@{viewModel.nextTrackingDateHumanTextLive != null ? View.VISIBLE : View.GONE}" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-              android:onClick="@{() -> fragment.showNextTrackingTimePicker()}"
-              android:visibility="@{viewModel.showTimeField() ? View.VISIBLE : View.GONE}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_schedule"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_next_estimated_tracking_time" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.nextTrackingTimeHumanTextLive ?? @string/subtitle_none_selected}" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/linear_assigned_to"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-              android:onClick="@{() -> viewModel.showUsersBottomSheet()}">
-
-              <ImageView
-                android:id="@+id/image_purchase_store"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_person_anim"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_assigned_to" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{viewModel.getUserTextLive}" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-              style="@style/Widget.Grocy.Button.UnelevatedButton"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:layout_marginStart="56dp"
-              android:layout_marginTop="8dp"
-              android:text="@string/action_reset"
-              android:onClick="@{() -> viewModel.resetReschedule()}" />
+              android:orientation="vertical"
+              android:animateLayoutChanges="true"
+              app:transitionTypeChanging="@{true}"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
 
-          </LinearLayout>
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/title_chore"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:text="@{viewModel.chore.name}" />
+
+                </LinearLayout>
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                android:id="@+id/linear_due_date"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> fragment.showNextTrackingDatePicker()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_event"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_next_estimated_tracking" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{viewModel.nextTrackingDateTextLive}" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@{viewModel.nextTrackingDateHumanTextLive}"
+                    android:visibility="@{viewModel.nextTrackingDateHumanTextLive != null ? View.VISIBLE : View.GONE}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> fragment.showNextTrackingTimePicker()}"
+                android:visibility="@{viewModel.showTimeField() ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_schedule"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_next_estimated_tracking_time" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{viewModel.nextTrackingTimeHumanTextLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:id="@+id/linear_assigned_to"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> viewModel.showUsersBottomSheet()}">
+
+                <ImageView
+                  android:id="@+id/image_purchase_store"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_person_anim"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_assigned_to" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{viewModel.getUserTextLive}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Grocy.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/action_reset"
+                android:onClick="@{() -> viewModel.resetReschedule()}" />
+
+            </LinearLayout>
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 

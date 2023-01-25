@@ -69,79 +69,89 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
-      <LinearLayout
-        android:id="@+id/linear_container_scroll"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:orientation="vertical">
+        android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> switchLogging.setChecked(!switchLogging.isChecked())}">
+          android:orientation="vertical"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
-          <ImageView
-            android:id="@+id/image_bug"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_bug_report_anim" />
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchLogging.setChecked(!switchLogging.isChecked())}">
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+            <ImageView
+              android:id="@+id/image_bug"
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_bug_report_anim" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_debug" />
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_debug_description" />
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_debug" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_debug_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_logging"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{() -> activity.startIconAnimation(imageBug, true)}"
+              android:checked="@={viewModel.loggingEnabled}" />
 
           </LinearLayout>
 
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_logging"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{() -> activity.startIconAnimation(imageBug, true)}"
-            android:checked="@={viewModel.loggingEnabled}" />
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> activity.navigateFragment(SettingsCatDebuggingFragmentDirections.actionSettingsCatDebuggingFragmentToLogFragment())}"
+            app:clickUtil="@{clickUtil}">
 
-        </LinearLayout>
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription"
+              android:src="@drawable/ic_round_developer_mode" />
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.navigateFragment(SettingsCatDebuggingFragmentDirections.actionSettingsCatDebuggingFragmentToLogFragment())}"
-          app:clickUtil="@{clickUtil}">
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription"
-            android:src="@drawable/ic_round_developer_mode" />
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/title_logs" />
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_logs_description" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/title_logs" />
+            </LinearLayout>
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_logs_description" />
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.Icon"
+              android:layout_marginStart="16dp"
+              android:src="@drawable/ic_round_chevron_right"
+              tools:ignore="ContentDescription" />
 
           </LinearLayout>
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.Icon"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_round_chevron_right"
-            tools:ignore="ContentDescription" />
-
         </LinearLayout>
 
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -88,7 +88,7 @@ public class SettingsCatServerFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainer);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());

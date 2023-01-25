@@ -60,73 +60,82 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="?attr/actionBarSize"
-      android:overScrollMode="never"
-      android:fillViewport="true">
+      android:overScrollMode="never">
 
-      <LinearLayout
-        android:id="@+id/linear_container_scroll"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true"
-        app:transitionTypeChanging="@{true}">
+        android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> switchAutoAdd.setChecked(!switchAutoAdd.isChecked())}">
+          android:orientation="vertical"
+          android:animateLayoutChanges="true"
+          app:transitionTypeChanging="@{true}"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_auto_mode"
-            tools:ignore="ContentDescription" />
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchAutoAdd.setChecked(!switchAutoAdd.isChecked())}">
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_auto_mode"
+              tools:ignore="ContentDescription" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_auto_add_shopping_list" />
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_auto_add_shopping_list_description" />
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_auto_add_shopping_list" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_auto_add_shopping_list_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_auto_add"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setAutoAddToShoppingListEnabled(checked)}"
+              app:initialChecked="@{viewModel.autoAddToShoppingListLive}" />
+
+          </LinearLayout>
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:onClick="@{() -> viewModel.showShoppingListsBottomSheet()}"
+            android:visibility="@{viewModel.autoAddToShoppingListLive ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/property_shopping_list" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.autoAddToShoppingListTextLive}" />
+
+            </LinearLayout>
 
           </LinearLayout>
 
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_auto_add"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setAutoAddToShoppingListEnabled(checked)}"
-            app:initialChecked="@{viewModel.autoAddToShoppingListLive}" />
-
-        </LinearLayout>
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:onClick="@{() -> viewModel.showShoppingListsBottomSheet()}"
-          android:visibility="@{viewModel.autoAddToShoppingListLive ? View.VISIBLE : View.GONE}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/property_shopping_list" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.autoAddToShoppingListTextLive}" />
-
-          </LinearLayout>
-
         </LinearLayout>
 
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

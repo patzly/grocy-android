@@ -73,48 +73,58 @@
           android:layout_height="match_parent"
           android:overScrollMode="ifContentScrolls">
 
-          <LinearLayout
-            android:id="@+id/linear_container_scroll"
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            android:paddingBottom="@dimen/global_scroll_bottom_padding"
-            android:orientation="vertical">
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="0dp"
-              android:paddingBottom="0dp">
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
 
-              <ImageView
-                android:id="@+id/image_name"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                android:src="@drawable/ic_round_label_anim"
-                android:layout_marginTop="16sp"
-                tools:ignore="ContentDescription" />
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp">
 
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_name"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_name"
-                app:errorText="@{formData.nameErrorLive}">
+                <ImageView
+                  android:id="@+id/image_name"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+                  android:src="@drawable/ic_round_label_anim"
+                  android:layout_marginTop="16sp"
+                  tools:ignore="ContentDescription" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_name"
-                  android:text="@={formData.nameLive}"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:inputType="text|textCapSentences"
-                  android:imeOptions="actionDone"
-                  android:afterTextChanged="@{() -> formData.isNameValid()}"
-                  app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}"
-                  app:onDoneClickInSoftKeyboard="@{() -> viewModel.saveShoppingList()}"/>
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_name"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_name"
+                  app:errorText="@{formData.nameErrorLive}">
 
-              </com.google.android.material.textfield.TextInputLayout>
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_name"
+                    android:text="@={formData.nameLive}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapSentences"
+                    android:imeOptions="actionDone"
+                    android:afterTextChanged="@{() -> formData.isNameValid()}"
+                    app:onFocusChangeListener="@{(v, focus) -> activity.startIconAnimation(imageName, focus)}"
+                    app:onDoneClickInSoftKeyboard="@{() -> viewModel.saveShoppingList()}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
 
             </LinearLayout>
 
-          </LinearLayout>
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 

@@ -77,7 +77,7 @@ public class SettingsCatShoppingModeFragment extends BaseFragment {
 
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
