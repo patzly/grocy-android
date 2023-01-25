@@ -60,75 +60,85 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-      android:id="@+id/linear_container_unlock"
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraint_unlock"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:orientation="vertical"
-      android:visibility="@{viewModel.appUnlocked ? View.GONE : View.VISIBLE}"
       android:layout_marginTop="?attr/actionBarSize"
-      android:paddingBottom="92dp">
-
-      <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.Grocy.Card.Text"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="0dp"
-        app:contentPadding="0dp">
-
-        <androidx.core.widget.NestedScrollView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:scrollbars="vertical"
-          android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
-
-          <xyz.zedler.patrick.grocy.view.FormattedTextView
-            android:id="@+id/formatted_ml_kit_intro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        </androidx.core.widget.NestedScrollView>
-
-      </com.google.android.material.card.MaterialCardView>
+      android:paddingBottom="92dp"
+      android:visibility="@{viewModel.appUnlocked ? View.GONE : View.VISIBLE}">
 
       <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="@dimen/max_content_width"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-          android:id="@+id/button_github"
-          style="@style/Widget.Grocy.Button.OutlinedButton"
-          android:text="@string/action_github"
-          android:onClick="@{() -> fragment.openGitHub()}"
-          clickUtil="@{clickUtil}"/>
+        <com.google.android.material.card.MaterialCardView
+          style="@style/Widget.Grocy.Card.Text"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          android:layout_marginTop="16dp"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="0dp"
+          app:contentPadding="0dp">
 
-        <com.google.android.material.button.MaterialButton
-          android:id="@+id/button_github_no_vending"
-          style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:text="@string/action_github"
-          android:onClick="@{() -> fragment.openGitHub()}"
-          clickUtil="@{clickUtil}"/>
+          <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:scrollbarThumbVertical="@drawable/shape_scrollbar_rounded">
 
-        <com.google.android.material.button.MaterialButton
-          android:id="@+id/button_vending"
-          style="@style/Widget.Grocy.Button.UnelevatedButton"
-          android:layout_marginStart="8dp"
-          android:text="@string/action_play_store"
-          android:onClick="@{() -> fragment.openPlayStore()}"
-          clickUtil="@{clickUtil}"/>
+            <xyz.zedler.patrick.grocy.view.FormattedTextView
+              android:id="@+id/formatted_ml_kit_intro"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+
+          </androidx.core.widget.NestedScrollView>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginTop="12dp"
+          android:gravity="center_horizontal"
+          android:orientation="horizontal">
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_github"
+            style="@style/Widget.Grocy.Button.OutlinedButton"
+            android:text="@string/action_github"
+            android:onClick="@{() -> fragment.openGitHub()}"
+            clickUtil="@{clickUtil}"/>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_github_no_vending"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:text="@string/action_github"
+            android:onClick="@{() -> fragment.openGitHub()}"
+            clickUtil="@{clickUtil}"/>
+
+          <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_vending"
+            style="@style/Widget.Grocy.Button.UnelevatedButton"
+            android:layout_marginStart="8dp"
+            android:text="@string/action_play_store"
+            android:onClick="@{() -> fragment.openPlayStore()}"
+            clickUtil="@{clickUtil}"/>
+
+        </LinearLayout>
 
       </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
       android:id="@+id/scroll"
@@ -138,73 +148,83 @@
       android:overScrollMode="never"
       android:visibility="@{viewModel.appUnlocked ? View.VISIBLE : View.GONE}">
 
-      <LinearLayout
-        android:id="@+id/linear_body"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true"
-        app:transitionTypeChanging="@{true}">
+        android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginTop="8dp"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="0dp">
-
-          <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph.Card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{@string/msg_help_barcode_scanner_choose}" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-          android:id="@+id/toggle_select_scanner"
-          android:layout_width="wrap_content"
+        <LinearLayout
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:paddingStart="16dp"
-          android:paddingEnd="16dp"
-          android:layout_marginTop="12dp"
-          android:layout_marginBottom="12dp"
-          android:layout_gravity="center_horizontal"
-          app:singleSelection="true"
-          app:selectionRequired="true"
-          tools:ignore="HardcodedText">
+          android:orientation="vertical"
+          android:animateLayoutChanges="true"
+          app:transitionTypeChanging="@{true}"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_xzing"
-            style="@style/Widget.Grocy.Button.OutlinedButton"
-            android:text="XZing" />
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="0dp">
 
-          <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_mlkit"
-            style="@style/Widget.Grocy.Button.OutlinedButton"
-            android:text="ML Kit" />
+            <TextView
+              style="@style/Widget.Grocy.TextView.Paragraph.Card"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@{@string/msg_help_barcode_scanner_choose}" />
 
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+          </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-          android:id="@+id/card_info_mlkit"
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_marginTop="0dp"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="0dp"
-          app:contentPadding="0dp">
+          <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggle_select_scanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_gravity="center_horizontal"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            tools:ignore="HardcodedText">
 
-          <xyz.zedler.patrick.grocy.view.FormattedTextView
-            android:id="@+id/formatted_scanner_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/button_xzing"
+              style="@style/Widget.Grocy.Button.OutlinedButton"
+              android:text="XZing" />
 
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton
+              android:id="@+id/button_mlkit"
+              style="@style/Widget.Grocy.Button.OutlinedButton"
+              android:text="ML Kit" />
 
-      </LinearLayout>
+          </com.google.android.material.button.MaterialButtonToggleGroup>
+
+          <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_info_mlkit"
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="0dp"
+            app:contentPadding="0dp">
+
+            <xyz.zedler.patrick.grocy.view.FormattedTextView
+              android:id="@+id/formatted_scanner_info"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" />
+
+          </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

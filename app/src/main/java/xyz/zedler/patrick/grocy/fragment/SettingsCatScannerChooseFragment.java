@@ -82,9 +82,9 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     if (isUnlocked) {
-      systemBarBehavior.setScroll(binding.scroll, binding.linearBody);
+      systemBarBehavior.setScroll(binding.scroll, binding.constraintBody);
     } else {
-      systemBarBehavior.setContainer(binding.linearContainerUnlock);
+      systemBarBehavior.setContainer(binding.constraintUnlock);
     }
     systemBarBehavior.setUp();
 
