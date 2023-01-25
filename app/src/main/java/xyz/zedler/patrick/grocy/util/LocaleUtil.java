@@ -100,4 +100,13 @@ public class LocaleUtil {
       return Locale.getDefault();
     }
   }
+
+  public static String getLangFromLanguageCode(@NonNull String languageCode) {
+    String[] codeParts = languageCode.split("-");
+    if (codeParts.length > 1) {
+      return codeParts[0];
+    } else {
+      return languageCode;
+    }
+  }
 }

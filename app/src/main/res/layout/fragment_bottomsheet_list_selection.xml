@@ -56,7 +56,7 @@
 
         <TextView
           android:id="@+id/text_list_selection_description"
-          style="@style/Widget.Grocy.TextView.Paragraph.BodyMedium"
+          style="@style/Widget.Grocy.TextView.BodyMedium"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:paddingTop="4dp"

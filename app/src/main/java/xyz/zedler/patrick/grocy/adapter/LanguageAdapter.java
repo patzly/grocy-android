@@ -30,6 +30,7 @@ import java.util.List;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.RowLanguageBinding;
 import xyz.zedler.patrick.grocy.model.Language;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHolder> {
@@ -106,6 +107,12 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHo
     // SELECTED
 
     boolean isSelected = language.getCode().equals(selectedCode);
+    if (selectedCode != null && !isSelected && !languageHashMap.containsKey(selectedCode)) {
+      String lang = LocaleUtil.getLangFromLanguageCode(selectedCode);
+      if (languageHashMap.containsKey(lang)) {
+        isSelected = language.getCode().equals(lang);
+      }
+    }
     holder.binding.imageLanguageSelected.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
     if (isSelected) {
       holder.binding.linearLanguageContainer.setBackground(ViewUtil.getBgListItemSelected(context));

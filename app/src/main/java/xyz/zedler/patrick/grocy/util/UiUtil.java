@@ -160,13 +160,13 @@ public class UiUtil {
 
   public static boolean areAnimationsEnabled(Context context) {
     boolean duration = Global.getFloat(
-        context.getContentResolver(), Global.ANIMATOR_DURATION_SCALE, 0
+        context.getContentResolver(), Global.ANIMATOR_DURATION_SCALE, 1
     ) != 0;
     boolean transition = Global.getFloat(
-        context.getContentResolver(), Global.TRANSITION_ANIMATION_SCALE, 0
+        context.getContentResolver(), Global.TRANSITION_ANIMATION_SCALE, 1
     ) != 0;
     boolean window = Global.getFloat(
-        context.getContentResolver(), Global.WINDOW_ANIMATION_SCALE, 0
+        context.getContentResolver(), Global.WINDOW_ANIMATION_SCALE, 1
     ) != 0;
     return duration && transition && window;
   }

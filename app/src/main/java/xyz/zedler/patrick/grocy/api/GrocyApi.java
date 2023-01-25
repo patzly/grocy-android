@@ -272,13 +272,23 @@ public class GrocyApi {
     );
   }
 
-  public String getStockLogEntries(int limit, int offset) {
-    return getUrl(
-        "/objects/stock_log",
-        "limit=" + limit,
-        "offset=" + offset,
-        "order=id%3Adesc"
-    );
+  public String getStockLogEntries(int limit, int offset, int filterProductId) {
+    if (filterProductId == -1) {
+      return getUrl(
+          "/objects/stock_log",
+          "limit=" + limit,
+          "offset=" + offset,
+          "order=id%3Adesc"
+      );
+    } else {
+      return getUrl(
+          "/objects/stock_log",
+          "query%5B%5D=product_id%3D" + filterProductId,
+          "limit=" + limit,
+          "offset=" + offset,
+          "order=id%3Adesc"
+      );
+    }
   }
 
   /**
