@@ -106,179 +106,189 @@
           android:overScrollMode="never"
           android:fillViewport="true">
 
-          <LinearLayout
-            android:id="@+id/linear_container_scroll"
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:paddingBottom="0dp"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            transitionTypeChanging="@{true}">
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
-            <View
-              android:id="@+id/dummy_focus_view"
+            <LinearLayout
               android:layout_width="0dp"
-              android:layout_height="0dp"
-              android:focusable="true"
-              android:focusableInTouchMode="true"/>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginBottom="8dp"
-              android:layout_marginTop="8dp"
-              android:visibility="@{viewModel.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_choose_product" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginBottom="8dp"
-              android:layout_marginTop="8dp"
-              android:visibility="@{viewModel.displayHelpLive &amp;&amp; !viewModel.isOpenFoodFactsEnabled() ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_off_option_deactivated" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginBottom="8dp"
-              android:layout_marginTop="8dp"
-              android:visibility="@{viewModel.displayHelpLive &amp;&amp; viewModel.offHelpText != null ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@{viewModel.offHelpText}" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-              android:paddingTop="8dp"
-              android:paddingBottom="0dp">
-
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_product"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_product_name"
-                app:helperTextEnabled="true"
-                app:helperText="@{viewModel.productNameHelperTextLive}"
-                app:endIconMode="clear_text"
-                app:errorText="@{viewModel.productNameErrorLive}" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_product"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="@={viewModel.productNameLive}"
-                  android:imeOptions="actionSearch"
-                  android:inputType="text|textCapSentences"
-                  app:onSearchClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
-
-              </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:visibility="@{viewModel.forbidCreateProductLive ? View.GONE : View.VISIBLE}">
+              android:animateLayoutChanges="true"
+              app:transitionTypeChanging="@{true}"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
+
+              <View
+                android:id="@+id/dummy_focus_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{viewModel.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_choose_product" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{viewModel.displayHelpLive &amp;&amp; !viewModel.isOpenFoodFactsEnabled() ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_off_option_deactivated" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="@{viewModel.displayHelpLive &amp;&amp; viewModel.offHelpText != null ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@{viewModel.offHelpText}" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_product"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_product_name"
+                  app:helperTextEnabled="true"
+                  app:helperText="@{viewModel.productNameHelperTextLive}"
+                  app:endIconMode="clear_text"
+                  app:errorText="@{viewModel.productNameErrorLive}" >
+
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.productNameLive}"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text|textCapSentences"
+                    app:onSearchClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.forbidCreateProductLive ? View.GONE : View.VISIBLE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Category"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginTop="12dp"
+                  android:layout_marginBottom="8dp"
+                  android:text="@string/category_new_product" />
+
+                <LinearLayout
+                  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:onClick="@{() -> fragment.createNewPendingProduct()}"
+                  android:visibility="gone"
+                  app:clickUtil="@{clickUtil}">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.createPendingProductTextLive}"
+                    android:maxLines="3"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:onClick="@{() -> fragment.createNewProduct()}"
+                  app:clickUtil="@{clickUtil}">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.createProductTextLive}"
+                    android:maxLines="3"/>
+
+                  <ImageView
+                    style="@style/Widget.Grocy.ImageView.Icon"
+                    android:layout_marginStart="16dp"
+                    android:clickable="false"
+                    android:src="@drawable/ic_round_chevron_right"
+                    tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+              </LinearLayout>
 
               <TextView
                 style="@style/Widget.Grocy.TextView.Category"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/category_new_product" />
+                android:text="@{viewModel.existingProductsCategoryTextLive}" />
 
-              <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+              <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> fragment.createNewPendingProduct()}"
-                android:visibility="gone"
-                app:clickUtil="@{clickUtil}">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:layout_height="wrap_content"
-                  android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:text="@{viewModel.createPendingProductTextLive}"
-                  android:maxLines="3"/>
-
-              </LinearLayout>
-
-              <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> fragment.createNewProduct()}"
-                app:clickUtil="@{clickUtil}">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:layout_height="wrap_content"
-                  android:layout_width="0dp"
-                  android:layout_weight="1"
-                  android:text="@{viewModel.createProductTextLive}"
-                  android:maxLines="3"/>
-
-                <ImageView
-                  style="@style/Widget.Grocy.ImageView.Icon"
-                  android:layout_marginStart="16dp"
-                  android:clickable="false"
-                  android:src="@drawable/ic_round_chevron_right"
-                  tools:ignore="ContentDescription" />
-
-              </LinearLayout>
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="100dp"
+                android:overScrollMode="never" />
 
             </LinearLayout>
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.Category"
-              android:layout_marginStart="16dp"
-              android:text="@{viewModel.existingProductsCategoryTextLive}" />
-
-            <androidx.recyclerview.widget.RecyclerView
-              android:id="@+id/recycler"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:clipToPadding="false"
-              android:paddingTop="8dp"
-              android:paddingBottom="100dp"
-              android:overScrollMode="never" />
-
-          </LinearLayout>
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 

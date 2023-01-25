@@ -311,7 +311,7 @@ public class BottomScrollBehavior {
 
   public void setNestedOverScrollFixEnabled(boolean enabled) {
     useOverScrollFix = enabled && Build.VERSION.SDK_INT < 31;
-    if (useOverScrollFix && scrollView.getScrollY() == 0) {
+    if (useOverScrollFix && scrollView != null && scrollView.getScrollY() == 0) {
       setOverScrollEnabled(false);
     }
   }

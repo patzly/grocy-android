@@ -106,7 +106,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
-    systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
+    systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
@@ -294,7 +294,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     binding.textInputProduct.clearFocus();
     binding.textInputAmount.clearFocus();
     binding.textInputNote.clearFocus();
-    binding.linearContainerScroll.clearFocus();
+    binding.constraint.clearFocus();
     binding.quantityUnitContainer.clearFocus();
   }
 

@@ -67,338 +67,348 @@
       android:layout_marginTop="?attr/actionBarSize"
       android:overScrollMode="never">
 
-      <LinearLayout
-        android:id="@+id/linear_container_scroll"
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:orientation="vertical">
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Category"
-          android:text="@string/title_presets_new_products" />
+        android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
         <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showLocationsBottomSheet()}"
-          clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_place"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/property_location" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.presetLocationTextLive}"/>
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showProductGroupsBottomSheet()}"
-          clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_category"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/property_product_group" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.presetProductGroupTextLive}"/>
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet()}"
-          clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_weights"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/property_quantity_unit" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.presetQuantityUnitTextLive}"/>
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showDefaultDueDaysBottomSheet()}"
-          clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_event"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/property_due_days_default" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.defaultDueDaysTextLive}"/>
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:onClick="@{v -> switchTreatOpened.setChecked(!switchTreatOpened.isChecked())}"
-          android:visibility="@{viewModel.hasServerNewOptionTreatOpenedAsOutOfStock() ? View.VISIBLE : View.GONE}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_open"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_treat_opened_as_out_of_stock" />
-
-          </LinearLayout>
-
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_treat_opened"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setTreatOpenedAsOutOfStockEnabled(checked)}"
-            initialChecked="@{viewModel.treatOpenedAsOutOfStockEnabled}"/>
-
-        </LinearLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Category"
-          android:text="@string/title_stock_overview" />
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showDueSoonDaysBottomSheet()}"
-          clickUtil="@{clickUtil}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_event"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/setting_due_soon_days" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.dueSoonDaysTextLive}"/>
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> switchIndicator.setChecked(!switchIndicator.isChecked())}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_shopping_list_long"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_list_indicator" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_list_indicator_description" />
-
-          </LinearLayout>
-
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_indicator"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setListIndicatorEnabled(checked)}"
-            initialChecked="@{viewModel.listIndicatorEnabled}"/>
-
-        </LinearLayout>
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.Category"
-          android:text="@string/title_purchase" />
-
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showDefaultPurchaseAmountBottomSheet()}"
-          clickUtil="@{clickUtil}"
-          iconToAnimate="@{imageDefaultAmountPurchase}">
-
-          <ImageView
-            android:id="@+id/image_default_amount_purchase"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_scatter_plot_anim"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/setting_default_amount_purchase" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.defaultPurchaseAmountTextLive}"/>
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-          style="@style/Widget.Grocy.Card.Text"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="8dp"
-          android:layout_marginTop="8dp">
+          android:orientation="vertical"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintWidth_max="@dimen/max_content_width"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent">
 
           <TextView
-            style="@style/Widget.Grocy.TextView.Paragraph"
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/title_presets_new_products" />
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showLocationsBottomSheet()}"
+            clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_place"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/property_location" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.presetLocationTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showProductGroupsBottomSheet()}"
+            clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_category"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/property_product_group" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.presetProductGroupTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showQuantityUnitsBottomSheet()}"
+            clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_weights"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/property_quantity_unit" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.presetQuantityUnitTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showDefaultDueDaysBottomSheet()}"
+            clickUtil="@{clickUtil}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_event"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/property_due_days_default" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.defaultDueDaysTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:text="@string/msg_help_purchased_date_settings" />
+            android:onClick="@{v -> switchTreatOpened.setChecked(!switchTreatOpened.isChecked())}"
+            android:visibility="@{viewModel.hasServerNewOptionTreatOpenedAsOutOfStock() ? View.VISIBLE : View.GONE}">
 
-        </com.google.android.material.card.MaterialCardView>
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_open"
+              tools:ignore="ContentDescription" />
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> switchPurchaseDate.setChecked(!switchPurchaseDate.isChecked())}">
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_event"
-            tools:ignore="ContentDescription" />
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_treat_opened_as_out_of_stock" />
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+            </LinearLayout>
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_purchased_date" />
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Description"
-              android:text="@string/setting_purchased_date_description" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_treat_opened"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setTreatOpenedAsOutOfStockEnabled(checked)}"
+              initialChecked="@{viewModel.treatOpenedAsOutOfStockEnabled}"/>
 
           </LinearLayout>
 
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_purchase_date"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setPurchasedDateEnabled(checked)}"
-            initialChecked="@{viewModel.purchasedDateEnabled}"/>
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/title_stock_overview" />
 
-        </LinearLayout>
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showDueSoonDaysBottomSheet()}"
+            clickUtil="@{clickUtil}">
 
-        <TextView
-          style="@style/Widget.Grocy.TextView.Category"
-          android:text="@string/title_consume" />
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_event"
+              tools:ignore="ContentDescription" />
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-          android:onClick="@{() -> viewModel.showDefaultConsumeAmountBottomSheet()}"
-          clickUtil="@{clickUtil}"
-          iconToAnimate="@{imageDefaultAmountConsume}">
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
 
-          <ImageView
-            android:id="@+id/image_default_amount_consume"
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_scatter_plot_anim"
-            tools:ignore="ContentDescription" />
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/setting_due_soon_days" />
 
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.dueSoonDaysTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchIndicator.setChecked(!switchIndicator.isChecked())}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_shopping_list_long"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_list_indicator" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_list_indicator_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_indicator"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setListIndicatorEnabled(checked)}"
+              initialChecked="@{viewModel.listIndicatorEnabled}"/>
+
+          </LinearLayout>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/title_purchase" />
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showDefaultPurchaseAmountBottomSheet()}"
+            clickUtil="@{clickUtil}"
+            iconToAnimate="@{imageDefaultAmountPurchase}">
+
+            <ImageView
+              android:id="@+id/image_default_amount_purchase"
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_scatter_plot_anim"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/setting_default_amount_purchase" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.defaultPurchaseAmountTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Grocy.Card.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
 
             <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-              android:text="@string/setting_default_amount_consume" />
+              style="@style/Widget.Grocy.TextView.Paragraph"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="?attr/colorOnSurfaceVariant"
+              android:text="@string/msg_help_purchased_date_settings" />
 
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@{viewModel.defaultConsumeAmountTextLive}"/>
+          </com.google.android.material.card.MaterialCardView>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchPurchaseDate.setChecked(!switchPurchaseDate.isChecked())}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_event"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_purchased_date" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Description"
+                android:text="@string/setting_purchased_date_description" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_purchase_date"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setPurchasedDateEnabled(checked)}"
+              initialChecked="@{viewModel.purchasedDateEnabled}"/>
+
+          </LinearLayout>
+
+          <TextView
+            style="@style/Widget.Grocy.TextView.Category"
+            android:text="@string/title_consume" />
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+            android:onClick="@{() -> viewModel.showDefaultConsumeAmountBottomSheet()}"
+            clickUtil="@{clickUtil}"
+            iconToAnimate="@{imageDefaultAmountConsume}">
+
+            <ImageView
+              android:id="@+id/image_default_amount_consume"
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_scatter_plot_anim"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                android:text="@string/setting_default_amount_consume" />
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@{viewModel.defaultConsumeAmountTextLive}"/>
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <LinearLayout
+            style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> switchQuickConsumeAmount.setChecked(!switchQuickConsumeAmount.isChecked())}">
+
+            <ImageView
+              style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+              android:src="@drawable/ic_round_consume_product"
+              tools:ignore="ContentDescription" />
+
+            <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+              <TextView
+                style="@style/Widget.Grocy.TextView.ListItem.Title"
+                android:text="@string/setting_use_quick_consume_amount" />
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+              android:id="@+id/switch_quick_consume_amount"
+              style="@style/Widget.Grocy.Switch"
+              android:onCheckedChanged="@{(view, checked) -> viewModel.setUseQuickConsumeAmountEnabled(checked)}"
+              initialChecked="@{viewModel.useQuickConsumeAmountEnabled}"/>
 
           </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-          style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> switchQuickConsumeAmount.setChecked(!switchQuickConsumeAmount.isChecked())}">
-
-          <ImageView
-            style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-            android:src="@drawable/ic_round_consume_product"
-            tools:ignore="ContentDescription" />
-
-          <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-            <TextView
-              style="@style/Widget.Grocy.TextView.ListItem.Title"
-              android:text="@string/setting_use_quick_consume_amount" />
-
-          </LinearLayout>
-
-          <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_quick_consume_amount"
-            style="@style/Widget.Grocy.Switch"
-            android:onCheckedChanged="@{(view, checked) -> viewModel.setUseQuickConsumeAmountEnabled(checked)}"
-            initialChecked="@{viewModel.useQuickConsumeAmountEnabled}"/>
-
-        </LinearLayout>
-
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

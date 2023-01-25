@@ -20,7 +20,7 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/container"
-  style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+  style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
   android:orientation="vertical">
 
   <TextView

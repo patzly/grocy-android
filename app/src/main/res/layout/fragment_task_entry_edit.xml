@@ -76,205 +76,215 @@
           android:layout_height="match_parent"
           android:overScrollMode="ifContentScrolls">
 
-          <LinearLayout
-            android:id="@+id/linear_container_scroll"
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            android:paddingBottom="@dimen/global_scroll_bottom_padding"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            app:transitionTypeChanging="@{true}">
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
-            <View
-              android:id="@+id/dummy_focus_view"
+            <LinearLayout
               android:layout_width="0dp"
-              android:layout_height="0dp"
-              android:focusable="true"
-              android:focusableInTouchMode="true"/>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="0dp"
-              android:paddingBottom="0dp">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                android:src="@drawable/ic_round_label_anim"
-                android:layout_marginTop="16sp"
-                tools:ignore="ContentDescription" />
-
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_name"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_name"
-                app:errorText="@{formData.nameErrorLive}">
-
-                <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_name"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:inputType="text|textCapSentences"
-                  android:scrollHorizontally="false"
-                  android:maxLines="4"
-                  android:imeOptions="actionDone"
-                  android:text="@={formData.nameLive}"
-                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
-
-              </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="0dp"
-              android:paddingBottom="0dp"
-              android:paddingStart="0dp"
-              android:paddingEnd="0dp"
-              android:layout_marginStart="56dp"
-              android:weightSum="2">
-
-              <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/Widget.Grocy.RadioButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingEnd="4dp"
-                android:paddingStart="0dp"
-                android:text="@string/property_singleline"
-                android:checked="@{!formData.useMultilineDescriptionLive}"
-                android:onClick="@{() -> formData.setUseMultilineDescriptionLive(false)}" />
-
-              <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/Widget.Grocy.RadioButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingEnd="16dp"
-                android:paddingStart="0dp"
-                android:text="@string/property_multiline"
-                android:checked="@{formData.useMultilineDescriptionLive}"
-                android:onClick="@{() -> formData.setUseMultilineDescriptionLive(true)}" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="0dp"
-              android:paddingBottom="8dp">
-
-              <ImageView
-                android:id="@+id/image_note"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
-                android:src="@drawable/ic_round_subject_anim"
-                android:layout_marginTop="16sp"
-                tools:ignore="ContentDescription" />
-
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_description"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_description">
-
-                <com.google.android.material.textfield.TextInputEditText
-                  android:id="@+id/edit_text_description"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="@={formData.descriptionLive}"
-                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
-
-              </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/linear_due_date"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-              android:onClick="@{() -> viewModel.showDueDateBottomSheet()}"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
               android:animateLayoutChanges="true"
-              android:paddingStart="16dp"
-              android:paddingEnd="8dp"
-              app:transitionTypeChanging="@{true}">
+              app:transitionTypeChanging="@{true}"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_event"
-                tools:ignore="ContentDescription" />
+              <View
+                android:id="@+id/dummy_focus_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_due_date"/>
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+                  android:src="@drawable/ic_round_label_anim"
+                  android:layout_marginTop="16sp"
+                  tools:ignore="ContentDescription" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.dueDateTextLive}" />
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_name"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_name"
+                  app:errorText="@{formData.nameErrorLive}">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@{formData.dueDateTextHumanLive}"
-                  android:visibility="@{formData.dueDateTextHumanLive != null ? View.VISIBLE : View.GONE}" />
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapSentences"
+                    android:scrollHorizontally="false"
+                    android:maxLines="4"
+                    android:imeOptions="actionDone"
+                    android:text="@={formData.nameLive}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
 
-              </LinearLayout>
-
-              <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_delete_due_date"
-                style="@style/Widget.Grocy.Button.IconButton"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="4dp"
-                android:visibility="@{formData.dueDateLive != null ? View.VISIBLE : View.GONE}"
-                android:onClick="@{() -> formData.deleteDueDate()}"
-                app:icon="@drawable/ic_round_close" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-              android:onClick="@{() -> viewModel.showCategoriesBottomSheet()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_category"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_category" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.taskCategoryNameLive ?? @string/subtitle_none_selected}" />
+                </com.google.android.material.textfield.TextInputLayout>
 
               </LinearLayout>
 
-            </LinearLayout>
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:layout_marginStart="56dp"
+                android:weightSum="2">
 
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
-              android:onClick="@{() -> viewModel.showUsersBottomSheet()}">
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                  style="@style/Widget.Grocy.RadioButton"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:paddingEnd="4dp"
+                  android:paddingStart="0dp"
+                  android:text="@string/property_singleline"
+                  android:checked="@{!formData.useMultilineDescriptionLive}"
+                  android:onClick="@{() -> formData.setUseMultilineDescriptionLive(false)}" />
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_person_anim"
-                tools:ignore="ContentDescription" />
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                  style="@style/Widget.Grocy.RadioButton"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:paddingEnd="16dp"
+                  android:paddingStart="0dp"
+                  android:text="@string/property_multiline"
+                  android:checked="@{formData.useMultilineDescriptionLive}"
+                  android:onClick="@{() -> formData.setUseMultilineDescriptionLive(true)}" />
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+              </LinearLayout>
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_assigned_to" />
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="0dp"
+                android:paddingBottom="8dp">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.userNameLive ?? @string/subtitle_none_selected}" />
+                <ImageView
+                  android:id="@+id/image_note"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon.Top"
+                  android:src="@drawable/ic_round_subject_anim"
+                  android:layout_marginTop="16sp"
+                  tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_description"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_description">
+
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={formData.descriptionLive}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:id="@+id/linear_due_date"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+                android:onClick="@{() -> viewModel.showDueDateBottomSheet()}"
+                android:animateLayoutChanges="true"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                app:transitionTypeChanging="@{true}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_event"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_due_date"/>
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.dueDateTextLive}" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@{formData.dueDateTextHumanLive}"
+                    android:visibility="@{formData.dueDateTextHumanLive != null ? View.VISIBLE : View.GONE}" />
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                  android:id="@+id/button_delete_due_date"
+                  style="@style/Widget.Grocy.Button.IconButton"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginStart="4dp"
+                  android:visibility="@{formData.dueDateLive != null ? View.VISIBLE : View.GONE}"
+                  android:onClick="@{() -> formData.deleteDueDate()}"
+                  app:icon="@drawable/ic_round_close" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+                android:onClick="@{() -> viewModel.showCategoriesBottomSheet()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_category"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_category" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.taskCategoryNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable.More"
+                android:onClick="@{() -> viewModel.showUsersBottomSheet()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_person_anim"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_assigned_to" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.userNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
 
               </LinearLayout>
 
             </LinearLayout>
 
-          </LinearLayout>
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 

@@ -844,7 +844,7 @@ public class MainActivity extends AppCompatActivity {
   public void showSnackbar(Snackbar snackbar) {
     if (binding.fabMain.isOrWillBeShown()) {
       snackbar.setAnchorView(binding.fabMain);
-    } else if (binding.bottomAppBar.getVisibility() == View.VISIBLE) {
+    } else {
       snackbar.setAnchorView(binding.bottomAppBar);
     }
     snackbar.show();

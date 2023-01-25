@@ -144,8 +144,6 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     refreshItems();
 
     binding.textName.setText(product.getName());
-    ViewUtil.centerTextOnLargeScreens(binding.textName);
-    ViewUtil.centerTextOnLargeScreens(binding.textDescription);
 
     // TOOLBAR
 

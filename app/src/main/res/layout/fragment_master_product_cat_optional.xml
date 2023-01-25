@@ -105,417 +105,427 @@
           android:layout_height="match_parent"
           android:overScrollMode="never">
 
-          <LinearLayout
-            android:id="@+id/linear_container_scroll"
+          <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:paddingBottom="@dimen/global_scroll_bottom_padding"
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            transitionTypeChanging="@{true}">
+            android:paddingBottom="@dimen/global_scroll_bottom_padding">
 
             <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:onClick="@{() -> formData.toggleActiveLive()}"
+              android:orientation="vertical"
               android:animateLayoutChanges="true"
-              transitionTypeChanging="@{true}">
+              app:transitionTypeChanging="@{true}"
+              app:layout_constraintTop_toTopOf="parent"
+              app:layout_constraintWidth_max="@dimen/max_content_width"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent">
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_done" />
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> formData.toggleActiveLive()}"
+                android:animateLayoutChanges="true"
+                app:transitionTypeChanging="@{true}">
 
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_done" />
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/property_active" />
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@{formData.isActiveLive ? @string/subtitle_product_not_hidden : @string/subtitle_product_hidden}" />
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/property_active" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@{formData.isActiveLive ? @string/subtitle_product_not_hidden : @string/subtitle_product_hidden}" />
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                  style="@style/Widget.Grocy.Switch"
+                  android:checked="@={formData.isActiveLive}" />
 
               </LinearLayout>
 
-              <com.google.android.material.materialswitch.MaterialSwitch
-                style="@style/Widget.Grocy.Switch"
-                android:checked="@={formData.isActiveLive}" />
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
 
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_marginBottom="8dp"
-              android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_help_parent_product_deactivated" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="8dp"
-              android:paddingBottom="8dp"
-              android:paddingStart="16dp"
-              android:paddingEnd="16dp"
-              android:gravity="center"
-              android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}">
-
-              <androidx.coordinatorlayout.widget.CoordinatorLayout
-                android:id="@+id/container_scanner"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_gravity="center"
-                android:onClick="@{() -> fragment.toggleTorch()}"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
-              android:paddingTop="8dp"
-              android:paddingBottom="0dp">
-
-              <ImageView
-                android:id="@+id/image_product"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_account_tree"
-                android:layout_marginBottom="10dp"
-                android:alpha="@{formData.parentProductEnabled ? 1.0f : 0.38f}"
-                tools:ignore="ContentDescription" />
-
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_parent_product"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_round_barcode_scan"
-                app:endIconContentDescription="Scan barcode"
-                android:hint="@string/property_parent_product"
-                app:helperTextEnabled="true"
-                app:helperText=" "
-                app:errorIconDrawable="@{null}"
-                app:endIconOnClickListener="@{v -> formData.toggleScannerVisibility()}"
-                app:errorText="@{formData.parentProductNameErrorLive}"
-                android:enabled="@{formData.parentProductEnabled}">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                  android:id="@+id/auto_complete_parent_product"
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:inputType="text|textCapSentences|textNoSuggestions"
-                  android:imeOptions="actionDone"
-                  android:completionThreshold="1"
-                  android:popupBackground="@drawable/bg_auto_complete"
-                  android:text="@={formData.parentProductNameLive}"
-                  android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
-                  app:productList="@{formData.productsLive}"
-                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"
-                  app:onFocusChangeListener="@{(v, focus) -> fragment.onParentProductInputFocusChanged(focus)}" />
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_parent_product_deactivated" />
 
-              </com.google.android.material.textfield.TextInputLayout>
+              </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:gravity="center"
+                android:visibility="@{formData.scannerVisibilityLive ? View.VISIBLE : View.GONE}">
 
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> fragment.navigateToHtmlEditor()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_short_text" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_description" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.descriptionSpannedLive ?? fragment.getString(R.string.subtitle_empty)}"
-                  android:singleLine="true" />
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                  android:id="@+id/container_scanner"
+                  android:layout_width="match_parent"
+                  android:layout_height="160dp"
+                  android:layout_gravity="center"
+                  android:onClick="@{() -> fragment.toggleTorch()}"/>
 
               </LinearLayout>
 
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                  android:id="@+id/image_product"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_account_tree"
+                  android:layout_marginBottom="10dp"
+                  android:alpha="@{formData.parentProductEnabled ? 1.0f : 0.38f}"
+                  tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/text_input_parent_product"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox.DropDown"
+                  app:endIconMode="custom"
+                  app:endIconDrawable="@drawable/ic_round_barcode_scan"
+                  app:endIconContentDescription="Scan barcode"
+                  android:hint="@string/property_parent_product"
+                  app:helperTextEnabled="true"
+                  app:helperText=" "
+                  app:errorIconDrawable="@{null}"
+                  app:endIconOnClickListener="@{v -> formData.toggleScannerVisibility()}"
+                  app:errorText="@{formData.parentProductNameErrorLive}"
+                  android:enabled="@{formData.parentProductEnabled}">
+
+                  <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/auto_complete_parent_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textCapSentences|textNoSuggestions"
+                    android:imeOptions="actionDone"
+                    android:completionThreshold="1"
+                    android:popupBackground="@drawable/bg_auto_complete"
+                    android:text="@={formData.parentProductNameLive}"
+                    android:onItemClick="@{(parent, view, pos, id) -> fragment.onItemAutoCompleteClick(parent, pos)}"
+                    app:productList="@{formData.productsLive}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}"
+                    app:onFocusChangeListener="@{(v, focus) -> fragment.onParentProductInputFocusChanged(focus)}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> fragment.navigateToHtmlEditor()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_short_text" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_description" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.descriptionSpannedLive ?? fragment.getString(R.string.subtitle_empty)}"
+                    android:singleLine="true" />
+
+                </LinearLayout>
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
+                android:onClick="@{() -> fragment.showProductGroupsBottomSheet()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_category"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.OverLine"
+                    android:text="@string/property_product_group" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@{formData.productGroupNameLive ?? @string/subtitle_none_selected}" />
+
+                </LinearLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem"
+                android:paddingTop="8dp"
+                android:paddingBottom="0dp">
+
+                <ImageView
+                  android:id="@+id/image_master_product_simple_name"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_local_fire_department"
+                  android:layout_marginBottom="10dp"
+                  tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/energy"
+                  style="@style/Widget.Grocy.TextInputLayout.FilledBox"
+                  android:hint="@string/property_energy"
+                  app:helperTextEnabled="true"
+                  app:helperText=" ">
+
+                  <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:imeOptions="actionDone"
+                    android:text="@={formData.energyLive}"
+                    app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.TwoLine.Clickable"
-              android:onClick="@{() -> fragment.showProductGroupsBottomSheet()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_category"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox">
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
 
                 <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                  android:text="@string/property_product_group" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@{formData.productGroupNameLive ?? @string/subtitle_none_selected}" />
-
-              </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem"
-              android:paddingTop="8dp"
-              android:paddingBottom="0dp">
-
-              <ImageView
-                android:id="@+id/image_master_product_simple_name"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_local_fire_department"
-                android:layout_marginBottom="10dp"
-                tools:ignore="ContentDescription" />
-
-              <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/energy"
-                style="@style/Widget.Grocy.TextInputLayout.FilledBox"
-                android:hint="@string/property_energy"
-                app:helperTextEnabled="true"
-                app:helperText=" ">
-
-                <com.google.android.material.textfield.TextInputEditText
+                  style="@style/Widget.Grocy.TextView.Paragraph"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:inputType="number|numberDecimal"
-                  android:imeOptions="actionDone"
-                  android:text="@={formData.energyLive}"
-                  app:onDoneClickInSoftKeyboard="@{() -> fragment.clearInputFocus()}" />
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_default_stock_label_type" />
 
-              </com.google.android.material.textfield.TextInputLayout>
+              </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_marginBottom="8dp"
-              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
+              <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_help_default_stock_label_type" />
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:visibility="@{formData.featureLabelPrintEnabled ? View.VISIBLE : View.GONE}">
 
-            </com.google.android.material.card.MaterialCardView>
+                <ImageView
+                  android:id="@+id/image_label_print"
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_printer"
+                  android:layout_marginTop="12dp"
+                  android:layout_marginStart="16dp"
+                  tools:ignore="ContentDescription" />
 
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:layout_marginTop="8dp"
-              android:visibility="@{formData.featureLabelPrintEnabled ? View.VISIBLE : View.GONE}">
-
-              <ImageView
-                android:id="@+id/image_label_print"
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_printer"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="16dp"
-                tools:ignore="ContentDescription" />
-
-              <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:overScrollMode="ifContentScrolls"
-                android:layout_marginBottom="8dp">
-
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                  android:id="@+id/toggle_other_theme"
-                  android:layout_width="wrap_content"
+                <HorizontalScrollView
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:paddingStart="0dp"
-                  android:paddingEnd="24dp"
-                  app:singleSelection="true"
-                  app:selectionRequired="true">
+                  android:scrollbars="none"
+                  android:overScrollMode="ifContentScrolls"
+                  android:layout_marginBottom="8dp">
 
-                  <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Grocy.Button.OutlinedButton"
+                  <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_other_theme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/subtitle_print_label_no"
-                    android:checked="@{formData.defaultStockLabelTypeLive == 0}"
-                    android:onClick="@{() -> formData.setDefaultStockLabelTypeLive(0)}"
-                    tools:ignore="TextContrastCheck" />
+                    android:paddingStart="0dp"
+                    android:paddingEnd="24dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
 
-                  <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Grocy.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/subtitle_print_label_per_purchase"
-                    android:checked="@{formData.defaultStockLabelTypeLive == 1}"
-                    android:onClick="@{() -> formData.setDefaultStockLabelTypeLive(1)}"
-                    tools:ignore="TextContrastCheck" />
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.OutlinedButton"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/subtitle_print_label_no"
+                      android:checked="@{formData.defaultStockLabelTypeLive == 0}"
+                      android:onClick="@{() -> formData.setDefaultStockLabelTypeLive(0)}"
+                      tools:ignore="TextContrastCheck" />
 
-                  <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Grocy.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/subtitle_print_label_per_unit"
-                    android:checked="@{formData.defaultStockLabelTypeLive == 2}"
-                    android:onClick="@{() -> formData.setDefaultStockLabelTypeLive(2)}"
-                    tools:ignore="TextContrastCheck" />
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.OutlinedButton"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/subtitle_print_label_per_purchase"
+                      android:checked="@{formData.defaultStockLabelTypeLive == 1}"
+                      android:onClick="@{() -> formData.setDefaultStockLabelTypeLive(1)}"
+                      tools:ignore="TextContrastCheck" />
 
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+                    <com.google.android.material.button.MaterialButton
+                      style="@style/Widget.Grocy.Button.OutlinedButton"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/subtitle_print_label_per_unit"
+                      android:checked="@{formData.defaultStockLabelTypeLive == 2}"
+                      android:onClick="@{() -> formData.setDefaultStockLabelTypeLive(2)}"
+                      tools:ignore="TextContrastCheck" />
 
-              </HorizontalScrollView>
+                  </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_marginBottom="8dp"
-              android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_help_hide_on_stock" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> formData.toggleNeverShowOnStockLive()}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_visibility_off" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:maxLines="3"
-                  android:text="@string/property_never_show" />
+                </HorizontalScrollView>
 
               </LinearLayout>
 
-              <com.google.android.material.materialswitch.MaterialSwitch
-                style="@style/Widget.Grocy.Switch"
-                android:checked="@={formData.neverShowOnStockLive}" />
-
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-              style="@style/Widget.Grocy.Card.Text"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="16dp"
-              android:layout_marginTop="8dp"
-              android:layout_marginBottom="8dp"
-              android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
-
-              <TextView
-                style="@style/Widget.Grocy.TextView.Paragraph"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="@string/msg_help_disable_own_stock" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:onClick="@{() -> formData.toggleNoOwnStockLive()}"
-              android:visibility="@{formData.noOwnStockVisible ? View.VISIBLE : View.GONE}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                tools:ignore="ContentDescription"
-                android:src="@drawable/ic_round_lock" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:maxLines="3"
-                  android:text="@string/property_disable_own_stock" />
-
-              </LinearLayout>
-
-              <com.google.android.material.materialswitch.MaterialSwitch
-                style="@style/Widget.Grocy.Switch"
-                android:checked="@={formData.noOwnStockLive}" />
-
-            </LinearLayout>
-
-            <LinearLayout
-              android:id="@+id/category_picture"
-              style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:alpha="@{viewModel.actionEdit ? 1.0f : 0.38f}"
-              android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet)}">
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-                android:src="@drawable/ic_round_image"
-                tools:ignore="ContentDescription" />
-
-              <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Title"
-                  android:text="@string/property_picture" />
-
-                <TextView
-                  style="@style/Widget.Grocy.TextView.ListItem.Description"
-                  android:text="@string/subtitle_product_not_on_server"
-                  android:visibility="@{viewModel.actionEdit ? View.GONE : View.VISIBLE}" />
-
-              </LinearLayout>
-
-              <ImageView
-                style="@style/Widget.Grocy.ImageView.Icon"
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_round_chevron_right"
-                tools:ignore="ContentDescription" />
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_hide_on_stock" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> formData.toggleNeverShowOnStockLive()}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_visibility_off" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:maxLines="3"
+                    android:text="@string/property_never_show" />
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                  style="@style/Widget.Grocy.Switch"
+                  android:checked="@={formData.neverShowOnStockLive}" />
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_disable_own_stock" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> formData.toggleNoOwnStockLive()}"
+                android:visibility="@{formData.noOwnStockVisible ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_lock" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:maxLines="3"
+                    android:text="@string/property_disable_own_stock" />
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                  style="@style/Widget.Grocy.Switch"
+                  android:checked="@={formData.noOwnStockLive}" />
+
+              </LinearLayout>
+
+              <LinearLayout
+                android:id="@+id/category_picture"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="@{viewModel.actionEdit ? 1.0f : 0.38f}"
+                android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet)}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  android:src="@drawable/ic_round_image"
+                  tools:ignore="ContentDescription" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:text="@string/property_picture" />
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Description"
+                    android:text="@string/subtitle_product_not_on_server"
+                    android:visibility="@{viewModel.actionEdit ? View.GONE : View.VISIBLE}" />
+
+                </LinearLayout>
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.Icon"
+                  android:layout_marginStart="16dp"
+                  android:src="@drawable/ic_round_chevron_right"
+                  tools:ignore="ContentDescription" />
+
+              </LinearLayout>
 
             </LinearLayout>
 
-          </LinearLayout>
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
