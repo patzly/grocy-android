@@ -145,14 +145,12 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
       }
     });
 
-    if (activity.binding.bottomAppBar.getVisibility() == View.VISIBLE) {
-      activity.getScrollBehavior().setUpScroll(
-          binding.appBar, false, isUnlocked ? binding.scroll : null, true
-      );
-      activity.getScrollBehavior().setBottomBarVisibility(true, true);
-      activity.updateBottomAppBar(false, R.menu.menu_empty);
-      activity.binding.fabMain.hide();
-    }
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
+    activity.getScrollBehavior().setUpScroll(
+        binding.appBar, false, isUnlocked ? binding.scroll : null, true
+    );
+    activity.getScrollBehavior().setBottomBarVisibility(true, true);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }
