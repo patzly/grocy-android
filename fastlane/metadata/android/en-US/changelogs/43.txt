@@ -1,0 +1,13 @@
+• New: Material You redesign with dynamic colors for Android 12+
+• New: Replaced HTML editor for recipe and product descriptions (same like on grocy server)
+• New: Support for more than two decimal places for amounts & prices, uses option from server
+• New: Product option "Move on open"
+• New: Option in behavior settings for copying barcode note to stock entry note field
+• New: Option on purchase page to print stock label and default option on master product page
+• Improved: Layout on large screens
+• Improved: Master object lists now have fuzzy search
+• Improved: Consume quick mode confirmation page now has option to open instead of consume
+• Improved: Allow changing stock unit of product if no transaction was made since creation
+• Fixed: Many bugs and crash causes
+
+Full changelog is available in the app.
