@@ -139,6 +139,7 @@ public class SettingsCatAppearanceFragment extends BaseFragment implements OnChe
     );
     binding.partialOptionTransition.switchOtherTransition.setOnCheckedChangeListener(this);
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );

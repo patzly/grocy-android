@@ -166,7 +166,9 @@ public class OnboardingFragment extends BaseFragment {
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setProvideTopScroll(false);
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
     activity.getScrollBehavior().setBottomBarVisibility(false);
   }
 

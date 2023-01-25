@@ -242,6 +242,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );

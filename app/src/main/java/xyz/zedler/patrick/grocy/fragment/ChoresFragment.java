@@ -253,6 +253,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );

@@ -259,6 +259,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true, true
     );
@@ -349,6 +350,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
       return;
     }
     viewModel.setOfflineLive(!isOnline);
+    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

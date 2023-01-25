@@ -152,6 +152,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
 
     // UPDATE UI
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
@@ -254,6 +255,7 @@ public class MasterProductCatBarcodesEditFragment extends BaseFragment implement
       return;
     }
     viewModel.setOfflineLive(!isOnline);
+    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

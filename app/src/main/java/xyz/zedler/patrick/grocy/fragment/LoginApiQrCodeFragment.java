@@ -104,6 +104,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
       return true;
     });
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setProvideTopScroll(false);
     activity.getScrollBehavior().setCanBottomAppBarBeVisible(false);
     activity.getScrollBehavior().setBottomBarVisibility(false, true, false);

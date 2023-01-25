@@ -206,12 +206,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
 
     focusProductInputIfNecessary();
 
-    setHasOptionsMenu(true);
-
-    updateUI(args.getAnimateStart() && savedInstanceState == null);
-  }
-
-  private void updateUI(boolean animated) {
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(true, R.menu.menu_inventory, this::onMenuItemClick);
@@ -219,7 +214,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
         R.drawable.ic_round_inventory,
         R.string.action_inventory,
         FAB.TAG.INVENTORY,
-        animated,
+        args.getAnimateStart() && savedInstanceState == null,
         () -> {
           if (viewModel.isQuickModeEnabled()
               && viewModel.getFormData().isCurrentProductFlowNotInterrupted()) {

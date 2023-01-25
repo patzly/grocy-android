@@ -70,12 +70,12 @@ public class SettingsCatUserSettingsFragment extends BaseFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
-    activity.binding.fabMain.hide();
 
     setForPreviousDestination(Constants.ARGUMENT.ANIMATED, false);
   }

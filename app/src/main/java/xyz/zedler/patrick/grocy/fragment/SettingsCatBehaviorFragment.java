@@ -110,6 +110,7 @@ public class SettingsCatBehaviorFragment extends BaseFragment {
       ViewUtil.startIcon(binding.imageHaptic);
     });
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.scroll, false
     );

@@ -172,6 +172,7 @@ public class RecipeEditIngredientEditFragment extends BaseFragment implements Em
       viewModel.loadFromDatabase(true);
     }
 
+    activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
