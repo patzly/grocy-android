@@ -437,7 +437,8 @@
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
                       android:paddingStart="16dp"
-                      android:paddingEnd="16dp">
+                      android:paddingEnd="16dp"
+                      android:layout_gravity="end">
 
                       <com.google.android.material.button.MaterialButton
                         style="@style/Widget.Grocy.Button.OutlinedButton.Icon"
