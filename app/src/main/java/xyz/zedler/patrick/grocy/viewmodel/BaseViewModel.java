@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.viewmodel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -29,22 +30,24 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.BaseBottomSheetDialogFragment;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
+import xyz.zedler.patrick.grocy.util.LocaleUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 
 public class BaseViewModel extends AndroidViewModel {
 
   private final EventHandler eventHandler;
   private final SharedPreferences sharedPrefs;
+  private final Resources resources;
   private boolean isSearchVisible;
-  private boolean debug;
+  private final boolean debug;
 
   public BaseViewModel(@NonNull Application application) {
     super(application);
@@ -52,6 +55,11 @@ public class BaseViewModel extends AndroidViewModel {
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     isSearchVisible = false;
+
+    resources = getApplication().getResources();
+    Configuration config = resources.getConfiguration();
+    config.setLocale(LocaleUtil.getLocale());
+    resources.updateConfiguration(config, resources.getDisplayMetrics());
   }
 
   SharedPreferences getSharedPrefs() {
@@ -159,11 +167,11 @@ public class BaseViewModel extends AndroidViewModel {
   }
 
   String getString(@StringRes int resId) {
-    return getApplication().getString(resId);
+    return resources.getString(resId);
   }
 
   Resources getResources() {
-    return getApplication().getResources();
+    return resources;
   }
 
   public boolean isSearchVisible() {

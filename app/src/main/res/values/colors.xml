@@ -19,9 +19,9 @@
 
 <resources>
 
-  <color name="black">#000</color>
-  <color name="white">#fff</color>
-  <color name="transparent">#00000000</color>
+  <color name="black">@android:color/black</color>
+  <color name="white">@android:color/white</color>
+  <color name="transparent">@android:color/transparent</color>
   <color name="blue">#3a608d</color>
   <color name="green">#4c662d</color>
   <color name="yellow">#715c10</color>
