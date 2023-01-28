@@ -249,7 +249,7 @@ public class RecipesViewModel extends BaseViewModel {
   }
 
   public void consumeRecipe(int recipeId) {
-    dlHelper.get(
+    dlHelper.post(
         grocyApi.consumeRecipe(recipeId),
         response -> downloadData(),
         this::showErrorMessage
@@ -257,7 +257,7 @@ public class RecipesViewModel extends BaseViewModel {
   }
 
   public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
-    dlHelper.get(
+    dlHelper.post(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
         response -> downloadData(),
         this::showErrorMessage
