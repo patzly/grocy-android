@@ -74,6 +74,11 @@ public class SplashActivity extends MainActivity {
 
       // DARK MODE
 
+      try {
+        sharedPrefs.getInt(SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
+      } catch (ClassCastException e) {
+        sharedPrefs.edit().remove(SETTINGS.APPEARANCE.DARK_MODE).apply();
+      }
       int modeNight = sharedPrefs.getInt(
           SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
       int uiMode = getResources().getConfiguration().uiMode;
@@ -175,6 +180,11 @@ public class SplashActivity extends MainActivity {
     }
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(base);
     // Night mode
+    try {
+      sharedPrefs.getInt(SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE);
+    } catch (ClassCastException e) {
+      sharedPrefs.edit().remove(SETTINGS.APPEARANCE.DARK_MODE).apply();
+    }
     int modeNight = sharedPrefs.getInt(
         SETTINGS.APPEARANCE.DARK_MODE, SETTINGS_DEFAULT.APPEARANCE.DARK_MODE
     );
