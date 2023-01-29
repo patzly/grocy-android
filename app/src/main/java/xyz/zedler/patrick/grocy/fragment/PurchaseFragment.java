@@ -127,6 +127,9 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
 
     if (args.getShoppingListItems() != null) {
       binding.containerBatchMode.setVisibility(View.VISIBLE);
+      binding.linearBatchItem.containerRow.setBackgroundResource(
+          R.drawable.ripple_list_item_bg_selected
+      );
     }
 
     viewModel.getInfoFullscreenLive().observe(

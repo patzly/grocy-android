@@ -205,7 +205,7 @@
 
                 <com.google.android.material.divider.MaterialDivider
                   style="@style/Widget.Grocy.Divider.Small"
-                  android:layout_marginTop="16dp"
+                  android:layout_marginTop="14dp"
                   android:layout_marginBottom="8dp" />
 
               </LinearLayout>
