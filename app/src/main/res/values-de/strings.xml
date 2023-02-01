@@ -273,7 +273,7 @@
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
-  <string name="msg_recipe_added_to_cart">Fehlende Produkte auf den Einkaufszettel setzen</string>
+  <string name="msg_recipe_added_to_cart">Fehlende Produkte wurden auf den Einkaufszettel gesetzt</string>
   <string name="msg_recipe_consumed">Alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, wurden aus dem Bestand entfernt</string>
   <string name="msg_stored_purchases_overview">Es gibt Einkäufe auf dem Gerät, welche noch nicht auf den Server übertragen wurden. Hier tippen für Details.</string>
   <string name="msg_stored_purchases">Einkäufe, welche noch nicht auf den Server übertragen wurden, werden hier angezeigt. Sie wurden zusammen mit temporären Produkten in dieser App gespeichert, damit Sie Ihren Einkauf schneller im Schnellmodus erfassen konnten und Produkte nicht gleich in den Stammdaten erstellen mussten.</string>
@@ -313,7 +313,7 @@
   <string name="msg_point_at_barcode">Richten Sie die Kamera auf einen Barcode</string>
   <string name="msg_press_hold_confirm">Drücken und halten, um das Löschen zu bestätigen</string>
   <string name="msg_recipe_consume_ask">Sicher, dass alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, aus dem Bestand entfernt werden sollen (Zutaten markiert mit \"Nur prüfen, ob eine beliebige Menge im Bestand verfügbar ist\" werden ignoriert)?</string>
-  <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntferne den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
+  <string name="msg_recipe_shopping_list_ask">Alle fehlenden Zutaten für Rezept \"%1$s\" wirklich auf den Einkaufszettel setzen?\n\nEntfernen Sie den Haken einer Zutat, um diese nicht auf den Einkaufszettel zu übernehmen:</string>
   <string name="msg_welcome">Willkommen bei Grocy Android!</string>
   <string name="msg_welcome_introduce">Um grocy produktiv nutzen zu können, brauchen Sie Ihren eigenen Server oder das grocy Add-on für Home Assistant.\nWenn Sie diese App nur ausprobieren möchten, können Sie den Demo-Server von Bernd Bestel benutzen, dem Entwickler von grocy.</string>
   <string name="msg_choose_option_below">Bitte wählen Sie eine der Optionen unten aus.</string>

@@ -1,3 +1,8 @@
+## 3.0.1
+
+- Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
+- Fixed: Behavior option "reduce app startup time" not working on Android 12+
+
 ## 3.0.0
 
 - New: Material You redesign with dynamic colors for Android 12+

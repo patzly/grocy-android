@@ -563,7 +563,6 @@ public class FormDataConsume {
       amountRemoved += productDetails.getProduct().getTareWeightDouble();
     }
     QuantityUnit qU = quantityUnitLive.getValue();
-    assert qU != null;
     String stockLocationName;
     if (isFeatureEnabled(PREF.FEATURE_STOCK_LOCATION_TRACKING)) {
       StockLocation stockLocation = stockLocationLive.getValue();
@@ -577,7 +576,7 @@ public class FormDataConsume {
             ? R.string.msg_quick_mode_confirm_open
             : R.string.msg_quick_mode_confirm_consume,
         NumUtil.trimAmount(amountRemoved, maxDecimalPlacesAmount),
-        pluralUtil.getQuantityUnitPlural(qU, amountRemoved),
+        qU != null ? pluralUtil.getQuantityUnitPlural(qU, amountRemoved) : "",
         productDetails.getProduct().getName(),
         stockLocationName
     );
