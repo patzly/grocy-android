@@ -273,7 +273,7 @@
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
   <string name="option_synced_error">Einstellung konnte nicht synchronisiert werden</string>
-  <string name="msg_recipe_added_to_cart">Fehlende Produkte auf den Einkaufszettel setzen</string>
+  <string name="msg_recipe_added_to_cart">Fehlende Produkte wurden auf den Einkaufszettel gesetzt</string>
   <string name="msg_recipe_consumed">Alle Zutaten, die vom Rezept \"%1$s\" benötigt werden, wurden aus dem Bestand entfernt</string>
   <string name="msg_stored_purchases_overview">Es gibt Einkäufe auf dem Gerät, welche noch nicht auf den Server übertragen wurden. Hier tippen für Details.</string>
   <string name="msg_stored_purchases">Einkäufe, welche noch nicht auf den Server übertragen wurden, werden hier angezeigt. Sie wurden zusammen mit temporären Produkten in dieser App gespeichert, damit Sie Ihren Einkauf schneller im Schnellmodus erfassen konnten und Produkte nicht gleich in den Stammdaten erstellen mussten.</string>
