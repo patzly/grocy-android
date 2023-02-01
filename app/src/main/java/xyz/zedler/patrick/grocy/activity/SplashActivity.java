@@ -50,8 +50,15 @@ public class SplashActivity extends MainActivity {
 
   @Override
   public void onCreate(Bundle bundle) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
       super.onCreate(bundle);
+
+      boolean speedUpStart = sharedPrefs.getBoolean(
+          Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
+          Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
+      );
 
       getSplashScreen().setOnExitAnimationListener(view -> {
         AnimatorSet set = new AnimatorSet();
@@ -59,8 +66,8 @@ public class SplashActivity extends MainActivity {
             ObjectAnimator.ofFloat(view, "alpha", 0),
             ObjectAnimator.ofFloat(view.getIconView(), "alpha", 0)
         );
-        set.setDuration(400);
-        set.setStartDelay(550);
+        set.setDuration(speedUpStart ? 200 : 400);
+        set.setStartDelay(speedUpStart ? 0 : 550);
         set.addListener(new AnimatorListenerAdapter() {
           @Override
           public void onAnimationEnd(Animator animation, boolean isReverse) {
@@ -70,8 +77,6 @@ public class SplashActivity extends MainActivity {
         set.start();
       });
     } else {
-      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
       // DARK MODE
 
       try {
@@ -146,7 +151,6 @@ public class SplashActivity extends MainActivity {
             Constants.SETTINGS.BEHAVIOR.SPEED_UP_START,
             Constants.SETTINGS_DEFAULT.BEHAVIOR.SPEED_UP_START
         );
-
         LayerDrawable splashContent = (LayerDrawable) ResourcesCompat.getDrawable(
             getResources(), R.drawable.splash_content, getTheme()
         );
