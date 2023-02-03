@@ -22,6 +22,7 @@ package xyz.zedler.patrick.grocy.adapter;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -194,17 +195,15 @@ public class RecipeEntryAdapter extends
       if (recipeFulfillment.isNeedFulfilled()) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
         holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_check_circle_outline);
-        holder.binding.imageFulfillment.setColorFilter(
-            colorGreen.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorGreen.getAccent())
         );
         holder.binding.missing.setVisibility(View.GONE);
       } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_error_outline);
-        holder.binding.imageFulfillment.setColorFilter(
-            colorYellow.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorYellow.getAccent())
         );
         holder.binding.missing.setText(
             context.getResources()
@@ -216,9 +215,8 @@ public class RecipeEntryAdapter extends
       } else {
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageResource(R.drawable.ic_round_highlight_off);
-        holder.binding.imageFulfillment.setColorFilter(
-            colorRed.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorRed.getAccent())
         );
         holder.binding.missing.setText(
             context.getResources()
@@ -277,6 +275,7 @@ public class RecipeEntryAdapter extends
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
                 DataSource dataSource, boolean isFirstResource) {
               holder.binding.picture.setVisibility(View.VISIBLE);
+              holder.binding.picturePlaceholder.setVisibility(View.GONE);
               return false;
             }
           }).into(holder.binding.picture);
@@ -285,6 +284,7 @@ public class RecipeEntryAdapter extends
       holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
     } else {
       holder.binding.picture.setVisibility(View.GONE);
+      holder.binding.picturePlaceholder.setVisibility(View.GONE);
     }
 
 
