@@ -91,6 +91,8 @@ import xyz.zedler.patrick.grocy.web.RequestQueueSingleton;
 
 public class DownloadHelper {
 
+  private static final String TAG = DownloadHelper.class.getSimpleName();
+
   private final Application application;
   private final GrocyApi grocyApi;
   private final RequestQueue requestQueue;
@@ -453,7 +455,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<List<ProductGroup>>() {
               }.getType();
-              ArrayList<ProductGroup> productGroups = new Gson().fromJson(response, type);
+              ArrayList<ProductGroup> productGroups = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download ProductGroups: " + productGroups);
               }
@@ -498,7 +500,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ProductGroup>>() {
                 }.getType();
-                ArrayList<ProductGroup> productGroups = new Gson().fromJson(response, type);
+                ArrayList<ProductGroup> productGroups = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ProductGroups: " + productGroups);
                 }
@@ -553,7 +555,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<List<QuantityUnit>>() {
               }.getType();
-              ArrayList<QuantityUnit> quantityUnits = new Gson().fromJson(response, type);
+              ArrayList<QuantityUnit> quantityUnits = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download QuantityUnits: " + quantityUnits);
               }
@@ -598,7 +600,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<QuantityUnit>>() {
                 }.getType();
-                ArrayList<QuantityUnit> quantityUnits = new Gson().fromJson(response, type);
+                ArrayList<QuantityUnit> quantityUnits = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download QuantityUnits: " + quantityUnits);
                 }
@@ -658,7 +660,7 @@ public class DownloadHelper {
                 Type type = new TypeToken<List<QuantityUnitConversion>>() {
                 }.getType();
                 ArrayList<QuantityUnitConversion> conversions
-                    = new Gson().fromJson(response, type);
+                    = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download QuantityUnitConversions: "
                       + conversions);
@@ -878,7 +880,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<Product>>() {
                 }.getType();
-                ArrayList<Product> products = new Gson().fromJson(response, type);
+                ArrayList<Product> products = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Products: " + products);
                 }
@@ -938,7 +940,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ProductLastPurchased>>() {
                 }.getType();
-                ArrayList<ProductLastPurchased> productsLastPurchased = new Gson().fromJson(response, type);
+                ArrayList<ProductLastPurchased> productsLastPurchased = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ProductsLastPurchased: " + productsLastPurchased);
                 }
@@ -1005,7 +1007,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ProductAveragePrice>>() {
                 }.getType();
-                ArrayList<ProductAveragePrice> productsAveragePrice = new Gson().fromJson(response, type);
+                ArrayList<ProductAveragePrice> productsAveragePrice = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ProductsAveragePrice: " + productsAveragePrice);
                 }
@@ -1073,7 +1075,7 @@ public class DownloadHelper {
                 Type type = new TypeToken<List<ProductBarcode>>() {
                 }.getType();
                 ArrayList<ProductBarcode> barcodes
-                    = new Gson().fromJson(response, type);
+                    = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Barcodes: " + barcodes);
                 }
@@ -1172,7 +1174,7 @@ public class DownloadHelper {
               Type type = new TypeToken<List<ProductBarcode>>() {
               }.getType();
               ArrayList<ProductBarcode> barcodes
-                  = new Gson().fromJson(response, type);
+                  = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download filtered Barcodes: " + barcodes);
               }
@@ -1219,7 +1221,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<User>>() {
                 }.getType();
-                ArrayList<User> users = new Gson().fromJson(response, type);
+                ArrayList<User> users = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Users: " + users);
                 }
@@ -1596,7 +1598,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<ProductDetails>() {
               }.getType();
-              ProductDetails productDetails = new Gson().fromJson(response, type);
+              ProductDetails productDetails = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download ProductDetails: " + productDetails);
               }
@@ -1645,7 +1647,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<ArrayList<StockLocation>>() {
               }.getType();
-              ArrayList<StockLocation> stockLocations = new Gson().fromJson(response, type);
+              ArrayList<StockLocation> stockLocations = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download StockLocations: " + stockLocations);
               }
@@ -1694,7 +1696,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<ArrayList<StockEntry>>() {
               }.getType();
-              ArrayList<StockEntry> stockEntries = new Gson().fromJson(response, type);
+              ArrayList<StockEntry> stockEntries = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download StockEntries: " + stockEntries);
               }
@@ -1745,7 +1747,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<ArrayList<StockLogEntry>>() {
               }.getType();
-              ArrayList<StockLogEntry> stockLogEntries = new Gson().fromJson(response, type);
+              ArrayList<StockLogEntry> stockLogEntries = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download StockLogEntry: " + stockLogEntries);
               }
@@ -1798,7 +1800,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ShoppingListItem>>() {
                 }.getType();
-                ArrayList<ShoppingListItem> shoppingListItems = new Gson().fromJson(response, type);
+                ArrayList<ShoppingListItem> shoppingListItems = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ShoppingListItems: " + shoppingListItems);
                 }
@@ -1858,7 +1860,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ShoppingListItem>>() {
                 }.getType();
-                ArrayList<ShoppingListItem> shoppingListItems = new Gson().fromJson(response, type);
+                ArrayList<ShoppingListItem> shoppingListItems = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ShoppingListItems: " + shoppingListItems);
                 }
@@ -1939,7 +1941,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<List<ShoppingList>>() {
               }.getType();
-              ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+              ArrayList<ShoppingList> shoppingLists = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download ShoppingLists: " + shoppingLists);
               }
@@ -1982,7 +1984,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ShoppingList>>() {
                 }.getType();
-                ArrayList<ShoppingList> shoppingLists = new Gson().fromJson(response, type);
+                ArrayList<ShoppingList> shoppingLists = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ShoppingLists: " + shoppingLists);
                 }
@@ -2041,7 +2043,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<Store>>() {
                 }.getType();
-                ArrayList<Store> stores = new Gson().fromJson(response, type);
+                ArrayList<Store> stores = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Stores: " + stores);
                 }
@@ -2184,7 +2186,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<Task>>() {
                 }.getType();
-                ArrayList<Task> tasks = new Gson().fromJson(response, type);
+                ArrayList<Task> tasks = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Tasks: " + tasks);
                 }
@@ -2243,7 +2245,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<TaskCategory>>() {
                 }.getType();
-                ArrayList<TaskCategory> taskCategories = new Gson().fromJson(response, type);
+                ArrayList<TaskCategory> taskCategories = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Task categories: " + taskCategories);
                 }
@@ -2303,7 +2305,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<Chore>>() {
                 }.getType();
-                ArrayList<Chore> chores = new Gson().fromJson(response, type);
+                ArrayList<Chore> chores = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download Chores: " + chores);
                 }
@@ -2350,7 +2352,7 @@ public class DownloadHelper {
         response -> {
           Type type = new TypeToken<List<ChoreEntry>>() {
           }.getType();
-          ArrayList<ChoreEntry> choreEntries = new Gson().fromJson(response, type);
+          ArrayList<ChoreEntry> choreEntries = gson.fromJson(response, type);
           if (debug) {
             Log.i(tag, "getChoreEntries: " + choreEntries);
           }
@@ -2381,7 +2383,7 @@ public class DownloadHelper {
               response -> {
                 Type type = new TypeToken<List<ChoreEntry>>() {
                 }.getType();
-                ArrayList<ChoreEntry> choreEntries = new Gson().fromJson(response, type);
+                ArrayList<ChoreEntry> choreEntries = gson.fromJson(response, type);
                 if (debug) {
                   Log.i(tag, "download ChoreEntries: " + choreEntries);
                 }
@@ -2437,7 +2439,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<ChoreDetails>() {
               }.getType();
-              ChoreDetails choreDetails = new Gson().fromJson(response, type);
+              ChoreDetails choreDetails = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "download ChoreDetails: " + choreDetails);
               }
@@ -2486,7 +2488,7 @@ public class DownloadHelper {
                   response -> {
                     Type type = new TypeToken<List<Recipe>>() {
                     }.getType();
-                    ArrayList<Recipe> recipes = new Gson().fromJson(response, type);
+                    ArrayList<Recipe> recipes = gson.fromJson(response, type);
                     if (debug) {
                       Log.i(tag, "download Recipes: " + recipes);
                     }
@@ -2583,7 +2585,7 @@ public class DownloadHelper {
                   response -> {
                     Type type = new TypeToken<List<RecipeFulfillment>>() {
                     }.getType();
-                    ArrayList<RecipeFulfillment> recipeFulfillments = new Gson().fromJson(response, type);
+                    ArrayList<RecipeFulfillment> recipeFulfillments = gson.fromJson(response, type);
                     if (debug) {
                       Log.i(tag, "download RecipeFulfillments: " + recipeFulfillments);
                     }
@@ -2643,7 +2645,7 @@ public class DownloadHelper {
                   response -> {
                     Type type = new TypeToken<List<RecipePosition>>() {
                     }.getType();
-                    ArrayList<RecipePosition> recipePositions = new Gson().fromJson(response, type);
+                    ArrayList<RecipePosition> recipePositions = gson.fromJson(response, type);
                     if (debug) {
                       Log.i(tag, "download RecipePositions: " + recipePositions);
                     }
@@ -2703,7 +2705,7 @@ public class DownloadHelper {
             response -> {
               Type type = new TypeToken<List<User>>() {
               }.getType();
-              ArrayList<User> users = new Gson().fromJson(response, type);
+              ArrayList<User> users = gson.fromJson(response, type);
               if (debug) {
                 Log.i(tag, "get currentUserId: " + response);
               }
@@ -2822,7 +2824,7 @@ public class DownloadHelper {
             JSONObject jsonObject = new JSONObject(response);
             JSONObject jsonProduct = jsonObject.getJSONObject("product");
             Type type = new TypeToken<OpenFoodFactsProduct>(){}.getType();
-            OpenFoodFactsProduct product = new Gson().fromJson(jsonProduct.toString(), type);
+            OpenFoodFactsProduct product = gson.fromJson(jsonProduct.toString(), type);
             product.setProductJson(jsonProduct);
             successListener.onResponse(product);
             if(debug) Log.i(tag, "getOpenFoodFactsProduct: " + product);

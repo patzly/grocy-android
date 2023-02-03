@@ -1,6 +1,7 @@
 ## 3.0.1
 
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
+- Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
 
 ## 3.0.0
