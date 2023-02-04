@@ -33,6 +33,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
@@ -45,6 +50,8 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -79,8 +86,6 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.TaskCategory;
 import xyz.zedler.patrick.grocy.model.User;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.web.CustomJsonArrayRequest;
@@ -123,7 +128,7 @@ public class DownloadHelper {
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
     dateUtil = new DateUtil(application);
     appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
-    gson = new Gson();
+    gson = new GsonBuilder().registerTypeAdapter(Double.class, new BadDoubleDeserializer()).create();
     requestQueue = RequestQueueSingleton.getInstance(application).getRequestQueue();
     grocyApi = new GrocyApi(application);
     apiKey = sharedPrefs.getString(Constants.PREF.API_KEY, "");
@@ -158,7 +163,7 @@ public class DownloadHelper {
     this.tag = tag;
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application);
     debug = PrefsUtil.isDebuggingEnabled(sharedPrefs);
-    gson = new Gson();
+    gson = new GsonBuilder().registerTypeAdapter(Double.class, new BadDoubleDeserializer()).create();
     dateUtil = new DateUtil(application);
     appDatabase = AppDatabase.getAppDatabase(application.getApplicationContext());
     RequestQueueSingleton.getInstance(application).newRequestQueue();
@@ -3344,5 +3349,17 @@ public class DownloadHelper {
   public interface OnSettingUploadListener {
 
     void onFinished(@StringRes int msg);
+  }
+
+  public static class BadDoubleDeserializer implements JsonDeserializer<Double> {
+    @Override
+    public Double deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+      try {
+        return Double.parseDouble(element.getAsString().replace(',', '.'));
+      } catch (NumberFormatException e) {
+        throw new JsonParseException(e);
+      }
+    }
+
   }
 }
