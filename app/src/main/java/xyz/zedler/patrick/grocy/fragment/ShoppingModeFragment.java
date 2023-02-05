@@ -214,6 +214,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     activity.getScrollBehavior().setUpScroll(
         binding.appBar, false, binding.recycler, true
     );
+    activity.updateBottomAppBar(false, R.menu.menu_empty);
     activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 

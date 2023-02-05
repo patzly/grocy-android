@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -465,20 +466,84 @@ public class MainActivity extends AppCompatActivity {
       } else if (!showFab && binding.fabMain.isShown()) {
         binding.fabMain.hide();
       }
-      binding.bottomAppBar.replaceMenu(newMenuId);
-      Menu menu = binding.bottomAppBar.getMenu();
-      int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
-      for (int i = 0; i < menu.size(); i++) {
-        MenuItem item = menu.getItem(i);
-        if (item.getIcon() != null) {
-          if (VERSION.SDK_INT >= VERSION_CODES.O) {
-            item.setIconTintList(ColorStateList.valueOf(tint));
-          } else {
-            item.getIcon().setTint(tint);
+
+      if (!UiUtil.areAnimationsEnabled(this)) {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+        Menu menu = binding.bottomAppBar.getMenu();
+        int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < menu.size(); i++) {
+          MenuItem item = menu.getItem(i);
+          if (item.getIcon() != null) {
+            if (VERSION.SDK_INT >= VERSION_CODES.O) {
+              item.setIconTintList(ColorStateList.valueOf(tint));
+            } else {
+              item.getIcon().setTint(tint);
+            }
           }
         }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+        return;
       }
-      binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+
+      long iconFadeOutDuration = 150;
+      long iconFadeInDuration = 300;
+
+      int alphaFrom = 255;
+      // get better start value if animation was not finished yet
+      if (binding.bottomAppBar.getMenu() != null
+          && binding.bottomAppBar.getMenu().size() > 0
+          && binding.bottomAppBar.getMenu().getItem(0) != null
+          && binding.bottomAppBar.getMenu().getItem(0).getIcon() != null) {
+        alphaFrom = binding.bottomAppBar.getMenu().getItem(0).getIcon().getAlpha();
+      }
+      ValueAnimator animatorFadeOut = ValueAnimator.ofInt(alphaFrom, 0);
+      animatorFadeOut.addUpdateListener(animation -> {
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() != null) {
+            item.getIcon().setAlpha((int) animation.getAnimatedValue());
+          }
+        }
+      });
+      animatorFadeOut.setDuration(iconFadeOutDuration);
+      animatorFadeOut.setInterpolator(new FastOutSlowInInterpolator());
+      animatorFadeOut.start();
+
+      new Handler(Looper.getMainLooper()).postDelayed(() -> {
+        binding.bottomAppBar.replaceMenu(newMenuId);
+
+        int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
+        for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
+          int index = i;
+          MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
+          if (item.getIcon() != null) {
+            if (VERSION.SDK_INT >= VERSION_CODES.O) {
+              item.setIconTintList(ColorStateList.valueOf(tint));
+            } else {
+              item.getIcon().setTint(tint);
+            }
+            item.getIcon().setAlpha(0);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+              Rect bounds = item.getIcon().copyBounds();
+              int top = bounds.top;
+              int offset = UiUtil.dpToPx(this, 12);
+              ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+              animator.addUpdateListener(animation -> {
+                bounds.offsetTo(
+                    0, (int) (top + (float) animation.getAnimatedValue() * offset)
+                );
+                item.getIcon().setBounds(bounds);
+                item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+                item.getIcon().invalidateSelf();
+              });
+              animator.setDuration(iconFadeInDuration - index * 50L);
+              animator.setInterpolator(new FastOutSlowInInterpolator());
+              animator.start();
+            }, index * 90L);
+          }
+        }
+        binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
+      }, iconFadeOutDuration);
     }, 10);
   }
 
