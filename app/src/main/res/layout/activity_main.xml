@@ -38,6 +38,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
+    app:paddingBottomSystemWindowInsets="false"
     app:elevation="0dp"
     app:navigationIcon="@drawable/ic_round_menu_anim"
     app:menu="@menu/menu_empty" />
