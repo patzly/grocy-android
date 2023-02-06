@@ -19,6 +19,8 @@
 
 package xyz.zedler.patrick.grocy.behavior;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
@@ -52,9 +54,10 @@ public class BottomScrollBehavior {
   private static final int PUFFER_DIVIDER = 2;
 
   private final BottomAppBar bottomAppBar;
-  private final FloatingActionButton fabTopScroll;
+  private final FloatingActionButton fabMain, fabTopScroll;
   private AppBarLayout appBar;
   private ViewGroup scrollView;
+  private final View snackbarAnchor;
   private boolean liftOnScroll;
   private boolean provideTopScroll;
 
@@ -68,13 +71,17 @@ public class BottomScrollBehavior {
   private boolean isTopScroll = false;
   private boolean canBottomAppBarBeVisible;
   private boolean useOverScrollFix;
+  private boolean useTopScrollAsAnchor, useFabAsAnchor;
 
   public BottomScrollBehavior(
       @NonNull Context context, @NonNull BottomAppBar bottomAppBar,
-      @NonNull FloatingActionButton fabMain, @NonNull FloatingActionButton fabTopScroll
+      @NonNull FloatingActionButton fabMain, @NonNull FloatingActionButton fabTopScroll,
+      @NonNull View snackbarAnchor
   ) {
     this.bottomAppBar = bottomAppBar;
+    this.fabMain = fabMain;
     this.fabTopScroll = fabTopScroll;
+    this.snackbarAnchor = snackbarAnchor;
 
     ViewCompat.setOnApplyWindowInsetsListener(fabTopScroll, (v, insets) -> {
       int insetBottom = insets.getInsets(Type.systemBars()).bottom;
@@ -116,11 +123,44 @@ public class BottomScrollBehavior {
       } else {
         fabTopScroll.setTranslationY(translationY);
       }
+      updateSnackbarAnchor();
+    });
+
+    fabMain.addOnHideAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        useFabAsAnchor = false;
+        updateSnackbarAnchor();
+      }
+    });
+    fabMain.addOnShowAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        useFabAsAnchor = true;
+        updateSnackbarAnchor();
+      }
+    });
+
+    fabTopScroll.addOnHideAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationEnd(Animator animation) {
+        useTopScrollAsAnchor = false;
+        updateSnackbarAnchor();
+      }
+    });
+    fabTopScroll.addOnShowAnimationListener(new AnimatorListenerAdapter() {
+      @Override
+      public void onAnimationStart(Animator animation) {
+        useTopScrollAsAnchor = true;
+        updateSnackbarAnchor();
+      }
     });
 
     topScrollLimit = UiUtil.dpToPx(context, 150);
     canBottomAppBarBeVisible = true;
     useOverScrollFix = Build.VERSION.SDK_INT < 31;
+    useFabAsAnchor = true;
+    useTopScrollAsAnchor = false;
   }
 
   private void test(MainActivity activity) {
@@ -417,6 +457,20 @@ public class BottomScrollBehavior {
     }
     if (DEBUG) {
       Log.i(TAG, "onScrollDown: DOWN");
+    }
+  }
+
+  public void updateSnackbarAnchor() {
+    snackbarAnchor.setY(getSnackbarAnchorY());
+  }
+
+  public float getSnackbarAnchorY() {
+    if (useTopScrollAsAnchor) {
+      return fabTopScroll.getY();
+    } else if (useFabAsAnchor) {
+      return Math.min(fabMain.getY(), bottomAppBar.getY());
+    } else {
+      return bottomAppBar.getY();
     }
   }
 }

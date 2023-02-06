@@ -70,4 +70,12 @@
     app:elevation="1dp"
     tools:targetApi="o" />
 
+  <View
+    android:id="@+id/anchor"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="start"
+    android:background="?attr/colorTertiary"
+    android:visibility="invisible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

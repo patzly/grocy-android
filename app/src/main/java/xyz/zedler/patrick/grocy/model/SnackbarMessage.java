@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.model;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -53,11 +52,6 @@ public class SnackbarMessage extends Event {
 
   public void setDurationSecs(int duration) {
     this.duration = String.valueOf(duration * 1000);
-  }
-
-  @Deprecated // Use getSnackbar(View)
-  public Snackbar getSnackbar(Context context, View view) {
-    return getSnackbar(view);
   }
 
   public Snackbar getSnackbar(View view) {

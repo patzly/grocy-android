@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
     ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
 
     scrollBehavior = new BottomScrollBehavior(
-        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
+        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll, binding.anchor
     );
 
     // IME ANIMATION
@@ -413,11 +413,17 @@ public class MainActivity extends AppCompatActivity {
     };
     ViewCompat.setOnApplyWindowInsetsListener(binding.fabMain, (v, insets) -> {
       if (insets.isVisible(Type.ime())) {
-        v.setTranslationY(
-            -insets.getInsets(Type.ime()).bottom - UiUtil.dpToPx(this, 16)
-        );
+        int bottomInset = insets.getInsets(Type.ime()).bottom;
+        v.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
+        int keyboardY = UiUtil.getDisplayHeight(this) - bottomInset;
+        if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
+          binding.anchor.setY(keyboardY);
+        } else {
+          scrollBehavior.updateSnackbarAnchor();
+        }
       } else {
         v.setY(fabBaseY);
+        scrollBehavior.updateSnackbarAnchor();
       }
       return insets;
     });
@@ -751,11 +757,6 @@ public class MainActivity extends AppCompatActivity {
 
   // NAVIGATION
 
-  @NonNull
-  public NavController getNavController() {
-    return navController;
-  }
-
   public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
     if (UiUtil.areAnimationsEnabled(this)) {
       boolean useSliding = getSharedPrefs().getBoolean(
@@ -1000,11 +1001,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showSnackbar(Snackbar snackbar) {
-    if (binding.fabMain.isOrWillBeShown()) {
-      snackbar.setAnchorView(binding.fabMain);
-    } else {
-      snackbar.setAnchorView(binding.bottomAppBar);
-    }
+    snackbar.setAnchorView(binding.anchor);
+    snackbar.setAnchorViewLayoutListenerEnabled(true);
     snackbar.show();
   }
 

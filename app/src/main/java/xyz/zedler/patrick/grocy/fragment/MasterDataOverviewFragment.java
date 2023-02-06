@@ -138,7 +138,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       }
