@@ -581,7 +581,7 @@
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_never_overdue">No venç mai</string>
   <string name="subtitle_selected">Seleccionat</string>
-  <string name="subtitle_stock_entry_no_specific">El primer obert, després el que vençi primer, després el primer a entrar el primer a sortir</string>
+  <string name="subtitle_stock_entry_no_specific">El primer obert, després el que venci primer, després el primer a entrar és el primer a sortir</string>
   <!-- %1$s is a purchase date -->
   <!--The same string is also in the web interface: Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="subtitle_stock_entry_name">Comprat el%1$s</string>
