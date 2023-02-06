@@ -373,7 +373,7 @@
   <string name="msg_help_external_scanner_ready">Pots utilitzar un escàner extern per al següent camp mentre aquest estigui enfocat i buit.</string>
   <string name="msg_help_external_scanner_settings">L\'aplicació suporta dispositius d\'escaneig externs que actuen com a teclats i es poden connectar via USB o Bluetooth. Les següents opcions s\'han de configurar a l\'escàner extern:\n\nPrefix: Cap\nSuffix: TAB o ENTER </string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
-  <string name="msg_help_specific_item">El primer element d\'aquesta llista seria escollit per la regla per defecte, la qual es \"El primer obert, després el que venci primer, després el primer a entrar el primer a sortir\".</string>
+  <string name="msg_help_specific_item">El primer element d\'aquesta llista seria escollit per la regla per defecte, la qual es \"El primer obert, després el que venci primer, després el primer a entrar és el primer a sortir\".</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_recipe_consume">Només per finalitats estadístiques.</string>
   <!--The same string is also in the web interface: Recipe edit page -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
