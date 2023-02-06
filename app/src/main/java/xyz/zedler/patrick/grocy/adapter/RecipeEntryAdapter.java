@@ -268,6 +268,7 @@ public class RecipeEntryAdapter extends
             public boolean onLoadFailed(@Nullable GlideException e, Object model,
                 Target<Drawable> target, boolean isFirstResource) {
               holder.binding.picture.setVisibility(View.GONE);
+              holder.binding.picturePlaceholder.setVisibility(View.VISIBLE);
               return false;
             }
 
