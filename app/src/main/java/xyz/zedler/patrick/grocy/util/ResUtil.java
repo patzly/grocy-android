@@ -176,11 +176,9 @@ public class ResUtil {
     for (int i = 0; i < menu.size(); i++) {
       MenuItem item = menu.getItem(i);
       if (item == null || item.getIcon() == null) {
-        return;
+        continue;
       }
-      item.getIcon().setTintList(
-          ColorStateList.valueOf(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant))
-      );
+      item.getIcon().setTint(ResUtil.getColorAttr(context, R.attr.colorOnSurfaceVariant));
     }
   }
 

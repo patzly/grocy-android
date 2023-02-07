@@ -46,6 +46,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -63,6 +64,13 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsAnimationCompat;
+import androidx.core.view.WindowInsetsAnimationCompat.BoundsCompat;
+import androidx.core.view.WindowInsetsAnimationCompat.Callback;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -74,14 +82,17 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigator;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.HarmonizedColors;
 import com.google.android.material.color.HarmonizedColorsOptions;
 import com.google.android.material.elevation.SurfaceColors;
+import com.google.android.material.math.MathUtils;
 import com.google.android.material.snackbar.Snackbar;
 import info.guardianproject.netcipher.proxy.OrbotHelper;
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -143,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
   private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
   private boolean debug;
+  private float fabBaseY;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -325,6 +337,36 @@ public class MainActivity extends AppCompatActivity {
 
     // BOTTOM APP BAR
 
+    binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+    binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
+
+    // Use reflection to store bottomInset in BAB manually
+    // The automatic method includes IME insets which is bad behavior for BABs
+    ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
+      int bottomInset = insets.getInsets(Type.systemBars()).bottom;
+      ViewCompat.setPaddingRelative(v, 0, 0, 0, bottomInset);
+      Class<?> classBottomAppBar = BottomAppBar.class;
+      Object objectBottomAppBar = classBottomAppBar.cast(binding.bottomAppBar);
+      Field fieldBottomInset = null;
+      try {
+        if (objectBottomAppBar != null && objectBottomAppBar.getClass().getSuperclass() != null) {
+          fieldBottomInset = objectBottomAppBar.getClass().getDeclaredField("bottomInset");
+        } else {
+          Log.e(TAG, "onCreate: reflection for bottomInset not working");
+        }
+      } catch (NoSuchFieldException e) {
+        Log.e(TAG, "onCreate: ", e);
+      }
+      if (fieldBottomInset != null) {
+        fieldBottomInset.setAccessible(true);
+        try {
+          fieldBottomInset.set(objectBottomAppBar, bottomInset);
+        } catch (IllegalAccessException e) {
+          Log.e(TAG, "onCreate: ", e);
+        }
+      }
+      return insets;
+    });
     binding.bottomAppBar.setNavigationOnClickListener(v -> {
       if (clickUtil.isDisabled()) {
         return;
@@ -339,8 +381,68 @@ public class MainActivity extends AppCompatActivity {
     ViewUtil.setTooltipText(binding.fabMainScroll, R.string.action_top_scroll);
 
     scrollBehavior = new BottomScrollBehavior(
-        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll
+        this, binding.bottomAppBar, binding.fabMain, binding.fabMainScroll, binding.anchor
     );
+
+    // IME ANIMATION
+
+    Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
+      WindowInsetsAnimationCompat animation;
+      float startY, endY;
+
+      @Override
+      public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
+        this.animation = animation;
+        startY = binding.fabMain.getY();
+      }
+
+      @NonNull
+      @Override
+      public BoundsCompat onStart(
+          @NonNull WindowInsetsAnimationCompat animation, @NonNull BoundsCompat bounds) {
+        endY = binding.fabMain.getY();
+        binding.fabMain.setY(startY);
+        return bounds;
+      }
+
+      @NonNull
+      @Override
+      public WindowInsetsCompat onProgress(
+          @NonNull WindowInsetsCompat insets,
+          @NonNull List<WindowInsetsAnimationCompat> animations) {
+        binding.fabMain.setY(MathUtils.lerp(startY, endY, animation.getInterpolatedFraction()));
+        return insets;
+      }
+    };
+    ViewCompat.setOnApplyWindowInsetsListener(binding.fabMain, (v, insets) -> {
+      if (insets.isVisible(Type.ime())) {
+        int bottomInset = insets.getInsets(Type.ime()).bottom;
+        v.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
+        int keyboardY = UiUtil.getDisplayHeight(this) - bottomInset;
+        if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
+          binding.anchor.setY(keyboardY);
+        } else {
+          scrollBehavior.updateSnackbarAnchor();
+        }
+      } else {
+        v.setY(fabBaseY);
+        scrollBehavior.updateSnackbarAnchor();
+      }
+      return insets;
+    });
+    ViewCompat.setWindowInsetsAnimationCallback(binding.fabMain, callback);
+    ViewTreeObserver observer = binding.fabMain.getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        fabBaseY = binding.fabMain.getY();
+        if (binding.fabMain.getViewTreeObserver().isAlive()) {
+          binding.fabMain.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+      }
+    });
+
+    // SUPPORTED GROCY VERSIONS
 
     Runnable onSuccessConfigLoad = () -> {
       String version = sharedPrefs.getString(Constants.PREF.GROCY_VERSION, null);
@@ -467,6 +569,9 @@ public class MainActivity extends AppCompatActivity {
         binding.fabMain.hide();
       }
 
+      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
+
+      // IF ANIMATIONS DISABLED
       if (!UiUtil.areAnimationsEnabled(this)) {
         binding.bottomAppBar.replaceMenu(newMenuId);
         Menu menu = binding.bottomAppBar.getMenu();
@@ -474,12 +579,14 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < menu.size(); i++) {
           MenuItem item = menu.getItem(i);
           if (item.getIcon() != null) {
-            if (VERSION.SDK_INT >= VERSION_CODES.O) {
-              item.setIconTintList(ColorStateList.valueOf(tint));
-            } else {
-              item.getIcon().setTint(tint);
-            }
+            item.getIcon().mutate();
+            item.getIcon().setAlpha(255);
+            item.getIcon().setTint(tint);
           }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha(255);
+          overflowIcon.setTint(tint);
         }
         binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
         return;
@@ -500,9 +607,12 @@ public class MainActivity extends AppCompatActivity {
       animatorFadeOut.addUpdateListener(animation -> {
         for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
           MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() != null) {
+          if (item.getIcon() != null && item.isVisible()) {
             item.getIcon().setAlpha((int) animation.getAnimatedValue());
           }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha((int) animation.getAnimatedValue());
         }
       });
       animatorFadeOut.setDuration(iconFadeOutDuration);
@@ -512,35 +622,68 @@ public class MainActivity extends AppCompatActivity {
       new Handler(Looper.getMainLooper()).postDelayed(() -> {
         binding.bottomAppBar.replaceMenu(newMenuId);
 
+        int iconIndex = 0;
+        int overflowCount = 0;
         int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
         for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
-          int index = i;
           MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() != null) {
-            if (VERSION.SDK_INT >= VERSION_CODES.O) {
-              item.setIconTintList(ColorStateList.valueOf(tint));
-            } else {
-              item.getIcon().setTint(tint);
+          if (item.getIcon() == null || !item.isVisible()) {
+            if (item.isVisible()) {
+              overflowCount++;
             }
-            item.getIcon().setAlpha(0);
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-              Rect bounds = item.getIcon().copyBounds();
-              int top = bounds.top;
-              int offset = UiUtil.dpToPx(this, 12);
-              ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
-              animator.addUpdateListener(animation -> {
-                bounds.offsetTo(
-                    0, (int) (top + (float) animation.getAnimatedValue() * offset)
-                );
-                item.getIcon().setBounds(bounds);
-                item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
-                item.getIcon().invalidateSelf();
-              });
-              animator.setDuration(iconFadeInDuration - index * 50L);
-              animator.setInterpolator(new FastOutSlowInInterpolator());
-              animator.start();
-            }, index * 90L);
+            continue;
           }
+          iconIndex++;
+          int index = iconIndex;
+          item.getIcon().mutate();
+          item.getIcon().setTint(tint);
+          item.getIcon().setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = item.getIcon().copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(this, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              item.getIcon().setBounds(bounds);
+              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              item.getIcon().invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        if (overflowCount > 0) {
+          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
+          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
+            return;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          overflowIconNew.setTint(tint);
+          overflowIconNew.setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = overflowIconNew.copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(this, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              overflowIconNew.setBounds(bounds);
+              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              overflowIconNew.invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
         }
         binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
       }, iconFadeOutDuration);
@@ -657,11 +800,6 @@ public class MainActivity extends AppCompatActivity {
   }
 
   // NAVIGATION
-
-  @NonNull
-  public NavController getNavController() {
-    return navController;
-  }
 
   public NavOptions.Builder getNavOptionsBuilderFragmentFadeOrSlide(boolean slideVertically) {
     if (UiUtil.areAnimationsEnabled(this)) {
@@ -907,11 +1045,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void showSnackbar(Snackbar snackbar) {
-    if (binding.fabMain.isOrWillBeShown()) {
-      snackbar.setAnchorView(binding.fabMain);
-    } else {
-      snackbar.setAnchorView(binding.bottomAppBar);
-    }
+    snackbar.setAnchorView(binding.anchor);
+    snackbar.setAnchorViewLayoutListenerEnabled(true);
     snackbar.show();
   }
 
@@ -983,9 +1118,7 @@ public class MainActivity extends AppCompatActivity {
   public void showKeyboard(EditText editText) {
     new Handler().postDelayed(() -> {
       editText.requestFocus();
-      ((InputMethodManager) Objects
-          .requireNonNull(getSystemService(Context.INPUT_METHOD_SERVICE))
-      ).showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+      WindowCompat.getInsetsController(getWindow(), editText).show(Type.ime());
     }, 100);
   }
 
@@ -1009,10 +1142,6 @@ public class MainActivity extends AppCompatActivity {
 
   public void updateGrocyApi() {
     grocyApi = new GrocyApi(getApplication());
-  }
-
-  public Menu getBottomMenu() {
-    return binding.bottomAppBar.getMenu();
   }
 
   @NonNull

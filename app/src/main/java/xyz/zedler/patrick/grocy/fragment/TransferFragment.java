@@ -129,7 +129,6 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.CONSUME_SUCCESS) {

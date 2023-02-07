@@ -18,14 +18,16 @@
   -->
 
 <menu
+  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
 
   <item
     android:id="@+id/action_about"
     android:title="@string/title_about"
     android:icon="@drawable/ic_round_info_outline_anim"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="always" />
 
   <item
     android:id="@+id/action_feedback"
