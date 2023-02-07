@@ -424,9 +424,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
           scrollBehavior.updateSnackbarAnchor();
         }
+        float elevation = UiUtil.dpToPx(this, 6);
+        ViewCompat.setElevation(binding.fabMain, elevation);
+        binding.fabMain.setCompatElevation(elevation);
       } else {
         v.setY(fabBaseY);
         scrollBehavior.updateSnackbarAnchor();
+        ViewCompat.setElevation(binding.fabMain, 0);
+        binding.fabMain.setCompatElevation(0);
       }
       return insets;
     });
