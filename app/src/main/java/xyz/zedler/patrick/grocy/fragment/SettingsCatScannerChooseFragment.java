@@ -136,7 +136,6 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
     viewModel.getEventHandler().observe(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
         activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity,
             activity.binding.coordinatorMain
         ));
       } else if (event.getType() == Event.BOTTOM_SHEET) {
