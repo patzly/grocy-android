@@ -9,6 +9,7 @@
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
 - Fixed: Crash on recipe page because server somehow returns wrong floating point format (#652)
 - Fixed: Floating action button not hidden in shopping mode
+- Fixed: Occasionally dark toolbar menu icons in dark mode (thanks @martin-braun!) (#631)
 
 ## 3.0.0
 

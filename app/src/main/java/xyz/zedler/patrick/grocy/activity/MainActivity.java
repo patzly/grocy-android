@@ -1141,10 +1141,6 @@ public class MainActivity extends AppCompatActivity {
     grocyApi = new GrocyApi(getApplication());
   }
 
-  public Menu getBottomMenu() {
-    return binding.bottomAppBar.getMenu();
-  }
-
   @NonNull
   public BaseFragment getCurrentFragment() {
     Fragment navHostFragment = fragmentManager.findFragmentById(R.id.fragment_main_nav_host);
