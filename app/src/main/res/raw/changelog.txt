@@ -1,9 +1,9 @@
 ## 3.0.1
 
-- Improved: Finally the floating action button stays visible when the keyboard is shown
+- Improved: Finally the floating action button stays visible when the keyboard is shown (will be shifted above the keyboard)
 - Improved: Bottom app bar not above keyboard anymore
 - Improved: Prevent status messages from covering elements like floating action button and bottom bar
-- Improved: Animated menu in bottom bar when navigating
+- Improved: Animated menu icons in bottom bar when navigating
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
