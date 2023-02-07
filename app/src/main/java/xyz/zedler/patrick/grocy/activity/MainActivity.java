@@ -1114,8 +1114,8 @@ public class MainActivity extends AppCompatActivity {
 
   public void showKeyboard(EditText editText) {
     new Handler().postDelayed(() -> {
-      WindowCompat.getInsetsController(getWindow(), editText).show(Type.ime());
       editText.requestFocus();
+      WindowCompat.getInsetsController(getWindow(), editText).show(Type.ime());
     }, 100);
   }
 
