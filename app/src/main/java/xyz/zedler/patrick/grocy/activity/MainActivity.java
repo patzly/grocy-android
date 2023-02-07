@@ -337,6 +337,9 @@ public class MainActivity extends AppCompatActivity {
 
     // BOTTOM APP BAR
 
+    binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+    binding.bottomAppBar.setMenuAlignmentMode(BottomAppBar.MENU_ALIGNMENT_MODE_START);
+
     // Use reflection to store bottomInset in BAB manually
     // The automatic method includes IME insets which is bad behavior for BABs
     ViewCompat.setOnApplyWindowInsetsListener(binding.bottomAppBar, (v, insets) -> {
