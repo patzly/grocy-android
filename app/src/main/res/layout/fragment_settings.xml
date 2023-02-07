@@ -315,7 +315,7 @@
 
             <ImageView
               style="@style/Widget.Grocy.ImageView.ListItem.Icon"
-              android:src="@drawable/ic_round_info_outline_anim_menu"
+              android:src="@drawable/ic_round_info_outline_anim"
               tools:ignore="ContentDescription" />
 
             <TextView

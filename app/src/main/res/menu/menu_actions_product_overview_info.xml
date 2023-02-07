@@ -18,8 +18,10 @@
   -->
 
 <menu
+  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
 
   <item
     android:id="@+id/action_stock_entries"
@@ -30,6 +32,6 @@
     android:id="@+id/action_edit_product"
     android:title="@string/action_edit_product"
     android:icon="@drawable/ic_round_edit"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="always" />
 
 </menu>

@@ -566,6 +566,9 @@ public class MainActivity extends AppCompatActivity {
         binding.fabMain.hide();
       }
 
+      Drawable overflowIcon = binding.bottomAppBar.getOverflowIcon();
+
+      // IF ANIMATIONS DISABLED
       if (!UiUtil.areAnimationsEnabled(this)) {
         binding.bottomAppBar.replaceMenu(newMenuId);
         Menu menu = binding.bottomAppBar.getMenu();
@@ -573,12 +576,14 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < menu.size(); i++) {
           MenuItem item = menu.getItem(i);
           if (item.getIcon() != null) {
-            if (VERSION.SDK_INT >= VERSION_CODES.O) {
-              item.setIconTintList(ColorStateList.valueOf(tint));
-            } else {
-              item.getIcon().setTint(tint);
-            }
+            item.getIcon().mutate();
+            item.getIcon().setAlpha(255);
+            item.getIcon().setTint(tint);
           }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha(255);
+          overflowIcon.setTint(tint);
         }
         binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
         return;
@@ -599,9 +604,12 @@ public class MainActivity extends AppCompatActivity {
       animatorFadeOut.addUpdateListener(animation -> {
         for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
           MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() != null) {
+          if (item.getIcon() != null && item.isVisible()) {
             item.getIcon().setAlpha((int) animation.getAnimatedValue());
           }
+        }
+        if (overflowIcon != null && overflowIcon.isVisible()) {
+          overflowIcon.setAlpha((int) animation.getAnimatedValue());
         }
       });
       animatorFadeOut.setDuration(iconFadeOutDuration);
@@ -611,35 +619,68 @@ public class MainActivity extends AppCompatActivity {
       new Handler(Looper.getMainLooper()).postDelayed(() -> {
         binding.bottomAppBar.replaceMenu(newMenuId);
 
+        int iconIndex = 0;
+        int overflowCount = 0;
         int tint = ResUtil.getColorAttr(this, R.attr.colorOnSurfaceVariant);
         for (int i = 0; i < binding.bottomAppBar.getMenu().size(); i++) {
-          int index = i;
           MenuItem item = binding.bottomAppBar.getMenu().getItem(i);
-          if (item.getIcon() != null) {
-            if (VERSION.SDK_INT >= VERSION_CODES.O) {
-              item.setIconTintList(ColorStateList.valueOf(tint));
-            } else {
-              item.getIcon().setTint(tint);
+          if (item.getIcon() == null || !item.isVisible()) {
+            if (item.isVisible()) {
+              overflowCount++;
             }
-            item.getIcon().setAlpha(0);
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-              Rect bounds = item.getIcon().copyBounds();
-              int top = bounds.top;
-              int offset = UiUtil.dpToPx(this, 12);
-              ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
-              animator.addUpdateListener(animation -> {
-                bounds.offsetTo(
-                    0, (int) (top + (float) animation.getAnimatedValue() * offset)
-                );
-                item.getIcon().setBounds(bounds);
-                item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
-                item.getIcon().invalidateSelf();
-              });
-              animator.setDuration(iconFadeInDuration - index * 50L);
-              animator.setInterpolator(new FastOutSlowInInterpolator());
-              animator.start();
-            }, index * 90L);
+            continue;
           }
+          iconIndex++;
+          int index = iconIndex;
+          item.getIcon().mutate();
+          item.getIcon().setTint(tint);
+          item.getIcon().setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = item.getIcon().copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(this, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              item.getIcon().setBounds(bounds);
+              item.getIcon().setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              item.getIcon().invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
+        }
+        if (overflowCount > 0) {
+          Drawable overflowIconNew = binding.bottomAppBar.getOverflowIcon();
+          if (overflowIconNew == null || !overflowIconNew.isVisible()) {
+            return;
+          }
+          iconIndex++;
+          int index = iconIndex;
+          overflowIconNew.setTint(tint);
+          overflowIconNew.setAlpha(0);
+          new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Rect bounds = overflowIconNew.copyBounds();
+            int top = bounds.top;
+            int offset = UiUtil.dpToPx(this, 12);
+            ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+            animator.addUpdateListener(animation -> {
+              bounds.offsetTo(
+                  0,
+                  (int) (top + (float) animation.getAnimatedValue() * offset)
+              );
+              overflowIconNew.setBounds(bounds);
+              overflowIconNew.setAlpha(255 - (int) ((float) animation.getAnimatedValue() * 255));
+              overflowIconNew.invalidateSelf();
+            });
+            animator.setDuration(iconFadeInDuration - index * 50L);
+            animator.setInterpolator(new FastOutSlowInInterpolator());
+            animator.start();
+          }, index * 90L);
         }
         binding.bottomAppBar.setOnMenuItemClickListener(onMenuItemClickListener);
       }, iconFadeOutDuration);

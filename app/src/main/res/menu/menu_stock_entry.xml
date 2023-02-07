@@ -18,26 +18,27 @@
   -->
 
 <menu
+  xmlns:tools="http://schemas.android.com/tools"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:ignore="AlwaysShowAction">
 
   <item
     android:id="@+id/action_consume"
     android:title="@string/action_consume"
     android:icon="@drawable/ic_round_consume_product"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="always" />
 
   <item
     android:id="@+id/action_open"
     android:title="@string/action_open"
     android:icon="@drawable/ic_round_open"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="always" />
 
   <item
     android:id="@+id/action_edit"
     android:title="@string/action_edit"
-    android:icon="@drawable/ic_round_edit"
-    app:showAsAction="ifRoom" />
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/action_consume_spoiled"
