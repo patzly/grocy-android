@@ -13,6 +13,7 @@
 - Fixed: Occasionally dark toolbar menu icons in dark mode (thanks @martin-braun!) (#631)
 - Fixed: Unintended length limit on bottom sheet for general text and number input (#657)
 - Fixed: Occasional crashes on stock journal and master product page
+- Fixed: Stores selection list not redesigned
 
 ## 3.0.0
 
