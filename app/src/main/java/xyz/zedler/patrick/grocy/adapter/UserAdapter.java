@@ -94,13 +94,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     if (user.getId() == selectedId) {
       holder.imageViewSelected.setVisibility(View.VISIBLE);
+      holder.linearLayoutContainer.setBackground(
+          ViewUtil.getBgListItemSelected(holder.linearLayoutContainer.getContext())
+      );
+    } else {
+      holder.imageViewSelected.setVisibility(View.INVISIBLE);
+      holder.linearLayoutContainer.setBackground(
+          ViewUtil.getRippleBgListItemSurface(holder.linearLayoutContainer.getContext())
+      );
     }
 
     // CONTAINER
 
-    holder.linearLayoutContainer.setBackground(
-        ViewUtil.getRippleBgListItemSurface(holder.linearLayoutContainer.getContext())
-    );
     holder.linearLayoutContainer.setOnClickListener(
         view -> listener.onItemRowClicked(user)
     );

@@ -98,6 +98,7 @@ public class QuantityUnitAdapter extends RecyclerView.Adapter<QuantityUnitAdapte
       holder.imageViewSelected.setVisibility(View.VISIBLE);
       holder.linearLayoutContainer.setBackground(ViewUtil.getBgListItemSelected(context));
     } else {
+      holder.imageViewSelected.setVisibility(View.INVISIBLE);
       holder.linearLayoutContainer.setBackground(ViewUtil.getRippleBgListItemSurface(context));
     }
 
