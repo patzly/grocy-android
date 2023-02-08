@@ -116,6 +116,7 @@ public class RecipesFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -378,7 +379,6 @@ public class RecipesFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-    systemBarBehavior.refresh();
   }
 
   private void setUpSearch() {

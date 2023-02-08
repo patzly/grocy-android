@@ -99,7 +99,7 @@ public class StockJournalViewModel extends BaseViewModel {
       userHashMap = ArrayUtil.getUsersHashMap(data.getUsers());
 
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       } else {
         NetworkQueue queue = dlHelper.newQueue(this::updateFilteredStockLogEntries, this::onDownloadError);
         queue.append(dlHelper.getStockLogEntries(
@@ -112,8 +112,8 @@ public class StockJournalViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading and update recyclerview
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredStockLogEntries();
       return;
@@ -136,21 +136,21 @@ public class StockJournalViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_LOCATIONS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void loadNextPage(DownloadHelper.OnStockLogEntriesResponseListener responseListener) {
-    NetworkQueue queue = dlHelper.newQueue(() -> {}, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {
+      if (isOffline()) setOfflineLive(false);
+    }, this::onDownloadError);
     queue.append(dlHelper.getStockLogEntries(
         20,
         currentPage*20,
@@ -160,6 +160,7 @@ public class StockJournalViewModel extends BaseViewModel {
   }
 
   public void updateFilteredStockLogEntries() {
+    if (this.stockLogEntries == null) return;
     ArrayList<StockLogEntry> filteredStockLogEntries = new ArrayList<>(this.stockLogEntries);
 
     if (filteredStockLogEntries.isEmpty()) {
@@ -181,7 +182,7 @@ public class StockJournalViewModel extends BaseViewModel {
     dlHelper.post(
         grocyApi.undoStockTransaction(entry.getTransactionId()),
         response -> {
-          downloadData();
+          downloadData(false);
           showSnackbar(new SnackbarMessage(
               getString(R.string.msg_undone_transaction),
               Snackbar.LENGTH_SHORT
@@ -190,7 +191,7 @@ public class StockJournalViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction");
           }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

@@ -17,132 +17,134 @@
   ~ Copyright (c) 2020-2023 by Patrick Zedler and Dominic Zedler
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="?android:attr/colorBackground">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <import type="android.view.View" />
+    <import type="xyz.zedler.patrick.grocy.R" />
+    <import type="xyz.zedler.patrick.grocy.Constants" />
+    <variable
+      name="viewModel"
+      type="xyz.zedler.patrick.grocy.viewmodel.MasterObjectListViewModel" />
+    <variable
+      name="systemBarBehavior"
+      type="xyz.zedler.patrick.grocy.behavior.SystemBarBehavior" />
+  </data>
 
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/app_bar"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:orientation="vertical"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
-    <LinearLayout
-      android:id="@+id/app_bar_default"
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize">
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:orientation="vertical"
+      android:animateLayoutChanges="true">
 
-      <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_default"
-        style="@style/Widget.Grocy.Toolbar.Back" />
+      <LinearLayout
+        android:id="@+id/app_bar_default"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
 
-    </LinearLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+          android:id="@+id/toolbar_default"
+          style="@style/Widget.Grocy.Toolbar.Back" />
 
-    <LinearLayout
-      android:id="@+id/app_bar_search"
+      </LinearLayout>
+
+      <LinearLayout
+        android:id="@+id/app_bar_search"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:baselineAligned="false">
+
+        <FrameLayout
+          android:id="@+id/search_close"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_marginStart="4dp"
+          android:layout_marginEnd="8dp"
+          android:background="?attr/actionBarItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:contentDescription="@string/action_close"
+          android:tooltipText="@string/action_close"
+          android:focusable="true"
+          tools:targetApi="o">
+
+          <ImageView
+            style="@style/Widget.Grocy.ImageView.Icon.Navigation"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_round_close" />
+
+        </FrameLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/text_input_search"
+          style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginStart="0dp"
+          android:layout_marginEnd="56dp">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_search"
+            style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
+            android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+      </LinearLayout>
+
+      <xyz.zedler.patrick.grocy.view.OfflineIndicatorView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
+        app:systemBarBehavior="@{systemBarBehavior}"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
+      android:id="@+id/swipe"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:visibility="gone"
-      android:baselineAligned="false">
+      android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
+      android:animateLayoutChanges="true"
+      android:overScrollMode="never">
 
       <FrameLayout
-        android:id="@+id/search_close"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:background="?attr/actionBarItemBackground"
-        android:clickable="true"
-        android:gravity="center"
-        android:contentDescription="@string/action_close"
-        android:tooltipText="@string/action_close"
-        android:focusable="true"
-        tools:targetApi="o">
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_gravity="center"
-          android:importantForAccessibility="no"
-          android:src="@drawable/ic_round_close" />
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recycler"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:clipToPadding="false"
+          android:paddingTop="8dp"
+          android:paddingBottom="@dimen/global_scroll_bottom_padding"
+          android:overScrollMode="never"
+          android:scrollbarStyle="outsideOverlay"
+          android:layoutAnimation="@anim/recycler_layout" />
 
       </FrameLayout>
 
-      <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_search"
-        style="@style/Widget.Grocy.TextInputLayout.FilledBox.Dense"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="56dp">
+    </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/edit_text_search"
-          style="@style/Widget.Grocy.TextInputEditText.FilledBox.Dense"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:imeOptions="actionSearch"
-          android:inputType="textAutoCorrect|textAutoComplete|textCapSentences"
-          android:singleLine="true" />
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-      </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-      android:id="@+id/linear_offline_error"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?attr/colorError"
-      android:gravity="center"
-      android:visibility="gone">
-
-      <TextView
-        style="@style/Widget.Grocy.TextView.OfflineIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:text="@string/error_offline" />
-
-    </LinearLayout>
-
-  </com.google.android.material.appbar.AppBarLayout>
-
-  <xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout
-    android:id="@+id/swipe"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:animateLayoutChanges="true"
-    android:overScrollMode="never">
-
-    <FrameLayout
-      android:id="@+id/frame_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="@dimen/global_scroll_bottom_padding"
-        android:overScrollMode="never"
-        android:scrollbarStyle="outsideOverlay"
-        android:layoutAnimation="@anim/recycler_layout" />
-
-    </FrameLayout>
-
-  </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

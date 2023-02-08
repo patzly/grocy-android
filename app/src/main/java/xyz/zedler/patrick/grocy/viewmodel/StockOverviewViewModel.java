@@ -257,19 +257,22 @@ public class StockOverviewViewModel extends BaseViewModel {
           .emitCounts();
       updateFilteredStockItems();
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     });
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading and update recyclerview
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredStockItems();
       return;
     }
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        () -> {
+          if (isOffline()) setOfflineLive(false);
+          loadFromDatabase(false);
+        },
         this::onDownloadError,
         QuantityUnit.class,
         ProductGroup.class,
@@ -285,6 +288,10 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
   }
 
+  public void downloadData() {
+    downloadData(false);
+  }
+
   public void downloadDataForceUpdate() {
     SharedPreferences.Editor editPrefs = sharedPrefs.edit();
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
@@ -298,17 +305,15 @@ public class StockOverviewViewModel extends BaseViewModel {
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_LOCATIONS, null);
     editPrefs.putString(Constants.PREF.DB_LAST_TIME_STOCK_LOCATIONS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredStockItems() {
@@ -499,7 +504,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     Log.i(TAG, "consumeProduct: undone");
                   }
                 },
-                this::showErrorMessage
+                this::showNetworkErrorMessage
             ));
           }
           downloadData();
@@ -511,7 +516,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "consumeProduct: " + error);
           }
@@ -573,7 +578,7 @@ public class StockOverviewViewModel extends BaseViewModel {
                     Log.i(TAG, "openProduct: undone");
                   }
                 },
-                this::showErrorMessage
+                this::showNetworkErrorMessage
             ));
           }
           downloadData();
@@ -585,7 +590,7 @@ public class StockOverviewViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "openProduct: " + error);
           }

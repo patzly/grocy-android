@@ -456,7 +456,7 @@ public class InventoryViewModel extends BaseViewModel {
           sendEvent(Event.TRANSACTION_SUCCESS);
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
             if (debug) {
                 Log.i(TAG, "inventoryProduct: " + error);
             }
@@ -473,7 +473,7 @@ public class InventoryViewModel extends BaseViewModel {
                 Log.i(TAG, "undoTransaction: undone");
             }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

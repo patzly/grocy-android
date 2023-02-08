@@ -138,18 +138,18 @@ public class MasterObjectListViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
+  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
     }
-    if (isOffline()) { // skip downloading
+    if (!skipOfflineCheck && isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(
-          this::downloadData,
+          time -> downloadData(time, skipOfflineCheck),
           () -> onDownloadError(null)
       );
       return;
@@ -210,7 +210,7 @@ public class MasterObjectListViewModel extends BaseViewModel {
   }
 
   public void downloadData() {
-    downloadData(null);
+    downloadData(null, false);
   }
 
   public void downloadDataForceUpdate() {
@@ -239,13 +239,11 @@ public class MasterObjectListViewModel extends BaseViewModel {
         break;
     }
     editPrefs.apply();
-    downloadData();
+    downloadData(null, true);
   }
 
   private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
+    if (isOffline()) setOfflineLive(false);
     displayItems();
   }
 
@@ -253,10 +251,8 @@ public class MasterObjectListViewModel extends BaseViewModel {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
     displayItems(); // maybe objects can be loaded partially
   }
 

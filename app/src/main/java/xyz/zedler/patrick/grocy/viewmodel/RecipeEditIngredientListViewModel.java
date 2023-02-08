@@ -217,7 +217,7 @@ public class RecipeEditIngredientListViewModel extends BaseViewModel {
     dlHelper.delete(
             grocyApi.getObject(GrocyApi.ENTITY.RECIPES_POS, recipePositionId),
             response -> downloadData(),
-            this::showErrorMessage
+            this::showNetworkErrorMessage
     );
   }
 

@@ -473,7 +473,7 @@ public class TransferViewModel extends BaseViewModel {
           sendEvent(Event.CONSUME_SUCCESS);
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "transferProduct: " + error);
           }
@@ -490,7 +490,7 @@ public class TransferViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

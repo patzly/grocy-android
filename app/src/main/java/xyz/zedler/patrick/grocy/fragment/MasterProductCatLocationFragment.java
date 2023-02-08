@@ -195,7 +195,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   public void showLocationsBottomSheet(boolean consumeLocation) {
     List<Location> locations = viewModel.getFormData().getLocationsLive().getValue();
     if (locations == null) {
-      viewModel.showErrorMessage(null);
+      viewModel.showNetworkErrorMessage(null);
       return;
     }
     Bundle bundle = new Bundle();
@@ -216,7 +216,7 @@ public class MasterProductCatLocationFragment extends BaseFragment {
   public void showStoresBottomSheet() {
     List<Store> stores = viewModel.getFormData().getStoresLive().getValue();
     if (stores == null) {
-      viewModel.showErrorMessage(null);
+      viewModel.showNetworkErrorMessage(null);
       return;
     }
     Bundle bundle = new Bundle();

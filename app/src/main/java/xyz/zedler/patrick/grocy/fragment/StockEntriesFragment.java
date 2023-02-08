@@ -122,6 +122,7 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -349,7 +350,6 @@ public class StockEntriesFragment extends BaseFragment implements StockEntryAdap
       return;
     }
     viewModel.setOfflineLive(!isOnline);
-    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

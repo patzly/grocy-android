@@ -110,6 +110,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -322,7 +323,6 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
       return;
     }
     viewModel.setOfflineLive(!isOnline);
-    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

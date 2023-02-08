@@ -115,6 +115,7 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -303,9 +304,8 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
       return;
     }
     viewModel.setOfflineLive(!isOnline);
-    systemBarBehavior.refresh();
     if (isOnline) {
-      viewModel.downloadData();
+      viewModel.downloadData(true);
     }
   }
 

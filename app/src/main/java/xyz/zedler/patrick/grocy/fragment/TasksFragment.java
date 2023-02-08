@@ -114,6 +114,7 @@ public class TasksFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -328,7 +329,6 @@ public class TasksFragment extends BaseFragment implements
       return;
     }
     viewModel.setOfflineLive(!isOnline);
-    systemBarBehavior.refresh();
     if (isOnline) {
       viewModel.downloadData();
     }

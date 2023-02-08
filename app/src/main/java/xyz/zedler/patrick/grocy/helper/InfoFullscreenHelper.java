@@ -48,34 +48,40 @@ public class InfoFullscreenHelper {
   public void setInfo(InfoFullscreen infoFullscreen, boolean slide) {
     View oldView = viewGroup.findViewById(INFO_FULLSCREEN_VIEW_ID);
     if (oldView != null && infoFullscreen != null) {
-      // if info texts and type are the same, skip update
+      // if info texts and type are the same and no animation is running, skip update
       InfoFullscreenView oldFullscreenView = (InfoFullscreenView) oldView;
       if (oldFullscreenView.getType() == infoFullscreen.getType()
           && Objects.equals(oldFullscreenView.getExact(), infoFullscreen.getExact())
+          && oldFullscreenView.getAnimation() == null && infoFullscreen.getClickListener() == null
       ) {
+        return;
+      } else if (oldFullscreenView.getType() == infoFullscreen.getType()
+          && Objects.equals(oldFullscreenView.getExact(), infoFullscreen.getExact())
+          && oldFullscreenView.getAnimation() == null && infoFullscreen.getClickListener() != null
+      ) {
+        Animation animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_out_up);
+        animation.setDuration(ANIMATION_DURATION);
+        clearState(skipped -> newFullScreenView(infoFullscreen, slide), slide ? animation : null);
+        return;
+      } else if (oldFullscreenView.getType() == infoFullscreen.getType()
+          && Objects.equals(oldFullscreenView.getExact(), infoFullscreen.getExact())
+          && oldFullscreenView.getAnimation() != null
+      ) {
+        oldFullscreenView.getAnimation().cancel();
+        newFullScreenView(infoFullscreen, slide);
         return;
       }
     }
 
-    Animation animation;
     if (infoFullscreen == null) {
-      animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_out_up);
+      Animation animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_out_up);
       animation.setDuration(ANIMATION_DURATION);
       this.infoFullscreenView = null;
       clearState(null, slide ? animation : null);
       return;
-    } else {
-      animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_in_down);
-      animation.setDuration(ANIMATION_DURATION);
     }
-    this.infoFullscreenView = new InfoFullscreenView(
-        viewGroup.getContext(),
-        infoFullscreen.getType(),
-        infoFullscreen.getExact(),
-        infoFullscreen.getClickListener()
-    );
-    this.infoFullscreenView.setId(INFO_FULLSCREEN_VIEW_ID);
-    startAnimation(slide ? animation : null);
+
+    newFullScreenView(infoFullscreen, slide);
   }
 
   private void clearState(
@@ -123,6 +129,19 @@ public class InfoFullscreenHelper {
             }
           }).start();
     }
+  }
+
+  private void newFullScreenView(InfoFullscreen infoFullscreen, boolean slide) {
+    this.infoFullscreenView = new InfoFullscreenView(
+        viewGroup.getContext(),
+        infoFullscreen.getType(),
+        infoFullscreen.getExact(),
+        infoFullscreen.getClickListener()
+    );
+    this.infoFullscreenView.setId(INFO_FULLSCREEN_VIEW_ID);
+    Animation animation = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.slide_in_down);
+    animation.setDuration(ANIMATION_DURATION);
+    startAnimation(slide ? animation : null);
   }
 
   private void startAnimation(@Nullable Animation additionalAnim) {

@@ -27,15 +27,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentMasterDataOverviewBinding;
-import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.viewmodel.MasterDataOverviewViewModel;
 
 public class MasterDataOverviewFragment extends BaseFragment {
@@ -45,7 +44,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
   private MainActivity activity;
   private FragmentMasterDataOverviewBinding binding;
   private MasterDataOverviewViewModel viewModel;
-  private InfoFullscreenHelper infoFullscreenHelper;
   private SystemBarBehavior systemBarBehavior;
 
   @Override
@@ -63,10 +61,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    if (infoFullscreenHelper != null) {
-      infoFullscreenHelper.destroyInstance();
-      infoFullscreenHelper = null;
-    }
     if (binding != null) {
       binding = null;
     }
@@ -75,15 +69,17 @@ public class MasterDataOverviewFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
-
     viewModel = new ViewModelProvider(this).get(MasterDataOverviewViewModel.class);
     viewModel.setOfflineLive(!activity.isOnline());
+    binding.setViewModel(viewModel);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
 
     systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -142,14 +138,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
         ));
       }
     });
-
-    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-    viewModel.getInfoFullscreenLive().observe(
-        getViewLifecycleOwner(),
-        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
     viewModel.getProductsLive().observe(
         getViewLifecycleOwner(),
@@ -237,17 +225,8 @@ public class MasterDataOverviewFragment extends BaseFragment {
       return;
     }
     viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
-  }
-
-  private void appBarOfflineInfo(boolean visible) {
-    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-    if (visible == currentState) {
-      return;
-    }
-    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-    if (systemBarBehavior != null) {
-      systemBarBehavior.refresh();
+    if (online) {
+      viewModel.downloadData();
     }
   }
 

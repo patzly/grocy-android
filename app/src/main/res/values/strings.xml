@@ -460,6 +460,7 @@
   <string name="error_name_exists">Name already exists</string>
   <string name="error_network">Network error</string>
   <string name="error_network_subtitle">The required data could not be loaded completely</string>
+  <string name="error_network_exact">Network error: %1$s</string>
   <string name="error_unknown">Oops!</string>
   <string name="error_not_grocy_instance">Not a valid grocy instance</string>
   <string name="error_timeout">Timeout error</string>

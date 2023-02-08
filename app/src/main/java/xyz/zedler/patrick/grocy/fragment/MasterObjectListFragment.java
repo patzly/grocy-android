@@ -134,17 +134,19 @@ public class MasterObjectListFragment extends BaseFragment
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     activity = (MainActivity) requireActivity();
     clickUtil = new ClickUtil();
+    viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
+        .MasterObjectListViewModelFactory(activity.getApplication(), entity)
+    ).get(MasterObjectListViewModel.class);
+    viewModel.setOfflineLive(!activity.isOnline());
+    binding.setViewModel(viewModel);
+    binding.setLifecycleOwner(getViewLifecycleOwner());
 
     systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
-
-    viewModel = new ViewModelProvider(this, new MasterObjectListViewModel
-        .MasterObjectListViewModelFactory(activity.getApplication(), entity)
-    ).get(MasterObjectListViewModel.class);
-    viewModel.setOfflineLive(!activity.isOnline());
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
       binding.swipe.setRefreshing(state);
@@ -215,8 +217,6 @@ public class MasterObjectListFragment extends BaseFragment
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
       }
     });
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
     if (savedInstanceState == null) {
       viewModel.deleteSearch(); // delete search if navigating back from other fragment
@@ -462,22 +462,13 @@ public class MasterObjectListFragment extends BaseFragment
     viewModel.deleteObject(objectId);
   }
 
-  private void appBarOfflineInfo(boolean visible) {
-    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-    if (visible == currentState) {
-      return;
-    }
-    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-  }
-
   @Override
   public void updateConnectivity(boolean online) {
     if (!online == viewModel.isOffline()) {
       return;
     }
     viewModel.setOfflineLive(!online);
-    viewModel.downloadData();
-    systemBarBehavior.refresh();
+    if (online) viewModel.downloadData();
   }
 
   @NonNull

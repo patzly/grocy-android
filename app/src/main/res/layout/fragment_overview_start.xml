@@ -37,6 +37,9 @@
     <variable
       name="clickUtil"
       type="xyz.zedler.patrick.grocy.util.ClickUtil" />
+    <variable
+      name="systemBarBehavior"
+      type="xyz.zedler.patrick.grocy.behavior.SystemBarBehavior" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -83,24 +86,11 @@
 
       </FrameLayout>
 
-      <LinearLayout
-        android:id="@+id/linear_offline_error"
+      <xyz.zedler.patrick.grocy.view.OfflineIndicatorView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?attr/colorError"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.OfflineIndicator"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="4dp"
-          android:layout_marginBottom="4dp"
-          android:text="@string/error_offline" />
-
-      </LinearLayout>
+        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
+        app:systemBarBehavior="@{systemBarBehavior}"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

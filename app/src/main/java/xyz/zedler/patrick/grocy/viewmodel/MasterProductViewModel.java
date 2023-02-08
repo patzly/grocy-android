@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.fragment.MasterProductFragmentArgs;
@@ -47,10 +49,7 @@ import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.ProductBarcode;
 import xyz.zedler.patrick.grocy.repository.MasterProductRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
-import xyz.zedler.patrick.grocy.web.ConnectivityLiveData;
 import xyz.zedler.patrick.grocy.web.NetworkQueue;
 
 public class MasterProductViewModel extends BaseViewModel {
@@ -66,7 +65,7 @@ public class MasterProductViewModel extends BaseViewModel {
   private final MutableLiveData<List<PendingProductBarcode>> pendingProductBarcodesLive;
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final ConnectivityLiveData isOnlineLive;
+  private final MutableLiveData<Boolean> offlineLive;
 
   private List<Product> products;
 
@@ -96,7 +95,7 @@ public class MasterProductViewModel extends BaseViewModel {
 
     pendingProductBarcodesLive = new MutableLiveData<>();
     infoFullscreenLive = new MutableLiveData<>();
-    isOnlineLive = new ConnectivityLiveData(application);
+    offlineLive = new MutableLiveData<>(false);
 
     if (isActionEdit()) {
       if (args.getProduct() != null) {
@@ -259,7 +258,7 @@ public class MasterProductViewModel extends BaseViewModel {
             sendEvent(Event.NAVIGATE_UP);
           },
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveProduct: " + error);
             }
@@ -296,7 +295,7 @@ public class MasterProductViewModel extends BaseViewModel {
             }
           },
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveProduct: " + error);
             }
@@ -387,12 +386,17 @@ public class MasterProductViewModel extends BaseViewModel {
     }
   }
 
-  private boolean isOffline() {
-    return !isOnlineLive.getValue();
+  @NonNull
+  public MutableLiveData<Boolean> getOfflineLive() {
+    return offlineLive;
   }
 
-  public ConnectivityLiveData getIsOnlineLive() {
-    return isOnlineLive;
+  public Boolean isOffline() {
+    return offlineLive.getValue();
+  }
+
+  public void setOfflineLive(boolean isOffline) {
+    offlineLive.setValue(isOffline);
   }
 
   @NonNull
