@@ -4,6 +4,7 @@
 - Improved: Bottom app bar not above keyboard anymore
 - Improved: Prevent status messages from covering elements like floating action button and bottom bar
 - Improved: Animated menu icons in bottom bar when navigating
+- Improved: Network and user interface behavior when offline (#492)
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
@@ -11,6 +12,7 @@
 - Fixed: Floating action button not hidden in shopping mode
 - Fixed: Occasionally dark toolbar menu icons in dark mode (thanks @martin-braun!) (#631)
 - Fixed: Unintended length limit on bottom sheet for general text and number input (#657)
+- Fixed: Occasional crashes on stock journal and master product page
 
 ## 3.0.0
 

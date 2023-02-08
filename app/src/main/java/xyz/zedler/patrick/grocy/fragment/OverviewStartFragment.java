@@ -33,7 +33,6 @@ import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.FragmentOverviewStartBinding;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
-import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
@@ -48,7 +47,6 @@ public class OverviewStartFragment extends BaseFragment {
   private MainActivity activity;
   private FragmentOverviewStartBinding binding;
   private OverviewStartViewModel viewModel;
-  private InfoFullscreenHelper infoFullscreenHelper;
   private ClickUtil clickUtil;
   private SystemBarBehavior systemBarBehavior;
 
@@ -67,10 +65,6 @@ public class OverviewStartFragment extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    if (infoFullscreenHelper != null) {
-      infoFullscreenHelper.destroyInstance();
-      infoFullscreenHelper = null;
-    }
     if (binding != null) {
       binding = null;
     }
@@ -91,6 +85,7 @@ public class OverviewStartFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
     binding.scrollHorizActions.post(
@@ -110,14 +105,6 @@ public class OverviewStartFragment extends BaseFragment {
         ));
       }
     });
-
-    infoFullscreenHelper = new InfoFullscreenHelper(binding.frameContainer);
-    viewModel.getInfoFullscreenLive().observe(
-        getViewLifecycleOwner(),
-        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), this::appBarOfflineInfo);
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
       int id = item.getItemId();
@@ -205,20 +192,7 @@ public class OverviewStartFragment extends BaseFragment {
       return;
     }
     viewModel.setOfflineLive(!online);
-    if (online) {
-      viewModel.downloadData();
-    }
-  }
-
-  private void appBarOfflineInfo(boolean visible) {
-    boolean currentState = binding.linearOfflineError.getVisibility() == View.VISIBLE;
-    if (visible == currentState) {
-      return;
-    }
-    binding.linearOfflineError.setVisibility(visible ? View.VISIBLE : View.GONE);
-    if (systemBarBehavior != null) {
-      systemBarBehavior.refresh();
-    }
+    viewModel.downloadData(false);
   }
 
   @NonNull

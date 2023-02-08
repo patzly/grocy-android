@@ -114,6 +114,7 @@ public class ShoppingModeFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
@@ -328,7 +329,6 @@ public class ShoppingModeFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {

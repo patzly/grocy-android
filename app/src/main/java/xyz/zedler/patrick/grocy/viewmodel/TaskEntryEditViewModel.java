@@ -196,7 +196,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveEntry: " + error);
             }
@@ -208,7 +208,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveEntry: " + error);
             }
@@ -262,7 +262,7 @@ public class TaskEntryEditViewModel extends BaseViewModel {
             task.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

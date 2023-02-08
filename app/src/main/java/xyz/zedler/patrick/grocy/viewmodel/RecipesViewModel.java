@@ -29,7 +29,7 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
-import xyz.zedler.patrick.grocy.R;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
@@ -45,7 +45,6 @@ import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
-import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
 
@@ -124,15 +123,18 @@ public class RecipesViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
-    if (isOffline()) { // skip downloading and update recyclerview
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredRecipes();
       return;
     }
 
     dlHelper.updateData(
-        () -> loadFromDatabase(false),
+        () -> {
+          if (isOffline()) setOfflineLive(false);
+          loadFromDatabase(false);
+        },
         this::onDownloadError,
         Recipe.class,
         RecipeFulfillment.class,
@@ -144,7 +146,7 @@ public class RecipesViewModel extends BaseViewModel {
   }
 
   public void downloadData() {
-    downloadData(null);
+    downloadData(false);
   }
 
   public void downloadDataForceUpdate() {
@@ -156,17 +158,15 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredRecipes() {
@@ -244,7 +244,7 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.RECIPES, recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -252,7 +252,7 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper.post(
         grocyApi.consumeRecipe(recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -260,7 +260,7 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper.post(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -268,7 +268,7 @@ public class RecipesViewModel extends BaseViewModel {
     dlHelper.post(
         grocyApi.copyRecipe(recipeId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

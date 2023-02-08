@@ -147,22 +147,28 @@ public class TasksViewModel extends BaseViewModel {
     });
   }
 
-  public void downloadData(@Nullable String dbChangedTime) {
+  public void downloadData(@Nullable String dbChangedTime, boolean skipOfflineCheck) {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
     }
-    if (isOffline()) { // skip downloading and update recyclerview
+    if (!skipOfflineCheck && isOffline()) { // skip downloading and update recyclerview
       isLoadingLive.setValue(false);
       updateFilteredTasks();
       return;
     }
     if (dbChangedTime == null) {
-      dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
+      dlHelper.getTimeDbChanged(
+          time -> downloadData(time, skipOfflineCheck),
+          () -> onDownloadError(null)
+      );
       return;
     }
 
-    NetworkQueue queue = dlHelper.newQueue(this::updateFilteredTasks, this::onDownloadError);
+    NetworkQueue queue = dlHelper.newQueue(() -> {
+      if (isOffline()) setOfflineLive(false);
+      updateFilteredTasks();
+    }, this::onDownloadError);
     queue.append(
         dlHelper.updateTaskCategories(dbChangedTime, taskCategories -> {
           this.taskCategories = taskCategories;
@@ -210,7 +216,7 @@ public class TasksViewModel extends BaseViewModel {
   }
 
   public void downloadData() {
-    downloadData(null);
+    downloadData(null, false);
   }
 
   public void downloadDataForceUpdate() {
@@ -219,17 +225,15 @@ public class TasksViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_TASK_CATEGORIES, null);
     editPrefs.putString(PREF.DB_LAST_TIME_USERS, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(null, true);
   }
 
   private void onDownloadError(@Nullable VolleyError error) {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   public void updateFilteredTasks() {
@@ -302,7 +306,7 @@ public class TasksViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             if (!task.isDone()) {
               Log.i(TAG, "completeTask: " + error);
@@ -318,7 +322,7 @@ public class TasksViewModel extends BaseViewModel {
     dlHelper.delete(
         grocyApi.getObject(ENTITY.TASKS, taskId),
         response -> downloadData(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

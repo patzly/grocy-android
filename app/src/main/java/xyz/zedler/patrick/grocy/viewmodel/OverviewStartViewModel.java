@@ -34,10 +34,13 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
+import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
 import xyz.zedler.patrick.grocy.model.ChoreEntry;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.MissingItem;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.Recipe;
@@ -48,10 +51,6 @@ import xyz.zedler.patrick.grocy.model.Task;
 import xyz.zedler.patrick.grocy.model.VolatileItem;
 import xyz.zedler.patrick.grocy.repository.OverviewStartRepository;
 import xyz.zedler.patrick.grocy.util.ArrayUtil;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.PREF;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
-import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.util.DateUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
@@ -65,7 +64,6 @@ public class OverviewStartViewModel extends BaseViewModel {
   private final OverviewStartRepository repository;
 
   private final MutableLiveData<Boolean> isLoadingLive;
-  private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
   private final MutableLiveData<Boolean> offlineLive;
 
   private final MutableLiveData<List<StockItem>> stockItemsLive;
@@ -119,7 +117,6 @@ public class OverviewStartViewModel extends BaseViewModel {
     dlHelper = new DownloadHelper(getApplication(), TAG, isLoadingLive::setValue);
     repository = new OverviewStartRepository(application);
 
-    infoFullscreenLive = new MutableLiveData<>();
     offlineLive = new MutableLiveData<>(false);
     stockItemsLive = new MutableLiveData<>();
     itemsDueNextCountLive = new MutableLiveData<>();
@@ -486,13 +483,13 @@ public class OverviewStartViewModel extends BaseViewModel {
       choresDueTodayCountLive.setValue(choresDueTodayCount);
 
       if (downloadAfterLoading) {
-        downloadData();
+        downloadData(false);
       }
     });
   }
 
-  public void downloadData() {
-    if (isOffline()) { // skip downloading
+  public void downloadData(boolean skipOfflineCheck) {
+    if (!skipOfflineCheck && isOffline()) { // skip downloading
       isLoadingLive.setValue(false);
       return;
     }
@@ -521,14 +518,11 @@ public class OverviewStartViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_TASKS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_CHORE_ENTRIES, null);
     editPrefs.apply();
-    downloadData();
+    downloadData(true);
   }
 
   private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
-    infoFullscreenLive.setValue(null);
+    if (isOffline()) setOfflineLive(false);
 
     if (sharedPrefs.getInt(PREF.CURRENT_USER_ID, -1) == -1) {
       dlHelper.getCurrentUserId(id -> {
@@ -562,13 +556,8 @@ public class OverviewStartViewModel extends BaseViewModel {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    String exact = error == null ? null : error.getLocalizedMessage();
-    infoFullscreenLive.setValue(
-        new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, () -> {
-          infoFullscreenLive.setValue(null);
-          downloadDataForceUpdate();
-        })
-    );
+    showNetworkErrorMessage(error);
+    if (!isOffline()) setOfflineLive(true);
   }
 
   @NonNull
@@ -587,11 +576,6 @@ public class OverviewStartViewModel extends BaseViewModel {
   @NonNull
   public MutableLiveData<Boolean> getIsLoadingLive() {
     return isLoadingLive;
-  }
-
-  @NonNull
-  public MutableLiveData<InfoFullscreen> getInfoFullscreenLive() {
-    return infoFullscreenLive;
   }
 
   public LiveData<String> getStockDescriptionTextLive() {

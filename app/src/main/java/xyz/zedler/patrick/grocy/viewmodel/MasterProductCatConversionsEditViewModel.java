@@ -192,7 +192,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -204,7 +204,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -265,7 +265,7 @@ public class MasterProductCatConversionsEditViewModel extends BaseViewModel {
             conversion.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

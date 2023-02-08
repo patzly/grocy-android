@@ -30,6 +30,9 @@
     <variable
       name="fragment"
       type="xyz.zedler.patrick.grocy.fragment.TasksFragment" />
+    <variable
+      name="systemBarBehavior"
+      type="xyz.zedler.patrick.grocy.behavior.SystemBarBehavior" />
   </data>
 
   <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -165,22 +168,11 @@
 
       </HorizontalScrollView>
 
-      <LinearLayout
+      <xyz.zedler.patrick.grocy.view.OfflineIndicatorView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorError"
-        android:gravity="center"
-        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
-
-        <TextView
-          style="@style/Widget.Grocy.TextView.OfflineIndicator"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="4dp"
-          android:layout_marginBottom="4dp"
-          android:text="@string/error_offline" />
-
-      </LinearLayout>
+        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
+        app:systemBarBehavior="@{systemBarBehavior}"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

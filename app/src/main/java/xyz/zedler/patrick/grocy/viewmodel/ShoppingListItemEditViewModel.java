@@ -73,7 +73,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
 
   private final MutableLiveData<Boolean> isLoadingLive;
   private final MutableLiveData<InfoFullscreen> infoFullscreenLive;
-  private final MutableLiveData<Boolean> offlineLive;
 
   private List<ShoppingList> shoppingLists;
   private List<Product> products;
@@ -109,7 +108,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     isActionEdit = startupArgs.getAction().equals(Constants.ACTION.EDIT);
 
     infoFullscreenLive = new MutableLiveData<>();
-    offlineLive = new MutableLiveData<>(false);
   }
 
   public FormDataShoppingListItemEdit getFormData() {
@@ -138,10 +136,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (currentQueueLoading != null) {
       currentQueueLoading.reset(true);
       currentQueueLoading = null;
-    }
-    if (isOffline()) { // skip downloading
-      isLoadingLive.setValue(false);
-      return;
     }
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
@@ -192,9 +186,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
   }
 
   private void onQueueEmpty() {
-    if (isOffline()) {
-      setOfflineLive(false);
-    }
     if (queueEmptyAction != null) {
       queueEmptyAction.run();
       queueEmptyAction = null;
@@ -207,10 +198,13 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (debug) {
       Log.e(TAG, "onError: VolleyError: " + error);
     }
-    showMessage(getString(R.string.msg_no_connection));
-    if (!isOffline()) {
-      setOfflineLive(true);
-    }
+    String exact = error == null ? null : error.getLocalizedMessage();
+    infoFullscreenLive.setValue(
+        new InfoFullscreen(InfoFullscreen.ERROR_NETWORK, exact, () -> {
+          infoFullscreenLive.setValue(null);
+          downloadDataForceUpdate();
+        })
+    );
   }
 
   public void saveItem() {
@@ -233,7 +227,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           jsonObject,
           response -> saveProductBarcodeAndNavigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -245,7 +239,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
           jsonObject,
           response -> saveProductBarcodeAndNavigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveItem: " + error);
             }
@@ -398,7 +392,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
             shoppingListItem.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 
@@ -466,19 +460,6 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     return sharedPrefs.getBoolean(
         Constants.PREF.FEATURE_MULTIPLE_SHOPPING_LISTS, true
     );
-  }
-
-  @NonNull
-  public MutableLiveData<Boolean> getOfflineLive() {
-    return offlineLive;
-  }
-
-  public Boolean isOffline() {
-    return offlineLive.getValue();
-  }
-
-  public void setOfflineLive(boolean isOffline) {
-    offlineLive.setValue(isOffline);
   }
 
   @NonNull

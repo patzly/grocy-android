@@ -750,7 +750,7 @@ public class PurchaseViewModel extends BaseViewModel {
           }
         },
         error -> {
-          showErrorMessage(error);
+          showNetworkErrorMessage(error);
           if (debug) {
             Log.i(TAG, "purchaseProduct: " + error);
           }
@@ -768,7 +768,7 @@ public class PurchaseViewModel extends BaseViewModel {
             Log.i(TAG, "undoTransaction: undone");
           }
         },
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

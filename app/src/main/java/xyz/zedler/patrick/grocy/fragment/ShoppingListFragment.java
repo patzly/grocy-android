@@ -123,6 +123,7 @@ public class ShoppingListFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipeShoppingList);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
@@ -274,8 +275,8 @@ public class ShoppingListFragment extends BaseFragment implements
     );
     activity.getScrollBehavior().setBottomBarVisibility(true);
     activity.updateBottomAppBar(
-        !viewModel.isOffline(),
-        viewModel.isOffline() ? R.menu.menu_shopping_list_offline : R.menu.menu_shopping_list,
+        true,
+        R.menu.menu_shopping_list,
         getBottomMenuClickListener()
     );
     activity.updateFab(
@@ -548,14 +549,6 @@ public class ShoppingListFragment extends BaseFragment implements
     if (isOnline) {
       viewModel.downloadData();
     }
-    if (isOnline) {
-      activity.updateBottomAppBar(
-          true,
-          R.menu.menu_shopping_list,
-          getBottomMenuClickListener()
-      );
-    }
-    systemBarBehavior.refresh();
   }
 
   private void hideDisabledFeatures() {

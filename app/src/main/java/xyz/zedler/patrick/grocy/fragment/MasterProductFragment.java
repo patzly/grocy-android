@@ -199,11 +199,6 @@ public class MasterProductFragment extends BaseFragment {
       }
     }
 
-    viewModel.getIsOnlineLive().observe(getViewLifecycleOwner(), isOnline -> {
-      //if(isOnline ) viewModel.downloadData();
-      systemBarBehavior.refresh();
-    });
-
     viewModel.getFormData().getCatOptionalErrorLive().observe(
         getViewLifecycleOwner(), value -> binding.textCatOptional.setTextColor(
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnBackground)
@@ -275,6 +270,17 @@ public class MasterProductFragment extends BaseFragment {
   @Override
   public void deleteObject(int objectId) {
     viewModel.deleteProduct(objectId);
+  }
+
+  @Override
+  public void updateConnectivity(boolean online) {
+    if (!online == viewModel.isOffline()) {
+      return;
+    }
+    viewModel.setOfflineLive(!online);
+    if (online) {
+      viewModel.downloadData();
+    }
   }
 
   @NonNull

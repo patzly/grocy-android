@@ -298,7 +298,7 @@ public class RecipeEditViewModel extends BaseViewModel {
           jsonObject,
           response -> navigateUp(),
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveEntry: " + error);
             }
@@ -333,7 +333,7 @@ public class RecipeEditViewModel extends BaseViewModel {
             }
           },
           error -> {
-            showErrorMessage(error);
+            showNetworkErrorMessage(error);
             if (debug) {
               Log.e(TAG, "saveEntry: " + error);
             }
@@ -373,7 +373,7 @@ public class RecipeEditViewModel extends BaseViewModel {
             recipe.getId()
         ),
         response -> navigateUp(),
-        this::showErrorMessage
+        this::showNetworkErrorMessage
     );
   }
 

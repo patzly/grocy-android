@@ -37,6 +37,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -46,7 +49,6 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ShoppingListsBottomSh
 import xyz.zedler.patrick.grocy.helper.InfoFullscreenHelper;
 import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
-import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.QuantityUnit;
 import xyz.zedler.patrick.grocy.model.ShoppingList;
@@ -54,9 +56,6 @@ import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScanner.BarcodeListener;
 import xyz.zedler.patrick.grocy.scanner.EmbeddedFragmentScannerBundle;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
@@ -137,20 +136,18 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
           .setProductId(null).build().toBundle());
       viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productId));
     } else if (savedInstanceState == null && args.getAction().equals(ACTION.CREATE)) {
-      if (binding.autoCompleteProduct.getText() == null
-          || binding.autoCompleteProduct.getText().length() == 0) {
-        new Handler().postDelayed(
-            () -> activity.showKeyboard(binding.autoCompleteProduct),
-            50
-        );
-      }
+      showInitialKeyboardIfConditionsAreMet();
     }
 
     infoFullscreenHelper = new InfoFullscreenHelper(binding.container);
-    viewModel.getInfoFullscreenLive().observe(
-        getViewLifecycleOwner(),
-        infoFullscreen -> infoFullscreenHelper.setInfo(infoFullscreen)
-    );
+    viewModel.getInfoFullscreenLive().observe(getViewLifecycleOwner(), infoFullscreen -> {
+      infoFullscreenHelper.setInfo(infoFullscreen);
+      if (infoFullscreen == null && savedInstanceState == null
+          && args.getAction().equals(ACTION.CREATE)
+      ) {
+        showInitialKeyboardIfConditionsAreMet();
+      }
+    });
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), isLoading -> {
       if (!isLoading) {
@@ -165,14 +162,6 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
             ResUtil.getColorAttr(activity, value ? R.attr.colorError : R.attr.colorOnSurfaceVariant)
         )
     );
-
-    viewModel.getOfflineLive().observe(getViewLifecycleOwner(), offline -> {
-      InfoFullscreen infoFullscreen = offline ? new InfoFullscreen(
-          InfoFullscreen.ERROR_OFFLINE,
-          () -> updateConnectivity(true)
-      ) : null;
-      viewModel.getInfoFullscreenLive().setValue(infoFullscreen);
-    });
 
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive()
@@ -298,6 +287,16 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
     binding.quantityUnitContainer.clearFocus();
   }
 
+  private void showInitialKeyboardIfConditionsAreMet() {
+    if (binding.autoCompleteProduct.getText() == null
+        || binding.autoCompleteProduct.getText().length() == 0) {
+      new Handler().postDelayed(() -> {
+        if (viewModel.getInfoFullscreenLive().getValue() != null) return;
+        activity.showKeyboard(binding.autoCompleteProduct);
+      }, 50);
+    }
+  }
+
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
     Product product = (Product) adapterView.getItemAtPosition(pos);
     viewModel.setProduct(product);
@@ -382,17 +381,6 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
       return true;
     }
     return false;
-  }
-
-  @Override
-  public void updateConnectivity(boolean isOnline) {
-    if (!isOnline == viewModel.isOffline()) {
-      return;
-    }
-    viewModel.setOfflineLive(!isOnline);
-    if (isOnline) {
-      viewModel.downloadData();
-    }
   }
 
   @NonNull

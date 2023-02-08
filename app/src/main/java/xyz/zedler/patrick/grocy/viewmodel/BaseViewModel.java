@@ -95,7 +95,7 @@ public class BaseViewModel extends AndroidViewModel {
     showMessage(getString(R.string.error_undefined));
   }
 
-  public void showErrorMessage(VolleyError volleyError) {
+  public void showNetworkErrorMessage(VolleyError volleyError) {
     // similar method is also in BaseFragment
     if (volleyError != null && volleyError.networkResponse != null) {
       if (volleyError.networkResponse.statusCode == 403) {
@@ -103,7 +103,12 @@ public class BaseViewModel extends AndroidViewModel {
         return;
       }
     }
-    showMessage(getString(R.string.error_undefined));
+    if (volleyError != null && volleyError.getLocalizedMessage() != null) {
+      showMessage(getApplication()
+          .getString(R.string.error_network_exact, volleyError.getLocalizedMessage()));
+    } else {
+      showMessage(getString(R.string.error_network));
+    }
   }
 
   public void showMessage(@Nullable String message) {
