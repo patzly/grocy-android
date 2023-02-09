@@ -46,7 +46,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -365,6 +364,11 @@ public class MainActivity extends AppCompatActivity {
           Log.e(TAG, "onCreate: ", e);
         }
       }
+      // Calculate initial FAB y position for restoring after shifted by keyboard
+      int babHeight = UiUtil.dpToPx(this, 80);
+      int fabHeight = UiUtil.dpToPx(this, 56);
+      int bottom = UiUtil.getDisplayHeight(this);
+      fabBaseY = bottom - bottomInset - (babHeight / 2f) - (fabHeight / 2f);
       return insets;
     });
     binding.bottomAppBar.setNavigationOnClickListener(v -> {
@@ -436,16 +440,6 @@ public class MainActivity extends AppCompatActivity {
       return insets;
     });
     ViewCompat.setWindowInsetsAnimationCallback(binding.fabMain, callback);
-    ViewTreeObserver observer = binding.fabMain.getViewTreeObserver();
-    observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        fabBaseY = binding.fabMain.getY();
-        if (binding.fabMain.getViewTreeObserver().isAlive()) {
-          binding.fabMain.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        }
-      }
-    });
 
     // SUPPORTED GROCY VERSIONS
 

@@ -37,6 +37,7 @@ import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetListSelectionBind
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.model.Store;
 import xyz.zedler.patrick.grocy.util.SortUtil;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
 
 public class StoresBottomSheet extends BaseBottomSheetDialogFragment
@@ -90,6 +91,16 @@ public class StoresBottomSheet extends BaseBottomSheetDialogFragment
     BaseFragment currentFragment = activity.getCurrentFragment();
     currentFragment.selectStore(stores.get(position));
     dismiss();
+  }
+
+  @Override
+  public void applyBottomInset(int bottom) {
+    binding.recyclerListSelection.setPadding(
+        binding.recyclerListSelection.getPaddingLeft(),
+        binding.recyclerListSelection.getPaddingTop(),
+        binding.recyclerListSelection.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull
