@@ -25,7 +25,7 @@ plugins {
 android {
     namespace 'xyz.zedler.patrick.grocy'
     compileSdkVersion 33
-    buildToolsVersion '33.0.1'
+    buildToolsVersion '33.0.2'
 
     buildFeatures {
         viewBinding true
@@ -87,9 +87,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
-    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'androidx.browser:browser:1.5.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
@@ -120,7 +120,7 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
     // Work for daily notifications
-    implementation 'androidx.work:work-runtime:2.7.1'
+    implementation 'androidx.work:work-runtime:2.8.0'
 
     implementation 'androidx.webkit:webkit:1.6.0'
 
@@ -131,5 +131,5 @@ dependencies {
     // https://github.com/journeyapps/zxing-android-embedded#option-2-desugaring-advanced
     // prevents bug https://github.com/patzly/grocy-android/issues/425
     //noinspection GradleDependency
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 }
