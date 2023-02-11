@@ -87,6 +87,7 @@ public class SettingsCatScannerChooseFragment extends BaseFragment {
       systemBarBehavior.setContainer(binding.constraintUnlock);
     }
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
