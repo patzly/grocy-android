@@ -95,6 +95,7 @@ public class LoginRequestFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     ViewUtil.startIcon(binding.imageLogo);
 

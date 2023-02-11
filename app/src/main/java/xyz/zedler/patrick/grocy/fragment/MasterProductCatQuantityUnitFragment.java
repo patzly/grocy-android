@@ -88,6 +88,7 @@ public class MasterProductCatQuantityUnitFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> {
       onBackPressed();

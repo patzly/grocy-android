@@ -89,6 +89,7 @@ public class ChooseProductFragment extends BaseFragment
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     String barcode = ChooseProductFragmentArgs.fromBundle(requireArguments()).getBarcode();
     boolean forbidCreateProduct = ChooseProductFragmentArgs.fromBundle(requireArguments())

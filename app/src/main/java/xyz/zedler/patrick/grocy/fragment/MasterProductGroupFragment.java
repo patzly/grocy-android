@@ -133,6 +133,7 @@ public class MasterProductGroupFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipeMasterProductGroup);
     systemBarBehavior.setScroll(binding.scrollMasterProductGroup, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 

@@ -41,20 +41,16 @@ public class SystemBarBehavior {
 
   private final Activity activity;
   private final Window window;
-  private int containerPaddingTop;
-  private int containerPaddingBottom;
-  private int scrollContentPaddingBottom;
-  private int statusBarInset;
-  private int navBarInset;
+  private int containerPaddingTop, containerPaddingBottom, scrollContentPaddingBottom;
+  private int statusBarInset, navBarInset;
   private AppBarLayout appBarLayout;
   private ViewGroup container;
   private NestedScrollView scrollView;
   private ViewGroup scrollContent;
-  private boolean applyAppBarInsetOnContainer;
-  private boolean applyStatusBarInsetOnContainer;
+  private boolean applyAppBarInsetOnContainer, applyStatusBarInsetOnContainer;
   private boolean hasScrollView, hasRecycler;
   private boolean isScrollable;
-  private int addBottomInset;
+  private int additionalBottomInset;
 
   public SystemBarBehavior(@NonNull Activity activity) {
     this.activity = activity;
@@ -102,7 +98,11 @@ public class SystemBarBehavior {
   }
 
   public void setAdditionalBottomInset(int additional) {
-    addBottomInset = additional;
+    additionalBottomInset = additional;
+  }
+
+  public int getAdditionalBottomInset() {
+    return additionalBottomInset;
   }
 
   public void setUp() {
@@ -161,7 +161,7 @@ public class SystemBarBehavior {
             container.getPaddingLeft(),
             container.getPaddingTop(),
             container.getPaddingRight(),
-            paddingBottom + addBottomInset + navBarInset
+            paddingBottom + additionalBottomInset + navBarInset
         );
         return insets;
       });
@@ -177,7 +177,7 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              paddingBottom + addBottomInset + navBarInset
+              paddingBottom + additionalBottomInset + navBarInset
           );
           return insets;
         });
@@ -199,7 +199,7 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              container.getPaddingBottom() + addBottomInset
+              container.getPaddingBottom() + additionalBottomInset
           );
         }
       }
@@ -215,19 +215,25 @@ public class SystemBarBehavior {
   }
 
   public void refresh() {
+    refresh(true);
+  }
+
+  public void refresh(boolean measure) {
     // TOP INSET
     if (appBarLayout != null) {
       // STATUS BAR INSET
       appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
-      appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+      if (measure) {
+        appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+      }
 
       // APP BAR INSET
-      if (container != null && applyAppBarInsetOnContainer) {
+      if (container != null && applyAppBarInsetOnContainer && measure) {
         ViewGroup.MarginLayoutParams params
             = (ViewGroup.MarginLayoutParams) container.getLayoutParams();
         params.topMargin = appBarLayout.getMeasuredHeight();
         container.setLayoutParams(params);
-      } else if (container != null) {
+      } else if (container != null && measure) {
         container.setPadding(
             container.getPaddingLeft(),
             containerPaddingTop + (applyStatusBarInsetOnContainer ? statusBarInset : 0),
@@ -256,7 +262,7 @@ public class SystemBarBehavior {
           container.getPaddingLeft(),
           container.getPaddingTop(),
           container.getPaddingRight(),
-          paddingBottom + addBottomInset + navBarInset
+          paddingBottom + additionalBottomInset + navBarInset
       );
     } else {
       if (UiUtil.isNavigationModeGesture(activity) && hasContainer()) {
@@ -268,7 +274,7 @@ public class SystemBarBehavior {
             container.getPaddingLeft(),
             container.getPaddingTop(),
             container.getPaddingRight(),
-            paddingBottom + addBottomInset + navBarInset
+            paddingBottom + additionalBottomInset + navBarInset
         );
       } else {
         View root = window.getDecorView().findViewById(android.R.id.content);
@@ -284,16 +290,16 @@ public class SystemBarBehavior {
               container.getPaddingLeft(),
               container.getPaddingTop(),
               container.getPaddingRight(),
-              container.getPaddingBottom() + addBottomInset
+              container.getPaddingBottom() + additionalBottomInset
           );
         }
       }
     }
 
-    if (hasScrollView) {
+    if (measure && hasScrollView) {
       // call viewThreeObserver, this updates the system bar appearance
       measureScrollView();
-    } else {
+    } else if (measure) {
       // call directly because there won't be any changes caused by scroll content
       updateSystemBars();
     }

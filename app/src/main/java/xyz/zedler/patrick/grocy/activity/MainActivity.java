@@ -116,6 +116,7 @@ import xyz.zedler.patrick.grocy.NavigationMainDirections;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.behavior.BottomScrollBehavior;
+import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
 import xyz.zedler.patrick.grocy.databinding.ActivityMainBinding;
 import xyz.zedler.patrick.grocy.fragment.BaseFragment;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.CompatibilityBottomSheet;
@@ -150,9 +151,11 @@ public class MainActivity extends AppCompatActivity {
   private NavController navController;
   private BroadcastReceiver networkReceiver;
   private BottomScrollBehavior scrollBehavior;
+  private SystemBarBehavior systemBarBehavior;
   private HapticUtil hapticUtil;
   private boolean runAsSuperClass;
   private boolean debug;
+  private boolean wasKeyboardOpened;
   private float fabBaseY;
 
   @Override
@@ -392,20 +395,29 @@ public class MainActivity extends AppCompatActivity {
 
     Callback callback = new Callback(Callback.DISPATCH_MODE_STOP) {
       WindowInsetsAnimationCompat animation;
-      float startY, endY;
+      int bottomInsetStart, bottomInsetEnd;
+      float yStart, yEnd;
 
       @Override
       public void onPrepare(@NonNull WindowInsetsAnimationCompat animation) {
         this.animation = animation;
-        startY = binding.fabMain.getY();
+        if (systemBarBehavior != null) {
+          bottomInsetStart = systemBarBehavior.getAdditionalBottomInset();
+        }
+        yStart = binding.fabMain.getY();
       }
 
       @NonNull
       @Override
       public BoundsCompat onStart(
           @NonNull WindowInsetsAnimationCompat animation, @NonNull BoundsCompat bounds) {
-        endY = binding.fabMain.getY();
-        binding.fabMain.setY(startY);
+        if (systemBarBehavior != null) {
+          bottomInsetEnd = systemBarBehavior.getAdditionalBottomInset();
+          systemBarBehavior.setAdditionalBottomInset(bottomInsetStart);
+          systemBarBehavior.refresh(false);
+        }
+        yEnd = binding.fabMain.getY();
+        binding.fabMain.setY(yStart);
         return bounds;
       }
 
@@ -414,14 +426,27 @@ public class MainActivity extends AppCompatActivity {
       public WindowInsetsCompat onProgress(
           @NonNull WindowInsetsCompat insets,
           @NonNull List<WindowInsetsAnimationCompat> animations) {
-        binding.fabMain.setY(MathUtils.lerp(startY, endY, animation.getInterpolatedFraction()));
+        if (systemBarBehavior != null) {
+          systemBarBehavior.setAdditionalBottomInset(
+              (int) MathUtils.lerp(
+                  bottomInsetStart, bottomInsetEnd, animation.getInterpolatedFraction()
+              )
+          );
+          systemBarBehavior.refresh(false);
+        }
+        binding.fabMain.setY(MathUtils.lerp(yStart, yEnd, animation.getInterpolatedFraction()));
         return insets;
       }
     };
-    ViewCompat.setOnApplyWindowInsetsListener(binding.fabMain, (v, insets) -> {
+    ViewCompat.setOnApplyWindowInsetsListener(binding.coordinatorMain, (v, insets) -> {
+      int bottomInset = insets.getInsets(Type.ime()).bottom;
+      if (systemBarBehavior != null) {
+        systemBarBehavior.setAdditionalBottomInset(bottomInset);
+        systemBarBehavior.refresh(false);
+      }
       if (insets.isVisible(Type.ime())) {
-        int bottomInset = insets.getInsets(Type.ime()).bottom;
-        v.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
+        wasKeyboardOpened = true;
+        binding.fabMain.setTranslationY(-bottomInset - UiUtil.dpToPx(this, 16));
         int keyboardY = UiUtil.getDisplayHeight(this) - bottomInset;
         if (keyboardY < scrollBehavior.getSnackbarAnchorY()) {
           binding.anchor.setY(keyboardY);
@@ -432,14 +457,22 @@ public class MainActivity extends AppCompatActivity {
         ViewCompat.setElevation(binding.fabMain, elevation);
         binding.fabMain.setCompatElevation(elevation);
       } else {
-        v.setY(fabBaseY);
+        binding.fabMain.setY(fabBaseY);
         scrollBehavior.updateSnackbarAnchor();
         ViewCompat.setElevation(binding.fabMain, 0);
         binding.fabMain.setCompatElevation(0);
+        // If the keyboard was shown and the page was therefore scrollable
+        // and the bottom bar has disappeared caused by scrolling down,
+        // then the bottom bar should not stay hidden when the keyboard disappears
+        if (wasKeyboardOpened) {
+          wasKeyboardOpened = false;
+          Log.i(TAG, "onCreate: hello");
+          scrollBehavior.setBottomBarVisibility(true);
+        }
       }
       return insets;
     });
-    ViewCompat.setWindowInsetsAnimationCallback(binding.fabMain, callback);
+    ViewCompat.setWindowInsetsAnimationCallback(binding.coordinatorMain, callback);
 
     // SUPPORTED GROCY VERSIONS
 
@@ -553,6 +586,10 @@ public class MainActivity extends AppCompatActivity {
 
   public BottomScrollBehavior getScrollBehavior() {
     return scrollBehavior;
+  }
+
+  public void setSystemBarBehavior(SystemBarBehavior behavior) {
+    systemBarBehavior = behavior;
   }
 
   public void updateBottomAppBar(

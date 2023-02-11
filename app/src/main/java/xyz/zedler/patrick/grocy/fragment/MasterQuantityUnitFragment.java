@@ -133,6 +133,7 @@ public class MasterQuantityUnitFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipeMasterQuantityUnit);
     systemBarBehavior.setScroll(binding.scrollMasterQuantityUnit, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 

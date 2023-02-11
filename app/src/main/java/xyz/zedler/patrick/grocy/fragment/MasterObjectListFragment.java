@@ -146,6 +146,7 @@ public class MasterObjectListFragment extends BaseFragment
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
     binding.setSystemBarBehavior(systemBarBehavior);
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {

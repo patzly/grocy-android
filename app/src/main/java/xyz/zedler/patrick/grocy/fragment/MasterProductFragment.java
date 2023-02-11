@@ -96,6 +96,7 @@ public class MasterProductFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipeMasterProductSimple);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
