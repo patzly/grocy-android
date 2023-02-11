@@ -103,6 +103,7 @@ public class MasterProductCatOptionalFragment extends BaseFragment implements Ba
     systemBarBehavior.setContainer(binding.swipeMasterProductSimple);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> {
       onBackPressed();

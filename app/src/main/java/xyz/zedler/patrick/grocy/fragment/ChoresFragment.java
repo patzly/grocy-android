@@ -110,6 +110,7 @@ public class ChoresFragment extends BaseFragment implements ChoreEntryAdapterLis
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
     binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());

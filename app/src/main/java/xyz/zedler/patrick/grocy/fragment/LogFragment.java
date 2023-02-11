@@ -72,6 +72,7 @@ public class LogFragment extends BaseFragment {
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setScroll(binding.scroll, binding.frameContainer);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 

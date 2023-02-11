@@ -81,6 +81,7 @@ public class OnboardingFragment extends BaseFragment {
     SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setContainer(binding.linearContainer);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.buttonOnboardingPrevious.setOnClickListener(v -> {
       if (binding.pagerOnboarding.getCurrentItem() == 0) {
@@ -169,7 +170,7 @@ public class OnboardingFragment extends BaseFragment {
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(false);
     activity.getScrollBehavior().setProvideTopScroll(false);
     activity.updateBottomAppBar(false, R.menu.menu_empty);
-    activity.getScrollBehavior().setBottomBarVisibility(false);
+    activity.getScrollBehavior().setBottomBarVisibility(false, true);
   }
 
   @SuppressLint("RestrictedApi")

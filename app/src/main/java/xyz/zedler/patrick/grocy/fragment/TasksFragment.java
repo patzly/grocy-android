@@ -114,6 +114,7 @@ public class TasksFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
     binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());

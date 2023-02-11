@@ -86,6 +86,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setScroll(binding.scroll, binding.linearContainerScroll);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
     binding.toolbar.setOnMenuItemClickListener(item -> {

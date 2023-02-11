@@ -122,6 +122,7 @@ public class MasterStoreFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipeMasterStore);
     systemBarBehavior.setScroll(binding.scrollMasterStore, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
 

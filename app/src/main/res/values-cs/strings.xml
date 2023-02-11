@@ -492,6 +492,7 @@ Po zaškrtnutí nebude brán zřetel na množství produktu v nákupním seznamu
   <string name="error_name_exists">Toto jméno již existuje</string>
   <string name="error_network">Chyba sítě</string>
   <string name="error_network_subtitle">Potřebná data nemohla být načtena</string>
+  <string name="error_network_exact">Chyba sítě: %1$s</string>
   <string name="error_unknown">Jejda!</string>
   <string name="error_not_grocy_instance">Neplatná instance grocy</string>
   <string name="error_timeout">Odezva serveru byla příliš dlouhá</string>

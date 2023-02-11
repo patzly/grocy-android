@@ -123,6 +123,7 @@ public class ShoppingListFragment extends BaseFragment implements
     systemBarBehavior.setContainer(binding.swipeShoppingList);
     systemBarBehavior.setRecycler(binding.recycler);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
     binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());

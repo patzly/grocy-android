@@ -76,6 +76,7 @@ public class SettingsCatDebuggingFragment extends BaseFragment {
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 

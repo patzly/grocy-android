@@ -65,6 +65,7 @@ public class EditorHtmlFragment extends BaseFragment {
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.summernote);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 

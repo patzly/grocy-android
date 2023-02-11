@@ -85,6 +85,7 @@ public class OverviewStartFragment extends BaseFragment {
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
     systemBarBehavior.setUp();
+    activity.setSystemBarBehavior(systemBarBehavior);
     binding.setSystemBarBehavior(systemBarBehavior);
 
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
