@@ -259,7 +259,9 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       return false;
     });
 
-    servingsDesiredLive = new MutableLiveData<>(NumUtil.trimAmount(recipe.getDesiredServings(), maxDecimalPlacesAmount));
+    servingsDesiredLive = new MutableLiveData<>(
+        NumUtil.trimAmount(recipe.getDesiredServings(), maxDecimalPlacesAmount)
+    );
     servingsDesiredSaveEnabledLive = new MutableLiveData<>(false);
 
     servingsDesiredSaveEnabledLive.observe(
@@ -556,7 +558,9 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     JSONObject body = new JSONObject();
     try {
-      body.put("desired_servings", NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount));
+      body.put(
+          "desired_servings", NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount)
+      );
     } catch (JSONException e) {
       showToast(R.string.error_undefined);
       servingsDesiredSaveEnabledLive.setValue(true);

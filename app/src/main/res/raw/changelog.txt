@@ -14,6 +14,7 @@
 - Fixed: Unintended length limit on bottom sheet for general text and number input (#657)
 - Fixed: Occasional crashes on stock journal and master product page
 - Fixed: Stores selection list not redesigned
+- Fixed: Recipe preparation not displayed in certain conditions
 
 ## 3.0.0
 
