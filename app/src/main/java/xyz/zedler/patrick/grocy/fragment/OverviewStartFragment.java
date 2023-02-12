@@ -48,7 +48,6 @@ public class OverviewStartFragment extends BaseFragment {
   private FragmentOverviewStartBinding binding;
   private OverviewStartViewModel viewModel;
   private ClickUtil clickUtil;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -80,13 +79,14 @@ public class OverviewStartFragment extends BaseFragment {
     binding.setActivity(activity);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
-    binding.setSystemBarBehavior(systemBarBehavior);
 
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
     binding.scrollHorizActions.post(

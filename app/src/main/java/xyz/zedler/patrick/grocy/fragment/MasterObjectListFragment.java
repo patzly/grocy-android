@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -78,7 +77,6 @@ public class MasterObjectListFragment extends BaseFragment
   private InfoFullscreenHelper infoFullscreenHelper;
   private FragmentMasterObjectListBinding binding;
   private MasterObjectListViewModel viewModel;
-  private SystemBarBehavior systemBarBehavior;
 
   private String entity;
 
@@ -141,13 +139,14 @@ public class MasterObjectListFragment extends BaseFragment
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
-    binding.setSystemBarBehavior(systemBarBehavior);
 
     viewModel.getIsLoadingLive().observe(getViewLifecycleOwner(), state -> {
       binding.swipe.setRefreshing(state);
@@ -156,8 +155,6 @@ public class MasterObjectListFragment extends BaseFragment
       }
     });
     binding.swipe.setOnRefreshListener(() -> viewModel.downloadDataForceUpdate());
-    // for offline info in app bar
-    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
     viewModel.getDisplayedItemsLive().observe(getViewLifecycleOwner(), objects -> {
       if (objects == null) {

@@ -30,26 +30,24 @@
     <variable
       name="fragment"
       type="xyz.zedler.patrick.grocy.fragment.RecipesFragment" />
-    <variable
-      name="systemBarBehavior"
-      type="xyz.zedler.patrick.grocy.behavior.SystemBarBehavior" />
   </data>
 
-  <androidx.coordinatorlayout.widget.CoordinatorLayout
+  <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="?android:attr/colorBackground"
+    android:animateLayoutChanges="true"
+    app:transitionTypeChanging="@{true}">
 
     <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/app_bar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:animateLayoutChanges="true"
-      transitionTypeChanging="@{true}">
+      android:layout_alignParentTop="true">
 
       <FrameLayout
         android:layout_width="match_parent"
@@ -174,11 +172,23 @@
 
       </HorizontalScrollView>
 
-      <xyz.zedler.patrick.grocy.view.OfflineIndicatorView
+      <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}"
-        app:systemBarBehavior="@{systemBarBehavior}"/>
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="?attr/colorError"
+        android:visibility="@{viewModel.offlineLive ? View.VISIBLE : View.GONE}">
+
+        <TextView
+          style="@style/Widget.Grocy.TextView.LabelLarge"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:textColor="?attr/colorOnError"
+          android:text="@string/error_offline" />
+
+      </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -186,10 +196,8 @@
       android:id="@+id/swipe"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="?attr/actionBarSize"
+      android:layout_below="@+id/app_bar"
       android:overScrollMode="never"
-      android:animateLayoutChanges="true"
-      app:transitionTypeChanging="@{true}"
       app:setRefreshing="@{viewModel.isLoadingLive}"
       app:onRefreshListener="@{() -> viewModel.downloadDataForceUpdate()}">
 
@@ -213,6 +221,6 @@
 
     </xyz.zedler.patrick.grocy.view.swiperefreshlayout.CustomSwipeRefreshLayout>
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </RelativeLayout>
 
 </layout>

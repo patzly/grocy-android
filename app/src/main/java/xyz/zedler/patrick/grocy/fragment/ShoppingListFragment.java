@@ -81,7 +81,6 @@ public class ShoppingListFragment extends BaseFragment implements
   private FragmentShoppingListBinding binding;
   private InfoFullscreenHelper infoFullscreenHelper;
   private PluralUtil pluralUtil;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -118,13 +117,14 @@ public class ShoppingListFragment extends BaseFragment implements
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipeShoppingList);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
-    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());
