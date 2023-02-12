@@ -17,6 +17,7 @@
 - Fixed: Stores selection list not redesigned
 - Fixed: Recipe preparation not displayed in certain conditions
 - Fixed: Duplicate expired items on stock overview page with filters "expired" and "overdue"
+- Fixed: Products without own stock not hidden in filters on stock overview page (#660)
 
 ## 3.0.0
 
