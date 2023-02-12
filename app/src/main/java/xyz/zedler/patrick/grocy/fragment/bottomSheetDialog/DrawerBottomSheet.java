@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -365,9 +364,12 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
 
   @Override
   public void applyBottomInset(int bottom) {
-    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, bottom);
-    binding.linearDrawerContainer.setLayoutParams(params);
+    binding.linearDrawerContainer.setPadding(
+        binding.linearDrawerContainer.getPaddingLeft(),
+        binding.linearDrawerContainer.getPaddingTop(),
+        binding.linearDrawerContainer.getPaddingRight(),
+        UiUtil.dpToPx(activity, 8) + bottom
+    );
   }
 
   @NonNull

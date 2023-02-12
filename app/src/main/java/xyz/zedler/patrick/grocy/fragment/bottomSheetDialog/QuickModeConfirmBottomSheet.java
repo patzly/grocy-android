@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.transition.TransitionManager;
 import xyz.zedler.patrick.grocy.Constants;
@@ -34,6 +33,7 @@ import xyz.zedler.patrick.grocy.Constants.ACTION;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetScanModeConfirmBinding;
+import xyz.zedler.patrick.grocy.util.UiUtil;
 
 public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
@@ -192,9 +192,12 @@ public class QuickModeConfirmBottomSheet extends BaseBottomSheetDialogFragment {
 
   @Override
   public void applyBottomInset(int bottom) {
-    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, bottom);
-    binding.container.setLayoutParams(params);
+    binding.container.setPadding(
+        binding.container.getPaddingLeft(),
+        binding.container.getPaddingTop(),
+        binding.container.getPaddingRight(),
+        UiUtil.dpToPx(activity, 12) + bottom
+    );
   }
 
   @NonNull

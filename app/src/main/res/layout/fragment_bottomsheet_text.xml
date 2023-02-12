@@ -37,10 +37,17 @@
     android:scrollbars="none"
     android:importantForAccessibility="no">
 
-    <xyz.zedler.patrick.grocy.view.FormattedTextView
-      android:id="@+id/formatted_text"
+    <LinearLayout
+      android:id="@+id/linear_container_scroll"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content">
+
+      <xyz.zedler.patrick.grocy.view.FormattedTextView
+        android:id="@+id/formatted_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
   </androidx.core.widget.NestedScrollView>
 
