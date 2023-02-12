@@ -838,6 +838,22 @@
     <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
   </style>
 
+  <style name="Widget.Grocy.AppWidget.Container" parent="android:Widget">
+    <item name="android:id">@android:id/background</item>
+    <item name="android:background">?android:attr/colorBackground</item>
+  </style>
+
+  <style name="Widget.Grocy.AppWidget.Title" parent="Widget.Grocy.TextView">
+    <item name="android:textColor">?android:attr/textColorPrimary</item>
+    <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+    <item name="android:textSize">16sp</item>
+  </style>
+
+  <style name="Widget.Grocy.AppWidget.InnerView" parent="android:Widget">
+    <item name="android:background">?android:attr/colorBackground</item>
+    <item name="android:textColor">?android:attr/textColorPrimary</item>
+  </style>
+
   <!-- TextAppearance -->
 
   <style name="TextAppearance.Grocy.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">

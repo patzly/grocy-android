@@ -90,8 +90,21 @@
     </service>
 
     <receiver
-      android:name=".notification.DueSoonNotificationReceiver"
-      android:enabled="true" />
+      android:exported="false"
+      android:name=".widget.StockOverviewAppWidget">
+
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+
+      <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/stock_overview_app_widget_info" />
+    </receiver>
+
+    <receiver
+      android:enabled="true"
+      android:name=".notification.DueSoonNotificationReceiver" />
 
     <receiver
       android:name=".notification.BootReceiver"

@@ -24,5 +24,12 @@
     <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo_anim</item>
     <item name="android:windowSplashScreenAnimationDuration">970</item>
   </style>
+  <!--
+    Having themes.xml for night-v31 because of the priority order of the resource qualifiers.
+    -->
+  <style name="Theme.Grocy.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
+    <item name="appWidgetRadius">@android:dimen/system_app_widget_background_radius</item>
+    <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
+  </style>
 
 </resources>

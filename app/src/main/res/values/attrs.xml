@@ -20,9 +20,14 @@
 <resources>
 
   <declare-styleable name="ActionButton">
-    <attr name="icon" format="reference" />
-    <attr name="tint" format="color" />
-    <attr name="dense" format="boolean" />
+    <attr format="reference" name="icon" />
+    <attr format="color" name="tint" />
+    <attr format="boolean" name="dense" />
+  </declare-styleable>
+  <declare-styleable name="AppWidgetAttrs">
+    <attr format="dimension" name="appWidgetPadding" />
+    <attr format="dimension" name="appWidgetInnerRadius" />
+    <attr format="dimension" name="appWidgetRadius" />
   </declare-styleable>
 
 </resources>
