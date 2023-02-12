@@ -35,7 +35,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -207,9 +206,9 @@ public class MasterObjectListFragment extends BaseFragment
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage msg = (SnackbarMessage) event;
-        Snackbar snackbar = msg.getSnackbar(activity.binding.coordinatorMain);
-        activity.showSnackbar(snackbar);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.BOTTOM_SHEET) {
         BottomSheetEvent bottomSheetEvent = (BottomSheetEvent) event;
         activity.showBottomSheet(bottomSheetEvent.getBottomSheet(), event.getBundle());
@@ -352,7 +351,7 @@ public class MasterObjectListFragment extends BaseFragment
             });
           }
         } else {
-          activity.showSnackbar(R.string.error_undefined);
+          activity.showSnackbar(R.string.error_undefined, false);
         }
         return true;
       } else if (item.getItemId() == R.id.action_sort_ascending) {

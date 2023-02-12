@@ -1034,22 +1034,6 @@ public class MainActivity extends AppCompatActivity {
     return Uri.parse(finalDeepLink.toString());
   }
 
-  public void showToastTextLong(@StringRes int resId, boolean showLong) {
-    Toast toast = Toast.makeText(
-        this, resId, showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT
-    );
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      LinearLayout linearLayout = (LinearLayout) toast.getView();
-      if (linearLayout != null) {
-        TextView textView = (TextView) linearLayout.getChildAt(0);
-        if (textView != null) {
-          textView.setTypeface(ResourcesCompat.getFont(this, R.font.jost_book));
-        }
-      }
-    }
-    toast.show();
-  }
-
   public void restartToApply(long delay, @NonNull Bundle bundle) {
     new Handler(Looper.getMainLooper()).postDelayed(() -> {
       onSaveInstanceState(bundle);
@@ -1076,8 +1060,14 @@ public class MainActivity extends AppCompatActivity {
     getCurrentFragment().getActivityResult(requestCode, resultCode, data);
   }
 
-  public Snackbar getSnackbar(@StringRes int resId, int duration) {
-    return Snackbar.make(binding.coordinatorMain, getString(resId), duration);
+  public Snackbar getSnackbar(String msg, boolean showLong) {
+    return Snackbar.make(
+        binding.coordinatorMain, msg, showLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT
+    );
+  }
+
+  public Snackbar getSnackbar(@StringRes int resId, boolean showLong) {
+    return getSnackbar(getString(resId), showLong);
   }
 
   public void showSnackbar(Snackbar snackbar) {
@@ -1086,12 +1076,28 @@ public class MainActivity extends AppCompatActivity {
     snackbar.show();
   }
 
-  public void showSnackbar(String message) {
-    showSnackbar(Snackbar.make(binding.coordinatorMain, message, Snackbar.LENGTH_LONG));
+  public void showSnackbar(String msg, boolean showLong) {
+    showSnackbar(getSnackbar(msg, showLong));
   }
 
-  public void showSnackbar(@StringRes int resId) {
-    showSnackbar(getString(resId));
+  public void showSnackbar(@StringRes int resId, boolean showLong) {
+    showSnackbar(getSnackbar(resId, showLong));
+  }
+
+  public void showToast(@StringRes int resId, boolean showLong) {
+    Toast toast = Toast.makeText(
+        this, resId, showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT
+    );
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+      LinearLayout linearLayout = (LinearLayout) toast.getView();
+      if (linearLayout != null) {
+        TextView textView = (TextView) linearLayout.getChildAt(0);
+        if (textView != null) {
+          textView.setTypeface(ResourcesCompat.getFont(this, R.font.jost_book));
+        }
+      }
+    }
+    toast.show();
   }
 
   public void showBottomSheet(BottomSheetDialogFragment bottomSheet) {

@@ -177,7 +177,7 @@ public class OnboardingFragment extends BaseFragment {
   @Override
   public boolean onBackPressed() {
     if (!sharedPrefs.getBoolean(Constants.PREF.INTRO_SHOWN, false)) {
-      activity.showSnackbar(R.string.msg_features);
+      activity.showSnackbar(R.string.msg_features, true);
       sharedPrefs.edit().putBoolean(Constants.PREF.INTRO_SHOWN, true).apply();
     }
     if (findNavController().getBackQueue().getSize() == 2) { // TODO: Better condition

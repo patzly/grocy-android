@@ -495,7 +495,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="@{viewModel.actionEdit ? 1.0f : 0.38f}"
-                android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet)}">
+                android:onClick="@{v -> activity.showSnackbar(@string/msg_not_implemented_yet, false)}">
 
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"

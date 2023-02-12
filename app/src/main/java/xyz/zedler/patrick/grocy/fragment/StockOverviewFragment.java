@@ -200,9 +200,9 @@ public class StockOverviewFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -389,7 +389,7 @@ public class StockOverviewFragment extends BaseFragment implements
         .getQuantityUnitFromId(stockItem.getProduct().getQuIdPurchaseInt());
     Location location = viewModel.getLocationFromId(stockItem.getProduct().getLocationIdInt());
     if (quantityUnitStock == null || quantityUnitPurchase == null) {
-      activity.showSnackbar(R.string.error_undefined);
+      activity.showSnackbar(R.string.error_undefined, false);
       return;
     }
     activity.navigateFragment(StockOverviewFragmentDirections

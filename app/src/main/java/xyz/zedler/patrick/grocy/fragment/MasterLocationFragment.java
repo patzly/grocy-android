@@ -36,7 +36,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
@@ -275,12 +274,8 @@ public class MasterLocationFragment extends BaseFragment {
     } else {
       binding.swipeMasterLocation.setRefreshing(false);
       activity.showSnackbar(
-          Snackbar.make(
-              activity.binding.coordinatorMain,
-              activity.getString(R.string.msg_no_connection),
-              Snackbar.LENGTH_SHORT
-          ).setAction(
-              activity.getString(R.string.action_retry),
+          activity.getSnackbar(R.string.msg_no_connection, false).setAction(
+              R.string.action_retry,
               v1 -> refresh()
           )
       );
@@ -318,12 +313,8 @@ public class MasterLocationFragment extends BaseFragment {
         error -> {
           binding.swipeMasterLocation.setRefreshing(false);
           activity.showSnackbar(
-              Snackbar.make(
-                  activity.binding.coordinatorMain,
-                  getErrorMessage(error),
-                  Snackbar.LENGTH_SHORT
-              ).setAction(
-                  activity.getString(R.string.action_retry),
+              activity.getSnackbar(getErrorMessage(error), false).setAction(
+                  R.string.action_retry,
                   v1 -> download()
               )
           );
@@ -471,13 +462,7 @@ public class MasterLocationFragment extends BaseFragment {
   }
 
   private void showErrorMessage(VolleyError volleyError) {
-    activity.showSnackbar(
-        Snackbar.make(
-            activity.binding.coordinatorMain,
-            getErrorMessage(volleyError),
-            Snackbar.LENGTH_SHORT
-        )
-    );
+    activity.showSnackbar(getErrorMessage(volleyError), true);
   }
 
   private void showDeleteConfirmationDialog() {

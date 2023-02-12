@@ -337,7 +337,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           ? RecipeFulfillment.getRecipeFulfillmentFromRecipeId(recipeFulfillments, recipe.getId())
           : null;
       if (recipe == null || recipeFulfillment == null) {
-        showToast(R.string.error_undefined);
+        activity.showToast(R.string.error_undefined, false);
         return;
       }
 
@@ -455,7 +455,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     binding.textInputServings.setEndIconOnClickListener(v -> saveDesiredServings());
     binding.textInputServings.setEndIconOnLongClickListener(v -> {
-      activity.showToastTextLong(R.string.action_apply_desired_servings, true);
+      activity.showToast(R.string.action_apply_desired_servings, true);
       return true;
     });
     binding.textInputServings.setHelperText(
@@ -562,7 +562,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           "desired_servings", NumUtil.trimAmount(servingsDesired, maxDecimalPlacesAmount)
       );
     } catch (JSONException e) {
-      showToast(R.string.error_undefined);
+      activity.showToast(R.string.error_undefined, false);
       servingsDesiredSaveEnabledLive.setValue(true);
       return;
     }
@@ -576,7 +576,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
               loadDataFromDatabase();
             },
             volleyError -> {
-              showToast(R.string.error_undefined);
+              activity.showToast(R.string.error_undefined, false);
               servingsDesiredSaveEnabledLive.setValue(true);
             },
             Recipe.class,
@@ -584,7 +584,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
             RecipePosition.class
         ),
         error -> {
-          showToast(R.string.error_undefined);
+          activity.showToast(R.string.error_undefined, false);
           servingsDesiredSaveEnabledLive.setValue(true);
         }
     ).perform(dlHelper.getUuid());
@@ -725,7 +725,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   }
 
   public void openPreparationMode() {
-    showToast(R.string.msg_coming_soon);
+    activity.showToast(R.string.msg_coming_soon, false);
   }
 
   public MutableLiveData<String> getServingsDesiredLive() {

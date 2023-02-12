@@ -313,7 +313,7 @@ public class DateBottomSheet extends BaseBottomSheetDialogFragment {
         }
       } catch (ParseException e) {
         fillDatePickerForm(null);
-        activity.showSnackbar(activity.getString(R.string.error_undefined));
+        activity.showSnackbar(R.string.error_undefined, false);
         return;
       }
       binding.datePicker.setEnabled(true);

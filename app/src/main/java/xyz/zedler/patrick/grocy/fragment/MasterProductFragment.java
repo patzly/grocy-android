@@ -27,7 +27,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.snackbar.Snackbar;
+import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.ACTION;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -37,9 +39,6 @@ import xyz.zedler.patrick.grocy.model.BottomSheetEvent;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.Product;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
-import xyz.zedler.patrick.grocy.Constants;
-import xyz.zedler.patrick.grocy.Constants.ACTION;
-import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.viewmodel.MasterProductViewModel;
@@ -122,7 +121,7 @@ public class MasterProductFragment extends BaseFragment {
         .setProduct(viewModel.getFilledProduct())));
     binding.categoryBarcodes.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showSnackbar(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
       activity.navigateFragment(MasterProductFragmentDirections
@@ -131,7 +130,7 @@ public class MasterProductFragment extends BaseFragment {
     });
     binding.categoryQuConversions.setOnClickListener(v -> {
       if (!viewModel.isActionEdit()) {
-        activity.showSnackbar(R.string.subtitle_product_not_on_server);
+        activity.showSnackbar(R.string.subtitle_product_not_on_server, true);
         return;
       }
       activity.navigateFragment(MasterProductFragmentDirections
@@ -147,9 +146,9 @@ public class MasterProductFragment extends BaseFragment {
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity.binding.coordinatorMain);
-        activity.showSnackbar(snack);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.SET_PRODUCT_ID) {

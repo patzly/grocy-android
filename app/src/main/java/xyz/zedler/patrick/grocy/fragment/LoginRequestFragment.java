@@ -77,9 +77,9 @@ public class LoginRequestFragment extends BaseFragment {
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.LOGIN_SUCCESS) {
         // BottomAppBar should now be visible when navigating
         activity.getScrollBehavior().setCanBottomAppBarBeVisible(true);

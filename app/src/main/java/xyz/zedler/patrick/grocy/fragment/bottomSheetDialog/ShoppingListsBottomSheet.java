@@ -191,7 +191,7 @@ public class ShoppingListsBottomSheet extends BaseBottomSheetDialogFragment
   @Override
   public void onClickEdit(ShoppingList shoppingList) {
     if (!activity.isOnline()) {
-      showMessage(R.string.error_offline);
+      activity.showSnackbar(R.string.error_offline, false);
       return;
     }
     dismiss();

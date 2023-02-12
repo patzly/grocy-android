@@ -137,7 +137,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     if(pageStatus == SCAN_GROCY_KEY) {
       String[] resultSplit = rawValue.split("\\|");
       if (resultSplit.length != 2) {
-        activity.showSnackbar(R.string.error_api_qr_code);
+        activity.showSnackbar(R.string.error_api_qr_code, true);
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }
@@ -168,7 +168,7 @@ public class LoginApiQrCodeFragment extends BaseFragment implements BarcodeListe
     } else if (pageStatus == SCAN_HASS_TOKEN) {
       String[] resultSplit = rawValue.split("\\.");
       if (resultSplit.length != 3) {
-        activity.showSnackbar(R.string.error_token_qr_code);
+        activity.showSnackbar(R.string.error_token_qr_code, true);
         embeddedFragmentScanner.startScannerIfVisible();
         return;
       }

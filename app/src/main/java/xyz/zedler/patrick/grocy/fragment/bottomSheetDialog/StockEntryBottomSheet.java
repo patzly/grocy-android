@@ -87,7 +87,7 @@ public class StockEntryBottomSheet extends BaseBottomSheetDialogFragment {
     Location location = bundle.getParcelable(ARGUMENT.LOCATION);
     Store store = bundle.getParcelable(ARGUMENT.STORE);
     if (stockEntry == null || product == null) {
-      showMessage(R.string.error_undefined);
+      activity.showSnackbar(R.string.error_undefined, false);
       dismiss();
       return;
     }

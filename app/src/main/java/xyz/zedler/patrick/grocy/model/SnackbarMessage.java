@@ -64,7 +64,7 @@ public class SnackbarMessage extends Event {
     }
     View v = snackbar.getView();
     TextView text = v.findViewById(com.google.android.material.R.id.snackbar_text);
-    text.setMaxLines(3);
+    text.setMaxLines(4);
     return snackbar;
   }
 
