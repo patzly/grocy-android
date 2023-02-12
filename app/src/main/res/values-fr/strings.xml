@@ -147,6 +147,18 @@
     <item quantity="many">%1$d expirés</item>
     <item quantity="other">%1$d expirés</item>
   </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d pas frais</item>
+    <item quantity="many">%1$d pas frais</item>
+    <item quantity="other">%1$d pas frais</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d pas frais (celui ci-dessous)</item>
+    <item quantity="many">%1$d pas frais (ceux ci-dessous)</item>
+    <item quantity="other">%1$d pas frais (ceux ci-dessous)</item>
+  </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d en dessous du stock min.</item>
