@@ -218,22 +218,19 @@ public class SystemBarBehavior {
     refresh(true);
   }
 
-  public void refresh(boolean measure) {
+  public void refresh(boolean measureScrollContent) {
     // TOP INSET
     if (appBarLayout != null) {
       // STATUS BAR INSET
       appBarLayout.setPadding(0, statusBarInset, 0, appBarLayout.getPaddingBottom());
-      if (measure) {
-        appBarLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-      }
 
       // APP BAR INSET
-      if (container != null && applyAppBarInsetOnContainer && measure) {
+      if (container != null && applyAppBarInsetOnContainer) {
         ViewGroup.MarginLayoutParams params
             = (ViewGroup.MarginLayoutParams) container.getLayoutParams();
-        params.topMargin = appBarLayout.getMeasuredHeight();
+        params.topMargin = appBarLayout.getHeight();
         container.setLayoutParams(params);
-      } else if (container != null && measure) {
+      } else if (container != null) {
         container.setPadding(
             container.getPaddingLeft(),
             containerPaddingTop + (applyStatusBarInsetOnContainer ? statusBarInset : 0),
@@ -296,13 +293,11 @@ public class SystemBarBehavior {
       }
     }
 
-    if (measure && hasScrollView) {
+    if (hasScrollView && measureScrollContent) {
       // call viewThreeObserver, this updates the system bar appearance
       measureScrollView();
-    } else if (measure) {
-      // call directly because there won't be any changes caused by scroll content
-      updateSystemBars();
     }
+    // updateSystemBars() doesn't need to be called again if no scroll view is used
   }
 
   private void measureScrollView() {

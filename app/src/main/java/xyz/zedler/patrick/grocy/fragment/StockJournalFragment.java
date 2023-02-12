@@ -70,7 +70,6 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
   private InfoFullscreenHelper infoFullscreenHelper;
   private AlertDialog dialog;
   private StockLogEntry dialogEntry;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -110,13 +109,14 @@ public class StockJournalFragment extends BaseFragment implements StockLogEntryA
     infoFullscreenHelper = new InfoFullscreenHelper(binding.frame);
     clickUtil = new ClickUtil();
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
-    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbarDefault.setNavigationOnClickListener(v -> activity.navigateUp());
 

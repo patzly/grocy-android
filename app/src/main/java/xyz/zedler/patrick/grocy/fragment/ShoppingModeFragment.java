@@ -70,7 +70,6 @@ public class ShoppingModeFragment extends BaseFragment implements
   private Timer timer;
   private TimerTask timerTask;
   private Handler handler;
-  private SystemBarBehavior systemBarBehavior;
 
   private boolean debug = false;
 
@@ -109,13 +108,14 @@ public class ShoppingModeFragment extends BaseFragment implements
     binding.setFragment(this);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setRecycler(binding.recycler);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
-    //activity.setSystemBarBehavior(systemBarBehavior);
-    binding.setSystemBarBehavior(systemBarBehavior);
+    activity.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
     binding.toolbar.setOnClickListener(v -> showShoppingListsBottomSheet());

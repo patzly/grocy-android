@@ -19,7 +19,6 @@
 
 package xyz.zedler.patrick.grocy.fragment;
 
-import android.animation.LayoutTransition;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
   private MainActivity activity;
   private FragmentMasterDataOverviewBinding binding;
   private MasterDataOverviewViewModel viewModel;
-  private SystemBarBehavior systemBarBehavior;
 
   @Override
   public View onCreateView(
@@ -74,13 +72,14 @@ public class MasterDataOverviewFragment extends BaseFragment {
     binding.setViewModel(viewModel);
     binding.setLifecycleOwner(getViewLifecycleOwner());
 
-    systemBarBehavior = new SystemBarBehavior(activity);
+    SystemBarBehavior systemBarBehavior = new SystemBarBehavior(activity);
     systemBarBehavior.setAppBar(binding.appBar);
     systemBarBehavior.setContainer(binding.swipe);
     systemBarBehavior.setScroll(binding.scroll, binding.constraint);
+    systemBarBehavior.applyAppBarInsetOnContainer(false);
+    systemBarBehavior.applyStatusBarInsetOnContainer(false);
     systemBarBehavior.setUp();
     activity.setSystemBarBehavior(systemBarBehavior);
-    binding.setSystemBarBehavior(systemBarBehavior);
 
     binding.toolbar.setNavigationOnClickListener(v -> activity.navigateUp());
 
@@ -185,9 +184,6 @@ public class MasterDataOverviewFragment extends BaseFragment {
                 : getString(R.string.subtitle_unknown)
         )
     );
-
-    // for offline info in app bar
-    binding.swipe.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
     if (savedInstanceState == null) {
       viewModel.loadFromDatabase(true);
