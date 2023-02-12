@@ -286,6 +286,7 @@
     <item quantity="other">%1$s %2$s will be removed from stock.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Products with tare weight enabled are currently not supported for transfer.</string>
+  <string name="msg_should_not_be_frozen">This product should\'t be frozen. Do you want to proceed?</string>
   <string name="msg_item_marked_as_done">Marked item as done</string>
   <string name="msg_item_marked_as_undone">Marked item as undone</string>
   <string name="option_synced_success">Option synced successfully</string>
@@ -354,6 +355,8 @@
   <string name="msg_help_move_on_open">When enabled, on marking this product as opened, the corresponding amount will be moved to the default consume location.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">When enabled, the corresponding product can\'t have own stock, means it will not be selectable on purchase (useful for parent products which are just used as a summary/total view of the sub products).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">When enabled, on moving this product to a freezer location (so when freezing it), a warning will be shown.</string>
   <string name="msg_help_due_date_type">Based on the selected due date type, the highlighting on the stock overview page will be different. \"Best before date\" means that the product is maybe still safe to be consumed after its due date is reached. \"Expiration date\" means that the product is not safe to be consumed after its due date is reached.</string>
   <string name="msg_help_default_due_days_format">You can long press on an item below to enter a date instead of a number.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -873,6 +876,8 @@
   <string name="property_never_show">Never show on stock overview</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Disable own stock</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Should not be frozen</string>
   <string name="property_number">Number</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Enable tare weight handling</string>

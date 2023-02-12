@@ -419,6 +419,10 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void transferProduct() {
+    transferProduct(false);
+  }
+
+  public void transferProduct(boolean confirmed) {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
@@ -431,6 +435,14 @@ public class TransferViewModel extends BaseViewModel {
     assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
+
+    if (!confirmed && product.getShouldNotBeFrozenBoolean()
+        && formData.getToLocationLive().getValue() != null
+        && formData.getToLocationLive().getValue().getIsFreezerInt() == 1) {
+      sendEvent(Event.CONFIRM_FREEZING);
+      return;
+    }
+
     dlHelper.postWithArray(grocyApi.transferProduct(product.getId()),
         body,
         response -> {

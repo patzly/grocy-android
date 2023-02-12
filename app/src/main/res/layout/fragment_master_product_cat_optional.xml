@@ -451,7 +451,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:visibility="@{formData.displayHelpLive &amp;&amp; !formData.parentProductEnabled ? View.VISIBLE : View.GONE}">
+                android:visibility="@{formData.displayHelpLive &amp;&amp; formData.noOwnStockVisible ? View.VISIBLE : View.GONE}">
 
                 <TextView
                   style="@style/Widget.Grocy.TextView.Paragraph"
@@ -486,6 +486,50 @@
                 <com.google.android.material.materialswitch.MaterialSwitch
                   style="@style/Widget.Grocy.Switch"
                   android:checked="@={formData.noOwnStockLive}" />
+
+              </LinearLayout>
+
+              <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Grocy.Card.Text"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="@{formData.displayHelpLive &amp;&amp; formData.featureFreezingEnabled ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                  style="@style/Widget.Grocy.TextView.Paragraph"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="?attr/colorOnSurfaceVariant"
+                  android:text="@string/msg_help_should_not_be_frozen" />
+
+              </com.google.android.material.card.MaterialCardView>
+
+              <LinearLayout
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> formData.toggleShouldNotBeFrozenLive()}"
+                android:visibility="@{formData.featureFreezingEnabled ? View.VISIBLE : View.GONE}">
+
+                <ImageView
+                  style="@style/Widget.Grocy.ImageView.ListItem.Icon"
+                  tools:ignore="ContentDescription"
+                  android:src="@drawable/ic_round_lock" />
+
+                <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
+
+                  <TextView
+                    style="@style/Widget.Grocy.TextView.ListItem.Title"
+                    android:maxLines="3"
+                    android:text="@string/property_should_not_be_frozen" />
+
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                  style="@style/Widget.Grocy.Switch"
+                  android:checked="@={formData.shouldNotBeFrozenLive}" />
 
               </LinearLayout>
 

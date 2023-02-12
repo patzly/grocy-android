@@ -635,8 +635,16 @@ public class Product extends GroupedListItem implements Parcelable {
     return shouldNotBeFrozen;
   }
 
+  public boolean getShouldNotBeFrozenBoolean() {
+    return NumUtil.isStringInt(shouldNotBeFrozen) && Integer.parseInt(shouldNotBeFrozen) == 1;
+  }
+
   public void setShouldNotBeFrozen(String shouldNotBeFrozen) {
     this.shouldNotBeFrozen = shouldNotBeFrozen;
+  }
+
+  public void setShouldNotBeFrozenBoolean(boolean shouldNotBeFrozen) {
+    this.shouldNotBeFrozen = shouldNotBeFrozen ? "1" : "0";
   }
 
   public boolean getTreatOpenedAsOutOfStockBoolean() {

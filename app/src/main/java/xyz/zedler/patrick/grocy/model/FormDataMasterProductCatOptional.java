@@ -56,6 +56,7 @@ public class FormDataMasterProductCatOptional {
   private final MutableLiveData<Integer> defaultStockLabelTypeLive;
   private final MutableLiveData<Boolean> neverShowOnStockLive;
   private final MutableLiveData<Boolean> noOwnStockLive;
+  private final MutableLiveData<Boolean> shouldNotBeFrozenLive;
 
   private final MutableLiveData<Product> productLive;
   private boolean filledWithProduct;
@@ -88,8 +89,9 @@ public class FormDataMasterProductCatOptional {
     );
     energyLive = new MutableLiveData<>();
     defaultStockLabelTypeLive = new MutableLiveData<>(0);
-    neverShowOnStockLive = new MutableLiveData<>();
-    noOwnStockLive = new MutableLiveData<>();
+    neverShowOnStockLive = new MutableLiveData<>(false);
+    noOwnStockLive = new MutableLiveData<>(false);
+    shouldNotBeFrozenLive = new MutableLiveData<>(false);
 
     productLive = new MutableLiveData<>();
     filledWithProduct = false;
@@ -186,6 +188,16 @@ public class FormDataMasterProductCatOptional {
 
   public boolean getNoOwnStockVisible() {
     return VersionUtil.isGrocyServerMin330(sharedPrefs);
+  }
+
+  public MutableLiveData<Boolean> getShouldNotBeFrozenLive() {
+    return shouldNotBeFrozenLive;
+  }
+
+  public void toggleShouldNotBeFrozenLive() {
+    shouldNotBeFrozenLive.setValue(
+        shouldNotBeFrozenLive.getValue() == null || !shouldNotBeFrozenLive.getValue()
+    );
   }
 
   public MutableLiveData<Boolean> getScannerVisibilityLive() {
@@ -285,6 +297,7 @@ public class FormDataMasterProductCatOptional {
     assert isActiveLive.getValue() != null;
     assert neverShowOnStockLive.getValue() != null;
     assert noOwnStockLive.getValue() != null;
+    assert shouldNotBeFrozenLive.getValue() != null;
     ProductGroup pGroup = productGroupLive.getValue();
     product.setActive(isActiveLive.getValue());
     product.setParentProductId(parentProductLive.getValue() != null
@@ -300,6 +313,7 @@ public class FormDataMasterProductCatOptional {
     }
     product.setHideOnStockOverviewBoolean(neverShowOnStockLive.getValue());
     product.setNoOwnStockBoolean(noOwnStockLive.getValue());
+    product.setShouldNotBeFrozenBoolean(shouldNotBeFrozenLive.getValue());
     return product;
   }
 
@@ -329,10 +343,15 @@ public class FormDataMasterProductCatOptional {
     defaultStockLabelTypeLive.setValue(product.getDefaultStockLabelTypeInt());
     neverShowOnStockLive.setValue(product.getHideOnStockOverviewBoolean());
     noOwnStockLive.setValue(product.getNoOwnStockBoolean());
+    shouldNotBeFrozenLive.setValue(product.getShouldNotBeFrozenBoolean());
     filledWithProduct = true;
   }
 
   public boolean isFeatureLabelPrintEnabled() {
     return sharedPrefs.getBoolean(PREF.FEATURE_LABEL_PRINTER, false);
+  }
+
+  public boolean isFeatureFreezingEnabled() {
+    return sharedPrefs.getBoolean(PREF.FEATURE_STOCK_FREEZING_TRACKING, false);
   }
 }

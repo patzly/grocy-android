@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
@@ -177,6 +178,15 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
         activity.navigateFragment(PurchaseFragmentDirections
             .actionPurchaseFragmentToChooseProductFragment(barcode)
             .setPendingProductsActive(viewModel.isQuickModeEnabled()));
+      } else if (event.getType() == Event.CONFIRM_FREEZING) {
+        new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution)
+            .setTitle(R.string.title_confirmation)
+            .setMessage(getString(R.string.msg_should_not_be_frozen))
+            .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+              performHapticClick();
+              viewModel.purchaseProduct(true);
+            }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+            .setOnCancelListener(dialog -> performHapticClick()).create().show();
       }
     });
 

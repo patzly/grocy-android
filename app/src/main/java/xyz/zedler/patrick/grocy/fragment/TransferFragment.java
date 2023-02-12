@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.color.ColorRoles;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -159,6 +160,15 @@ public class TransferFragment extends BaseFragment implements BarcodeListener {
                 .actionTransferFragmentToChooseProductFragment(barcode)
                 .setForbidCreateProduct(true)
         );
+      } else if (event.getType() == Event.CONFIRM_FREEZING) {
+        new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog_Caution)
+            .setTitle(R.string.title_confirmation)
+            .setMessage(getString(R.string.msg_should_not_be_frozen))
+            .setPositiveButton(R.string.action_proceed, (dialog, which) -> {
+              performHapticClick();
+              viewModel.transferProduct(true);
+            }).setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick())
+            .setOnCancelListener(dialog -> performHapticClick()).create().show();
       }
     });
 
