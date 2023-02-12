@@ -416,6 +416,7 @@
   <string name="msg_help_home_assistant_login_server">In the field below you can also enter your Nabu Casa cloud URL if you\'re using that service. Tap this card to visit the Nabu Casa website.</string>
   <string name="msg_help_home_assistant_login_token">You can create a long-lived access token in your Home Assistant profile settings (last section). Tap here to open the URL from above.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigate back or tap this card to scan a QR code which fills the fields below.</string>
+  <string name="msg_help_fab_overview_start">The action button on this overview page has two actions:\n\nShort tap:\nConsume with barcode scanner\n\nLong tap:\nPurchase with barcode scanner\n\nWith this button the quick mode on the respective pages is turned on by default. You can change this in behavior settings.</string>
   <string name="msg_share">Check out this Android client for the awesome grocy-project: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API key not working</string>

@@ -27,6 +27,7 @@ import android.widget.HorizontalScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -139,11 +140,14 @@ public class OverviewStartFragment extends BaseFragment {
         R.string.action_scan,
         Constants.FAB.TAG.SCAN,
         animated,
-        () -> activity.navigateFragment(
-            R.id.consumeFragment,
-            new ConsumeFragmentArgs.Builder()
-                .setStartWithScanner(true).build().toBundle()
-        ), () -> activity.navigateFragment(
+        () -> {
+          if (displayFabInfoIfAppropriate()) return;
+          activity.navigateFragment(
+              R.id.consumeFragment,
+              new ConsumeFragmentArgs.Builder()
+                  .setStartWithScanner(true).build().toBundle()
+          );
+        }, () -> activity.navigateFragment(
             R.id.purchaseFragment,
             new PurchaseFragmentArgs.Builder()
                 .setStartWithScanner(true).build().toBundle()
@@ -178,6 +182,32 @@ public class OverviewStartFragment extends BaseFragment {
     } else {
       activity.navigateDeepLink(getString(R.string.deep_link_settingsCatServerFragment));
     }
+  }
+
+  private boolean displayFabInfoIfAppropriate() {
+    if (viewModel.getOverviewFabInfoShown()) return false;
+    new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog)
+        .setTitle(R.string.title_help)
+        .setMessage(getString(R.string.msg_help_fab_overview_start))
+        .setPositiveButton(R.string.title_consume, (dialog, which) -> {
+          performHapticClick();
+          viewModel.setOverviewFabInfoShown();
+          activity.navigateFragment(
+              R.id.consumeFragment,
+              new ConsumeFragmentArgs.Builder()
+                  .setStartWithScanner(true).build().toBundle()
+          );
+        }).setNegativeButton(R.string.title_purchase, (dialog, which) -> {
+          performHapticClick();
+          viewModel.setOverviewFabInfoShown();
+          activity.navigateFragment(
+              R.id.purchaseFragment,
+              new PurchaseFragmentArgs.Builder()
+                  .setStartWithScanner(true).build().toBundle()
+          );
+        })
+        .setOnCancelListener(dialog -> performHapticClick()).create().show();
+    return true;
   }
 
   public void startLogoAnimation() {
