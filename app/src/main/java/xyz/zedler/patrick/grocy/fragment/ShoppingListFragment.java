@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -362,7 +363,7 @@ public class ShoppingListFragment extends BaseFragment implements
 
   private boolean showOfflineError() {
     if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
+      showMessage(R.string.error_offline);
       return true;
     }
     return false;
@@ -417,17 +418,17 @@ public class ShoppingListFragment extends BaseFragment implements
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          showMessage(R.string.error_undefined);
           return true;
         }
         if (shoppingListItemsSelected.isEmpty()) {
-          showMessage(activity.getString(R.string.error_empty_shopping_list));
+          showMessage(R.string.error_empty_shopping_list);
           return true;
         }
         ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
         HashMap<Integer, String> productNamesHashMap = viewModel.getProductNamesHashMap();
         if (productNamesHashMap == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          showMessage(R.string.error_undefined);
           return true;
         }
         SortUtil.sortShoppingListItemsByName(listItems, productNamesHashMap, true);
@@ -446,17 +447,17 @@ public class ShoppingListFragment extends BaseFragment implements
         ArrayList<ShoppingListItem> shoppingListItemsSelected
             = viewModel.getFilteredShoppingListItemsLive().getValue();
         if (shoppingListItemsSelected == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          showMessage(R.string.error_undefined);
           return true;
         }
         if (shoppingListItemsSelected.isEmpty()) {
-          showMessage(activity.getString(R.string.error_empty_shopping_list));
+          showMessage(R.string.error_empty_shopping_list);
           return true;
         }
         ArrayList<ShoppingListItem> listItems = new ArrayList<>(shoppingListItemsSelected);
         HashMap<Integer, String> productNamesHashMap = viewModel.getProductNamesHashMap();
         if (productNamesHashMap == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          showMessage(R.string.error_undefined);
           return true;
         }
         ArrayList<ShoppingListItem> doneItems = new ArrayList<>();
@@ -464,7 +465,7 @@ public class ShoppingListFragment extends BaseFragment implements
           if (!tempItem.isUndone()) doneItems.add(tempItem);
         }
         if (doneItems.isEmpty()) {
-          showMessage(activity.getString(R.string.error_no_done_items));
+          showMessage(R.string.error_no_done_items);
           return true;
         }
         SortUtil.sortShoppingListItemsByName(doneItems, productNamesHashMap, true);
@@ -491,7 +492,7 @@ public class ShoppingListFragment extends BaseFragment implements
         ViewUtil.startIcon(item);
         ShoppingList shoppingList = viewModel.getSelectedShoppingList();
         if (shoppingList == null) {
-          showMessage(activity.getString(R.string.error_undefined));
+          showMessage(R.string.error_undefined);
           return true;
         }
         Bundle bundle = new Bundle();
@@ -618,10 +619,8 @@ public class ShoppingListFragment extends BaseFragment implements
     viewModel.setIsSearchVisible(false);
   }
 
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
+  private void showMessage(@StringRes int resId) {
+    activity.showSnackbar(activity.getSnackbar(resId, Snackbar.LENGTH_SHORT));
   }
 
   private boolean isFeatureMultipleListsDisabled() {

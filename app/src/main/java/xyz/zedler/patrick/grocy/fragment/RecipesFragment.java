@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -328,7 +329,7 @@ public class RecipesFragment extends BaseFragment implements
 
   private boolean showOfflineError() {
     if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
+      showMessage(R.string.error_offline);
       return true;
     }
     return false;
@@ -406,10 +407,8 @@ public class RecipesFragment extends BaseFragment implements
     viewModel.setIsSearchVisible(false);
   }
 
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
+  private void showMessage(@StringRes int resId) {
+    activity.showSnackbar(activity.getSnackbar(resId, Snackbar.LENGTH_SHORT));
   }
 
   @NonNull
