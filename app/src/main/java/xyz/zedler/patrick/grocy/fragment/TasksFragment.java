@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -192,9 +191,9 @@ public class TasksFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -262,14 +261,6 @@ public class TasksFragment extends BaseFragment implements
     if (appBarBehavior != null) {
       appBarBehavior.saveInstanceState(outState);
     }
-  }
-
-  private boolean showOfflineError() {
-    if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
-      return true;
-    }
-    return false;
   }
 
   private boolean onMenuItemClick(MenuItem item) {
@@ -360,12 +351,6 @@ public class TasksFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
   }
 
   @NonNull

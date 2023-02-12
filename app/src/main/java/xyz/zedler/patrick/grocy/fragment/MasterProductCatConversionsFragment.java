@@ -28,7 +28,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -110,9 +109,9 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        SnackbarMessage message = (SnackbarMessage) event;
-        Snackbar snack = message.getSnackbar(activity.binding.coordinatorMain);
-        activity.showSnackbar(snack);
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       } else if (event.getType() == Event.NAVIGATE_UP) {
         activity.navigateUp();
       } else if (event.getType() == Event.BOTTOM_SHEET) {
@@ -177,8 +176,7 @@ public class MasterProductCatConversionsFragment extends BaseFragment implements
         R.menu.menu_master_product_edit,
         menuItem -> {
           if (menuItem.getItemId() == R.id.action_delete) {
-            activity.showSnackbar(R.string.msg_not_implemented_yet);
-
+            activity.showSnackbar(R.string.msg_not_implemented_yet, false);
             return true;
           }
           return false;

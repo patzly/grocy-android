@@ -1,10 +1,11 @@
 ## 3.0.1
 
-- Improved: Finally the floating action button stays visible when the keyboard is shown (will be shifted above it)
+- Improved: Finally the floating action button stays visible when the keyboard is shown (#405)
 - Improved: Bottom bar not above keyboard anymore
-- Improved: Prevent status messages from covering elements like floating action button and bottom bar
+- Improved: Prevent status messages from covering elements like floating action button or bottom bar
 - Improved: Animated menu icons in bottom bar when navigating
 - Improved: Network and user interface behavior when offline (#492)
+- Improved: Stock overview page has new status filter "not fresh" for combined results (#661)
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
@@ -15,6 +16,9 @@
 - Fixed: Occasional crashes on stock journal and master product page
 - Fixed: Stores selection list not redesigned
 - Fixed: Recipe preparation not displayed in certain conditions
+- Fixed: Duplicate expired items on stock overview page with filters "expired" and "overdue"
+- Fixed: Products without own stock not hidden in filters on stock overview page (#660)
+- Fixed: Amount of products without own stock not hidden on stock overview page (#654)
 
 ## 3.0.0
 

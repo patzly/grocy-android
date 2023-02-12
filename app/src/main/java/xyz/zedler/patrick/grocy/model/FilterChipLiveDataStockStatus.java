@@ -37,12 +37,14 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
   public final static int STATUS_BELOW_MIN = 4;
   public final static int STATUS_IN_STOCK = 5;
   public final static int STATUS_OPENED = 6;
+  public final static int STATUS_NOT_FRESH = 7;
 
   private final Application application;
   private final SharedPreferences sharedPrefs;
   private int dueSoonCount = 0;
   private int overdueCount = 0;
   private int expiredCount = 0;
+  private int notFreshCount = 0;
   private int belowStockCount = 0;
   private int inStockCount = 0;
   private int openedCount = 0;
@@ -69,6 +71,9 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     if (status == STATUS_ALL) {
       setActive(false);
       setText(application.getString(R.string.property_status));
+    } else if (status == STATUS_NOT_FRESH) {
+      setActive(true);
+      setText(getQuString(R.plurals.msg_not_fresh_products_short, notFreshCount));
     } else {
       setActive(true);
       assert text != null;
@@ -78,8 +83,8 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     return this;
   }
 
-  public void setStatusDueSoon() {
-    setStatus(STATUS_DUE_SOON, getQuString(R.plurals.msg_due_products, dueSoonCount));
+  public void setStatusNotFresh() {
+    setStatus(STATUS_NOT_FRESH, null);
   }
 
   public FilterChipLiveDataStockStatus setDueSoonCount(int dueSoonCount) {
@@ -94,6 +99,11 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
 
   public FilterChipLiveDataStockStatus setExpiredCount(int expiredCount) {
     this.expiredCount = expiredCount;
+    return this;
+  }
+
+  public FilterChipLiveDataStockStatus setNotFreshCount(int notFreshCount) {
+    this.notFreshCount = notFreshCount;
     return this;
   }
 
@@ -121,40 +131,49 @@ public class FilterChipLiveDataStockStatus extends FilterChipLiveData {
     ));
     if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_BBD_TRACKING, true)) {
       menuItemDataList.add(new MenuItemData(
+          STATUS_NOT_FRESH,
+          1,
+          getQuString(R.plurals.msg_not_fresh_products_long, notFreshCount)
+      ));
+      menuItemDataList.add(new MenuItemData(
           STATUS_DUE_SOON,
-          0,
+          1,
           getQuString(R.plurals.msg_due_products, dueSoonCount)
       ));
       menuItemDataList.add(new MenuItemData(
           STATUS_OVERDUE,
-          0,
+          1,
           getQuString(R.plurals.msg_overdue_products, overdueCount)
       ));
       menuItemDataList.add(new MenuItemData(
           STATUS_EXPIRED,
-          0,
+          1,
           getQuString(R.plurals.msg_expired_products, expiredCount)
       ));
     }
     menuItemDataList.add(new MenuItemData(
         STATUS_BELOW_MIN,
-        0,
+        2,
         getQuString(R.plurals.msg_missing_products, belowStockCount)
     ));
     menuItemDataList.add(new MenuItemData(
         STATUS_IN_STOCK,
-        0,
+        2,
         getQuString(R.plurals.msg_in_stock_products, inStockCount)
     ));
     if (sharedPrefs.getBoolean(PREF.FEATURE_STOCK_OPENED_TRACKING, true)) {
       menuItemDataList.add(new MenuItemData(
           STATUS_OPENED,
-          0,
+          2,
           getQuString(R.plurals.msg_opened_products, openedCount)
       ));
     }
     setMenuItemDataList(menuItemDataList);
-    setMenuItemGroups(new MenuItemGroup(0, true, true));
+    setMenuItemGroups(
+        new MenuItemGroup(0, true, true),
+        new MenuItemGroup(1, true, true),
+        new MenuItemGroup(2, true, true)
+    );
     for (MenuItemData menuItemData : menuItemDataList) {
       if (getItemIdChecked() != STATUS_ALL && getItemIdChecked() == menuItemData.getItemId()) {
         setText(menuItemData.getText());

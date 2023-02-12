@@ -1383,16 +1383,19 @@ public class DownloadHelper {
                 }
                 ArrayList<VolatileItem> volatileItemsTogether = new ArrayList<>();
                 for (StockItem stockItem : dueItems) {
+                  if (stockItem.getDueTypeInt() != StockItem.DUE_TYPE_BEST_BEFORE) continue;
                   volatileItemsTogether.add(
                       new VolatileItem(stockItem.getProductId(), VolatileItem.TYPE_DUE)
                   );
                 }
                 for (StockItem stockItem : overdueItems) {
+                  if (stockItem.getDueTypeInt() != StockItem.DUE_TYPE_BEST_BEFORE) continue;
                   volatileItemsTogether.add(
                       new VolatileItem(stockItem.getProductId(), VolatileItem.TYPE_OVERDUE)
                   );
                 }
                 for (StockItem stockItem : expiredItems) {
+                  if (stockItem.getDueTypeInt() != StockItem.DUE_TYPE_EXPIRATION) continue;
                   volatileItemsTogether.add(
                       new VolatileItem(stockItem.getProductId(), VolatileItem.TYPE_EXPIRED)
                   );

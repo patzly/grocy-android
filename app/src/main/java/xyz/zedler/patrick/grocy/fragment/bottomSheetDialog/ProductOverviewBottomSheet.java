@@ -333,11 +333,12 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
     AmountUtil.addStockAmountNormalInfo(activity, pluralUtil, amountNormal, stockItem,
         quantityUnitStock, maxDecimalPlacesAmount);
     AmountUtil.addStockAmountAggregatedInfo(activity, pluralUtil, amountAggregated, stockItem,
-        quantityUnitStock, maxDecimalPlacesAmount);
+        quantityUnitStock, maxDecimalPlacesAmount, false);
     binding.itemAmount.setText(
         activity.getString(R.string.property_amount),
-        amountNormal.toString(),
-        amountAggregated.toString().isEmpty() ? null : amountAggregated.toString().trim()
+        product.getNoOwnStockBoolean() ? amountAggregated.toString() : amountNormal.toString(),
+        amountAggregated.toString().isEmpty() || product.getNoOwnStockBoolean() ?
+            null : amountAggregated.toString()
     );
     binding.itemAmount.setSingleLine(false);
 

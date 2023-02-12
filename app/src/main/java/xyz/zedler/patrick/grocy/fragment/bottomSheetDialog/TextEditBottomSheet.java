@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
 import xyz.zedler.patrick.grocy.Constants;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
@@ -56,7 +55,7 @@ public class TextEditBottomSheet extends BaseBottomSheetDialogFragment {
     if (getArguments() == null
         || getArguments().getString(Constants.ARGUMENT.TITLE) == null
     ) {
-      activity.showSnackbar(activity.getSnackbar(R.string.error_undefined, Snackbar.LENGTH_SHORT));
+      activity.showSnackbar(R.string.error_undefined, false);
       dismiss();
       return binding.getRoot();
     }

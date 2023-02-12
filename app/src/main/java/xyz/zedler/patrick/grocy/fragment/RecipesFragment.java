@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 import xyz.zedler.patrick.grocy.Constants;
@@ -188,9 +187,9 @@ public class RecipesFragment extends BaseFragment implements
 
     viewModel.getEventHandler().observeEvent(getViewLifecycleOwner(), event -> {
       if (event.getType() == Event.SNACKBAR_MESSAGE) {
-        activity.showSnackbar(((SnackbarMessage) event).getSnackbar(
-            activity.binding.coordinatorMain
-        ));
+        activity.showSnackbar(
+            ((SnackbarMessage) event).getSnackbar(activity.binding.coordinatorMain)
+        );
       }
     });
 
@@ -223,7 +222,9 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   consumeRecipe(recipe.getId());
-                  activity.showSnackbar(getString(R.string.msg_recipe_consumed, recipe.getName()));
+                  activity.showSnackbar(
+                      getString(R.string.msg_recipe_consumed, recipe.getName()), true
+                  );
                 }, 100);
               }
           ));
@@ -239,7 +240,7 @@ public class RecipesFragment extends BaseFragment implements
                 new Handler().postDelayed(() -> {
                   Recipe recipe = displayedItems.get(pos);
                   addNotFulfilledProductsToCartForRecipe(recipe.getId());
-                  activity.showSnackbar(getString(R.string.msg_recipe_added_to_cart));
+                  activity.showSnackbar(R.string.msg_recipe_added_to_cart, true);
                 }, 100);
               }
           ));
@@ -328,7 +329,7 @@ public class RecipesFragment extends BaseFragment implements
 
   private boolean showOfflineError() {
     if (viewModel.isOffline()) {
-      showMessage(getString(R.string.error_offline));
+      activity.showSnackbar(R.string.error_offline, false);
       return true;
     }
     return false;
@@ -404,12 +405,6 @@ public class RecipesFragment extends BaseFragment implements
     activity.hideKeyboard();
     binding.editTextSearch.setText("");
     viewModel.setIsSearchVisible(false);
-  }
-
-  private void showMessage(String msg) {
-    activity.showSnackbar(
-        Snackbar.make(activity.binding.coordinatorMain, msg, Snackbar.LENGTH_SHORT)
-    );
   }
 
   @NonNull

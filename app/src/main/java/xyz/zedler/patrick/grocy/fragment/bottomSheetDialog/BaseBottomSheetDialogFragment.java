@@ -29,10 +29,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
@@ -256,13 +254,5 @@ public class BaseBottomSheetDialogFragment extends CustomBottomSheetDialogFragme
   }
 
   public void applyBottomInset(int bottom) {
-  }
-
-  public void showMessage(@StringRes int msg) {
-    activity.showSnackbar(msg);
-  }
-
-  public void showToast(@StringRes int msg) {
-    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
   }
 }

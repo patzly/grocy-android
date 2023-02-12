@@ -385,7 +385,8 @@ public class StockOverviewItemAdapter extends
     ) {
       holder.binding.linearDays.setVisibility(View.VISIBLE);
       holder.binding.textDays.setText(dateUtil.getHumanForDaysFromNow(date));
-      if (Integer.parseInt(days) <= daysExpiringSoon) {
+      if (Integer.parseInt(days) <= daysExpiringSoon
+          && !stockItem.getProduct().getNoOwnStockBoolean()) {  // don't color days text if product has no own stock (children will be colored)
         colorDays = true;
       }
       if (holder.binding.linearDays.getChildCount() == 1) { // not in landscape/tablet mode

@@ -142,8 +142,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataStockStatus.STATUS_DUE_SOON) {
-        filterChipLiveDataStatus.setStatusDueSoon();
+          == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH) {
+        filterChipLiveDataStatus.setStatusNotFresh();
       }
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
@@ -189,6 +189,8 @@ public class StockOverviewViewModel extends BaseViewModel {
       for (VolatileItem volatileItem : data.getVolatileItems()) {
         StockItem stockItem = stockItemHashMap.get(volatileItem.getProductId());
         if (stockItem == null) continue;
+        Product product = productHashMap.get(stockItem.getProductId());
+        if (product != null && product.getNoOwnStockBoolean()) continue;
         if (volatileItem.getVolatileType() == VolatileItem.TYPE_DUE) {
           stockItem.setItemDue(true);
           itemsDueCount++;
@@ -248,6 +250,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       }
 
       filterChipLiveDataStatus
+          .setNotFreshCount(itemsDueCount+itemsOverdueCount+itemsExpiredCount)
           .setDueSoonCount(itemsDueCount)
           .setOverdueCount(itemsOverdueCount)
           .setExpiredCount(itemsExpiredCount)
@@ -385,13 +388,16 @@ public class StockOverviewViewModel extends BaseViewModel {
       }
 
       MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
+      boolean hasOwnStock = !item.getProduct().getNoOwnStockBoolean();
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH
+          && (item.isItemDue() || item.isItemOverdue() || item.isItemExpired()) && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
-          && item.isItemDue()
+          && item.isItemDue() && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE
-          && item.isItemOverdue()
+          && item.isItemOverdue() && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_EXPIRED
-          && item.isItemExpired()
+          && item.isItemExpired() && hasOwnStock
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_BELOW_MIN
           && missingItem != null
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_IN_STOCK

@@ -34,7 +34,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import com.android.volley.VolleyError;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
@@ -253,12 +252,8 @@ public class MasterStoreFragment extends BaseFragment {
     } else {
       binding.swipeMasterStore.setRefreshing(false);
       activity.showSnackbar(
-          Snackbar.make(
-              activity.findViewById(R.id.coordinator_main),
-              activity.getString(R.string.msg_no_connection),
-              Snackbar.LENGTH_SHORT
-          ).setAction(
-              activity.getString(R.string.action_retry),
+          activity.getSnackbar(R.string.msg_no_connection, false).setAction(
+              R.string.action_retry,
               v1 -> refresh()
           )
       );
@@ -296,12 +291,8 @@ public class MasterStoreFragment extends BaseFragment {
         error -> {
           binding.swipeMasterStore.setRefreshing(false);
           activity.showSnackbar(
-              Snackbar.make(
-                  activity.findViewById(R.id.coordinator_main),
-                  getErrorMessage(error),
-                  Snackbar.LENGTH_SHORT
-              ).setAction(
-                  activity.getString(R.string.action_retry),
+              activity.getSnackbar(getErrorMessage(error), false).setAction(
+                  R.string.action_retry,
                   v1 -> download()
               )
           );
@@ -441,13 +432,7 @@ public class MasterStoreFragment extends BaseFragment {
   }
 
   private void showErrorMessage(VolleyError volleyError) {
-    activity.showSnackbar(
-        Snackbar.make(
-            activity.findViewById(R.id.coordinator_main),
-            getErrorMessage(volleyError),
-            Snackbar.LENGTH_SHORT
-        )
-    );
+    activity.showSnackbar(getErrorMessage(volleyError), false);
   }
 
   private void showDeleteConfirmationDialog() {
