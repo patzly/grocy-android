@@ -19,6 +19,7 @@
 - Fixed: Duplicate expired items on stock overview page with filters "expired" and "overdue"
 - Fixed: Products without own stock not hidden in filters on stock overview page (#660)
 - Fixed: Amount of products without own stock not hidden on stock overview page (#654)
+- Fixed: Navigation bar color on devices without gesture navigation
 
 ## 3.0.0
 

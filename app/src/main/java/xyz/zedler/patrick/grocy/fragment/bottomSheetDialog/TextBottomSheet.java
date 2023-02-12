@@ -27,7 +27,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout.LayoutParams;
 import androidx.annotation.NonNull;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.databinding.FragmentBottomsheetTextBinding;
@@ -88,9 +87,12 @@ public class TextBottomSheet extends BaseBottomSheetDialogFragment {
 
   @Override
   public void applyBottomInset(int bottom) {
-    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, bottom);
-    binding.formattedText.setLayoutParams(params);
+    binding.linearContainerScroll.setPadding(
+        binding.linearContainerScroll.getPaddingLeft(),
+        binding.linearContainerScroll.getPaddingTop(),
+        binding.linearContainerScroll.getPaddingRight(),
+        bottom
+    );
   }
 
   @NonNull
