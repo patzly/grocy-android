@@ -144,6 +144,16 @@
     <item quantity="one">%1$d abgelaufen</item>
     <item quantity="other">%1$d abgelaufen</item>
   </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_short">
+    <item quantity="one">%1$d nicht frisch</item>
+    <item quantity="other">%1$d nicht frisch</item>
+  </plurals>
+  <!-- %1$s is the number of products which are not fresh. This string is the short form of e.g. "3 products are not fresh" -> "3 not fresh" -->
+  <plurals name="msg_not_fresh_products_long">
+    <item quantity="one">%1$d nicht frisch (alle folgenden)</item>
+    <item quantity="other">%1$d nicht frisch (alle folgenden)</item>
+  </plurals>
   <!-- %1$s is the number of products which are below min. stock amount. This string is the short form of e.g. "3 products are below min. stock amount" -> "3 below min. stock amount" -->
   <plurals name="msg_missing_products">
     <item quantity="one">%1$d unter Mindestbestand</item>
@@ -452,6 +462,7 @@
   <string name="error_name_exists">Name existiert bereits</string>
   <string name="error_network">Netzwerkfehler</string>
   <string name="error_network_subtitle">Die benötigten Daten konnten nicht vollständig geladen werden</string>
+  <string name="error_network_exact">Netzwerkfehler: %1$s</string>
   <string name="error_unknown">Uups!</string>
   <string name="error_not_grocy_instance">Keine gültige Grocy Instanz</string>
   <string name="error_timeout">Zeitüberschreitungsfehler</string>
