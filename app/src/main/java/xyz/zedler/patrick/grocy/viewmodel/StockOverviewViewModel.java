@@ -142,8 +142,8 @@ public class StockOverviewViewModel extends BaseViewModel {
     );
     if (NumUtil.isStringInt(args.getStatusFilterId())) {
       if (Integer.parseInt(args.getStatusFilterId())
-          == FilterChipLiveDataStockStatus.STATUS_DUE_SOON) {
-        filterChipLiveDataStatus.setStatusDueSoon();
+          == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH) {
+        filterChipLiveDataStatus.setStatusNotFresh();
       }
     }
     filterChipLiveDataProductGroup = new FilterChipLiveDataProductGroup(
@@ -248,6 +248,7 @@ public class StockOverviewViewModel extends BaseViewModel {
       }
 
       filterChipLiveDataStatus
+          .setNotFreshCount(itemsDueCount+itemsOverdueCount+itemsExpiredCount)
           .setDueSoonCount(itemsDueCount)
           .setOverdueCount(itemsOverdueCount)
           .setExpiredCount(itemsExpiredCount)
@@ -386,6 +387,8 @@ public class StockOverviewViewModel extends BaseViewModel {
 
       MissingItem missingItem = productIdsMissingItems.get(item.getProductId());
       if (filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_ALL
+          || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_NOT_FRESH
+          && (item.isItemDue() || item.isItemOverdue() || item.isItemExpired())
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_DUE_SOON
           && item.isItemDue()
           || filterChipLiveDataStatus.getStatus() == FilterChipLiveDataStockStatus.STATUS_OVERDUE

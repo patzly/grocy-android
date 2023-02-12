@@ -98,7 +98,7 @@ public class DueSoonNotificationReceiver extends BroadcastReceiver {
         Uri uri = MainActivity.getUriWithArgs(
             context.getString(R.string.deep_link_stockOverviewFragment),
             new StockOverviewFragmentArgs.Builder()
-                .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_DUE_SOON))
+                .setStatusFilterId(String.valueOf(FilterChipLiveDataStockStatus.STATUS_NOT_FRESH))
                 .build().toBundle()
         );
         Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
