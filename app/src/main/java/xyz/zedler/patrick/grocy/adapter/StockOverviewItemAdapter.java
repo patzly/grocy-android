@@ -349,11 +349,15 @@ public class StockOverviewItemAdapter extends
     QuantityUnit quantityUnitStock = quantityUnitHashMap.get(
         stockItem.getProduct().getQuIdStockInt()
     );
-    holder.binding.textAmount.setText(
-        AmountUtil.getStockAmountInfo(
-            context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount
-        )
+    String stockAmountInfo = AmountUtil.getStockAmountInfo(
+        context, pluralUtil, stockItem, quantityUnitStock, maxDecimalPlacesAmount
     );
+    if (stockAmountInfo.isBlank()) {
+      holder.binding.textAmount.setVisibility(View.GONE);
+    } else {
+      holder.binding.textAmount.setText(stockAmountInfo);
+      holder.binding.textAmount.setVisibility(View.VISIBLE);
+    }
     if (missingItemsProductIds.contains(stockItem.getProductId())) {
       holder.binding.textAmount.setTypeface(
           ResourcesCompat.getFont(context, R.font.jost_medium)
