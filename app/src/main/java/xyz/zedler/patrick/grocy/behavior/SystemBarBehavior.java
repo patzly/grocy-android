@@ -27,11 +27,13 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.elevation.SurfaceColors;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 
@@ -340,8 +342,9 @@ public class SystemBarBehavior {
   private void updateSystemBars() {
     boolean isOrientationPortrait = UiUtil.isOrientationPortrait(activity);
     boolean isDarkModeActive = UiUtil.isDarkModeActive(activity);
-
-    int colorScrim = ResUtil.getColorAttr(activity, android.R.attr.colorBackground, 0.7f);
+    int colorScrim = ColorUtils.setAlphaComponent(
+        SurfaceColors.SURFACE_2.getColor(activity), 1
+    );
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // 29
       window.setStatusBarColor(Color.TRANSPARENT);
