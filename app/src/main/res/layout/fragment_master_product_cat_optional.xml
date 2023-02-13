@@ -420,7 +420,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> formData.toggleNeverShowOnStockLive()}">
@@ -463,7 +463,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> formData.toggleNoOwnStockLive()}"
@@ -507,7 +507,7 @@
               </com.google.android.material.card.MaterialCardView>
 
               <LinearLayout
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> formData.toggleShouldNotBeFrozenLive()}"
@@ -516,7 +516,7 @@
                 <ImageView
                   style="@style/Widget.Grocy.ImageView.ListItem.Icon"
                   tools:ignore="ContentDescription"
-                  android:src="@drawable/ic_round_lock" />
+                  android:src="@drawable/ic_round_severe_cold" />
 
                 <LinearLayout style="@style/Widget.Grocy.LinearLayout.ListItem.TextBox.Stretch">
 
@@ -535,7 +535,7 @@
 
               <LinearLayout
                 android:id="@+id/category_picture"
-                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable"
+                style="@style/Widget.Grocy.LinearLayout.ListItem.SingleLine.Clickable.More"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="@{viewModel.actionEdit ? 1.0f : 0.38f}"
