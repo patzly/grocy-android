@@ -20,12 +20,15 @@
 package xyz.zedler.patrick.grocy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
@@ -37,18 +40,23 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.FeedbackBottomSheet;
 import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.SnackbarMessage;
 import xyz.zedler.patrick.grocy.util.ClickUtil;
+import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.UiUtil;
 import xyz.zedler.patrick.grocy.util.ViewUtil;
+import xyz.zedler.patrick.grocy.view.FormattedTextView;
 import xyz.zedler.patrick.grocy.viewmodel.OverviewStartViewModel;
 
 public class OverviewStartFragment extends BaseFragment {
 
   private final static String TAG = OverviewStartFragment.class.getSimpleName();
 
+  private static final String DIALOG_FAB_INFO = "dialog_fab_info";
+
   private MainActivity activity;
   private FragmentOverviewStartBinding binding;
   private OverviewStartViewModel viewModel;
   private ClickUtil clickUtil;
+  private AlertDialog dialogFabInfo;
 
   @Override
   public View onCreateView(
@@ -56,9 +64,7 @@ public class OverviewStartFragment extends BaseFragment {
       ViewGroup container,
       Bundle savedInstanceState
   ) {
-    binding = FragmentOverviewStartBinding.inflate(
-        inflater, container, false
-    );
+    binding = FragmentOverviewStartBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
@@ -141,18 +147,30 @@ public class OverviewStartFragment extends BaseFragment {
         Constants.FAB.TAG.SCAN,
         animated,
         () -> {
-          if (displayFabInfoIfAppropriate()) return;
+          if (showFabInfoDialogIfAppropriate()) {
+            return;
+          }
           activity.navigateFragment(
               R.id.consumeFragment,
-              new ConsumeFragmentArgs.Builder()
-                  .setStartWithScanner(true).build().toBundle()
+              new ConsumeFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
           );
         }, () -> activity.navigateFragment(
             R.id.purchaseFragment,
-            new PurchaseFragmentArgs.Builder()
-                .setStartWithScanner(true).build().toBundle()
+            new PurchaseFragmentArgs.Builder().setStartWithScanner(true).build().toBundle()
         )
     );
+
+    if (savedInstanceState != null && savedInstanceState.getBoolean(DIALOG_FAB_INFO)) {
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showFabInfoDialogIfAppropriate, 1
+      );
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    boolean isShowing = dialogFabInfo != null && dialogFabInfo.isShowing();
+    outState.putBoolean(DIALOG_FAB_INFO, isShowing);
   }
 
   public void navigateToSettingsCatBehavior() {
@@ -184,11 +202,21 @@ public class OverviewStartFragment extends BaseFragment {
     }
   }
 
-  private boolean displayFabInfoIfAppropriate() {
-    if (viewModel.getOverviewFabInfoShown()) return false;
-    new MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Grocy_AlertDialog)
-        .setTitle(R.string.title_help)
-        .setMessage(getString(R.string.msg_help_fab_overview_start))
+  private boolean showFabInfoDialogIfAppropriate() {
+    if (viewModel.getOverviewFabInfoShown()) {
+      return false;
+    }
+    FormattedTextView textView = new FormattedTextView(activity);
+    textView.setTextColor(ResUtil.getColorAttr(activity, R.attr.colorOnSurfaceVariant));
+    textView.setTextSizeParagraph(14);
+    textView.setBlockDistance(8);
+    textView.setSideMargin(24);
+    textView.setLastBlockWithBottomMargin(false);
+    textView.setText(getString(R.string.msg_help_fab_overview_start));
+    dialogFabInfo = new MaterialAlertDialogBuilder(
+        activity, R.style.ThemeOverlay_Grocy_AlertDialog
+    ).setTitle(R.string.title_help)
+        .setView(textView)
         .setPositiveButton(R.string.title_consume, (dialog, which) -> {
           performHapticClick();
           viewModel.setOverviewFabInfoShown();
@@ -205,8 +233,8 @@ public class OverviewStartFragment extends BaseFragment {
               new PurchaseFragmentArgs.Builder()
                   .setStartWithScanner(true).build().toBundle()
           );
-        })
-        .setOnCancelListener(dialog -> performHapticClick()).create().show();
+        }).setOnCancelListener(dialog -> performHapticClick()).create();
+    dialogFabInfo.show();
     return true;
   }
 

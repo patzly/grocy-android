@@ -51,6 +51,10 @@ public class FormattedTextView extends LinearLayout {
 
   private final Context context;
   private int textColor;
+  private float textSizeParagraph;
+  private int sideMargin;
+  private int blockDistance;
+  private boolean lastBlockWithBottomMargin;
 
   public FormattedTextView(Context context) {
     super(context);
@@ -69,6 +73,10 @@ public class FormattedTextView extends LinearLayout {
     int padding = UiUtil.dpToPx(context, 16);
     setPadding(0, padding, 0, 0);
     textColor = ResUtil.getColorAttr(context, R.attr.colorOnBackground);
+    textSizeParagraph = -1;
+    sideMargin = 16;
+    blockDistance = 16;
+    lastBlockWithBottomMargin = true;
   }
 
   public void setText(String text, String... highlights) {
@@ -78,6 +86,7 @@ public class FormattedTextView extends LinearLayout {
     for (int i = 0; i < parts.length; i++) {
       String part = parts[i];
       String partNext = i < parts.length - 1 ? parts[i + 1] : "";
+      boolean addBottomMargin = i < parts.length - 1 || lastBlockWithBottomMargin;
 
       for (String highlight : highlights) {
         part = part.replaceAll(highlight, "<b>" + highlight + "</b>");
@@ -86,19 +95,25 @@ public class FormattedTextView extends LinearLayout {
 
       if (part.startsWith("#")) {
         String[] h = part.split(" ");
-        addView(getHeadline(h[0].length(), part.substring(h[0].length() + 1)));
+        addView(
+            getHeadline(h[0].length(), part.substring(h[0].length() + 1), addBottomMargin)
+        );
       } else if (part.startsWith("- ")) {
         String[] bullets = part.trim().split("- ");
         for (int index = 1; index < bullets.length; index++) {
-          addView(getBullet(bullets[index], index == bullets.length - 1));
+          addView(getBullet(bullets[index], index == bullets.length - 1, addBottomMargin));
         }
       } else if (part.startsWith("? ")) {
-        addView(getMessage(part.substring(2), false));
+        addView(getMessage(part.substring(2), false, addBottomMargin));
       } else if (part.startsWith("! ")) {
-        addView(getMessage(part.substring(2), true));
+        addView(getMessage(part.substring(2), true, addBottomMargin));
       } else if (part.startsWith("> ") || part.startsWith("=> ")) {
         String[] link = part.substring(part.startsWith("> ") ? 2 : 3).trim().split(" ");
-        addView(link.length == 1 ? getLink(link[0], link[0]) : getLink(link[0], link[1]));
+        addView(
+            link.length == 1
+                ? getLink(link[0], link[0], addBottomMargin)
+                : getLink(link[0], link[1], addBottomMargin)
+        );
       } else if (part.startsWith("---")) {
         addView(getDivider());
       } else if (part.startsWith("OPTION_USE_SLIDING")) {
@@ -124,8 +139,8 @@ public class FormattedTextView extends LinearLayout {
         );
         addView(optionTransition);
       } else {
-        boolean keepDistance = !partNext.startsWith("=> ");
-        addView(getParagraph(part, keepDistance));
+        addBottomMargin = addBottomMargin && !partNext.startsWith("=> ");
+        addView(getParagraph(part, addBottomMargin));
       }
     }
   }
@@ -137,23 +152,58 @@ public class FormattedTextView extends LinearLayout {
     textColor = color;
   }
 
-  private MaterialTextView getParagraph(String text, boolean keepDistance) {
+  /**
+   * Call this before setText().
+   */
+  public void setTextSizeParagraph(float textSize) {
+    textSizeParagraph = textSize;
+  }
+
+  /**
+   * Call this before setText().
+   */
+  public void setSideMargin(int margin) {
+    sideMargin = margin;
+  }
+
+  /**
+   * Call this before setText().
+   */
+  public void setBlockDistance(int distance) {
+    blockDistance = distance;
+  }
+
+  /**
+   * Call this before setText().
+   */
+  public void setLastBlockWithBottomMargin(boolean withMargin) {
+    lastBlockWithBottomMargin = withMargin;
+  }
+
+  private MaterialTextView getParagraph(String text, boolean addBottomMargin) {
     MaterialTextView textView = new MaterialTextView(
         new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView_Paragraph),
         null,
         0
     );
-    textView.setLayoutParams(getVerticalLayoutParams(16, keepDistance ? 16 : 0));
+    textView.setLayoutParams(
+        getVerticalLayoutParams(sideMargin, addBottomMargin ? blockDistance : 0)
+    );
     textView.setTextColor(textColor);
+    if (textSizeParagraph > 0) {
+      textView.setTextSize(textSizeParagraph);
+    }
     textView.setText(HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY));
     return textView;
   }
 
-  private MaterialTextView getHeadline(int h, String title) {
+  private MaterialTextView getHeadline(int h, String title, boolean addBottomMargin) {
     MaterialTextView textView = new MaterialTextView(
         new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView), null, 0
     );
-    textView.setLayoutParams(getVerticalLayoutParams(16, 16));
+    textView.setLayoutParams(
+        getVerticalLayoutParams(sideMargin, addBottomMargin ? blockDistance : 0)
+    );
     textView.setText(HtmlCompat.fromHtml(title, HtmlCompat.FROM_HTML_MODE_LEGACY));
     int resId;
     switch (h) {
@@ -178,13 +228,15 @@ public class FormattedTextView extends LinearLayout {
     return textView;
   }
 
-  private MaterialTextView getLink(String text, String link) {
+  private MaterialTextView getLink(String text, String link, boolean addBottomMargin) {
     MaterialTextView textView = new MaterialTextView(
         new ContextThemeWrapper(context, R.style.Widget_Grocy_TextView_LabelLarge),
         null,
         0
     );
-    textView.setLayoutParams(getVerticalLayoutParams(16, 16));
+    textView.setLayoutParams(
+        getVerticalLayoutParams(sideMargin, addBottomMargin ? blockDistance : 0)
+    );
     textView.setTextColor(ResUtil.getColorAttr(context, R.attr.colorPrimary));
     textView.setText(text);
     textView.setOnClickListener(
@@ -205,7 +257,7 @@ public class FormattedTextView extends LinearLayout {
     return divider;
   }
 
-  private LinearLayout getBullet(String text, boolean isLast) {
+  private LinearLayout getBullet(String text, boolean isLast, boolean addBottomMargin) {
     int bulletSize = UiUtil.dpToPx(context, 4);
 
     View viewBullet = new View(context);
@@ -229,6 +281,9 @@ public class FormattedTextView extends LinearLayout {
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
     );
+    if (textSizeParagraph > 0) {
+      textViewHeight.setTextSize(textSizeParagraph);
+    }
     textViewHeight.setText("E");
     textViewHeight.setVisibility(INVISIBLE);
 
@@ -250,6 +305,9 @@ public class FormattedTextView extends LinearLayout {
     paramsText.weight = 1;
     textView.setLayoutParams(paramsText);
     textView.setTextColor(textColor);
+    if (textSizeParagraph > 0) {
+      textView.setTextSize(textSizeParagraph);
+    }
 
     if (text.trim().endsWith("<br/>")) {
       text = text.trim().substring(0, text.length() - 5);
@@ -259,7 +317,7 @@ public class FormattedTextView extends LinearLayout {
 
     LinearLayout linearLayout = new LinearLayout(context);
     linearLayout.setLayoutParams(
-        getVerticalLayoutParams(16, isLast ? 16 : 8)
+        getVerticalLayoutParams(sideMargin, isLast ? (addBottomMargin ? blockDistance : 0) : 8)
     );
 
     linearLayout.addView(frameLayout);
@@ -267,7 +325,8 @@ public class FormattedTextView extends LinearLayout {
     return linearLayout;
   }
 
-  private MaterialCardView getMessage(String text, boolean useErrorColors) {
+  private MaterialCardView getMessage(String text, boolean useErrorColors,
+      boolean addBottomMargin) {
     int colorSurface = ResUtil.getColorAttr(
         context, useErrorColors ? R.attr.colorErrorContainer : R.attr.colorSurfaceVariant
     );
@@ -275,7 +334,9 @@ public class FormattedTextView extends LinearLayout {
         context, useErrorColors ? R.attr.colorOnErrorContainer : R.attr.colorOnSurfaceVariant
     );
     MaterialCardView cardView = new MaterialCardView(context);
-    cardView.setLayoutParams(getVerticalLayoutParams(16, 16));
+    cardView.setLayoutParams(
+        getVerticalLayoutParams(sideMargin, addBottomMargin ? blockDistance : 0)
+    );
     int padding = UiUtil.dpToPx(context, 16);
     cardView.setContentPadding(padding, padding, padding, padding);
     cardView.setCardBackgroundColor(colorSurface);
