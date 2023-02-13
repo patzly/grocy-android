@@ -680,6 +680,10 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void purchaseProduct() {
+    purchaseProduct(false);
+  }
+
+  public void purchaseProduct(boolean confirmed) {
     if (!formData.isFormValid()) {
       showMessage(R.string.error_missing_information);
       return;
@@ -700,6 +704,13 @@ public class PurchaseViewModel extends BaseViewModel {
     assert formData.getProductDetailsLive().getValue() != null;
     Product product = formData.getProductDetailsLive().getValue().getProduct();
     JSONObject body = formData.getFilledJSONObject();
+
+    if (!confirmed && product.getShouldNotBeFrozenBoolean()
+        && formData.getLocationLive().getValue() != null
+        && formData.getLocationLive().getValue().getIsFreezerInt() == 1) {
+      sendEvent(Event.CONFIRM_FREEZING);
+      return;
+    }
 
     OnJSONArrayResponseListener onResponse = response -> {
       // UNDO OPTION

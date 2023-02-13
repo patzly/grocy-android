@@ -336,7 +336,9 @@ public class ProductOverviewBottomSheet extends BaseBottomSheetDialogFragment {
         quantityUnitStock, maxDecimalPlacesAmount, false);
     binding.itemAmount.setText(
         activity.getString(R.string.property_amount),
-        product.getNoOwnStockBoolean() ? amountAggregated.toString() : amountNormal.toString(),
+        product.getNoOwnStockBoolean()
+            ? !amountAggregated.toString().isBlank() ? amountAggregated.toString() : getString(R.string.subtitle_none)
+            : amountNormal.toString(),
         amountAggregated.toString().isEmpty() || product.getNoOwnStockBoolean() ?
             null : amountAggregated.toString()
     );

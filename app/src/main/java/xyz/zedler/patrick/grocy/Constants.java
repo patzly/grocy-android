@@ -112,6 +112,7 @@ public final class Constants {
     public final static String UPDATE_INFO_READ = "update_info_read";
     public static final String LAST_VERSION = "last_version";
     public final static String ZXING_PROMPT = "zxing_prompt";
+    public final static String OVERVIEW_FAB_INFO_SHOWN = "overview_fab_info_shown";
   }
 
   public final static class SETTINGS {

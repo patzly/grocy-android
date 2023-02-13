@@ -661,6 +661,14 @@ public class OverviewStartViewModel extends BaseViewModel {
     return server != null && server.contains("grocy.info");
   }
 
+  public boolean getOverviewFabInfoShown() {
+    return sharedPrefs.getBoolean(PREF.OVERVIEW_FAB_INFO_SHOWN, false);
+  }
+
+  public void setOverviewFabInfoShown() {
+    sharedPrefs.edit().putBoolean(PREF.OVERVIEW_FAB_INFO_SHOWN, true).apply();
+  }
+
   @Override
   protected void onCleared() {
     dlHelper.destroy();
