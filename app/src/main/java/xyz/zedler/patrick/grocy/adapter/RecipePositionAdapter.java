@@ -144,6 +144,32 @@ public class RecipePositionAdapter extends
     ));
   }
 
+  public List<Product> getMissingProducts() {
+    ArrayList<Product> missingProducts = new ArrayList<>();
+    for (RecipePosition recipePosition : recipePositions) {
+      Product product = Product.getProductFromId(products, recipePosition.getProductId());
+      QuantityUnitConversion quantityUnitConversion = product != null
+          ? QuantityUnitConversion.getFromTwoUnits(
+          quantityUnitConversions,
+          product.getQuIdStockInt(),
+          recipePosition.getQuantityUnitId(),
+          product.getId()
+      ) : null;
+      double amountStockUnit = recipePosition.getAmount() /
+          recipe.getBaseServings() * recipe.getDesiredServings();
+      double amountRecipeUnit = amountStockUnit;
+      if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
+        amountRecipeUnit *= quantityUnitConversion.getFactor();
+      }
+      if (stockItemHashMap.isEmpty()) continue;
+      StockItem stockItem = stockItemHashMap.get(recipePosition.getProductId());
+      double amountMissing = getAmountMissing(recipePosition, stockItem, amountStockUnit, amountRecipeUnit);
+      double amountShoppingList = getAmountOnShoppingList(recipePosition, quantityUnitConversion);
+      if (amountMissing > 0 && amountShoppingList < amountMissing) missingProducts.add(product);
+    }
+    return missingProducts;
+  }
+
   private double getAmountOnShoppingList(RecipePosition recipePosition, QuantityUnitConversion conversion) {
     double amountStockUnit = 0;
     for (ShoppingListItem shoppingListItem : shoppingListItems) {

@@ -29,6 +29,9 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -262,9 +265,18 @@ public class RecipesViewModel extends BaseViewModel {
     );
   }
 
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
-    dlHelper.post(
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      JSONArray array = new JSONArray();
+      for (int id : excludedProductIds) array.put(id);
+      jsonObject.put("excludedProductIds", array);
+    } catch (JSONException e) {
+      throw new RuntimeException(e);
+    }
+    dlHelper.postWithArray(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
+        jsonObject,
         response -> downloadData(),
         this::showNetworkErrorMessage
     );

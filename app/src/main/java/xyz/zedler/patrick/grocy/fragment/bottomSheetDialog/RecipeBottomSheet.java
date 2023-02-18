@@ -29,7 +29,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +59,7 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.material.color.ColorRoles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.elevation.SurfaceColors;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -652,13 +652,7 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
   private void setupMenuButtons() {
     binding.chipConsume.setOnClickListener(v -> showConsumeConfirmationDialog());
-    // Hashmap with all missing products for the dialog (at first all should be checked)
-    // global variable for alert dialog management
-    dialogShoppingListMultiChoiceItems.clear();
-    for (Product product : products) {
-      dialogShoppingListMultiChoiceItems.put(product.getName(), true);
-    }
-    binding.chipShoppingList.setOnClickListener(v -> showShoppingListConfirmationDialog());
+    binding.chipShoppingList.setOnClickListener(v -> buildShoppingListConfirmationDialog());
   }
 
   private void showConsumeConfirmationDialog() {
@@ -674,6 +668,18 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         .setOnCancelListener(dialog -> performHapticClick())
         .create();
     dialogConsume.show();
+  }
+
+  private void buildShoppingListConfirmationDialog() {
+    // Hashmap with all missing products for the dialog (at first all should be checked)
+    // global variable for alert dialog management
+    dialogShoppingListMultiChoiceItems.clear();
+    if (binding.recycler.getAdapter() == null
+        || !(binding.recycler.getAdapter() instanceof RecipePositionAdapter)) return;
+    for (Product product : ((RecipePositionAdapter) binding.recycler.getAdapter()).getMissingProducts()) {
+      dialogShoppingListMultiChoiceItems.put(product.getName(), true);
+    }
+    showShoppingListConfirmationDialog();
   }
 
   private void showShoppingListConfirmationDialog() {
@@ -704,9 +710,9 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
 
     builder.setCustomTitle(container);
     builder.setPositiveButton(R.string.action_proceed, (dialog, which) -> {
-      Log.i(TAG, "setupMenuButtons: " + dialogShoppingListMultiChoiceItems);
-      activity.getCurrentFragment().addNotFulfilledProductsToCartForRecipe(recipe.getId());
+      activity.getCurrentFragment().addNotFulfilledProductsToCartForRecipe(recipe.getId(), getExcludedProductIds());
       dialog.dismiss();
+      dismiss();
     });
     builder.setNegativeButton(R.string.action_cancel, (dialog, which) -> performHapticClick());
     builder.setOnCancelListener(dialog -> performHapticClick());
@@ -743,16 +749,22 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
     dialogDelete.show();
   }
 
+  private int[] getExcludedProductIds() {
+    List<Integer> excludedIds = new ArrayList<>();
+    for (String productName : dialogShoppingListMultiChoiceItems.keySet()) {
+      if (Boolean.TRUE.equals(dialogShoppingListMultiChoiceItems.get(productName))) continue;
+      Product product = Product.getProductFromName(products, productName);
+      if (product != null) excludedIds.add(product.getId());
+    }
+    return excludedIds.stream().mapToInt(i -> i).toArray();
+  }
+
   public void openPreparationMode() {
     activity.showToast(R.string.msg_coming_soon, false);
   }
 
   public MutableLiveData<String> getServingsDesiredLive() {
     return servingsDesiredLive;
-  }
-
-  public MutableLiveData<Boolean> getServingsDesiredSaveEnabledLive() {
-    return servingsDesiredSaveEnabledLive;
   }
 
   public MutableLiveData<Boolean> getNetworkLoadingLive() {
