@@ -221,6 +221,7 @@
   <string name="msg_task_undo">Aufgabe rückgängig machen</string>
   <string name="msg_recipes_enough_in_stock">Bestand reicht aus</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Bestand reicht aus</string>
+  <string name="msg_recipes_enough_in_stock_amount">Bestand reicht aus (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Nicht ausreichend im Bestand aber bereits auf Einkaufszettel</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Bestand nicht ausreichend</string>
   <string name="msg_recipes_not_enough">Bestand nicht ausreichend</string>
@@ -232,6 +233,7 @@
     <item quantity="one">%1$d Zutat fehlt</item>
     <item quantity="other">%1$d Zutaten fehlen</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Fehlend: %1$s | Bereits auf dem Einkaufszettel: %2$s</string>
   <string name="msg_chore_executed">Ausführung erfasst</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s %3$s dem Bestand hinzugefügt</string>
@@ -279,6 +281,7 @@
     <item quantity="other">%1$s %2$s werden vom Bestand entfernt.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Produkte mit aktivierter Taragewichtbehandlung können aktuell nicht umgelagert werden.</string>
+  <string name="msg_should_not_be_frozen">Dieses Produkt sollte nicht eingefroren werden. Möchten Sie fortfahren?</string>
   <string name="msg_item_marked_as_done">Eintrag als erledigt markiert</string>
   <string name="msg_item_marked_as_undone">Eintrag als unerledigt markiert</string>
   <string name="option_synced_success">Einstellung erfolgreich synchronisiert</string>
@@ -346,6 +349,8 @@
   <string name="msg_help_move_on_open">Wenn aktiviert, wird die entsprechende Menge an den Standardverbrauchsstandort umgelagert, wenn das Produkt als geöffnet markiert wurde.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Wenn aktiviert, kann dieses Produkt keinen eigenen Bestand haben, bedeutet es ist unter \"Einkauf\" nicht auswählbar (nützlich für übergeordnete Produkte, die nur als Zusammenfassung/Gesamtansicht der untergeordneten Produkte verwendet werden).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Wenn aktiviert und wenn dieses Produkt zu einem Gefrierstandort umgelagert (sprich eingefroren) wird, wird eine entsprechende Warnung angezeigt.</string>
   <string name="msg_help_due_date_type">Je nach ausgewähltem Typ wird die Hervorhebung auf der Bestandsübersicht unterschiedlich sein. \"MHD\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum möglicherweise immer noch verzehrt werden kann. \"Verbrauchsdatum\" bedeutet, dass das Produkt nach dem Fälligkeitsdatum nicht mehr verzehrt werden kann.</string>
   <string name="msg_help_default_due_days_format">Sie können lange auf einen Eintrag unten tippen, um ein Datum anstatt einer Zahl einzugeben.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -405,6 +410,7 @@
   <string name="msg_help_home_assistant_login_server">In dem nächsten Feld können Sie auch Ihre Nabu Casa Cloud-URL eingeben, falls Sie diesen Service benutzen. Auf diese Karte tippen, um die Nabu Casa Website zu besuchen.</string>
   <string name="msg_help_home_assistant_login_token">Sie können einen langlebigen Zugangsschlüssel in Ihren Home Assistant Profileinstellungen erstellen (letzter Abschnitt). Hier tippen, um die URL von oben zu öffnen.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Navigieren Sie zurück oder tippen Sie auf  diese Karte, um einen QR-Code zu scannen, wodurch die Felder unten vorausgefüllt werden.</string>
+  <string name="msg_help_fab_overview_start">Der Aktionsknopf auf dieser Übersichtsseite hat zwei Aktionen:\n\n- Kurzes Drücken: Verbrauchen mit Barcode-Scanner\n- Langes Drücken: Einkaufen mit Barcode-Scanner\n\nMit diesem Knopf ist der Schnellmodus auf den jeweiligen Seiten standardmäßig aktiviert. Dies können Sie in den Einstellungen für Verhalten ändern.</string>
   <string name="msg_share">Schau Dir mal diesen Android-Client für grocy an: \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">API Schüssel funktioniert nicht</string>
@@ -573,6 +579,8 @@
   <string name="title_product_cat_qu_conversions">ME-Umrechnungen</string>
   <string name="title_unknown_input">Unbekannte Eingabe</string>
   <string name="title_presets_new_products">Vorgaben für neue Produkte</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -859,6 +867,8 @@
   <string name="property_never_show">Nie auf der Bestand-Seite anzeigen</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Eigenen Bestand deaktivieren</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Sollte nicht eingefroren werden</string>
   <string name="property_number">Zahl</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Taragewichtbehandlung aktivieren</string>
