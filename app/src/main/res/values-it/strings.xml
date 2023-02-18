@@ -311,8 +311,6 @@
   <string name="msg_quick_mode_confirm_purchase">La transazione sarà eseguita:\n\nAggiunta di %1$s %2$s di %3$s alla dispensa\nData di scadenza: %4$s\nPrezzo: %5$s\nNegozio: %6$s\nPosizione: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">La transazione sarà eseguito:\n\nRimozione di %1$s %2$s di %3$s dalla dispensa\nPosizinoe: %4$s</string>
-  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">La transazione che verrà eseguita:\n\Mark %1$s %2$s di %3$s aperta come\nPosizione: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">La transazione sarà eseguita:\n\nSpostamento %1$s %2$sdi %3$s\nDalla posizione: %4$s\nAlla posizione: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -570,7 +568,6 @@
   <string name="title_product_cat_qu_conversions">Conversione UM</string>
   <string name="title_unknown_input">Input sconosciuto</string>
   <string name="title_presets_new_products">Impostazioni predefinite per nuovi prodotti</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -630,7 +627,6 @@
   <string name="subtitle_recipe_due_score">Punteggio scadenza: %1$s</string>
   <string name="subtitle_per_serving">per porzione</string>
   <string name="subtitle_tap_preparation_mode">Premi qui per la modalità preparazione</string>
-
   <string name="description_input_product_part1">Il campo prodotto contiene:</string>
   <string name="description_input_product_part2">Per favore scegli come procedere:</string>
   <string name="description_input_product_option1">Crea nuovo prodotto e usa il dato inserito come nome</string>
