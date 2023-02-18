@@ -46,7 +46,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.transition.TransitionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -403,8 +402,6 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   }
 
   public void updateDataWithServings() {
-    TransitionManager.beginDelayedTransition(binding.recipeBottomsheet);
-
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
     ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
