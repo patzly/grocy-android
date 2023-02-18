@@ -237,6 +237,8 @@
   <string name="msg_task_undo">Annuler la tâche</string>
   <string name="msg_recipes_enough_in_stock">Stock suffisant</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Stock suffisant</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
+  <string name="msg_recipes_enough_in_stock_amount">Suffisamment en stock (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Stock insuffisant mais sur la liste de courses</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Stock insuffisant</string>
   <string name="msg_recipes_not_enough">Stock insuffisant</string>
