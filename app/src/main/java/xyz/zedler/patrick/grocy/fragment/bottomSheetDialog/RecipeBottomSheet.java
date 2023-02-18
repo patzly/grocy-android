@@ -402,6 +402,10 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   }
 
   public void updateDataWithServings() {
+    if (binding == null) {
+      return; // When sheet is dismissed directly after opening
+    }
+
     ColorRoles colorBlue = ResUtil.getHarmonizedRoles(activity, R.color.blue);
     ColorRoles colorGreen = ResUtil.getHarmonizedRoles(activity, R.color.green);
     ColorRoles colorYellow = ResUtil.getHarmonizedRoles(activity, R.color.yellow);
