@@ -216,7 +216,7 @@ public class RecipePositionAdapter extends
     QuantityUnit quantityUnit = QuantityUnit.getFromId(
         quantityUnits, recipePosition.getQuantityUnitId()
     );
-    QuantityUnitConversion quantityUnitConversion = product != null
+    QuantityUnitConversion conversion = product != null
         ? QuantityUnitConversion.getFromTwoUnits(
             quantityUnitConversions,
             product.getQuIdStockInt(),
@@ -228,8 +228,8 @@ public class RecipePositionAdapter extends
     double amountStockUnit = recipePosition.getAmount() /
         recipe.getBaseServings() * recipe.getDesiredServings();
     double amountRecipeUnit = amountStockUnit;
-    if (quantityUnitConversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
-      amountRecipeUnit *= quantityUnitConversion.getFactor();
+    if (conversion != null && !recipePosition.isOnlyCheckSingleUnitInStock()) {
+      amountRecipeUnit *= conversion.getFactor();
     }
     String amountString;
     if (recipePosition.getVariableAmount() == null
@@ -262,9 +262,26 @@ public class RecipePositionAdapter extends
       double amountMissing = getAmountMissing(
           recipePosition, stockItem, amountStockUnit, amountRecipeUnit
       );
-      double amountShoppingList = getAmountOnShoppingList(recipePosition, quantityUnitConversion);
+      double amountShoppingList = getAmountOnShoppingList(recipePosition, conversion);
       if (amountMissing == 0) {
-        holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
+        if (stockItem != null) {
+          double stockAmount = conversion != null
+              ? stockItem.getAmountDouble() * conversion.getFactor()
+              : stockItem.getAmountDouble();
+          holder.binding.fulfilled.setText(
+              context.getString(
+                  R.string.msg_recipes_enough_in_stock_amount,
+                  context.getString(
+                      R.string.subtitle_amount,
+                      NumUtil.trimAmount(stockAmount, maxDecimalPlacesAmount),
+                      pluralUtil.getQuantityUnitPlural(quantityUnit, stockAmount)
+                  )
+              )
+          );
+        } else {
+          holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
+        }
+
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
             R.drawable.ic_round_check_circle_outline,
