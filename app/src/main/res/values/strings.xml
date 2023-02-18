@@ -239,6 +239,8 @@
     <item quantity="one">%1$d ingredient missing</item>
     <item quantity="other">%1$d ingredients missing</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info">Missing: %1$s</string>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Missing: %1$s | Already on shopping list: %2$s</string>
   <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
@@ -591,6 +593,8 @@
   <string name="title_product_cat_qu_conversions">QU conversions</string>
   <string name="title_unknown_input">Unknown input</string>
   <string name="title_presets_new_products">Presets for new products</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s of %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>

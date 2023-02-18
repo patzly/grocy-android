@@ -82,7 +82,10 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
+import xyz.zedler.patrick.grocy.util.ArrayUtil;
 import xyz.zedler.patrick.grocy.util.NumUtil;
 import xyz.zedler.patrick.grocy.util.ResUtil;
 import xyz.zedler.patrick.grocy.util.TextUtil;
@@ -118,6 +121,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
   private List<Product> products;
   private List<QuantityUnit> quantityUnits;
   private List<QuantityUnitConversion> quantityUnitConversions;
+  private HashMap<Integer, StockItem> stockItemHashMap;
+  private List<ShoppingListItem> shoppingListItems;
 
   private MutableLiveData<Boolean> networkLoadingLive;
   private MutableLiveData<String> servingsDesiredLive;
@@ -301,6 +306,14 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
         );
       }
     }
+
+    if (stockItemHashMap == null || shoppingListItems == null) {
+      new Handler().postDelayed(() -> recipesRepository.loadFromDatabase(data -> {
+        stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
+        shoppingListItems = data.getShoppingListItems();
+        updateDataWithServings();
+      }), 500);
+    }
   }
 
   @Override
@@ -331,6 +344,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
       products = data.getProducts();
       quantityUnits = data.getQuantityUnits();
       quantityUnitConversions = data.getQuantityUnitConversions();
+      stockItemHashMap = ArrayUtil.getStockItemHashMap(data.getStockItems());
+      shoppingListItems = data.getShoppingListItems();
 
       recipe = Recipe.getRecipeFromId(recipes, recipe.getId());
       recipeFulfillment = recipe != null
@@ -496,7 +511,9 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
             recipePositions,
             products,
             quantityUnits,
-            quantityUnitConversions
+            quantityUnitConversions,
+            stockItemHashMap,
+            shoppingListItems
         );
       } else {
         binding.recycler.setAdapter(
@@ -508,6 +525,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
                 products,
                 quantityUnits,
                 quantityUnitConversions,
+                stockItemHashMap,
+                shoppingListItems,
                 this
             )
         );
