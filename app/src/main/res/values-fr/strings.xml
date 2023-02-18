@@ -250,6 +250,7 @@
     <item quantity="many">%1$d ingrédients manquants</item>
     <item quantity="other">%1$d ingrédients manquants</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Manquant : %1$s | Déjà sur la liste de courses : %2$s</string>
   <string name="msg_chore_executed">Suivi de la réalisation de la corvée</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
@@ -299,6 +300,7 @@
     <item quantity="other">%1$s %2$s seront retirés du stock.</item>
   </plurals>
   <string name="msg_transfer_tare_weight">Le transfert des produits dont le poids de la tare est défini n\'est actuellement pas supporté.</string>
+  <string name="msg_should_not_be_frozen">Ce produit ne devrait pas être congelé. Voulez-vous poursuivre ?</string>
   <string name="msg_item_marked_as_done">Élément marqué comme terminé</string>
   <string name="msg_item_marked_as_undone">Élément marqué comme non terminé</string>
   <string name="option_synced_success">Option synchronisée avec succès</string>
@@ -366,6 +368,8 @@
   <string name="msg_help_move_on_open">Lorsque activé, en marquant ce produit comme ouvert, le montant correspondant sera déplacé vers l\'emplacement de consommation par défaut.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_disable_own_stock">Lorsque activé, le produit correspondant ne peut pas avoir son propre stock, ce qui signifie qu\'il ne sera pas sélectionnable à l\'achat (utile pour les produits parents qui ne sont utilisés que comme vue récapitulative/totale des sous-produits).</string>
+  <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="msg_help_should_not_be_frozen">Lorsque activé, lors du déplacement de ce produit vers un emplacement de congélation (donc lors de sa congélation), un avertissement s\'affiche.</string>
   <string name="msg_help_due_date_type">D\'après le type d\'échéance sélectionné, la coloration de la page d\'aperçu du stock sera différente. \"À consommer de préférence avant le\" signifie que le produit est peut-être toujours consommable après la date limite. \"À consommer jusqu\'au\" signifie que le produit n\'est plus consommable après la date limite.</string>
   <string name="msg_help_default_due_days_format">Vous pouvez appuyer longuement sur un élément ci-dessous pour entrer une date au lieu d\'un nombre.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -425,6 +429,7 @@
   <string name="msg_help_home_assistant_login_server">Dans le champ ci-dessous, vous pouvez saisir l\'URL de votre instance Nabu Casa, si vous utilisez ce service. Appuyer ici pour consulter le site de Nabu Casa.</string>
   <string name="msg_help_home_assistant_login_token">Vous pouvez créer un jeton d\'accès de longue durée dans les paramètres de votre profil Home Assistant (dernière section). Appuyez ici pour ouvrir l\'URL ci-dessus.</string>
   <string name="msg_help_home_assistant_login_proxy_id">Appuyez ici pour scanner un code QR afin de remplir les champs ci-dessous.</string>
+  <string name="msg_help_fab_overview_start">Le bouton d\'action sur cette page d\'aperçu a deux actions :\n\n- Appui court : consommer avec le lecteur de code-barres\n- Appui long : acheter avec le lecteur de code-barres\n\nAvec ce bouton, le mode rapide sur les pages respectives est activé par défaut. Vous pouvez modifier cela dans les paramètres de comportement.</string>
   <string name="msg_share">Découvrez ce client Android pour l\'excellent projet grocy : \nhttps://github.com/patzly/grocy-android</string>
 
   <string name="error_api_not_working">La clé API ne fonctionne pas</string>
@@ -593,6 +598,8 @@
   <string name="title_product_cat_qu_conversions">Conversions d\'UQ</string>
   <string name="title_unknown_input">Entrée inconnue</string>
   <string name="title_presets_new_products">Préréglages pour de nouveaux produits</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s de %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
@@ -899,6 +906,8 @@
   <string name="property_never_show">Ne jamais afficher sur l\'aperçu du stock</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_disable_own_stock">Désactiver son propre stock</string>
+  <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
+  <string name="property_should_not_be_frozen">Ne doit pas être congelé</string>
   <string name="property_number">Nombre</string>
   <!--The same string is also in the web interface: Product edit form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_enable_tare_weight">Activer la gestion du tarage du poids</string>

@@ -228,22 +228,6 @@ public class RecipesFragment extends BaseFragment implements
                 }, 100);
               }
           ));
-
-          underlayButtons.add(new UnderlayButton(
-              activity,
-              R.drawable.ic_round_add_shopping_cart,
-              pos -> {
-                if (pos >= displayedItems.size()) {
-                  return;
-                }
-                swipeBehavior.recoverLatestSwipedItem();
-                new Handler().postDelayed(() -> {
-                  Recipe recipe = displayedItems.get(pos);
-                  addNotFulfilledProductsToCartForRecipe(recipe.getId());
-                  activity.showSnackbar(R.string.msg_recipe_added_to_cart, true);
-                }, 100);
-              }
-          ));
         }
       };
     }
@@ -281,11 +265,11 @@ public class RecipesFragment extends BaseFragment implements
   }
 
   @Override
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
     if (showOfflineError()) {
       return;
     }
-    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId);
+    viewModel.addNotFulfilledProductsToCartForRecipe(recipeId, excludedProductIds);
   }
 
   @Override

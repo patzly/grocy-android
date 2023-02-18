@@ -273,8 +273,6 @@
   <string name="msg_quick_mode_confirm_purchase">将被执行的事务: \n\n 添加%1$s%2$s的%3$s到库存 \n 到期日:%4$s \n 价格:%5$s \n 商店:%6$s \n 位置:%7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">将被执行的事务: \n\n %1$s%2$s的%3$s从库存删除 \n 位置:%4$s</string>
-  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">将要执行的事务:\n\标记%1$s%2$s的%3$s为已打开\n位置: %4$s </string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">将被执行的事务: \n\n 迁移%1$s%2$s的%3$s \n 从位置:%4$s \n 到位置:%5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -527,7 +525,6 @@
   <string name="title_product_cat_qu_conversions">QU换算</string>
   <string name="title_unknown_input">未知的输入</string>
   <string name="title_presets_new_products">预设新产品</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -585,7 +582,6 @@
   <string name="subtitle_recipe_not_on_server">食谱不在服务器上</string>
   <string name="subtitle_per_serving">每份</string>
   <string name="subtitle_tap_preparation_mode">点击这里进入准备模式</string>
-
   <string name="description_input_product_part1">产品字段包含：</string>
   <string name="description_input_product_part2">请选择如何继续：</string>
   <string name="description_input_product_option1">创建新产品并使用输入作为名称</string>

@@ -8,6 +8,8 @@
 - Improved: Stock overview page has new status filter "not fresh" for combined results (#661)
 - Improved: "Should not be frozen" toggle on master product page and warn user if appropriate (#638)
 - Improved: Info shown for action button on overview start page (#540)
+- Improved: Fulfillment check for every ingredient on recipe page
+- Improved: On recipe page ingredients now can be added to shopping list with exclude option (#632)
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+
@@ -38,6 +40,7 @@
 - Improved: Master object lists now have fuzzy search (#610)
 - Improved: Consume quick mode confirmation page now has option to open instead of consume (#572)
 - Improved: Allow changing stock unit of product if no transaction was made since creation (#635)
+- Improved: Ingredients display available amount in stock if fulfilled
 - Fixed: F-Droid build should work again (#566)
 - Fixed: Crash when amount in recipe ingredient was NaN (thanks @Whhoesj for your fix) (#565)
 - Fixed: Wrong ingredient amount in the recipe view with base servings other than 1 (#584)

@@ -228,6 +228,7 @@
   <string name="msg_task_undo">Undo task</string>
   <string name="msg_recipes_enough_in_stock">Enough in stock</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Enough in stock</string>
+  <string name="msg_recipes_enough_in_stock_amount">Enough in stock (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Not enough in stock but on shopping list</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Not enough in stock</string>
   <string name="msg_recipes_not_enough">Not enough in stock</string>
@@ -239,6 +240,7 @@
     <item quantity="one">%1$d ingredient missing</item>
     <item quantity="other">%1$d ingredients missing</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Missing: %1$s | Already on shopping list: %2$s</string>
   <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">Purchased %1$s %2$s of %3$s</string>
@@ -591,6 +593,8 @@
   <string name="title_product_cat_qu_conversions">QU conversions</string>
   <string name="title_unknown_input">Unknown input</string>
   <string name="title_presets_new_products">Presets for new products</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s of %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>

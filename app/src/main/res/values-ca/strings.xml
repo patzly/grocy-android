@@ -562,7 +562,6 @@
   <string name="title_product_cat_qu_conversions">Conversions QU</string>
   <string name="title_unknown_input">Entrada desconeguda</string>
   <string name="title_presets_new_products">Paràmetres per defecte per a nous productes</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s%2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->

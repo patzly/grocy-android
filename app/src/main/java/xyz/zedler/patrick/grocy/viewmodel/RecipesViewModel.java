@@ -29,6 +29,9 @@ import androidx.preference.PreferenceManager;
 import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.api.GrocyApi;
 import xyz.zedler.patrick.grocy.api.GrocyApi.ENTITY;
@@ -44,6 +47,8 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 import xyz.zedler.patrick.grocy.repository.RecipesRepository;
 import xyz.zedler.patrick.grocy.util.PrefsUtil;
 import xyz.zedler.patrick.grocy.util.SortUtil;
@@ -141,7 +146,9 @@ public class RecipesViewModel extends BaseViewModel {
         RecipePosition.class,
         Product.class,
         QuantityUnit.class,
-        QuantityUnitConversion.class
+        QuantityUnitConversion.class,
+        StockItem.class,
+        ShoppingListItem.class
     );
   }
 
@@ -157,6 +164,8 @@ public class RecipesViewModel extends BaseViewModel {
     editPrefs.putString(PREF.DB_LAST_TIME_PRODUCTS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNITS, null);
     editPrefs.putString(PREF.DB_LAST_TIME_QUANTITY_UNIT_CONVERSIONS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_STOCK_ITEMS, null);
+    editPrefs.putString(PREF.DB_LAST_TIME_SHOPPING_LIST_ITEMS, null);
     editPrefs.apply();
     downloadData(true);
   }
@@ -256,9 +265,18 @@ public class RecipesViewModel extends BaseViewModel {
     );
   }
 
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
-    dlHelper.post(
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
+    JSONObject jsonObject = new JSONObject();
+    try {
+      JSONArray array = new JSONArray();
+      for (int id : excludedProductIds) array.put(id);
+      jsonObject.put("excludedProductIds", array);
+    } catch (JSONException e) {
+      throw new RuntimeException(e);
+    }
+    dlHelper.postWithArray(
         grocyApi.addNotFulfilledProductsToCartForRecipe(recipeId),
+        jsonObject,
         response -> downloadData(),
         this::showNetworkErrorMessage
     );

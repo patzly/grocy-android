@@ -330,7 +330,7 @@
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Операция, которая будет выполнена:\n\nУдалить %1$s %2$s %3$s из запасов\nМесто: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Транзакция, которая будет выполнена:\n\Отметить %1$s %2$s %3$s открытым\nРасположение: %4$s</string>
+  <string name="msg_quick_mode_confirm_open">Транзакция, которая будет выполнена:\n\nОтметить %1$s %2$s %3$s открытым\nРасположение: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Операция, которая будет выполнена:\n\nПереместить %1$s %2$s %3$s\nИз места: %4$s\nВ место: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -350,6 +350,9 @@
   <string name="msg_press_hold_confirm">Нажмите и удерживайте, чтобы подтвердить удаление</string>
   <string name="msg_recipe_consume_ask">Использовать все ингредиенты рецепта \"%1$s\"? (ингредиенты с пометкой \"любое количество в запасах\" будут игнорироваться)</string>
   <string name="msg_recipe_shopping_list_ask">Добавить все недостающие ингредиенты рецепта \"%1$s\" в список покупок?\n\nСнимите галочки с ингредиентов, которые добавлять не нужно:</string>
+  <string name="msg_welcome">Добро пожаловать в Grocy Android!</string>
+  <string name="msg_welcome_introduce">Для продуктивного использования Grocy вам понадобится собственный сервер или надстройка Grocy для Home Assistant.\nЕсли вы просто хотите опробовать это приложение, вы можете использовать демонстрационный сервер от Бернда Бестела, создателя Grocy.</string>
+  <string name="msg_choose_option_below">Пожалуйста, выберите вариант снизу</string>
   <string name="msg_qr_code_scan">На другом устройстве посетите свой веб-сайт Grocy и перейдите на страницу «Ключи API». Нажмите «Добавить», затем нажмите на маленький символ QR-кода и отсканируйте QR-код.</string>
   <string name="msg_qr_code_scan_token">Вы используете надстройку Grocy Home Assistant. Создайте долговечный токен доступа в настройках вашего профиля Home Assistant (последний раздел). Под полем токена нажмите на \"Сгенерировать QR-код\" и отсканируйте его здесь.</string>
   <string name="msg_port_connection_info_without_port">Приложение подключится к порту %1$s.\nЕсли вы хотите подключить его к другому порту, вы можете добавить порт к адресу.\nПример: http://domain.com:81/</string>
@@ -397,6 +400,10 @@
   <string name="msg_help_inventory_fields">Следующие поля относятся к недавно добавленным продуктам.</string>
   <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
   <string name="msg_help_barcode_scanner_choose">Вы можете выбрать сканер штрихкода для сканирования штрихкода камерой смартфона.</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_zxing">ZXing (\"zebra crossing\") использует данные контрастности из потока камеры для обнаружения штрихкода. Затем он вычисляет относительную ширину всех линий.\n\n- Иногда неправильные результаты\n- Штрихкод должен быть выровнен по горизонтали\n- Требуется хорошая контрастность и резкость\n- Выполняется полностью автономно на вашем устройстве\n- Фреймворк с открытым исходным кодом</string>
+  <!-- Note for app maintainers: Only relevant for Play Store and GitHub variant, it's here because strings for Transifex must be in master branch. -->
+  <string name="msg_help_barcode_scanner_info_mlkit">ML Kit использует машинное обучение с использованием новейших технологий для сканирования штрихкодов.\n\n- Почти нет неправильных результатов\n- Ориентация не имеет значения\n- Работает даже для нечетких или низкоконтрастных штрихкодов\n- Выполняется полностью автономно на вашем устройстве\n- Фреймворк не является открытым исходным кодом</string>
   <string name="msg_help_external_scanner_ready">Вы можете использовать внешний сканер для поля ниже, пока оно активно и не заполнено.</string>
   <string name="msg_help_external_scanner_settings">Это приложение поддерживает внешние сканеры, которые действуют как клавиатура и могут быть подключены через USB или Bluetooth. Во внешнем сканере должны быть настроены следующие параметры:\n\nPrefix: None\nSuffix: TAB or ENTER</string>
   <!--The same string is also in the web interface: Consume form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -462,6 +469,7 @@
   <string name="error_api_qr_code">QR-код без учетных данных Grocy API</string>
   <string name="error_token_qr_code">Не QR-код с долговечным токеном доступа от Home Assistant</string>
   <string name="error_loading_qus">Не удалось загрузить единицы количества из продукта</string>
+  <string name="error_no_children">У выбранного товара нет дочерних элементов</string>
   <!-- %1$s is a number like 0, 1, 2 -->
   <string name="error_amount_equal_stock">Не может быть равно %1$s</string>
   <!-- %1$s and %2$s are numbers like 0, 1, 2 -->
@@ -478,6 +486,7 @@
   <string name="error_name_exists">Название уже существует</string>
   <string name="error_network">Ошибка сети</string>
   <string name="error_network_subtitle">Требуемые данные не могут быть загружены полностью</string>
+  <string name="error_network_exact">Ошибка сети: %1$s</string>
   <string name="error_unknown">Ой!</string>
   <string name="error_not_grocy_instance">Это не сервер Grocy</string>
   <string name="error_timeout">Превышено время ожидания</string>
@@ -588,7 +597,6 @@
   <string name="title_product_cat_qu_conversions">Преобразование ЕИ</string>
   <string name="title_unknown_input">Неизвестный ввод</string>
   <string name="title_presets_new_products">Шаблоны для новых продуктов</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -644,8 +652,14 @@
   <string name="subtitle_product_quantity_unit">В запасах, При покупках</string>
   <string name="subtitle_synced_with_server">Синхронизировано с сервером</string>
   <string name="subtitle_recipe_not_on_server">Рецепт не на сервере</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="subtitle_recipe_due_score">Балл \"срока годности\": %1$s</string>
   <string name="subtitle_per_serving">за порцию</string>
   <string name="subtitle_tap_preparation_mode">Нажмите для режима приготовления</string>
+  <!-- Short form for "One label per purchase" -->
+  <string name="subtitle_print_label_per_purchase">На покупку</string>
+  <!-- Short form for "One label per unit" -->
+  <string name="subtitle_print_label_per_unit">На единицу</string>
 
   <string name="description_input_product_part1">Поле продукта содержит:</string>
   <string name="description_input_product_part2">Пожалуйста, выберите, как продолжить:</string>
@@ -783,6 +797,14 @@
     <item quantity="many">В базе данных %1$d продуктов.</item>
     <item quantity="other">В базе данных %1$d продуктов.</item>
   </plurals>
+  <!-- %1$s is a number -->
+  <plurals name="error_max_decimal_places">
+    <item quantity="one">Максимум %1$s знак после запятой</item>
+    <item quantity="few">Максимум %1$s знака после запятой</item>
+    <item quantity="many">Максимум %1$s знаков после запятой</item>
+    <item quantity="other">Максимум %1$s знаков после запятой</item>
+  </plurals>
+
   <string name="property_name">Название</string>
   <string name="property_name_singular">Название</string>
   <string name="property_name_plural">Название (множественная форма)</string>
@@ -860,6 +882,7 @@
   <string name="property_location_default">Место по умолчанию</string>
   <string name="property_location_default_insert">Место по умолчанию: %1$s</string>
   <string name="property_location_consume_default">Место потребления по умолчанию</string>
+  <string name="property_move_on_open">Перемести при открытии</string>
   <string name="property_notes">Заметки</string>
   <string name="property_locations">Места</string>
   <string name="property_store">Магазин</string>
@@ -959,6 +982,8 @@
   <string name="property_preparation">Приготовление</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_costs">Цены</string>
+  <!-- See context for this string on the web interface on the recipe page, the table contains the due score and help text for it -->
+  <string name="property_due_score">Балл \"срока годности\"</string>
   <!-- See context for this string on the web interface on the recipes page, the recipe details card contains it -->
   <string name="property_ingredients">Игредиенты</string>
   <string name="property_only_check_single_unit_in_stock">Проверить любое кол-во в запасах</string>
@@ -1077,6 +1102,7 @@
   <string name="hint_key">Действительный ключ доступа к API</string>
 
   <string name="setting_theme">Тема</string>
+  <string name="setting_theme_description">Попробовать другой вид</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system (automatic or shorter auto) theme. The button width should be as dense as possible. -->
   <string name="setting_theme_auto">Автоматически</string>
   <!-- This is a theme name: User can choose between dark or light theme or follow system theme -->
@@ -1145,6 +1171,8 @@
   <string name="setting_timeout_descriptions">После которого загрузка отменяется</string>
   <string name="setting_beginner_mode">Режим для начинающих</string>
   <string name="setting_beginner_mode_description">Показывать подсказки по умолчанию</string>
+  <string name="setting_haptic">Тактильные эффекты</string>
+  <string name="setting_haptic_description">Обратный отклик приложения</string>
   <!-- Maybe you can copy the term 'bottom sheet' to your translation, because it's a term from Material Design which may not be translatable... -->
   <string name="setting_expand_bottom_sheets">Расширить Bottom Sheets</string>
   <string name="setting_expand_bottom_sheets_description">Выдвигающийся снизу экран в альбомном режиме</string>
@@ -1154,6 +1182,7 @@
   <string name="setting_date_keyboard_input_description">Вместо колес для выбора даты</string>
   <string name="setting_date_keyboard_reverse">Использовать обратный формат даты для ввода</string>
   <string name="setting_date_keyboard_reverse_description">ДДММГГ вместо ГГММВВ</string>
+  <string name="setting_copy_barcode_note_description">При покупке продукта</string>
   <string name="setting_loading_circle">Показывать анимацию загрузки для всех запросов</string>
   <string name="setting_loading_circle_description">Полезно для медленных соединений</string>
   <string name="setting_tor">Использовать Tor</string>
@@ -1169,6 +1198,9 @@
   <string name="setting_message_duration">Время отображения сообщений</string>
   <string name="setting_message_duration_description">Касается только сообщений о транзакциях</string>
   <string name="setting_notifications_enable">Включить уведомления</string>
+  <!-- The string belongs to the stock overview, due soon items are products which are overdue in a
+  few days and therefore should be consumed in the next few days. -->
+  <string name="setting_notifications_due_soon">Продукты, которые скоро испортятся</string>
   <string name="setting_notifications_due_soon_description">Ежедневно проверяет запасы и уведомляет вас портящихся продуктах</string>
   <string name="setting_notifications_chores_description">Ежедневно проверяет работу по дому и уведомляет вас, когда работа должна быть выполнена сегодня</string>
   <string name="setting_notification_time">Время уведомлений</string>

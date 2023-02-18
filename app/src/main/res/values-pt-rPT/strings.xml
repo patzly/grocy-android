@@ -310,8 +310,6 @@
   <string name="msg_quick_mode_confirm_purchase">Transação que será executada:\n\nAdicionar %1$s %2$s de %3$s ao stock\nPrazo de validade: %4$s\nPreço: %5$s\nLoja: %6$s\nLocalização: %7$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
   <string name="msg_quick_mode_confirm_consume">Transação que será executada:\n\nRemover %1$s %2$s de %3$s do stock\nLocalização: %4$s</string>
-  <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location-->
-  <string name="msg_quick_mode_confirm_open">Transação que será executada:\n\Marcar %1$s %2$s de %3$s como abertos(as)\nLocalização: %4$s</string>
   <!-- %1$s is an amount, %2$s a quantity unit, %3$s a product name, %4$s is a location, %5$s is a location-->
   <string name="msg_quick_mode_confirm_transfer">Transação que será executada:\n\nTransferir %1$s %2$s de %3$s\nDa localização: %4$s\nPara localização: %5$s</string>
   <!-- %1$s is a product name, %2$s an amount, %3$s a quantity unit, %4$s a due date, %5$s a price, %6$s a store and %7$s is a location -->
@@ -564,7 +562,6 @@
   <string name="title_product_cat_qu_conversions">Conversões de unidades</string>
   <string name="title_unknown_input">Valor desconhecido</string>
   <string name="title_presets_new_products">Pré-definições para novos produtos</string>
-
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
   <!-- Is an extension for an amount, example: 3 Bottles (opened) -->
@@ -624,7 +621,6 @@
   <string name="subtitle_recipe_due_score">Pontuação devida: %1$s</string>
   <string name="subtitle_per_serving">por porção</string>
   <string name="subtitle_tap_preparation_mode">Clique aqui para modo de preparação</string>
-
   <string name="description_input_product_part1">Campo do produto contém:</string>
   <string name="description_input_product_part2">Por favor escolha como prosseguir:</string>
   <string name="description_input_product_option1">Criar novo produto introduzindo o nome</string>

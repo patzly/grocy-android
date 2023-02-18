@@ -179,7 +179,7 @@ public class BaseFragment extends Fragment {
   public void consumeRecipe(int recipeId) {
   }
 
-  public void addNotFulfilledProductsToCartForRecipe(int recipeId) {
+  public void addNotFulfilledProductsToCartForRecipe(int recipeId, int[] excludedProductIds) {
   }
 
   public void editRecipe(Recipe recipe) {

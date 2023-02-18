@@ -31,6 +31,8 @@ import xyz.zedler.patrick.grocy.model.QuantityUnitConversion;
 import xyz.zedler.patrick.grocy.model.Recipe;
 import xyz.zedler.patrick.grocy.model.RecipeFulfillment;
 import xyz.zedler.patrick.grocy.model.RecipePosition;
+import xyz.zedler.patrick.grocy.model.ShoppingListItem;
+import xyz.zedler.patrick.grocy.model.StockItem;
 
 public class RecipesRepository {
 
@@ -53,19 +55,26 @@ public class RecipesRepository {
     private final List<Product> products;
     private final List<QuantityUnit> quantityUnits;
     private final List<QuantityUnitConversion> quantityUnitConversions;
+    private final List<StockItem> stockItems;
+    private final List<ShoppingListItem> shoppingListItems;
 
-    public RecipesData(List<Recipe> recipes,
-                       List<RecipeFulfillment> recipeFulfillments,
-                       List<RecipePosition> recipePositions,
-                       List<Product> products,
-                       List<QuantityUnit> quantityUnits,
-                       List<QuantityUnitConversion> quantityUnitConversions) {
+    public RecipesData(
+        List<Recipe> recipes,
+        List<RecipeFulfillment> recipeFulfillments,
+        List<RecipePosition> recipePositions,
+        List<Product> products,
+        List<QuantityUnit> quantityUnits,
+        List<QuantityUnitConversion> quantityUnitConversions,
+        List<StockItem> stockItems,
+        List<ShoppingListItem> shoppingListItems) {
       this.recipes = recipes;
       this.recipeFulfillments = recipeFulfillments;
       this.recipePositions = recipePositions;
       this.products = products;
       this.quantityUnits = quantityUnits;
       this.quantityUnitConversions = quantityUnitConversions;
+      this.stockItems = stockItems;
+      this.shoppingListItems = shoppingListItems;
     }
 
     public List<Recipe> getRecipes() {
@@ -91,6 +100,14 @@ public class RecipesRepository {
     public List<QuantityUnitConversion> getQuantityUnitConversions() {
       return quantityUnitConversions;
     }
+
+    public List<StockItem> getStockItems() {
+      return stockItems;
+    }
+
+    public List<ShoppingListItem> getShoppingListItems() {
+      return shoppingListItems;
+    }
   }
 
   public void loadFromDatabase(RecipesDataListener listener) {
@@ -102,6 +119,8 @@ public class RecipesRepository {
             appDatabase.productDao().getProducts(),
             appDatabase.quantityUnitDao().getQuantityUnits(),
             appDatabase.quantityUnitConversionDao().getConversions(),
+            appDatabase.stockItemDao().getStockItems(),
+            appDatabase.shoppingListItemDao().getShoppingListItems(),
             RecipesData::new
         )
         .subscribeOn(Schedulers.io())

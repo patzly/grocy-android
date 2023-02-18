@@ -110,6 +110,9 @@ public class HtmlCardView extends LinearLayout {
         @Override
         public void onPageFinished(WebView view, String url) {
           new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (binding == null) {
+              return;
+            }
             ViewTreeObserver observer = binding.webview.getViewTreeObserver();
             observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
               @Override
