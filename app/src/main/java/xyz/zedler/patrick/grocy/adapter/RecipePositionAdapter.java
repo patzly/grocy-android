@@ -21,6 +21,7 @@ package xyz.zedler.patrick.grocy.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,8 +101,12 @@ public class RecipePositionAdapter extends
     this.products = new ArrayList<>(products);
     this.quantityUnits = new ArrayList<>(quantityUnits);
     this.quantityUnitConversions = new ArrayList<>(quantityUnitConversions);
-    this.stockItemHashMap = stockItemHashMap != null ? new HashMap<>(stockItemHashMap) : new HashMap<>();
-    this.shoppingListItems = shoppingListItems != null ? new ArrayList<>(shoppingListItems) : new ArrayList<>();
+    this.stockItemHashMap = stockItemHashMap != null
+        ? new HashMap<>(stockItemHashMap)
+        : new HashMap<>();
+    this.shoppingListItems = shoppingListItems != null
+        ? new ArrayList<>(shoppingListItems)
+        : new ArrayList<>();
     this.listener = listener;
     this.pluralUtil = new PluralUtil(context);
 
@@ -163,17 +168,21 @@ public class RecipePositionAdapter extends
       }
       if (stockItemHashMap.isEmpty()) continue;
       StockItem stockItem = stockItemHashMap.get(recipePosition.getProductId());
-      double amountMissing = getAmountMissing(recipePosition, stockItem, amountStockUnit, amountRecipeUnit);
+      double amountMissing = getAmountMissing(
+          recipePosition, stockItem, amountStockUnit, amountRecipeUnit
+      );
       double amountShoppingList = getAmountOnShoppingList(recipePosition, quantityUnitConversion);
       if (amountMissing > 0 && amountShoppingList < amountMissing) missingProducts.add(product);
     }
     return missingProducts;
   }
 
-  private double getAmountOnShoppingList(RecipePosition recipePosition, QuantityUnitConversion conversion) {
+  private double getAmountOnShoppingList(RecipePosition recipePosition,
+      QuantityUnitConversion conversion) {
     double amountStockUnit = 0;
     for (ShoppingListItem shoppingListItem : shoppingListItems) {
-      if (!shoppingListItem.hasProduct() || shoppingListItem.getProductIdInt() != recipePosition.getProductId()) continue;
+      if (!shoppingListItem.hasProduct()
+          || shoppingListItem.getProductIdInt() != recipePosition.getProductId()) continue;
       amountStockUnit += shoppingListItem.getAmountDouble();
     }
     return conversion != null ? amountStockUnit * conversion.getFactor() : amountStockUnit;
@@ -250,7 +259,9 @@ public class RecipePositionAdapter extends
     } else {
       holder.binding.fulfillment.setVisibility(View.VISIBLE);
 
-      double amountMissing = getAmountMissing(recipePosition, stockItem, amountStockUnit, amountRecipeUnit);
+      double amountMissing = getAmountMissing(
+          recipePosition, stockItem, amountStockUnit, amountRecipeUnit
+      );
       double amountShoppingList = getAmountOnShoppingList(recipePosition, quantityUnitConversion);
       if (amountMissing == 0) {
         holder.binding.fulfilled.setText(R.string.msg_recipes_enough_in_stock);
@@ -259,21 +270,23 @@ public class RecipePositionAdapter extends
             R.drawable.ic_round_check_circle_outline,
             null
         ));
-        holder.binding.imageFulfillment.setColorFilter(
-            colorGreen.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(colorGreen.getAccent())
         );
         holder.binding.missing.setVisibility(View.GONE);
       } else {
         holder.binding.fulfilled.setText(R.string.msg_recipes_not_enough);
         holder.binding.imageFulfillment.setImageDrawable(ResourcesCompat.getDrawable(
             context.getResources(),
-            amountShoppingList >= amountMissing ? R.drawable.ic_round_error_outline : R.drawable.ic_round_highlight_off,
+            amountShoppingList >= amountMissing
+                ? R.drawable.ic_round_error_outline
+                : R.drawable.ic_round_highlight_off,
             null
         ));
-        holder.binding.imageFulfillment.setColorFilter(
-            amountShoppingList >= amountMissing ? colorYellow.getAccent() : colorRed.getAccent(),
-            android.graphics.PorterDuff.Mode.SRC_IN
+        holder.binding.imageFulfillment.setImageTintList(
+            ColorStateList.valueOf(
+                amountShoppingList >= amountMissing ? colorYellow.getAccent() : colorRed.getAccent()
+            )
         );
         holder.binding.missing.setText(
             context.getString(

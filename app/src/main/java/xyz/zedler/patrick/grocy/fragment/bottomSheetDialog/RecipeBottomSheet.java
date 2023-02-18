@@ -420,9 +420,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           R.drawable.ic_round_check_circle_outline,
           null
       ));
-      binding.imageFulfillment.setColorFilter(
-          colorGreen.getAccent(),
-          android.graphics.PorterDuff.Mode.SRC_IN
+      binding.imageFulfillment.setImageTintList(
+          ColorStateList.valueOf(colorGreen.getAccent())
       );
       binding.missing.setVisibility(View.GONE);
     } else if (recipeFulfillment.isNeedFulfilledWithShoppingList()) {
@@ -434,9 +433,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           R.drawable.ic_round_error_outline,
           null
       ));
-      binding.imageFulfillment.setColorFilter(
-          colorYellow.getAccent(),
-          android.graphics.PorterDuff.Mode.SRC_IN
+      binding.imageFulfillment.setImageTintList(
+          ColorStateList.valueOf(colorYellow.getAccent())
       );
       binding.missing.setText(
           getResources()
@@ -454,9 +452,8 @@ public class RecipeBottomSheet extends BaseBottomSheetDialogFragment implements
           R.drawable.ic_round_highlight_off,
           null
       ));
-      binding.imageFulfillment.setColorFilter(
-          colorRed.getAccent(),
-          android.graphics.PorterDuff.Mode.SRC_IN
+      binding.imageFulfillment.setImageTintList(
+          ColorStateList.valueOf(colorRed.getAccent())
       );
       binding.missing.setText(
           getResources().getQuantityString(R.plurals.msg_recipes_ingredients_missing,

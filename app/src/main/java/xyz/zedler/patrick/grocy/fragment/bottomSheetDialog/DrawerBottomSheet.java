@@ -307,8 +307,8 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
       );
     }
     if (imageView != null) {
-      imageView.setColorFilter(
-          ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary)
+      imageView.setImageTintList(
+          ColorStateList.valueOf(ResUtil.getColorAttr(requireContext(), R.attr.colorPrimary))
       );
     }
   }

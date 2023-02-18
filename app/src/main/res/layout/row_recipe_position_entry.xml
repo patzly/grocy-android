@@ -76,10 +76,10 @@
 
       <ImageView
         android:id="@+id/image_fulfillment"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="4dp"
         android:visibility="visible"
         tools:ignore="ContentDescription" />
 
