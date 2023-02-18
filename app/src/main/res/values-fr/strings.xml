@@ -250,6 +250,7 @@
     <item quantity="many">%1$d ingrédients manquants</item>
     <item quantity="other">%1$d ingrédients manquants</item>
   </plurals>
+  <string name="msg_recipes_ingredient_fulfillment_info_list">Manquant : %1$s | Déjà sur la liste de courses : %2$s</string>
   <string name="msg_chore_executed">Suivi de la réalisation de la corvée</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
   <string name="msg_purchased">%1$s %2$s de %3$s acheté</string>
@@ -597,6 +598,8 @@
   <string name="title_product_cat_qu_conversions">Conversions d\'UQ</string>
   <string name="title_unknown_input">Entrée inconnue</string>
   <string name="title_presets_new_products">Préréglages pour de nouveaux produits</string>
+  <!-- %1$s is an amount, %2$s a quantity unit and %3$s is a product name -->
+  <string name="title_ingredient_with_amount">%1$s %2$s de %3$s</string>
 
   <!-- %1$s is a number like 5, 6, 7 and %2$s is a quantity unit like "bottles" or "bottle" -->
   <string name="subtitle_amount">%1$s %2$s</string>
