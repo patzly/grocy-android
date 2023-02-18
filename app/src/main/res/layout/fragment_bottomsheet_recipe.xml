@@ -232,7 +232,7 @@
           android:layout_marginTop="8dp">
 
           <TextView
-            style="@style/Widget.Grocy.TextView.LabelLarge"
+            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorSecondary"
@@ -301,7 +301,7 @@
 
           <TextView
             android:id="@+id/ingredients_headline"
-            style="@style/Widget.Grocy.TextView.LabelLarge"
+            style="@style/Widget.Grocy.TextView.ListItem.OverLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
