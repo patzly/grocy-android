@@ -239,7 +239,6 @@
     <item quantity="one">%1$d ingredient missing</item>
     <item quantity="other">%1$d ingredients missing</item>
   </plurals>
-  <string name="msg_recipes_ingredient_fulfillment_info">Missing: %1$s</string>
   <string name="msg_recipes_ingredient_fulfillment_info_list">Missing: %1$s | Already on shopping list: %2$s</string>
   <string name="msg_chore_executed">Tracked execution of chore</string>
   <!-- %1$s is a number, %2$s a quantity unit and %3$s is a product name -->
