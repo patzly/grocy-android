@@ -24,6 +24,7 @@
 - Fixed: Products without own stock not hidden in filters on stock overview page (#660)
 - Fixed: Amount of products without own stock not hidden on stock overview page (#654)
 - Fixed: Navigation bar color on devices without gesture navigation
+- Fixed: Default due days after freezing applied on purchase when freezer location is set (#593)
 - Fixed: (not F-Droid) Crash with ML Kit scanner after barcode was scanned
 
 ## 3.0.0

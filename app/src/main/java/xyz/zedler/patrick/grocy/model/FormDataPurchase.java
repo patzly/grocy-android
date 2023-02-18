@@ -861,6 +861,10 @@ public class FormDataPurchase {
     Location location = locationLive.getValue();
     String purchasedDate = purchasedDateLive.getValue();
     String dueDate = dueDateLive.getValue();
+    if (location != null && location.getIsFreezerInt() == 1 && productDetailsLive.getValue() != null) {
+      int daysToAdd = productDetailsLive.getValue().getProduct().getDefaultDueDaysAfterFreezingInt();
+      dueDate = DateUtil.getDateWithDaysAdded(dueDate, daysToAdd);
+    }
     if (!isFeatureEnabled(Constants.PREF.FEATURE_STOCK_BBD_TRACKING)) {
       dueDate = Constants.DATE.NEVER_OVERDUE;
     }
