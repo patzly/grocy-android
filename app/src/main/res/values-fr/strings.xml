@@ -667,6 +667,8 @@
   <string name="subtitle_print_label_per_purchase">Par achat</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Par unité</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Prix total : %1$s %2$s</string>
 
   <string name="description_input_product_part1">Le champ du produit contient :</string>
   <string name="description_input_product_part2">Merci de choisir comment procéder :</string>
