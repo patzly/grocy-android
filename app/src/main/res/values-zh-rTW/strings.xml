@@ -297,7 +297,6 @@
   <string name="msg_not_implemented_yet">本功能即將實裝，請暫時使用伺服器的網頁介面</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">這是在購買時會填入的預設值</string>
-  <string name="stock_disabled">庫存功能已在您的Grocy設定中被停用。但是此應用程式目前只有庫存管理的功能，所以對您可能沒有太大的幫助</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">庫存總覽頁面會列出庫存中的所有物品。啟用此選項以在庫存總覽頁面中永久隱藏此物品</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

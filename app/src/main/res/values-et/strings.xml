@@ -325,7 +325,6 @@
   <string name="msg_not_implemented_yet">See funktsionaalsus lisatakse peagi. Palun kasuta nii kaua oma serveri liidest.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">See on vaikimisi varude sildi tüüp, mis eeltäidetakse ostmisel.</string>
-  <string name="stock_disabled">Sa oled oma Grocy seadistuses varude funktsiooni välja lülitanud, ilmselt seetõttu, et sa ei vaja seda. Kuid see rakendus saab hetkel teha ainult varude haldamist, nii et sellest ei pruugi sulle palju kasu olla.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Varude ülevaate lehel on loetletud kõik tooted, mis on hetkel varudes või alla oma miinimumkoguse. Lülitage see sisse, et see toode oleks seal alati peidetud.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

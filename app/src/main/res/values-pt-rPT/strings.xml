@@ -335,7 +335,6 @@
   <string name="msg_port_connection_info_with_port">A aplicação vai-se conectar à porta %1$s.</string>
   <string name="msg_clear_form_first">Apague o formulário primeiro antes de registar outro código de barras.</string>
   <string name="msg_not_implemented_yet">Isto será implementado em breve. Por favor utilize o seu interface do servidor por agora.</string>
-  <string name="stock_disabled">A funcionalidade de stock foi desactivada na configuração do grocy, provavelmente porque não é necessária. Mas esta aplicação neste momento apenas consegue fazer a gestão de stock, por isso poderá não ter grande utilidade para si.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">A visão geral de stock contêm a lista de todos os produtos em stock ou abaixo da quantidade mín. defenida. Active esta opção para que este produto não seja visivél na visão geral.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

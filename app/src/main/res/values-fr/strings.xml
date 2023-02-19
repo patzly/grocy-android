@@ -359,7 +359,6 @@
   <string name="msg_not_implemented_yet">Cela sera implémenté bientôt. Merci d\'utiliser l\'interface de votre serveur pour l\'instant.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Il s\'agit du type d\'étiquette d\'entrée de stock par défaut qui sera pré-remplie à l\'achat.</string>
-  <string name="stock_disabled">Vous avez désactivé la fonctionnalité de suivi de stock dans la configuration de votre serveur grocy, probablement parce que vous n\'en avez pas besoin. Cependant, cette application ne sert qu\'au suivi de stock pour le moment, elle ne vous sera donc pas d\'une grande utilité.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">L\'aperçu du stock liste tous les produits actuellement en stock ou en-deça de leur stock minimum. Activer cette cette option désactive l\'affichage de ce produit dans tous les cas.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -338,7 +338,6 @@
   <string name="msg_not_implemented_yet">Dies wird bald implementiert. Bitte benutzen Sie vorerst Ihre Server-Oberfläche.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Dies ist die Standardeinstellung für das Bestandseintragsetikett, die beim Einkauf vorbelegt wird.</string>
-  <string name="stock_disabled">Sie haben in Ihrer grocy-Konfiguration das Bestandsfeature deaktiviert, wahrscheinlich weil Sie es nicht brauchen. Diese App kann aber im Moment nur Bestandsverwaltung, also kann es sein, dass sie Ihnen nicht viel nützt.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Die Bestand-Seite listet alle Produkte auf, die derzeit im Bestand oder unter ihrem Mindestbestand sind. Aktiviere dies, um dieses Produkt nie dort anzuzeigen.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -40,6 +40,7 @@
       android:paddingBottom="8dp">
 
       <FrameLayout
+        android:id="@+id/frame_drawer_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -247,6 +248,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.divider.MaterialDivider
+          android:id="@+id/divider_drawer_tasks"
           style="@style/Widget.Grocy.Divider.Margin" />
 
         <LinearLayout

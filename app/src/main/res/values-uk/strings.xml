@@ -355,7 +355,6 @@
   <string name="msg_port_connection_info_with_port">Додаток під\'єднується до порту %1$s.</string>
   <string name="msg_clear_form_first">Спершу очистіть форму, перш ніж сканувати інший відомий штрих-код.</string>
   <string name="msg_not_implemented_yet">Це буде реалізовано найближчим часом. Будь ласка, зараз використовуйте інтерфейс вашого сервера.</string>
-  <string name="stock_disabled">Ви вимкнули функцію запасів у своїй конфігурації grocy, можливо, тому, що вона вам не потрібна. Але на даний момент ця програма може займатися лише управлінням запасами, тому вона може вам не принести великої користі.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">На сторінці огляду запасів перераховані всі товари, які зараз є на складі або їх менше мін. кількості. Увімкніть це, щоб завжди приховувати цей продукт там.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

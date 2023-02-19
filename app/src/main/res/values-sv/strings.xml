@@ -213,7 +213,6 @@
   <string name="msg_port_connection_info_without_port">Appen vill ansluta till port %1$s.\nOm du använder en annan port så lägg till porten i URL:en.n Exempel: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Appen ansluter till port %1$s.</string>
   <string name="msg_not_implemented_yet">Denna funktion kommer att införas senare, var god använd din servers hemsida  tillsvidare.</string>
-  <string name="stock_disabled">Du har valt bort Lager-funktioner i din server konfiguration, förmodligen för att du inte behöver dem. Men appen kan bara hantera dessa just nu, så appen är kanske inte något för dig.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Lager översikten visar alla varor i lager eller varor under min. antal. Aktivera för att \\"Gömma\\" alltid gömma denna produkt där.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
