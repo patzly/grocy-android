@@ -263,7 +263,6 @@
   <string name="msg_port_connection_info_without_port">Aplikácia sa pripojí na port %1$s.\nAk ju chcete pripojiť na iný port, môžete ho pridať k URL.\nNapríklad: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Aplikácia sa pripojí na port %1$s.</string>
   <string name="msg_not_implemented_yet">Toto zavedieme čoskoro. Zatiaľ na to prosím použite rozhranie na serveri.</string>
-  <string name="stock_disabled">Vo vašom nastavení grocy ste vypli funkciu správy zásob. Možno preto, že ju nepotrebujete. Ale táto aplikácia vie zatiaľ len spravovať zásoby, takže Vám asi nebude veľmi užitočná.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Stránka s prehľadom zásob vypisuje všetky výrobky, ktoré sú momentálne v zásobe, alebo pod úrovňou minimálneho množstva. Ak na nej nechcete tento výrobok zobrazovať, zapnite túto voľbu. </string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

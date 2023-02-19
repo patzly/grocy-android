@@ -32,6 +32,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import xyz.zedler.patrick.grocy.Constants;
+import xyz.zedler.patrick.grocy.Constants.PREF;
 import xyz.zedler.patrick.grocy.R;
 import xyz.zedler.patrick.grocy.activity.MainActivity;
 import xyz.zedler.patrick.grocy.behavior.SystemBarBehavior;
@@ -140,7 +141,7 @@ public class OverviewStartFragment extends BaseFragment {
     activity.getScrollBehavior().setNestedOverScrollFixEnabled(true);
     activity.getScrollBehavior().setUpScroll(binding.appBar, false, binding.scroll);
     activity.getScrollBehavior().setBottomBarVisibility(true);
-    activity.updateBottomAppBar(true, R.menu.menu_empty);
+    activity.updateBottomAppBar(viewModel.isFeatureEnabled(PREF.FEATURE_STOCK), R.menu.menu_empty);
     activity.updateFab(
         R.drawable.ic_round_barcode_scan,
         R.string.action_scan,

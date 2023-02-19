@@ -338,7 +338,6 @@
   <string name="msg_port_connection_info_with_port">L\'app si connetterà alla porta %1$s.</string>
   <string name="msg_clear_form_first">Pulisci il form prima di scannerizzare un altro codice a barre salvato.</string>
   <string name="msg_not_implemented_yet">Questo sarà implementato presto. Per favore usa l\'interfaccia server per il momento.</string>
-  <string name="stock_disabled">Hai disabilitato la funzionalità di dispensa nella tua configurazione di grocy, probabilmente perché non ti serve. Ma questa app può solo gestire la dispensa al momento, per cui non ti sarà molto utile.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Il riepilogo della dispensa elenca tutti i prodotti che sono attualmente in dispensa o sotto la quantità minima. Abilita questo per nasconderlo sempre per questo prodotto.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

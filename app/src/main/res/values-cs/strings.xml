@@ -361,7 +361,6 @@
   <string name="msg_not_implemented_yet">Tato funkce zatím není implemetována. Zatím, prosím, použijte rozhraní svého serveru.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Výchozí typ nálepky s čárovým kódem pro produkt při nákupu</string>
-  <string name="stock_disabled">V konfiguraci grocy na vašem serveru máte vypnutou funkci Přehled zásob. Ovšem tato aplikace je určena hlavně na správu produktů. Její funkčnost je teď značně omezená.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">Stránka Přehledu zásob zobrazuje všechny produkty, které jsou v zásobě nebo pod jejich minimálním stavem. Zaškrtnutím se v něm produkt nikdy neobjeví.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

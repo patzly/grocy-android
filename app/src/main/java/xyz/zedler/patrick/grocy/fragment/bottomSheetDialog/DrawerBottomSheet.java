@@ -138,29 +138,33 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     ViewUtil.setTooltipText(binding.linearDrawerTransfer, R.string.title_transfer);
     ViewUtil.setTooltipText(binding.linearDrawerInventory, R.string.title_inventory);
 
-    ViewTreeObserver observerText = binding.textDrawerStock.getViewTreeObserver();
-    observerText.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        boolean isLayoutRtl = UiUtil.isLayoutRtl(activity);
-        int textEnd = isLayoutRtl
-            ? binding.textDrawerStock.getLeft()
-            : binding.textDrawerStock.getRight();
-        int iconsStart = isLayoutRtl
-            ? binding.linearDrawerContainerTransactionIcons.getRight()
-            : binding.linearDrawerContainerTransactionIcons.getLeft();
-        boolean hasEnoughSpace = isLayoutRtl ? textEnd >= iconsStart : textEnd <= iconsStart;
-        binding.linearDrawerContainerTransactions.setVisibility(
-            hasEnoughSpace ? View.GONE : View.VISIBLE
-        );
-        binding.linearDrawerContainerTransactionIcons.setVisibility(
-            hasEnoughSpace ? View.VISIBLE : View.GONE
-        );
-        if (binding.textDrawerStock.getViewTreeObserver().isAlive()) {
-          binding.textDrawerStock.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    if (!isFeatureDisabled(PREF.FEATURE_STOCK)) {
+      ViewTreeObserver observerText = binding.textDrawerStock.getViewTreeObserver();
+      observerText.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          boolean isLayoutRtl = UiUtil.isLayoutRtl(activity);
+          int textEnd = isLayoutRtl
+              ? binding.textDrawerStock.getLeft()
+              : binding.textDrawerStock.getRight();
+          int iconsStart = isLayoutRtl
+              ? binding.linearDrawerContainerTransactionIcons.getRight()
+              : binding.linearDrawerContainerTransactionIcons.getLeft();
+          boolean hasEnoughSpace = isLayoutRtl ? textEnd >= iconsStart : textEnd <= iconsStart;
+          binding.linearDrawerContainerTransactions.setVisibility(
+              hasEnoughSpace ? View.GONE : View.VISIBLE
+          );
+          binding.linearDrawerContainerTransactionIcons.setVisibility(
+              hasEnoughSpace ? View.VISIBLE : View.GONE
+          );
+          if (binding.textDrawerStock.getViewTreeObserver().isAlive()) {
+            binding.textDrawerStock.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+          }
         }
-      }
-    });
+      });
+    } else {
+      binding.linearDrawerContainerTransactions.setVisibility(View.GONE);
+    }
 
     ClickUtil.setOnClickListeners(
         this,
@@ -332,6 +336,9 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
   }
 
   private void hideDisabledFeatures() {
+    if (isFeatureDisabled(PREF.FEATURE_STOCK)) {
+      binding.frameDrawerStock.setVisibility(View.GONE);
+    }
     if (isFeatureDisabled(PREF.FEATURE_SHOPPING_LIST)) {
       binding.frameShoppingList.setVisibility(View.GONE);
     }
@@ -340,9 +347,11 @@ public class DrawerBottomSheet extends BaseBottomSheetDialogFragment implements 
     }
     if (isFeatureDisabled(PREF.FEATURE_RECIPES)) {
       binding.containerRecipes.setVisibility(View.GONE);
-    }
-    if (isFeatureDisabled(PREF.FEATURE_RECIPES)) {
       binding.linearDrawerRecipes.setVisibility(View.GONE);
+    }
+    if (isFeatureDisabled(PREF.FEATURE_STOCK) && isFeatureDisabled(PREF.FEATURE_SHOPPING_LIST)
+        && isFeatureDisabled(PREF.FEATURE_RECIPES)) {
+      binding.dividerDrawerTasks.setVisibility(View.GONE);
     }
     if (isFeatureDisabled(PREF.FEATURE_TASKS) && isFeatureDisabled(PREF.FEATURE_CHORES)) {
       binding.containerTasks.setVisibility(View.GONE);

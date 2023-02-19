@@ -228,6 +228,7 @@
   <string name="msg_task_undo">Undo task</string>
   <string name="msg_recipes_enough_in_stock">Enough in stock</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Enough in stock</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
   <string name="msg_recipes_enough_in_stock_amount">Enough in stock (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Not enough in stock but on shopping list</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Not enough in stock</string>
@@ -346,7 +347,6 @@
   <string name="msg_not_implemented_yet">This will be implemented soon. Please use your server interface for now.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">This is the default stock entry label type which will be prefilled on purchase.</string>
-  <string name="stock_disabled">You have disabled the stock feature in your grocy configuration, probably because you don\'t need it. But this app can only do stock management at the moment, so it may not be of much use to you.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">The stock overview page lists all products which are currently in-stock or below their min. amount. Enable this to hide this product there always.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
@@ -661,6 +661,8 @@
   <string name="subtitle_print_label_per_purchase">Per purchase</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Per unit</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Total price: %1$s %2$s</string>
 
   <string name="description_input_product_part1">Product field contains:</string>
   <string name="description_input_product_part2">Please choose how to proceed:</string>

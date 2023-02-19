@@ -58,14 +58,32 @@
     android:layout_height="wrap_content"
     android:singleLine="true" />
 
-  <TextView
-    android:id="@+id/extra_field"
-    style="@style/Widget.Grocy.TextView.LabelSmall"
+  <LinearLayout
+    android:id="@+id/extra_field_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:layout_marginStart="16dp"
-    android:singleLine="true"
-    android:visibility="gone"
-    android:textColor="?attr/colorOnSurfaceVariant" />
+    android:layout_gravity="top"
+    android:visibility="gone">
+
+    <TextView
+      android:id="@+id/extra_field"
+      style="@style/Widget.Grocy.TextView.LabelSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:textColor="?attr/colorOnSurfaceVariant" />
+
+    <TextView
+      android:id="@+id/extra_field_subtitle"
+      style="@style/Widget.Grocy.TextView.LabelSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:visibility="gone"
+      android:textColor="?attr/colorOnSurfaceVariant" />
+
+  </LinearLayout>
 
 </LinearLayout>

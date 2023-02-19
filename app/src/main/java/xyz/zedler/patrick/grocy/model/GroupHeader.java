@@ -26,6 +26,10 @@ public class GroupHeader extends GroupedListItem {
   private final String groupName;
   private int displayDivider = 0;
 
+  public GroupHeader() {
+    this.groupName = null;
+  }
+
   public GroupHeader(String groupName) {
     this.groupName = groupName;
   }

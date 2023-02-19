@@ -325,7 +325,6 @@
   <string name="msg_not_implemented_yet">Això s’implementarà aviat. Fes servir de moment la teva interfície de servidor.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_default_stock_label_type">Aquest es el tipus d\'etiqueta d\'entrada que serà predefinida a la compra.</string>
-  <string name="stock_disabled">Has desactivat la funció de valors de la teva configuració de botigues, probablement perquè no la necessites. Aquesta aplicació només pot gestionar les existències en aquest moment, de manera que pot ser que no et sigui de gran utilitat.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">A la pàgina de descripció general de les existències s’enumeren tots els productes que actualment estan en estoc o per sota de la quantitat mínima. Activa aquesta opció per amagar sempre aquest producte.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

@@ -301,7 +301,6 @@
   <string name="msg_port_connection_info_with_port">应用程序将连接到端口%1$s</string>
   <string name="msg_clear_form_first">在扫描另一个已知条形码之前先清空表单</string>
   <string name="msg_not_implemented_yet">本功能即将实施。请暂时使用您的WEB页面。</string>
-  <string name="stock_disabled">您已经禁用了grocy配置中的常用特性，可能是因为您不需要它。但是这个应用目前只能做库存管理，所以可能对你没有太大的用处。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">库存概述页面列出了所有库存产品或低于最小库存的产品。启用此选项可始终隐藏该产品。</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

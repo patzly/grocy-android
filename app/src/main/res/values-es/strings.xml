@@ -223,7 +223,6 @@
   <string name="msg_port_connection_info_without_port">La aplicación se conectará al puerto %1$s.\nSi quieres conectarlo a otro puerto, puedes añadirlo a la URL.\nEjemplo: http://dominio.es:81/</string>
   <string name="msg_port_connection_info_with_port">La aplicación se conectará al puerto %1$s.</string>
   <string name="msg_not_implemented_yet">Esto será implementado pronto. Por favor, use su interfaz web de momento.</string>
-  <string name="stock_disabled">Has desactivado la función de inventario en tu configuración de grocy, probablemente porque no la necesitas. Pero esta app solo puede hacer gestión de inventario por el momento, así que puede que no te sirva de mucho.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">La página de resumen de existencias muestra todos los productos que están actualmente en existencia o por debajo de su cantidad mínima. Habilite esta opción para ocultar este producto siempre.</string>
   <string name="msg_help_due_date_type">Según el tipo de fecha de caducidad seleccionada, el resaltado en la página de resumen de inventario será diferente. \"Fecha de consumo preferente\" significa que el producto podría ser consumido después de su fecha de vencimiento. \"Fecha de caducidad\" significa que el consumo del producto no es seguro después de su fecha de vencimiento.</string>

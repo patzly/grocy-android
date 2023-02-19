@@ -247,7 +247,6 @@
   <string name="msg_port_connection_info_without_port">Az alkalmazás a(z) %1$s porthoz fog kapcsolódni.\nHa másik portot használnál, megadhatod az URL-ben.\nPéldául: http://domain.com:81/</string>
   <string name="msg_port_connection_info_with_port">Az alkalmazás a(z) %1$s porthoz fog kapcsolódni.</string>
   <string name="msg_not_implemented_yet">Ez még fejlesztés alatt áll. Addig is használd a szervered weboldalát.</string>
-  <string name="stock_disabled">A Grocy szervereden kikapcsoltad a készlet funkciót, valószínűleg azért, mert nincs rá szükséged. Sajnos ez az applikáció egyelőre csak készlet menedzsmenttel dolgozik, így nem sok hasznát veszed.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_hide_on_stock">A készlet áttekintés oldal az összes készleten vagy min. készlet mennyiség alatt lévő terméket mutatja - kapcsold ezt be, hogy a termék soha ne jelenjen meg ott</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

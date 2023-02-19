@@ -56,12 +56,14 @@ public class DateUtil {
   }
 
   public static Date getDate(String dateString) {
-    if (dateString == null) {
+    if (dateString == null || dateString.isEmpty()) {
       return null;
     }
     Date date = null;
     try {
-      date = dateString.split(" ").length == 2 ? DATE_FORMAT_WITH_TIME.parse(dateString) : DATE_FORMAT.parse(dateString);
+      date = dateString.split(" ").length == 2
+          ? DATE_FORMAT_WITH_TIME.parse(dateString)
+          : DATE_FORMAT.parse(dateString);
     } catch (ParseException e) {
       Log.e(TAG, "getDate: ");
     }
@@ -73,25 +75,23 @@ public class DateUtil {
   }
 
   public static int getDaysFromNow(String dateString) {
-    if (dateString == null || dateString.isEmpty()) {
-      return 0;
-    }
-    SimpleDateFormat format = dateString.split(" ").length == 2 ? DATE_FORMAT_WITH_TIME : DATE_FORMAT;
-    Date date = null;
-    try {
-      date = format.parse(dateString);
-    } catch (ParseException e) {
-      Log.e(TAG, "getDaysFromNow: " + e);
-    }
-    if (date == null) {
-      return 0;
-    }
+    Date date = getDate(dateString);
+    if (date == null) return 0;
     long diff = date.getTime() - getCurrentDate().getTime();
     return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
   }
 
   public static String getTodayWithDaysAdded(int daysToAdd) {
     Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DAY_OF_MONTH, daysToAdd);
+    return DATE_FORMAT.format(calendar.getTime());
+  }
+
+  public static String getDateWithDaysAdded(String dateString, int daysToAdd) {
+    Date date = getDate(dateString);
+    if (date == null) return dateString;
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
     calendar.add(Calendar.DAY_OF_MONTH, daysToAdd);
     return DATE_FORMAT.format(calendar.getTime());
   }

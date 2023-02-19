@@ -238,7 +238,6 @@
   <string name="msg_port_connection_info_without_port">היישום יתחבר לפתחה %1$s.\nאם צריך להתחבר לפתחה אחרת, ניתן להוסיף אותה לכתובת.\nלדוגמה: http://domain.com:81/‎</string>
   <string name="msg_port_connection_info_with_port">היישומון יתחבר לפתחה %1$s.</string>
   <string name="msg_not_implemented_yet">זה יוטמע בקרוב. נא להשתמש במנשק השרת שלך לבינתיים.</string>
-  <string name="stock_disabled">השבתת את יכולת המלאי בהגדרות ה־grocy שלך, כנראה כיוון שאין לך צורך בה. היישום הזה יכול לעשות ניהול מלאי בלבד כרגע, לכן יכול להיות שלא יביא לך תועלת.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="msg_help_parent_product_deactivated">למוצר זה לא יכול להיות מוצר הורה כיוון שהוא כבר משמש כמוצר הורה למוצר אחר.</string>
   <!--The same string is also in the web interface: Product edit form -> tiny help symbols (maybe you can get the translation from there to prevent different translations for the same string) -->

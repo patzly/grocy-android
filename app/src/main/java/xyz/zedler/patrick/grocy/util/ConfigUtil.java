@@ -113,6 +113,10 @@ public class ConfigUtil {
               jsonObject.getBoolean("FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING")
           )
           .putBoolean(
+              PREF.FEATURE_RECIPES,
+              jsonObject.getBoolean("FEATURE_FLAG_RECIPES")
+          )
+          .putBoolean(
               PREF.FEATURE_TASKS,
               jsonObject.getBoolean("FEATURE_FLAG_TASKS")
           )

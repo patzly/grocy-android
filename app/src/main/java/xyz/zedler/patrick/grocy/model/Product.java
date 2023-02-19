@@ -468,6 +468,10 @@ public class Product extends GroupedListItem implements Parcelable {
     return defaultDueDaysAfterFreezing;
   }
 
+  public int getDefaultDueDaysAfterFreezingInt() {
+    return NumUtil.isStringInt(defaultDueDaysAfterFreezing) ? Integer.parseInt(defaultDueDaysAfterFreezing) : 0;
+  }
+
   public void setDefaultDueDaysAfterFreezing(String defaultDueDaysAfterFreezing) {
     this.defaultDueDaysAfterFreezing = defaultDueDaysAfterFreezing;
   }
