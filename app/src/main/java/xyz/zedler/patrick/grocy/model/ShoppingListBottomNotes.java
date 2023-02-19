@@ -26,6 +26,7 @@ import java.util.Objects;
 public class ShoppingListBottomNotes extends GroupedListItem {
 
   private final Spanned notes;
+  private boolean clickable = true;
 
   public ShoppingListBottomNotes(Spanned notes) {
     this.notes = notes;
@@ -33,6 +34,14 @@ public class ShoppingListBottomNotes extends GroupedListItem {
 
   public Spanned getNotes() {
     return notes;
+  }
+
+  public boolean isClickable() {
+    return clickable;
+  }
+
+  public void setClickable(boolean clickable) {
+    this.clickable = clickable;
   }
 
   @Override
