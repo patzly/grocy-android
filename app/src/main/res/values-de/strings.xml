@@ -221,6 +221,7 @@
   <string name="msg_task_undo">Aufgabe rückgängig machen</string>
   <string name="msg_recipes_enough_in_stock">Bestand reicht aus</string>
   <string name="msg_recipes_enough_in_stock_filter">(%1$d) Bestand reicht aus</string>
+  <!-- %1$s is an amount with quantity unit (e.g. 3 bottles) -->
   <string name="msg_recipes_enough_in_stock_amount">Bestand reicht aus (%1$s)</string>
   <string name="msg_recipes_not_enough_but_on_shopping_list_filter">(%1$d) Nicht ausreichend im Bestand aber bereits auf Einkaufszettel</string>
   <string name="msg_recipes_not_enough_filter">(%1$d) Bestand nicht ausreichend</string>
