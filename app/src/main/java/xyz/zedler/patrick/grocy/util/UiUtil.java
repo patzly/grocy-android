@@ -23,11 +23,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.provider.Settings.Global;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsetsController;
@@ -150,9 +152,18 @@ public class UiUtil {
         return windowMetrics.getBounds().height();
       }
     } else {
-      DisplayMetrics displayMetrics = new DisplayMetrics();
+      // More reliable method from MDC lib
+      Display defaultDisplay = windowManager.getDefaultDisplay();
+      Point defaultDisplaySize = new Point();
+      defaultDisplay.getRealSize(defaultDisplaySize);
+      Rect bounds = new Rect();
+      bounds.right = defaultDisplaySize.x;
+      bounds.bottom = defaultDisplaySize.y;
+      return useWidth ? bounds.width() : bounds.height();
+      // Old method
+      /*DisplayMetrics displayMetrics = new DisplayMetrics();
       windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-      return useWidth ? displayMetrics.widthPixels : displayMetrics.heightPixels;
+      return useWidth ? displayMetrics.widthPixels : displayMetrics.heightPixels;*/
     }
   }
 
