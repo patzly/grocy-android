@@ -4,6 +4,7 @@
 - New: Total price displayed on shopping list bottom (#645)
 - New: Stock overview page has new status filter "not fresh" for combined results (#661)
 - New: "Should not be frozen" toggle on master product page and warn user if appropriate (#638)
+- New: Inventory form can now be used to link unknown barcode to product without any action (#605)
 - Improved: Finally the floating action button stays visible when the keyboard is shown (#405)
 - Improved: Bottom bar not above keyboard anymore
 - Improved: Prevent status messages from covering elements like floating action button or bottom bar
@@ -12,6 +13,8 @@
 - Improved: Info shown for action button on overview start page (#540)
 - Improved: On recipe page ingredients now can be added to shopping list with exclude option (#632)
 - Improved: App now supports disabled stock feature and hides stock parts, same with recipes (#647)
+- Improved: When adding an unknown barcode through purchase or inventory, note is saved (#644, #619)
+- Improved: When adding an unknown barcode through purchase, amount and unit is saved (#644)
 - Fixed: Recipe actions throwing errors (thanks @timhae!) (#646)
 - Fixed: Simultaneous display of recipe photos and placeholder images
 - Fixed: Behavior option "reduce app startup time" not working on Android 12+

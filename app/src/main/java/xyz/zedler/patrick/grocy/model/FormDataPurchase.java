@@ -907,10 +907,18 @@ public class FormDataPurchase {
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
     Store store = storeLive.getValue();
+    String note = noteLive.getValue();
+    String amount = amountLive.getValue();
+    Integer quId = quantityUnitLive.getValue() != null ? quantityUnitLive.getValue().getId() : null;
 
     ProductBarcode productBarcode = new ProductBarcode();
     productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
+    productBarcode.setNote(note);
+    productBarcode.setAmount(amount);
+    if (quId != null) {
+      productBarcode.setQuId(String.valueOf(quId));
+    }
     if (store != null && isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       productBarcode.setStoreId(String.valueOf(store.getId()));
     }
