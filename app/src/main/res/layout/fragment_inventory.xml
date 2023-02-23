@@ -273,17 +273,30 @@
               </LinearLayout>
 
               <LinearLayout
-                android:id="@+id/barcode_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingStart="68dp"
-                android:paddingEnd="16dp">
+                android:paddingEnd="16dp"
+                android:weightSum="1">
 
                 <xyz.zedler.patrick.grocy.view.InputChip
                   android:id="@+id/barcode_chip"
-                  android:layout_width="match_parent"
+                  android:layout_width="0dp"
                   android:layout_height="wrap_content"
+                  android:layout_gravity="start|center_vertical"
+                  android:layout_weight="1"
                   app:text="@={formData.barcodeLive}" />
+
+                <com.google.android.material.button.MaterialButton
+                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="12dp"
+                  android:layout_gravity="end|center_vertical"
+                  android:text="@string/action_link_and_clear"
+                  android:onClick="@{() -> fragment.linkBarcodeToProductAndClearForm()}"
+                  android:visibility="@{formData.barcodeLive != null ? View.VISIBLE : View.GONE}" />
 
               </LinearLayout>
 

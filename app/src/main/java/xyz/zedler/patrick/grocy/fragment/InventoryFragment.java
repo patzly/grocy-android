@@ -306,6 +306,10 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     }
   }
 
+  public void linkBarcodeToProductAndClearForm() {
+    viewModel.uploadProductBarcode(this::clearFormAndFocusProductInput, true);
+  }
+
   public void clearAmountFieldAndFocusIt() {
     binding.editTextAmount.setText("");
     activity.showKeyboard(binding.editTextAmount);

@@ -922,6 +922,19 @@ public class FormDataInventory {
     return productBarcode;
   }
 
+  public ProductBarcode fillProductBarcodeWithoutForm() {
+    if (productDetailsLive.getValue() == null) {
+      return null;
+    }
+    String barcode = barcodeLive.getValue();
+    Product product = productDetailsLive.getValue().getProduct();
+
+    ProductBarcode productBarcode = new ProductBarcode();
+    productBarcode.setProductIdInt(product.getId());
+    productBarcode.setBarcode(barcode);
+    return productBarcode;
+  }
+
   public void clearForm() {
     currentProductFlowInterrupted = false;
     barcodeLive.setValue(null);
