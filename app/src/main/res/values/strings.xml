@@ -830,6 +830,8 @@
   <string name="property_due_type_expiration">Expiration date</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Due date</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Due date</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Due date: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->

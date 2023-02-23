@@ -100,13 +100,13 @@ public class TaskEntryBottomSheet extends BaseBottomSheetDialogFragment {
     }
     if (task.getDueDate() != null && !task.getDueDate().isEmpty()) {
       binding.date.setText(
-          getString(R.string.property_due_date),
+          getString(R.string.property_due_date_task),
           dateUtil.getLocalizedDate(task.getDueDate()),
           dateUtil.getHumanForDaysFromNow(task.getDueDate())
       );
     } else {
       binding.date.setText(
-          getString(R.string.property_due_date),
+          getString(R.string.property_due_date_task),
           getString(R.string.subtitle_none_selected)
       );
     }
