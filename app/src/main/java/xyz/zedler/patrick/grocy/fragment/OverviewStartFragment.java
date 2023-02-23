@@ -98,11 +98,14 @@ public class OverviewStartFragment extends BaseFragment {
 
     ViewUtil.setOnlyOverScrollStretchEnabled(binding.scrollHorizActions);
     binding.scrollHorizActions.post(
-        () -> binding.scrollHorizActions.fullScroll(
-            UiUtil.isLayoutRtl(activity)
-                ? HorizontalScrollView.FOCUS_LEFT
-                : HorizontalScrollView.FOCUS_RIGHT
-        )
+        () -> {
+          if (binding == null) return;
+          binding.scrollHorizActions.fullScroll(
+              UiUtil.isLayoutRtl(activity)
+                  ? HorizontalScrollView.FOCUS_LEFT
+                  : HorizontalScrollView.FOCUS_RIGHT
+          );
+        }
     );
 
     clickUtil = new ClickUtil(1000);
