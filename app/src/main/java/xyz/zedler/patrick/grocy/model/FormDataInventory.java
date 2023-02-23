@@ -730,20 +730,6 @@ public class FormDataInventory {
       ));
       return false;
     }
-    if (!isTareWeightEnabled()&& NumUtil.isStringDouble(amountLive.getValue())
-        && Double.parseDouble(amountLive.getValue()) == productDetails.getStockAmount()) {
-      amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
-          NumUtil.trimAmount(productDetails.getStockAmount(), maxDecimalPlacesAmount)));
-      return false;
-    }
-    if (isTareWeightEnabled() && NumUtil.isStringDouble(amountLive.getValue())
-        && Double.parseDouble(amountLive.getValue()) == productDetails.getStockAmount()
-        + productDetails.getProduct().getTareWeightDouble()) {
-      amountErrorLive.setValue(application.getString(R.string.error_amount_equal_stock,
-          NumUtil.trimAmount(productDetails.getStockAmount()
-              + productDetails.getProduct().getTareWeightDouble(), maxDecimalPlacesAmount)));
-      return false;
-    }
     if (!isTareWeightEnabled() && Double.parseDouble(amountLive.getValue()) < 0) {
       amountErrorLive.setValue(application.getString(
           R.string.error_bounds_min, String.valueOf(0)
