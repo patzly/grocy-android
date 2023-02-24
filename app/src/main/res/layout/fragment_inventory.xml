@@ -276,17 +276,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="68dp"
-                android:paddingEnd="16dp"
-                android:weightSum="1">
+                android:gravity="center_vertical"
+                android:paddingStart="52dp"
+                android:paddingEnd="16dp">
 
-                <xyz.zedler.patrick.grocy.view.InputChip
-                  android:id="@+id/barcode_chip"
+                <FrameLayout
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
-                  android:layout_gravity="start|center_vertical"
-                  android:layout_weight="1"
-                  app:text="@={formData.barcodeLive}" />
+                  android:layout_weight="1">
+
+                  <xyz.zedler.patrick.grocy.view.InputChip
+                    android:id="@+id/barcode_chip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    app:text="@={formData.barcodeLive}" />
+
+                </FrameLayout>
 
                 <com.google.android.material.button.MaterialButton
                   style="@style/Widget.Grocy.Button.UnelevatedButton"

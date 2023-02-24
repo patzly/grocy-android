@@ -53,6 +53,7 @@
 
     <activity
       android:name=".activity.SplashActivity"
+      android:windowSoftInputMode="adjustNothing"
       android:exported="true">
 
       <intent-filter>
