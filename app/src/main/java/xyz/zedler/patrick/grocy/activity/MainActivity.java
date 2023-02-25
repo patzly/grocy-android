@@ -518,7 +518,9 @@ public class MainActivity extends AppCompatActivity {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
     } else if (versionOld != versionNew) {
       sharedPrefs.edit().putInt(PREF.LAST_VERSION, versionNew).apply();
-      showChangelogBottomSheet();
+      new Handler(Looper.getMainLooper()).postDelayed(
+          this::showChangelogBottomSheet, 900
+      );
     }
   }
 
