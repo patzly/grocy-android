@@ -212,7 +212,7 @@
 
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.OverLine"
-                    android:text="@string/property_due_date"/>
+                    android:text="@string/property_due_date_task"/>
 
                   <TextView
                     style="@style/Widget.Grocy.TextView.ListItem.Title"

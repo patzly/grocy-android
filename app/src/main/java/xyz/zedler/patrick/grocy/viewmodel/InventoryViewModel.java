@@ -413,7 +413,7 @@ public class InventoryViewModel extends BaseViewModel {
       return;
     }
     if (formData.getBarcodeLive().getValue() != null) {
-      uploadProductBarcode(this::inventoryProduct);
+      uploadProductBarcode(this::inventoryProduct, false);
       return;
     }
 
@@ -477,8 +477,13 @@ public class InventoryViewModel extends BaseViewModel {
     );
   }
 
-  private void uploadProductBarcode(Runnable onSuccess) {
-    ProductBarcode productBarcode = formData.fillProductBarcode();
+  public void uploadProductBarcode(Runnable onSuccess, boolean withoutForm) {
+    ProductBarcode productBarcode;
+    if (withoutForm) {
+      productBarcode = formData.fillProductBarcodeWithoutForm();
+    } else {
+      productBarcode = formData.fillProductBarcode();
+    }
     JSONObject body = productBarcode.getJsonFromProductBarcode(debug, TAG);
     dlHelper.addProductBarcode(body, () -> {
       formData.getBarcodeLive().setValue(null);

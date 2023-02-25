@@ -73,7 +73,7 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
         R.string.property_sort_mode,
         sortMode.equals(SORT_NAME)
             ? application.getString(R.string.property_name)
-            : application.getString(R.string.property_due_date)
+            : application.getString(R.string.property_due_date_task)
     ));
   }
 
@@ -104,7 +104,7 @@ public class FilterChipLiveDataTasksSort extends FilterChipLiveData {
       menuItemDataList.add(new MenuItemData(
           ID_SORT_DUE_DATE,
           0,
-          application.getString(R.string.property_due_date),
+          application.getString(R.string.property_due_date_task),
           sortMode.equals(SORT_DUE_DATE)
       ));
     }

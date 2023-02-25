@@ -910,13 +910,28 @@ public class FormDataInventory {
     String barcode = barcodeLive.getValue();
     Product product = productDetailsLive.getValue().getProduct();
     Store store = storeLive.getValue();
+    String note = noteLive.getValue();
 
     ProductBarcode productBarcode = new ProductBarcode();
     productBarcode.setProductIdInt(product.getId());
     productBarcode.setBarcode(barcode);
+    productBarcode.setNote(note);
     if (store != null && isFeatureEnabled(PREF.FEATURE_STOCK_PRICE_TRACKING)) {
       productBarcode.setStoreId(String.valueOf(store.getId()));
     }
+    return productBarcode;
+  }
+
+  public ProductBarcode fillProductBarcodeWithoutForm() {
+    if (productDetailsLive.getValue() == null) {
+      return null;
+    }
+    String barcode = barcodeLive.getValue();
+    Product product = productDetailsLive.getValue().getProduct();
+
+    ProductBarcode productBarcode = new ProductBarcode();
+    productBarcode.setProductIdInt(product.getId());
+    productBarcode.setBarcode(barcode);
     return productBarcode;
   }
 

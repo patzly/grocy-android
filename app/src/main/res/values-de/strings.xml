@@ -647,6 +647,8 @@
   <string name="subtitle_print_label_per_purchase">Pro Einkauf</string>
   <!-- Short form for "One label per unit" -->
   <string name="subtitle_print_label_per_unit">Pro Einheit</string>
+  <!-- %1$s is a price and %2$s is a currency -->
+  <string name="subtitle_total_price">Gesamtpreis: %1$s %2$s</string>
 
   <string name="description_input_product_part1">Produkt-Feld enthält:</string>
   <string name="description_input_product_part2">Bitte wählen Sie, wie Sie fortfahren möchten:</string>

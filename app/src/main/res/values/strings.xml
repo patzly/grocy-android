@@ -101,6 +101,8 @@
   <string name="action_open_scanner">Open scanner</string>
   <string name="action_discard">Discard</string>
   <string name="action_clear_form">Clear form</string>
+  <!-- Short form for "Link barcode to existing product and clear form", this should fit into a button so keep it short -->
+  <string name="action_link_and_clear">Link &amp; Clear</string>
   <string name="action_toggle_done">Toggle done</string>
   <string name="action_edit_notes">Edit notes</string>
   <string name="action_add_missing">Add missing products</string>
@@ -828,6 +830,8 @@
   <string name="property_due_type_expiration">Expiration date</string>
   <!--The same string is also in the web interface: Purchase/Consume form (maybe you can get the translation from there to prevent different translations for the same string) -->
   <string name="property_due_date">Due date</string>
+  <!-- This string is for due date of task -->
+  <string name="property_due_date_task">Due date</string>
   <!-- %1$s is a due date-->
   <string name="property_due_date_fill">Due date: %1$s</string>
   <!--The same string is also in the web interface: Stock overview (maybe you can get the translation from there to prevent different translations for the same string) -->
