@@ -295,7 +295,7 @@
                 </FrameLayout>
 
                 <com.google.android.material.button.MaterialButton
-                  style="@style/Widget.Grocy.Button.UnelevatedButton"
+                  style="@style/Widget.Grocy.Button.TonalButton"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginStart="12dp"
