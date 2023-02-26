@@ -203,9 +203,11 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(
-          productIdSavedSate, null, null
-      ));
+      viewModel.setProductWillBeFilled(true);
+      viewModel.setQueueEmptyAction(() -> {
+        viewModel.setProduct(productIdSavedSate, null, null);
+        viewModel.setProductWillBeFilled(false);
+      });
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new PurchaseFragmentArgs.Builder(args)
@@ -252,7 +254,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
     embeddedFragmentScanner.setScannerVisibilityLive(
         viewModel.getFormData().getScannerVisibilityLive(),
         backFromChooseProductPage != null
-            && viewModel.getFormData().getProductDetailsLive().getValue() != null
+            && (viewModel.getFormData().getProductDetailsLive().getValue() != null
+            || viewModel.isProductWillBeFilled())
             ? backFromChooseProductPage : false
     );
 
@@ -322,7 +325,8 @@ public class PurchaseFragment extends BaseFragment implements BarcodeListener {
   public void onResume() {
     super.onResume();
     if (backFromChooseProductPage != null && backFromChooseProductPage
-        && viewModel.getFormData().getProductDetailsLive().getValue() != null) {
+        && (viewModel.getFormData().getProductDetailsLive().getValue() != null
+        || viewModel.isProductWillBeFilled())) {
       backFromChooseProductPage = false;
       return;
     }

@@ -30,7 +30,9 @@
 - Fixed: Amount of products without own stock not hidden on stock overview page (#654)
 - Fixed: Navigation bar color on devices without gesture navigation
 - Fixed: Default due days after freezing applied on purchase when freezer location is set (#593)
+- Fixed: Quick mode scanner started again just after navigating back from "choose product" page
 - Fixed: (not F-Droid) Crash with ML Kit scanner after barcode was scanned
+- Fixed: (not F-Droid) Crash with ML Kit scanner after transaction was successful (#639)
 
 ## 3.0.0
 

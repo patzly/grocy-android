@@ -115,6 +115,7 @@ public class PurchaseViewModel extends BaseViewModel {
   private Integer storedPurchaseId;
   private StoredPurchase storedPurchase;
   private Runnable queueEmptyAction;
+  private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
   private final int decimalPlacesPriceInput;
 
@@ -203,10 +204,6 @@ public class PurchaseViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-        /*if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }*/
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
@@ -246,8 +243,6 @@ public class PurchaseViewModel extends BaseViewModel {
       onQueueEmpty();
       return;
     }
-
-    //currentQueueLoading = queue;
     queue.start();
   }
 
@@ -1029,6 +1024,14 @@ public class PurchaseViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public void setProductWillBeFilled(boolean productWillBeFilled) {
+    this.productWillBeFilled = productWillBeFilled;
+  }
+
+  public boolean isProductWillBeFilled() {
+    return productWillBeFilled;
   }
 
   private ArrayList<Product> appendPendingProducts(

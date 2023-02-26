@@ -67,6 +67,7 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   private InventoryViewModel viewModel;
   private InfoFullscreenHelper infoFullscreenHelper;
   private EmbeddedFragmentScanner embeddedFragmentScanner;
+  private Boolean backFromChooseProductPage;
 
   @Override
   public View onCreateView(
@@ -160,7 +161,11 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     Integer productIdSavedSate = (Integer) getFromThisDestinationNow(Constants.ARGUMENT.PRODUCT_ID);
     if (productIdSavedSate != null) {
       removeForThisDestination(Constants.ARGUMENT.PRODUCT_ID);
-      viewModel.setQueueEmptyAction(() -> viewModel.setProduct(productIdSavedSate, null));
+      viewModel.setProductWillBeFilled(true);
+      viewModel.setQueueEmptyAction(() -> {
+        viewModel.setProduct(productIdSavedSate, null);
+        viewModel.setProductWillBeFilled(false);
+      });
     } else if (NumUtil.isStringInt(args.getProductId())) {
       int productId = Integer.parseInt(args.getProductId());
       setArguments(new InventoryFragmentArgs.Builder(args)
@@ -174,7 +179,11 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
     }
 
     embeddedFragmentScanner.setScannerVisibilityLive(
-        viewModel.getFormData().getScannerVisibilityLive()
+        viewModel.getFormData().getScannerVisibilityLive(),
+        backFromChooseProductPage != null
+            && (viewModel.getFormData().getProductDetailsLive().getValue() != null
+            || viewModel.isProductWillBeFilled())
+            ? backFromChooseProductPage : false
     );
 
     ColorRoles roles = ResUtil.getHarmonizedRoles(activity, R.color.blue);
@@ -231,6 +240,12 @@ public class InventoryFragment extends BaseFragment implements BarcodeListener {
   @Override
   public void onResume() {
     super.onResume();
+    if (backFromChooseProductPage != null && backFromChooseProductPage
+        && (viewModel.getFormData().getProductDetailsLive().getValue() != null
+        || viewModel.isProductWillBeFilled())) {
+      backFromChooseProductPage = false;
+      return;
+    }
     embeddedFragmentScanner.onResume();
   }
 
