@@ -38,6 +38,7 @@ public abstract class Event {
   public final static int CHOOSE_PRODUCT = 24;
   public final static int SET_RECIPE_ID = 26;
   public final static int CONFIRM_FREEZING = 28;
+  public final static int FOCUS_AMOUNT_FIELD = 30;
 
   abstract public int getType();
 

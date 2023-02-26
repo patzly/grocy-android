@@ -129,6 +129,8 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
             R.id.chooseProductFragment,
             new ChooseProductFragmentArgs.Builder(barcode).build().toBundle()
         );
+      } else if (event.getType() == Event.FOCUS_AMOUNT_FIELD) {
+        clearAmountFieldAndFocusIt();
       }
     });
 
@@ -314,7 +316,7 @@ public class ShoppingListItemEditFragment extends BaseFragment implements Barcod
 
   public void onItemAutoCompleteClick(AdapterView<?> adapterView, int pos) {
     Product product = (Product) adapterView.getItemAtPosition(pos);
-    viewModel.setProduct(product);
+    viewModel.setProduct(product, false);
     focusNextView();
   }
 

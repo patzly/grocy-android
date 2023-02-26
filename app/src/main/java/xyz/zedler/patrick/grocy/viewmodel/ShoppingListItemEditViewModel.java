@@ -306,7 +306,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     formData.setFilledWithShoppingListItem(true);
   }
 
-  public void setProduct(Product product) {
+  public void setProduct(Product product, boolean explicitlyFocusAmountField) {
     if (product == null) {
       return;
     }
@@ -330,7 +330,11 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     QuantityUnit purchase = quantityUnitHashMap.get(product.getQuIdPurchaseInt());
     formData.getQuantityUnitLive().setValue(purchase);
 
-    formData.isFormValid();
+    if (explicitlyFocusAmountField) {
+      sendEvent(Event.FOCUS_AMOUNT_FIELD);
+    } else {
+      formData.isFormValid();
+    }
   }
 
   public void setProduct(int productId) {
@@ -341,7 +345,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (product == null) {
       return;
     }
-    setProduct(product);
+    setProduct(product, false);
   }
 
   public void onBarcodeRecognized(String barcode) {
@@ -363,7 +367,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
       product = Product.getProductFromBarcode(products, barcodes, barcode);
     }
     if (product != null) {
-      setProduct(product);
+      setProduct(product, true);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(ARGUMENT.BARCODE, barcode);
@@ -413,7 +417,7 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     }
 
     if (product != null) {
-      setProduct(product);
+      setProduct(product, false);
     } else {
       Bundle bundle = new Bundle();
       bundle.putString(Constants.ARGUMENT.PRODUCT_INPUT, input);
