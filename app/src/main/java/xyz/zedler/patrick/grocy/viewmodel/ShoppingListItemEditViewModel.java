@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
+import xyz.zedler.patrick.grocy.Constants.ARGUMENT;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS.STOCK;
 import xyz.zedler.patrick.grocy.Constants.SETTINGS_DEFAULT;
 import xyz.zedler.patrick.grocy.R;
@@ -42,6 +43,7 @@ import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.InputProductBottomShe
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheet;
 import xyz.zedler.patrick.grocy.fragment.bottomSheetDialog.ProductOverviewBottomSheetArgs;
 import xyz.zedler.patrick.grocy.helper.DownloadHelper;
+import xyz.zedler.patrick.grocy.model.Event;
 import xyz.zedler.patrick.grocy.model.FormDataShoppingListItemEdit;
 import xyz.zedler.patrick.grocy.model.InfoFullscreen;
 import xyz.zedler.patrick.grocy.model.Product;
@@ -363,8 +365,9 @@ public class ShoppingListItemEditViewModel extends BaseViewModel {
     if (product != null) {
       setProduct(product);
     } else {
-      formData.getBarcodeLive().setValue(barcode);
-      formData.isFormValid();
+      Bundle bundle = new Bundle();
+      bundle.putString(ARGUMENT.BARCODE, barcode);
+      sendEvent(Event.CHOOSE_PRODUCT, bundle);
     }
   }
 

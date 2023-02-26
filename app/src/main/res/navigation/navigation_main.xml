@@ -1144,20 +1144,23 @@
   </fragment>
   <fragment
     android:id="@+id/chooseProductFragment"
-    android:name="xyz.zedler.patrick.grocy.fragment.ChooseProductFragment"
     android:label="ChooseProductFragment"
+    android:name="xyz.zedler.patrick.grocy.fragment.ChooseProductFragment"
     tools:layout="@layout/fragment_choose_product">
     <argument
       android:name="barcode"
       app:argType="string" />
     <argument
+      android:defaultValue="false"
       android:name="forbidCreateProduct"
-      app:argType="boolean"
-      android:defaultValue="false" />
+      app:argType="boolean" />
     <argument
+      android:defaultValue="false"
       android:name="pendingProductsActive"
-      app:argType="boolean"
-      android:defaultValue="false" />
+      app:argType="boolean" />
+    <deepLink
+      android:id="@+id/deepLink19"
+      app:uri="@string/deep_link_chooseProductFragment" />
   </fragment>
   <fragment
     android:id="@+id/storedPurchasesFragment"
