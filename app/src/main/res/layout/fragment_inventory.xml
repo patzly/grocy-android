@@ -287,9 +287,9 @@
 
                   <xyz.zedler.patrick.grocy.view.InputChip
                     android:id="@+id/barcode_chip"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
+                    android:layout_gravity="start"
                     app:text="@={formData.barcodeLive}" />
 
                 </FrameLayout>
