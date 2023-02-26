@@ -94,6 +94,7 @@ public class TransferViewModel extends BaseViewModel {
   private final MutableLiveData<Boolean> quickModeEnabled;
 
   private Runnable queueEmptyAction;
+  private boolean productWillBeFilled;
   private final int maxDecimalPlacesAmount;
 
   public TransferViewModel(@NonNull Application application, TransferFragmentArgs args) {
@@ -146,10 +147,6 @@ public class TransferViewModel extends BaseViewModel {
   }
 
   public void downloadData(@Nullable String dbChangedTime) {
-        /*if(isOffline()) { // skip downloading
-            isLoadingLive.setValue(false);
-            return;
-        }*/
     if (dbChangedTime == null) {
       dlHelper.getTimeDbChanged(this::downloadData, () -> onDownloadError(null));
       return;
@@ -178,8 +175,6 @@ public class TransferViewModel extends BaseViewModel {
       }
       return;
     }
-
-    //currentQueueLoading = queue;
     queue.start();
   }
 
@@ -636,6 +631,14 @@ public class TransferViewModel extends BaseViewModel {
 
   public void setQueueEmptyAction(Runnable queueEmptyAction) {
     this.queueEmptyAction = queueEmptyAction;
+  }
+
+  public void setProductWillBeFilled(boolean productWillBeFilled) {
+    this.productWillBeFilled = productWillBeFilled;
+  }
+
+  public boolean isProductWillBeFilled() {
+    return productWillBeFilled;
   }
 
   public boolean isQuickModeEnabled() {
